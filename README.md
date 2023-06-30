@@ -32,7 +32,8 @@ You can use Audio Separator via the command line:
 audio-separator [audio_file] --model_name [model_name]
     
     audio_file: The path to the WAV audio file to be separated.
-    model_name: (Optional) The name of the model to use for separation.
+    model_name: (Optional) The name of the model to use for separation. Default: UVR_MDXNET_KARA_2
+    model_file_dir: (Optional) Directory to cache model files in. Default: /tmp/audio-separator-models/
 ```
 
 Example:
