@@ -27,16 +27,19 @@ You can install Audio Separator using pip:
 You can use Audio Separator via the command line:
 
 ```sh
-audio_separator [audio_file] --model_name [model_name]
-audio_file: The path to the WAV audio file to be separated.
-model_name: (Optional) The name of the model to use for separation.
+audio-separator [audio_file] --model_name [model_name]
+    
+    audio_file: The path to the WAV audio file to be separated.
+    model_name: (Optional) The name of the model to use for separation.
 ```
 
 Example:
 
-audio_separator /path/to/your/audio.wav --model_name UVR_MDXNET_KARA_2
+```
+audio-separator /path/to/your/audio.wav --model_name UVR_MDXNET_KARA_2
+```
 
-This command will process the file and generate two new files, one for each stem.
+This command will process the file and generate two new files in the current directory, one for each stem.
 
 ### As a Dependency in a Python Project
 
