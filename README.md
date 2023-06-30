@@ -117,6 +117,24 @@ You can run the CLI command directly within the virtual environment. For example
 audio-separator path/to/your/audio-file.wav
 ```
 
+### Deactivate the Virtual Environment
+
+Once you are done with your development work, you can exit the virtual environment by simply typing:
+
+```
+exit
+```
+
+### Building the Package
+
+To build the package for distribution, use the following command:
+
+```
+poetry build
+```
+
+This will generate the distribution packages in the dist directory - but for now only @beveradb will be able to publish to PyPI.
+
 ## Contributing
 
 Contributions are very much welcome! Please fork the repository and submit a pull request with your changes, and I'll try to review, merge and publish promptly!
