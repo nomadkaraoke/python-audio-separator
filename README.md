@@ -73,6 +73,58 @@ Python <= 3.10 (one of the dependencies doesn't like 3.11 yet)
 
 Libraries: onnx, onnxruntime, numpy, soundfile, librosa, torch, wget, six
 
+## Developing Locally
+
+This project uses Poetry for dependency management and packaging. Follow these steps to setup a local development environment:
+
+### Prerequisites
+
+- Make sure you have Python 3.9 or newer installed on your machine.
+- Install Poetry by following the installation guide here.
+
+### Clone the Repository
+
+Clone the repository to your local machine:
+
+```
+git clone https://github.com/YOUR_USERNAME/audio-separator.git
+cd audio-separator
+```
+
+Replace YOUR_USERNAME with your GitHub username if you've forked the repository, or use the main repository URL if you have the permissions.
+
+### Install Dependencies
+
+Run the following command to install the project dependencies:
+
+```
+poetry install
+```
+
+### Activate the Virtual Environment
+
+To activate the virtual environment, use the following command:
+
+```
+poetry shell
+```
+
+### Running the Command-Line Interface Locally
+
+You can run the CLI command directly within the virtual environment. For example:
+
+```
+audio-separator path/to/your/audio-file.wav
+```
+
+## Contributing
+
+Contributions are very much welcome! Please fork the repository and submit a pull request with your changes, and I'll try to review, merge and publish promptly!
+
+- This project is 100% open-source and free for anyone to use and modify as they wish. 
+- If the maintenance workload for this repo somehow becomes too much for me I'll ask for volunteers to share maintainership of the repo, though I don't think that is very likely
+- Development and support for the MDX-Net separation models is part of the main [UVR project](https://github.com/Anjok07/ultimatevocalremovergui), this repo is just a CLI/Python package wrapper to simplify running those models programmatically. So, if you want to try and improve the actual models, please get involved in the UVR project and look for guidance there!
+
 ## License
 
 This project is licensed under the MIT [License](LICENSE).
@@ -86,11 +138,3 @@ This project is licensed under the MIT [License](LICENSE).
 - [Kuielab & Woosung Choi](https://github.com/kuielab) - Developed the original MDX-Net AI code. 
 - [KimberleyJSN](https://github.com/KimberleyJensen) - Advised and aided the implementation of the training scripts for MDX-Net and Demucs. Thank you!
 - [Hv](https://github.com/NaJeongMo/Colab-for-MDX_B) - Helped implement chunks into the MDX-Net AI code. Thank you!
-
-## Contributing
-
-Contributions are very much welcome! Please fork the repository and submit a pull request with your changes, and I'll try to review, merge and publish promptly!
-
-- This project is 100% open-source and free for anyone to use and modify as they wish. 
-- If the maintenance workload for this repo somehow becomes too much for me I'll ask for volunteers to share maintainership of the repo, though I don't think that is very likely
-- Development and support for the MDX-Net separation models is part of the main [UVR project](https://github.com/Anjok07/ultimatevocalremovergui), this repo is just a CLI/Python package wrapper to simplify running those models programmatically. So, if you want to try and improve the actual models, please get involved in the UVR project and look for guidance there!

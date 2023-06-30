@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import argparse
 import datetime
-from audio_separator.audio_separator import Separator
+from audio_separator import Separator
 
 
 def print_with_timestamp(message):
