@@ -1,1 +1,1 @@
-from .audio_separator import Separator
+from .separator import Separator
