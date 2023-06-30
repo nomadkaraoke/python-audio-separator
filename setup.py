@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="audio-separator",
-    version="0.1.2",
+    version="0.1.3",
     packages=find_packages(),
 
     # Metadata
@@ -17,7 +17,7 @@ setup(
     # Specify entry script
     entry_points={
         'console_scripts': [
-            'audio-separator=scripts.separate:main',
+            'audio-separator=audio_separator.utils.separate:main',
         ],
     },
 

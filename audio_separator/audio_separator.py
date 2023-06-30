@@ -11,7 +11,7 @@ import librosa
 import numpy as np
 import onnxruntime as ort
 import soundfile as sf
-from utils import spec_utils
+from audio_separator.utils import spec_utils
 
 def print_with_timestamp(message):
     timestamp = datetime.datetime.now().isoformat()

@@ -16,7 +16,7 @@ ARM = 'arm'
 if OPERATING_SYSTEM == 'Windows':
     from pyrubberband import pyrb
 else:
-    from utils import pyrb
+    from audio_separator.utils import pyrb
 
 if OPERATING_SYSTEM == 'Darwin':
     wav_resolution = "polyphase" if SYSTEM_PROC == ARM or ARM in SYSTEM_ARCH else "sinc_fastest" 
