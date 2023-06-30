@@ -18,9 +18,10 @@ def print_with_timestamp(message):
     print(f"{timestamp} - {message}")
 
 class Separator:
-    def __init__(self, audio_file_path, model_name='UVR_MDXNET_KARA_2', model_file_dir='models/', output_dir=None):
+    def __init__(self, audio_file_path, model_name='UVR_MDXNET_KARA_2', model_file_dir='/tmp/audio-separator-models/', output_dir=None):
         self.model_name = model_name
         self.model_file_dir = model_file_dir
+        self.output_dir = output_dir
 
         # Create the model directory if it does not exist
         os.makedirs(self.model_file_dir, exist_ok=True)
@@ -32,8 +33,6 @@ class Separator:
         self.model_url = f'https://github.com/TRvlvr/model_repo/releases/download/all_public_uvr_models/{self.model_name}.onnx'
         self.model_data_url = 'https://raw.githubusercontent.com/TRvlvr/application_data/main/mdx_model_data/model_data.json'
         
-        self.output_dir = output_dir
-
         self.wav_type_set = "PCM_16"
         self.is_normalization = False
         self.is_denoise = False

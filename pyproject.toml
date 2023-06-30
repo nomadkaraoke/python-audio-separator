@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "audio-separator"
-version = "0.2.1"
+version = "0.2.2"
 description = "Easy to use vocal separation on CLI or as a python package, using the amazing MDX-Net models from UVR trained by @Anjok07"
 authors = ["Andrew Beveridge <andrew@beveridge.uk>"]
 license = "MIT"

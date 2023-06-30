@@ -11,7 +11,8 @@ The primary stem typically contains the instrumental part of the audio, while th
 ## Features
 
 - Separate audio into instrumental and vocal stems.
-- Ability to specify a pre-trained deep learning model.
+- Supports all common audio formats (WAV, MP3, FLAC, M4A, etc.)
+- Ability to specify a pre-trained deep learning model in ONNX format.
 - CLI support for easy use in scripts and batch processing.
 - Python API for integration into other projects.
 
@@ -31,9 +32,10 @@ You can use Audio Separator via the command line:
 ```sh
 audio-separator [audio_file] --model_name [model_name]
     
-    audio_file: The path to the WAV audio file to be separated.
+    audio_file: The path to the audio file to be separated. Supports all common formats (WAV, MP3, FLAC, M4A, etc.)
     model_name: (Optional) The name of the model to use for separation. Default: UVR_MDXNET_KARA_2
     model_file_dir: (Optional) Directory to cache model files in. Default: /tmp/audio-separator-models/
+    output_dir: (Optional) The directory where the separated files will be saved. If not specified, outputs to current dir.
 ```
 
 Example:
@@ -52,7 +54,7 @@ You can also use Audio Separator in your Python project. Here's how you can use 
 from audio_separator import Separator
 
 # Initialize the Separator with the audio file and model name
-separator = Separator('/path/to/your/audio.wav', model_name='UVR_MDXNET_KARA_2')
+separator = Separator('/path/to/your/audio.m4a', model_name='UVR_MDXNET_KARA_2')
 
 # Perform the separation
 primary_stem_path, secondary_stem_path = separator.separate()
@@ -63,9 +65,10 @@ print(f'Secondary stem saved at {secondary_stem_path}')
 
 ## Parameters for the Separator class
 
-- audio_file: The path to the WAV audio file to be separated.
+- audio_file: The path to the audio file to be separated. Supports all common formats (WAV, MP3, FLAC, M4A, etc.)
 - model_name: (Optional) The name of the model to use for separation. Defaults to 'UVR_MDXNET_KARA_2', a very powerful model for Karaoke instrumental tracks.
-- output_dir: (Optional) The directory where the separated files will be saved.
+- model_file_dir: (Optional) Directory to cache model files in. Default: /tmp/audio-separator-models/
+- output_dir: (Optional) Directory where the separated files will be saved. If not specified, outputs to current dir.
 
 ## Requirements
 
