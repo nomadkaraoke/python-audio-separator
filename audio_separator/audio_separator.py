@@ -18,15 +18,19 @@ def print_with_timestamp(message):
     print(f"{timestamp} - {message}")
 
 class Separator:
-    def __init__(self, audio_file, model_name='UVR_MDXNET_KARA_2', output_dir=None):       
-        warnings.filterwarnings("ignore")
-        self.cpu = torch.device('cpu')
+    def __init__(self, audio_file_path, model_name='UVR_MDXNET_KARA_2', model_file_dir='models/', output_dir=None):
+        self.model_name = model_name
+        self.model_file_dir = model_file_dir
 
-        self.audio_file = audio_file
-        self.audio_file_base = os.path.splitext(os.path.basename(audio_file))[0]
+        # Create the model directory if it does not exist
+        os.makedirs(self.model_file_dir, exist_ok=True)
+
+        self.audio_file_path = audio_file_path
+        self.audio_file_base = os.path.splitext(os.path.basename(audio_file_path))[0]
 
         self.model_name = model_name
         self.model_url = f'https://github.com/TRvlvr/model_repo/releases/download/all_public_uvr_models/{self.model_name}.onnx'
+        self.model_data_url = 'https://raw.githubusercontent.com/TRvlvr/application_data/main/mdx_model_data/model_data.json'
         
         self.output_dir = output_dir
 
@@ -43,7 +47,10 @@ class Separator:
         self.primary_source = None
         self.secondary_source = None
 
-        self.device, self.run_type = torch.device('cpu'), ['CPUExecutionProvider']
+        warnings.filterwarnings("ignore")
+        self.cpu = torch.device('cpu')
+        self.device = torch.device('cpu')
+        self.run_type = ['CPUExecutionProvider']
 
     def get_model_hash(self, model_path):
         try:
@@ -54,7 +61,7 @@ class Separator:
             return hashlib.md5(open(model_path,'rb').read()).hexdigest()
 
     def separate(self):
-        model_path = f'models/{self.model_name}.onnx'
+        model_path = os.path.join(self.model_file_dir, f'{self.model_name}.onnx')
         if not os.path.isfile(model_path):
             print_with_timestamp(f'Model not found at path {model_path}, downloading...')
             wget.download(self.model_url, model_path)
@@ -64,7 +71,11 @@ class Separator:
         model_hash = self.get_model_hash(model_path)
         print_with_timestamp(f'Model {model_path} has hash {model_hash} ...')
         
-        model_data_path = 'models/model_data.json'
+        model_data_path = os.path.join(self.model_file_dir, 'model_data.json')
+        if not os.path.isfile(model_data_path):
+            print_with_timestamp(f'Model data not found at path {model_data_path}, downloading...')
+            wget.download(self.model_data_url, model_data_path)
+
         model_data_object = json.load(open(model_data_path))
         model_data = model_data_object[model_hash]
         
@@ -84,7 +95,7 @@ class Separator:
         self.initialize_model_settings()
         print_with_timestamp('Running inference...')
         mdx_net_cut = True
-        mix, raw_mix, samplerate = prepare_mix(self.audio_file, self.chunks, self.margin, mdx_net_cut=mdx_net_cut)
+        mix, raw_mix, samplerate = prepare_mix(self.audio_file_path, self.chunks, self.margin, mdx_net_cut=mdx_net_cut)
         print_with_timestamp('Demixing...')
         source = self.demix_base(mix)[0]
 
@@ -106,8 +117,10 @@ class Separator:
         return primary_stem_path, secondary_stem_path
 
     def write_audio(self, stem_path, stem_source, samplerate):
-        # If output_dir is specified, join it with stem_path
+        # If output_dir is specified, create it and join it with stem_path
         if self.output_dir:
+            # Create the output directory if it does not exist
+            os.makedirs(self.output_dir, exist_ok=True)
             stem_path = os.path.join(self.output_dir, stem_path)
         
         sf.write(stem_path, stem_source, samplerate, subtype=self.wav_type_set)
