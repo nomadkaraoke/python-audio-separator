@@ -1,4 +1,4 @@
-# Audio Separator
+# Audio Separator 🎶
 
 [![PyPI version](https://badge.fury.io/py/audio-separator.svg)](https://badge.fury.io/py/audio-separator)
 
@@ -16,14 +16,14 @@ The primary stem typically contains the instrumental part of the audio, while th
 - CLI support for easy use in scripts and batch processing.
 - Python API for integration into other projects.
 
-## Installation
+## Installation 🛠️
 
 You can install Audio Separator using pip:
 
 `pip install audio-separator`
 
 
-## Usage
+## Usage 🚀
 
 ### Command Line Interface (CLI)
 
@@ -70,7 +70,7 @@ print(f'Secondary stem saved at {secondary_stem_path}')
 - model_file_dir: (Optional) Directory to cache model files in. Default: /tmp/audio-separator-models/
 - output_dir: (Optional) Directory where the separated files will be saved. If not specified, outputs to current dir.
 
-## Requirements
+## Requirements 📋
 
 Python <= 3.10 (one of the dependencies doesn't like 3.11 yet)
 
@@ -138,7 +138,7 @@ poetry build
 
 This will generate the distribution packages in the dist directory - but for now only @beveradb will be able to publish to PyPI.
 
-## Contributing
+## Contributing 🤝
 
 Contributions are very much welcome! Please fork the repository and submit a pull request with your changes, and I'll try to review, merge and publish promptly!
 
@@ -146,16 +146,20 @@ Contributions are very much welcome! Please fork the repository and submit a pul
 - If the maintenance workload for this repo somehow becomes too much for me I'll ask for volunteers to share maintainership of the repo, though I don't think that is very likely
 - Development and support for the MDX-Net separation models is part of the main [UVR project](https://github.com/Anjok07/ultimatevocalremovergui), this repo is just a CLI/Python package wrapper to simplify running those models programmatically. So, if you want to try and improve the actual models, please get involved in the UVR project and look for guidance there!
 
-## License
+## License 📄
 
 This project is licensed under the MIT [License](LICENSE).
 
 - **Please Note:** If you choose to integrate this project into some other project using the default model or any other model trained as part of the [UVR](https://github.com/Anjok07/ultimatevocalremovergui) project, please honor the MIT license by providing credit to UVR and its developers!
 
-## Credits
+## Credits 🙏
 
 - [Anjok07](https://github.com/Anjok07) - Author of [Ultimate Vocal Remover GUI](https://github.com/Anjok07/ultimatevocalremovergui), which almost all of the code in this repo was copied from! Definitely deserving of credit for anything good from this project. Thank you!
 - [DilanBoskan](https://github.com/DilanBoskan) - Your contributions at the start of this project were essential to the success of UVR. Thank you!
 - [Kuielab & Woosung Choi](https://github.com/kuielab) - Developed the original MDX-Net AI code. 
 - [KimberleyJSN](https://github.com/KimberleyJensen) - Advised and aided the implementation of the training scripts for MDX-Net and Demucs. Thank you!
 - [Hv](https://github.com/NaJeongMo/Colab-for-MDX_B) - Helped implement chunks into the MDX-Net AI code. Thank you!
+
+## Contact 💌
+
+For questions or feedback, please raise an issue or reach out to @beveradb ([Andrew Beveridge](mailto:andrew@beveridge.uk)) directly.
