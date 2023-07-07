@@ -36,6 +36,9 @@ audio-separator [audio_file] --model_name [model_name]
     model_name: (Optional) The name of the model to use for separation. Default: UVR_MDXNET_KARA_2
     model_file_dir: (Optional) Directory to cache model files in. Default: /tmp/audio-separator-models/
     output_dir: (Optional) The directory where the separated files will be saved. If not specified, outputs to current dir.
+    use_cuda: (Optional) Flag to use Nvidia GPU via CUDA for separation if available. Default: False
+    log_level: (Optional) The log level. Default: logging.DEBUG
+    log_formatter: (Optional) The log format. Default: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 ```
 
 Example:
@@ -69,6 +72,9 @@ print(f'Secondary stem saved at {secondary_stem_path}')
 - model_name: (Optional) The name of the model to use for separation. Defaults to 'UVR_MDXNET_KARA_2', a very powerful model for Karaoke instrumental tracks.
 - model_file_dir: (Optional) Directory to cache model files in. Default: /tmp/audio-separator-models/
 - output_dir: (Optional) Directory where the separated files will be saved. If not specified, outputs to current dir.
+- use_cuda: (Optional) Flag to use Nvidia GPU via CUDA for separation if available. Default: False
+- log_level: (Optional) The log level. Default: logging.DEBUG
+- log_formatter: (Optional) The log format. Default: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 
 ## Requirements 📋
 
