@@ -37,7 +37,7 @@ audio-separator [audio_file] --model_name [model_name]
     model_file_dir: (Optional) Directory to cache model files in. Default: /tmp/audio-separator-models/
     output_dir: (Optional) The directory where the separated files will be saved. If not specified, outputs to current dir.
     use_cuda: (Optional) Flag to use Nvidia GPU via CUDA for separation if available. Default: False
-    log_level: (Optional) The log level. Default: logging.DEBUG
+    log_level: (Optional) Logging level, e.g. info, debug, warning. Default: INFO
     log_formatter: (Optional) The log format. Default: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 ```
 
@@ -73,7 +73,7 @@ print(f'Secondary stem saved at {secondary_stem_path}')
 - model_file_dir: (Optional) Directory to cache model files in. Default: /tmp/audio-separator-models/
 - output_dir: (Optional) Directory where the separated files will be saved. If not specified, outputs to current dir.
 - use_cuda: (Optional) Flag to use Nvidia GPU via CUDA for separation if available. Default: False
-- log_level: (Optional) The log level. Default: logging.DEBUG
+- log_level: (Optional) Logging level, e.g. info, debug, warning. Default: INFO
 - log_formatter: (Optional) The log format. Default: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 
 ## Requirements 📋
