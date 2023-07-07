@@ -2,8 +2,7 @@ import os
 import warnings
 import hashlib
 import json
-import datetime
-
+import logging
 import warnings
 import wget
 import torch
@@ -14,16 +13,36 @@ import soundfile as sf
 from audio_separator.utils import spec_utils
 
 
-def print_with_timestamp(message):
-    timestamp = datetime.datetime.now().isoformat()
-    print(f"{timestamp} - {message}")
-
-
 class Separator:
-    def __init__(self, audio_file_path, model_name="UVR_MDXNET_KARA_2", model_file_dir="/tmp/audio-separator-models/", output_dir=None):
+    def __init__(
+        self,
+        audio_file_path,
+        model_name="UVR_MDXNET_KARA_2",
+        model_file_dir="/tmp/audio-separator-models/",
+        output_dir=None,
+        use_cuda=False,
+        log_level=logging.DEBUG,
+        log_formatter=None,
+    ):
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(log_level)
+
+        log_handler = logging.StreamHandler()
+
+        if log_formatter is None:
+            log_formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(module)s - %(message)s")
+
+        log_handler.setFormatter(log_formatter)
+        self.logger.addHandler(log_handler)
+
+        self.logger.debug(
+            f"Separator instantiating with input file: {audio_file_path}, model_name: {model_name}, output_dir: {output_dir}, use_cuda: {use_cuda}"
+        )
+
         self.model_name = model_name
         self.model_file_dir = model_file_dir
         self.output_dir = output_dir
+        self.use_cuda = use_cuda
 
         # Create the model directory if it does not exist
         os.makedirs(self.model_file_dir, exist_ok=True)
@@ -50,8 +69,15 @@ class Separator:
 
         warnings.filterwarnings("ignore")
         self.cpu = torch.device("cpu")
-        self.device = torch.device("cpu")
-        self.run_type = ["CPUExecutionProvider"]
+
+        if self.use_cuda:
+            self.logger.debug("Running in GPU mode")
+            self.device = torch.device("cuda")
+            self.run_type = ["CUDAExecutionProvider"]
+        else:
+            self.logger.debug("Running in CPU mode")
+            self.device = torch.device("cpu")
+            self.run_type = ["CPUExecutionProvider"]
 
     def get_model_hash(self, model_path):
         try:
@@ -64,17 +90,17 @@ class Separator:
     def separate(self):
         model_path = os.path.join(self.model_file_dir, f"{self.model_name}.onnx")
         if not os.path.isfile(model_path):
-            print_with_timestamp(f"Model not found at path {model_path}, downloading...")
+            self.logger.debug(f"Model not found at path {model_path}, downloading...")
             wget.download(self.model_url, model_path)
 
-        print_with_timestamp("Reading model settings...")
+        self.logger.debug("Reading model settings...")
 
         model_hash = self.get_model_hash(model_path)
-        print_with_timestamp(f"Model {model_path} has hash {model_hash} ...")
+        self.logger.debug(f"Model {model_path} has hash {model_hash} ...")
 
         model_data_path = os.path.join(self.model_file_dir, "model_data.json")
         if not os.path.isfile(model_data_path):
-            print_with_timestamp(f"Model data not found at path {model_data_path}, downloading...")
+            self.logger.debug(f"Model data not found at path {model_data_path}, downloading...")
             wget.download(self.model_data_url, model_data_path)
 
         model_data_object = json.load(open(model_data_path))
@@ -87,32 +113,34 @@ class Separator:
         self.primary_stem = model_data["primary_stem"]
         self.secondary_stem = "Vocals" if self.primary_stem == "Instrumental" else "Instrumental"
 
-        print_with_timestamp(
+        self.logger.debug(
             f"Set model data values: compensate = {self.compensate} primary_stem = {self.primary_stem} dim_f = {self.dim_f} dim_t = {self.dim_t} n_fft = {self.n_fft}"
         )
 
-        print_with_timestamp("Loading model...")
+        self.logger.debug("Loading model...")
         ort_ = ort.InferenceSession(model_path, providers=self.run_type)
         self.model_run = lambda spek: ort_.run(None, {"input": spek.cpu().numpy()})[0]
 
         self.initialize_model_settings()
-        print_with_timestamp("Running inference...")
+        self.logger.info("Running inference...")
         mdx_net_cut = True
         mix, raw_mix, samplerate = prepare_mix(self.audio_file_path, self.chunks, self.margin, mdx_net_cut=mdx_net_cut)
-        print_with_timestamp("Demixing...")
+        self.logger.info("Demixing...")
         source = self.demix_base(mix)[0]
 
-        print_with_timestamp(f"Saving {self.primary_stem} stem...")
+        self.logger.info(f"Saving {self.primary_stem} stem...")
         primary_stem_path = os.path.join(f"{self.audio_file_base}_({self.primary_stem})_{self.model_name}.wav")
         if not isinstance(self.primary_source, np.ndarray):
-            self.primary_source = spec_utils.normalize(source, self.is_normalization).T
+            self.primary_source = spec_utils.normalize(self.logger, source, self.is_normalization).T
         self.write_audio(primary_stem_path, self.primary_source, samplerate)
 
-        print_with_timestamp(f"Saving {self.secondary_stem} stem...")
+        self.logger.info(f"Saving {self.secondary_stem} stem...")
         secondary_stem_path = os.path.join(f"{self.audio_file_base}_({self.secondary_stem})_{self.model_name}.wav")
         if not isinstance(self.secondary_source, np.ndarray):
             raw_mix = self.demix_base(raw_mix, is_match_mix=True)[0] if mdx_net_cut else raw_mix
-            self.secondary_source, raw_mix = spec_utils.normalize_two_stem(source * self.compensate, raw_mix, self.is_normalization)
+            self.secondary_source, raw_mix = spec_utils.normalize_two_stem(
+                self.logger, source * self.compensate, raw_mix, self.is_normalization
+            )
             self.secondary_source = -self.secondary_source.T + raw_mix.T
         self.write_audio(secondary_stem_path, self.secondary_source, samplerate)
 

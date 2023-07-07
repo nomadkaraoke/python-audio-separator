@@ -5,18 +5,12 @@ import math
 import random
 import math
 import platform
-import traceback
-import datetime
+import logging
 
 OPERATING_SYSTEM = platform.system()
 SYSTEM_ARCH = platform.platform()
 SYSTEM_PROC = platform.processor()
 ARM = "arm"
-
-if OPERATING_SYSTEM == "Windows":
-    from pyrubberband import pyrb
-else:
-    from audio_separator.utils import pyrb
 
 if OPERATING_SYSTEM == "Darwin":
     wav_resolution = "polyphase" if SYSTEM_PROC == ARM or ARM in SYSTEM_ARCH else "sinc_fastest"
@@ -26,11 +20,6 @@ else:
 MAX_SPEC = "Max Spec"
 MIN_SPEC = "Min Spec"
 AVERAGE = "Average"
-
-
-def print_with_timestamp(message):
-    timestamp = datetime.datetime.now().isoformat()
-    print(f"{timestamp} - {message}")
 
 
 def crop_center(h1, h2):
@@ -118,42 +107,42 @@ def wave_to_spectrogram_mt(wave, hop_length, n_fft, mid_side=False, mid_side_b2=
     return spec
 
 
-def normalize(wave, is_normalize=False):
+def normalize(logger: logging.Logger, wave, is_normalize=False):
     """Save output music files"""
     maxv = np.abs(wave).max()
     if maxv > 1.0:
-        print_with_timestamp(f"Normalization Set {is_normalize}: Input above threshold for clipping. Max:{maxv}")
+        logger.debug(f"Normalization Set {is_normalize}: Input above threshold for clipping. Max:{maxv}")
         if is_normalize:
-            print(f"The result was normalized.")
+            logger.debug(f"The result was normalized.")
             wave /= maxv
         else:
-            print(f"The result was not normalized.")
+            logger.debug(f"The result was not normalized.")
     else:
-        print_with_timestamp(f"Normalization Set {is_normalize}: Input not above threshold for clipping. Max:{maxv}")
+        logger.debug(f"Normalization Set {is_normalize}: Input not above threshold for clipping. Max:{maxv}")
 
     return wave
 
 
-def normalize_two_stem(wave, mix, is_normalize=False):
+def normalize_two_stem(logger: logging.Logger, wave, mix, is_normalize=False):
     """Save output music files"""
 
     maxv = np.abs(wave).max()
     max_mix = np.abs(mix).max()
 
     if maxv > 1.0:
-        print_with_timestamp(f"Normalization Set {is_normalize}: Primary source above threshold for clipping. Max:{maxv}")
-        print_with_timestamp(f"Normalization Set {is_normalize}: Mixture above threshold for clipping. Max:{max_mix}")
+        logger.debug(f"Normalization Set {is_normalize}: Primary source above threshold for clipping. Max:{maxv}")
+        logger.debug(f"Normalization Set {is_normalize}: Mixture above threshold for clipping. Max:{max_mix}")
         if is_normalize:
-            print(f"The result was normalized.")
+            logger.debug(f"The result was normalized.")
             wave /= maxv
             mix /= maxv
         else:
-            print(f"The result was not normalized.")
+            logger.debug(f"The result was not normalized.")
     else:
-        print_with_timestamp(f"Normalization Set {is_normalize}: Input not above threshold for clipping. Max:{maxv}")
+        logger.debug(f"Normalization Set {is_normalize}: Input not above threshold for clipping. Max:{maxv}")
 
-    print_with_timestamp(f"Normalization Set {is_normalize}: Primary source - Max:{np.abs(wave).max()}")
-    print_with_timestamp(f"Normalization Set {is_normalize}: Mixture - Max:{np.abs(mix).max()}")
+    logger.debug(f"Normalization Set {is_normalize}: Primary source - Max:{np.abs(wave).max()}")
+    logger.debug(f"Normalization Set {is_normalize}: Mixture - Max:{np.abs(mix).max()}")
 
     return wave, mix
 
@@ -219,52 +208,6 @@ def reduce_vocal_aggressively(X, y, softmask):
     y_mag = np.clip(y_mag_tmp - v_mag_tmp * v_mask * softmask, 0, np.inf)
 
     return y_mag * np.exp(1.0j * np.angle(y))
-
-
-def merge_artifacts(y_mask, thres=0.01, min_range=64, fade_size=32):
-    mask = y_mask
-
-    try:
-        if min_range < fade_size * 2:
-            raise ValueError("min_range must be >= fade_size * 2")
-
-        idx = np.where(y_mask.min(axis=(0, 1)) > thres)[0]
-        start_idx = np.insert(idx[np.where(np.diff(idx) != 1)[0] + 1], 0, idx[0])
-        end_idx = np.append(idx[np.where(np.diff(idx) != 1)[0]], idx[-1])
-        artifact_idx = np.where(end_idx - start_idx > min_range)[0]
-        weight = np.zeros_like(y_mask)
-        if len(artifact_idx) > 0:
-            start_idx = start_idx[artifact_idx]
-            end_idx = end_idx[artifact_idx]
-            old_e = None
-            for s, e in zip(start_idx, end_idx):
-                if old_e is not None and s - old_e < fade_size:
-                    s = old_e - fade_size * 2
-
-                if s != 0:
-                    weight[:, :, s : s + fade_size] = np.linspace(0, 1, fade_size)
-                else:
-                    s -= fade_size
-
-                if e != y_mask.shape[2]:
-                    weight[:, :, e - fade_size : e] = np.linspace(1, 0, fade_size)
-                else:
-                    e += fade_size
-
-                weight[:, :, s + fade_size : e - fade_size] = 1
-                old_e = e
-
-        v_mask = 1 - y_mask
-        y_mask += weight * v_mask
-
-        mask = y_mask
-    except Exception as e:
-        error_name = f"{type(e).__name__}"
-        traceback_text = "".join(traceback.format_tb(e.__traceback__))
-        message = f'{error_name}: "{e}"\n{traceback_text}"'
-        print("Post Process Failed: ", message)
-
-    return mask
 
 
 def align_wave_head_and_tail(a, b):
@@ -566,30 +509,6 @@ def to_shape_minimize(x: np.ndarray, target_shape):
         padding_list.append(pad_tuple)
 
     return np.pad(x, tuple(padding_list), mode="constant")
-
-
-def augment_audio(export_path, audio_file, rate, is_normalization, wav_type_set, save_format=None, is_pitch=False):
-    wav, sr = librosa.load(audio_file, sr=44100, mono=False)
-
-    if wav.ndim == 1:
-        wav = np.asfortranarray([wav, wav])
-
-    if is_pitch:
-        wav_1 = pyrb.pitch_shift(wav[0], sr, rate, rbargs=None)
-        wav_2 = pyrb.pitch_shift(wav[1], sr, rate, rbargs=None)
-    else:
-        wav_1 = pyrb.time_stretch(wav[0], sr, rate, rbargs=None)
-        wav_2 = pyrb.time_stretch(wav[1], sr, rate, rbargs=None)
-
-    if wav_1.shape > wav_2.shape:
-        wav_2 = to_shape(wav_2, wav_1.shape)
-    if wav_1.shape < wav_2.shape:
-        wav_1 = to_shape(wav_1, wav_2.shape)
-
-    wav_mix = np.asfortranarray([wav_1, wav_2])
-
-    sf.write(export_path, normalize(wav_mix.T, is_normalization), sr, subtype=wav_type_set)
-    save_format(export_path)
 
 
 def average_audio(audio):
