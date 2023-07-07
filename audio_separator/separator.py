@@ -26,14 +26,16 @@ class Separator:
     ):
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(log_level)
+        self.log_level = log_level
+        self.log_formatter = log_formatter
 
-        log_handler = logging.StreamHandler()
+        self.log_handler = logging.StreamHandler()
 
-        if log_formatter is None:
-            log_formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(module)s - %(message)s")
+        if self.log_formatter is None:
+            self.log_formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(module)s - %(message)s")
 
-        log_handler.setFormatter(log_formatter)
-        self.logger.addHandler(log_handler)
+        self.log_handler.setFormatter(self.log_formatter)
+        self.logger.addHandler(self.log_handler)
 
         self.logger.debug(
             f"Separator instantiating with input file: {audio_file_path}, model_name: {model_name}, output_dir: {output_dir}, use_cuda: {use_cuda}"
