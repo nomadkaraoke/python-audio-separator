@@ -27,6 +27,7 @@ def main():
     parser.add_argument("--model_file_dir", default="/tmp/audio-separator-models/", help="Optional: model files directory.")
     parser.add_argument("--output_dir", default=None, help="Optional: directory to write output files. Default: current dir.")
     parser.add_argument("--use_cuda", action="store_true", help="Optional: use Nvidia GPU with CUDA for separation.")
+    parser.add_argument("--output_format", default="FLAC", help="Optional: output format for separated files, any common format. Default: FLAC")
 
     args = parser.parse_args()
 
@@ -41,12 +42,13 @@ def main():
 
     separator = Separator(
         args.audio_file,
+        log_formatter=log_formatter,
+        log_level=log_level,
         model_name=args.model_name,
         model_file_dir=args.model_file_dir,
         output_dir=args.output_dir,
         use_cuda=args.use_cuda,
-        log_formatter=log_formatter,
-        log_level=log_level,
+        output_format=args.output_format,
     )
     primary_stem_path, secondary_stem_path = separator.separate()
 

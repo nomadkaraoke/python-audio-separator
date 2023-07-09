@@ -17,12 +17,14 @@ class Separator:
     def __init__(
         self,
         audio_file_path,
+        log_level=logging.DEBUG,
+        log_formatter=None,
         model_name="UVR_MDXNET_KARA_2",
         model_file_dir="/tmp/audio-separator-models/",
         output_dir=None,
         use_cuda=False,
-        log_level=logging.DEBUG,
-        log_formatter=None,
+        output_format="WAV",
+        output_subtype=None,
     ):
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(log_level)
@@ -38,7 +40,7 @@ class Separator:
         self.logger.addHandler(self.log_handler)
 
         self.logger.debug(
-            f"Separator instantiating with input file: {audio_file_path}, model_name: {model_name}, output_dir: {output_dir}, use_cuda: {use_cuda}"
+            f"Separator instantiating with input file: {audio_file_path}, model_name: {model_name}, output_dir: {output_dir}, use_cuda: {use_cuda}, output_format: {output_format}"
         )
 
         self.model_name = model_name
@@ -56,7 +58,15 @@ class Separator:
         self.model_url = f"https://github.com/TRvlvr/model_repo/releases/download/all_public_uvr_models/{self.model_name}.onnx"
         self.model_data_url = "https://raw.githubusercontent.com/TRvlvr/application_data/main/mdx_model_data/model_data.json"
 
-        self.wav_type_set = "PCM_16"
+        self.output_subtype = output_subtype
+        self.output_format = output_format
+
+        if self.output_format is None:
+            self.output_format = "WAV"
+
+        if self.output_subtype is None and output_format == "WAV":
+            self.output_subtype = "PCM_16"
+
         self.is_normalization = False
         self.is_denoise = False
 
@@ -131,13 +141,13 @@ class Separator:
         source = self.demix_base(mix)[0]
 
         self.logger.info(f"Saving {self.primary_stem} stem...")
-        primary_stem_path = os.path.join(f"{self.audio_file_base}_({self.primary_stem})_{self.model_name}.wav")
+        primary_stem_path = os.path.join(f"{self.audio_file_base}_({self.primary_stem})_{self.model_name}.{self.output_format.lower()}")
         if not isinstance(self.primary_source, np.ndarray):
             self.primary_source = spec_utils.normalize(self.logger, source, self.is_normalization).T
         self.write_audio(primary_stem_path, self.primary_source, samplerate)
 
         self.logger.info(f"Saving {self.secondary_stem} stem...")
-        secondary_stem_path = os.path.join(f"{self.audio_file_base}_({self.secondary_stem})_{self.model_name}.wav")
+        secondary_stem_path = os.path.join(f"{self.audio_file_base}_({self.secondary_stem})_{self.model_name}.{self.output_format.lower()}")
         if not isinstance(self.secondary_source, np.ndarray):
             raw_mix = self.demix_base(raw_mix, is_match_mix=True)[0] if mdx_net_cut else raw_mix
             self.secondary_source, raw_mix = spec_utils.normalize_two_stem(
@@ -156,7 +166,7 @@ class Separator:
             os.makedirs(self.output_dir, exist_ok=True)
             stem_path = os.path.join(self.output_dir, stem_path)
 
-        sf.write(stem_path, stem_source, samplerate, subtype=self.wav_type_set)
+        sf.write(stem_path, stem_source, samplerate, subtype=self.output_subtype, format=self.output_format)
 
     def initialize_model_settings(self):
         self.n_bins = self.n_fft // 2 + 1

@@ -33,12 +33,13 @@ You can use Audio Separator via the command line:
 audio-separator [audio_file] --model_name [model_name]
     
     audio_file: The path to the audio file to be separated. Supports all common formats (WAV, MP3, FLAC, M4A, etc.)
+    log_level: (Optional) Logging level, e.g. info, debug, warning. Default: INFO
+    log_formatter: (Optional) The log format. Default: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     model_name: (Optional) The name of the model to use for separation. Default: UVR_MDXNET_KARA_2
     model_file_dir: (Optional) Directory to cache model files in. Default: /tmp/audio-separator-models/
     output_dir: (Optional) The directory where the separated files will be saved. If not specified, outputs to current dir.
     use_cuda: (Optional) Flag to use Nvidia GPU via CUDA for separation if available. Default: False
-    log_level: (Optional) Logging level, e.g. info, debug, warning. Default: INFO
-    log_formatter: (Optional) The log format. Default: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    output_format: (Optional) Format to encode output files, any common format (WAV, MP3, FLAC, M4A, etc.). Default: WAV
 ```
 
 Example:
@@ -69,12 +70,13 @@ print(f'Secondary stem saved at {secondary_stem_path}')
 ## Parameters for the Separator class
 
 - audio_file: The path to the audio file to be separated. Supports all common formats (WAV, MP3, FLAC, M4A, etc.)
+- log_level: (Optional) Logging level, e.g. info, debug, warning. Default: INFO
+- log_formatter: (Optional) The log format. Default: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 - model_name: (Optional) The name of the model to use for separation. Defaults to 'UVR_MDXNET_KARA_2', a very powerful model for Karaoke instrumental tracks.
 - model_file_dir: (Optional) Directory to cache model files in. Default: /tmp/audio-separator-models/
 - output_dir: (Optional) Directory where the separated files will be saved. If not specified, outputs to current dir.
 - use_cuda: (Optional) Flag to use Nvidia GPU via CUDA for separation if available. Default: False
-- log_level: (Optional) Logging level, e.g. info, debug, warning. Default: INFO
-- log_formatter: (Optional) The log format. Default: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+- output_format: (Optional) Format to encode output files, any common format (WAV, MP3, FLAC, M4A, etc.). Default: WAV
 
 ## Requirements 📋
 
