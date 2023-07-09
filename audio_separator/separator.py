@@ -83,9 +83,19 @@ class Separator:
         self.cpu = torch.device("cpu")
 
         if self.use_cuda:
-            self.logger.debug("Running in GPU mode")
-            self.device = torch.device("cuda")
-            self.run_type = ["CUDAExecutionProvider"]
+            self.logger.debug("CUDA requested, checking Torch version and CUDA status")
+            self.logger.debug(f"Torch version: {str(torch.__version__)}")
+
+            cuda_available = torch.cuda.is_available()
+            self.logger.debug(f"Is CUDA enabled? {str(cuda_available)}")
+
+            if cuda_available:
+                self.logger.debug("Running in GPU mode")
+                self.device = torch.device("cuda")
+                self.run_type = ["CUDAExecutionProvider"]
+            else:
+                raise Exception("CUDA requested but not available with current Torch installation. Do you have an Nvidia GPU?")
+
         else:
             self.logger.debug("Running in CPU mode")
             self.device = torch.device("cpu")

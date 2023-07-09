@@ -8,6 +8,7 @@
 /.cache/
 /models/*.onnx
 *.wav
+*.flac
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
