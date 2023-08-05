@@ -25,6 +25,8 @@ class Separator:
         use_cuda=False,
         output_format="WAV",
         output_subtype=None,
+        normalization_enabled=True,
+        denoise_enabled=True,
     ):
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(log_level)
@@ -67,8 +69,17 @@ class Separator:
         if self.output_subtype is None and output_format == "WAV":
             self.output_subtype = "PCM_16"
 
-        self.is_normalization = False
-        self.is_denoise = False
+        self.normalization_enabled = normalization_enabled
+        if self.normalization_enabled:
+            self.logger.debug(f"Normalization enabled, waveform will be normalized to max amplitude of 1.0 to avoid clipping.")
+        else:
+            self.logger.debug(f"Normalization disabled, waveform will not be normalized.")
+
+        self.denoise_enabled = denoise_enabled
+        if self.denoise_enabled:
+            self.logger.debug(f"Denoising enabled, model will be run twice to reduce noise in output audio.")
+        else:
+            self.logger.debug(f"Denoising disabled, model will only be run once. This may result in noisier output audio.")
 
         self.chunks = 0
         self.margin = 44100
@@ -153,7 +164,7 @@ class Separator:
         self.logger.info(f"Saving {self.primary_stem} stem...")
         primary_stem_path = os.path.join(f"{self.audio_file_base}_({self.primary_stem})_{self.model_name}.{self.output_format.lower()}")
         if not isinstance(self.primary_source, np.ndarray):
-            self.primary_source = spec_utils.normalize(self.logger, source, self.is_normalization).T
+            self.primary_source = spec_utils.normalize(self.logger, source, self.normalization_enabled).T
         self.write_audio(primary_stem_path, self.primary_source, samplerate)
 
         self.logger.info(f"Saving {self.secondary_stem} stem...")
@@ -161,7 +172,7 @@ class Separator:
         if not isinstance(self.secondary_source, np.ndarray):
             raw_mix = self.demix_base(raw_mix, is_match_mix=True)[0] if mdx_net_cut else raw_mix
             self.secondary_source, raw_mix = spec_utils.normalize_two_stem(
-                self.logger, source * self.compensate, raw_mix, self.is_normalization
+                self.logger, source * self.compensate, raw_mix, self.normalization_enabled
             )
             self.secondary_source = -self.secondary_source.T + raw_mix.T
         self.write_audio(secondary_stem_path, self.secondary_source, samplerate)
@@ -237,7 +248,7 @@ class Separator:
         if is_match_mix:
             spec_pred = spek.cpu().numpy()
         else:
-            spec_pred = -self.model_run(-spek) * 0.5 + self.model_run(spek) * 0.5 if self.is_denoise else self.model_run(spek)
+            spec_pred = -self.model_run(-spek) * 0.5 + self.model_run(spek) * 0.5 if self.denoise_enabled else self.model_run(spek)
 
         if is_ckpt:
             return self.istft(spec_pred).cpu().detach().numpy()

@@ -22,6 +22,19 @@ You can install Audio Separator using pip:
 
 `pip install audio-separator`
 
+### Extra installation steps for use with a GPU
+
+Unfortunately the way Torch and ONNX Runtime are published means the correct platform-specific dependencies for CUDA use don't get installed by the package published to PyPI with Poetry.
+
+As such, if you want to use audio-separator with a CUDA-capable Nvidia GPU, you need to reinstall them directly, allowing pip to calculate the right versions for your platform:
+
+- `pip uninstall torch onnxruntime`
+- `pip cache purge`
+- `pip install -r requirements-gpu.txt`
+
+This should get you set up to run audio-separator with CUDA acceleration, using the `--use_cuda` argument.
+
+> Note: if anyone has a way to make this cleaner so we can support both CPU and CUDA transcodes without separate installation processes, please let me know or submit a PR!
 
 ## Usage 🚀
 
@@ -39,6 +52,8 @@ audio-separator [audio_file] --model_name [model_name]
     model_file_dir: (Optional) Directory to cache model files in. Default: /tmp/audio-separator-models/
     output_dir: (Optional) The directory where the separated files will be saved. If not specified, outputs to current dir.
     use_cuda: (Optional) Flag to use Nvidia GPU via CUDA for separation if available. Default: False
+    denoise_enabled: (Optional) Flag to enable or disable denoising as part of the separation process. Default: True
+    normalization_enabled: (Optional) Flag to enable or disable normalization as part of the separation process. Default: False
     output_format: (Optional) Format to encode output files, any common format (WAV, MP3, FLAC, M4A, etc.). Default: WAV
 ```
 
@@ -76,6 +91,8 @@ print(f'Secondary stem saved at {secondary_stem_path}')
 - model_file_dir: (Optional) Directory to cache model files in. Default: /tmp/audio-separator-models/
 - output_dir: (Optional) Directory where the separated files will be saved. If not specified, outputs to current dir.
 - use_cuda: (Optional) Flag to use Nvidia GPU via CUDA for separation if available. Default: False
+- denoise_enabled: (Optional) Flag to enable or disable denoising as part of the separation process. Default: True
+- normalization_enabled: (Optional) Flag to enable or disable normalization as part of the separation process. Default: False
 - output_format: (Optional) Format to encode output files, any common format (WAV, MP3, FLAC, M4A, etc.). Default: WAV
 
 ## Requirements 📋

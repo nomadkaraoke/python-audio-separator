@@ -1,0 +1,2 @@
+optimum[onnxruntime-gpu] == "*"
+torch == "*"
