@@ -27,6 +27,7 @@ class Separator:
         output_subtype=None,
         normalization_enabled=True,
         denoise_enabled=True,
+        output_single_stem=None,
     ):
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(log_level)
@@ -79,7 +80,13 @@ class Separator:
         if self.denoise_enabled:
             self.logger.debug(f"Denoising enabled, model will be run twice to reduce noise in output audio.")
         else:
-            self.logger.debug(f"Denoising disabled, model will only be run once. This may result in noisier output audio.")
+            self.logger.debug(
+                f"Denoising disabled, model will only be run once. This is twice as fast, but may result in noisier output audio."
+            )
+
+        self.output_single_stem = output_single_stem
+        if output_single_stem is not None:
+            self.logger.debug(f"Single stem output requested, only one output file will be written: {output_single_stem}")
 
         self.chunks = 0
         self.margin = 44100
@@ -161,24 +168,32 @@ class Separator:
         self.logger.info("Demixing...")
         source = self.demix_base(mix)[0]
 
-        self.logger.info(f"Saving {self.primary_stem} stem...")
-        primary_stem_path = os.path.join(f"{self.audio_file_base}_({self.primary_stem})_{self.model_name}.{self.output_format.lower()}")
-        if not isinstance(self.primary_source, np.ndarray):
-            self.primary_source = spec_utils.normalize(self.logger, source, self.normalization_enabled).T
-        self.write_audio(primary_stem_path, self.primary_source, samplerate)
+        output_files = []
 
-        self.logger.info(f"Saving {self.secondary_stem} stem...")
-        secondary_stem_path = os.path.join(f"{self.audio_file_base}_({self.secondary_stem})_{self.model_name}.{self.output_format.lower()}")
-        if not isinstance(self.secondary_source, np.ndarray):
-            raw_mix = self.demix_base(raw_mix, is_match_mix=True)[0] if mdx_net_cut else raw_mix
-            self.secondary_source, raw_mix = spec_utils.normalize_two_stem(
-                self.logger, source * self.compensate, raw_mix, self.normalization_enabled
+        if self.output_single_stem != "secondary":
+            self.logger.info(f"Saving {self.primary_stem} stem...")
+            primary_stem_path = os.path.join(f"{self.audio_file_base}_({self.primary_stem})_{self.model_name}.{self.output_format.lower()}")
+            if not isinstance(self.primary_source, np.ndarray):
+                self.primary_source = spec_utils.normalize(self.logger, source, self.normalization_enabled).T
+            self.write_audio(primary_stem_path, self.primary_source, samplerate)
+            output_files.append(primary_stem_path)
+
+        if self.output_single_stem != "primary":
+            self.logger.info(f"Saving {self.secondary_stem} stem...")
+            secondary_stem_path = os.path.join(
+                f"{self.audio_file_base}_({self.secondary_stem})_{self.model_name}.{self.output_format.lower()}"
             )
-            self.secondary_source = -self.secondary_source.T + raw_mix.T
-        self.write_audio(secondary_stem_path, self.secondary_source, samplerate)
+            if not isinstance(self.secondary_source, np.ndarray):
+                raw_mix = self.demix_base(raw_mix, is_match_mix=True)[0] if mdx_net_cut else raw_mix
+                self.secondary_source, raw_mix = spec_utils.normalize_two_stem(
+                    self.logger, source * self.compensate, raw_mix, self.normalization_enabled
+                )
+                self.secondary_source = -self.secondary_source.T + raw_mix.T
+            self.write_audio(secondary_stem_path, self.secondary_source, samplerate)
+            output_files.append(secondary_stem_path)
 
         torch.cuda.empty_cache()
-        return primary_stem_path, secondary_stem_path
+        return output_files
 
     def write_audio(self, stem_path, stem_source, samplerate):
         # If output_dir is specified, create it and join it with stem_path

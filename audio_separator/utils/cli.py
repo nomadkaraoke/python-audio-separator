@@ -14,7 +14,7 @@ def main():
 
     parser = argparse.ArgumentParser(
         description="Separate audio file into different stems.",
-        formatter_class=lambda prog: argparse.HelpFormatter(prog, max_help_position=35),
+        formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, max_help_position=45),
     )
 
     parser.add_argument("audio_file", nargs="?", help="The audio file path to separate, in any common format.", default=argparse.SUPPRESS)
@@ -23,47 +23,59 @@ def main():
     parser.add_argument("-v", "--version", action="version", version=f"%(prog)s {package_version}")
 
     parser.add_argument(
-        "--log_level", default="info", help="Optional: logging level, e.g. info, debug, warning (default: info). Ex: --log_level=debug"
+        "--log_level",
+        default="info",
+        help="Optional: logging level, e.g. info, debug, warning (default: %(default)s). Example: --log_level=debug",
     )
 
     parser.add_argument(
         "--model_name",
         default="UVR_MDXNET_KARA_2",
-        help="Optional: model name to be used for separation (default: UVR_MDXNET_KARA_2). Ex: --model_name=UVR-MDX-NET-Inst_HQ_3",
+        help="Optional: model name to be used for separation (default: %(default)s). Example: --model_name=UVR-MDX-NET-Inst_HQ_3",
     )
 
     parser.add_argument(
         "--model_file_dir",
         default="/tmp/audio-separator-models/",
-        help="Optional: model files directory (default: /tmp/audio-separator-models/). Ex: --model_file_dir=/app/models",
+        help="Optional: model files directory (default: %(default)s). Example: --model_file_dir=/app/models",
     )
 
     parser.add_argument(
         "--output_dir",
         default=None,
-        help="Optional: directory to write output files (default: <current dir>). Ex: --output_dir=/app/separated",
+        help="Optional: directory to write output files (default: <current dir>). Example: --output_dir=/app/separated",
     )
 
     parser.add_argument(
-        "--use_cuda", action="store_true", help="Optional: use Nvidia GPU with CUDA for separation (default: false). Ex: --use_cuda=true"
+        "--use_cuda",
+        action="store_true",
+        help="Optional: use Nvidia GPU with CUDA for separation (default: %(default)s). Example: --use_cuda=true",
     )
 
     parser.add_argument(
-        "--output_format", default="FLAC", help="Optional: output format for separated files, any common format. Default: FLAC"
+        "--output_format",
+        default="FLAC",
+        help="Optional: output format for separated files, any common format (default: %(default)s). Example: --output_format=MP3",
     )
 
     parser.add_argument(
         "--denoise",
         type=lambda x: (str(x).lower() == "true"),
         default=True,
-        help="Optional: enable or disable denoising during separation (default: True). Ex: --denoise=False",
+        help="Optional: enable or disable denoising during separation (default: %(default)s). Example: --denoise=False",
     )
 
     parser.add_argument(
         "--normalize",
         type=lambda x: (str(x).lower() == "true"),
         default=True,
-        help="Optional: enable or disable normalization during separation (default: True). Ex: --normalize=False",
+        help="Optional: enable or disable normalization during separation (default: %(default)s). Example: --normalize=False",
+    )
+
+    parser.add_argument(
+        "--single_stem",
+        default=None,
+        help="Optional: output only single stem, primary or secondary. With the default model, primary is the instrumental. Example: --single_stem=primary",
     )
 
     args = parser.parse_args()
@@ -88,10 +100,11 @@ def main():
         output_format=args.output_format,
         denoise_enabled=args.denoise,
         normalization_enabled=args.normalize,
+        output_single_stem=args.single_stem,
     )
-    primary_stem_path, secondary_stem_path = separator.separate()
+    output_files = separator.separate()
 
-    logger.info(f"Separation complete! Output files: {primary_stem_path} {secondary_stem_path}")
+    logger.info(f"Separation complete! Output file(s): {' '.join(output_files)}")
 
 
 if __name__ == "__main__":
