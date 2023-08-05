@@ -75,7 +75,7 @@ def main():
     parser.add_argument(
         "--single_stem",
         default=None,
-        help="Optional: output only single stem, primary or secondary. With the default model, primary is the instrumental. Example: --single_stem=primary",
+        help="Optional: output only single stem, either instrumental or vocals. Example: --single_stem=instrumental",
     )
 
     args = parser.parse_args()

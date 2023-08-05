@@ -86,7 +86,9 @@ class Separator:
 
         self.output_single_stem = output_single_stem
         if output_single_stem is not None:
-            self.logger.debug(f"Single stem output requested, only one output file will be written: {output_single_stem}")
+            if output_single_stem.lower() not in {"instrumental", "vocals"}:
+                raise Exception("output_single_stem must be either 'instrumental' or 'vocals'")
+            self.logger.debug(f"Single stem output requested, only one output file ({output_single_stem}) will be written")
 
         self.chunks = 0
         self.margin = 44100
@@ -170,7 +172,7 @@ class Separator:
 
         output_files = []
 
-        if self.output_single_stem != "secondary":
+        if not self.output_single_stem or self.output_single_stem.lower() == self.primary_stem.lower():
             self.logger.info(f"Saving {self.primary_stem} stem...")
             primary_stem_path = os.path.join(f"{self.audio_file_base}_({self.primary_stem})_{self.model_name}.{self.output_format.lower()}")
             if not isinstance(self.primary_source, np.ndarray):
@@ -178,7 +180,7 @@ class Separator:
             self.write_audio(primary_stem_path, self.primary_source, samplerate)
             output_files.append(primary_stem_path)
 
-        if self.output_single_stem != "primary":
+        if not self.output_single_stem or self.output_single_stem.lower() == self.secondary_stem.lower():
             self.logger.info(f"Saving {self.secondary_stem} stem...")
             secondary_stem_path = os.path.join(
                 f"{self.audio_file_base}_({self.secondary_stem})_{self.model_name}.{self.output_format.lower()}"
