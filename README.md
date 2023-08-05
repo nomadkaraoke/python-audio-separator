@@ -55,6 +55,7 @@ audio-separator [audio_file] --model_name [model_name]
     denoise_enabled: (Optional) Flag to enable or disable denoising as part of the separation process. Default: True
     normalization_enabled: (Optional) Flag to enable or disable normalization as part of the separation process. Default: False
     output_format: (Optional) Format to encode output files, any common format (WAV, MP3, FLAC, M4A, etc.). Default: WAV
+    single_stem: (Optional) Output only single stem, either instrumental or vocals. Example: --single_stem=instrumental
 ```
 
 Example:
@@ -94,6 +95,7 @@ print(f'Secondary stem saved at {secondary_stem_path}')
 - denoise_enabled: (Optional) Flag to enable or disable denoising as part of the separation process. Default: True
 - normalization_enabled: (Optional) Flag to enable or disable normalization as part of the separation process. Default: False
 - output_format: (Optional) Format to encode output files, any common format (WAV, MP3, FLAC, M4A, etc.). Default: WAV
+- output_single_stem: (Optional) Output only single stem, either instrumental or vocals.
 
 ## Requirements 📋
 
