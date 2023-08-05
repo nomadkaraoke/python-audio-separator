@@ -30,7 +30,7 @@ As such, if you want to use audio-separator with a CUDA-capable Nvidia GPU, you 
 
 - `pip uninstall torch onnxruntime`
 - `pip cache purge`
-- `pip install -r requirements-gpu.txt`
+- `pip install torch "optimum[onnxruntime-gpu]"`
 
 This should get you set up to run audio-separator with CUDA acceleration, using the `--use_cuda` argument.
 

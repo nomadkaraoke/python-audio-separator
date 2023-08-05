@@ -1,2 +1,0 @@
-optimum[onnxruntime-gpu] == "*"
-torch == "*"
