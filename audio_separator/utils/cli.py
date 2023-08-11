@@ -53,6 +53,12 @@ def main():
     )
 
     parser.add_argument(
+        "--use_coreml",
+        action="store_true",
+        help="Optional: use Apple Silicon GPU with CoreML for separation (default: %(default)s). Example: --use_coreml=true",
+    )
+
+    parser.add_argument(
         "--output_format",
         default="FLAC",
         help="Optional: output format for separated files, any common format (default: %(default)s). Example: --output_format=MP3",
@@ -97,6 +103,7 @@ def main():
         model_file_dir=args.model_file_dir,
         output_dir=args.output_dir,
         use_cuda=args.use_cuda,
+        use_coreml=args.use_coreml,
         output_format=args.output_format,
         denoise_enabled=args.denoise,
         normalization_enabled=args.normalize,

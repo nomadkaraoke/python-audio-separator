@@ -23,6 +23,7 @@ class Separator:
         model_file_dir="/tmp/audio-separator-models/",
         output_dir=None,
         use_cuda=False,
+        use_coreml=False,
         output_format="WAV",
         output_subtype=None,
         normalization_enabled=True,
@@ -50,6 +51,7 @@ class Separator:
         self.model_file_dir = model_file_dir
         self.output_dir = output_dir
         self.use_cuda = use_cuda
+        self.use_coreml = use_coreml
 
         # Create the model directory if it does not exist
         os.makedirs(self.model_file_dir, exist_ok=True)
@@ -115,6 +117,26 @@ class Separator:
                 self.run_type = ["CUDAExecutionProvider"]
             else:
                 raise Exception("CUDA requested but not available with current Torch installation. Do you have an Nvidia GPU?")
+
+        elif self.use_coreml:
+            self.logger.debug("Apple Silicon CoreML requested, checking Torch version")
+            self.logger.debug(f"Torch version: {str(torch.__version__)}")
+
+            mps_available = hasattr(torch.backends, "mps") and torch.backends.mps.is_available()
+            self.logger.debug(f"Is Apple Silicon CoreML MPS available? {str(mps_available)}")
+
+            if mps_available:
+                self.logger.debug("Running in Apple Silicon MPS GPU mode")
+
+                # TODO: Change this to use MPS once FFTs are supported, see https://github.com/pytorch/pytorch/issues/78044
+                # self.device = torch.device("mps")
+
+                self.device = torch.device("cpu")
+                self.run_type = ["CoreMLExecutionProvider"]
+            else:
+                raise Exception(
+                    "Apple Silicon CoreML / MPS requested but not available with current Torch installation. Do you have an Apple Silicon GPU?"
+                )
 
         else:
             self.logger.debug("Running in CPU mode")
