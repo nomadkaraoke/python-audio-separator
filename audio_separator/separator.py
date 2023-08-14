@@ -194,11 +194,19 @@ class Separator:
 
         output_files = []
 
+        if not isinstance(self.primary_source, np.ndarray):
+            self.primary_source = spec_utils.normalize(self.logger, source, self.normalization_enabled).T
+
+        if not isinstance(self.secondary_source, np.ndarray):
+            raw_mix = self.demix_base(raw_mix, is_match_mix=True)[0] if mdx_net_cut else raw_mix
+            self.secondary_source, raw_mix = spec_utils.normalize_two_stem(
+                self.logger, source * self.compensate, raw_mix, self.normalization_enabled
+            )
+            self.secondary_source = -self.secondary_source.T + raw_mix.T
+
         if not self.output_single_stem or self.output_single_stem.lower() == self.primary_stem.lower():
             self.logger.info(f"Saving {self.primary_stem} stem...")
             primary_stem_path = os.path.join(f"{self.audio_file_base}_({self.primary_stem})_{self.model_name}.{self.output_format.lower()}")
-            if not isinstance(self.primary_source, np.ndarray):
-                self.primary_source = spec_utils.normalize(self.logger, source, self.normalization_enabled).T
             self.write_audio(primary_stem_path, self.primary_source, samplerate)
             output_files.append(primary_stem_path)
 
@@ -207,12 +215,6 @@ class Separator:
             secondary_stem_path = os.path.join(
                 f"{self.audio_file_base}_({self.secondary_stem})_{self.model_name}.{self.output_format.lower()}"
             )
-            if not isinstance(self.secondary_source, np.ndarray):
-                raw_mix = self.demix_base(raw_mix, is_match_mix=True)[0] if mdx_net_cut else raw_mix
-                self.secondary_source, raw_mix = spec_utils.normalize_two_stem(
-                    self.logger, source * self.compensate, raw_mix, self.normalization_enabled
-                )
-                self.secondary_source = -self.secondary_source.T + raw_mix.T
             self.write_audio(secondary_stem_path, self.secondary_source, samplerate)
             output_files.append(secondary_stem_path)
 
