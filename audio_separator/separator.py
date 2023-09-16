@@ -22,6 +22,8 @@ class Separator:
         model_name="UVR_MDXNET_KARA_2",
         model_file_dir="/tmp/audio-separator-models/",
         output_dir=None,
+        primary_stem_path=None,
+        secondary_stem_path=None,
         use_cuda=False,
         use_coreml=False,
         output_format="WAV",
@@ -41,7 +43,9 @@ class Separator:
             self.log_formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(module)s - %(message)s")
 
         self.log_handler.setFormatter(self.log_formatter)
-        self.logger.addHandler(self.log_handler)
+
+        if not self.logger.hasHandlers():
+            self.logger.addHandler(self.log_handler)
 
         self.logger.debug(
             f"Separator instantiating with input file: {audio_file_path}, model_name: {model_name}, output_dir: {output_dir}, use_cuda: {use_cuda}, output_format: {output_format}"
@@ -52,6 +56,8 @@ class Separator:
         self.output_dir = output_dir
         self.use_cuda = use_cuda
         self.use_coreml = use_coreml
+        self.primary_stem_path = primary_stem_path
+        self.secondary_stem_path = secondary_stem_path
 
         # Create the model directory if it does not exist
         os.makedirs(self.model_file_dir, exist_ok=True)
@@ -206,17 +212,21 @@ class Separator:
 
         if not self.output_single_stem or self.output_single_stem.lower() == self.primary_stem.lower():
             self.logger.info(f"Saving {self.primary_stem} stem...")
-            primary_stem_path = os.path.join(f"{self.audio_file_base}_({self.primary_stem})_{self.model_name}.{self.output_format.lower()}")
-            self.write_audio(primary_stem_path, self.primary_source, samplerate)
-            output_files.append(primary_stem_path)
+            if not self.primary_stem_path:
+                self.primary_stem_path = os.path.join(
+                    f"{self.audio_file_base}_({self.primary_stem})_{self.model_name}.{self.output_format.lower()}"
+                )
+            self.write_audio(self.primary_stem_path, self.primary_source, samplerate)
+            output_files.append(self.primary_stem_path)
 
         if not self.output_single_stem or self.output_single_stem.lower() == self.secondary_stem.lower():
             self.logger.info(f"Saving {self.secondary_stem} stem...")
-            secondary_stem_path = os.path.join(
-                f"{self.audio_file_base}_({self.secondary_stem})_{self.model_name}.{self.output_format.lower()}"
-            )
-            self.write_audio(secondary_stem_path, self.secondary_source, samplerate)
-            output_files.append(secondary_stem_path)
+            if not self.secondary_stem_path:
+                self.secondary_stem_path = os.path.join(
+                    f"{self.audio_file_base}_({self.secondary_stem})_{self.model_name}.{self.output_format.lower()}"
+                )
+            self.write_audio(self.secondary_stem_path, self.secondary_source, samplerate)
+            output_files.append(self.secondary_stem_path)
 
         torch.cuda.empty_cache()
         return output_files
