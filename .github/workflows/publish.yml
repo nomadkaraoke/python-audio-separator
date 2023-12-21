@@ -24,8 +24,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install TOML
+        run: pip install toml
+
       - name: Get version from pyproject.toml
-        id: get_version
         run: |
           VERSION=$(python -c "import toml; print(toml.load('pyproject.toml')['tool']['poetry']['version'])")
           echo "VERSION=$VERSION" >> $GITHUB_ENV
