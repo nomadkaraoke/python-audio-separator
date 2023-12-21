@@ -24,8 +24,6 @@ class Separator:
         output_dir=None,
         primary_stem_path=None,
         secondary_stem_path=None,
-        use_cuda=False,
-        use_coreml=False,
         output_format="WAV",
         output_subtype=None,
         normalization_enabled=True,
@@ -48,14 +46,12 @@ class Separator:
             self.logger.addHandler(self.log_handler)
 
         self.logger.debug(
-            f"Separator instantiating with input file: {audio_file_path}, model_name: {model_name}, output_dir: {output_dir}, use_cuda: {use_cuda}, output_format: {output_format}"
+            f"Separator instantiating with input file: {audio_file_path}, model_name: {model_name}, output_dir: {output_dir}, output_format: {output_format}"
         )
 
         self.model_name = model_name
         self.model_file_dir = model_file_dir
         self.output_dir = output_dir
-        self.use_cuda = use_cuda
-        self.use_coreml = use_coreml
         self.primary_stem_path = primary_stem_path
         self.secondary_stem_path = secondary_stem_path
 
@@ -110,51 +106,57 @@ class Separator:
         warnings.filterwarnings("ignore")
         self.cpu = torch.device("cpu")
 
-        if self.use_cuda:
-            self.logger.debug("CUDA requested, checking Torch version and CUDA status")
-            self.logger.debug(f"Torch version: {str(torch.__version__)}")
+        # Prepare for hardware-accelerated inference by validating both Torch and ONNX Runtime support either CUDA or CoreML
+        self.logger.debug(f"Torch version: {str(torch.__version__)}")
+        ort_device = ort.get_device()
+        ort_providers = ort.get_available_providers()
+        hardware_acceleration_enabled = False
 
-            cuda_available = torch.cuda.is_available()
-            self.logger.debug(f"Is CUDA enabled for Torch? {str(cuda_available)}")
+        if torch.cuda.is_available():
+            self.logger.info("CUDA is available in Torch, setting Torch device to CUDA")
+            self.device = torch.device("cuda")
 
-            if cuda_available:
-                self.logger.info("Torch running in CUDA GPU mode")
-                self.device = torch.device("cuda")
-                self.run_type = ["CUDAExecutionProvider"]
+            if ort_device == "GPU" and "CUDAExecutionProvider" in ort_providers:
+                self.logger.info("ONNXruntime device is GPU with CUDAExecutionProvider available, enabling acceleration")
+                self.onnx_execution_provider = ["CUDAExecutionProvider"]
+                hardware_acceleration_enabled = True
             else:
-                raise Exception("CUDA requested but not available with current Torch installation. Do you have an Nvidia GPU?")
-
-            # Check GPU inferencing is enabled for ONNXRuntime too, which is essential to actually use the GPU
-            ort_device = ort.get_device()
-            if ort_device == 'GPU':
-                self.logger.info("ONNX Runtime running in GPU mode")
-            else:
-                raise Exception("CUDA requested but not available with current ONNX Runtime installation. Try pip install --force-reinstall onnxruntime-gpu")
-
-        elif self.use_coreml:
-            self.logger.debug("Apple Silicon CoreML requested, checking Torch version")
-            self.logger.debug(f"Torch version: {str(torch.__version__)}")
-
-            mps_available = hasattr(torch.backends, "mps") and torch.backends.mps.is_available()
-            self.logger.debug(f"Is Apple Silicon CoreML MPS available? {str(mps_available)}")
-
-            if mps_available:
-                self.logger.debug("Running in Apple Silicon MPS GPU mode")
-
-                # TODO: Change this to use MPS once FFTs are supported, see https://github.com/pytorch/pytorch/issues/78044
-                # self.device = torch.device("mps")
-
-                self.device = torch.device("cpu")
-                self.run_type = ["CoreMLExecutionProvider"]
-            else:
-                raise Exception(
-                    "Apple Silicon CoreML / MPS requested but not available with current Torch installation. Do you have an Apple Silicon GPU?"
-                )
-
+                self.logger.warning("CUDAExecutionProvider not available in ONNXruntime, so acceleration will NOT be enabled")
+                self.logger.warning("If you expect CUDA to work with your GPU, try pip install --force-reinstall onnxruntime-gpu")
         else:
-            self.logger.debug("Running in CPU mode")
+            self.logger.debug(
+                "CUDA not available with Torch installation. If you have an Nvidia GPU and expect CUDA support to work, try: "
+            )
+            self.logger.debug(
+                "pip install --force-reinstall torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118"
+            )
+
+        if hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+            self.logger.info("Apple Silicon MPS/CoreML is available in Torch, setting Torch device to MPS")
+
+            # TODO: Change this to use MPS once FFTs are supported, see https://github.com/pytorch/pytorch/issues/78044
+            # self.device = torch.device("mps")
+
+            self.logger.warning("Torch MPS backend does not yet support FFT operations, Torch will still use CPU!")
+            self.logger.warning("To track progress towards Apple Silicon acceleration, see https://github.com/pytorch/pytorch/issues/78044")
             self.device = torch.device("cpu")
-            self.run_type = ["CPUExecutionProvider"]
+
+            if "CoreMLExecutionProvider" in ort_providers:
+                self.logger.info("ONNXruntime has CoreMLExecutionProvider available, enabling acceleration")
+                self.onnx_execution_provider = ["CoreMLExecutionProvider"]
+                hardware_acceleration_enabled = True
+            else:
+                self.logger.warning("CoreMLExecutionProvider not available in ONNXruntime, so acceleration will NOT be enabled")
+                self.logger.warning("If you expect MPS/CoreML to work with your Mac, try pip install --force-reinstall onnxruntime-silicon")
+        else:
+            raise Exception(
+                "Apple Silicon CoreML / MPS requested but not available with current Torch installation. Do you have an Apple Silicon GPU?"
+            )
+
+        if not hardware_acceleration_enabled:
+            self.logger.info("No hardware acceleration could be configured, running in CPU mode")
+            self.device = torch.device("cpu")
+            self.onnx_execution_provider = ["CPUExecutionProvider"]
 
     def get_model_hash(self, model_path):
         try:
@@ -195,7 +197,7 @@ class Separator:
         )
 
         self.logger.debug("Loading model...")
-        ort_ = ort.InferenceSession(model_path, providers=self.run_type)
+        ort_ = ort.InferenceSession(model_path, providers=self.onnx_execution_provider)
         self.model_run = lambda spek: ort_.run(None, {"input": spek.cpu().numpy()})[0]
 
         self.initialize_model_settings()
@@ -235,7 +237,9 @@ class Separator:
             self.write_audio(self.secondary_stem_path, self.secondary_source, samplerate)
             output_files.append(self.secondary_stem_path)
 
-        torch.cuda.empty_cache()
+        if hasattr(torch, "cuda"):
+            torch.cuda.empty_cache()
+
         return output_files
 
     def write_audio(self, stem_path, stem_source, samplerate):
