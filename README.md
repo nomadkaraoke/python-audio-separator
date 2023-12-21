@@ -20,9 +20,14 @@ The primary stem typically contains the instrumental part of the audio, while th
 
 You can install Audio Separator using pip, use one of the following depending on your device:
 
-- `pip install audio-separator` (CPU only, no specific hardware acceleration, slow)
-- `pip install audio-separator[gpu]` (Nvidia GPU with CUDA support)
-- `pip install audio-separator[silicon]` (Apple Silicon with CoreML support, macOS Sonoma+)
+Nvidia GPU with CUDA support:
+`pip install audio-separator[gpu]`
+
+Apple Silicon running macOS Sonoma+ with CoreML support: 
+`pip install audio-separator[silicon]`
+
+No specific hardware acceleration, CPU only, slow
+`pip install audio-separator`
 
 ### Requirements
 
