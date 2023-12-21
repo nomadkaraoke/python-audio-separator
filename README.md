@@ -18,23 +18,41 @@ The primary stem typically contains the instrumental part of the audio, while th
 
 ## Installation 🛠️
 
-You can install Audio Separator using pip:
+You can install Audio Separator using pip, use one of the following depending on your device:
 
-`pip install audio-separator`
+- `pip install audio-separator` (CPU only, no specific hardware acceleration, slow)
+- `pip install audio-separator[gpu]` (Nvidia GPU with CUDA support)
+- `pip install audio-separator[silicon]` (Apple Silicon with CoreML support, macOS Sonoma+)
 
-### Extra installation steps for use with a GPU
+### Requirements
 
-Unfortunately the way Torch and ONNX Runtime are published means the correct platform-specific dependencies for CUDA use don't get installed by the package published to PyPI with Poetry.
+You'll need two other things installed on your system: `ffmpeg` and `libsndfile`.
+These should be easy to install on most platforms, e.g.
 
-As such, if you want to use audio-separator with a CUDA-capable Nvidia GPU, you need to reinstall them directly, allowing pip to calculate the right versions for your platform:
+- Debian/Ubuntu: `apt-get update; apt-get install -y libsndfile1-dev ffmpeg`
+- macOS: `brew update; brew install libsndfile ffmpeg`
+
+
+### GPU / CUDA specific steps 
+
+In theory, all you should need to do to get `audio-separator` working with a GPU is install it with the `[gpu]` extra as above.
+
+However, sometimes getting both PyTorch and ONNX Runtime working with CUDA support can be a bit tricky so sometimes it may not be that easy.
+
+You may need to reinstall them directly, allowing pip to calculate the right versions for your platform:
 
 - `pip uninstall torch onnxruntime`
 - `pip cache purge`
-- `pip install torch "optimum[onnxruntime-gpu]"`
+- `pip install torch torchvision torchaudio`
+- `pip install onnxruntime-gpu`
 
-This should get you set up to run audio-separator with CUDA acceleration, using the `--use_cuda` argument.
+Depending on your hardware, you may get better performance with the optimum version of onnxruntime:
+- `pip install "optimum[onnxruntime-gpu]"`
 
-> Note: if anyone has a way to make this cleaner so we can support both CPU and CUDA transcodes without separate installation processes, please let me know or submit a PR!
+Depending on your CUDA version and hardware, you may need to install torch from the `cu118` index instead:
+- `pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118`
+
+> Note: if anyone knows how to make this cleaner so we can support both different platform-specific dependencies for hardware acceleration without a separate installation process for each, please let me know or raise a PR!
 
 ## Usage 🚀
 
@@ -51,7 +69,6 @@ audio-separator [audio_file] --model_name [model_name]
     model_name: (Optional) The name of the model to use for separation. Default: UVR_MDXNET_KARA_2
     model_file_dir: (Optional) Directory to cache model files in. Default: /tmp/audio-separator-models/
     output_dir: (Optional) The directory where the separated files will be saved. If not specified, outputs to current dir.
-    use_cuda: (Optional) Flag to use Nvidia GPU via CUDA for separation if available. Default: False
     denoise_enabled: (Optional) Flag to enable or disable denoising as part of the separation process. Default: True
     normalization_enabled: (Optional) Flag to enable or disable normalization as part of the separation process. Default: False
     output_format: (Optional) Format to encode output files, any common format (WAV, MP3, FLAC, M4A, etc.). Default: WAV
@@ -91,7 +108,6 @@ print(f'Secondary stem saved at {secondary_stem_path}')
 - model_name: (Optional) The name of the model to use for separation. Defaults to 'UVR_MDXNET_KARA_2', a very powerful model for Karaoke instrumental tracks.
 - model_file_dir: (Optional) Directory to cache model files in. Default: /tmp/audio-separator-models/
 - output_dir: (Optional) Directory where the separated files will be saved. If not specified, outputs to current dir.
-- use_cuda: (Optional) Flag to use Nvidia GPU via CUDA for separation if available. Default: False
 - denoise_enabled: (Optional) Flag to enable or disable denoising as part of the separation process. Default: True
 - normalization_enabled: (Optional) Flag to enable or disable normalization as part of the separation process. Default: False
 - output_format: (Optional) Format to encode output files, any common format (WAV, MP3, FLAC, M4A, etc.). Default: WAV
