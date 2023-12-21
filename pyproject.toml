@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "audio-separator"
-version = "0.8.0"
+version = "0.8.1"
 description = "Easy to use vocal separation on CLI or as a python package, using the amazing MDX-Net models from UVR trained by @Anjok07"
 authors = ["Andrew Beveridge <andrew@beveridge.uk>"]
 license = "MIT"
@@ -12,27 +12,27 @@ documentation = "https://github.com/karaokenerds/python-audio-separator/blob/mai
 
 [tool.poetry.dependencies]
 python = ">=3.9"
-onnx = "^1.14"
-numpy = "^1.23"
-soundfile = ">=0.11, <0.13"
-librosa = ">=0.9, <0.11"
-torch = "^2"
-wget = "^3"
-six = "^1.16"
+onnx = ">=1.14"
+numpy = ">=1.23"
+soundfile = ">=0.11"
+librosa = ">=0.9"
+torch = ">=2"
+wget = ">=3"
+six = ">=1.16"
+onnxruntime = { version = ">=1.15", optional = true }
+onnxruntime-gpu = { version = ">=1.15", optional = true }
+onnxruntime-silicon = { version = ">=1.15", optional = true }
 
-[tool.poetry.dependencies.onnxruntime]
-version = "^1.15"
-markers = "sys_platform != 'darwin' and platform_machine != 'arm64'"
-
-[tool.poetry.dependencies.onnxruntime-silicon]
-version = "^1.15"
-markers = "sys_platform == 'darwin' and platform_machine == 'arm64'"
+[tool.poetry.extras]
+cpu = ["onnxruntime"]
+gpu = ["onnxruntime-gpu"]
+silicon = ["onnxruntime-silicon"]
 
 [tool.poetry.scripts]
 audio-separator = 'audio_separator.utils.cli:main'
 
 [tool.poetry.group.dev.dependencies]
-black = "^23.3.0"
+black = ">=23.3.0"
 
 [tool.black]
 line-length = 140
