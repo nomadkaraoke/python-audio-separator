@@ -124,12 +124,7 @@ class Separator:
                 self.logger.warning("CUDAExecutionProvider not available in ONNXruntime, so acceleration will NOT be enabled")
                 self.logger.warning("If you expect CUDA to work with your GPU, try pip install --force-reinstall onnxruntime-gpu")
         else:
-            self.logger.debug(
-                "CUDA not available with Torch installation. If you have an Nvidia GPU and expect CUDA support to work, try: "
-            )
-            self.logger.debug(
-                "pip install --force-reinstall torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118"
-            )
+            self.logger.debug("CUDA not available in Torch installation. If you expect GPU/CUDA support to work, please see README")
 
         if hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
             self.logger.info("Apple Silicon MPS/CoreML is available in Torch, setting Torch device to MPS")
@@ -149,9 +144,7 @@ class Separator:
                 self.logger.warning("CoreMLExecutionProvider not available in ONNXruntime, so acceleration will NOT be enabled")
                 self.logger.warning("If you expect MPS/CoreML to work with your Mac, try pip install --force-reinstall onnxruntime-silicon")
         else:
-            raise Exception(
-                "Apple Silicon CoreML / MPS requested but not available with current Torch installation. Do you have an Apple Silicon GPU?"
-            )
+            self.logger.debug("Apple Silicon MPS/CoreML not available in Torch installation. If you expect this to work, please see README")
 
         if not hardware_acceleration_enabled:
             self.logger.info("No hardware acceleration could be configured, running in CPU mode")

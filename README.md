@@ -18,24 +18,24 @@ The primary stem typically contains the instrumental part of the audio, while th
 
 ## Installation 🛠️
 
-You can install Audio Separator using pip, use one of the following depending on your device:
-
-Nvidia GPU with CUDA support:
-`pip install audio-separator[gpu]`
-
-Apple Silicon running macOS Sonoma+ with CoreML support: 
-`pip install audio-separator[silicon]`
-
-No specific hardware acceleration, CPU only, slow
-`pip install audio-separator`
-
-### Requirements
-
-You'll need two other things installed on your system: `ffmpeg` and `libsndfile`.
-These should be easy to install on most platforms, e.g.
+You'll need `ffmpeg` and `libsndfile`, which should be easy to install on most platforms, e.g.:
 
 - Debian/Ubuntu: `apt-get update; apt-get install -y libsndfile1-dev ffmpeg`
 - macOS: `brew update; brew install libsndfile ffmpeg`
+
+You can then install Audio Separator using pip, use one of the following to install the correct onnxruntime dependency for your device:
+
+### Nvidia GPU with CUDA acceleration:
+
+`pip install audio-separator[gpu]`
+
+### Apple Silicon, macOS Sonoma+ with CoreML acceleration: 
+
+`pip install audio-separator[silicon]`
+
+### No hardware acceleration, CPU only:
+
+`pip install audio-separator[cpu]`
 
 
 ### GPU / CUDA specific steps 
