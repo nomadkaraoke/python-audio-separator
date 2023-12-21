@@ -9,7 +9,7 @@ import torch
 import librosa
 import numpy as np
 import onnxruntime as ort
-import soundfile as sf
+from pydub import AudioSegment
 from audio_separator.utils import spec_utils
 
 
@@ -45,7 +45,7 @@ class Separator:
         if not self.logger.hasHandlers():
             self.logger.addHandler(self.log_handler)
 
-        self.logger.debug(
+        self.logger.info(
             f"Separator instantiating with input file: {audio_file_path}, model_name: {model_name}, output_dir: {output_dir}, output_format: {output_format}"
         )
 
@@ -236,13 +236,58 @@ class Separator:
         return output_files
 
     def write_audio(self, stem_path, stem_source, samplerate):
+        self.logger.debug(f"Entering write_audio with stem_path: {stem_path}, samplerate: {samplerate}")
+
+        # Check if the numpy array is empty or contains very low values
+        if np.max(np.abs(stem_source)) < 1e-6:
+            self.logger.warning("Warning: stem_source array is near-silent or empty.")
+            return
+
         # If output_dir is specified, create it and join it with stem_path
         if self.output_dir:
-            # Create the output directory if it does not exist
             os.makedirs(self.output_dir, exist_ok=True)
             stem_path = os.path.join(self.output_dir, stem_path)
 
-        sf.write(stem_path, stem_source, samplerate, subtype=self.output_subtype, format=self.output_format)
+        self.logger.debug(f"Audio data shape before processing: {stem_source.shape}")
+        self.logger.debug(f"Data type before conversion: {stem_source.dtype}")
+
+        # Ensure the audio data is in the correct format (e.g., int16)
+        if stem_source.dtype != np.int16:
+            stem_source = (stem_source * 32767).astype(np.int16)
+            self.logger.debug("Converted stem_source to int16.")
+
+        # Correctly interleave stereo channels
+        stem_source_interleaved = np.empty((2 * stem_source.shape[0],), dtype=np.int16)
+        stem_source_interleaved[0::2] = stem_source[:, 0]  # Left channel
+        stem_source_interleaved[1::2] = stem_source[:, 1]  # Right channel
+
+        self.logger.debug(f"Interleaved audio data shape: {stem_source_interleaved.shape}")
+
+        # Create a pydub AudioSegment
+        try:
+            audio_segment = AudioSegment(
+                stem_source_interleaved.tobytes(), frame_rate=samplerate, sample_width=stem_source.dtype.itemsize, channels=2
+            )
+            self.logger.debug("Created AudioSegment successfully.")
+        except Exception as e:
+            self.logger.error(f"Error creating AudioSegment: {e}")
+            return
+
+        # Determine file format based on the file extension
+        file_format = stem_path.lower().split(".")[-1]
+
+        # For M4A files, specify 'mp4' as the container format
+        if file_format == "m4a":
+            file_format = "mp4"
+        elif file_format == "mka":
+            file_format = "matroska"
+
+        # Export using the determined format
+        try:
+            audio_segment.export(stem_path, format=file_format)
+            self.logger.debug(f"Exported audio file successfully to {stem_path}")
+        except Exception as e:
+            self.logger.error(f"Error exporting audio file: {e}")
 
     def initialize_model_settings(self):
         self.n_bins = self.n_fft // 2 + 1

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "audio-separator"
-version = "0.9.2"
+version = "0.9.3"
 description = "Easy to use vocal separation on CLI or as a python package, using the amazing MDX-Net models from UVR trained by @Anjok07"
 authors = ["Andrew Beveridge <andrew@beveridge.uk>"]
 license = "MIT"
@@ -14,11 +14,11 @@ documentation = "https://github.com/karaokenerds/python-audio-separator/blob/mai
 python = ">=3.9"
 onnx = ">=1.14"
 numpy = ">=1.23"
-soundfile = ">=0.11"
 librosa = ">=0.9"
 torch = ">=2"
 wget = ">=3"
 six = ">=1.16"
+pydub = ">=0.25"
 onnxruntime = { version = ">=1.15", optional = true }
 onnxruntime-gpu = { version = ">=1.15", optional = true }
 onnxruntime-silicon = { version = ">=1.15", optional = true }

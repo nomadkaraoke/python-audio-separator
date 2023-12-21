@@ -18,33 +18,33 @@ The primary stem typically contains the instrumental part of the audio, while th
 
 ## Installation 🛠️
 
-You'll need `ffmpeg` and `libsndfile`, which should be easy to install on most platforms, e.g.:
+You'll need `ffmpeg`, which should be easy to install on most platforms, e.g.:
 
 ### 🐧 Debian/Ubuntu
-`apt-get update; apt-get install -y libsndfile1-dev ffmpeg`
+`apt-get update; apt-get install -y ffmpeg`
 
 ###  macOS
-`brew update; brew install libsndfile ffmpeg`
+`brew update; brew install ffmpeg`
 
 You can then install Audio Separator using pip, use one of the following to install the correct onnxruntime dependency for your device:
 
 ### 🎮 Nvidia GPU with CUDA acceleration
 
-`pip install audio-separator[gpu]`
+`pip install "audio-separator[gpu]"`
 
 - 💬 If successfully configured, you should see this log message when running audio-separator:
  `ONNXruntime has CUDAExecutionProvider available, enabling acceleration`
 
 ###  Apple Silicon, macOS Sonoma+ with CoreML acceleration
 
-`pip install audio-separator[silicon]`
+`pip install "audio-separator[silicon]"`
 
 - 💬 If successfully configured, you should see this log message when running audio-separator:
  `ONNXruntime has CoreMLExecutionProvider available, enabling acceleration`
 
 ### 🐢 No hardware acceleration, CPU only:
 
-`pip install audio-separator[cpu]`
+`pip install "audio-separator[cpu]"`
 
 
 ## GPU / CUDA specific installation steps
@@ -131,7 +131,7 @@ print(f'Secondary stem saved at {secondary_stem_path}')
 
 Python >= 3.9
 
-Libraries: onnx, onnxruntime, numpy, soundfile, librosa, torch, wget, six
+Libraries: onnx, onnxruntime, numpy, librosa, torch, wget, six
 
 ## Developing Locally
 
