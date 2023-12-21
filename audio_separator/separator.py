@@ -115,14 +115,21 @@ class Separator:
             self.logger.debug(f"Torch version: {str(torch.__version__)}")
 
             cuda_available = torch.cuda.is_available()
-            self.logger.debug(f"Is CUDA enabled? {str(cuda_available)}")
+            self.logger.debug(f"Is CUDA enabled for Torch? {str(cuda_available)}")
 
             if cuda_available:
-                self.logger.debug("Running in GPU mode")
+                self.logger.info("Torch running in CUDA GPU mode")
                 self.device = torch.device("cuda")
                 self.run_type = ["CUDAExecutionProvider"]
             else:
                 raise Exception("CUDA requested but not available with current Torch installation. Do you have an Nvidia GPU?")
+
+            # Check GPU inferencing is enabled for ONNXRuntime too, which is essential to actually use the GPU
+            ort_device = ort.get_device()
+            if ort_device == 'GPU':
+                self.logger.info("ONNX Runtime running in GPU mode")
+            else:
+                raise Exception("CUDA requested but not available with current ONNX Runtime installation. Try pip install --force-reinstall onnxruntime-gpu")
 
         elif self.use_coreml:
             self.logger.debug("Apple Silicon CoreML requested, checking Torch version")
