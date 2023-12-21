@@ -4,7 +4,7 @@ on: [push, workflow_dispatch]
 
 jobs:
   # Auto-publish when version is increased
-  publish-job:
+  publish-pypi:
     # Only publish on `main` branch
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
@@ -17,3 +17,52 @@ jobs:
           pypi-token: ${{ secrets.PYPI_API_TOKEN }}
           gh-token: ${{ secrets.GITHUB_TOKEN }}
           parse-changelog: false
+
+  build-and-push-docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get version from pyproject.toml
+        id: get_version
+        run: |
+          VERSION=$(python -c "import toml; print(toml.load('pyproject.toml')['tool']['poetry']['version'])")
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image for CPU
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: docker/build-push-action@v5
+        with:
+          file: Dockerfile.cpu
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            beveradb/audio-separator:cpu-${{ env.VERSION }}
+            beveradb/audio-separator:cpu-latest
+            beveradb/audio-separator:latest
+
+      - name: Build and push Docker image for GPU
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: docker/build-push-action@v5
+        with:
+          file: Dockerfile.gpu
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            beveradb/audio-separator:gpu-${{ env.VERSION }}
+            beveradb/audio-separator:gpu-latest

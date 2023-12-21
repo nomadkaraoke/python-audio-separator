@@ -1,0 +1,14 @@
+# Use an official Python runtime as a parent image
+FROM python:3.11-slim
+
+# Set the working directory in the container
+WORKDIR /usr/src/app
+
+RUN apt-get update; apt-get install -y ffmpeg
+RUN python -m pip install --upgrade pip
+
+RUN --mount=type=cache,target=/root/.cache \
+    pip install "audio-separator[cpu]"
+
+# Run audio-separator when the container launches
+ENTRYPOINT ["audio-separator"]
