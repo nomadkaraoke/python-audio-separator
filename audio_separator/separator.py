@@ -298,25 +298,44 @@ class Separator:
         self.gen_size = self.chunk_size - 2 * self.trim
 
     def initialize_mix(self, mix, is_ckpt=False):
+        # Log the initial state of the mix
+        self.logger.debug(f"Initializing mix. is_ckpt: {is_ckpt}, Initial mix shape: {mix.shape}")
+
+        # Check if mix is a stereo (2-channel) signal
+        if mix.shape[0] != 2:
+            error_message = f"Expected a 2-channel audio signal, but got {mix.shape[0]} channels"
+            self.logger.error(error_message)
+            raise ValueError(error_message)
+
         if is_ckpt:
-            pad = self.gen_size + self.trim - ((mix.shape[-1]) % self.gen_size)
+            self.logger.debug("Processing in checkpoint mode.")
+            pad = self.gen_size + self.trim - (mix.shape[-1] % self.gen_size)
+            self.logger.debug(f"Padding calculated: {pad}")
             mixture = np.concatenate((np.zeros((2, self.trim), dtype="float32"), mix, np.zeros((2, pad), dtype="float32")), 1)
             num_chunks = mixture.shape[-1] // self.gen_size
+            self.logger.debug(f"Mixture shape after padding: {mixture.shape}, Number of chunks: {num_chunks}")
             mix_waves = [mixture[:, i * self.gen_size : i * self.gen_size + self.chunk_size] for i in range(num_chunks)]
         else:
+            self.logger.debug("Processing in non-checkpoint mode.")
             mix_waves = []
             n_sample = mix.shape[1]
             pad = self.gen_size - n_sample % self.gen_size
+            self.logger.debug(f"Number of samples: {n_sample}, Padding calculated: {pad}")
             mix_p = np.concatenate((np.zeros((2, self.trim)), mix, np.zeros((2, pad)), np.zeros((2, self.trim))), 1)
+            self.logger.debug(f"Shape of mix after padding: {mix_p.shape}")
+
             i = 0
             while i < n_sample + pad:
                 waves = np.array(mix_p[:, i : i + self.chunk_size])
                 mix_waves.append(waves)
                 i += self.gen_size
+                self.logger.debug(f"Processed chunk {len(mix_waves)}: Start {i - self.gen_size}, End {i}")
 
-        mix_waves = torch.tensor(mix_waves, dtype=torch.float32).to(self.device)
+        # Convert mix_waves to a PyTorch tensor and move it to the specified device
+        mix_waves_tensor = torch.tensor(mix_waves, dtype=torch.float32).to(self.device)
+        self.logger.debug(f"Converted mix_waves to tensor. Tensor shape: {mix_waves_tensor.shape}")
 
-        return mix_waves, pad
+        return mix_waves_tensor, pad
 
     def demix_base(self, mix, is_ckpt=False, is_match_mix=False):
         chunked_sources = []
