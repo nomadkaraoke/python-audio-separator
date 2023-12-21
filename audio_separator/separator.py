@@ -117,7 +117,7 @@ class Separator:
             self.device = torch.device("cuda")
 
             if ort_device == "GPU" and "CUDAExecutionProvider" in ort_providers:
-                self.logger.info("ONNXruntime device is GPU with CUDAExecutionProvider available, enabling acceleration")
+                self.logger.info("ONNXruntime has CUDAExecutionProvider available, enabling acceleration")
                 self.onnx_execution_provider = ["CUDAExecutionProvider"]
                 hardware_acceleration_enabled = True
             else:

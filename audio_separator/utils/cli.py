@@ -2,7 +2,6 @@
 import argparse
 import logging
 import pkg_resources
-from audio_separator import Separator
 
 
 def main():
@@ -82,6 +81,9 @@ def main():
         exit(1)
 
     logger.info(f"Separator beginning with input file: {args.audio_file}")
+
+    # Deliberately import here to avoid loading heave dependencies when just running --help
+    from audio_separator import Separator
 
     separator = Separator(
         args.audio_file,

@@ -20,42 +20,51 @@ The primary stem typically contains the instrumental part of the audio, while th
 
 You'll need `ffmpeg` and `libsndfile`, which should be easy to install on most platforms, e.g.:
 
-- Debian/Ubuntu: `apt-get update; apt-get install -y libsndfile1-dev ffmpeg`
-- macOS: `brew update; brew install libsndfile ffmpeg`
+### 🐧 Debian/Ubuntu
+`apt-get update; apt-get install -y libsndfile1-dev ffmpeg`
+
+###  macOS
+`brew update; brew install libsndfile ffmpeg`
 
 You can then install Audio Separator using pip, use one of the following to install the correct onnxruntime dependency for your device:
 
-### Nvidia GPU with CUDA acceleration:
+### 🎮 Nvidia GPU with CUDA acceleration
 
 `pip install audio-separator[gpu]`
 
-### Apple Silicon, macOS Sonoma+ with CoreML acceleration: 
+- 💬 If successfully configured, you should see this log message when running audio-separator:
+ `ONNXruntime has CUDAExecutionProvider available, enabling acceleration`
+
+###  Apple Silicon, macOS Sonoma+ with CoreML acceleration
 
 `pip install audio-separator[silicon]`
 
-### No hardware acceleration, CPU only:
+- 💬 If successfully configured, you should see this log message when running audio-separator:
+ `ONNXruntime has CoreMLExecutionProvider available, enabling acceleration`
+
+### 🐢 No hardware acceleration, CPU only:
 
 `pip install audio-separator[cpu]`
 
 
-### GPU / CUDA specific steps 
+## GPU / CUDA specific installation steps
 
 In theory, all you should need to do to get `audio-separator` working with a GPU is install it with the `[gpu]` extra as above.
 
-However, sometimes getting both PyTorch and ONNX Runtime working with CUDA support can be a bit tricky so sometimes it may not be that easy.
+However, sometimes getting both PyTorch and ONNX Runtime working with CUDA support can be a bit tricky so it may not work that easily.
 
-You may need to reinstall them directly, allowing pip to calculate the right versions for your platform:
+You may need to reinstall both packages directly, allowing pip to calculate the right versions for your platform:
 
 - `pip uninstall torch onnxruntime`
 - `pip cache purge`
-- `pip install torch torchvision torchaudio`
-- `pip install onnxruntime-gpu`
+- `pip install --force-reinstall torch torchvision torchaudio`
+- `pip install --force-reinstall onnxruntime-gpu`
 
 Depending on your hardware, you may get better performance with the optimum version of onnxruntime:
-- `pip install "optimum[onnxruntime-gpu]"`
+- `pip install --force-reinstall "optimum[onnxruntime-gpu]"`
 
 Depending on your CUDA version and hardware, you may need to install torch from the `cu118` index instead:
-- `pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118`
+- `pip install --force-reinstall torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118`
 
 > Note: if anyone knows how to make this cleaner so we can support both different platform-specific dependencies for hardware acceleration without a separate installation process for each, please let me know or raise a PR!
 
