@@ -59,7 +59,7 @@ jobs:
           push: true
           tags: |
             beveradb/audio-separator:cpu-${{ env.VERSION }}
-            beveradb/audio-separator:cpu-latest
+            beveradb/audio-separator:cpu
             beveradb/audio-separator:latest
 
       - name: Build and push Docker image for GPU
@@ -72,4 +72,4 @@ jobs:
           push: true
           tags: |
             beveradb/audio-separator:gpu-${{ env.VERSION }}
-            beveradb/audio-separator:gpu-latest
+            beveradb/audio-separator:gpu

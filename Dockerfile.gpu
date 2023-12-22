@@ -6,14 +6,15 @@ WORKDIR /usr/src/app
 
 RUN apt-get update && apt-get install -y \
     ffmpeg \
+    python3 \
     python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
-RUN python -m pip install --upgrade pip
+RUN python3 -m pip install --upgrade pip
 
 # Install the GPU version of audio-separator
 RUN --mount=type=cache,target=/root/.cache \
-    pip install "audio-separator[gpu]"
+    pip3 install "audio-separator[gpu]"
 
 # Run audio-separator when the container launches
 ENTRYPOINT ["audio-separator"]
