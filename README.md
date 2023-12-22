@@ -1,6 +1,7 @@
 # Audio Separator 🎶
 
 [![PyPI version](https://badge.fury.io/py/audio-separator.svg)](https://badge.fury.io/py/audio-separator)
+[![Docker pulls](https://img.shields.io/docker/pulls/beveradb/audio-separator.svg)](https://hub.docker.com/r/beveradb/audio-separator/tags)
 
 Summary: Easy to use vocal separation on CLI or as a python package, using the amazing MDX-Net models from UVR trained by @Anjok07
 
@@ -67,6 +68,27 @@ Depending on your CUDA version and hardware, you may need to install torch from 
 - `pip install --force-reinstall torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118`
 
 > Note: if anyone knows how to make this cleaner so we can support both different platform-specific dependencies for hardware acceleration without a separate installation process for each, please let me know or raise a PR!
+
+## Usage in Docker 🐳
+
+There are [images published on Docker Hub](https://hub.docker.com/r/beveradb/audio-separator/tags) for GPU (CUDA) and CPU inferencing, for both `amd64` and `arm64` platforms.
+
+You probably want to volume-mount a folder containing whatever file you want to separate, which can then also be used as the output folder.
+
+For example, if the current directory contains your input file `input.wav`, you could run `audio-separator` like so:
+
+```
+docker run -it -v `pwd`:/usr/src/app beveradb/audio-separator input.wav
+```
+
+If you're using a machine with a GPU, you'll want to use the GPU specific image and pass in the GPU device to the container, like this:
+
+```
+docker run -it --gpus all -v `pwd`:/usr/src/app beveradb/audio-separator:gpu input.wav
+```
+
+If the GPU isn't being detected, make sure your docker runtime environment is passing through the GPU correctly - there are [various guides](https://www.celantur.com/blog/run-cuda-in-docker-on-linux/) online to help with that.
+
 
 ## Usage 🚀
 
