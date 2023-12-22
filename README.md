@@ -78,13 +78,13 @@ You probably want to volume-mount a folder containing whatever file you want to 
 For example, if the current directory contains your input file `input.wav`, you could run `audio-separator` like so:
 
 ```
-docker run -it -v `pwd`:/usr/src/app beveradb/audio-separator input.wav
+docker run -it -v `pwd`:/workdir beveradb/audio-separator input.wav
 ```
 
 If you're using a machine with a GPU, you'll want to use the GPU specific image and pass in the GPU device to the container, like this:
 
 ```
-docker run -it --gpus all -v `pwd`:/usr/src/app beveradb/audio-separator:gpu input.wav
+docker run -it --gpus all -v `pwd`:/workdir beveradb/audio-separator:gpu input.wav
 ```
 
 If the GPU isn't being detected, make sure your docker runtime environment is passing through the GPU correctly - there are [various guides](https://www.celantur.com/blog/run-cuda-in-docker-on-linux/) online to help with that.
