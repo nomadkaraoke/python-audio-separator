@@ -1,0 +1,17 @@
+name: audio-separator
+channels:
+  - pytorch
+  - conda-forge
+  # We want to have a reproducible setup, so we don't want default channels,
+  # which may be different for different users. All required channels should
+  # be listed explicitly here.
+  - nodefaults
+dependencies:
+  - python >=3.9
+  - mamba
+  - pip  # pip must be mentioned explicitly, or conda-lock will fail
+  - poetry
+  - pytorch
+  - torchaudio
+  - onnxruntime
+  - ffmpeg

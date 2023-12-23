@@ -1,0 +1,27 @@
+name: publish-to-conda
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setting up anaconda for channels
+        uses: s-weigand/setup-conda@v1
+        with:
+          update-conda: true
+          conda-channels: anaconda, conda-forge
+  publish:
+      runs-on: ubuntu-latest
+      needs: setup
+      steps:
+        - uses: actions/checkout@v4
+        - name: Publish to anaconda.org
+          uses: fcakyon/conda-publish-action@v1.3
+          with:
+            subdir: 'conda'
+            anacondatoken: ${{ secrets.ANACONDA_TOKEN }}
+            platforms: 'win osx linux'
