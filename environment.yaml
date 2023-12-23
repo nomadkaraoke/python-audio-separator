@@ -7,11 +7,16 @@ channels:
   # be listed explicitly here.
   - nodefaults
 dependencies:
-  - python >=3.9
-  - mamba
-  - pip  # pip must be mentioned explicitly, or conda-lock will fail
-  - poetry
+  - python>=3.9
+  - onnx>=1.14
+  - numpy>=1.23
+  - librosa>=0.9
+  - wget>=3
+  - six>=1.16
+  - pydub>=0.25
   - pytorch
-  - torchaudio
   - onnxruntime
   - ffmpeg
+  - mamba # conda is too slow, so we use mamba
+  - pip  # pip must be mentioned explicitly, or conda-lock will fail
+  - poetry # packaging 

@@ -1,9 +1,6 @@
-{% set name = "audio-separator" %}
-{% set version = "0.9.6"%}
-
 package:
-  name: "{{ name|lower }}"
-  version: "{{ version }}"
+  name: "audio-separator"
+  version: "0.10.0"
 
 source:
     path: ..
@@ -16,6 +13,7 @@ requirements:
   host:
     - python>=3.9
     - pip
+    - poetry
   run:
     - python>=3.9
 
