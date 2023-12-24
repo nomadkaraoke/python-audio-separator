@@ -25,7 +25,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          conda install poetry
+          conda install conda-build poetry
           poetry install
 
       - name: Build Conda Package
