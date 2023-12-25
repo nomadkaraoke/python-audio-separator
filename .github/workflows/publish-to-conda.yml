@@ -29,7 +29,7 @@ jobs:
           poetry install
 
       - name: Build Conda Package
-        run: conda build conda --croot build/ --output-folder dist/
+        run: conda build conda --output-folder /home/runner/work/dist/
 
       - name: Publish to Anaconda
-        run: anaconda -t $ANACONDA_TOKEN upload --user beveradb build/*/audio-separator*bz2
+        run: anaconda -t $ANACONDA_TOKEN upload --user beveradb /home/runner/work/dist/*/audio-separator*bz2
