@@ -1,9 +1,12 @@
 name: Build and upload conda packages
 
 on:
-  release:
-    types: ['released', 'prereleased']
+  push:
+    paths:
+      - pyproject.toml
+      - conda/meta.yaml
   workflow_dispatch:
+
 
 jobs:
   conda_deployment_with_new_tag:

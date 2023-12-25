@@ -1,6 +1,10 @@
 name: publish-to-pypi
 
-on: [push, workflow_dispatch]
+on:
+  push:
+    paths:
+      - pyproject.toml
+  workflow_dispatch:
 
 jobs:
   # Auto-publish when version is increased
