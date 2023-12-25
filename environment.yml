@@ -19,3 +19,6 @@ dependencies:
   - mamba # conda is too slow, so we use mamba
   - pip  # pip must be mentioned explicitly, or conda-lock will fail
   - poetry # packaging 
+  - conda-build # packaging
+  - boa
+

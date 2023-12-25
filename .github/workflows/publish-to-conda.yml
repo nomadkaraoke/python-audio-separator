@@ -26,6 +26,7 @@ jobs:
           environment-file: environment.yml
           channels: conda-forge
           mamba-version: "*"
+          use-mamba: true
           auto-update-conda: false
           auto-activate-base: false
           show-channel-urls: true
