@@ -11,7 +11,6 @@ dependencies:
   - onnx>=1.14
   - numpy>=1.23
   - librosa>=0.9
-  - wget>=3
   - six>=1.16
   - pydub>=0.25
   - pytorch

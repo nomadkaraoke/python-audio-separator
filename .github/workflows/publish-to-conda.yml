@@ -20,7 +20,7 @@ jobs:
         uses: conda-incubator/setup-miniconda@v3
         with:
           python-version: ${{ matrix.python-version }}
-          environment-file: environment.yaml
+          environment-file: environment.yml
           channels: conda-forge
           mamba-version: "*"
           auto-update-conda: false
