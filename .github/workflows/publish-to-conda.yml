@@ -1,35 +1,85 @@
-name: publish-to-conda
+name: Build and upload conda packages
 
-on: [push, workflow_dispatch]
+on:
+  release:
+    types: ['released', 'prereleased']
+  workflow_dispatch:
 
 jobs:
-  setup:
-    runs-on: ${{ matrix.os }}
+  conda_deployment_with_new_tag:
+    name: Conda deployment of package with Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [ubuntu-latest] # windows-latest, macOS-latest
         python-version: ["3.10"]
-    name: Python ${{ matrix.python-version }} example
     steps:
-      - name: Check Out Repo
-        uses: actions/checkout@v4
-      
-      - name: Setup Conda
-        uses: s-weigand/setup-conda@v1
+      - uses: actions/checkout@v3
         with:
-          update-conda: true
+          fetch-depth: 0
+      - name: Conda environment creation and activation
+        uses: conda-incubator/setup-miniconda@v3
+        with:
           python-version: ${{ matrix.python-version }}
-          conda-channels: anaconda, conda-forge
-      - run: conda --version
-      - run: which python
+          environment-file: environment.yaml
+          channels: conda-forge
+          mamba-version: "*"
+          auto-update-conda: false
+          auto-activate-base: false
+          show-channel-urls: true
+      - name: Build and upload the conda packages
+        uses: uibcdf/action-build-and-upload-conda-packages@v1.2.0
+        with:
+          meta_yaml_dir: conda
+          python-version: ${{ matrix.python-version }} # Values previously defined in `matrix`
+          platform_linux-64: true
+          platform_osx-64: true
+          platform_win-64: true
+          user: beveradb
+          label: auto
+          token: ${{ secrets.ANACONDA_TOKEN }} # Replace with the right name of your secret
 
-      - name: Install Dependencies
-        run: |
-          conda install conda-build poetry
-          poetry install
 
-      - name: Build Conda Package
-        run: conda build conda --output-folder /home/runner/work/dist/
+# name: publish-to-conda
 
-      - name: Publish to Anaconda
-        run: anaconda -t $ANACONDA_TOKEN upload --user beveradb /home/runner/work/dist/*/audio-separator*bz2
+# on: [push, workflow_dispatch]
+
+# jobs:
+#   setup:
+#     runs-on: ${{ matrix.os }}
+#     strategy:
+#       matrix:
+#         os: [ubuntu-latest] # windows-latest, macOS-latest
+#         python-version: ["3.10"]
+#     name: Python ${{ matrix.python-version }} example
+#     steps:
+#       - name: Check Out Repo
+#         uses: actions/checkout@v4
+      
+#       - name: Setup Conda
+#         uses: s-weigand/setup-conda@v1
+#         with:
+#           update-conda: true
+#           python-version: ${{ matrix.python-version }}
+#           conda-channels: anaconda, conda-forge
+#       - run: conda --version
+#       - run: which python
+
+#       - name: Cache Gradle packages
+#         uses: actions/cache@v3
+#         with:
+#           path: |
+#             ~/.cache/pip
+
+
+#       - name: Install Dependencies
+#         run: |
+#           conda install conda-build poetry
+#           poetry install
+
+
+
+#       - name: Build Conda Package
+#         run: conda build conda --output-folder /home/runner/work/dist/
+
+#       - name: Publish to Anaconda
+#         run: anaconda -t $ANACONDA_TOKEN upload --user beveradb /home/runner/work/dist/*/audio-separator*bz2
