@@ -23,12 +23,12 @@ jobs:
         uses: conda-incubator/setup-miniconda@v3
         with:
           python-version: ${{ matrix.python-version }}
-          environment-file: environment.yml
+          environment-file: conda/build-env.yaml
           channels: conda-forge
           mamba-version: "*"
           use-mamba: true
-          auto-update-conda: true
-          auto-activate-base: true
+          auto-update-conda: false
+          auto-activate-base: false
           show-channel-urls: true
       - name: Build and upload the conda packages
         uses: uibcdf/action-build-and-upload-conda-packages@v1.2.0
