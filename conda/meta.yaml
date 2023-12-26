@@ -1,13 +1,13 @@
 package:
   name: "audio-separator"
-  version: "0.10.0"
+  version: "0.10.1"
 
 source:
     path: ..
 
 build:
   number: 0
-  script: "{{ PYTHON }} -m pip install . -vv"
+  script: poetry install
 
 requirements:
   host:
@@ -29,4 +29,4 @@ about:
 
 extra:
   recipe-maintainers:
-    - 757713
+    - beveradb
