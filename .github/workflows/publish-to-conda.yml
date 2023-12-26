@@ -27,8 +27,8 @@ jobs:
           channels: conda-forge
           mamba-version: "*"
           use-mamba: true
-          auto-update-conda: false
-          auto-activate-base: false
+          auto-update-conda: true
+          auto-activate-base: true
           show-channel-urls: true
       - name: Build and upload the conda packages
         uses: uibcdf/action-build-and-upload-conda-packages@v1.2.0
