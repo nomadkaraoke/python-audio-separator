@@ -39,7 +39,7 @@ jobs:
           platform_osx-64: true
           platform_win-64: true
           user: beveradb
-          label: auto
+          label: "main"
           token: ${{ secrets.ANACONDA_TOKEN }} # Replace with the right name of your secret
 
 
