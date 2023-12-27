@@ -1,32 +1,36 @@
+{% set pyproject = load_file_data('pyproject.toml') %}
+{% set poetry = pyproject.get('tool', {}).get('poetry') %}
 package:
-  name: "audio-separator"
-  version: "0.10.1"
+  name: {{ poetry.get('name') }}
+  version: {{ poetry.get('version') }}
+
+about:
+  home: {{ poetry.get('homepage') }}
+  license: {{ poetry.get('license') }}
+  summary: {{ poetry.get('description') }}
+  description: |
+    Audio Separator is a Python package that allows you to separate an audio file into two stems, primary and secondary, using a model in the ONNX format trained by @Anjok07 for use with UVR (https://github.com/Anjok07/ultimatevocalremovergui).
+  doc_url: {{ poetry.get('documentation') }}
+  dev_url: {{ poetry.get('homepage') }}
+
+extra:
+  recipe-maintainers:
+    - beveradb
 
 source:
     path: ..
 
 build:
   number: 0
-  script: poetry install
+  script: pip install . -vv --no-deps --no-build-isolation
 
 requirements:
   host:
     - python>=3.9
     - pip
     - poetry
+    - llvm
+    - llvmlite
   run:
     - python>=3.9
 
-about:
-  home: "https://github.com/karaokenerds/python-audio-separator"
-  license: "MIT"
-  license_family: MIT
-  summary: "Easy to use vocal separation on CLI or as a python package, using the amazing MDX-Net models from UVR."
-  description: |
-    Audio Separator is a Python package that allows you to separate an audio file into two stems, primary and secondary, using a model in the ONNX format trained by @Anjok07 for use with UVR (https://github.com/Anjok07/ultimatevocalremovergui).
-  doc_url: "https://github.com/karaokenerds/python-audio-separator"
-  dev_url: "https://github.com/karaokenerds/python-audio-separator"
-
-extra:
-  recipe-maintainers:
-    - beveradb
