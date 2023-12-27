@@ -19,40 +19,37 @@ The primary stem typically contains the instrumental part of the audio, while th
 
 ## Installation 🛠️
 
-### Conda
 
-`conda install -c beveradb -c conda-forge audio-separator`
+### 🎮 Nvidia GPU with CUDA acceleration
 
-### Pip
-
-#### 🎮 Nvidia GPU with CUDA acceleration
-
-`pip install "audio-separator[gpu]"`
-
-- 💬 If successfully configured, you should see this log message when running audio-separator:
+💬 If successfully configured, you should see this log message when running audio-separator:
  `ONNXruntime has CUDAExecutionProvider available, enabling acceleration`
 
-####  Apple Silicon, macOS Sonoma+ with CoreML acceleration
+Conda: `conda install pytorch=*=*cuda* onnxruntime=*=*cuda* audio-separator -c beveradb -c pytorch -c conda-forge`
 
-`pip install "audio-separator[silicon]"`
+Pip: `pip install "audio-separator[gpu]"`
 
-- 💬 If successfully configured, you should see this log message when running audio-separator:
+### 🐢 No hardware acceleration, CPU only:
+
+Conda: `conda install -c beveradb -c conda-forge audio-separator`
+
+Pip: `pip install "audio-separator[cpu]"`
+
+###  Apple Silicon, macOS Sonoma+ with CoreML acceleration
+
+💬 If successfully configured, you should see this log message when running audio-separator:
  `ONNXruntime has CoreMLExecutionProvider available, enabling acceleration`
 
-#### 🐢 No hardware acceleration, CPU only:
+Pip: `pip install "audio-separator[silicon]"`
 
-`pip install "audio-separator[cpu]"`
+### FFmpeg dependency (if using pip)
 
+If you installed `audio-separator` using `pip`, you'll separately need to ensure you have `ffmpeg` installed.
+This should be easy to install on most platforms, e.g.:
 
-### FFmpeg dependency
+🐧 Debian/Ubuntu: `apt-get update; apt-get install -y ffmpeg`
 
-You'll also need `ffmpeg`, which should be easy to install on most platforms, e.g.:
-
-#### 🐧 Debian/Ubuntu
-`apt-get update; apt-get install -y ffmpeg`
-
-####  macOS
-`brew update; brew install ffmpeg`
+ macOS:`brew update; brew install ffmpeg`
 
 
 ## GPU / CUDA specific installation steps
