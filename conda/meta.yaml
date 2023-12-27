@@ -1,5 +1,6 @@
 {% set pyproject = load_file_data('pyproject.toml') %}
 {% set poetry = pyproject.get('tool', {}).get('poetry') %}
+
 package:
   name: {{ poetry.get('name') }}
   version: {{ poetry.get('version') }}
@@ -17,11 +18,11 @@ extra:
   recipe-maintainers:
     - beveradb
   authors:
-    {% for author in project['authors'] %}
-    - '{{ author['name'] }} <{{ author['email'] }}>'
+    {% for author in poetry['authors'] %}
+    - '{{ author }}>'
     {% endfor %}
   classifiers:
-    {% for classifier in project['classifiers'] %}
+    {% for classifier in poetry['classifiers'] %}
     - '{{ classifier }}'
     {% endfor %}
 
@@ -33,8 +34,8 @@ build:
   script: pip install . -vv --no-deps --no-build-isolation
 
   entry_points:
-    {% for script in project['scripts'] %}
-    - '{{ script }}={{ project['scripts'][script] }}'
+    {% for script in poetry['scripts'] %}
+    - '{{ script }}={{ poetry['scripts'][script] }}'
     {% endfor %}
 
 requirements:
