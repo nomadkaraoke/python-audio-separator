@@ -16,13 +16,26 @@ about:
 extra:
   recipe-maintainers:
     - beveradb
+  authors:
+    {% for author in project['authors'] %}
+    - '{{ author['name'] }} <{{ author['email'] }}>'
+    {% endfor %}
+  classifiers:
+    {% for classifier in project['classifiers'] %}
+    - '{{ classifier }}'
+    {% endfor %}
 
 source:
     path: ..
 
 build:
-  number: 0
+  noarch: python
   script: pip install . -vv --no-deps --no-build-isolation
+
+  entry_points:
+    {% for script in project['scripts'] %}
+    - '{{ script }}={{ project['scripts'][script] }}'
+    {% endfor %}
 
 requirements:
   host:
