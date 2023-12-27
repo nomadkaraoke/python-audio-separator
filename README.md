@@ -25,7 +25,7 @@ The primary stem typically contains the instrumental part of the audio, while th
 💬 If successfully configured, you should see this log message when running audio-separator:
  `ONNXruntime has CUDAExecutionProvider available, enabling acceleration`
 
-Conda: `conda install pytorch=*=*cuda* onnxruntime=*=*cuda* audio-separator -c beveradb -c pytorch -c conda-forge`
+Conda: `conda install pytorch=*=*cuda* onnxruntime=*=*cuda* ffmpeg audio-separator -c beveradb -c conda-forge`
 
 Pip: `pip install "audio-separator[gpu]"`
 
