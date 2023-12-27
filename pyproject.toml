@@ -1,6 +1,11 @@
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
 [tool.poetry]
 name = "audio-separator"
 version = "0.10.1"
+requires-python = ">=3.9"
 description = "Easy to use vocal separation on CLI or as a python package, using the amazing MDX-Net models from UVR trained by @Anjok07"
 authors = ["Andrew Beveridge <andrew@beveridge.uk>"]
 license = "MIT"
@@ -32,14 +37,33 @@ silicon = ["onnxruntime-silicon"]
 audio-separator = 'audio_separator.utils.cli:main'
 
 [tool.poetry.group.dev.dependencies]
-black = ">=23.3.0"
+black = ">=23"
 
 [tool.black]
 line-length = 140
 
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
-
 [tool.poetry2conda]
 name = "audio-separator"
+
+[tool.whl2conda]
+# The default directory for whl2conda to look for wheels.
+# Specified relative to the project root.
+wheel-dir = "dist"
+# The default directory for writing conda packages
+# If not specified, this will be the wheel directory.
+out-dir = "build"
+# The default output conda package format.
+# Valid values are:   "V1" / ".tar.bz2": original .tar.bz2 package format
+#    "V2" / ".conda": new V2 .conda package format
+#    "TREE":  output package as directory tree (debug)
+conda-format = "V2"
+# An optional list of pypi/conda rename patterns
+# Each entry should be a two element list of the form
+#    ["<pypi-name-pattern>", "<conda-name>"]
+# Where <pypi-name-pattern> may either just be the pypi package name
+# or is a Python regular expression that will match the full name,and where <conda-name> can contain subsitution expression,
+# For example, to rename all `acme-<foo>` packages to `acme.<foo>`:
+#    ["acme-(.*)", "acme.$1"]
+dependency-rename = ["torch", "pytorch"]
+# An optional list of extra conda dependencies.
+extra-dependencies = []
