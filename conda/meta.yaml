@@ -30,7 +30,6 @@ source:
     path: ..
 
 build:
-  noarch: python
   script: pip install . -vv --no-deps --no-build-isolation
 
   entry_points:

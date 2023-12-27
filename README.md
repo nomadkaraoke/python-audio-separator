@@ -19,33 +19,40 @@ The primary stem typically contains the instrumental part of the audio, while th
 
 ## Installation 🛠️
 
-You'll need `ffmpeg`, which should be easy to install on most platforms, e.g.:
+### Conda
 
-### 🐧 Debian/Ubuntu
-`apt-get update; apt-get install -y ffmpeg`
+`conda install -c beveradb -c conda-forge audio-separator`
 
-###  macOS
-`brew update; brew install ffmpeg`
+### Pip
 
-You can then install Audio Separator using pip, use one of the following to install the correct onnxruntime dependency for your device:
-
-### 🎮 Nvidia GPU with CUDA acceleration
+#### 🎮 Nvidia GPU with CUDA acceleration
 
 `pip install "audio-separator[gpu]"`
 
 - 💬 If successfully configured, you should see this log message when running audio-separator:
  `ONNXruntime has CUDAExecutionProvider available, enabling acceleration`
 
-###  Apple Silicon, macOS Sonoma+ with CoreML acceleration
+####  Apple Silicon, macOS Sonoma+ with CoreML acceleration
 
 `pip install "audio-separator[silicon]"`
 
 - 💬 If successfully configured, you should see this log message when running audio-separator:
  `ONNXruntime has CoreMLExecutionProvider available, enabling acceleration`
 
-### 🐢 No hardware acceleration, CPU only:
+#### 🐢 No hardware acceleration, CPU only:
 
 `pip install "audio-separator[cpu]"`
+
+
+### FFmpeg dependency
+
+You'll also need `ffmpeg`, which should be easy to install on most platforms, e.g.:
+
+#### 🐧 Debian/Ubuntu
+`apt-get update; apt-get install -y ffmpeg`
+
+####  macOS
+`brew update; brew install ffmpeg`
 
 
 ## GPU / CUDA specific installation steps
