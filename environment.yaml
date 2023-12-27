@@ -1,0 +1,12 @@
+name: audio-separator-dev
+channels:
+  - conda-forge
+dependencies:
+  - python >=3.9
+  - anaconda-client
+  - conda-build
+  - conda-verify
+  - pip >=23.2.1
+  - poetry
+  - hatchling
+
