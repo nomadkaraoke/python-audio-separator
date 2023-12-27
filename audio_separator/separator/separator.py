@@ -4,13 +4,13 @@ import hashlib
 import json
 import logging
 import warnings
-import wget
+import requests
 import torch
 import librosa
 import numpy as np
 import onnxruntime as ort
 from pydub import AudioSegment
-from audio_separator.utils import spec_utils
+from audio_separator.separator import spec_utils
 
 
 class Separator:
@@ -159,11 +159,21 @@ class Separator:
         except:
             return hashlib.md5(open(model_path, "rb").read()).hexdigest()
 
+    def download_file(self, url, output_path):
+        response = requests.get(url, stream=True)
+
+        if response.status_code == 200:
+            with open(output_path, "wb") as f:
+                for chunk in response.iter_content(chunk_size=8192):
+                    f.write(chunk)
+        else:
+            self.logger.error(f"Failed to download file from {url}")
+
     def separate(self):
         model_path = os.path.join(self.model_file_dir, f"{self.model_name}.onnx")
         if not os.path.isfile(model_path):
             self.logger.debug(f"Model not found at path {model_path}, downloading...")
-            wget.download(self.model_url, model_path)
+            self.download_file(self.model_url, model_path)
 
         self.logger.debug("Reading model settings...")
 
@@ -173,7 +183,7 @@ class Separator:
         model_data_path = os.path.join(self.model_file_dir, "model_data.json")
         if not os.path.isfile(model_data_path):
             self.logger.debug(f"Model data not found at path {model_data_path}, downloading...")
-            wget.download(self.model_data_url, model_data_path)
+            self.download_file(self.model_data_url, model_data_path)
 
         model_data_object = json.load(open(model_data_path))
         model_data = model_data_object[model_hash]

@@ -83,7 +83,7 @@ def main():
     logger.info(f"Separator beginning with input file: {args.audio_file}")
 
     # Deliberately import here to avoid loading heave dependencies when just running --help
-    from audio_separator import Separator
+    from audio_separator.separator import Separator
 
     separator = Separator(
         args.audio_file,

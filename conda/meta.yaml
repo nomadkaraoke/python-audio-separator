@@ -26,18 +26,18 @@ build:
 
 requirements:
   host:
-    - python {{ poetry['requires-python'] }}
+    - python >=3.9
     - pip
     - poetry
-    - llvm
     - llvmlite
   run:
-    - python {{ poetry['requires-python'] }}
+    - python >=3.9
+    - requests
     - numpy
     - librosa
     - pytorch
-    - wget
     - six
+    - ffmpeg
     - pydub
     - onnx
     - onnxruntime
