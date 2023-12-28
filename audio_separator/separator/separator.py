@@ -11,6 +11,7 @@ import numpy as np
 import onnxruntime as ort
 from pydub import AudioSegment
 from audio_separator.separator import spec_utils
+from audio_separator.separator.stft import STFT
 
 
 class Separator:
@@ -327,6 +328,7 @@ class Separator:
         self.window = torch.hann_window(window_length=self.n_fft, periodic=False).to(self.device)
         self.freq_pad = torch.zeros([1, self.dim_c, self.n_bins - self.dim_f, self.dim_t]).to(self.device)
         self.gen_size = self.chunk_size - 2 * self.trim
+        self.stft = STFT(self.logger, self.n_fft, self.hop, self.dim_f, self.device)
         self.logger.debug(
             f"Model settings initialized: n_bins={self.n_bins}, trim={self.trim}, chunk_size={self.chunk_size}, gen_size={self.gen_size}"
         )
@@ -407,9 +409,9 @@ class Separator:
 
         return sources
 
-    # This function is called by demix_base for each audio chunk. 
-    # It applies a Short-Time Fourier Transform (STFT) to the chunk, processes it through the neural network model, 
-    # and then applies an inverse STFT to convert it back to the time domain. 
+    # This function is called by demix_base for each audio chunk.
+    # It applies a Short-Time Fourier Transform (STFT) to the chunk, processes it through the neural network model,
+    # and then applies an inverse STFT to convert it back to the time domain.
     # This function is where the model infers the separation of vocals and instrumentals from the mixed audio.
     def run_model(self, mix, is_ckpt=False, is_match_mix=False):
         self.logger.debug(f"Running model on mix_wave with is_ckpt={is_ckpt}, is_match_mix={is_match_mix}")
@@ -426,41 +428,15 @@ class Separator:
             spec_pred = -self.model_run(-spek) * 0.5 + self.model_run(spek) * 0.5 if self.denoise_enabled else self.model_run(spek)
 
         if is_ckpt:
-            return self.istft(spec_pred).cpu().detach().numpy()
+            return self.stft.inverse(spec_pred).cpu().detach().numpy()
         else:
             return (
-                self.istft(torch.tensor(spec_pred).to(self.device))
+                self.stft.inverse(torch.tensor(spec_pred).to(self.device))
                 .to(self.cpu)[:, :, self.trim : -self.trim]
                 .transpose(0, 1)
                 .reshape(2, -1)
                 .numpy()
             )
-
-    # These functions perform the Short-Time Fourier Transform (stft) and its inverse (istft). 
-    # They are essential for converting the audio between the time domain and the frequency domain, 
-    # which is a crucial aspect of audio processing in neural networks.
-    def stft(self, x):
-        initial_shape = x.shape
-        x = x.reshape([-1, self.chunk_size])
-        x = torch.stft(x, n_fft=self.n_fft, hop_length=self.hop, window=self.window, center=True, return_complex=True)
-        x = torch.view_as_real(x)
-        x = x.permute([0, 3, 1, 2])
-        x = x.reshape([-1, 2, 2, self.n_bins, self.dim_t]).reshape([-1, self.dim_c, self.n_bins, self.dim_t])
-        self.logger.debug(f"STFT applied. Initial shape: {initial_shape} Resulting shape: {x.shape}")
-        return x[:, :, : self.dim_f]
-
-    def istft(self, x, freq_pad=None):
-        initial_shape = x.shape
-        freq_pad = self.freq_pad.repeat([x.shape[0], 1, 1, 1]) if freq_pad is None else freq_pad
-        x = torch.cat([x, freq_pad], -2)
-        x = x.reshape([-1, 2, 2, self.n_bins, self.dim_t]).reshape([-1, 2, self.n_bins, self.dim_t])
-        x = x.permute([0, 2, 3, 1])
-        x = x.contiguous()
-        x = torch.view_as_complex(x)
-        x = torch.istft(x, n_fft=self.n_fft, hop_length=self.hop, window=self.window, center=True)
-        x = x.reshape([-1, 2, self.chunk_size])
-        self.logger.debug(f"ISTFT applied. Initial shape: {initial_shape} Returning shape: {x.shape}")
-        return x
 
     # This function handles the initial processing of the audio file. It involves loading the audio file (or array),
     # ensuring it's in stereo format, and then segmenting it into manageable chunks based on the specified chunk size and margin.
