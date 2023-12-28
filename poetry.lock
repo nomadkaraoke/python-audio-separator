@@ -1459,4 +1459,4 @@ silicon = ["onnxruntime-silicon"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9"
-content-hash = "e5996585a3109d737dd35760dccfadb9df070a7d16317aa46484dd992778f130"
+content-hash = "d7c133d2850352c2c461a9939e80abc9ba31af770ca99ab425a6fbbf713b9753"

@@ -170,52 +170,67 @@ class Separator:
             self.logger.error(f"Failed to download file from {url}")
 
     def separate(self):
+        self.logger.debug("Starting separation process...")
         model_path = os.path.join(self.model_file_dir, f"{self.model_name}.onnx")
+        self.logger.debug(f"Model path set to {model_path}")
+
         if not os.path.isfile(model_path):
             self.logger.debug(f"Model not found at path {model_path}, downloading...")
             self.download_file(self.model_url, model_path)
 
         self.logger.debug("Reading model settings...")
-
         model_hash = self.get_model_hash(model_path)
-        self.logger.debug(f"Model {model_path} has hash {model_hash} ...")
+        self.logger.debug(f"Model {model_path} has hash {model_hash}")
 
         model_data_path = os.path.join(self.model_file_dir, "model_data.json")
+        self.logger.debug(f"Model data path set to {model_data_path}")
+
         if not os.path.isfile(model_data_path):
             self.logger.debug(f"Model data not found at path {model_data_path}, downloading...")
             self.download_file(self.model_data_url, model_data_path)
 
+        self.logger.debug("Loading model data...")
         model_data_object = json.load(open(model_data_path))
         model_data = model_data_object[model_hash]
+        self.logger.debug(f"Model data loaded: {model_data}")
 
-        self.compensate = model_data["compensate"]
-        self.dim_f = model_data["mdx_dim_f_set"]
-        self.dim_t = 2 ** model_data["mdx_dim_t_set"]
-        self.n_fft = model_data["mdx_n_fft_scale_set"]
-        self.primary_stem = model_data["primary_stem"]
+        self.compensate, self.dim_f, self.dim_t, self.n_fft, self.primary_stem = (
+            model_data["compensate"],
+            model_data["mdx_dim_f_set"],
+            2 ** model_data["mdx_dim_t_set"],
+            model_data["mdx_n_fft_scale_set"],
+            model_data["primary_stem"],
+        )
         self.secondary_stem = "Vocals" if self.primary_stem == "Instrumental" else "Instrumental"
-
         self.logger.debug(
-            f"Set model data values: compensate = {self.compensate} primary_stem = {self.primary_stem} dim_f = {self.dim_f} dim_t = {self.dim_t} n_fft = {self.n_fft}"
+            f"Model settings initialized: compensate={self.compensate}, primary_stem={self.primary_stem}, secondary_stem={self.secondary_stem}, dim_f={self.dim_f}, dim_t={self.dim_t}, n_fft={self.n_fft}"
         )
 
-        self.logger.debug("Loading model...")
+        self.logger.debug("Loading ONNX model for inference...")
         ort_ = ort.InferenceSession(model_path, providers=self.onnx_execution_provider)
         self.model_run = lambda spek: ort_.run(None, {"input": spek.cpu().numpy()})[0]
+        self.logger.debug("Model loaded successfully.")
 
         self.initialize_model_settings()
-        self.logger.info("Running inference...")
-        mdx_net_cut = True
-        mix, raw_mix, samplerate = prepare_mix(self.audio_file_path, self.chunks, self.margin, mdx_net_cut=mdx_net_cut)
-        self.logger.info("Demixing...")
+        self.logger.info("Model settings initialized, starting inference...")
+
+        mdx_net_cut = True  # Hardcoded for now, can be parameterized if needed
+        self.logger.debug(f"Preparing mix with chunks={self.chunks}, margin={self.margin}, mdx_net_cut={mdx_net_cut}")
+        mix, raw_mix, samplerate = self.prepare_mix(self.audio_file_path, self.chunks, self.margin, mdx_net_cut=mdx_net_cut)
+
+        self.logger.info("Starting demixing process...")
         source = self.demix_base(mix)[0]
+        self.logger.debug("Demixing completed.")
 
         output_files = []
+        self.logger.debug("Processing output files...")
 
         if not isinstance(self.primary_source, np.ndarray):
+            self.logger.debug("Normalizing primary source...")
             self.primary_source = spec_utils.normalize(self.logger, source, self.normalization_enabled).T
 
         if not isinstance(self.secondary_source, np.ndarray):
+            self.logger.debug("Normalizing secondary source...")
             raw_mix = self.demix_base(raw_mix, is_match_mix=True)[0] if mdx_net_cut else raw_mix
             self.secondary_source, raw_mix = spec_utils.normalize_two_stem(
                 self.logger, source * self.compensate, raw_mix, self.normalization_enabled
@@ -241,8 +256,10 @@ class Separator:
             output_files.append(self.secondary_stem_path)
 
         if hasattr(torch, "cuda"):
+            self.logger.debug("Clearing CUDA cache...")
             torch.cuda.empty_cache()
 
+        self.logger.debug("Separation process completed.")
         return output_files
 
     def write_audio(self, stem_path, stem_source, samplerate):
@@ -300,25 +317,27 @@ class Separator:
             self.logger.error(f"Error exporting audio file: {e}")
 
     def initialize_model_settings(self):
+        self.logger.debug("Initializing model settings...")
         self.n_bins = self.n_fft // 2 + 1
         self.trim = self.n_fft // 2
         self.chunk_size = self.hop * (self.dim_t - 1)
         self.window = torch.hann_window(window_length=self.n_fft, periodic=False).to(self.device)
         self.freq_pad = torch.zeros([1, self.dim_c, self.n_bins - self.dim_f, self.dim_t]).to(self.device)
         self.gen_size = self.chunk_size - 2 * self.trim
+        self.logger.debug(
+            f"Model settings initialized: n_bins={self.n_bins}, trim={self.trim}, chunk_size={self.chunk_size}, gen_size={self.gen_size}"
+        )
 
     def initialize_mix(self, mix, is_ckpt=False):
-        # Log the initial state of the mix
-        self.logger.debug(f"Initializing mix. is_ckpt: {is_ckpt}, Initial mix shape: {mix.shape}")
+        self.logger.debug(f"Initializing mix with is_ckpt={is_ckpt}. Initial mix shape: {mix.shape}")
 
-        # Check if mix is a stereo (2-channel) signal
         if mix.shape[0] != 2:
             error_message = f"Expected a 2-channel audio signal, but got {mix.shape[0]} channels"
             self.logger.error(error_message)
             raise ValueError(error_message)
 
         if is_ckpt:
-            self.logger.debug("Processing in checkpoint mode.")
+            self.logger.debug("Processing in checkpoint mode...")
             pad = self.gen_size + self.trim - (mix.shape[-1] % self.gen_size)
             self.logger.debug(f"Padding calculated: {pad}")
             mixture = np.concatenate((np.zeros((2, self.trim), dtype="float32"), mix, np.zeros((2, pad), dtype="float32")), 1)
@@ -326,7 +345,7 @@ class Separator:
             self.logger.debug(f"Mixture shape after padding: {mixture.shape}, Number of chunks: {num_chunks}")
             mix_waves = [mixture[:, i * self.gen_size : i * self.gen_size + self.chunk_size] for i in range(num_chunks)]
         else:
-            self.logger.debug("Processing in non-checkpoint mode.")
+            self.logger.debug("Processing in non-checkpoint mode...")
             mix_waves = []
             n_sample = mix.shape[1]
             pad = self.gen_size - n_sample % self.gen_size
@@ -338,45 +357,58 @@ class Separator:
             while i < n_sample + pad:
                 waves = np.array(mix_p[:, i : i + self.chunk_size])
                 mix_waves.append(waves)
+                self.logger.debug(f"Processed chunk {len(mix_waves)}: Start {i}, End {i + self.chunk_size}")
                 i += self.gen_size
-                self.logger.debug(f"Processed chunk {len(mix_waves)}: Start {i - self.gen_size}, End {i}")
 
-        # Convert mix_waves to a PyTorch tensor and move it to the specified device
         mix_waves_tensor = torch.tensor(mix_waves, dtype=torch.float32).to(self.device)
         self.logger.debug(f"Converted mix_waves to tensor. Tensor shape: {mix_waves_tensor.shape}")
 
         return mix_waves_tensor, pad
 
     def demix_base(self, mix, is_ckpt=False, is_match_mix=False):
+        self.logger.debug(f"Starting demixing base method. is_ckpt={is_ckpt}, is_match_mix={is_match_mix}")
         chunked_sources = []
+
         for slice in mix:
+            self.logger.debug(f"Processing slice {slice}")
             sources = []
             tar_waves_ = []
             mix_p = mix[slice]
             mix_waves, pad = self.initialize_mix(mix_p, is_ckpt=is_ckpt)
+            self.logger.debug(f"mix_waves shape: {mix_waves.shape}, pad: {pad}")
+
             mix_waves = mix_waves.split(1)
             pad = mix_p.shape[-1] if is_ckpt else -pad
+
             with torch.no_grad():
                 for mix_wave in mix_waves:
                     tar_waves = self.run_model(mix_wave, is_ckpt=is_ckpt, is_match_mix=is_match_mix)
                     tar_waves_.append(tar_waves)
                 tar_waves_ = np.vstack(tar_waves_)[:, :, self.trim : -self.trim] if is_ckpt else tar_waves_
                 tar_waves = np.concatenate(tar_waves_, axis=-1)[:, :pad]
+                self.logger.debug(f"Concatenated tar_waves shape: {tar_waves.shape}")
+
                 start = 0 if slice == 0 else self.margin
                 end = None if slice == list(mix.keys())[::-1][0] or self.margin == 0 else -self.margin
                 sources.append(tar_waves[:, start:end] * (1 / self.adjust))
             chunked_sources.append(sources)
         sources = np.concatenate(chunked_sources, axis=-1)
+        self.logger.debug(f"Final concatenated sources shape: {sources.shape}")
 
         return sources
 
     def run_model(self, mix, is_ckpt=False, is_match_mix=False):
+        self.logger.debug(f"Running model on mix_wave with is_ckpt={is_ckpt}, is_match_mix={is_match_mix}")
         spek = self.stft(mix.to(self.device)) * self.adjust
+
         spek[:, :, :3, :] *= 0
+        self.logger.debug("Zeroed the first 3 bins of the spectrum")
 
         if is_match_mix:
+            self.logger.debug("Running model in match mix mode...")
             spec_pred = spek.cpu().numpy()
         else:
+            self.logger.debug("Running model in normal mode...")
             spec_pred = -self.model_run(-spek) * 0.5 + self.model_run(spek) * 0.5 if self.denoise_enabled else self.model_run(spek)
 
         if is_ckpt:
@@ -391,14 +423,17 @@ class Separator:
             )
 
     def stft(self, x):
+        initial_shape = x.shape
         x = x.reshape([-1, self.chunk_size])
         x = torch.stft(x, n_fft=self.n_fft, hop_length=self.hop, window=self.window, center=True, return_complex=True)
         x = torch.view_as_real(x)
         x = x.permute([0, 3, 1, 2])
         x = x.reshape([-1, 2, 2, self.n_bins, self.dim_t]).reshape([-1, self.dim_c, self.n_bins, self.dim_t])
+        self.logger.debug(f"STFT applied. Initial shape: {initial_shape} Resulting shape: {x.shape}")
         return x[:, :, : self.dim_f]
 
     def istft(self, x, freq_pad=None):
+        initial_shape = x.shape
         freq_pad = self.freq_pad.repeat([x.shape[0], 1, 1, 1]) if freq_pad is None else freq_pad
         x = torch.cat([x, freq_pad], -2)
         x = x.reshape([-1, 2, 2, self.n_bins, self.dim_t]).reshape([-1, 2, self.n_bins, self.dim_t])
@@ -406,45 +441,66 @@ class Separator:
         x = x.contiguous()
         x = torch.view_as_complex(x)
         x = torch.istft(x, n_fft=self.n_fft, hop_length=self.hop, window=self.window, center=True)
-        return x.reshape([-1, 2, self.chunk_size])
+        x = x.reshape([-1, 2, self.chunk_size])
+        self.logger.debug(f"ISTFT applied. Initial shape: {initial_shape} Returning shape: {x.shape}")
+        return x
 
+    def prepare_mix(self, mix, chunk_set, margin_set, mdx_net_cut=False, is_missing_mix=False):
+        self.logger.debug(f"Starting to prepare mix. Chunk set: {chunk_set}, Margin set: {margin_set}, MDX Net Cut: {mdx_net_cut}")
 
-def prepare_mix(mix, chunk_set, margin_set, mdx_net_cut=False, is_missing_mix=False):
-    samplerate = 44100
+        samplerate = 44100
+        self.logger.debug(f"Default samplerate set to {samplerate}")
 
-    if not isinstance(mix, np.ndarray):
-        mix, samplerate = librosa.load(mix, mono=False, sr=44100)
-    else:
-        mix = mix.T
+        # Load mix if it's a file path, or transpose if it's an array
+        if not isinstance(mix, np.ndarray):
+            self.logger.debug(f"Loading mix from file: {mix}")
+            mix, samplerate = librosa.load(mix, mono=False, sr=samplerate)
+        else:
+            self.logger.debug("Transposing the given mix array.")
+            mix = mix.T
 
-    if mix.ndim == 1:
-        mix = np.asfortranarray([mix, mix])
+        # Ensure the mix is stereo
+        if mix.ndim == 1:
+            self.logger.debug("Mix is mono. Converting to stereo.")
+            mix = np.asfortranarray([mix, mix])
 
-    def get_segmented_mix(chunk_set=chunk_set):
-        segmented_mix = {}
+        def get_segmented_mix(chunk_set=chunk_set):
+            self.logger.debug(f"Segmenting mix. Chunk size: {chunk_set}, Margin: {margin_set}")
 
-        samples = mix.shape[-1]
-        margin = margin_set
-        chunk_size = chunk_set * 44100
-        assert not margin == 0, "margin cannot be zero!"
+            segmented_mix = {}
+            samples = mix.shape[-1]
+            margin = margin_set
+            chunk_size = chunk_set * samplerate
 
-        if margin > chunk_size:
-            margin = chunk_size
-        if chunk_set == 0 or samples < chunk_size:
-            chunk_size = samples
+            self.logger.debug(f"Calculated chunk size: {chunk_size}, Total samples: {samples}")
 
-        counter = -1
-        for skip in range(0, samples, chunk_size):
-            counter += 1
-            s_margin = 0 if counter == 0 else margin
-            end = min(skip + chunk_size + margin, samples)
-            start = skip - s_margin
-            segmented_mix[skip] = mix[:, start:end].copy()
-            if end == samples:
-                break
+            if margin > chunk_size:
+                self.logger.debug(f"Margin ({margin}) is greater than chunk size. Setting margin to chunk size.")
+                margin = chunk_size
 
-        return segmented_mix
+            if chunk_set == 0 or samples < chunk_size:
+                self.logger.debug("Chunk set is zero or samples less than chunk size. Setting chunk size to total samples.")
+                chunk_size = samples
 
-    segmented_mix = get_segmented_mix()
-    raw_mix = get_segmented_mix(chunk_set=0) if mdx_net_cut else mix
-    return segmented_mix, raw_mix, samplerate
+            counter = -1
+            for skip in range(0, samples, chunk_size):
+                counter += 1
+                s_margin = 0 if counter == 0 else margin
+                end = min(skip + chunk_size + margin, samples)
+                start = skip - s_margin
+
+                self.logger.debug(f"Processing chunk {counter}. Start: {start}, End: {end}")
+
+                segmented_mix[skip] = mix[:, start:end].copy()
+                if end == samples:
+                    self.logger.debug("Reached end of samples.")
+                    break
+
+            return segmented_mix
+
+        segmented_mix = get_segmented_mix()
+        raw_mix = get_segmented_mix(chunk_set=0) if mdx_net_cut else mix
+
+        self.logger.debug("Mix preparation completed.")
+
+        return segmented_mix, raw_mix, samplerate
