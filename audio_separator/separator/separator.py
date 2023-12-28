@@ -100,6 +100,7 @@ class Separator:
         self.adjust = 1
         self.dim_c = 4
         self.hop = 1024
+        self.segment_size = 256
 
         self.primary_source = None
         self.secondary_source = None
@@ -322,15 +323,22 @@ class Separator:
     # It ensures that the model is configured with the correct settings for processing the audio data.
     def initialize_model_settings(self):
         self.logger.debug("Initializing model settings...")
+
+        # n_bins is half the FFT size plus one (self.n_fft // 2 + 1).
         self.n_bins = self.n_fft // 2 + 1
+
+        # trim is half the FFT size (self.n_fft // 2).
         self.trim = self.n_fft // 2
-        self.chunk_size = self.hop * (self.dim_t - 1)
-        self.window = torch.hann_window(window_length=self.n_fft, periodic=False).to(self.device)
-        self.freq_pad = torch.zeros([1, self.dim_c, self.n_bins - self.dim_f, self.dim_t]).to(self.device)
+
+        # chunk_size is the hop size times the segment size (hard-coded in init; in UVR it's selectable in the UI) minus one
+        self.chunk_size = self.hop * (self.segment_size - 1)
+
+        # gen_size is the chunk size minus twice the trim size
         self.gen_size = self.chunk_size - 2 * self.trim
+
         self.stft = STFT(self.logger, self.n_fft, self.hop, self.dim_f, self.device)
         self.logger.debug(
-            f"Model settings initialized: n_bins={self.n_bins}, trim={self.trim}, chunk_size={self.chunk_size}, gen_size={self.gen_size}"
+            f"Model settings and STFT initialized: n_fft={self.n_fft} hop={self.hop} dim_f={self.dim_f} n_bins={self.n_bins}, trim={self.trim}, chunk_size={self.chunk_size}, gen_size={self.gen_size}"
         )
 
     # After prepare_mix segments the audio, initialize_mix further processes each segment.
