@@ -316,6 +316,9 @@ class Separator:
         except Exception as e:
             self.logger.error(f"Error exporting audio file: {e}")
 
+    # This function sets up the necessary parameters for the model, like the number of frequency bins (n_bins), the trimming size (trim),
+    # the size of each audio chunk (chunk_size), and the window function for spectral transformations (window).
+    # It ensures that the model is configured with the correct settings for processing the audio data.
     def initialize_model_settings(self):
         self.logger.debug("Initializing model settings...")
         self.n_bins = self.n_fft // 2 + 1
@@ -328,6 +331,10 @@ class Separator:
             f"Model settings initialized: n_bins={self.n_bins}, trim={self.trim}, chunk_size={self.chunk_size}, gen_size={self.gen_size}"
         )
 
+    # After prepare_mix segments the audio, initialize_mix further processes each segment.
+    # It ensures each audio segment is in the correct format for the model, applies necessary padding,
+    # and converts the segments into tensors for processing with the model.
+    # This step is essential for preparing the audio data in a format that the neural network can process.
     def initialize_mix(self, mix, is_ckpt=False):
         self.logger.debug(f"Initializing mix with is_ckpt={is_ckpt}. Initial mix shape: {mix.shape}")
 
@@ -365,6 +372,9 @@ class Separator:
 
         return mix_waves_tensor, pad
 
+    # This is the core function where the actual separation of vocals and instrumentals happens.
+    # It iterates over each audio chunk, applies the model to each chunk (via run_model), and then concatenates the results.
+    # This function is where the heavy lifting of source separation occurs.
     def demix_base(self, mix, is_ckpt=False, is_match_mix=False):
         self.logger.debug(f"Starting demixing base method. is_ckpt={is_ckpt}, is_match_mix={is_match_mix}")
         chunked_sources = []
@@ -397,6 +407,10 @@ class Separator:
 
         return sources
 
+    # This function is called by demix_base for each audio chunk. 
+    # It applies a Short-Time Fourier Transform (STFT) to the chunk, processes it through the neural network model, 
+    # and then applies an inverse STFT to convert it back to the time domain. 
+    # This function is where the model infers the separation of vocals and instrumentals from the mixed audio.
     def run_model(self, mix, is_ckpt=False, is_match_mix=False):
         self.logger.debug(f"Running model on mix_wave with is_ckpt={is_ckpt}, is_match_mix={is_match_mix}")
         spek = self.stft(mix.to(self.device)) * self.adjust
@@ -422,6 +436,9 @@ class Separator:
                 .numpy()
             )
 
+    # These functions perform the Short-Time Fourier Transform (stft) and its inverse (istft). 
+    # They are essential for converting the audio between the time domain and the frequency domain, 
+    # which is a crucial aspect of audio processing in neural networks.
     def stft(self, x):
         initial_shape = x.shape
         x = x.reshape([-1, self.chunk_size])
@@ -445,6 +462,9 @@ class Separator:
         self.logger.debug(f"ISTFT applied. Initial shape: {initial_shape} Returning shape: {x.shape}")
         return x
 
+    # This function handles the initial processing of the audio file. It involves loading the audio file (or array),
+    # ensuring it's in stereo format, and then segmenting it into manageable chunks based on the specified chunk size and margin.
+    # This segmentation is crucial for efficient processing of the audio, especially for longer tracks.
     def prepare_mix(self, mix, chunk_set, margin_set, mdx_net_cut=False, is_missing_mix=False):
         self.logger.debug(f"Starting to prepare mix. Chunk set: {chunk_set}, Margin set: {margin_set}, MDX Net Cut: {mdx_net_cut}")
 
