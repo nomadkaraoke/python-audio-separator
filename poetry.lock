@@ -923,20 +923,24 @@ protobuf = ">=3.20.2"
 reference = ["Pillow", "google-re2"]
 
 [[package]]
-name = "onnx2pytorch"
-version = "0.4.1"
-description = "Library to transform onnx model to pytorch."
+name = "onnx2torch"
+version = "1.5.13"
+description = "ONNX to PyTorch converter"
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "onnx2pytorch-0.4.1-py3-none-any.whl", hash = "sha256:0cde7a4c45bb16217a75e15f83c0cf838e7beffa4a192208f0f9308f90d7e5a2"},
-    {file = "onnx2pytorch-0.4.1.tar.gz", hash = "sha256:f935f6b162fc2db4111b8e2948dca23f5e698da0a8a50a1771299c08754becf3"},
+    {file = "onnx2torch-1.5.13-py3-none-any.whl", hash = "sha256:c127206eb4650cc337dcda972c73e76ee4ac54ddf5eb82f87338e46c5bf16255"},
+    {file = "onnx2torch-1.5.13.tar.gz", hash = "sha256:81b596f5c553796007e60f15969594a3a43ac39299e787ade0edbab1d2d30c89"},
 ]
 
 [package.dependencies]
-onnx = ">=1.6.0"
-torch = ">=1.4.0"
+numpy = ">=1.16.4"
+onnx = ">=1.9.0"
+torch = ">=1.8.0"
 torchvision = ">=0.9.0"
+
+[package.extras]
+dev = ["Pillow", "black", "googledrivedownloader", "isort", "onnxruntime", "pre-commit", "pylint", "pytest", "requests"]
 
 [[package]]
 name = "onnxruntime"
@@ -1580,4 +1584,4 @@ silicon = ["onnxruntime-silicon"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9"
-content-hash = "5885c3abe8e41178924c395eb0717a40fa5f5a4452dc8ccaae4443d55c7b8619"
+content-hash = "8efc582e86a483a55e1eac46e011f6a6f7c02c34bd55c3471d4a22509a715ade"

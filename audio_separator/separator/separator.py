@@ -9,9 +9,8 @@ import requests
 import torch
 import librosa
 import numpy as np
-from onnx import load
 import onnxruntime as ort
-from onnx2pytorch import ConvertModel
+from onnx2torch import convert
 from pydub import AudioSegment
 from audio_separator.separator import spec_utils
 from audio_separator.separator.stft import STFT
@@ -254,7 +253,7 @@ class Separator:
             self.model_run = lambda spek: ort_.run(None, {"input": spek.cpu().numpy()})[0]
             self.logger.debug("Model loaded successfully using ONNXruntime inferencing session.")
         else:
-            self.model_run = ConvertModel(load(model_path))
+            self.model_run = convert(model_path)
             self.model_run.to(self.device).eval()
             self.logger.warning("Model converted from onnx to pytorch due to segment size not matching dim_t, processing may be slower.")
 
