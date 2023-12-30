@@ -101,18 +101,34 @@ If the GPU isn't being detected, make sure your docker runtime environment is pa
 You can use Audio Separator via the command line:
 
 ```sh
-audio-separator [audio_file] --model_name [model_name]
-    
-    audio_file: The path to the audio file to be separated. Supports all common formats (WAV, MP3, FLAC, M4A, etc.)
-    log_level: (Optional) Logging level, e.g. info, debug, warning. Default: INFO
-    log_formatter: (Optional) The log format. Default: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    model_name: (Optional) The name of the model to use for separation. Default: UVR_MDXNET_KARA_2
-    model_file_dir: (Optional) Directory to cache model files in. Default: /tmp/audio-separator-models/
-    output_dir: (Optional) The directory where the separated files will be saved. If not specified, outputs to current dir.
-    denoise_enabled: (Optional) Flag to enable or disable denoising as part of the separation process. Default: True
-    normalization_enabled: (Optional) Flag to enable or disable normalization as part of the separation process. Default: False
-    output_format: (Optional) Format to encode output files, any common format (WAV, MP3, FLAC, M4A, etc.). Default: WAV
-    single_stem: (Optional) Output only single stem, either instrumental or vocals. Example: --single_stem=instrumental
+usage: audio-separator [-h] [-v] [--log_level LOG_LEVEL] [--model_name MODEL_NAME] [--model_file_dir MODEL_FILE_DIR] [--output_dir OUTPUT_DIR] [--output_format OUTPUT_FORMAT] [--denoise DENOISE] [--normalize NORMALIZE]
+                       [--single_stem SINGLE_STEM] [--invert_spect INVERT_SPECT] [--samplerate SAMPLERATE] [--adjust ADJUST] [--dim_c DIM_C] [--hop HOP] [--segment_size SEGMENT_SIZE] [--overlap overlap] [--batch_size BATCH_SIZE]
+                       [audio_file]
+
+Separate audio file into different stems.
+
+positional arguments:
+  audio_file                       The audio file path to separate, in any common format.
+
+options:
+  -h, --help                       show this help message and exit
+  -v, --version                    show program's version number and exit
+  --log_level LOG_LEVEL            Optional: logging level, e.g. info, debug, warning (default: info). Example: --log_level=debug
+  --model_name MODEL_NAME          Optional: model name to be used for separation (default: UVR_MDXNET_KARA_2). Example: --model_name=UVR-MDX-NET-Inst_HQ_3
+  --model_file_dir MODEL_FILE_DIR  Optional: model files directory (default: /tmp/audio-separator-models/). Example: --model_file_dir=/app/models
+  --output_dir OUTPUT_DIR          Optional: directory to write output files (default: <current dir>). Example: --output_dir=/app/separated
+  --output_format OUTPUT_FORMAT    Optional: output format for separated files, any common format (default: FLAC). Example: --output_format=MP3
+  --denoise DENOISE                Optional: enable or disable denoising during separation (default: True). Example: --denoise=False
+  --normalize NORMALIZE            Optional: enable or disable normalization during separation (default: True). Example: --normalize=False
+  --single_stem SINGLE_STEM        Optional: output only single stem, either instrumental or vocals. Example: --single_stem=instrumental
+  --invert_spect INVERT_SPECT      Optional: invert secondary stem using spectogram (default: True). Example: --invert_spect=False
+  --samplerate SAMPLERATE          Optional: samplerate (default: 44100). Example: --samplerate=44100
+  --adjust ADJUST                  Optional: adjust (default: 1). Example: --adjust=1
+  --dim_c DIM_C                    Optional: dim_c (default: 4). Example: --dim_c=4
+  --hop HOP                        Optional: hop (default: 1024). Example: --hop=1024
+  --segment_size SEGMENT_SIZE      Optional: segment_size (default: 256). Example: --segment_size=256
+  --overlap overlap        Optional: overlap (default: 0.25). Example: --overlap=0.25
+  --batch_size BATCH_SIZE          Optional: batch_size (default: 4). Example: --batch_size=4
 ```
 
 Example:
@@ -152,6 +168,12 @@ print(f'Secondary stem saved at {secondary_stem_path}')
 - normalization_enabled: (Optional) Flag to enable or disable normalization as part of the separation process. Default: False
 - output_format: (Optional) Format to encode output files, any common format (WAV, MP3, FLAC, M4A, etc.). Default: WAV
 - output_single_stem: (Optional) Output only single stem, either instrumental or vocals.
+- invert_secondary_stem_using_spectogram=True,
+- samplerate: (Optional) Modify the sample rate of the output audio. Default: 44100
+- hop_length: (Optional) Hop length; advanced parameter used by the separation process. Default: 1024
+- segment_size: (Optional) Segment size; advanced parameter used by the separation process. Default: 256
+- overlap: (Optional) Overlap; advanced parameter used by the separation process. Default: 0.25
+- batch_size: (Optional) Batch Size; advanced parameter used by the separation process. Default: 4
 
 ## Requirements 📋
 

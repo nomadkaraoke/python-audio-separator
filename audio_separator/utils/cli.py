@@ -71,6 +71,48 @@ def main():
         help="Optional: output only single stem, either instrumental or vocals. Example: --single_stem=instrumental",
     )
 
+    parser.add_argument(
+        "--invert_spect",
+        type=lambda x: (str(x).lower() == "true"),
+        default=True,
+        help="Optional: invert secondary stem using spectogram (default: %(default)s). Example: --invert_spect=False",
+    )
+
+    parser.add_argument(
+        "--samplerate",
+        type=int,
+        default=44100,
+        help="Optional: samplerate (default: %(default)s). Example: --samplerate=44100",
+    )
+
+    parser.add_argument(
+        "--hop_length",
+        type=int,
+        default=1024,
+        help="Optional: hop_length (default: %(default)s). Example: --hop_length=1024",
+    )
+
+    parser.add_argument(
+        "--segment_size",
+        type=int,
+        default=256,
+        help="Optional: segment_size (default: %(default)s). Example: --segment_size=256",
+    )
+
+    parser.add_argument(
+        "--overlap",
+        type=float,
+        default=0.25,
+        help="Optional: overlap (default: %(default)s). Example: --overlap=0.25",
+    )
+
+    parser.add_argument(
+        "--batch_size",
+        type=int,
+        default=4,
+        help="Optional: batch_size (default: %(default)s). Example: --batch_size=4",
+    )
+
     args = parser.parse_args()
 
     log_level = getattr(logging, args.log_level.upper())
@@ -96,6 +138,12 @@ def main():
         denoise_enabled=args.denoise,
         normalization_enabled=args.normalize,
         output_single_stem=args.single_stem,
+        invert_secondary_stem_using_spectogram=args.invert_spect,
+        samplerate=args.samplerate,
+        hop_length=args.hop_length,
+        segment_size=args.segment_size,
+        overlap=args.overlap,
+        batch_size=args.batch_size,
     )
     output_files = separator.separate()
 
