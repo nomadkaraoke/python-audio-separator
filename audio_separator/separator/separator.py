@@ -1,4 +1,5 @@
 import os
+import gc
 import warnings
 import hashlib
 import json
@@ -95,12 +96,18 @@ class Separator:
                 raise Exception("output_single_stem must be either 'instrumental' or 'vocals'")
             self.logger.debug(f"Single stem output requested, only one output file ({output_single_stem}) will be written")
 
-        self.chunks = 0
-        self.margin = 44100
+        self.samplerate = 44100
         self.adjust = 1
         self.dim_c = 4
         self.hop = 1024
         self.segment_size = 256
+        self.overlap_mdx = 0.25
+        self.batch_size = 4
+
+        # Potentially enhances the secondary stem quality:
+        # Inverts primary stem using spectrograms, instead of waveforms.
+        # Slightly slower inversion method.
+        self.invert_secondary_stem_using_spectogram = True
 
         self.primary_source = None
         self.secondary_source = None
@@ -171,6 +178,21 @@ class Separator:
         else:
             self.logger.error(f"Failed to download file from {url}")
 
+    def final_process(self, stem_path, source, stem_name, samplerate):
+        self.write_audio(stem_path, source, samplerate, stem_name=stem_name)
+
+        return {stem_name: source}
+
+    def clear_gpu_cache(self):
+        self.logger.debug("Running garbage collection...")
+        gc.collect()
+        if self.device == torch.device("mps"):
+            self.logger.debug("Clearing MPS cache...")
+            torch.mps.empty_cache()
+        if self.device == torch.device("cuda"):
+            self.logger.debug("Clearing CUDA cache...")
+            torch.cuda.empty_cache()
+
     def separate(self):
         self.logger.debug("Starting separation process...")
         model_path = os.path.join(self.model_file_dir, f"{self.model_name}.onnx")
@@ -214,14 +236,11 @@ class Separator:
         self.logger.debug("Model loaded successfully.")
 
         self.initialize_model_settings()
-        self.logger.info("Model settings initialized, starting inference...")
 
-        mdx_net_cut = True  # Hardcoded for now, can be parameterized if needed
-        self.logger.debug(f"Preparing mix with chunks={self.chunks}, margin={self.margin}, mdx_net_cut={mdx_net_cut}")
-        mix, raw_mix, samplerate = self.prepare_mix(self.audio_file_path, self.chunks, self.margin, mdx_net_cut=mdx_net_cut)
+        mix = self.prepare_mix(self.audio_file_path)
 
         self.logger.info("Starting demixing process...")
-        source = self.demix_base(mix)[0]
+        source = self.demix(mix)
         self.logger.debug("Demixing completed.")
 
         output_files = []
@@ -231,41 +250,51 @@ class Separator:
             self.logger.debug("Normalizing primary source...")
             self.primary_source = spec_utils.normalize(self.logger, source, self.normalization_enabled).T
 
+        # Processes the secondary source if not already an array.
         if not isinstance(self.secondary_source, np.ndarray):
             self.logger.debug("Normalizing secondary source...")
-            raw_mix = self.demix_base(raw_mix, is_match_mix=True)[0] if mdx_net_cut else raw_mix
-            self.secondary_source, raw_mix = spec_utils.normalize_two_stem(
-                self.logger, source * self.compensate, raw_mix, self.normalization_enabled
+            # Demixes with the mix to get the secondary source.
+            raw_mix = self.demix(mix, is_match_mix=True)
+            # Inverts the spectrum or subtracts the source from the mix based on configuration.
+            self.secondary_source = spec_utils.invert_stem(raw_mix, source) if self.invert_secondary_stem_using_spectogram else mix.T - source.T
+
+        # if not self.output_single_stem or self.output_single_stem.lower() == self.secondary_stem.lower():
+        self.logger.info(f"Saving {self.secondary_stem} stem...")
+        if not self.secondary_stem_path:
+            self.secondary_stem_path = os.path.join(
+                f"{self.audio_file_base}_({self.secondary_stem})_{self.model_name}.{self.output_format.lower()}"
             )
-            self.secondary_source = -self.secondary_source.T + raw_mix.T
 
-        if not self.output_single_stem or self.output_single_stem.lower() == self.primary_stem.lower():
-            self.logger.info(f"Saving {self.primary_stem} stem...")
-            if not self.primary_stem_path:
-                self.primary_stem_path = os.path.join(
-                    f"{self.audio_file_base}_({self.primary_stem})_{self.model_name}.{self.output_format.lower()}"
-                )
-            self.write_audio(self.primary_stem_path, self.primary_source, samplerate)
-            output_files.append(self.primary_stem_path)
+        # Finalizes the processing of the secondary stem and maps it.
+        self.secondary_source_map = self.final_process(
+            self.secondary_stem_path, self.secondary_source, self.secondary_stem, self.samplerate
+        )
+        output_files.append(self.secondary_stem_path)
 
-        if not self.output_single_stem or self.output_single_stem.lower() == self.secondary_stem.lower():
-            self.logger.info(f"Saving {self.secondary_stem} stem...")
-            if not self.secondary_stem_path:
-                self.secondary_stem_path = os.path.join(
-                    f"{self.audio_file_base}_({self.secondary_stem})_{self.model_name}.{self.output_format.lower()}"
-                )
-            self.write_audio(self.secondary_stem_path, self.secondary_source, samplerate)
-            output_files.append(self.secondary_stem_path)
+        # if not self.output_single_stem or self.output_single_stem.lower() == self.primary_stem.lower():
+        self.logger.info(f"Saving {self.primary_stem} stem...")
+        if not self.primary_stem_path:
+            self.primary_stem_path = os.path.join(
+                f"{self.audio_file_base}_({self.primary_stem})_{self.model_name}.{self.output_format.lower()}"
+            )
 
-        if hasattr(torch, "cuda"):
-            self.logger.debug("Clearing CUDA cache...")
-            torch.cuda.empty_cache()
+        # Sets the primary source if not already an array.
+        if not isinstance(self.primary_source, np.ndarray):
+            self.primary_source = source.T
+
+        # Finalizes the processing of the primary stem and maps it.
+        self.primary_source_map = self.final_process(self.primary_stem_path, self.primary_source, self.primary_stem, self.samplerate)
+        output_files.append(self.primary_stem_path)
+
+        self.clear_gpu_cache()
 
         self.logger.debug("Separation process completed.")
         return output_files
 
-    def write_audio(self, stem_path, stem_source, samplerate):
-        self.logger.debug(f"Entering write_audio with stem_path: {stem_path}, samplerate: {samplerate}")
+    def write_audio(self, stem_path: str, stem_source, samplerate, stem_name=None):
+        self.logger.debug(f"Entering write_audio with stem_name: {stem_name} and stem_path: {stem_path}")
+
+        stem_source = spec_utils.normalize(self.logger, stem_source, self.normalization_enabled)
 
         # Check if the numpy array is empty or contains very low values
         if np.max(np.abs(stem_source)) < 1e-6:
@@ -295,7 +324,7 @@ class Separator:
         # Create a pydub AudioSegment
         try:
             audio_segment = AudioSegment(
-                stem_source_interleaved.tobytes(), frame_rate=samplerate, sample_width=stem_source.dtype.itemsize, channels=2
+                stem_source_interleaved.tobytes(), frame_rate=self.samplerate, sample_width=stem_source.dtype.itemsize, channels=2
             )
             self.logger.debug("Created AudioSegment successfully.")
         except Exception as e:
@@ -305,7 +334,7 @@ class Separator:
         # Determine file format based on the file extension
         file_format = stem_path.lower().split(".")[-1]
 
-        # For M4A files, specify 'mp4' as the container format
+        # For m4a files, specify mp4 as the container format as the extension doesn't match the format name
         if file_format == "m4a":
             file_format = "mp4"
         elif file_format == "mka":
@@ -382,129 +411,141 @@ class Separator:
 
         return mix_waves_tensor, pad
 
-    # This is the core function where the actual separation of vocals and instrumentals happens.
-    # It iterates over each audio chunk, applies the model to each chunk (via run_model), and then concatenates the results.
-    # This function is where the heavy lifting of source separation occurs.
-    def demix_base(self, mix, is_ckpt=False, is_match_mix=False):
-        self.logger.debug(f"Starting demixing base method. is_ckpt={is_ckpt}, is_match_mix={is_match_mix}")
-        chunked_sources = []
+    def demix(self, mix, is_match_mix=False):
+        # Preserves the original mix for later use.
+        org_mix = mix
+        # Initializes a list to store the separated waveforms.
+        tar_waves_ = []
 
-        for slice in mix:
-            self.logger.debug(f"Processing slice {slice}")
-            sources = []
-            tar_waves_ = []
-            mix_p = mix[slice]
-            mix_waves, pad = self.initialize_mix(mix_p, is_ckpt=is_ckpt)
-            self.logger.debug(f"mix_waves shape: {mix_waves.shape}, pad: {pad}")
+        # The following block handles the case where matching the mix is required.
+        if is_match_mix:
+            # Sets a smaller chunk size specifically for matching the mix.
+            chunk_size = self.hop * (256 - 1)
+            # Sets a small overlap for the chunks.
+            overlap = 0.02
+        else:
+            # Uses the regular chunk size defined in model settings.
+            chunk_size = self.chunk_size
+            # Uses the overlap specified in the model settings.
+            overlap = self.overlap_mdx
 
-            mix_waves = mix_waves.split(1)
-            pad = mix_p.shape[-1] if is_ckpt else -pad
+        # Calculates the generated size after subtracting the trim from both ends of the chunk.
+        gen_size = chunk_size - 2 * self.trim
+
+        # Calculates padding to make the mix length a multiple of the generated size.
+        pad = gen_size + self.trim - ((mix.shape[-1]) % gen_size)
+        # Prepares the mixture with padding at the beginning and the end.
+        mixture = np.concatenate((np.zeros((2, self.trim), dtype="float32"), mix, np.zeros((2, pad), dtype="float32")), 1)
+
+        # Calculates the step size for processing chunks based on the overlap.
+        step = self.chunk_size - self.n_fft  # Or possibly: int((1 - overlap) * chunk_size)
+        # Initializes arrays to store the results and to account for overlap.
+        result = np.zeros((1, 2, mixture.shape[-1]), dtype=np.float32)
+        divider = np.zeros((1, 2, mixture.shape[-1]), dtype=np.float32)
+
+        # Initializes counters for processing chunks.
+        total = 0
+        total_chunks = (mixture.shape[-1] + step - 1) // step
+
+        # Processes each chunk of the mixture.
+        for i in range(0, mixture.shape[-1], step):
+            total += 1
+            start = i
+            end = min(i + chunk_size, mixture.shape[-1])
+            chunk_size_actual = end - start
+
+            # Handles windowing for overlapping chunks.
+            if overlap == 0:
+                window = None
+            else:
+                window = np.hanning(chunk_size_actual)
+                window = np.tile(window[None, None, :], (1, 2, 1))
+
+            # Prepares the chunk for processing.
+            mix_part_ = mixture[:, start:end]
+            if end != i + chunk_size:
+                pad_size = (i + chunk_size) - end
+                mix_part_ = np.concatenate((mix_part_, np.zeros((2, pad_size), dtype="float32")), axis=-1)
+
+            # Converts the chunk to a tensor for processing.
+            mix_part = torch.tensor([mix_part_], dtype=torch.float32).to(self.device)
+            # Splits the chunk into smaller batches if necessary.
+            mix_waves = mix_part.split(self.batch_size)
 
             with torch.no_grad():
+                # Processes each batch in the chunk.
                 for mix_wave in mix_waves:
-                    tar_waves = self.run_model(mix_wave, is_ckpt=is_ckpt, is_match_mix=is_match_mix)
-                    tar_waves_.append(tar_waves)
-                tar_waves_ = np.vstack(tar_waves_)[:, :, self.trim : -self.trim] if is_ckpt else tar_waves_
-                tar_waves = np.concatenate(tar_waves_, axis=-1)[:, :pad]
-                self.logger.debug(f"Concatenated tar_waves shape: {tar_waves.shape}")
+                    self.logger.debug(f"Processing mix_wave chunk {total}/{total_chunks}...")
 
-                start = 0 if slice == 0 else self.margin
-                end = None if slice == list(mix.keys())[::-1][0] or self.margin == 0 else -self.margin
-                sources.append(tar_waves[:, start:end] * (1 / self.adjust))
-            chunked_sources.append(sources)
-        sources = np.concatenate(chunked_sources, axis=-1)
-        self.logger.debug(f"Final concatenated sources shape: {sources.shape}")
+                    # Runs the model to separate the sources.
+                    tar_waves = self.run_model(mix_wave, is_match_mix=is_match_mix)
 
-        return sources
+                    # Applies windowing if needed and accumulates the results.
+                    if window is not None:
+                        tar_waves[..., :chunk_size_actual] *= window
+                        divider[..., start:end] += window
+                    else:
+                        divider[..., start:end] += 1
 
-    # This function is called by demix_base for each audio chunk.
-    # It applies a Short-Time Fourier Transform (STFT) to the chunk, processes it through the neural network model,
-    # and then applies an inverse STFT to convert it back to the time domain.
-    # This function is where the model infers the separation of vocals and instrumentals from the mixed audio.
-    def run_model(self, mix, is_ckpt=False, is_match_mix=False):
-        self.logger.debug(f"Running model on mix_wave with is_ckpt={is_ckpt}, is_match_mix={is_match_mix}")
+                    result[..., start:end] += tar_waves[..., : end - start]
+
+        # Normalizes the results by the divider to account for overlap.
+        tar_waves = result / divider
+        tar_waves_.append(tar_waves)
+
+        # Reshapes the results to match the original dimensions.
+        tar_waves_ = np.vstack(tar_waves_)[:, :, self.trim : -self.trim]
+        tar_waves = np.concatenate(tar_waves_, axis=-1)[:, : mix.shape[-1]]
+
+        # Extracts the source from the results.
+        source = tar_waves[:, 0:None]
+
+        # Compensates the source if not matching the mix.
+        source = source if is_match_mix else source * self.compensate
+
+        return source
+
+    def run_model(self, mix, is_match_mix=False):
         spek = self.stft(mix.to(self.device)) * self.adjust
-
         spek[:, :, :3, :] *= 0
-        self.logger.debug("Zeroed the first 3 bins of the spectrum")
 
         if is_match_mix:
-            self.logger.debug("Running model in match mix mode...")
             spec_pred = spek.cpu().numpy()
         else:
-            self.logger.debug("Running model in normal mode...")
             spec_pred = -self.model_run(-spek) * 0.5 + self.model_run(spek) * 0.5 if self.denoise_enabled else self.model_run(spek)
 
-        if is_ckpt:
-            return self.stft.inverse(spec_pred).cpu().detach().numpy()
-        else:
-            return (
-                self.stft.inverse(torch.tensor(spec_pred).to(self.device))
-                .to(self.cpu)[:, :, self.trim : -self.trim]
-                .transpose(0, 1)
-                .reshape(2, -1)
-                .numpy()
-            )
+        return self.stft.inverse(torch.tensor(spec_pred).to(self.device)).cpu().detach().numpy()
 
-    # This function handles the initial processing of the audio file. It involves loading the audio file (or array),
-    # ensuring it's in stereo format, and then segmenting it into manageable chunks based on the specified chunk size and margin.
-    # This segmentation is crucial for efficient processing of the audio, especially for longer tracks.
-    def prepare_mix(self, mix, chunk_set, margin_set, mdx_net_cut=False, is_missing_mix=False):
-        self.logger.debug(f"Starting to prepare mix. Chunk set: {chunk_set}, Margin set: {margin_set}, MDX Net Cut: {mdx_net_cut}")
+    def prepare_mix(self, mix):
+        # Store the original path or the mix itself for later checks
+        audio_path = mix
 
-        samplerate = 44100
-        self.logger.debug(f"Default samplerate set to {samplerate}")
-
-        # Load mix if it's a file path, or transpose if it's an array
+        # Check if the input is a file path (string) and needs to be loaded
         if not isinstance(mix, np.ndarray):
-            self.logger.debug(f"Loading mix from file: {mix}")
-            mix, samplerate = librosa.load(mix, mono=False, sr=samplerate)
+            self.logger.debug(f"Loading audio from file: {mix}")
+            mix, sr = librosa.load(mix, mono=False, sr=self.samplerate)
+            self.logger.debug(f"Audio loaded. Sample rate: {sr}, Audio shape: {mix.shape}")
         else:
-            self.logger.debug("Transposing the given mix array.")
+            # Transpose the mix if it's already an ndarray (expected shape: [channels, samples])
+            self.logger.debug("Transposing the provided mix array.")
             mix = mix.T
+            self.logger.debug(f"Transposed mix shape: {mix.shape}")
 
-        # Ensure the mix is stereo
+        # If the original input was a filepath, check if the loaded mix is empty
+        if isinstance(audio_path, str):
+            if not np.any(mix):
+                error_msg = f"Audio file {audio_path} is empty or not valid"
+                self.logger.error(error_msg)
+                raise ValueError(error_msg)
+            else:
+                self.logger.debug("Audio file is valid and contains data.")
+
+        # Ensure the mix is in stereo format
         if mix.ndim == 1:
             self.logger.debug("Mix is mono. Converting to stereo.")
             mix = np.asfortranarray([mix, mix])
+            self.logger.debug("Converted to stereo mix.")
 
-        def get_segmented_mix(chunk_set=chunk_set):
-            self.logger.debug(f"Segmenting mix. Chunk size: {chunk_set}, Margin: {margin_set}")
-
-            segmented_mix = {}
-            samples = mix.shape[-1]
-            margin = margin_set
-            chunk_size = chunk_set * samplerate
-
-            self.logger.debug(f"Calculated chunk size: {chunk_size}, Total samples: {samples}")
-
-            if margin > chunk_size:
-                self.logger.debug(f"Margin ({margin}) is greater than chunk size. Setting margin to chunk size.")
-                margin = chunk_size
-
-            if chunk_set == 0 or samples < chunk_size:
-                self.logger.debug("Chunk set is zero or samples less than chunk size. Setting chunk size to total samples.")
-                chunk_size = samples
-
-            counter = -1
-            for skip in range(0, samples, chunk_size):
-                counter += 1
-                s_margin = 0 if counter == 0 else margin
-                end = min(skip + chunk_size + margin, samples)
-                start = skip - s_margin
-
-                self.logger.debug(f"Processing chunk {counter}. Start: {start}, End: {end}")
-
-                segmented_mix[skip] = mix[:, start:end].copy()
-                if end == samples:
-                    self.logger.debug("Reached end of samples.")
-                    break
-
-            return segmented_mix
-
-        segmented_mix = get_segmented_mix()
-        raw_mix = get_segmented_mix(chunk_set=0) if mdx_net_cut else mix
-
+        # Final log indicating successful preparation of the mix
         self.logger.debug("Mix preparation completed.")
-
-        return segmented_mix, raw_mix, samplerate
+        return mix
