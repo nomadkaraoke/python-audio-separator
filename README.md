@@ -25,15 +25,19 @@ The primary stem typically contains the instrumental part of the audio, while th
 💬 If successfully configured, you should see this log message when running audio-separator:
  `ONNXruntime has CUDAExecutionProvider available, enabling acceleration`
 
-Conda: `conda install pytorch=*=*cuda* onnxruntime=*=*cuda* ffmpeg audio-separator -c beveradb -c conda-forge`
+Conda: `conda install pytorch=*=*cuda* onnxruntime=*=*cuda* audio-separator -c beveradb -c pytorch -c conda-forge --override-channels`
 
 Pip: `pip install "audio-separator[gpu]"`
 
+Docker: `beveradb/audio-separator:gpu`
+
 ### 🐢 No hardware acceleration, CPU only:
 
-Conda: `conda install -c beveradb -c conda-forge audio-separator`
+Conda: `conda install audio-separator -c beveradb -c pytorch -c conda-forge --override-channels`
 
 Pip: `pip install "audio-separator[cpu]"`
+
+Docker: `beveradb/audio-separator`
 
 ###  Apple Silicon, macOS Sonoma+ with CoreML acceleration
 
@@ -52,7 +56,7 @@ This should be easy to install on most platforms, e.g.:
  macOS:`brew update; brew install ffmpeg`
 
 
-## GPU / CUDA specific installation steps
+## GPU / CUDA specific installation steps with Pip
 
 In theory, all you should need to do to get `audio-separator` working with a GPU is install it with the `[gpu]` extra as above.
 
