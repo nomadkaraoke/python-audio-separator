@@ -48,12 +48,12 @@ requirements:
     - requests
     - numpy
     - librosa
+    - six
+    - pydub
     - pytorch
     - torchvision
     - torchaudio
-    - six
     - ffmpeg >=6
-    - pydub
     - onnx
     - onnxruntime
     - onnx2torch
