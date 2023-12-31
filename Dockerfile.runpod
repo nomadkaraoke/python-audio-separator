@@ -1,0 +1,10 @@
+# Base image - Set default to CUDA 11.8
+ARG WORKER_CUDA_VERSION=11.8
+FROM runpod/base:0.4.4-cuda${WORKER_CUDA_VERSION}.0
+
+# Install audio-separator dependency ffmpeg
+RUN apt-get update && apt-get install -y ffmpeg
+
+# Install the GPU version of audio-separator
+RUN --mount=type=cache,target=/root/.cache \
+    pip3 install "audio-separator[gpu]"

@@ -62,3 +62,15 @@ jobs:
           tags: |
             beveradb/audio-separator:gpu-${{ env.VERSION }}
             beveradb/audio-separator:gpu
+
+      - name: Build and push Docker image for Runpod
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: docker/build-push-action@v5
+        with:
+          file: Dockerfile.runpod
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            beveradb/audio-separator:runpod-${{ env.VERSION }}
+            beveradb/audio-separator:runpod
