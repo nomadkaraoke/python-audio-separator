@@ -3,7 +3,15 @@ ARG WORKER_CUDA_VERSION=11.8
 FROM runpod/base:0.4.4-cuda${WORKER_CUDA_VERSION}.0
 
 # Install audio-separator dependency ffmpeg
-RUN apt-get update && apt-get install -y ffmpeg
+RUN apt-get update && apt-get install -y ffmpeg wget && rm -rf /var/lib/apt/lists/*
+
+# Install miniconda
+RUN wget \
+    https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
+    && mkdir /root/.conda \
+    && bash Miniconda3-latest-Linux-x86_64.sh -b \
+    && rm -f Miniconda3-latest-Linux-x86_64.sh
+ENV PATH="/root/miniconda3/bin:$PATH"
 
 # Install the GPU version of audio-separator
 RUN --mount=type=cache,target=/root/.cache \

@@ -49,6 +49,8 @@ requirements:
     - numpy
     - librosa
     - pytorch
+    - torchvision
+    - torchaudio
     - six
     - ffmpeg >=6
     - pydub
