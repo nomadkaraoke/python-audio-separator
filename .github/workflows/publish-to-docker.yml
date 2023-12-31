@@ -57,7 +57,7 @@ jobs:
         with:
           file: Dockerfile.gpu
           context: .
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           push: true
           tags: |
             beveradb/audio-separator:gpu-${{ env.VERSION }}
@@ -69,7 +69,7 @@ jobs:
         with:
           file: Dockerfile.runpod
           context: .
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           push: true
           tags: |
             beveradb/audio-separator:runpod-${{ env.VERSION }}

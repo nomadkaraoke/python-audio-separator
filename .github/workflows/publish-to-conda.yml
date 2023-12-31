@@ -24,7 +24,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           environment-file: conda/build_env.yaml
-          channels: conda-forge
+          channels: conda-forge,pytorch
           mamba-version: "*"
           use-mamba: true
           auto-update-conda: false
