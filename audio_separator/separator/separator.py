@@ -3,6 +3,7 @@ import gc
 import warnings
 import hashlib
 import json
+import time
 import logging
 import warnings
 import requests
@@ -205,6 +206,7 @@ class Separator:
     def separate(self):
         # Starting the separation process
         self.logger.debug("Starting separation process...")
+        self.separate_start_time = time.perf_counter()
 
         # Setting up the model path
         model_path = os.path.join(self.model_file_dir, f"{self.model_name}.onnx")
@@ -314,6 +316,8 @@ class Separator:
 
         # Log the completion of the separation process
         self.logger.debug("Separation process completed.")
+
+        self.logger.info(f'Time Elapsed: {time.strftime("%H:%M:%S", time.gmtime(int(time.perf_counter() - self.separate_start_time)))}')
         return output_files
 
     def write_audio(self, stem_path: str, stem_source, samplerate, stem_name=None):
