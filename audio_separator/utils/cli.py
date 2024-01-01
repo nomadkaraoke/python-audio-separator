@@ -54,15 +54,15 @@ def main():
     parser.add_argument(
         "--denoise",
         type=lambda x: (str(x).lower() == "true"),
-        default=True,
-        help="Optional: enable or disable denoising during separation (default: %(default)s). Example: --denoise=False",
+        default=False,
+        help="Optional: enable or disable denoising during separation (default: %(default)s). Example: --denoise=True",
     )
 
     parser.add_argument(
         "--normalize",
         type=lambda x: (str(x).lower() == "true"),
-        default=True,
-        help="Optional: enable or disable normalization during separation (default: %(default)s). Example: --normalize=False",
+        default=False,
+        help="Optional: enable or disable normalization during separation (default: %(default)s). Example: --normalize=True",
     )
 
     parser.add_argument(
@@ -74,15 +74,15 @@ def main():
     parser.add_argument(
         "--invert_spect",
         type=lambda x: (str(x).lower() == "true"),
-        default=True,
-        help="Optional: invert secondary stem using spectogram (default: %(default)s). Example: --invert_spect=False",
+        default=False,
+        help="Optional: invert secondary stem using spectogram (default: %(default)s). Example: --invert_spect=True",
     )
 
     parser.add_argument(
-        "--samplerate",
+        "--sample_rate",
         type=int,
         default=44100,
-        help="Optional: samplerate (default: %(default)s). Example: --samplerate=44100",
+        help="Optional: sample_rate (default: %(default)s). Example: --sample_rate=44100",
     )
 
     parser.add_argument(
@@ -109,8 +109,8 @@ def main():
     parser.add_argument(
         "--batch_size",
         type=int,
-        default=4,
-        help="Optional: batch_size (default: %(default)s). Example: --batch_size=4",
+        default=1,
+        help="Optional: batch_size (default: %(default)s). Example: --batch_size=1",
     )
 
     args = parser.parse_args()
@@ -138,8 +138,8 @@ def main():
         denoise_enabled=args.denoise,
         normalization_enabled=args.normalize,
         output_single_stem=args.single_stem,
-        invert_secondary_stem_using_spectogram=args.invert_spect,
-        samplerate=args.samplerate,
+        invert_using_spec=args.invert_spect,
+        sample_rate=args.sample_rate,
         hop_length=args.hop_length,
         segment_size=args.segment_size,
         overlap=args.overlap,

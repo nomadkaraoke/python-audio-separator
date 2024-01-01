@@ -30,15 +30,15 @@ class Separator:
         secondary_stem_path=None,
         output_format="WAV",
         output_subtype=None,
-        normalization_enabled=True,
-        denoise_enabled=True,
+        normalization_enabled=False,
+        denoise_enabled=False,
         output_single_stem=None,
-        invert_secondary_stem_using_spectogram=True,
-        samplerate=44100,
+        invert_using_spec=False,
+        sample_rate=44100,
         hop_length=1024,
         segment_size=256,
         overlap=0.25,
-        batch_size=4,
+        batch_size=1,
     ):
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(log_level)
@@ -104,19 +104,19 @@ class Separator:
                 raise Exception("output_single_stem must be either 'instrumental' or 'vocals'")
             self.logger.debug(f"Single stem output requested, only one output file ({output_single_stem}) will be written")
 
-        self.invert_secondary_stem_using_spectogram = invert_secondary_stem_using_spectogram
-        if self.invert_secondary_stem_using_spectogram:
+        self.invert_using_spec = invert_using_spec
+        if self.invert_using_spec:
             self.logger.debug(
                 f"Secondary step will be inverted using spectogram rather than waveform. This may improve quality, but is slightly slower."
             )
 
-        self.samplerate = samplerate
+        self.sample_rate = sample_rate
         self.hop_length = hop_length
         self.segment_size = segment_size
         self.overlap = overlap
         self.batch_size = batch_size
         self.logger.debug(
-            f"Separation settings set: samplerate={self.samplerate}, hop_length={self.hop_length}, segment_size={self.segment_size}, overlap={self.overlap}, batch_size={self.batch_size}"
+            f"Separation settings set: sample_rate={self.sample_rate}, hop_length={self.hop_length}, segment_size={self.segment_size}, overlap={self.overlap}, batch_size={self.batch_size}"
         )
 
         self.primary_source = None
@@ -188,8 +188,9 @@ class Separator:
         else:
             self.logger.error(f"Failed to download file from {url}")
 
-    def final_process(self, stem_path, source, stem_name, samplerate):
-        self.write_audio(stem_path, source, samplerate, stem_name=stem_name)
+    def final_process(self, stem_path, source, stem_name, sample_rate):
+        self.logger.debug(f"Finalizing {stem_name} stem processing and writing audio...")
+        self.write_audio(stem_path, source, sample_rate, stem_name=stem_name)
 
         return {stem_name: source}
 
@@ -244,8 +245,32 @@ class Separator:
             model_data["primary_stem"],
         )
         self.secondary_stem = "Vocals" if self.primary_stem == "Instrumental" else "Instrumental"
+
+        # In UVR, these variables are set but either aren't useful or are better handled in audio-separator.
+        # Leaving these comments explaining to help myself or future developers understand why these aren't in audio-separator.
+        
+        # "chunks" is not actually used for anything in UVR...
+        # self.chunks = 0
+
+        # "adjust" is hard-coded to 1 in UVR, and only used as a multiplier in run_model, so it does nothing.
+        # self.adjust = 1
+
+        # "hop" is hard-coded to 1024 in UVR. We have a "hop_length" parameter instead
+        # self.hop = 1024
+
+        # "margin" maps to sample rate and is set from the GUI in UVR (default: 44100). We have a "sample_rate" parameter instead.
+        # self.margin = 44100
+
+        # "dim_c" is hard-coded to 4 in UVR, seems to be a parameter for the number of channels, and is only used for checkpoint models. 
+        # We haven't implemented support for the checkpoint models here, so we're not using it.
+        # self.dim_c = 4
+
+        self.logger.debug(f"Model params: primary_stem={self.primary_stem}, secondary_stem={self.secondary_stem}")
         self.logger.debug(
-            f"Model settings initialized: compensate={self.compensate}, primary_stem={self.primary_stem}, secondary_stem={self.secondary_stem}, dim_f={self.dim_f}, dim_t={self.dim_t}, n_fft={self.n_fft}"
+            f"Model params: batch_size={self.batch_size}, compensate={self.compensate}, segment_size={self.segment_size}, dim_f={self.dim_f}, dim_t={self.dim_t}"
+        )
+        self.logger.debug(
+            f"Model params: n_fft={self.n_fft}, hop={self.hop_length}"
         )
 
         # Loading the model for inference
@@ -259,16 +284,14 @@ class Separator:
             self.model_run.to(self.device).eval()
             self.logger.warning("Model converted from onnx to pytorch due to segment size not matching dim_t, processing may be slower.")
 
-        # Initialize model specific settings
-        self.initialize_model_settings()
-
         # Prepare the mix for processing
+        self.logger.debug("Preparing mix...")
         mix = self.prepare_mix(self.audio_file_path)
 
         # Start the demixing process
-        self.logger.info("Starting demixing process...")
         source = self.demix(mix)
-        self.logger.debug("Demixing completed.")
+
+        # In UVR, the source is cached here if it's a vocal split model, but we're not supporting that yet
 
         # Initialize the list for output files
         output_files = []
@@ -281,11 +304,15 @@ class Separator:
 
         # Process the secondary source if not already an array
         if not isinstance(self.secondary_source, np.ndarray):
-            self.logger.debug("Normalizing secondary source...")
+            self.logger.debug("Producing secondary source: demixing in match_mix mode")
             raw_mix = self.demix(mix, is_match_mix=True)
-            self.secondary_source = (
-                spec_utils.invert_stem(raw_mix, source) if self.invert_secondary_stem_using_spectogram else mix.T - source.T
-            )
+
+            if self.invert_using_spec:
+                self.logger.debug("Inverting secondary stem using spectogram as invert_using_spec is set to True")
+                self.secondary_source = spec_utils.invert_stem(raw_mix, source)
+            else:
+                self.logger.debug("Inverting secondary stem by subtracting of transposed demixed stem from transposed original mix")
+                self.secondary_source = mix.T - source.T
 
         # Save and process the secondary stem if needed
         if not self.output_single_stem or self.output_single_stem.lower() == self.secondary_stem.lower():
@@ -295,7 +322,7 @@ class Separator:
                     f"{self.audio_file_base}_({self.secondary_stem})_{self.model_name}.{self.output_format.lower()}"
                 )
             self.secondary_source_map = self.final_process(
-                self.secondary_stem_path, self.secondary_source, self.secondary_stem, self.samplerate
+                self.secondary_stem_path, self.secondary_source, self.secondary_stem, self.sample_rate
             )
             output_files.append(self.secondary_stem_path)
 
@@ -308,19 +335,21 @@ class Separator:
                 )
             if not isinstance(self.primary_source, np.ndarray):
                 self.primary_source = source.T
-            self.primary_source_map = self.final_process(self.primary_stem_path, self.primary_source, self.primary_stem, self.samplerate)
+            self.primary_source_map = self.final_process(self.primary_stem_path, self.primary_source, self.primary_stem, self.sample_rate)
             output_files.append(self.primary_stem_path)
 
         # Clear GPU cache to free up memory
         self.clear_gpu_cache()
 
+        # TODO: In UVR, this is where the vocal split chain gets processed - see process_vocal_split_chain()
+
         # Log the completion of the separation process
         self.logger.debug("Separation process completed.")
-
         self.logger.info(f'Time Elapsed: {time.strftime("%H:%M:%S", time.gmtime(int(time.perf_counter() - self.separate_start_time)))}')
+
         return output_files
 
-    def write_audio(self, stem_path: str, stem_source, samplerate, stem_name=None):
+    def write_audio(self, stem_path: str, stem_source, sample_rate, stem_name=None):
         self.logger.debug(f"Entering write_audio with stem_name: {stem_name} and stem_path: {stem_path}")
 
         stem_source = spec_utils.normalize(self.logger, stem_source, self.normalization_enabled)
@@ -353,7 +382,7 @@ class Separator:
         # Create a pydub AudioSegment
         try:
             audio_segment = AudioSegment(
-                stem_source_interleaved.tobytes(), frame_rate=self.samplerate, sample_width=stem_source.dtype.itemsize, channels=2
+                stem_source_interleaved.tobytes(), frame_rate=self.sample_rate, sample_width=stem_source.dtype.itemsize, channels=2
             )
             self.logger.debug("Created AudioSegment successfully.")
         except Exception as e:
@@ -395,9 +424,9 @@ class Separator:
         self.gen_size = self.chunk_size - 2 * self.trim
 
         self.stft = STFT(self.logger, self.n_fft, self.hop_length, self.dim_f, self.device)
-        self.logger.debug(
-            f"Model settings and STFT initialized: n_fft={self.n_fft} hop_length={self.hop_length} dim_f={self.dim_f} n_bins={self.n_bins}, trim={self.trim}, chunk_size={self.chunk_size}, gen_size={self.gen_size}"
-        )
+
+        self.logger.debug(f"Model input params: n_fft={self.n_fft} hop_length={self.hop_length} dim_f={self.dim_f}")
+        self.logger.debug(f"Model settings: n_bins={self.n_bins}, trim={self.trim}, chunk_size={self.chunk_size}, gen_size={self.gen_size}")
 
     # After prepare_mix segments the audio, initialize_mix further processes each segment.
     # It ensures each audio segment is in the correct format for the model, applies necessary padding,
@@ -453,33 +482,45 @@ class Separator:
         return mix_waves_tensor, pad
 
     def demix(self, mix, is_match_mix=False):
+        self.logger.info(f"Starting demixing process with is_match_mix: {is_match_mix}...")
+        self.initialize_model_settings()
+
         # Preserves the original mix for later use.
+        # In UVR, this is used for the pitch fix and VR denoise processes, which aren't yet implemented here.
         org_mix = mix
+        self.logger.debug(f"Original mix stored. Shape: {org_mix.shape}")
+
         # Initializes a list to store the separated waveforms.
         tar_waves_ = []
 
-        # The following block handles the case where matching the mix is required.
+        # Handling different chunk sizes and overlaps based on the matching requirement.
         if is_match_mix:
             # Sets a smaller chunk size specifically for matching the mix.
             chunk_size = self.hop_length * (self.segment_size - 1)
             # Sets a small overlap for the chunks.
             overlap = 0.02
+            self.logger.debug(f"Chunk size for matching mix: {chunk_size}, Overlap: {overlap}")
         else:
             # Uses the regular chunk size defined in model settings.
             chunk_size = self.chunk_size
             # Uses the overlap specified in the model settings.
             overlap = self.overlap
+            self.logger.debug(f"Standard chunk size: {chunk_size}, Overlap: {overlap}")
 
         # Calculates the generated size after subtracting the trim from both ends of the chunk.
         gen_size = chunk_size - 2 * self.trim
+        self.logger.debug(f"Generated size calculated: {gen_size}")
 
         # Calculates padding to make the mix length a multiple of the generated size.
         pad = gen_size + self.trim - ((mix.shape[-1]) % gen_size)
         # Prepares the mixture with padding at the beginning and the end.
         mixture = np.concatenate((np.zeros((2, self.trim), dtype="float32"), mix, np.zeros((2, pad), dtype="float32")), 1)
+        self.logger.debug(f"Mixture prepared with padding. Mixture shape: {mixture.shape}")
 
         # Calculates the step size for processing chunks based on the overlap.
-        step = self.chunk_size - self.n_fft  # Or possibly: int((1 - overlap) * chunk_size)
+        step = int((1 - overlap) * chunk_size)
+        self.logger.debug(f"Step size for processing chunks: {step} as overlap is set to {overlap}.")
+
         # Initializes arrays to store the results and to account for overlap.
         result = np.zeros((1, 2, mixture.shape[-1]), dtype=np.float32)
         divider = np.zeros((1, 2, mixture.shape[-1]), dtype=np.float32)
@@ -487,22 +528,24 @@ class Separator:
         # Initializes counters for processing chunks.
         total = 0
         total_chunks = (mixture.shape[-1] + step - 1) // step
+        self.logger.debug(f"Total chunks to process: {total_chunks}")
 
         # Processes each chunk of the mixture.
         for i in range(0, mixture.shape[-1], step):
             total += 1
             start = i
             end = min(i + chunk_size, mixture.shape[-1])
-            chunk_size_actual = end - start
+            self.logger.debug(f"Processing chunk {total}/{total_chunks}: Start {start}, End {end}")
 
             # Handles windowing for overlapping chunks.
-            if overlap == 0:
-                window = None
-            else:
+            chunk_size_actual = end - start
+            window = None
+            if overlap != 0:
                 window = np.hanning(chunk_size_actual)
                 window = np.tile(window[None, None, :], (1, 2, 1))
+                self.logger.debug("Window applied to the chunk.")
 
-            # Prepares the chunk for processing.
+            # Zero-pad the chunk to prepare it for processing.
             mix_part_ = mixture[:, start:end]
             if end != i + chunk_size:
                 pad_size = (i + chunk_size) - end
@@ -512,11 +555,15 @@ class Separator:
             mix_part = torch.tensor([mix_part_], dtype=torch.float32).to(self.device)
             # Splits the chunk into smaller batches if necessary.
             mix_waves = mix_part.split(self.batch_size)
+            total_batches = len(mix_waves)
+            self.logger.debug(f"Mix part split into batches. Number of batches: {total_batches}")
 
             with torch.no_grad():
                 # Processes each batch in the chunk.
+                batches_processed = 0
                 for mix_wave in mix_waves:
-                    self.logger.debug(f"Processing mix_wave chunk {total}/{total_chunks}...")
+                    batches_processed += 1
+                    self.logger.debug(f"Processing mix_wave batch {batches_processed}/{total_batches}")
 
                     # Runs the model to separate the sources.
                     tar_waves = self.run_model(mix_wave, is_match_mix=is_match_mix)
@@ -533,6 +580,7 @@ class Separator:
         # Normalizes the results by the divider to account for overlap.
         tar_waves = result / divider
         tar_waves_.append(tar_waves)
+        self.logger.debug("Result normalized by divider.")
 
         # Reshapes the results to match the original dimensions.
         tar_waves_ = np.vstack(tar_waves_)[:, :, self.trim : -self.trim]
@@ -540,16 +588,25 @@ class Separator:
 
         # Extracts the source from the results.
         source = tar_waves[:, 0:None]
+        self.logger.debug(f"Concatenated tar_waves. Shape: {tar_waves.shape}")
+
+        # TODO: In UVR, pitch changing happens here. Consider implementing this as a feature.
 
         # Compensates the source if not matching the mix.
-        source = source if is_match_mix else source * self.compensate
+        if not is_match_mix:
+            source * self.compensate
+            self.logger.debug("Match mix mode; compensate multiplier applied.")
 
+        # TODO: In UVR, VR denoise model gets applied here. Consider implementing this as a feature.
+
+        self.logger.debug("Demixing process completed.")
         return source
 
     def run_model(self, mix, is_match_mix=False):
         # Applying the STFT to the mix. The mix is moved to the specified device (e.g., GPU) before processing.
         # self.logger.debug(f"Running STFT on the mix. Mix shape before STFT: {mix.shape}")
         spek = self.stft(mix.to(self.device))
+        self.logger.debug(f"STFT applied on mix. Spectrum shape: {spek.shape}")
 
         # Zeroing out the first 3 bins of the spectrum. This is often done to reduce low-frequency noise.
         spek[:, :, :3, :] *= 0
@@ -559,14 +616,19 @@ class Separator:
         if is_match_mix:
             # self.logger.debug("Match mix mode is enabled. Converting spectrum to NumPy array.")
             spec_pred = spek.cpu().numpy()
+            self.logger.debug("is_match_mix: spectrum prediction obtained directly from STFT output.")
         else:
-            # Running the model in denoise mode if enabled, otherwise in normal mode.
-            # self.logger.debug(f"Denoise mode {'enabled' if self.denoise_enabled else 'disabled'}. Running the model.")
-            spec_pred = -self.model_run(-spek) * 0.5 + self.model_run(spek) * 0.5 if self.denoise_enabled else self.model_run(spek)
-            # self.logger.debug(f"Model run completed. Predicted spectrum shape: {spec_pred.shape}")
+            # If denoising is enabled, the model is run on both the negative and positive spectrums.
+            if self.denoise_enabled:
+                spec_pred = -self.model_run(-spek) * 0.5 + self.model_run(spek) * 0.5
+                self.logger.debug("Model run on both negative and positive spectrums for denoising.")
+            else:
+                spec_pred = self.model_run(spek)
+                self.logger.debug("Model run on the spectrum without denoising.")
 
         # Applying the inverse STFT to convert the spectrum back to the time domain.
         result = self.stft.inverse(torch.tensor(spec_pred).to(self.device)).cpu().detach().numpy()
+        self.logger.debug(f"Inverse STFT applied. Returning result with shape: {result.shape}")
 
         return result
 
@@ -577,7 +639,7 @@ class Separator:
         # Check if the input is a file path (string) and needs to be loaded
         if not isinstance(mix, np.ndarray):
             self.logger.debug(f"Loading audio from file: {mix}")
-            mix, sr = librosa.load(mix, mono=False, sr=self.samplerate)
+            mix, sr = librosa.load(mix, mono=False, sr=self.sample_rate)
             self.logger.debug(f"Audio loaded. Sample rate: {sr}, Audio shape: {mix.shape}")
         else:
             # Transpose the mix if it's already an ndarray (expected shape: [channels, samples])

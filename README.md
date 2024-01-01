@@ -148,7 +148,7 @@ This command will process the file and generate two new files in the current dir
 You can also use Audio Separator in your Python project. Here's how you can use it:
 
 ```
-from audio_separator import Separator
+from audio_separator.separator import Separator
 
 # Initialize the Separator with the audio file and model name
 separator = Separator('/path/to/your/audio.m4a', model_name='UVR_MDXNET_KARA_2')
@@ -168,9 +168,9 @@ print(f'Secondary stem saved at {secondary_stem_path}')
 - model_name: (Optional) The name of the model to use for separation. Defaults to 'UVR_MDXNET_KARA_2', a very powerful model for Karaoke instrumental tracks.
 - model_file_dir: (Optional) Directory to cache model files in. Default: /tmp/audio-separator-models/
 - output_dir: (Optional) Directory where the separated files will be saved. If not specified, outputs to current dir.
+- output_format: (Optional) Format to encode output files, any common format (WAV, MP3, FLAC, M4A, etc.). Default: WAV
 - denoise_enabled: (Optional) Flag to enable or disable denoising as part of the separation process. Default: True
 - normalization_enabled: (Optional) Flag to enable or disable normalization as part of the separation process. Default: False
-- output_format: (Optional) Format to encode output files, any common format (WAV, MP3, FLAC, M4A, etc.). Default: WAV
 - output_single_stem: (Optional) Output only single stem, either instrumental or vocals.
 - invert_secondary_stem_using_spectogram=True,
 - samplerate: (Optional) Modify the sample rate of the output audio. Default: 44100

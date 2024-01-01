@@ -30,7 +30,7 @@ class STFT:
         if x_is_mps:
             x = x.to(self.device)
 
-        self.logger.debug(f"STFT applied. Initial shape: {initial_shape} Resulting shape: {x.shape}")
+        # self.logger.debug(f"STFT applied. Initial shape: {initial_shape} Resulting shape: {x.shape}")
         return x[..., : self.dim_f, :]
 
     def inverse(self, x):
@@ -54,5 +54,5 @@ class STFT:
         if x_is_mps:
             x = x.to(self.device)
 
-        self.logger.debug(f"Inverse STFT applied. Initial shape: {initial_shape} Resulting shape: {x.shape}")
+        # self.logger.debug(f"Inverse STFT applied. Initial shape: {initial_shape} Resulting shape: {x.shape}")
         return x
