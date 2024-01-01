@@ -29,8 +29,8 @@ def main():
 
     parser.add_argument(
         "--model_name",
-        default="UVR_MDXNET_KARA_2",
-        help="Optional: model name to be used for separation (default: %(default)s). Example: --model_name=UVR-MDX-NET-Inst_HQ_3",
+        default="UVR-MDX-NET-Inst_HQ_3",
+        help="Optional: model name to be used for separation (default: %(default)s). Example: --model_name=UVR_MDXNET_KARA_2",
     )
 
     parser.add_argument(
@@ -124,14 +124,12 @@ def main():
 
     logger.info(f"Separator beginning with input file: {args.audio_file}")
 
-    # Deliberately import here to avoid loading heave dependencies when just running --help
+    # Deliberately import here to avoid loading slow dependencies when just running --help
     from audio_separator.separator import Separator
 
     separator = Separator(
-        args.audio_file,
         log_formatter=log_formatter,
         log_level=log_level,
-        model_name=args.model_name,
         model_file_dir=args.model_file_dir,
         output_dir=args.output_dir,
         output_format=args.output_format,
@@ -145,7 +143,10 @@ def main():
         overlap=args.overlap,
         batch_size=args.batch_size,
     )
-    output_files = separator.separate()
+
+    separator.load_model(args.model_name)
+
+    output_files = separator.separate(args.audio_file)
 
     logger.info(f"Separation complete! Output file(s): {' '.join(output_files)}")
 

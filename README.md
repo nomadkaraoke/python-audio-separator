@@ -145,19 +145,51 @@ This command will process the file and generate two new files in the current dir
 
 ### As a Dependency in a Python Project
 
-You can also use Audio Separator in your Python project. Here's how you can use it:
+You can use Audio Separator in your own Python project. Here's how you can use it:
 
 ```
 from audio_separator.separator import Separator
 
-# Initialize the Separator with the audio file and model name
-separator = Separator('/path/to/your/audio.m4a', model_name='UVR_MDXNET_KARA_2')
+# Initialize the Separator class (with optional configuration properties below)
+separator = Separator()
 
-# Perform the separation
-primary_stem_path, secondary_stem_path = separator.separate()
+# Load a machine learning model (if unspecified, defaults to 'UVR-MDX-NET-Inst_HQ_3')
+separator.load_model()
+
+# Perform the separation on specific audio files without reloading the model
+primary_stem_path, secondary_stem_path = separator.separate('audio1.wav')
 
 print(f'Primary stem saved at {primary_stem_path}')
 print(f'Secondary stem saved at {secondary_stem_path}')
+```
+
+#### Batch processing, or processing with multiple models
+
+You can process multiple separations without reloading the model, to save time and memory.
+
+You only need to load a model when choosing or changing models. See example below:
+
+```
+from audio_separator.separator import Separator
+
+# Initialize the Separator with other configuration properties below
+separator = Separator()
+
+# Load a model
+separator.load_model('UVR-MDX-NET-Inst_HQ_3')
+
+# Separate multiple audio files without reloading the model
+output_file_paths_1 = separator.separate('audio1.wav')
+output_file_paths_2 = separator.separate('audio2.wav')
+output_file_paths_3 = separator.separate('audio3.wav')
+
+# Load a different model
+separator.load_model('UVR_MDXNET_KARA_2')
+
+# Separate the same files with the new model
+output_file_paths_4 = separator.separate('audio1.wav')
+output_file_paths_5 = separator.separate('audio2.wav')
+output_file_paths_6 = separator.separate('audio3.wav')
 ```
 
 ## Parameters for the Separator class
@@ -165,7 +197,7 @@ print(f'Secondary stem saved at {secondary_stem_path}')
 - audio_file: The path to the audio file to be separated. Supports all common formats (WAV, MP3, FLAC, M4A, etc.)
 - log_level: (Optional) Logging level, e.g. info, debug, warning. Default: INFO
 - log_formatter: (Optional) The log format. Default: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-- model_name: (Optional) The name of the model to use for separation. Defaults to 'UVR_MDXNET_KARA_2', a very powerful model for Karaoke instrumental tracks.
+- model_name: (Optional) The name of the model to use for separation. Defaults to 'UVR-MDX-NET-Inst_HQ_3', a very powerful model for Karaoke instrumental tracks.
 - model_file_dir: (Optional) Directory to cache model files in. Default: /tmp/audio-separator-models/
 - output_dir: (Optional) Directory where the separated files will be saved. If not specified, outputs to current dir.
 - output_format: (Optional) Format to encode output files, any common format (WAV, MP3, FLAC, M4A, etc.). Default: WAV

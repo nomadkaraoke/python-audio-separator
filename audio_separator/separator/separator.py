@@ -20,10 +20,8 @@ from audio_separator.separator.stft import STFT
 class Separator:
     def __init__(
         self,
-        audio_file_path,
         log_level=logging.DEBUG,
         log_formatter=None,
-        model_name="UVR_MDXNET_KARA_2",
         model_file_dir="/tmp/audio-separator-models/",
         output_dir=None,
         primary_stem_path=None,
@@ -55,11 +53,8 @@ class Separator:
         if not self.logger.hasHandlers():
             self.logger.addHandler(self.log_handler)
 
-        self.logger.info(
-            f"Separator instantiating with input file: {audio_file_path}, model_name: {model_name}, output_dir: {output_dir}, output_format: {output_format}"
-        )
+        self.logger.info(f"Separator instantiating with output_dir: {output_dir}, output_format: {output_format}")
 
-        self.model_name = model_name
         self.model_file_dir = model_file_dir
         self.output_dir = output_dir
         self.primary_stem_path = primary_stem_path
@@ -67,13 +62,6 @@ class Separator:
 
         # Create the model directory if it does not exist
         os.makedirs(self.model_file_dir, exist_ok=True)
-
-        self.audio_file_path = audio_file_path
-        self.audio_file_base = os.path.splitext(os.path.basename(audio_file_path))[0]
-
-        self.model_name = model_name
-        self.model_url = f"https://github.com/TRvlvr/model_repo/releases/download/all_public_uvr_models/{self.model_name}.onnx"
-        self.model_data_url = "https://raw.githubusercontent.com/TRvlvr/application_data/main/mdx_model_data/model_data.json"
 
         self.output_subtype = output_subtype
         self.output_format = output_format
@@ -118,9 +106,6 @@ class Separator:
         self.logger.debug(
             f"Separation settings set: sample_rate={self.sample_rate}, hop_length={self.hop_length}, segment_size={self.segment_size}, overlap={self.overlap}, batch_size={self.batch_size}"
         )
-
-        self.primary_source = None
-        self.secondary_source = None
 
         warnings.filterwarnings("ignore")
         self.cpu = torch.device("cpu")
@@ -204,10 +189,14 @@ class Separator:
             self.logger.debug("Clearing CUDA cache...")
             torch.cuda.empty_cache()
 
-    def separate(self):
-        # Starting the separation process
-        self.logger.debug("Starting separation process...")
-        self.separate_start_time = time.perf_counter()
+    def load_model(self, model_name="UVR-MDX-NET-Inst_HQ_3"):
+        self.logger.info(f"Loading model {model_name}...")
+
+        self.load_model_start_time = time.perf_counter()
+
+        self.model_name = model_name
+        self.model_url = f"https://github.com/TRvlvr/model_repo/releases/download/all_public_uvr_models/{self.model_name}.onnx"
+        self.model_data_url = "https://raw.githubusercontent.com/TRvlvr/application_data/main/mdx_model_data/model_data.json"
 
         # Setting up the model path
         model_path = os.path.join(self.model_file_dir, f"{self.model_name}.onnx")
@@ -237,18 +226,18 @@ class Separator:
         self.logger.debug(f"Model data loaded: {model_data}")
 
         # Initializing model parameters
-        self.compensate, self.dim_f, self.dim_t, self.n_fft, self.primary_stem = (
+        self.compensate, self.dim_f, self.dim_t, self.n_fft, self.model_primary_stem = (
             model_data["compensate"],
             model_data["mdx_dim_f_set"],
             2 ** model_data["mdx_dim_t_set"],
             model_data["mdx_n_fft_scale_set"],
             model_data["primary_stem"],
         )
-        self.secondary_stem = "Vocals" if self.primary_stem == "Instrumental" else "Instrumental"
+        self.model_secondary_stem = "Vocals" if self.model_primary_stem == "Instrumental" else "Instrumental"
 
         # In UVR, these variables are set but either aren't useful or are better handled in audio-separator.
         # Leaving these comments explaining to help myself or future developers understand why these aren't in audio-separator.
-        
+
         # "chunks" is not actually used for anything in UVR...
         # self.chunks = 0
 
@@ -261,17 +250,15 @@ class Separator:
         # "margin" maps to sample rate and is set from the GUI in UVR (default: 44100). We have a "sample_rate" parameter instead.
         # self.margin = 44100
 
-        # "dim_c" is hard-coded to 4 in UVR, seems to be a parameter for the number of channels, and is only used for checkpoint models. 
+        # "dim_c" is hard-coded to 4 in UVR, seems to be a parameter for the number of channels, and is only used for checkpoint models.
         # We haven't implemented support for the checkpoint models here, so we're not using it.
         # self.dim_c = 4
 
-        self.logger.debug(f"Model params: primary_stem={self.primary_stem}, secondary_stem={self.secondary_stem}")
+        self.logger.debug(f"Model params: primary_stem={self.model_primary_stem}, secondary_stem={self.model_secondary_stem}")
         self.logger.debug(
             f"Model params: batch_size={self.batch_size}, compensate={self.compensate}, segment_size={self.segment_size}, dim_f={self.dim_f}, dim_t={self.dim_t}"
         )
-        self.logger.debug(
-            f"Model params: n_fft={self.n_fft}, hop={self.hop_length}"
-        )
+        self.logger.debug(f"Model params: n_fft={self.n_fft}, hop={self.hop_length}")
 
         # Loading the model for inference
         self.logger.debug("Loading ONNX model for inference...")
@@ -283,6 +270,23 @@ class Separator:
             self.model_run = convert(model_path)
             self.model_run.to(self.device).eval()
             self.logger.warning("Model converted from onnx to pytorch due to segment size not matching dim_t, processing may be slower.")
+
+        # Log the completion of the separation process
+        self.logger.debug("Loading model completed.")
+        self.logger.info(
+            f'Load model duration: {time.strftime("%H:%M:%S", time.gmtime(int(time.perf_counter() - self.load_model_start_time)))}'
+        )
+
+    def separate(self, audio_file_path):
+        # Starting the separation process
+        self.logger.info(f"Starting separation process for audio_file_path: {audio_file_path}")
+        self.separate_start_time = time.perf_counter()
+
+        self.primary_source = None
+        self.secondary_source = None
+        
+        self.audio_file_path = audio_file_path
+        self.audio_file_base = os.path.splitext(os.path.basename(audio_file_path))[0]
 
         # Prepare the mix for processing
         self.logger.debug("Preparing mix...")
@@ -315,27 +319,27 @@ class Separator:
                 self.secondary_source = mix.T - source.T
 
         # Save and process the secondary stem if needed
-        if not self.output_single_stem or self.output_single_stem.lower() == self.secondary_stem.lower():
-            self.logger.info(f"Saving {self.secondary_stem} stem...")
+        if not self.output_single_stem or self.output_single_stem.lower() == self.model_secondary_stem.lower():
+            self.logger.info(f"Saving {self.model_secondary_stem} stem...")
             if not self.secondary_stem_path:
                 self.secondary_stem_path = os.path.join(
-                    f"{self.audio_file_base}_({self.secondary_stem})_{self.model_name}.{self.output_format.lower()}"
+                    f"{self.audio_file_base}_({self.model_secondary_stem})_{self.model_name}.{self.output_format.lower()}"
                 )
             self.secondary_source_map = self.final_process(
-                self.secondary_stem_path, self.secondary_source, self.secondary_stem, self.sample_rate
+                self.secondary_stem_path, self.secondary_source, self.model_secondary_stem, self.sample_rate
             )
             output_files.append(self.secondary_stem_path)
 
         # Save and process the primary stem if needed
-        if not self.output_single_stem or self.output_single_stem.lower() == self.primary_stem.lower():
-            self.logger.info(f"Saving {self.primary_stem} stem...")
+        if not self.output_single_stem or self.output_single_stem.lower() == self.model_primary_stem.lower():
+            self.logger.info(f"Saving {self.model_primary_stem} stem...")
             if not self.primary_stem_path:
                 self.primary_stem_path = os.path.join(
-                    f"{self.audio_file_base}_({self.primary_stem})_{self.model_name}.{self.output_format.lower()}"
+                    f"{self.audio_file_base}_({self.model_primary_stem})_{self.model_name}.{self.output_format.lower()}"
                 )
             if not isinstance(self.primary_source, np.ndarray):
                 self.primary_source = source.T
-            self.primary_source_map = self.final_process(self.primary_stem_path, self.primary_source, self.primary_stem, self.sample_rate)
+            self.primary_source_map = self.final_process(self.primary_stem_path, self.primary_source, self.model_primary_stem, self.sample_rate)
             output_files.append(self.primary_stem_path)
 
         # Clear GPU cache to free up memory
@@ -345,7 +349,21 @@ class Separator:
 
         # Log the completion of the separation process
         self.logger.debug("Separation process completed.")
-        self.logger.info(f'Time Elapsed: {time.strftime("%H:%M:%S", time.gmtime(int(time.perf_counter() - self.separate_start_time)))}')
+        self.logger.info(
+            f'Separation duration: {time.strftime("%H:%M:%S", time.gmtime(int(time.perf_counter() - self.separate_start_time)))}'
+        )
+
+        # Unset the audio file to prevent accidental re-separation of the same file
+        self.logger.debug("Clearing audio file...")
+        self.audio_file_path = None
+        self.audio_file_base = None
+
+        # Unset more separation params to prevent accidentally re-using the wrong source files or output paths
+        self.logger.debug("Clearing sources and stems...")
+        self.primary_source = None
+        self.secondary_source = None
+        self.primary_stem_path = None
+        self.secondary_stem_path = None
 
         return output_files
 
@@ -482,7 +500,7 @@ class Separator:
         return mix_waves_tensor, pad
 
     def demix(self, mix, is_match_mix=False):
-        self.logger.info(f"Starting demixing process with is_match_mix: {is_match_mix}...")
+        self.logger.debug(f"Starting demixing process with is_match_mix: {is_match_mix}...")
         self.initialize_model_settings()
 
         # Preserves the original mix for later use.
