@@ -2,11 +2,12 @@ name: publish-to-conda
 
 on:
   push:
+    branches:
+      - main
     paths:
       - pyproject.toml
       - conda/meta.yaml
   workflow_dispatch:
-
 
 jobs:
   conda_deployment_with_new_tag:

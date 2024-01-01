@@ -2,8 +2,13 @@ name: publish-to-docker
 
 on:
   push:
+    branches:
+      - main
     paths:
       - pyproject.toml
+      - Dockerfile.cpu
+      - Dockerfile.gpu
+      - Dockerfile.runpod
   workflow_dispatch:
 
 jobs:
@@ -16,7 +21,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
+          python-version: "3.x"
 
       - name: Install TOML
         run: pip install toml
@@ -63,6 +68,8 @@ jobs:
             beveradb/audio-separator:gpu-${{ env.VERSION }}
             beveradb/audio-separator:gpu
 
+      # Deliberately commented out because Github CI can't build this runpod image due to disk space limits
+      # Instead, I build this (17GB) image locally and push it to Docker Hub manually.
       # - name: Build and push Docker image for Runpod
       #   if: ${{ github.ref == 'refs/heads/main' }}
       #   uses: docker/build-push-action@v5
