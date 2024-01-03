@@ -19,7 +19,6 @@ The primary stem typically contains the instrumental part of the audio, while th
 
 ## Installation 🛠️
 
-
 ### 🎮 Nvidia GPU with CUDA acceleration
 
 💬 If successfully configured, you should see this log message when running audio-separator:
@@ -30,6 +29,17 @@ Conda: `conda install pytorch=*=*cuda* onnxruntime=*=*cuda* audio-separator -c b
 Pip: `pip install "audio-separator[gpu]"`
 
 Docker: `beveradb/audio-separator:gpu`
+
+### 🧪 Google Colab
+
+Colab has recently upgraded to CUDA 12, which isn't yet supported by the official ONNX Runtime releases.
+
+To get `audio-separator` working with GPU acceleration on colab, first install this `onnxruntime-gpu` wheel (which I built with CUDA 12 support):
+
+`pip install https://github.com/karaokenerds/python-audio-separator/releases/download/v0.12.1/onnxruntime_gpu-1.17.0-cp310-cp310-linux_x86_64.whl`
+
+Then install audio-separator:
+`pip install "audio-separator[gpu]"`
 
 ### 🐢 No hardware acceleration, CPU only:
 
