@@ -10,10 +10,19 @@ RUN wget \
     && rm -f Miniconda3-latest-Linux-x86_64.sh
 ENV PATH="/root/miniconda3/bin:$PATH"
 
-# Install the GPU version of audio-separator
-RUN --mount=type=cache,target=/root/miniconda3/pkgs \
-    conda install -y -c beveradb -c pytorch -c conda-forge \
-    pytorch=*=*cuda* \
-    onnxruntime=*=*cuda* \
-    cudatoolkit \
-    audio-separator
+# Replace default channels with conda-forge, pytorch, and beveradb
+RUN conda config --remove channels defaults \
+    && conda config --add channels conda-forge \
+    && conda config --add channels beveradb
+
+# Install the CUDA toolkit, required for other cuda packages
+RUN conda install -y cudatoolkit
+
+# Install the CUDA version of onnxruntime
+RUN conda install -y onnxruntime=*=*cuda*
+
+# Install the CUDA version of pytorch
+RUN conda install -y pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
+
+# Install the audio-separator package
+RUN conda install -y audio-separator=0.12.1
