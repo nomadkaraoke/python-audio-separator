@@ -1,6 +1,8 @@
 # Audio Separator 🎶
 
 [![PyPI version](https://badge.fury.io/py/audio-separator.svg)](https://badge.fury.io/py/audio-separator)
+[![Conda version](https://anaconda.org/beveradb/audio-separator/badges/version.svg)](https://anaconda.org/beveradb/audio-separator)
+[![Conda downloads](https://anaconda.org/beveradb/audio-separator/badges/downloads.svg)](https://anaconda.org/beveradb/audio-separator)
 [![Docker pulls](https://img.shields.io/docker/pulls/beveradb/audio-separator.svg)](https://hub.docker.com/r/beveradb/audio-separator/tags)
 
 Summary: Easy to use vocal separation on CLI or as a python package, using the amazing MDX-Net models from UVR trained by @Anjok07
