@@ -1,6 +1,6 @@
 import os
 import gc
-import warnings
+import platform
 import hashlib
 import json
 import time
@@ -9,6 +9,7 @@ import warnings
 import requests
 import torch
 import librosa
+import pkg_resources
 import numpy as np
 import onnxruntime as ort
 from onnx2torch import convert
@@ -53,7 +54,13 @@ class Separator:
         if not self.logger.hasHandlers():
             self.logger.addHandler(self.log_handler)
 
-        self.logger.info(f"Separator instantiating with output_dir: {output_dir}, output_format: {output_format}")
+        # Filter out noisy warnings from PyTorch for users who don't care about them
+        if log_level > logging.DEBUG:
+            warnings.filterwarnings("ignore")
+        
+        package_version = pkg_resources.get_distribution("audio-separator").version
+
+        self.logger.info(f"Separator version {package_version} instantiating with output_dir: {output_dir}, output_format: {output_format}")
 
         self.model_file_dir = model_file_dir
         self.output_dir = output_dir
@@ -107,20 +114,58 @@ class Separator:
             f"Separation settings set: sample_rate={self.sample_rate}, hop_length={self.hop_length}, segment_size={self.segment_size}, overlap={self.overlap}, batch_size={self.batch_size}"
         )
 
-        warnings.filterwarnings("ignore")
-        self.cpu = torch.device("cpu")
+        self.setup_inferencing_device()
 
-        # Prepare for hardware-accelerated inference by validating both Torch and ONNX Runtime support either CUDA or CoreML
-        self.logger.debug(f"Torch version: {str(torch.__version__)}")
+    def setup_inferencing_device(self):
+        self.logger.info(f"Checking hardware specifics to configure acceleration")
+
+        os_name = platform.system()
+        os_version = platform.version()
+        self.logger.info(f"Operating System: {os_name} {os_version}")
+
+        system_info = platform.uname()
+        self.logger.info(f"System: {system_info.system} Node: {system_info.node} Release: {system_info.release} Machine: {system_info.machine} Proc: {system_info.processor}")
+
+        python_version = platform.python_version()
+        self.logger.info(f"Python Version: {python_version}")
+
+        onnxruntime_gpu_package = self.get_package_distribution("onnxruntime-gpu")
+        if onnxruntime_gpu_package is not None:
+            self.logger.info(f"ONNX Runtime GPU package installed with version: {onnxruntime_gpu_package.version}")
+        
+        onnxruntime_silicon_package = self.get_package_distribution("onnxruntime-silicon")
+        if onnxruntime_silicon_package is not None:
+            self.logger.info(f"ONNX Runtime Silicon package installed with version: {onnxruntime_silicon_package.version}")
+        
+        onnxruntime_cpu_package = self.get_package_distribution("onnxruntime")
+        if onnxruntime_cpu_package is not None:
+            self.logger.info(f"ONNX Runtime CPU package installed with version: {onnxruntime_cpu_package.version}")
+
+        torch_package = self.get_package_distribution("torch")
+        if torch_package is not None:
+            self.logger.info(f"Torch package installed with version: {torch_package.version}")
+        
+        torchvision_package = self.get_package_distribution("torchvision")
+        if torchvision_package is not None:
+            self.logger.info(f"Torchvision package installed with version: {torchvision_package.version}")
+        
+        torchaudio_package = self.get_package_distribution("torchaudio")
+        if torchaudio_package is not None:
+            self.logger.info(f"Torchaudio package installed with version: {torchaudio_package.version}")
+
+
         ort_device = ort.get_device()
         ort_providers = ort.get_available_providers()
+
+        self.cpu = torch.device("cpu")
         hardware_acceleration_enabled = False
 
+        # Prepare for hardware-accelerated inference by validating both Torch and ONNX Runtime support either CUDA or CoreML
         if torch.cuda.is_available():
             self.logger.info("CUDA is available in Torch, setting Torch device to CUDA")
             self.device = torch.device("cuda")
 
-            if ort_device == "GPU" and "CUDAExecutionProvider" in ort_providers:
+            if onnxruntime_gpu_package is not None and ort_device == "GPU" and "CUDAExecutionProvider" in ort_providers:
                 self.logger.info("ONNXruntime has CUDAExecutionProvider available, enabling acceleration")
                 self.onnx_execution_provider = ["CUDAExecutionProvider"]
                 hardware_acceleration_enabled = True
@@ -130,7 +175,7 @@ class Separator:
         else:
             self.logger.debug("CUDA not available in Torch installation. If you expect GPU/CUDA support to work, please see README")
 
-        if hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+        if onnxruntime_silicon_package is not None and hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
             self.logger.info("Apple Silicon MPS/CoreML is available in Torch, setting Torch device to MPS")
 
             # TODO: Change this to use MPS once FFTs are supported, see https://github.com/pytorch/pytorch/issues/78044
@@ -154,6 +199,13 @@ class Separator:
             self.logger.info("No hardware acceleration could be configured, running in CPU mode")
             self.device = torch.device("cpu")
             self.onnx_execution_provider = ["CPUExecutionProvider"]
+
+    def get_package_distribution(self, package_name):
+        try:
+            return pkg_resources.get_distribution(package_name)
+        except pkg_resources.DistributionNotFound:
+            self.logger.debug(f"Python package: {package_name} not installed")
+            return None
 
     def get_model_hash(self, model_path):
         try:

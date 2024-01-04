@@ -122,7 +122,7 @@ def main():
         parser.print_help()
         exit(1)
 
-    logger.info(f"Separator beginning with input file: {args.audio_file}")
+    logger.info(f"Separator version {package_version} beginning with input file: {args.audio_file}")
 
     # Deliberately import here to avoid loading slow dependencies when just running --help
     from audio_separator.separator import Separator
