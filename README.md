@@ -1,7 +1,7 @@
 # Audio Separator 🎶
 
 [![PyPI version](https://badge.fury.io/py/audio-separator.svg)](https://badge.fury.io/py/audio-separator)
-[![Conda version](https://anaconda.org/beveradb/audio-separator/badges/version.svg)](https://anaconda.org/beveradb/audio-separator)
+[![Conda Version](https://img.shields.io/conda/vn/conda-forge/audio-separator.svg)](https://anaconda.org/conda-forge/audio-separator)
 [![Docker pulls](https://img.shields.io/docker/pulls/beveradb/audio-separator.svg)](https://hub.docker.com/r/beveradb/audio-separator/tags)
 
 Summary: Easy to use vocal separation on CLI or as a python package, using the amazing MDX-Net models from UVR trained by @Anjok07
@@ -25,7 +25,7 @@ The primary stem typically contains the instrumental part of the audio, while th
 💬 If successfully configured, you should see this log message when running audio-separator:
  `ONNXruntime has CUDAExecutionProvider available, enabling acceleration`
 
-Conda: `conda install pytorch=*=*cuda* onnxruntime=*=*cuda* audio-separator -c beveradb -c pytorch -c conda-forge --override-channels`
+Conda: `conda install pytorch=*=*cuda* onnxruntime=*=*cuda* audio-separator -c pytorch -c conda-forge`
 
 Pip: `pip install "audio-separator[gpu]"`
 
@@ -44,7 +44,7 @@ Then install audio-separator:
 
 ### 🐢 No hardware acceleration, CPU only:
 
-Conda: `conda install audio-separator -c beveradb -c pytorch -c conda-forge --override-channels`
+Conda: `conda install audio-separator-c pytorch -c conda-forge`
 
 Pip: `pip install "audio-separator[cpu]"`
 
