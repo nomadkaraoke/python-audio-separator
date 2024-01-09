@@ -59,10 +59,10 @@ def main():
     )
 
     parser.add_argument(
-        "--normalize",
-        type=lambda x: (str(x).lower() == "true"),
-        default=False,
-        help="Optional: enable or disable normalization during separation (default: %(default)s). Example: --normalize=True",
+        "--normalization_threshold",
+        type=float,
+        default=0.9,
+        help="Optional: max peak amplitude to normalize input and output audio to (default: %(default)s). Example: --normalization_threshold=0.7",
     )
 
     parser.add_argument(
@@ -134,7 +134,7 @@ def main():
         output_dir=args.output_dir,
         output_format=args.output_format,
         denoise_enabled=args.denoise,
-        normalization_enabled=args.normalize,
+        normalization_threshold=args.normalization_threshold,
         output_single_stem=args.single_stem,
         invert_using_spec=args.invert_spect,
         sample_rate=args.sample_rate,

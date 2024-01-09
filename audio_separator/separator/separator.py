@@ -29,7 +29,7 @@ class Separator:
         secondary_stem_path=None,
         output_format="WAV",
         output_subtype=None,
-        normalization_enabled=False,
+        normalization_threshold=0.9,
         denoise_enabled=False,
         output_single_stem=None,
         invert_using_spec=False,
@@ -57,7 +57,7 @@ class Separator:
         # Filter out noisy warnings from PyTorch for users who don't care about them
         if log_level > logging.DEBUG:
             warnings.filterwarnings("ignore")
-        
+
         package_version = pkg_resources.get_distribution("audio-separator").version
 
         self.logger.info(f"Separator version {package_version} instantiating with output_dir: {output_dir}, output_format: {output_format}")
@@ -79,11 +79,10 @@ class Separator:
         if self.output_subtype is None and output_format == "WAV":
             self.output_subtype = "PCM_16"
 
-        self.normalization_enabled = normalization_enabled
-        if self.normalization_enabled:
-            self.logger.debug(f"Normalization enabled, waveform will be normalized to max amplitude of 1.0 to avoid clipping.")
-        else:
-            self.logger.debug(f"Normalization disabled, waveform will not be normalized.")
+        self.normalization_threshold = normalization_threshold
+        self.logger.debug(
+            f"Normalization threshold set to {normalization_threshold}, waveform will lowered to this max amplitude to avoid clipping."
+        )
 
         self.denoise_enabled = denoise_enabled
         if self.denoise_enabled:
@@ -124,7 +123,9 @@ class Separator:
         self.logger.info(f"Operating System: {os_name} {os_version}")
 
         system_info = platform.uname()
-        self.logger.info(f"System: {system_info.system} Node: {system_info.node} Release: {system_info.release} Machine: {system_info.machine} Proc: {system_info.processor}")
+        self.logger.info(
+            f"System: {system_info.system} Node: {system_info.node} Release: {system_info.release} Machine: {system_info.machine} Proc: {system_info.processor}"
+        )
 
         python_version = platform.python_version()
         self.logger.info(f"Python Version: {python_version}")
@@ -132,11 +133,11 @@ class Separator:
         onnxruntime_gpu_package = self.get_package_distribution("onnxruntime-gpu")
         if onnxruntime_gpu_package is not None:
             self.logger.info(f"ONNX Runtime GPU package installed with version: {onnxruntime_gpu_package.version}")
-        
+
         onnxruntime_silicon_package = self.get_package_distribution("onnxruntime-silicon")
         if onnxruntime_silicon_package is not None:
             self.logger.info(f"ONNX Runtime Silicon package installed with version: {onnxruntime_silicon_package.version}")
-        
+
         onnxruntime_cpu_package = self.get_package_distribution("onnxruntime")
         if onnxruntime_cpu_package is not None:
             self.logger.info(f"ONNX Runtime CPU package installed with version: {onnxruntime_cpu_package.version}")
@@ -144,15 +145,14 @@ class Separator:
         torch_package = self.get_package_distribution("torch")
         if torch_package is not None:
             self.logger.info(f"Torch package installed with version: {torch_package.version}")
-        
+
         torchvision_package = self.get_package_distribution("torchvision")
         if torchvision_package is not None:
             self.logger.info(f"Torchvision package installed with version: {torchvision_package.version}")
-        
+
         torchaudio_package = self.get_package_distribution("torchaudio")
         if torchaudio_package is not None:
             self.logger.info(f"Torchaudio package installed with version: {torchaudio_package.version}")
-
 
         ort_device = ort.get_device()
         ort_providers = ort.get_available_providers()
@@ -336,13 +336,16 @@ class Separator:
 
         self.primary_source = None
         self.secondary_source = None
-        
+
         self.audio_file_path = audio_file_path
         self.audio_file_base = os.path.splitext(os.path.basename(audio_file_path))[0]
 
         # Prepare the mix for processing
         self.logger.debug("Preparing mix...")
         mix = self.prepare_mix(self.audio_file_path)
+
+        self.logger.debug("Normalizing mix before demixing...")
+        mix = spec_utils.normalize(self.logger, wave=mix, max_peak=self.normalization_threshold)
 
         # Start the demixing process
         source = self.demix(mix)
@@ -356,7 +359,7 @@ class Separator:
         # Normalize and transpose the primary source if it's not already an array
         if not isinstance(self.primary_source, np.ndarray):
             self.logger.debug("Normalizing primary source...")
-            self.primary_source = spec_utils.normalize(self.logger, source, self.normalization_enabled).T
+            self.primary_source = spec_utils.normalize(self.logger, wave=source, max_peak=self.normalization_threshold).T
 
         # Process the secondary source if not already an array
         if not isinstance(self.secondary_source, np.ndarray):
@@ -391,7 +394,9 @@ class Separator:
                 )
             if not isinstance(self.primary_source, np.ndarray):
                 self.primary_source = source.T
-            self.primary_source_map = self.final_process(self.primary_stem_path, self.primary_source, self.model_primary_stem, self.sample_rate)
+            self.primary_source_map = self.final_process(
+                self.primary_stem_path, self.primary_source, self.model_primary_stem, self.sample_rate
+            )
             output_files.append(self.primary_stem_path)
 
         # Clear GPU cache to free up memory
@@ -422,7 +427,7 @@ class Separator:
     def write_audio(self, stem_path: str, stem_source, sample_rate, stem_name=None):
         self.logger.debug(f"Entering write_audio with stem_name: {stem_name} and stem_path: {stem_path}")
 
-        stem_source = spec_utils.normalize(self.logger, stem_source, self.normalization_enabled)
+        stem_source = spec_utils.normalize(self.logger, wave=stem_source, max_peak=self.normalization_threshold)
 
         # Check if the numpy array is empty or contains very low values
         if np.max(np.abs(stem_source)) < 1e-6:
@@ -648,9 +653,9 @@ class Separator:
                     result[..., start:end] += tar_waves[..., : end - start]
 
         # Normalizes the results by the divider to account for overlap.
+        self.logger.debug("Normalizing result by dividing result by divider.")
         tar_waves = result / divider
         tar_waves_.append(tar_waves)
-        self.logger.debug("Result normalized by divider.")
 
         # Reshapes the results to match the original dimensions.
         tar_waves_ = np.vstack(tar_waves_)[:, :, self.trim : -self.trim]

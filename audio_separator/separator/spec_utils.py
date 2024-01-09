@@ -107,18 +107,23 @@ def wave_to_spectrogram_mt(wave, hop_length, n_fft, mid_side=False, mid_side_b2=
     return spec
 
 
-def normalize(logger: logging.Logger, wave, is_normalize=False):
-    """Save output music files"""
+def normalize(logger: logging.Logger, wave, max_peak=1.0):
+    """Normalize audio waveform to a specified peak value.
+
+    Args:
+        logger (logging.Logger): Logger for debugging information.
+        wave (array-like): Audio waveform.
+        max_peak (float): Maximum peak value for normalization.
+
+    Returns:
+        array-like: Normalized or original waveform.
+    """
     maxv = np.abs(wave).max()
-    if maxv > 1.0:
-        logger.debug(f"Normalization Set {is_normalize}: Input above threshold for clipping. Max:{maxv}")
-        if is_normalize:
-            logger.debug(f"The result was normalized.")
-            wave /= maxv
-        else:
-            logger.debug(f"The result was not normalized.")
+    if maxv > max_peak:
+        logger.debug(f"Maximum peak amplitude above clipping threshold, normalizing from {maxv} to max peak {max_peak}.")
+        wave *= max_peak / maxv
     else:
-        logger.debug(f"Normalization Set {is_normalize}: Input not above threshold for clipping. Max:{maxv}")
+        logger.debug(f"Maximum peak amplitude not above clipping threshold, no need to normalize: {maxv}")
 
     return wave
 
