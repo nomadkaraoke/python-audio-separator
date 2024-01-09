@@ -2,27 +2,42 @@
 ARG WORKER_CUDA_VERSION=11.8
 FROM runpod/base:0.4.4-cuda${WORKER_CUDA_VERSION}.0
 
-# Install miniconda
-RUN wget \
-    https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
-    && mkdir /root/.conda \
-    && bash Miniconda3-latest-Linux-x86_64.sh -b \
-    && rm -f Miniconda3-latest-Linux-x86_64.sh
-ENV PATH="/root/miniconda3/bin:$PATH"
+ARG MINIFORGE_NAME=Miniforge3
+ARG MINIFORGE_VERSION=23.3.1-1
+ARG TARGETPLATFORM
 
-# Replace default channels with conda-forge, pytorch, and beveradb
-RUN conda config --remove channels defaults \
-    && conda config --add channels conda-forge \
-    && conda config --add channels beveradb
+ENV CONDA_DIR=/opt/conda
+ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
+ENV PATH=${CONDA_DIR}/bin:${PATH}
 
-# Install the CUDA toolkit, required for other cuda packages
-RUN conda install -y cudatoolkit
+# 1. Install just enough for conda to work
+# 2. Keep $HOME clean (no .wget-hsts file), since HSTS isn't useful in this context
+# 3. Install miniforge from GitHub releases
+# 4. Apply some cleanup tips from https://jcrist.github.io/conda-docker-tips.html
+#    Particularly, we remove pyc and a files. The default install has no js, we can skip that
+# 5. Activate base by default when running as any *non-root* user as well
+#    Good security practice requires running most workloads as non-root
+#    This makes sure any non-root users created also have base activated
+#    for their interactive shells.
+# 6. Activate base by default when running as root as well
+#    The root user is already created, so won't pick up changes to /etc/skel
+RUN apt-get update > /dev/null && \
+    apt-get install --no-install-recommends --yes \
+        wget bzip2 ca-certificates \
+        git \
+        tini \
+        > /dev/null && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
+    wget --no-hsts --quiet https://github.com/conda-forge/miniforge/releases/download/${MINIFORGE_VERSION}/${MINIFORGE_NAME}-${MINIFORGE_VERSION}-Linux-$(uname -m).sh -O /tmp/miniforge.sh && \
+    /bin/bash /tmp/miniforge.sh -b -p ${CONDA_DIR} && \
+    rm /tmp/miniforge.sh && \
+    conda clean --tarballs --index-cache --packages --yes && \
+    find ${CONDA_DIR} -follow -type f -name '*.a' -delete && \
+    find ${CONDA_DIR} -follow -type f -name '*.pyc' -delete && \
+    conda clean --force-pkgs-dirs --all --yes  && \
+    echo ". ${CONDA_DIR}/etc/profile.d/conda.sh && conda activate base" >> /etc/skel/.bashrc && \
+    echo ". ${CONDA_DIR}/etc/profile.d/conda.sh && conda activate base" >> ~/.bashrc
 
-# Install the CUDA version of onnxruntime
-RUN conda install -y onnxruntime=*=*cuda*
-
-# Install the CUDA version of pytorch
-RUN conda install -y pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
-
-# Install the audio-separator package
-RUN conda install -y audio-separator=0.12.1
+# Install audio-separator using mamba, much faster to resolve than conda
+RUN mamba install audio-separator
