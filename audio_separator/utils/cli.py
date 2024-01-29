@@ -3,12 +3,6 @@ import argparse
 import logging
 from importlib import metadata
 
-def get_package_distribution(logger, package_name):
-    try:
-        return metadata.distribution(package_name)
-    except metadata.PackageNotFoundError:
-        logger.debug(f"Python package: {package_name} not installed")
-        return None
 
 def main():
     logger = logging.getLogger(__name__)
@@ -24,7 +18,7 @@ def main():
 
     parser.add_argument("audio_file", nargs="?", help="The audio file path to separate, in any common format.", default=argparse.SUPPRESS)
 
-    package_version = get_package_distribution(logger, "audio-separator").version
+    package_version = metadata.distribution("audio-separator").version
     parser.add_argument("-v", "--version", action="version", version=f"%(prog)s {package_version}")
 
     parser.add_argument(
@@ -155,7 +149,3 @@ def main():
     output_files = separator.separate(args.audio_file)
 
     logger.info(f"Separation complete! Output file(s): {' '.join(output_files)}")
-
-
-if __name__ == "__main__":
-    main()
