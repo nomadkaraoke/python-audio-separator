@@ -1,9 +1,9 @@
-name: Audio Separator CI
+name: run-tests
 
 on: [push]
 
 jobs:
-  build:
+  pytest:
     runs-on: ubuntu-latest
 
     steps:
