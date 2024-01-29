@@ -35,6 +35,19 @@ def test_cli_no_args(capsys):
     assert "usage:" in captured.out
 
 
+# Test with multiple filename arguments
+def test_cli_multiple_filenames(capsys):
+    test_args = ["cli.py", "test1.mp3", "test2.mp3"]
+    with patch("sys.argv", test_args):
+        # Expecting the application to raise a SystemExit due to unrecognized arguments
+        with pytest.raises(SystemExit):
+            main()
+        captured = capsys.readouterr()
+
+        # Check if the correct error message is displayed
+        assert "unrecognized arguments" in captured.err
+
+
 # Test the CLI with a specific audio file
 def test_cli_with_audio_file(capsys):
     test_args = ["cli.py", "test_audio.mp3"]
@@ -82,6 +95,86 @@ def test_cli_output_dir_argument(common_expected_args):
 
             # Update expected args for this specific test
             common_expected_args["output_dir"] = "/custom/output/dir"
+
+            # Assertions
+            mock_separator.assert_called_once_with(**common_expected_args)
+
+
+# Test using output format argument
+def test_cli_output_format_argument(common_expected_args):
+    test_args = ["cli.py", "test_audio.mp3", "--output_format=MP3"]
+    with patch("sys.argv", test_args):
+        with patch("audio_separator.separator.Separator") as mock_separator:
+            mock_separator_instance = mock_separator.return_value
+            mock_separator_instance.separate.return_value = ["output_file.mp3"]
+            main()
+
+            # Update expected args for this specific test
+            common_expected_args["output_format"] = "MP3"
+
+            # Assertions
+            mock_separator.assert_called_once_with(**common_expected_args)
+
+
+# Test using denoise argument
+def test_cli_denoise_argument(common_expected_args):
+    test_args = ["cli.py", "test_audio.mp3", "--denoise=True"]
+    with patch("sys.argv", test_args):
+        with patch("audio_separator.separator.Separator") as mock_separator:
+            mock_separator_instance = mock_separator.return_value
+            mock_separator_instance.separate.return_value = ["output_file.mp3"]
+            main()
+
+            # Update expected args for this specific test
+            common_expected_args["denoise_enabled"] = True
+
+            # Assertions
+            mock_separator.assert_called_once_with(**common_expected_args)
+
+
+# Test using normalization_threshold argument
+def test_cli_normalization_threshold_argument(common_expected_args):
+    test_args = ["cli.py", "test_audio.mp3", "--normalization_threshold=0.75"]
+    with patch("sys.argv", test_args):
+        with patch("audio_separator.separator.Separator") as mock_separator:
+            mock_separator_instance = mock_separator.return_value
+            mock_separator_instance.separate.return_value = ["output_file.mp3"]
+            main()
+
+            # Update expected args for this specific test
+            common_expected_args["normalization_threshold"] = 0.75
+
+            # Assertions
+            mock_separator.assert_called_once_with(**common_expected_args)
+
+
+# Test using single stem argument
+def test_cli_single_stem_argument(common_expected_args):
+    test_args = ["cli.py", "test_audio.mp3", "--single_stem=instrumental"]
+    with patch("sys.argv", test_args):
+        with patch("audio_separator.separator.Separator") as mock_separator:
+            mock_separator_instance = mock_separator.return_value
+            mock_separator_instance.separate.return_value = ["output_file.mp3"]
+            main()
+
+            # Update expected args for this specific test
+            common_expected_args["output_single_stem"] = "instrumental"
+
+            # Assertions
+            mock_separator.assert_called_once_with(**common_expected_args)
+
+
+# Test using invert spectrogram argument
+def test_cli_invert_spectrogram_argument(common_expected_args):
+    test_args = ["cli.py", "test_audio.mp3", "--invert_spect=True"]
+    with patch("sys.argv", test_args):
+        with patch("audio_separator.separator.Separator") as mock_separator:
+            mock_separator_instance = mock_separator.return_value
+            mock_separator_instance.separate.return_value = ["output_file.mp3"]
+            main()
+
+            # Update expected args for this specific test
+            common_expected_args["invert_using_spec"] = True
 
             # Assertions
             mock_separator.assert_called_once_with(**common_expected_args)
