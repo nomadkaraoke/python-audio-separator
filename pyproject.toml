@@ -52,6 +52,7 @@ audio-separator = 'audio_separator.utils.cli:main'
 [tool.poetry.group.dev.dependencies]
 black = ">=23"
 pytest = "*"
+pytest-cov = "^4.1.0"
 
 [tool.black]
 line-length = 140

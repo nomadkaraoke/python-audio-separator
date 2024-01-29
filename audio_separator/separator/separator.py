@@ -9,9 +9,9 @@ import warnings
 import requests
 import torch
 import librosa
-import pkg_resources
 import numpy as np
 import onnxruntime as ort
+from importlib import metadata
 from onnx2torch import convert
 from pydub import AudioSegment
 from audio_separator.separator import spec_utils
@@ -58,7 +58,7 @@ class Separator:
         if log_level > logging.DEBUG:
             warnings.filterwarnings("ignore")
 
-        package_version = pkg_resources.get_distribution("audio-separator").version
+        package_version = self.get_package_distribution("audio-separator").version
 
         self.logger.info(f"Separator version {package_version} instantiating with output_dir: {output_dir}, output_format: {output_format}")
 
@@ -202,8 +202,8 @@ class Separator:
 
     def get_package_distribution(self, package_name):
         try:
-            return pkg_resources.get_distribution(package_name)
-        except pkg_resources.DistributionNotFound:
+            return metadata.distribution(package_name)
+        except metadata.PackageNotFoundError:
             self.logger.debug(f"Python package: {package_name} not installed")
             return None
 

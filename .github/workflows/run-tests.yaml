@@ -24,8 +24,8 @@ jobs:
       - name: Install Poetry dependencies (CPU)
         run: poetry install -E cpu
       
-      - name: Run pytest unit tests
-        run: poetry run pytest
+      - name: Run pytest with coverage
+        run: poetry run pytest --cov=audio_separator --cov-report=term-missing
 
       # - name: Run pytest integration tests
       #   run: poetry run pytest tests/integration

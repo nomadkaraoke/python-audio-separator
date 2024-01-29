@@ -4,7 +4,7 @@ from unittest.mock import patch, MagicMock
 
 # Test the CLI with no arguments
 def test_cli_no_args(capsys):
-    with pytest.raises(SystemExit):
+    with patch("sys.argv", ["cli.py"]), pytest.raises(SystemExit):
         main()
     captured = capsys.readouterr()
     assert "usage:" in captured.out
