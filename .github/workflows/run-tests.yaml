@@ -25,7 +25,7 @@ jobs:
         run: poetry install -E cpu
       
       - name: Run pytest unit tests
-        run: poetry run pytest tests/unit
+        run: poetry run pytest
 
       # - name: Run pytest integration tests
       #   run: poetry run pytest tests/integration
