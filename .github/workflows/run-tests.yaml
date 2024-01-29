@@ -21,8 +21,8 @@ jobs:
           python-version: "3.11"
           cache: "poetry" # caching dependencies from poetry.lock
 
-      - name: Install Poetry dependencies
-        run: poetry install
+      - name: Install Poetry dependencies (CPU)
+        run: poetry install -E cpu
       
       - name: Run pytest unit tests
         run: poetry run pytest tests/unit
