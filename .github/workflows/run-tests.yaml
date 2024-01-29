@@ -12,6 +12,9 @@ jobs:
 
       # Configured following guide at:
       # https://github.com/actions/setup-python/blob/main/docs/advanced-usage.md#caching-packages
+      - name: Install poetry
+        run: pipx install poetry
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
