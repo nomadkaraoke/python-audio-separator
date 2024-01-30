@@ -150,6 +150,7 @@ class TestSTFT(unittest.TestCase):
         # Check if the output tensor has the expected shape
         self.assertEqual(output_tensor.shape, expected_shape)
 
+    @unittest.skipIf(not torch.backends.mps.is_available(), "MPS not available")
     def test_stft_with_mps_device(self):
         mps_device = torch.device("mps")
         self.stft.device = mps_device
@@ -158,6 +159,7 @@ class TestSTFT(unittest.TestCase):
         self.assertIsNotNone(stft_result)
         self.assertIsInstance(stft_result, torch.Tensor)
 
+    @unittest.skipIf(not torch.backends.mps.is_available(), "MPS not available")
     def test_inverse_with_mps_device(self):
         mps_device = torch.device("mps")
         self.stft.device = mps_device
