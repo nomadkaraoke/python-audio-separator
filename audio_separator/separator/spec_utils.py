@@ -23,22 +23,34 @@ AVERAGE = "Average"
 
 
 def crop_center(h1, h2):
+    """
+    This function crops the center of the first input tensor to match the size of the second input tensor.
+    It is used to ensure that the two tensors have the same size in the time dimension.
+    """
     h1_shape = h1.size()
     h2_shape = h2.size()
 
+    # If the time dimensions are already equal, return the first tensor as is
     if h1_shape[3] == h2_shape[3]:
         return h1
+    # If the time dimension of the first tensor is smaller, raise an error
     elif h1_shape[3] < h2_shape[3]:
         raise ValueError("h1_shape[3] must be greater than h2_shape[3]")
 
+    # Calculate the start and end indices for cropping
     s_time = (h1_shape[3] - h2_shape[3]) // 2
     e_time = s_time + h2_shape[3]
+    # Crop the first tensor
     h1 = h1[:, :, :, s_time:e_time]
 
     return h1
 
 
 def preprocess(X_spec):
+    """
+    This function preprocesses a spectrogram by separating it into magnitude and phase components.
+    This is a common preprocessing step in audio processing tasks.
+    """
     X_mag = np.abs(X_spec)
     X_phase = np.angle(X_spec)
 
@@ -46,6 +58,10 @@ def preprocess(X_spec):
 
 
 def make_padding(width, cropsize, offset):
+    """
+    This function calculates the padding needed to make the width of an image divisible by the crop size.
+    It is used in the process of splitting an image into smaller patches.
+    """
     left = offset
     roi_size = cropsize - offset * 2
     if roi_size == 0:
@@ -56,6 +72,11 @@ def make_padding(width, cropsize, offset):
 
 
 def wave_to_spectrogram(wave, hop_length, n_fft, mid_side=False, mid_side_b2=False, reverse=False):
+    """
+    This function converts a stereo audio waveform into a spectrogram.
+    It supports several options for processing the stereo channels, such as mid-side processing and reversing.
+    """
+    # Process the stereo channels based on the provided options
     if reverse:
         wave_left = np.flip(np.asfortranarray(wave[0]))
         wave_right = np.flip(np.asfortranarray(wave[1]))
@@ -69,15 +90,21 @@ def wave_to_spectrogram(wave, hop_length, n_fft, mid_side=False, mid_side_b2=Fal
         wave_left = np.asfortranarray(wave[0])
         wave_right = np.asfortranarray(wave[1])
 
+    # Compute the spectrogram for each channel
     spec_left = librosa.stft(wave_left, n_fft, hop_length=hop_length)
     spec_right = librosa.stft(wave_right, n_fft, hop_length=hop_length)
 
+    # Combine the spectrograms into a single array
     spec = np.asfortranarray([spec_left, spec_right])
 
     return spec
 
 
 def wave_to_spectrogram_mt(wave, hop_length, n_fft, mid_side=False, mid_side_b2=False, reverse=False):
+    """
+    This function is similar to wave_to_spectrogram, but it uses multithreading to compute the spectrograms for the two channels in parallel.
+    This can provide a speedup on systems with multiple cores.
+    """
     import threading
 
     if reverse:
@@ -97,11 +124,13 @@ def wave_to_spectrogram_mt(wave, hop_length, n_fft, mid_side=False, mid_side_b2=
         global spec_left
         spec_left = librosa.stft(**kwargs)
 
+    # Start two threads to compute the spectrograms in parallel
     thread = threading.Thread(target=run_thread, kwargs={"y": wave_left, "n_fft": n_fft, "hop_length": hop_length})
     thread.start()
     spec_right = librosa.stft(wave_right, n_fft, hop_length=hop_length)
     thread.join()
 
+    # Combine the spectrograms into a single array
     spec = np.asfortranarray([spec_left, spec_right])
 
     return spec
