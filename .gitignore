@@ -6,7 +6,8 @@
 /tracks/
 /lyrics/
 /.cache/
-/models/*.onnx
+*.onnx
+*.pth
 *.wav
 *.flac
 *.mp3

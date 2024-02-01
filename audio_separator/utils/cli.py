@@ -28,9 +28,9 @@ def main():
     )
 
     parser.add_argument(
-        "--model_name",
-        default="UVR-MDX-NET-Inst_HQ_3",
-        help="Optional: model name to be used for separation (default: %(default)s). Example: --model_name=UVR_MDXNET_KARA_2",
+        "--model_filename",
+        default="UVR-MDX-NET-Inst_HQ_3.onnx",
+        help="Optional: model filename to be used for separation (default: %(default)s). Example: --model_filename=UVR_MDXNET_KARA_2.onnx",
     )
 
     parser.add_argument(
@@ -144,7 +144,7 @@ def main():
         batch_size=args.batch_size,
     )
 
-    separator.load_model(args.model_name)
+    separator.load_model(args.model_filename)
 
     output_files = separator.separate(args.audio_file)
 
