@@ -359,6 +359,7 @@ class Separator:
         self.logger.info(f"Starting separation process for audio_file_path: {audio_file_path}")
         self.separate_start_time = time.perf_counter()
 
+        # Run separation method for the loaded model
         output_files = self.model_instance.separate(audio_file_path)
 
         # Clear GPU cache to free up memory
