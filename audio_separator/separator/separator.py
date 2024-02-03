@@ -16,7 +16,7 @@ from onnx2torch import convert
 from pydub import AudioSegment
 from audio_separator.separator import spec_utils
 from audio_separator.separator.stft import STFT
-
+from tqdm import tqdm
 
 class Separator:
     def __init__(
@@ -606,7 +606,7 @@ class Separator:
         self.logger.debug(f"Total chunks to process: {total_chunks}")
 
         # Processes each chunk of the mixture.
-        for i in range(0, mixture.shape[-1], step):
+        for i in tqdm(range(0, mixture.shape[-1], step),desc="Processing chunk"):
             total += 1
             start = i
             end = min(i + chunk_size, mixture.shape[-1])
