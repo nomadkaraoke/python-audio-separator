@@ -224,8 +224,8 @@ class Separator:
         self.logger.info("Apple Silicon MPS/CoreML is available in Torch, setting Torch device to MPS")
         self.torch_device_mps = torch.device("mps")
 
-        self.logger.warning("Torch MPS backend does not yet support FFT operations, Torch will still use CPU!")
-        self.torch_device = self.torch_device_cpu
+        self.torch_device = self.torch_device_mps
+
         if "CoreMLExecutionProvider" in ort_providers:
             self.logger.info("ONNXruntime has CoreMLExecutionProvider available, enabling acceleration")
             self.onnx_execution_provider = ["CoreMLExecutionProvider"]
@@ -496,6 +496,7 @@ class Separator:
             "secondary_stem_output_path": self.secondary_stem_output_path,
             "output_format": self.output_format,
             "output_dir": self.output_dir,
+            "batch_size": self.batch_size,
             "normalization_threshold": self.normalization_threshold,
             "denoise_enabled": self.denoise_enabled,
             "output_single_stem": self.output_single_stem,
@@ -505,12 +506,12 @@ class Separator:
 
         # These are parameters which users may want to configure so we expose them to the top-level Separator class,
         # even though they are specific to a single model architecture
-        arch_specific_params = {"MDX": {"hop_length": self.hop_length, "segment_size": self.segment_size, "overlap": self.overlap, "batch_size": self.batch_size}, "VR": {}}
+        arch_specific_params = {"MDX": {"hop_length": self.hop_length, "segment_size": self.segment_size, "overlap": self.overlap}, "VR": {}}
 
         if model_type == "MDX":
             self.model_instance = MDXSeparator(common_config=common_params, arch_config=arch_specific_params["MDX"])
         elif model_type == "VR":
-            self.model_instance = VRSeparator(common_config=common_params, arch_config=arch_specific_params)
+            self.model_instance = VRSeparator(common_config=common_params, arch_config=arch_specific_params["VR"])
         else:
             raise ValueError(f"Unsupported model type: {model_type}")
 

@@ -55,7 +55,7 @@ def main():
 
     parser.add_argument("--overlap", type=float, default=0.25, help="Optional: overlap (default: %(default)s). Example: --overlap=0.25")
 
-    parser.add_argument("--batch_size", type=int, default=1, help="Optional: batch_size (default: %(default)s). Example: --batch_size=1")
+    parser.add_argument("--batch_size", type=int, default=1, help="Optional: batch_size (default: %(default)s). Example: --batch_size=4")
 
     args = parser.parse_args()
 

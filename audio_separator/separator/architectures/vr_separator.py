@@ -51,6 +51,9 @@ class VRSeparator(CommonSeparator):
         # Note: Selecting this option can adversely affect the conversion process, depending on the track. Because of this, it is only recommended as a last resort.
         self.is_post_process = self.model_data.get("is_post_process", False)
 
+        # post_process_threshold values = ('0.1', '0.2', '0.3')
+        self.post_process_threshold = 0.2
+
         # '• Use GPU for Processing (if available):\n'
         # '  - If checked, the application will attempt to use your GPU for faster processing.\n'
         # '  - If a GPU is not detected, it will default to CPU processing.\n'
@@ -64,21 +67,19 @@ class VRSeparator(CommonSeparator):
         # '• Higher values mean more RAM usage but slightly faster processing times.\n'
         # '• Lower values mean less RAM usage but slightly longer processing times.\n'
         # '• Batch size value has no effect on output quality.'
+        # Andrew note: for some reason, the HP_2 model run only worked with batch size set to 16, not 1 or 2
         self.batch_size = self.model_data.get("batch_size", 16)
 
         # 'Select window size to balance quality and speed:\n\n'
         # '• 1024 - Quick but lesser quality.\n'
         # '• 512 - Medium speed and quality.\n'
         # '• 320 - Takes longer but may offer better quality.'
-        self.window_size = self.model_data.get("window_size", 1024)
+        self.window_size = self.model_data.get("window_size", 512)
 
         # The application will mirror the missing frequency range of the output.
         self.high_end_process = arch_config.get("high_end_process", "False")
         self.input_high_end_h = None
         self.input_high_end = None
-
-        # post_process_threshold values = ('0.1', '0.2', '0.3')
-        self.post_process_threshold = 0.2
 
         # 'Adjust the intensity of primary stem extraction:\n\n'
         # '• It ranges from -100 - 100.\n'
@@ -97,10 +98,17 @@ class VRSeparator(CommonSeparator):
             self.model_capacity = self.model_data["nout"], self.model_data["nout_lstm"]
             self.is_vr_51_model = True
 
+        self.logger.debug(f"VR arch params: is_tta={self.is_tta}, is_post_process={self.is_post_process}, post_process_threshold={self.post_process_threshold}")
+        self.logger.debug(f"VR arch params: is_gpu_conversion={self.is_gpu_conversion}, batch_size={self.batch_size}, window_size={self.window_size}")
+        self.logger.debug(f"VR arch params: high_end_process={self.high_end_process}, aggression_setting={self.aggression_setting}")
+        self.logger.debug(f"VR arch params: is_vr_51_model={self.is_vr_51_model}, model_samplerate={self.model_samplerate}, model_capacity={self.model_capacity}")
+
         self.model_run = lambda *args, **kwargs: self.logger.error("Model run method is not initialised yet.")
 
         # This should go away once we refactor to remove soundfile.write and replace with pydub like we did for the MDX rewrite
         self.wav_subtype = "PCM_16"
+
+        self.logger.info("")
 
     def separate(self, audio_file_path):
         """
@@ -242,18 +250,21 @@ class VRSeparator(CommonSeparator):
         def _execute(X_mag_pad, roi_size):
             X_dataset = []
             patches = (X_mag_pad.shape[2] - 2 * self.model_run.offset) // roi_size
-            # total_iterations = patches // self.batch_size if not self.is_tta else (patches // self.batch_size) * 2
 
-            self.logger.debug(f"inference_vr iterating through {len(patches)} patches")
+            self.logger.debug(f"inference_vr appending to X_dataset for each of {patches} patches")
             for i in tqdm(range(patches)):
                 start = i * roi_size
                 X_mag_window = X_mag_pad[:, :, start : start + self.window_size]
                 X_dataset.append(X_mag_window)
 
+            total_iterations = patches // self.batch_size if not self.is_tta else (patches // self.batch_size) * 2
+            self.logger.debug(f"inference_vr iterating through {total_iterations} batches, batch_size = {self.batch_size}")
+
             X_dataset = np.asarray(X_dataset)
             self.model_run.eval()
             with torch.no_grad():
                 mask = []
+
                 for i in tqdm(range(0, patches, self.batch_size)):
 
                     X_batch = X_dataset[i : i + self.batch_size]

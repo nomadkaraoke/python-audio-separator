@@ -6,6 +6,7 @@ import numpy as np
 from pydub import AudioSegment
 from audio_separator.separator.uvr_lib_v5 import spec_utils
 
+
 class CommonSeparator:
     """
     This class contains the common methods and attributes common to all architecture-specific Separator classes.
@@ -70,6 +71,13 @@ class CommonSeparator:
         self.output_dir = config.get("output_dir")
         self.output_format = config.get("output_format")
 
+        # 'Specify the number of batches to be processed at a time.\n\nNotes:\n\n'
+        # '• Higher values mean more RAM usage but slightly faster processing times.\n'
+        # '• Lower values mean less RAM usage but slightly longer processing times.\n'
+        # '• Batch size value has no effect on output quality.'
+        # BATCH_SIZE = ('1', ''2', '3', '4', '5', '6', '7', '8', '9', '10')
+        self.batch_size = config.get("batch_size")
+
         # Functional options which are applicable to all architectures and the user may tweak to affect the output
         self.normalization_threshold = config.get("normalization_threshold")
         self.denoise_enabled = config.get("denoise_enabled")
@@ -102,6 +110,16 @@ class CommonSeparator:
         # "dim_c" is hard-coded to 4 in UVR, seems to be a parameter for the number of channels, and is only used for checkpoint models.
         # We haven't implemented support for the checkpoint models here, so we're not using it.
         # self.dim_c = 4
+
+        self.logger.debug(f"Common params: model_name={self.model_name}, model_path={self.model_path}")
+        self.logger.debug(f"Common params: primary_stem_output_path={self.primary_stem_output_path}, secondary_stem_output_path={self.secondary_stem_output_path}")
+        self.logger.debug(f"Common params: output_dir={self.output_dir}, output_format={self.output_format}")
+        self.logger.debug(f"Common params: batch_size={self.batch_size}, normalization_threshold={self.normalization_threshold}")
+        self.logger.debug(f"Common params: denoise_enabled={self.denoise_enabled}, output_single_stem={self.output_single_stem}")
+        self.logger.debug(f"Common params: invert_using_spec={self.invert_using_spec}, sample_rate={self.sample_rate}")
+
+        self.logger.debug(f"Common params: primary_stem_name={self.primary_stem_name}, secondary_stem_name={self.secondary_stem_name}")
+        self.logger.debug(f"Common params: is_karaoke={self.is_karaoke}, is_bv_model={self.is_bv_model}, bv_model_rebalance={self.bv_model_rebalance}")        
 
         self.cached_sources_map = {}
 

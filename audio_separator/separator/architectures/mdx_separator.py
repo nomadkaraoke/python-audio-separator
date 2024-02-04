@@ -24,7 +24,6 @@ class MDXSeparator(CommonSeparator):
         self.hop_length = arch_config.get("hop_length")
         self.segment_size = arch_config.get("segment_size")
         self.overlap = arch_config.get("overlap")
-        self.batch_size = arch_config.get("batch_size")
 
         # Initializing model parameters
         self.compensate = self.model_data["compensate"]
@@ -37,6 +36,9 @@ class MDXSeparator(CommonSeparator):
         self.logger.debug(f"Model params: primary_stem={self.primary_stem_name}, secondary_stem={self.secondary_stem_name}")
         self.logger.debug(f"Model params: batch_size={self.batch_size}, compensate={self.compensate}, segment_size={self.segment_size}, dim_f={self.dim_f}, dim_t={self.dim_t}")
         self.logger.debug(f"Model params: n_fft={self.n_fft}, hop={self.hop_length}")
+
+        # self.logger.warning("Torch MPS backend does not yet support FFT operations, Torch will still use CPU!")
+        # self.torch_device = self.torch_device_cpu
 
         # Loading the model for inference
         self.logger.debug("Loading ONNX model for inference...")
