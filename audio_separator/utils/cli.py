@@ -24,7 +24,7 @@ def main():
     parser.add_argument("--list_models", action="store_true", help="List all supported models and exit.")
 
     parser.add_argument(
-        "--model_filename", default="UVR-MDX-NET-Inst_HQ_3.onnx", help="Optional: model filename to be used for separation (default: %(default)s). Example: --model_filename=UVR_MDXNET_KARA_2.onnx"
+        "--model_filename", default="2_HP-UVR.pth", help="Optional: model filename to be used for separation (default: %(default)s). Example: --model_filename=UVR_MDXNET_KARA_2.onnx"
     )
 
     parser.add_argument("--model_file_dir", default="/tmp/audio-separator-models/", help="Optional: model files directory (default: %(default)s). Example: --model_file_dir=/app/models")

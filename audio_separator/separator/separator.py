@@ -354,7 +354,7 @@ class Separator:
         }
         return model_files_grouped
 
-    def load_model(self, model_filename="UVR-MDX-NET-Inst_HQ_3.onnx"):
+    def load_model(self, model_filename="2_HP-UVR.pth"):
         """
         This method loads the separation model into memory, downloading it first if necessary.
         """
