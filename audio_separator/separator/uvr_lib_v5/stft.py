@@ -1,10 +1,13 @@
 import torch
 
 
-# These functions perform the Short-Time Fourier Transform (stft) and its inverse (istft).
-# They are essential for converting the audio between the time domain and the frequency domain,
-# which is a crucial aspect of audio processing in neural networks.
 class STFT:
+    """
+    This class performs the Short-Time Fourier Transform (STFT) and its inverse (ISTFT).
+    These functions are essential for converting the audio between the time domain and the frequency domain,
+    which is a crucial aspect of audio processing in neural networks.
+    """
+
     def __init__(self, logger, n_fft, hop_length, dim_f, device):
         self.logger = logger
         self.n_fft = n_fft
@@ -35,9 +38,7 @@ class STFT:
         reshaped_tensor = input_tensor.reshape([-1, time_dim])
 
         # Perform the Short-Time Fourier Transform (STFT) on the reshaped tensor.
-        stft_output = torch.stft(
-            reshaped_tensor, n_fft=self.n_fft, hop_length=self.hop_length, window=stft_window, center=True, return_complex=False
-        )
+        stft_output = torch.stft(reshaped_tensor, n_fft=self.n_fft, hop_length=self.hop_length, window=stft_window, center=True, return_complex=False)
 
         # Rearrange the dimensions of the STFT output to bring the frequency dimension forward.
         permuted_stft_output = stft_output.permute([0, 3, 1, 2])
