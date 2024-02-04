@@ -4,13 +4,46 @@ from logging import Logger
 import os
 import numpy as np
 from pydub import AudioSegment
-from audio_separator.separator import spec_utils
-
+from audio_separator.separator.uvr_lib_v5 import spec_utils
 
 class CommonSeparator:
     """
     This class contains the common methods and attributes common to all architecture-specific Separator classes.
     """
+
+    ALL_STEMS = "All Stems"
+    VOCAL_STEM = "Vocals"
+    INST_STEM = "Instrumental"
+    OTHER_STEM = "Other"
+    BASS_STEM = "Bass"
+    DRUM_STEM = "Drums"
+    GUITAR_STEM = "Guitar"
+    PIANO_STEM = "Piano"
+    SYNTH_STEM = "Synthesizer"
+    STRINGS_STEM = "Strings"
+    WOODWINDS_STEM = "Woodwinds"
+    BRASS_STEM = "Brass"
+    WIND_INST_STEM = "Wind Inst"
+    NO_OTHER_STEM = "No Other"
+    NO_BASS_STEM = "No Bass"
+    NO_DRUM_STEM = "No Drums"
+    NO_GUITAR_STEM = "No Guitar"
+    NO_PIANO_STEM = "No Piano"
+    NO_SYNTH_STEM = "No Synthesizer"
+    NO_STRINGS_STEM = "No Strings"
+    NO_WOODWINDS_STEM = "No Woodwinds"
+    NO_WIND_INST_STEM = "No Wind Inst"
+    NO_BRASS_STEM = "No Brass"
+    PRIMARY_STEM = "Primary Stem"
+    SECONDARY_STEM = "Secondary Stem"
+    LEAD_VOCAL_STEM = "lead_only"
+    BV_VOCAL_STEM = "backing_only"
+    LEAD_VOCAL_STEM_I = "with_lead_vocals"
+    BV_VOCAL_STEM_I = "with_backing_vocals"
+    LEAD_VOCAL_STEM_LABEL = "Lead Vocals"
+    BV_VOCAL_STEM_LABEL = "Backing Vocals"
+
+    NON_ACCOM_STEMS = (VOCAL_STEM, OTHER_STEM, BASS_STEM, DRUM_STEM, GUITAR_STEM, PIANO_STEM, SYNTH_STEM, STRINGS_STEM, WOODWINDS_STEM, BRASS_STEM, WIND_INST_STEM)
 
     def __init__(self, config):
 
@@ -18,6 +51,8 @@ class CommonSeparator:
 
         # Inferencing device / acceleration config
         self.torch_device = config.get("torch_device")
+        self.torch_device_cpu = config.get("torch_device_cpu")
+        self.torch_device_mps = config.get("torch_device_mps")
         self.onnx_execution_provider = config.get("onnx_execution_provider")
 
         # Model data
@@ -47,6 +82,7 @@ class CommonSeparator:
         self.secondary_stem_name = "Vocals" if self.primary_stem_name == "Instrumental" else "Instrumental"
         self.is_karaoke = self.model_data.get("is_karaoke", False)
         self.is_bv_model = self.model_data.get("is_bv_model", False)
+        self.bv_model_rebalance = self.model_data.get("is_bv_model_rebalanced", 0)
 
         # In UVR, these variables are set but either aren't useful or are better handled in audio-separator.
         # Leaving these comments explaining to help myself or future developers understand why these aren't in audio-separator.
@@ -133,7 +169,7 @@ class CommonSeparator:
         """
         self.logger.debug(f"Entering write_audio with stem_path: {stem_path}")
 
-        stem_source = spec_utils.normalize(self.logger, wave=stem_source, max_peak=self.normalization_threshold)
+        stem_source = spec_utils.normalize(wave=stem_source, max_peak=self.normalization_threshold)
 
         # Check if the numpy array is empty or contains very low values
         if np.max(np.abs(stem_source)) < 1e-6:

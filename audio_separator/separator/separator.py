@@ -135,6 +135,9 @@ class Separator:
         )
 
         self.torch_device = None
+        self.torch_device_cpu = None
+        self.torch_device_mps = None
+
         self.onnx_execution_provider = None
         self.model_instance = None
         self.audio_file_path = None
@@ -188,6 +191,8 @@ class Separator:
         hardware_acceleration_enabled = False
         ort_providers = ort.get_available_providers()
 
+        self.torch_device_cpu = torch.device("cpu")
+
         if torch.cuda.is_available():
             self.configure_cuda(ort_providers)
             hardware_acceleration_enabled = True
@@ -197,7 +202,7 @@ class Separator:
 
         if not hardware_acceleration_enabled:
             self.logger.info("No hardware acceleration could be configured, running in CPU mode")
-            self.torch_device = torch.device("cpu")
+            self.torch_device = self.torch_device_cpu
             self.onnx_execution_provider = ["CPUExecutionProvider"]
 
     def configure_cuda(self, ort_providers):
@@ -217,8 +222,10 @@ class Separator:
         This method configures the Apple Silicon MPS/CoreML device for PyTorch and ONNX Runtime, if available.
         """
         self.logger.info("Apple Silicon MPS/CoreML is available in Torch, setting Torch device to MPS")
+        self.torch_device_mps = torch.device("mps")
+
         self.logger.warning("Torch MPS backend does not yet support FFT operations, Torch will still use CPU!")
-        self.torch_device = torch.device("cpu")
+        self.torch_device = self.torch_device_cpu
         if "CoreMLExecutionProvider" in ort_providers:
             self.logger.info("ONNXruntime has CoreMLExecutionProvider available, enabling acceleration")
             self.onnx_execution_provider = ["CoreMLExecutionProvider"]
@@ -479,6 +486,8 @@ class Separator:
         common_params = {
             "logger": self.logger,
             "torch_device": self.torch_device,
+            "torch_device_cpu": self.torch_device_cpu,
+            "torch_device_mps": self.torch_device_mps,
             "onnx_execution_provider": self.onnx_execution_provider,
             "model_name": model_name,
             "model_path": model_path,

@@ -2,7 +2,7 @@ import unittest
 import numpy as np
 import torch
 from unittest.mock import Mock, patch
-from audio_separator.separator.stft import STFT
+from audio_separator.separator.uvr_lib_v5.stft import STFT
 
 # Short-Time Fourier Transform (STFT) Process Overview:
 #

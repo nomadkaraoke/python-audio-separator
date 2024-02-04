@@ -7,8 +7,8 @@ import onnxruntime as ort
 import numpy as np
 import onnx2torch
 from tqdm import tqdm
-from audio_separator.separator import spec_utils
-from audio_separator.separator.stft import STFT
+from audio_separator.separator.uvr_lib_v5 import spec_utils
+from audio_separator.separator.uvr_lib_v5.stft import STFT
 from audio_separator.separator.common_separator import CommonSeparator
 
 
@@ -31,7 +31,7 @@ class MDXSeparator(CommonSeparator):
         self.dim_f = self.model_data["mdx_dim_f_set"]
         self.dim_t = 2 ** self.model_data["mdx_dim_t_set"]
         self.n_fft = self.model_data["mdx_n_fft_scale_set"]
-        
+
         self.config_yaml = self.model_data.get("config_yaml", None)
 
         self.logger.debug(f"Model params: primary_stem={self.primary_stem_name}, secondary_stem={self.secondary_stem_name}")
@@ -84,10 +84,11 @@ class MDXSeparator(CommonSeparator):
         mix = self.prepare_mix(self.audio_file_path)
 
         self.logger.debug("Normalizing mix before demixing...")
-        mix = spec_utils.normalize(self.logger, wave=mix, max_peak=self.normalization_threshold)
+        mix = spec_utils.normalize(wave=mix, max_peak=self.normalization_threshold)
 
         # Start the demixing process
         source = self.demix(mix)
+        self.logger.debug("Demixing completed.")
 
         # In UVR, the source is cached here if it's a vocal split model, but we're not supporting that yet
 
@@ -98,7 +99,7 @@ class MDXSeparator(CommonSeparator):
         # Normalize and transpose the primary source if it's not already an array
         if not isinstance(self.primary_source, np.ndarray):
             self.logger.debug("Normalizing primary source...")
-            self.primary_source = spec_utils.normalize(self.logger, wave=source, max_peak=self.normalization_threshold).T
+            self.primary_source = spec_utils.normalize(wave=source, max_peak=self.normalization_threshold).T
 
         # Process the secondary source if not already an array
         if not isinstance(self.secondary_source, np.ndarray):
@@ -130,7 +131,9 @@ class MDXSeparator(CommonSeparator):
             self.primary_source_map = self.final_process(self.primary_stem_output_path, self.primary_source, self.primary_stem_name)
             output_files.append(self.primary_stem_output_path)
 
-        # TODO: In UVR, this is where the vocal split chain gets processed - see process_vocal_split_chain()
+        # Not yet implemented from UVR features:
+        # self.process_vocal_split_chain(secondary_sources)
+        # self.logger.debug("Vocal split chain processed.")
 
         return output_files
 

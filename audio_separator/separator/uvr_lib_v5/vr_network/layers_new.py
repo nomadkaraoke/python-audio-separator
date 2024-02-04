@@ -2,7 +2,7 @@ import torch
 from torch import nn
 import torch.nn.functional as F
 
-from ultimatevocalremover.lib_v5 import spec_utils
+from audio_separator.separator.uvr_lib_v5 import spec_utils
 
 
 class Conv2DBNActiv(nn.Module):
