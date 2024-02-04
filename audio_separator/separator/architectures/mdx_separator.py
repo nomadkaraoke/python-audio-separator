@@ -26,6 +26,14 @@ class MDXSeparator(CommonSeparator):
         self.overlap = arch_config.get("overlap")
         self.batch_size = arch_config.get("batch_size")
 
+        # Initializing model parameters
+        self.compensate = self.model_data["compensate"]
+        self.dim_f = self.model_data["mdx_dim_f_set"]
+        self.dim_t = 2 ** self.model_data["mdx_dim_t_set"]
+        self.n_fft = self.model_data["mdx_n_fft_scale_set"]
+        
+        self.config_yaml = self.model_data.get("config_yaml", None)
+
         self.logger.debug(f"Model params: primary_stem={self.primary_stem_name}, secondary_stem={self.secondary_stem_name}")
         self.logger.debug(f"Model params: batch_size={self.batch_size}, compensate={self.compensate}, segment_size={self.segment_size}, dim_f={self.dim_f}, dim_t={self.dim_t}")
         self.logger.debug(f"Model params: n_fft={self.n_fft}, hop={self.hop_length}")
@@ -107,20 +115,20 @@ class MDXSeparator(CommonSeparator):
         # Save and process the secondary stem if needed
         if not self.output_single_stem or self.output_single_stem.lower() == self.secondary_stem_name.lower():
             self.logger.info(f"Saving {self.secondary_stem_name} stem...")
-            if not self.secondary_stem_path:
-                self.secondary_stem_path = os.path.join(f"{self.audio_file_base}_({self.secondary_stem_name})_{self.model_name}.{self.output_format.lower()}")
-            self.secondary_source_map = self.final_process(self.secondary_stem_path, self.secondary_source, self.secondary_stem_name)
-            output_files.append(self.secondary_stem_path)
+            if not self.secondary_stem_output_path:
+                self.secondary_stem_output_path = os.path.join(f"{self.audio_file_base}_({self.secondary_stem_name})_{self.model_name}.{self.output_format.lower()}")
+            self.secondary_source_map = self.final_process(self.secondary_stem_output_path, self.secondary_source, self.secondary_stem_name)
+            output_files.append(self.secondary_stem_output_path)
 
         # Save and process the primary stem if needed
         if not self.output_single_stem or self.output_single_stem.lower() == self.primary_stem_name.lower():
             self.logger.info(f"Saving {self.primary_stem_name} stem...")
-            if not self.primary_stem_path:
-                self.primary_stem_path = os.path.join(f"{self.audio_file_base}_({self.primary_stem_name})_{self.model_name}.{self.output_format.lower()}")
+            if not self.primary_stem_output_path:
+                self.primary_stem_output_path = os.path.join(f"{self.audio_file_base}_({self.primary_stem_name})_{self.model_name}.{self.output_format.lower()}")
             if not isinstance(self.primary_source, np.ndarray):
                 self.primary_source = source.T
-            self.primary_source_map = self.final_process(self.primary_stem_path, self.primary_source, self.primary_stem_name)
-            output_files.append(self.primary_stem_path)
+            self.primary_source_map = self.final_process(self.primary_stem_output_path, self.primary_source, self.primary_stem_name)
+            output_files.append(self.primary_stem_output_path)
 
         # TODO: In UVR, this is where the vocal split chain gets processed - see process_vocal_split_chain()
 

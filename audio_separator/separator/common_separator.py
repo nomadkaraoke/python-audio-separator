@@ -15,31 +15,38 @@ class CommonSeparator:
     def __init__(self, config):
 
         self.logger: Logger = config.get("logger")
+
+        # Inferencing device / acceleration config
         self.torch_device = config.get("torch_device")
         self.onnx_execution_provider = config.get("onnx_execution_provider")
+
+        # Model data
         self.model_name = config.get("model_name")
         self.model_path = config.get("model_path")
         self.model_data = config.get("model_data")
-        self.primary_stem_path = config.get("primary_stem_path")
-        self.secondary_stem_path = config.get("secondary_stem_path")
-        self.output_format = config.get("output_format")
-        self.output_subtype = config.get("output_subtype")
+
+        # Optional custom output paths for the primary and secondary stems
+        # If left as None, the arch-specific class decides the output filename, e.g. something like:
+        # f"{self.audio_file_base}_({self.primary_stem_name})_{self.model_name}.{self.output_format.lower()}"
+        self.primary_stem_output_path = config.get("primary_stem_output_path")
+        self.secondary_stem_output_path = config.get("secondary_stem_output_path")
+
+        # Output directory and format
         self.output_dir = config.get("output_dir")
+        self.output_format = config.get("output_format")
+
+        # Functional options which are applicable to all architectures and the user may tweak to affect the output
         self.normalization_threshold = config.get("normalization_threshold")
         self.denoise_enabled = config.get("denoise_enabled")
         self.output_single_stem = config.get("output_single_stem")
         self.invert_using_spec = config.get("invert_using_spec")
         self.sample_rate = config.get("sample_rate")
 
-        # Initializing model parameters
-        self.compensate, self.dim_f, self.dim_t, self.n_fft, self.primary_stem_name = (
-            self.model_data["compensate"],
-            self.model_data["mdx_dim_f_set"],
-            2 ** self.model_data["mdx_dim_t_set"],
-            self.model_data["mdx_n_fft_scale_set"],
-            self.model_data["primary_stem"],
-        )
+        # Model specific properties
+        self.primary_stem_name = self.model_data["primary_stem"]
         self.secondary_stem_name = "Vocals" if self.primary_stem_name == "Instrumental" else "Instrumental"
+        self.is_karaoke = self.model_data.get("is_karaoke", False)
+        self.is_bv_model = self.model_data.get("is_bv_model", False)
 
         # In UVR, these variables are set but either aren't useful or are better handled in audio-separator.
         # Leaving these comments explaining to help myself or future developers understand why these aren't in audio-separator.
@@ -62,12 +69,6 @@ class CommonSeparator:
 
         self.cached_sources_map = {}
 
-    def prepare_mix(self, mix):
-        """
-        Placeholder method for preparing the mix. Should be overridden by subclasses.
-        """
-        raise NotImplementedError("This method should be overridden by subclasses.")
-
     def separate(self, audio_file_path):
         """
         Placeholder method for separating audio sources. Should be overridden by subclasses.
@@ -79,7 +80,7 @@ class CommonSeparator:
         Finalizes the processing of a stem by writing the audio to a file and returning the processed source.
         """
         self.logger.debug(f"Finalizing {stem_name} stem processing and writing audio...")
-        self.write_audio(stem_path, source, stem_name=stem_name)
+        self.write_audio(stem_path, source)
 
         return {stem_name: source}
 
@@ -126,11 +127,11 @@ class CommonSeparator:
         """
         self.cached_sources_map[model_architecture] = {**self.cached_sources_map.get(model_architecture, {}), **{model_name: sources}}
 
-    def write_audio(self, stem_path: str, stem_source, stem_name=None):
+    def write_audio(self, stem_path: str, stem_source):
         """
         Writes the separated audio source to a file.
         """
-        self.logger.debug(f"Entering write_audio with stem_name: {stem_name} and stem_path: {stem_path}")
+        self.logger.debug(f"Entering write_audio with stem_path: {stem_path}")
 
         stem_source = spec_utils.normalize(self.logger, wave=stem_source, max_peak=self.normalization_threshold)
 

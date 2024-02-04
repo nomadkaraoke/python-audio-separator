@@ -168,10 +168,10 @@ separator = Separator()
 separator.load_model()
 
 # Perform the separation on specific audio files without reloading the model
-primary_stem_path, secondary_stem_path = separator.separate('audio1.wav')
+primary_stem_output_path, secondary_stem_output_path = separator.separate('audio1.wav')
 
-print(f'Primary stem saved at {primary_stem_path}')
-print(f'Secondary stem saved at {secondary_stem_path}')
+print(f'Primary stem saved at {primary_stem_output_path}')
+print(f'Secondary stem saved at {secondary_stem_output_path}')
 ```
 
 #### Batch processing, or processing with multiple models

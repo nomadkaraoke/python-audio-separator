@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import argparse
 import logging
+import json
 from importlib import metadata
 
 
@@ -11,112 +12,62 @@ def main():
     log_handler.setFormatter(log_formatter)
     logger.addHandler(log_handler)
 
-    parser = argparse.ArgumentParser(
-        description="Separate audio file into different stems.",
-        formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, max_help_position=45),
-    )
+    parser = argparse.ArgumentParser(description="Separate audio file into different stems.", formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, max_help_position=45))
 
     parser.add_argument("audio_file", nargs="?", help="The audio file path to separate, in any common format.", default=argparse.SUPPRESS)
 
     package_version = metadata.distribution("audio-separator").version
     parser.add_argument("-v", "--version", action="version", version=f"%(prog)s {package_version}")
 
+    parser.add_argument("--log_level", default="info", help="Optional: logging level, e.g. info, debug, warning (default: %(default)s). Example: --log_level=debug")
+
+    parser.add_argument("--list_models", action="store_true", help="List all supported models and exit.")
+
     parser.add_argument(
-        "--log_level",
-        default="info",
-        help="Optional: logging level, e.g. info, debug, warning (default: %(default)s). Example: --log_level=debug",
+        "--model_filename", default="UVR-MDX-NET-Inst_HQ_3.onnx", help="Optional: model filename to be used for separation (default: %(default)s). Example: --model_filename=UVR_MDXNET_KARA_2.onnx"
+    )
+
+    parser.add_argument("--model_file_dir", default="/tmp/audio-separator-models/", help="Optional: model files directory (default: %(default)s). Example: --model_file_dir=/app/models")
+
+    parser.add_argument("--output_dir", default=None, help="Optional: directory to write output files (default: <current dir>). Example: --output_dir=/app/separated")
+
+    parser.add_argument("--output_format", default="FLAC", help="Optional: output format for separated files, any common format (default: %(default)s). Example: --output_format=MP3")
+
+    parser.add_argument(
+        "--denoise", type=lambda x: (str(x).lower() == "true"), default=False, help="Optional: enable or disable denoising during separation (default: %(default)s). Example: --denoise=True"
     )
 
     parser.add_argument(
-        "--model_filename",
-        default="UVR-MDX-NET-Inst_HQ_3.onnx",
-        help="Optional: model filename to be used for separation (default: %(default)s). Example: --model_filename=UVR_MDXNET_KARA_2.onnx",
+        "--normalization_threshold", type=float, default=0.9, help="Optional: max peak amplitude to normalize input and output audio to (default: %(default)s). Example: --normalization_threshold=0.7"
     )
 
-    parser.add_argument(
-        "--model_file_dir",
-        default="/tmp/audio-separator-models/",
-        help="Optional: model files directory (default: %(default)s). Example: --model_file_dir=/app/models",
-    )
+    parser.add_argument("--single_stem", default=None, help="Optional: output only single stem, either instrumental or vocals. Example: --single_stem=instrumental")
 
     parser.add_argument(
-        "--output_dir",
-        default=None,
-        help="Optional: directory to write output files (default: <current dir>). Example: --output_dir=/app/separated",
+        "--invert_spect", type=lambda x: (str(x).lower() == "true"), default=False, help="Optional: invert secondary stem using spectogram (default: %(default)s). Example: --invert_spect=True"
     )
 
-    parser.add_argument(
-        "--output_format",
-        default="FLAC",
-        help="Optional: output format for separated files, any common format (default: %(default)s). Example: --output_format=MP3",
-    )
+    parser.add_argument("--sample_rate", type=int, default=44100, help="Optional: sample_rate (default: %(default)s). Example: --sample_rate=44100")
 
-    parser.add_argument(
-        "--denoise",
-        type=lambda x: (str(x).lower() == "true"),
-        default=False,
-        help="Optional: enable or disable denoising during separation (default: %(default)s). Example: --denoise=True",
-    )
+    parser.add_argument("--hop_length", type=int, default=1024, help="Optional: hop_length (default: %(default)s). Example: --hop_length=1024")
 
-    parser.add_argument(
-        "--normalization_threshold",
-        type=float,
-        default=0.9,
-        help="Optional: max peak amplitude to normalize input and output audio to (default: %(default)s). Example: --normalization_threshold=0.7",
-    )
+    parser.add_argument("--segment_size", type=int, default=256, help="Optional: segment_size (default: %(default)s). Example: --segment_size=256")
 
-    parser.add_argument(
-        "--single_stem",
-        default=None,
-        help="Optional: output only single stem, either instrumental or vocals. Example: --single_stem=instrumental",
-    )
+    parser.add_argument("--overlap", type=float, default=0.25, help="Optional: overlap (default: %(default)s). Example: --overlap=0.25")
 
-    parser.add_argument(
-        "--invert_spect",
-        type=lambda x: (str(x).lower() == "true"),
-        default=False,
-        help="Optional: invert secondary stem using spectogram (default: %(default)s). Example: --invert_spect=True",
-    )
-
-    parser.add_argument(
-        "--sample_rate",
-        type=int,
-        default=44100,
-        help="Optional: sample_rate (default: %(default)s). Example: --sample_rate=44100",
-    )
-
-    parser.add_argument(
-        "--hop_length",
-        type=int,
-        default=1024,
-        help="Optional: hop_length (default: %(default)s). Example: --hop_length=1024",
-    )
-
-    parser.add_argument(
-        "--segment_size",
-        type=int,
-        default=256,
-        help="Optional: segment_size (default: %(default)s). Example: --segment_size=256",
-    )
-
-    parser.add_argument(
-        "--overlap",
-        type=float,
-        default=0.25,
-        help="Optional: overlap (default: %(default)s). Example: --overlap=0.25",
-    )
-
-    parser.add_argument(
-        "--batch_size",
-        type=int,
-        default=1,
-        help="Optional: batch_size (default: %(default)s). Example: --batch_size=1",
-    )
+    parser.add_argument("--batch_size", type=int, default=1, help="Optional: batch_size (default: %(default)s). Example: --batch_size=1")
 
     args = parser.parse_args()
 
     log_level = getattr(logging, args.log_level.upper())
     logger.setLevel(log_level)
+
+    if args.list_models:
+        from audio_separator.separator import Separator
+
+        separator = Separator()
+        print(json.dumps(separator.list_supported_model_files(), indent=4, sort_keys=True))
+        exit(0)
 
     if not hasattr(args, "audio_file"):
         parser.print_help()

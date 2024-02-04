@@ -12,7 +12,6 @@ import warnings
 import requests
 import torch
 import onnxruntime as ort
-from tqdm import tqdm
 from audio_separator.separator.architectures import MDXSeparator, VRSeparator
 
 
@@ -23,15 +22,18 @@ class Separator:
     functionalities to configure separation parameters, load models, and perform audio source separation.
     It also handles logging, normalization, and output formatting of the separated audio stems.
 
+    The actual separation task is handled by one of the architecture-specific classes in the `architectures` module;
+    this class is responsible for initialising logging, configuring hardware acceleration, loading the model,
+    initiating the separation process and passing outputs back to the caller.
+
     Common Attributes:
         log_level (int): The logging level.
         log_formatter (logging.Formatter): The logging formatter.
         model_file_dir (str): The directory where model files are stored.
         output_dir (str): The directory where output files will be saved.
-        primary_stem_path (str): The path for saving the primary stem.
-        secondary_stem_path (str): The path for saving the secondary stem.
+        primary_stem_output_path (str): The path for saving the primary stem.
+        secondary_stem_output_path (str): The path for saving the secondary stem.
         output_format (str): The format of the output audio file.
-        output_subtype (str): The subtype of the output audio format.
         normalization_threshold (float): The threshold for audio normalization.
         denoise_enabled (bool): Flag to enable or disable denoising.
         output_single_stem (str): Option to output a single stem.
@@ -51,10 +53,9 @@ class Separator:
         log_formatter=None,
         model_file_dir="/tmp/audio-separator-models/",
         output_dir=None,
-        primary_stem_path=None,
-        secondary_stem_path=None,
+        primary_stem_output_path=None,
+        secondary_stem_output_path=None,
         output_format="WAV",
-        output_subtype=None,
         normalization_threshold=0.9,
         denoise_enabled=False,
         output_single_stem=None,
@@ -90,20 +91,20 @@ class Separator:
 
         self.model_file_dir = model_file_dir
         self.output_dir = output_dir
-        self.primary_stem_path = primary_stem_path
-        self.secondary_stem_path = secondary_stem_path
+
+        # Allow the user to specify the output paths for the primary and secondary stems
+        # If left as None, the arch-specific class decides the output filename, typically e.g. something like:
+        # f"{self.audio_file_base}_({self.primary_stem_name})_{self.model_name}.{self.output_format.lower()}"
+        self.primary_stem_output_path = primary_stem_output_path
+        self.secondary_stem_output_path = secondary_stem_output_path
 
         # Create the model directory if it does not exist
         os.makedirs(self.model_file_dir, exist_ok=True)
 
-        self.output_subtype = output_subtype
         self.output_format = output_format
 
         if self.output_format is None:
             self.output_format = "WAV"
-
-        if self.output_subtype is None and output_format == "WAV":
-            self.output_subtype = "PCM_16"
 
         self.normalization_threshold = normalization_threshold
         self.logger.debug(f"Normalization threshold set to {normalization_threshold}, waveform will lowered to this max amplitude to avoid clipping.")
@@ -248,8 +249,8 @@ class Separator:
                 # Read the file from the current pointer to the end and calculate its MD5 hash
                 return hashlib.md5(f.read()).hexdigest()
         except IOError as e:
-            # If an IOError occurs (e.g., file not found), log the error
-            self.logger.error(f"IOError reading model file for hash calculation: {e}")
+            # If an IOError occurs (e.g., if the file is less than 10MB large), log the error
+            self.logger.error(f"IOError seeking -10MB or reading model file for hash calculation: {e}")
             # Attempt to open the file again, read its entire content, and calculate the MD5 hash
             return hashlib.md5(open(model_path, "rb").read()).hexdigest()
 
@@ -257,8 +258,8 @@ class Separator:
         """
         This method downloads a file from a given URL to a given output path.
         """
-        self.logger.debug(f"Downloading file from {url} to {output_path} with timeout 300s and verify=False")
-        response = requests.get(url, stream=True, timeout=300, verify=False)
+        self.logger.debug(f"Downloading file from {url} to {output_path} with timeout 300s")
+        response = requests.get(url, stream=True, timeout=300)
 
         if response.status_code == 200:
             with open(output_path, "wb") as f:
@@ -280,6 +281,68 @@ class Separator:
             self.logger.debug("Clearing CUDA cache...")
             torch.cuda.empty_cache()
 
+    def list_supported_model_files(self):
+        """
+        This method lists the supported model files for audio-separator, by fetching the same file UVR uses to list these.
+        """
+        download_checks_path = os.path.join(self.model_file_dir, "download_checks.json")
+
+        if not os.path.isfile(download_checks_path):
+            self.download_file("https://raw.githubusercontent.com/TRvlvr/application_data/main/filelists/download_checks.json", download_checks_path)
+
+        model_downloads_list = json.load(open(download_checks_path, encoding="utf-8"))
+        self.logger.debug(f"Model download list loaded: {model_downloads_list}")
+
+        # model_downloads_list JSON structure / example snippet:
+        # {
+        #     "vr_download_list": {
+        #             "VR Arch Single Model v5: 1_HP-UVR": "1_HP-UVR.pth",
+        #             "VR Arch Single Model v5: UVR-DeNoise by FoxJoy": "UVR-DeNoise.pth",
+        #     },
+        #     "mdx_download_list": {
+        #             "MDX-Net Model: UVR-MDX-NET Inst HQ 3": "UVR-MDX-NET-Inst_HQ_3.onnx",
+        #             "MDX-Net Model: UVR-MDX-NET Karaoke 2": "UVR_MDXNET_KARA_2.onnx",
+        #             "MDX-Net Model: Kim Vocal 2": "Kim_Vocal_2.onnx",
+        #             "MDX-Net Model: kuielab_b_drums": "kuielab_b_drums.onnx"
+        #     },
+        #     "demucs_download_list": {
+        #             "Demucs v4: htdemucs_ft": {
+        #                     "f7e0c4bc-ba3fe64a.th": "https://dl.fbaipublicfiles.com/demucs/hybrid_transformer/f7e0c4bc-ba3fe64a.th",
+        #                     "d12395a8-e57c48e6.th": "https://dl.fbaipublicfiles.com/demucs/hybrid_transformer/d12395a8-e57c48e6.th",
+        #                     "92cfc3b6-ef3bcb9c.th": "https://dl.fbaipublicfiles.com/demucs/hybrid_transformer/92cfc3b6-ef3bcb9c.th",
+        #                     "04573f0d-f3cf25b2.th": "https://dl.fbaipublicfiles.com/demucs/hybrid_transformer/04573f0d-f3cf25b2.th",
+        #                     "htdemucs_ft.yaml": "https://github.com/TRvlvr/model_repo/releases/download/all_public_uvr_models/htdemucs_ft.yaml"
+        #             },
+        #             "Demucs v4: htdemucs": {
+        #                     "955717e8-8726e21a.th": "https://dl.fbaipublicfiles.com/demucs/hybrid_transformer/955717e8-8726e21a.th",
+        #                     "htdemucs.yaml": "https://github.com/TRvlvr/model_repo/releases/download/all_public_uvr_models/htdemucs.yaml"
+        #             },
+        #             "Demucs v1: tasnet": {
+        #                     "tasnet.th": "https://dl.fbaipublicfiles.com/demucs/v2.0/tasnet.th"
+        #             },
+        #     },
+        #     "mdx23_download_list": {
+        #             "MDX23C Model: MDX23C_D1581": {
+        #                     "MDX23C_D1581.ckpt": "model_2_stem_061321.yaml"
+        #             }
+        #     },
+        #     "mdx23c_download_list": {
+        #             "MDX23C Model: MDX23C-InstVoc HQ": {
+        #                     "MDX23C-8KFFT-InstVoc_HQ.ckpt": "model_2_stem_full_band_8k.yaml"
+        #             }
+        #     }
+        # }
+
+        # Return object with list of model names, which are the keys in vr_download_list, mdx_download_list, demucs_download_list, mdx23_download_list, mdx23c_download_list, grouped by type: VR, MDX, Demucs, MDX23, MDX23C
+        model_files_grouped = {
+            "VR": model_downloads_list["vr_download_list"],
+            "MDX": model_downloads_list["mdx_download_list"],
+            # "Demucs": list(model_downloads_list["demucs_download_list"].keys()),
+            # "MDX23": list(model_downloads_list["mdx23_download_list"].keys()),
+            # "MDX23C": list(model_downloads_list["mdx23c_download_list"].keys())
+        }
+        return model_files_grouped
+
     def load_model(self, model_filename="UVR-MDX-NET-Inst_HQ_3.onnx", model_type=None):
         """
         This method loads the separation model into memory, downloading it first if necessary.
@@ -288,45 +351,130 @@ class Separator:
 
         load_model_start_time = time.perf_counter()
 
-        model_name = model_filename.split(".")[0]
-        model_url = f"https://github.com/TRvlvr/model_repo/releases/download/all_public_uvr_models/{model_filename}"
-        model_data_url = "https://raw.githubusercontent.com/TRvlvr/application_data/main/mdx_model_data/model_data.json"
+        # Model data and configuration sources from UVR
+        model_repo_url_prefix = "https://github.com/TRvlvr/model_repo/releases/download/all_public_uvr_models"
+        model_data_url_prefix = "https://raw.githubusercontent.com/TRvlvr/application_data/main"
+        vr_model_data_url = f"{model_data_url_prefix}/vr_model_data/model_data_new.json"
+        mdx_model_data_url = f"{model_data_url_prefix}/mdx_model_data/model_data_new.json"
 
         # Setting up the model path
+        model_name = model_filename.split(".")[0]
         model_path = os.path.join(self.model_file_dir, f"{model_filename}")
         self.logger.debug(f"Model path set to {model_path}")
 
         # Check if model file exists, if not, download it
         if not os.path.isfile(model_path):
             self.logger.debug(f"Model not found at path {model_path}, downloading...")
-            self.download_file(model_url, model_path)
+            self.download_file(f"{model_repo_url_prefix}/{model_filename}", model_path)
 
-        # Reading model settings from the downloaded model
-        self.logger.debug("Reading model settings...")
+        # Calculating hash for the downloaded model
+        self.logger.debug("Calculating MD5 hash for model file to identify model parameters from UVR data...")
         model_hash = self.get_model_hash(model_path)
         self.logger.debug(f"Model {model_path} has hash {model_hash}")
 
         # Setting up the path for model data and checking its existence
-        model_data_path = os.path.join(self.model_file_dir, "model_data.json")
-        self.logger.debug(f"Model data path set to {model_data_path}")
-        if not os.path.isfile(model_data_path):
-            self.logger.debug(f"Model data not found at path {model_data_path}, downloading...")
-            self.download_file(model_data_url, model_data_path)
+        vr_model_data_path = os.path.join(self.model_file_dir, "vr_model_data.json")
+        self.logger.debug(f"VR model data path set to {vr_model_data_path}")
+        if not os.path.isfile(vr_model_data_path):
+            self.logger.debug(f"VR model data not found at path {vr_model_data_path}, downloading...")
+            self.download_file(vr_model_data_url, vr_model_data_path)
+
+        mdx_model_data_path = os.path.join(self.model_file_dir, "mdx_model_data.json")
+        self.logger.debug(f"MDX model data path set to {mdx_model_data_path}")
+        if not os.path.isfile(mdx_model_data_path):
+            self.logger.debug(f"MDX model data not found at path {mdx_model_data_path}, downloading...")
+            self.download_file(mdx_model_data_url, mdx_model_data_path)
 
         # Loading model data
-        self.logger.debug("Loading model data...")
-        model_data_object = json.load(open(model_data_path, encoding="utf-8"))
-        model_data = model_data_object[model_hash]
-        self.logger.debug(f"Model data loaded: {model_data}")
+        self.logger.debug("Loading MDX and VR model parameters from UVR model data files...")
+        vr_model_data_object = json.load(open(vr_model_data_path, encoding="utf-8"))
+        mdx_model_data_object = json.load(open(mdx_model_data_path, encoding="utf-8"))
 
-        # Identify model_type based on the file extension
-        file_extension = model_filename.split(".")[-1]
-        if file_extension == "onnx":
+        # vr_model_data_object JSON structure / example snippet:
+        # {
+        #     "0d0e6d143046b0eecc41a22e60224582": {
+        #         "vr_model_param": "3band_44100_mid",
+        #         "primary_stem": "Instrumental"
+        #     },
+        #     "6b5916069a49be3fe29d4397ecfd73fa": {
+        #         "vr_model_param": "3band_44100_msb2",
+        #         "primary_stem": "Instrumental",
+        #         "is_karaoke": true
+        #     },
+        #     "0ec76fd9e65f81d8b4fbd13af4826ed8": {
+        #         "vr_model_param": "4band_v3",
+        #         "primary_stem": "No Woodwinds"
+        #     },
+        #     "0fb9249ffe4ffc38d7b16243f394c0ff": {
+        #         "vr_model_param": "4band_v3",
+        #         "primary_stem": "No Reverb"
+        #     },
+        #     "6857b2972e1754913aad0c9a1678c753": {
+        #         "vr_model_param": "4band_v3",
+        #         "primary_stem": "No Echo",
+        #         "nout": 48,
+        #         "nout_lstm": 128
+        #     },
+        #     "944950a9c5963a5eb70b445d67b7068a": {
+        #         "vr_model_param": "4band_v3_sn",
+        #         "primary_stem": "Vocals",
+        #         "nout": 64,
+        #         "nout_lstm": 128,
+        #         "is_karaoke": false,
+        #         "is_bv_model": true,
+        #         "is_bv_model_rebalanced": 0.9
+        #     }
+        # }
+
+        # mdx_model_data_object JSON structure / example snippet:
+        # {
+        #     "0ddfc0eb5792638ad5dc27850236c246": {
+        #         "compensate": 1.035,
+        #         "mdx_dim_f_set": 2048,
+        #         "mdx_dim_t_set": 8,
+        #         "mdx_n_fft_scale_set": 6144,
+        #         "primary_stem": "Vocals"
+        #     },
+        #     "26d308f91f3423a67dc69a6d12a8793d": {
+        #         "compensate": 1.035,
+        #         "mdx_dim_f_set": 2048,
+        #         "mdx_dim_t_set": 9,
+        #         "mdx_n_fft_scale_set": 8192,
+        #         "primary_stem": "Other"
+        #     },
+        #     "2cdd429caac38f0194b133884160f2c6": {
+        #         "compensate": 1.045,
+        #         "mdx_dim_f_set": 3072,
+        #         "mdx_dim_t_set": 8,
+        #         "mdx_n_fft_scale_set": 7680,
+        #         "primary_stem": "Instrumental"
+        #     },
+        #     "2f5501189a2f6db6349916fabe8c90de": {
+        #         "compensate": 1.035,
+        #         "mdx_dim_f_set": 2048,
+        #         "mdx_dim_t_set": 8,
+        #         "mdx_n_fft_scale_set": 6144,
+        #         "primary_stem": "Vocals",
+        #         "is_karaoke": true
+        #     },
+        #     "2154254ee89b2945b97a7efed6e88820": {
+        #         "config_yaml": "model_2_stem_061321.yaml"
+        #     },
+        #     "116f6f9dabb907b53d847ed9f7a9475f": {
+        #         "config_yaml": "model_2_stem_full_band_8k.yaml"
+        #     }
+        # }
+
+        if model_hash in mdx_model_data_object:
+            model_data = mdx_model_data_object[model_hash]
             model_type = "MDX"
-        elif file_extension == "pth":
+        elif model_hash in vr_model_data_object:
+            model_data = vr_model_data_object[model_hash]
             model_type = "VR"
         else:
-            raise ValueError(f"Unsupported model file extension: {file_extension}")
+            raise ValueError(f"Unsupported Model File: parameters for MD5 hash {model_hash} could not be found in the UVR model data file.")
+
+        self.logger.debug(f"Model data loaded: {model_data}")
 
         common_params = {
             "logger": self.logger,
@@ -335,10 +483,9 @@ class Separator:
             "model_name": model_name,
             "model_path": model_path,
             "model_data": model_data,
-            "primary_stem_path": self.primary_stem_path,
-            "secondary_stem_path": self.secondary_stem_path,
+            "primary_stem_output_path": self.primary_stem_output_path,
+            "secondary_stem_output_path": self.secondary_stem_output_path,
             "output_format": self.output_format,
-            "output_subtype": self.output_subtype,
             "output_dir": self.output_dir,
             "normalization_threshold": self.normalization_threshold,
             "denoise_enabled": self.denoise_enabled,
@@ -347,10 +494,12 @@ class Separator:
             "sample_rate": self.sample_rate,
         }
 
-        arch_specific_params = {"hop_length": self.hop_length, "segment_size": self.segment_size, "overlap": self.overlap, "batch_size": self.batch_size}
+        # These are parameters which users may want to configure so we expose them to the top-level Separator class,
+        # even though they are specific to a single model architecture
+        arch_specific_params = {"MDX": {"hop_length": self.hop_length, "segment_size": self.segment_size, "overlap": self.overlap, "batch_size": self.batch_size}, "VR": {}}
 
         if model_type == "MDX":
-            self.model_instance = MDXSeparator(common_config=common_params, arch_config=arch_specific_params)
+            self.model_instance = MDXSeparator(common_config=common_params, arch_config=arch_specific_params["MDX"])
         elif model_type == "VR":
             self.model_instance = VRSeparator(common_config=common_params, arch_config=arch_specific_params)
         else:
@@ -393,8 +542,8 @@ class Separator:
         self.logger.debug("Clearing sources and stems...")
         self.primary_source = None
         self.secondary_source = None
-        self.primary_stem_path = None
-        self.secondary_stem_path = None
+        self.primary_stem_output_path = None
+        self.secondary_stem_output_path = None
 
         # Log the completion of the separation process
         self.logger.debug("Separation process completed.")
