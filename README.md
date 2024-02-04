@@ -212,7 +212,7 @@ output_file_paths_6 = separator.separate('audio3.wav')
 - model_file_dir: (Optional) Directory to cache model files in. Default: /tmp/audio-separator-models/
 - output_dir: (Optional) Directory where the separated files will be saved. If not specified, outputs to current dir.
 - output_format: (Optional) Format to encode output files, any common format (WAV, MP3, FLAC, M4A, etc.). Default: WAV
-- denoise_enabled: (Optional) Flag to enable or disable denoising as part of the separation process. Default: True
+- enable_denoise: (Optional) Flag to enable or disable denoising as part of the separation process. Default: True
 - normalization_enabled: (Optional) Flag to enable or disable normalization as part of the separation process. Default: False
 - output_single_stem: (Optional) Output only single stem, either instrumental or vocals.
 - invert_secondary_stem_using_spectogram=True,

@@ -49,13 +49,19 @@ def main():
 
     parser.add_argument("--sample_rate", type=int, default=44100, help="Optional: sample_rate (default: %(default)s). Example: --sample_rate=44100")
 
-    parser.add_argument("--hop_length", type=int, default=1024, help="Optional: hop_length (default: %(default)s). Example: --hop_length=1024")
+    parser.add_argument("--mdx_hop_length", type=int, default=1024, help="Optional: mdx_hop_length (default: %(default)s). Example: --mdx_hop_length=1024")
+    parser.add_argument("--mdx_segment_size", type=int, default=256, help="Optional: mdx_segment_size (default: %(default)s). Example: --mdx_segment_size=256")
+    parser.add_argument("--mdx_overlap", type=float, default=0.25, help="Optional: mdx_overlap (default: %(default)s). Example: --mdx_overlap=0.25")
+    parser.add_argument("--mdx_batch_size", type=int, default=1, help="Optional: mdx_batch_size (default: %(default)s). Example: --mdx_batch_size=4")
 
-    parser.add_argument("--segment_size", type=int, default=256, help="Optional: segment_size (default: %(default)s). Example: --segment_size=256")
+    parser.add_argument("--vr_batch_size", type=int, default=16, help="Optional: vr_batch_size (default: %(default)s). Example: --vr_batch_size=4")
+    parser.add_argument("--vr_window_size", type=int, default=512, help="Optional: vr_window_size (default: %(default)s). Example: --vr_window_size=256")
+    parser.add_argument("--vr_aggression", type=int, default=5, help="Optional: vr_aggression (default: %(default)s). Example: --vr_aggression=2")
 
-    parser.add_argument("--overlap", type=float, default=0.25, help="Optional: overlap (default: %(default)s). Example: --overlap=0.25")
-
-    parser.add_argument("--batch_size", type=int, default=1, help="Optional: batch_size (default: %(default)s). Example: --batch_size=4")
+    # parser.add_argument("--vr_enable_tta", type=int, default=, help="Optional: vr_enable_tta (default: %(default)s). Example: --vr_enable_tta=")
+    # parser.add_argument("--vr_", type=int, default=, help="Optional: vr_ (default: %(default)s). Example: --vr_=")
+    # parser.add_argument("--vr_", type=int, default=, help="Optional: vr_ (default: %(default)s). Example: --vr_=")
+    # parser.add_argument("--vr_", type=int, default=, help="Optional: vr_ (default: %(default)s). Example: --vr_=")
 
     args = parser.parse_args()
 
@@ -84,15 +90,21 @@ def main():
         model_file_dir=args.model_file_dir,
         output_dir=args.output_dir,
         output_format=args.output_format,
-        denoise_enabled=args.denoise,
+        enable_denoise=args.denoise,
         normalization_threshold=args.normalization_threshold,
         output_single_stem=args.single_stem,
         invert_using_spec=args.invert_spect,
         sample_rate=args.sample_rate,
-        hop_length=args.hop_length,
-        segment_size=args.segment_size,
-        overlap=args.overlap,
-        batch_size=args.batch_size,
+        mdx_params={"hop_length": args.mdx_hop_length, "segment_size": args.mdx_segment_size, "overlap": args.mdx_overlap, "batch_size": args.mdx_batch_size},
+        vr_params={
+            "batch_size": args.vr_batch_size,
+            "window_size": args.vr_window_size,
+            "aggression": args.vr_aggression,
+            "enable_tta": False,
+            "enable_post_process": False,
+            "post_process_threshold": 0.2,
+            "high_end_process": False,
+        },
     )
 
     separator.load_model(args.model_filename)

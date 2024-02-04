@@ -35,16 +35,25 @@ class Separator:
         secondary_stem_output_path (str): The path for saving the secondary stem.
         output_format (str): The format of the output audio file.
         normalization_threshold (float): The threshold for audio normalization.
-        denoise_enabled (bool): Flag to enable or disable denoising.
+        enable_denoise (bool): Flag to enable or disable denoising.
         output_single_stem (str): Option to output a single stem.
         invert_using_spec (bool): Flag to invert using spectrogram.
         sample_rate (int): The sample rate of the audio.
 
-    MDX Model Specific Attributes:
+    MDX Architecture Specific Attributes:
         hop_length (int): The hop length for STFT.
         segment_size (int): The segment size for processing.
         overlap (float): The overlap between segments.
         batch_size (int): The batch size for processing.
+
+    VR Architecture Specific Attributes & Defaults:
+        batch_size: 16
+        window_size: 512
+        aggression: 5
+        enable_tta: False
+        enable_post_process: False
+        post_process_threshold: 0.2
+        high_end_process: False
     """
 
     def __init__(
@@ -57,14 +66,12 @@ class Separator:
         secondary_stem_output_path=None,
         output_format="WAV",
         normalization_threshold=0.9,
-        denoise_enabled=False,
+        enable_denoise=False,
         output_single_stem=None,
         invert_using_spec=False,
         sample_rate=44100,
-        hop_length=1024,
-        segment_size=256,
-        overlap=0.25,
-        batch_size=1,
+        mdx_params={"hop_length": 1024, "segment_size": 256, "overlap": 0.25, "batch_size": 1},
+        vr_params={"batch_size": 16, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False},
     ):
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(log_level)
@@ -109,8 +116,8 @@ class Separator:
         self.normalization_threshold = normalization_threshold
         self.logger.debug(f"Normalization threshold set to {normalization_threshold}, waveform will lowered to this max amplitude to avoid clipping.")
 
-        self.denoise_enabled = denoise_enabled
-        if self.denoise_enabled:
+        self.enable_denoise = enable_denoise
+        if self.enable_denoise:
             self.logger.debug(f"Denoising enabled, model will be run twice to reduce noise in output audio.")
         else:
             self.logger.debug(f"Denoising disabled, model will only be run once. This is twice as fast, but may result in noisier output audio.")
@@ -126,13 +133,10 @@ class Separator:
             self.logger.debug(f"Secondary step will be inverted using spectogram rather than waveform. This may improve quality, but is slightly slower.")
 
         self.sample_rate = sample_rate
-        self.hop_length = hop_length
-        self.segment_size = segment_size
-        self.overlap = overlap
-        self.batch_size = batch_size
-        self.logger.debug(
-            f"Separation settings set: sample_rate={self.sample_rate}, hop_length={self.hop_length}, segment_size={self.segment_size}, overlap={self.overlap}, batch_size={self.batch_size}"
-        )
+
+        # These are parameters which users may want to configure so we expose them to the top-level Separator class,
+        # even though they are specific to a single model architecture
+        self.arch_specific_params = {"MDX": mdx_params, "VR": vr_params}
 
         self.torch_device = None
         self.torch_device_cpu = None
@@ -496,22 +500,17 @@ class Separator:
             "secondary_stem_output_path": self.secondary_stem_output_path,
             "output_format": self.output_format,
             "output_dir": self.output_dir,
-            "batch_size": self.batch_size,
             "normalization_threshold": self.normalization_threshold,
-            "denoise_enabled": self.denoise_enabled,
+            "enable_denoise": self.enable_denoise,
             "output_single_stem": self.output_single_stem,
             "invert_using_spec": self.invert_using_spec,
             "sample_rate": self.sample_rate,
         }
 
-        # These are parameters which users may want to configure so we expose them to the top-level Separator class,
-        # even though they are specific to a single model architecture
-        arch_specific_params = {"MDX": {"hop_length": self.hop_length, "segment_size": self.segment_size, "overlap": self.overlap}, "VR": {}}
-
         if model_type == "MDX":
-            self.model_instance = MDXSeparator(common_config=common_params, arch_config=arch_specific_params["MDX"])
+            self.model_instance = MDXSeparator(common_config=common_params, arch_config=self.arch_specific_params["MDX"])
         elif model_type == "VR":
-            self.model_instance = VRSeparator(common_config=common_params, arch_config=arch_specific_params["VR"])
+            self.model_instance = VRSeparator(common_config=common_params, arch_config=self.arch_specific_params["VR"])
         else:
             raise ValueError(f"Unsupported model type: {model_type}")
 

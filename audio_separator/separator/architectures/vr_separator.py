@@ -24,83 +24,83 @@ class VRSeparator(CommonSeparator):
     It initializes with configuration parameters and prepares the model for separation tasks.
     """
 
-    def __init__(self, common_config, arch_config):
+    def __init__(self, common_config, arch_config: dict):
+        # Any configuration values which can be shared between architectures should be set already in CommonSeparator,
+        # e.g. user-specified functionality choices (self.output_single_stem) or common model parameters (self.primary_stem_name)
         super().__init__(config=common_config)
 
+        # Model data is basic overview metadata about the model, e.g. which stem is primary and whether it's a karaoke model
+        # It's loaded in from model_data_new.json in Separator.load_model and there are JSON examples in that method
+        # The instance variable self.model_data is passed through from Separator and set in CommonSeparator
         self.logger.debug(f"Model data: {self.model_data}")
 
+        # Most of the VR models use the same number of output channels, but the VR 51 models have specific values set in model_data JSON
+        self.model_capacity = 32, 128
+        self.is_vr_51_model = False
+
+        if "nout" in self.model_data.keys() and "nout_lstm" in self.model_data.keys():
+            self.model_capacity = self.model_data["nout"], self.model_data["nout_lstm"]
+            self.is_vr_51_model = True
+
+        # Model params are additional technical parameter values from JSON files in separator/uvr_lib_v5/vr_network/modelparams/*.json,
+        # with filenames referenced by the model_data["vr_model_param"] value
         package_root_filepath = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         vr_params_json_dir = os.path.join(package_root_filepath, "uvr_lib_v5", "vr_network", "modelparams")
-        vr_model_param = os.path.join(vr_params_json_dir, f"{self.model_data['vr_model_param']}.json")
-        self.model_params = ModelParameters(vr_model_param)
+        vr_params_json_filename = f"{self.model_data['vr_model_param']}.json"
+        vr_params_json_filepath = os.path.join(vr_params_json_dir, vr_params_json_filename)
+        self.model_params = ModelParameters(vr_params_json_filepath)
 
-        self.logger.debug(f"Model params: primary_stem={self.primary_stem_name}, secondary_stem={self.secondary_stem_name}")
+        self.logger.debug(f"Model params: {self.model_params.param}")
 
-        self.primary_source = None
-        self.secondary_source = None
-        self.audio_file_path = None
-        self.audio_file_base = None
-        self.secondary_source_map = None
-        self.primary_source_map = None
+        # Arch Config is the VR architecture specific user configuration options, which should all be configurable by the user
+        # either by their Separator class instantiation or by passing in a CLI parameter.
+        # While there are similarities between architectures for some of these (e.g. batch_size), they are deliberately configured
+        # this way as they have architecture-specific default values.
 
         # This option performs Test-Time-Augmentation to improve the separation quality.
         # Note: Having this selected will increase the time it takes to complete a conversion
-        self.is_tta = self.model_data.get("is_tta", False)
+        self.enable_tta = arch_config.get("enable_tta", False)
 
         # This option can potentially identify leftover instrumental artifacts within the vocal outputs. \nThis option may improve the separation of some songs.
         # Note: Selecting this option can adversely affect the conversion process, depending on the track. Because of this, it is only recommended as a last resort.
-        self.is_post_process = self.model_data.get("is_post_process", False)
+        self.enable_post_process = arch_config.get("enable_post_process", False)
 
         # post_process_threshold values = ('0.1', '0.2', '0.3')
-        self.post_process_threshold = 0.2
+        self.post_process_threshold = arch_config.get("post_process_threshold", 0.2)
 
-        # '• Use GPU for Processing (if available):\n'
-        # '  - If checked, the application will attempt to use your GPU for faster processing.\n'
-        # '  - If a GPU is not detected, it will default to CPU processing.\n'
-        # '  - GPU processing for MacOS only works with VR Arch models.\n\n'
-        # '• Please Note:\n'
-        # '  - CPU processing is significantly slower than GPU processing.\n'
-        # '  - Only Macs with M1 chips can be used for GPU processing.'
-        self.is_gpu_conversion = self.model_data.get("is_gpu_conversion", True)
+        # Number of batches to be processed at a time.
+        # - Higher values mean more RAM usage but slightly faster processing times.
+        # - Lower values mean less RAM usage but slightly longer processing times.
+        # - Batch size value has no effect on output quality.
 
-        # 'Specify the number of batches to be processed at a time.\n\nNotes:\n\n'
-        # '• Higher values mean more RAM usage but slightly faster processing times.\n'
-        # '• Lower values mean less RAM usage but slightly longer processing times.\n'
-        # '• Batch size value has no effect on output quality.'
-        # Andrew note: for some reason, the HP_2 model run only worked with batch size set to 16, not 1 or 2
-        self.batch_size = self.model_data.get("batch_size", 16)
+        # Andrew note: for some reason, lower batch sizes seem to cause broken output for VR arch; need to investigate why
+        self.batch_size = arch_config.get("batch_size", 16)
 
         # 'Select window size to balance quality and speed:\n\n'
         # '• 1024 - Quick but lesser quality.\n'
         # '• 512 - Medium speed and quality.\n'
         # '• 320 - Takes longer but may offer better quality.'
-        self.window_size = self.model_data.get("window_size", 512)
+        self.window_size = arch_config.get("window_size", 512)
 
         # The application will mirror the missing frequency range of the output.
-        self.high_end_process = arch_config.get("high_end_process", "False")
+        self.high_end_process = arch_config.get("high_end_process", False)
         self.input_high_end_h = None
         self.input_high_end = None
 
-        # 'Adjust the intensity of primary stem extraction:\n\n'
-        # '• It ranges from -100 - 100.\n'
-        # '• Bigger values mean deeper extractions.\n'
-        # '• Typically, it\'s set to 5 for vocals & instrumentals. \n'
-        # '• Values beyond 5 might muddy the sound for non-vocal models.'
-        self.aggression_setting = self.model_data.get("aggression_setting", 5)
+        # Adjust the intensity of primary stem extraction:
+        # - Ranges from -100 - 100.
+        # - Bigger values mean deeper extractions.
+        # - Typically, it's set to 5 for vocals & instrumentals.
+        # - Values beyond 5 might muddy the sound for non-vocal models.
+        self.aggression = arch_config.get("aggression", 5)
 
-        self.aggressiveness = {"value": self.aggression_setting, "split_bin": self.model_params.param["band"][1]["crop_stop"], "aggr_correction": self.model_params.param.get("aggr_correction")}
+        self.aggressiveness = {"value": self.aggression, "split_bin": self.model_params.param["band"][1]["crop_stop"], "aggr_correction": self.model_params.param.get("aggr_correction")}
 
-        self.is_vr_51_model = self.model_data.get("is_vr_51_model")
         self.model_samplerate = self.model_params.param["sr"]
 
-        self.model_capacity = 32, 128
-        if "nout" in self.model_data.keys() and "nout_lstm" in self.model_data.keys():
-            self.model_capacity = self.model_data["nout"], self.model_data["nout_lstm"]
-            self.is_vr_51_model = True
-
-        self.logger.debug(f"VR arch params: is_tta={self.is_tta}, is_post_process={self.is_post_process}, post_process_threshold={self.post_process_threshold}")
-        self.logger.debug(f"VR arch params: is_gpu_conversion={self.is_gpu_conversion}, batch_size={self.batch_size}, window_size={self.window_size}")
-        self.logger.debug(f"VR arch params: high_end_process={self.high_end_process}, aggression_setting={self.aggression_setting}")
+        self.logger.debug(f"VR arch params: enable_tta={self.enable_tta}, enable_post_process={self.enable_post_process}, post_process_threshold={self.post_process_threshold}")
+        self.logger.debug(f"VR arch params: batch_size={self.batch_size}, window_size={self.window_size}")
+        self.logger.debug(f"VR arch params: high_end_process={self.high_end_process}, aggression={self.aggression}")
         self.logger.debug(f"VR arch params: is_vr_51_model={self.is_vr_51_model}, model_samplerate={self.model_samplerate}, model_capacity={self.model_capacity}")
 
         self.model_run = lambda *args, **kwargs: self.logger.error("Model run method is not initialised yet.")
@@ -108,7 +108,7 @@ class VRSeparator(CommonSeparator):
         # This should go away once we refactor to remove soundfile.write and replace with pydub like we did for the MDX rewrite
         self.wav_subtype = "PCM_16"
 
-        self.logger.info("")
+        self.logger.info("VR Separator initialisation complete")
 
     def separate(self, audio_file_path):
         """
@@ -236,7 +236,7 @@ class VRSeparator(CommonSeparator):
                 X_wave[d] = librosa.resample(X_wave[d + 1], orig_sr=self.model_params.param["band"][d + 1]["sr"], target_sr=bp["sr"], res_type=wav_resolution)
                 X_spec_s[d] = spec_utils.wave_to_spectrogram(X_wave[d], bp["hl"], bp["n_fft"], self.model_params, band=d, is_v51_model=self.is_vr_51_model)
 
-            if d == bands_n and self.high_end_process != "none":
+            if d == bands_n and self.high_end_process:
                 self.input_high_end_h = (bp["n_fft"] // 2 - bp["crop_stop"]) + (self.model_params.param["pre_filter_stop"] - self.model_params.param["pre_filter_start"])
                 self.input_high_end = X_spec_s[d][:, bp["n_fft"] // 2 - self.input_high_end_h : bp["n_fft"] // 2, :]
 
@@ -257,7 +257,7 @@ class VRSeparator(CommonSeparator):
                 X_mag_window = X_mag_pad[:, :, start : start + self.window_size]
                 X_dataset.append(X_mag_window)
 
-            total_iterations = patches // self.batch_size if not self.is_tta else (patches // self.batch_size) * 2
+            total_iterations = patches // self.batch_size if not self.enable_tta else (patches // self.batch_size) * 2
             self.logger.debug(f"inference_vr iterating through {total_iterations} batches, batch_size = {self.batch_size}")
 
             X_dataset = np.asarray(X_dataset)
@@ -289,7 +289,7 @@ class VRSeparator(CommonSeparator):
 
             mask = spec_utils.adjust_aggr(mask, is_non_accom_stem, aggressiveness)
 
-            if self.is_post_process:
+            if self.enable_post_process:
                 mask = spec_utils.merge_artifacts(mask, thres=self.post_process_threshold)
 
             y_spec = mask * X_mag * np.exp(1.0j * X_phase)
@@ -304,7 +304,7 @@ class VRSeparator(CommonSeparator):
         X_mag_pad /= X_mag_pad.max()
         mask = _execute(X_mag_pad, roi_size)
 
-        if self.is_tta:
+        if self.enable_tta:
             pad_l += roi_size // 2
             pad_r += roi_size // 2
             X_mag_pad = np.pad(X_mag, ((0, 0), (0, 0), (pad_l, pad_r)), mode="constant")
@@ -320,8 +320,8 @@ class VRSeparator(CommonSeparator):
         return y_spec, v_spec
 
     def spec_to_wav(self, spec):
-        if self.high_end_process.startswith("mirroring") and isinstance(self.input_high_end, np.ndarray) and self.input_high_end_h:
-            input_high_end_ = spec_utils.mirroring(self.high_end_process, spec, self.input_high_end, self.model_params)
+        if self.high_end_process and isinstance(self.input_high_end, np.ndarray) and self.input_high_end_h:
+            input_high_end_ = spec_utils.mirroring("mirroring", spec, self.input_high_end, self.model_params)
             wav = spec_utils.cmb_spectrogram_to_wave(spec, self.model_params, self.input_high_end_h, input_high_end_, is_v51_model=self.is_vr_51_model)
         else:
             wav = spec_utils.cmb_spectrogram_to_wave(spec, self.model_params, is_v51_model=self.is_vr_51_model)

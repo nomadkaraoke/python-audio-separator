@@ -15,7 +15,7 @@ def common_expected_args():
         "model_file_dir": "/tmp/audio-separator-models/",
         "output_dir": None,
         "output_format": "FLAC",
-        "denoise_enabled": False,
+        "enable_denoise": False,
         "normalization_threshold": 0.9,
         "output_single_stem": None,
         "invert_using_spec": False,
@@ -138,7 +138,7 @@ def test_cli_denoise_argument(common_expected_args):
             main()
 
             # Update expected args for this specific test
-            common_expected_args["denoise_enabled"] = True
+            common_expected_args["enable_denoise"] = True
 
             # Assertions
             mock_separator.assert_called_once_with(**common_expected_args)

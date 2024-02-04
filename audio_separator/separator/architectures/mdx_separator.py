@@ -33,12 +33,16 @@ class MDXSeparator(CommonSeparator):
 
         self.config_yaml = self.model_data.get("config_yaml", None)
 
+        # Number of batches to be processed at a time.
+        # - Higher values mean more RAM usage but slightly faster processing times.
+        # - Lower values mean less RAM usage but slightly longer processing times.
+        # - Batch size value has no effect on output quality.
+        # BATCH_SIZE = ('1', ''2', '3', '4', '5', '6', '7', '8', '9', '10')
+        self.batch_size = arch_config.get("batch_size", 1)
+
         self.logger.debug(f"Model params: primary_stem={self.primary_stem_name}, secondary_stem={self.secondary_stem_name}")
         self.logger.debug(f"Model params: batch_size={self.batch_size}, compensate={self.compensate}, segment_size={self.segment_size}, dim_f={self.dim_f}, dim_t={self.dim_t}")
         self.logger.debug(f"Model params: n_fft={self.n_fft}, hop={self.hop_length}")
-
-        # self.logger.warning("Torch MPS backend does not yet support FFT operations, Torch will still use CPU!")
-        # self.torch_device = self.torch_device_cpu
 
         # Loading the model for inference
         self.logger.debug("Loading ONNX model for inference...")
@@ -366,7 +370,7 @@ class MDXSeparator(CommonSeparator):
             self.logger.debug("is_match_mix: spectrum prediction obtained directly from STFT output.")
         else:
             # If denoising is enabled, the model is run on both the negative and positive spectrums.
-            if self.denoise_enabled:
+            if self.enable_denoise:
                 # Assuming spek is a tensor and self.model_run can process it directly
                 spec_pred_neg = self.model_run(-spek)  # Ensure this line correctly negates spek and runs the model
                 spec_pred_pos = self.model_run(spek)
