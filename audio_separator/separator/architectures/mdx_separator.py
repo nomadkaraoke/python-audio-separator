@@ -32,18 +32,18 @@ class MDXSeparator(CommonSeparator):
         # Loading the model for inference
         self.logger.debug("Loading ONNX model for inference...")
         if self.segment_size == self.dim_t:
-            ort_ = ort.InferenceSession(self.model_path, providers=self.onnx_execution_provider)
-            self.model_run = lambda spek: ort_.run(None, {"input": spek.cpu().numpy()})[0]
+            ort_inference_session = ort.InferenceSession(self.model_path, providers=self.onnx_execution_provider)
+            self.model_run = lambda spek: ort_inference_session.run(None, {"input": spek.cpu().numpy()})[0]
             self.logger.debug("Model loaded successfully using ONNXruntime inferencing session.")
         else:
             self.model_run = onnx2torch.convert(self.model_path)
             self.model_run.to(self.torch_device).eval()
             self.logger.warning("Model converted from onnx to pytorch due to segment size not matching dim_t, processing may be slower.")
 
-        self.n_bins = None
-        self.trim = None
-        self.chunk_size = None
-        self.gen_size = None
+        self.n_bins = 0
+        self.trim = 0
+        self.chunk_size = 0
+        self.gen_size = 0
         self.stft = None
 
         self.primary_source = None
@@ -323,8 +323,7 @@ class MDXSeparator(CommonSeparator):
 
         # Compensates the source if not matching the mix.
         if not is_match_mix:
-            # TODO: Investigate whether fixing this bug actually does anything!
-            source * self.compensate
+            source *= self.compensate
             self.logger.debug("Match mix mode; compensate multiplier applied.")
 
         # TODO: In UVR, VR denoise model gets applied here. Consider implementing this as a feature.
@@ -358,7 +357,7 @@ class MDXSeparator(CommonSeparator):
                 spec_pred_neg = self.model_run(-spek)  # Ensure this line correctly negates spek and runs the model
                 spec_pred_pos = self.model_run(spek)
                 # Ensure both spec_pred_neg and spec_pred_pos are tensors before applying operations
-                spec_pred = (-spec_pred_neg * 0.5) + (spec_pred_pos * 0.5)  # [invalid-unary-operand-type]
+                spec_pred = (spec_pred_neg * -0.5) + (spec_pred_pos * 0.5)  # [invalid-unary-operand-type]
                 self.logger.debug("Model run on both negative and positive spectrums for denoising.")
             else:
                 spec_pred = self.model_run(spek)
