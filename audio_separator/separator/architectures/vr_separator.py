@@ -10,6 +10,9 @@ import numpy as np
 
 from audio_separator.separator import spec_utils
 from audio_separator.separator.common_separator import CommonSeparator
+from audio_separator.separator.uvr_lib_v5.vr_network import nets
+from audio_separator.separator.uvr_lib_v5.vr_network import nets_new
+from audio_separator.separator.uvr_lib_v5.vr_network.model_param_init import ModelParameters
 
 
 class VRSeparator(CommonSeparator):
@@ -21,10 +24,16 @@ class VRSeparator(CommonSeparator):
     def __init__(self, common_config, arch_config):
         super().__init__(config=common_config)
 
-        self.logger.debug(f"Model data: ", self.model_data)
+        self.logger.debug(f"Model data: {self.model_data}")
+
+        package_root_filepath = os.path.dirname(os.path.abspath(__file__))
+        vr_params_json_dir = os.path.join(package_root_filepath, "uvr_lib_v5", "vr_network", "modelparams")
+        vr_model_param = os.path.join(vr_params_json_dir, f"{self.model_data['vr_model_param']}.json")
+        self.mp = ModelParameters(vr_model_param)
 
         self.logger.debug(f"Model params: primary_stem={self.primary_stem_name}, secondary_stem={self.secondary_stem_name}")
 
+        self.is_vr_51_model = self.model_data.get("is_vr_51_model")
 
         self.primary_source = None
         self.secondary_source = None
@@ -33,7 +42,20 @@ class VRSeparator(CommonSeparator):
         self.secondary_source_map = None
         self.primary_source_map = None
 
-        self.is_vr_51_model = model_data.is_vr_51_model
+        # The application will mirror the missing frequency range of the output.
+        self.high_end_process = False
+
+        # This option performs Test-Time-Augmentation to improve the separation quality.
+        # Note: Having this selected will increase the time it takes to complete a conversion
+        self.is_tta = False
+        self.is_post_process = model_data.is_post_process
+        self.is_gpu_conversion = model_data.is_gpu_conversion
+        self.batch_size = model_data.batch_size
+        self.window_size = model_data.window_size
+        self.input_high_end_h = None
+        self.input_high_end = None
+        self.post_process_threshold = model_data.post_process_threshold
+        self.aggressiveness = {"value": model_data.aggression_setting, "split_bin": self.mp.param["band"][1]["crop_stop"], "aggr_correction": self.mp.param.get("aggr_correction")}
 
     def separate(self, audio_file_path):
         """
@@ -69,10 +91,8 @@ class VRSeparator(CommonSeparator):
             self.model_run = nets.determine_model_capacity(self.mp.param["bins"] * 2, nn_arch_size)
 
         self.model_run.load_state_dict(torch.load(self.model_path, map_location=cpu))
-        self.model_run.to(device)
+        self.model_run.to(self.torch_device)
         self.logger.debug("Model loaded and moved to device.")
-
-        self.running_inference_console_write()
 
         y_spec, v_spec = self.inference_vr(self.loading_mix(), device, self.aggressiveness)
         self.logger.debug("Inference completed.")
@@ -86,7 +106,8 @@ class VRSeparator(CommonSeparator):
                 self.secondary_model, self.process_data, main_process_method=self.process_method, main_model_primary=self.primary_stem
             )
 
-        if not self.is_secondary_stem_only:
+        # Save and process the primary stem if needed
+        if not self.output_single_stem or self.output_single_stem.lower() == self.primary_stem_name.lower():
             primary_stem_output_path = os.path.join(self.export_path, f"{self.audio_file_base}_({self.primary_stem}).wav")
             self.logger.debug(f"Processing primary stem: {self.primary_stem}")
             if not isinstance(self.primary_source, np.ndarray):
@@ -99,7 +120,8 @@ class VRSeparator(CommonSeparator):
             self.primary_source_map = self.final_process(primary_stem_output_path, self.primary_source, self.secondary_source_primary, self.primary_stem, 44100)
             self.logger.debug("Primary stem processed.")
 
-        if not self.is_primary_stem_only:
+        # Save and process the secondary stem if needed
+        if not self.output_single_stem or self.output_single_stem.lower() == self.secondary_stem_name.lower():
             secondary_stem_output_path = os.path.join(self.export_path, f"{self.audio_file_base}_({self.secondary_stem}).wav")
             self.logger.debug(f"Processing secondary stem: {self.secondary_stem}")
             if not isinstance(self.secondary_source, np.ndarray):
