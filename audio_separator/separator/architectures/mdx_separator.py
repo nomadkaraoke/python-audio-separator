@@ -6,6 +6,7 @@ import librosa
 import onnxruntime as ort
 import numpy as np
 import onnx2torch
+from tqdm import tqdm
 from audio_separator.separator import spec_utils
 from audio_separator.separator.stft import STFT
 from audio_separator.separator.common_separator import CommonSeparator
@@ -260,7 +261,7 @@ class MDXSeparator(CommonSeparator):
         self.logger.debug(f"Total chunks to process: {total_chunks}")
 
         # Processes each chunk of the mixture.
-        for i in range(0, mixture.shape[-1], step):
+        for i in tqdm(range(0, mixture.shape[-1], step)):
             total += 1
             start = i
             end = min(i + chunk_size, mixture.shape[-1])
