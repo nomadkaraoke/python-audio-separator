@@ -1,77 +1,32 @@
+"""Module for separating audio sources using MDX architecture models."""
+
 import os
 import torch
 import librosa
 import onnxruntime as ort
 import numpy as np
-from onnx2torch import convert
+import onnx2torch
 from audio_separator.separator import spec_utils
 from audio_separator.separator.stft import STFT
+from audio_separator.separator.common_separator import CommonSeparator
 
 
-class MDXSeparator:
+class MDXSeparator(CommonSeparator):
     """
-    MDXSeparator is responsible for separating audio sources using the MDX model.
+    MDXSeparator is responsible for separating audio sources using MDX models.
     It initializes with configuration parameters and prepares the model for separation tasks.
     """
 
-    def __init__(self, logger, write_audio, separator_params):
-        self.logger = logger
-        self.write_audio = write_audio
-        self.separator_params = separator_params
+    def __init__(self, common_config, arch_config):
+        super().__init__(config=common_config)
 
-        self.model_name = separator_params["model_name"]
-        self.model_data = separator_params["model_data"]
-        self.model_path = separator_params["model_path"]
+        self.hop_length = arch_config.get("hop_length")
+        self.segment_size = arch_config.get("segment_size")
+        self.overlap = arch_config.get("overlap")
+        self.batch_size = arch_config.get("batch_size")
 
-        self.primary_stem_path = separator_params["primary_stem_path"]
-        self.secondary_stem_path = separator_params["secondary_stem_path"]
-        self.output_format = separator_params["output_format"]
-        self.output_subtype = separator_params["output_subtype"]
-        self.normalization_threshold = separator_params["normalization_threshold"]
-        self.denoise_enabled = separator_params["denoise_enabled"]
-        self.output_single_stem = separator_params["output_single_stem"]
-        self.invert_using_spec = separator_params["invert_using_spec"]
-        self.sample_rate = separator_params["sample_rate"]
-        self.hop_length = separator_params["hop_length"]
-        self.segment_size = separator_params["segment_size"]
-        self.overlap = separator_params["overlap"]
-        self.batch_size = separator_params["batch_size"]
-        self.device = separator_params["device"]
-        self.onnx_execution_provider = separator_params["onnx_execution_provider"]
-
-        # Initializing model parameters
-        self.compensate, self.dim_f, self.dim_t, self.n_fft, self.model_primary_stem = (
-            self.model_data["compensate"],
-            self.model_data["mdx_dim_f_set"],
-            2 ** self.model_data["mdx_dim_t_set"],
-            self.model_data["mdx_n_fft_scale_set"],
-            self.model_data["primary_stem"],
-        )
-        self.model_secondary_stem = "Vocals" if self.model_primary_stem == "Instrumental" else "Instrumental"
-
-        # In UVR, these variables are set but either aren't useful or are better handled in audio-separator.
-        # Leaving these comments explaining to help myself or future developers understand why these aren't in audio-separator.
-
-        # "chunks" is not actually used for anything in UVR...
-        # self.chunks = 0
-
-        # "adjust" is hard-coded to 1 in UVR, and only used as a multiplier in run_model, so it does nothing.
-        # self.adjust = 1
-
-        # "hop" is hard-coded to 1024 in UVR. We have a "hop_length" parameter instead
-        # self.hop = 1024
-
-        # "margin" maps to sample rate and is set from the GUI in UVR (default: 44100). We have a "sample_rate" parameter instead.
-        # self.margin = 44100
-
-        # "dim_c" is hard-coded to 4 in UVR, seems to be a parameter for the number of channels, and is only used for checkpoint models.
-        # We haven't implemented support for the checkpoint models here, so we're not using it.
-        # self.dim_c = 4
-
-        self.logger.debug(f"Model params: primary_stem={self.model_primary_stem}, secondary_stem={self.model_secondary_stem}")
-        self.logger.debug(
-            f"Model params: batch_size={self.batch_size}, compensate={self.compensate}, segment_size={self.segment_size}, dim_f={self.dim_f}, dim_t={self.dim_t}"
-        )
+        self.logger.debug(f"Model params: primary_stem={self.primary_stem_name}, secondary_stem={self.secondary_stem_name}")
+        self.logger.debug(f"Model params: batch_size={self.batch_size}, compensate={self.compensate}, segment_size={self.segment_size}, dim_f={self.dim_f}, dim_t={self.dim_t}")
         self.logger.debug(f"Model params: n_fft={self.n_fft}, hop={self.hop_length}")
 
         # Loading the model for inference
@@ -81,8 +36,8 @@ class MDXSeparator:
             self.model_run = lambda spek: ort_.run(None, {"input": spek.cpu().numpy()})[0]
             self.logger.debug("Model loaded successfully using ONNXruntime inferencing session.")
         else:
-            self.model_run = convert(self.model_path)
-            self.model_run.to(self.device).eval()
+            self.model_run = onnx2torch.convert(self.model_path)
+            self.model_run.to(self.torch_device).eval()
             self.logger.warning("Model converted from onnx to pytorch due to segment size not matching dim_t, processing may be slower.")
 
         self.n_bins = None
@@ -149,29 +104,21 @@ class MDXSeparator:
                 self.secondary_source = mix.T - source.T
 
         # Save and process the secondary stem if needed
-        if not self.output_single_stem or self.output_single_stem.lower() == self.model_secondary_stem.lower():
-            self.logger.info(f"Saving {self.model_secondary_stem} stem...")
+        if not self.output_single_stem or self.output_single_stem.lower() == self.secondary_stem_name.lower():
+            self.logger.info(f"Saving {self.secondary_stem_name} stem...")
             if not self.secondary_stem_path:
-                self.secondary_stem_path = os.path.join(
-                    f"{self.audio_file_base}_({self.model_secondary_stem})_{self.model_name}.{self.output_format.lower()}"
-                )
-            self.secondary_source_map = self.final_process(
-                self.secondary_stem_path, self.secondary_source, self.model_secondary_stem, self.sample_rate
-            )
+                self.secondary_stem_path = os.path.join(f"{self.audio_file_base}_({self.secondary_stem_name})_{self.model_name}.{self.output_format.lower()}")
+            self.secondary_source_map = self.final_process(self.secondary_stem_path, self.secondary_source, self.secondary_stem_name)
             output_files.append(self.secondary_stem_path)
 
         # Save and process the primary stem if needed
-        if not self.output_single_stem or self.output_single_stem.lower() == self.model_primary_stem.lower():
-            self.logger.info(f"Saving {self.model_primary_stem} stem...")
+        if not self.output_single_stem or self.output_single_stem.lower() == self.primary_stem_name.lower():
+            self.logger.info(f"Saving {self.primary_stem_name} stem...")
             if not self.primary_stem_path:
-                self.primary_stem_path = os.path.join(
-                    f"{self.audio_file_base}_({self.model_primary_stem})_{self.model_name}.{self.output_format.lower()}"
-                )
+                self.primary_stem_path = os.path.join(f"{self.audio_file_base}_({self.primary_stem_name})_{self.model_name}.{self.output_format.lower()}")
             if not isinstance(self.primary_source, np.ndarray):
                 self.primary_source = source.T
-            self.primary_source_map = self.final_process(
-                self.primary_stem_path, self.primary_source, self.model_primary_stem, self.sample_rate
-            )
+            self.primary_source_map = self.final_process(self.primary_stem_path, self.primary_source, self.primary_stem_name)
             output_files.append(self.primary_stem_path)
 
         # TODO: In UVR, this is where the vocal split chain gets processed - see process_vocal_split_chain()
@@ -198,7 +145,7 @@ class MDXSeparator:
         # gen_size is the chunk size minus twice the trim size
         self.gen_size = self.chunk_size - 2 * self.trim
 
-        self.stft = STFT(self.logger, self.n_fft, self.hop_length, self.dim_f, self.device)
+        self.stft = STFT(self.logger, self.n_fft, self.hop_length, self.dim_f, self.torch_device)
 
         self.logger.debug(f"Model input params: n_fft={self.n_fft} hop_length={self.hop_length} dim_f={self.dim_f}")
         self.logger.debug(f"Model settings: n_bins={self.n_bins}, trim={self.trim}, chunk_size={self.chunk_size}, gen_size={self.gen_size}")
@@ -253,7 +200,7 @@ class MDXSeparator:
                 i += self.gen_size
 
         # Convert the list of wave chunks into a tensor for processing on the specified device
-        mix_waves_tensor = torch.tensor(mix_waves, dtype=torch.float32).to(self.device)
+        mix_waves_tensor = torch.tensor(mix_waves, dtype=torch.float32).to(self.torch_device)
         self.logger.debug(f"Converted mix_waves to tensor. Tensor shape: {mix_waves_tensor.shape}")
 
         return mix_waves_tensor, pad
@@ -334,7 +281,7 @@ class MDXSeparator:
                 mix_part_ = np.concatenate((mix_part_, np.zeros((2, pad_size), dtype="float32")), axis=-1)
 
             # Converts the chunk to a tensor for processing.
-            mix_part = torch.tensor([mix_part_], dtype=torch.float32).to(self.device)
+            mix_part = torch.tensor([mix_part_], dtype=torch.float32).to(self.torch_device)
             # Splits the chunk into smaller batches if necessary.
             mix_waves = mix_part.split(self.batch_size)
             total_batches = len(mix_waves)
@@ -376,6 +323,7 @@ class MDXSeparator:
 
         # Compensates the source if not matching the mix.
         if not is_match_mix:
+            # TODO: Investigate whether fixing this bug actually does anything!
             source * self.compensate
             self.logger.debug("Match mix mode; compensate multiplier applied.")
 
@@ -391,7 +339,7 @@ class MDXSeparator:
         """
         # Applying the STFT to the mix. The mix is moved to the specified device (e.g., GPU) before processing.
         # self.logger.debug(f"Running STFT on the mix. Mix shape before STFT: {mix.shape}")
-        spek = self.stft(mix.to(self.device))
+        spek = self.stft(mix.to(self.torch_device))
         self.logger.debug(f"STFT applied on mix. Spectrum shape: {spek.shape}")
 
         # Zeroing out the first 3 bins of the spectrum. This is often done to reduce low-frequency noise.
@@ -406,14 +354,18 @@ class MDXSeparator:
         else:
             # If denoising is enabled, the model is run on both the negative and positive spectrums.
             if self.denoise_enabled:
-                spec_pred = -self.model_run(-spek) * 0.5 + self.model_run(spek) * 0.5
+                # Assuming spek is a tensor and self.model_run can process it directly
+                spec_pred_neg = self.model_run(-spek)  # Ensure this line correctly negates spek and runs the model
+                spec_pred_pos = self.model_run(spek)
+                # Ensure both spec_pred_neg and spec_pred_pos are tensors before applying operations
+                spec_pred = (-spec_pred_neg * 0.5) + (spec_pred_pos * 0.5)  # [invalid-unary-operand-type]
                 self.logger.debug("Model run on both negative and positive spectrums for denoising.")
             else:
                 spec_pred = self.model_run(spek)
                 self.logger.debug("Model run on the spectrum without denoising.")
 
         # Applying the inverse STFT to convert the spectrum back to the time domain.
-        result = self.stft.inverse(torch.tensor(spec_pred).to(self.device)).cpu().detach().numpy()
+        result = self.stft.inverse(torch.tensor(spec_pred).to(self.torch_device)).cpu().detach().numpy()
         self.logger.debug(f"Inverse STFT applied. Returning result with shape: {result.shape}")
 
         return result
@@ -455,12 +407,3 @@ class MDXSeparator:
         # Final log indicating successful preparation of the mix
         self.logger.debug("Mix preparation completed.")
         return mix
-
-    def final_process(self, stem_path, source, stem_name, sample_rate):
-        """
-        Finalizes the processing of a stem by writing the audio to a file and returning the processed source.
-        """
-        self.logger.debug(f"Finalizing {stem_name} stem processing and writing audio...")
-        self.write_audio(stem_path, source, sample_rate, stem_name=stem_name)
-
-        return {stem_name: source}

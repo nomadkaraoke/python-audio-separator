@@ -1,3 +1,6 @@
+""" This file contains the Separator class, to facilitate the separation of stems from audio. """
+
+from importlib import metadata
 import os
 import gc
 import platform
@@ -8,16 +11,39 @@ import logging
 import warnings
 import requests
 import torch
-import librosa
 import onnxruntime as ort
-import numpy as np
-from importlib import metadata
-from pydub import AudioSegment
-from audio_separator.separator import spec_utils
-from audio_separator.separator.architectures import MDXSeparator
+from audio_separator.separator.architectures import MDXSeparator, VRSeparator
 
 
 class Separator:
+    """
+    The Separator class is designed to facilitate the separation of audio sources from a given audio file.
+    It supports various separation architectures and models, including MDX and VR. The class provides
+    functionalities to configure separation parameters, load models, and perform audio source separation.
+    It also handles logging, normalization, and output formatting of the separated audio stems.
+
+    Common Attributes:
+        log_level (int): The logging level.
+        log_formatter (logging.Formatter): The logging formatter.
+        model_file_dir (str): The directory where model files are stored.
+        output_dir (str): The directory where output files will be saved.
+        primary_stem_path (str): The path for saving the primary stem.
+        secondary_stem_path (str): The path for saving the secondary stem.
+        output_format (str): The format of the output audio file.
+        output_subtype (str): The subtype of the output audio format.
+        normalization_threshold (float): The threshold for audio normalization.
+        denoise_enabled (bool): Flag to enable or disable denoising.
+        output_single_stem (str): Option to output a single stem.
+        invert_using_spec (bool): Flag to invert using spectrogram.
+        sample_rate (int): The sample rate of the audio.
+
+    MDX Model Specific Attributes:
+        hop_length (int): The hop length for STFT.
+        segment_size (int): The segment size for processing.
+        overlap (float): The overlap between segments.
+        batch_size (int): The batch size for processing.
+    """
+
     def __init__(
         self,
         log_level=logging.DEBUG,
@@ -90,7 +116,7 @@ class Separator:
         self.output_single_stem = output_single_stem
         if output_single_stem is not None:
             if output_single_stem.lower() not in {"instrumental", "vocals"}:
-                raise Exception("output_single_stem must be either 'instrumental' or 'vocals'")
+                raise ValueError("output_single_stem must be either 'instrumental' or 'vocals'")
             self.logger.debug(f"Single stem output requested, only one output file ({output_single_stem}) will be written")
 
         self.invert_using_spec = invert_using_spec
@@ -106,11 +132,28 @@ class Separator:
             f"Separation settings set: sample_rate={self.sample_rate}, hop_length={self.hop_length}, segment_size={self.segment_size}, overlap={self.overlap}, batch_size={self.batch_size}"
         )
 
-        self.setup_inferencing_device()
+        self.torch_device = None
+        self.onnx_execution_provider = None
+        self.model_instance = None
+        self.audio_file_path = None
+        self.audio_file_base = None
+        self.primary_source = None
+        self.secondary_source = None
 
-    def setup_inferencing_device(self):
-        self.logger.info(f"Checking hardware specifics to configure acceleration")
+        self.setup_accelerated_inferencing_device()
 
+    def setup_accelerated_inferencing_device(self):
+        """
+        This method sets up the PyTorch and/or ONNX Runtime inferencing device, using GPU hardware acceleration if available.
+        """
+        self.log_system_info()
+        self.log_onnxruntime_packages()
+        self.setup_torch_device()
+
+    def log_system_info(self):
+        """
+        This method logs the system information, including the operating system, CPU archutecture and Python version
+        """
         os_name = platform.system()
         os_version = platform.version()
         self.logger.info(f"Operating System: {os_name} {os_version}")
@@ -121,77 +164,69 @@ class Separator:
         python_version = platform.python_version()
         self.logger.info(f"Python Version: {python_version}")
 
+    def log_onnxruntime_packages(self):
+        """
+        This method logs the ONNX Runtime package versions, including the GPU and Silicon packages if available.
+        """
         onnxruntime_gpu_package = self.get_package_distribution("onnxruntime-gpu")
+        onnxruntime_silicon_package = self.get_package_distribution("onnxruntime-silicon")
+        onnxruntime_cpu_package = self.get_package_distribution("onnxruntime")
+
         if onnxruntime_gpu_package is not None:
             self.logger.info(f"ONNX Runtime GPU package installed with version: {onnxruntime_gpu_package.version}")
-
-        onnxruntime_silicon_package = self.get_package_distribution("onnxruntime-silicon")
         if onnxruntime_silicon_package is not None:
             self.logger.info(f"ONNX Runtime Silicon package installed with version: {onnxruntime_silicon_package.version}")
-
-        onnxruntime_cpu_package = self.get_package_distribution("onnxruntime")
         if onnxruntime_cpu_package is not None:
             self.logger.info(f"ONNX Runtime CPU package installed with version: {onnxruntime_cpu_package.version}")
 
-        torch_package = self.get_package_distribution("torch")
-        if torch_package is not None:
-            self.logger.info(f"Torch package installed with version: {torch_package.version}")
-
-        torchvision_package = self.get_package_distribution("torchvision")
-        if torchvision_package is not None:
-            self.logger.info(f"Torchvision package installed with version: {torchvision_package.version}")
-
-        torchaudio_package = self.get_package_distribution("torchaudio")
-        if torchaudio_package is not None:
-            self.logger.info(f"Torchaudio package installed with version: {torchaudio_package.version}")
-
-        ort_device = ort.get_device()
+    def setup_torch_device(self):
+        """
+        This method sets up the PyTorch and/or ONNX Runtime inferencing device, using GPU hardware acceleration if available.
+        """
+        hardware_acceleration_enabled = False
         ort_providers = ort.get_available_providers()
 
-        self.cpu = torch.device("cpu")
-        hardware_acceleration_enabled = False
-
-        # Prepare for hardware-accelerated inference by validating both Torch and ONNX Runtime support either CUDA or CoreML
         if torch.cuda.is_available():
-            self.logger.info("CUDA is available in Torch, setting Torch device to CUDA")
-            self.device = torch.device("cuda")
-
-            if onnxruntime_gpu_package is not None and ort_device == "GPU" and "CUDAExecutionProvider" in ort_providers:
-                self.logger.info("ONNXruntime has CUDAExecutionProvider available, enabling acceleration")
-                self.onnx_execution_provider = ["CUDAExecutionProvider"]
-                hardware_acceleration_enabled = True
-            else:
-                self.logger.warning("CUDAExecutionProvider not available in ONNXruntime, so acceleration will NOT be enabled")
-                self.logger.warning("If you expect CUDA to work with your GPU, try pip install --force-reinstall onnxruntime-gpu")
-        else:
-            self.logger.debug("CUDA not available in Torch installation. If you expect GPU/CUDA support to work, please see README")
-
-        if onnxruntime_silicon_package is not None and hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
-            self.logger.info("Apple Silicon MPS/CoreML is available in Torch, setting Torch device to MPS")
-
-            # TODO: Change this to use MPS once FFTs are supported, see https://github.com/pytorch/pytorch/issues/78044
-            # self.device = torch.device("mps")
-
-            self.logger.warning("Torch MPS backend does not yet support FFT operations, Torch will still use CPU!")
-            self.logger.warning("To track progress towards Apple Silicon acceleration, see https://github.com/pytorch/pytorch/issues/78044")
-            self.device = torch.device("cpu")
-
-            if "CoreMLExecutionProvider" in ort_providers:
-                self.logger.info("ONNXruntime has CoreMLExecutionProvider available, enabling acceleration")
-                self.onnx_execution_provider = ["CoreMLExecutionProvider"]
-                hardware_acceleration_enabled = True
-            else:
-                self.logger.warning("CoreMLExecutionProvider not available in ONNXruntime, so acceleration will NOT be enabled")
-                self.logger.warning("If you expect MPS/CoreML to work with your Mac, try pip install --force-reinstall onnxruntime-silicon")
-        else:
-            self.logger.debug("Apple Silicon MPS/CoreML not available in Torch installation. If you expect this to work, please see README")
+            self.configure_cuda(ort_providers)
+            hardware_acceleration_enabled = True
+        elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+            self.configure_mps(ort_providers)
+            hardware_acceleration_enabled = True
 
         if not hardware_acceleration_enabled:
             self.logger.info("No hardware acceleration could be configured, running in CPU mode")
-            self.device = torch.device("cpu")
+            self.torch_device = torch.device("cpu")
             self.onnx_execution_provider = ["CPUExecutionProvider"]
 
+    def configure_cuda(self, ort_providers):
+        """
+        This method configures the CUDA device for PyTorch and ONNX Runtime, if available.
+        """
+        self.logger.info("CUDA is available in Torch, setting Torch device to CUDA")
+        self.torch_device = torch.device("cuda")
+        if "CUDAExecutionProvider" in ort_providers:
+            self.logger.info("ONNXruntime has CUDAExecutionProvider available, enabling acceleration")
+            self.onnx_execution_provider = ["CUDAExecutionProvider"]
+        else:
+            self.logger.warning("CUDAExecutionProvider not available in ONNXruntime, so acceleration will NOT be enabled")
+
+    def configure_mps(self, ort_providers):
+        """
+        This method configures the Apple Silicon MPS/CoreML device for PyTorch and ONNX Runtime, if available.
+        """
+        self.logger.info("Apple Silicon MPS/CoreML is available in Torch, setting Torch device to MPS")
+        self.logger.warning("Torch MPS backend does not yet support FFT operations, Torch will still use CPU!")
+        self.torch_device = torch.device("cpu")
+        if "CoreMLExecutionProvider" in ort_providers:
+            self.logger.info("ONNXruntime has CoreMLExecutionProvider available, enabling acceleration")
+            self.onnx_execution_provider = ["CoreMLExecutionProvider"]
+        else:
+            self.logger.warning("CoreMLExecutionProvider not available in ONNXruntime, so acceleration will NOT be enabled")
+
     def get_package_distribution(self, package_name):
+        """
+        This method returns the package distribution for a given package name if installed, or None otherwise.
+        """
         try:
             return metadata.distribution(package_name)
         except metadata.PackageNotFoundError:
@@ -199,15 +234,30 @@ class Separator:
             return None
 
     def get_model_hash(self, model_path):
+        """
+        This method returns the MD5 hash of a given model file.
+        """
+
+        self.logger.error(f"Attempting to calculate hash of model file {model_path}")
         try:
+            # Open the model file in binary read mode
             with open(model_path, "rb") as f:
+                # Move the file pointer 10MB before the end of the file
                 f.seek(-10000 * 1024, 2)
+                # Read the file from the current pointer to the end and calculate its MD5 hash
                 return hashlib.md5(f.read()).hexdigest()
-        except:
+        except IOError as e:
+            # If an IOError occurs (e.g., file not found), log the error
+            self.logger.error(f"IOError reading model file for hash calculation: {e}")
+            # Attempt to open the file again, read its entire content, and calculate the MD5 hash
             return hashlib.md5(open(model_path, "rb").read()).hexdigest()
 
     def download_file(self, url, output_path):
-        response = requests.get(url, stream=True)
+        """
+        This method downloads a file from a given URL to a given output path.
+        """
+        self.logger.debug(f"Downloading file from {url} to {output_path} with timeout 300s and verify=False")
+        response = requests.get(url, stream=True, timeout=300, verify=False)
 
         if response.status_code == 200:
             with open(output_path, "wb") as f:
@@ -217,34 +267,38 @@ class Separator:
             self.logger.error(f"Failed to download file from {url}")
 
     def clear_gpu_cache(self):
+        """
+        This method clears the GPU cache to free up memory.
+        """
         self.logger.debug("Running garbage collection...")
         gc.collect()
-        if self.device == torch.device("mps"):
+        if self.torch_device == torch.device("mps"):
             self.logger.debug("Clearing MPS cache...")
             torch.mps.empty_cache()
-        if self.device == torch.device("cuda"):
+        if self.torch_device == torch.device("cuda"):
             self.logger.debug("Clearing CUDA cache...")
             torch.cuda.empty_cache()
 
-    def load_model(self, model_filename="UVR-MDX-NET-Inst_HQ_3.onnx", model_type="MDX"):
+    def load_model(self, model_filename="UVR-MDX-NET-Inst_HQ_3.onnx", model_type=None):
+        """
+        This method loads the separation model into memory, downloading it first if necessary.
+        """
         self.logger.info(f"Loading model {model_filename}...")
 
-        self.load_model_start_time = time.perf_counter()
+        load_model_start_time = time.perf_counter()
 
-        self.model_filename = model_filename
-        self.model_name = self.model_filename.split(".")[0]
-
-        self.model_url = f"https://github.com/TRvlvr/model_repo/releases/download/all_public_uvr_models/{self.model_filename}"
-        self.model_data_url = "https://raw.githubusercontent.com/TRvlvr/application_data/main/mdx_model_data/model_data.json"
+        model_name = model_filename.split(".")[0]
+        model_url = f"https://github.com/TRvlvr/model_repo/releases/download/all_public_uvr_models/{model_filename}"
+        model_data_url = "https://raw.githubusercontent.com/TRvlvr/application_data/main/mdx_model_data/model_data.json"
 
         # Setting up the model path
-        model_path = os.path.join(self.model_file_dir, f"{self.model_filename}")
+        model_path = os.path.join(self.model_file_dir, f"{model_filename}")
         self.logger.debug(f"Model path set to {model_path}")
 
         # Check if model file exists, if not, download it
         if not os.path.isfile(model_path):
             self.logger.debug(f"Model not found at path {model_path}, downloading...")
-            self.download_file(self.model_url, model_path)
+            self.download_file(model_url, model_path)
 
         # Reading model settings from the downloaded model
         self.logger.debug("Reading model settings...")
@@ -256,108 +310,72 @@ class Separator:
         self.logger.debug(f"Model data path set to {model_data_path}")
         if not os.path.isfile(model_data_path):
             self.logger.debug(f"Model data not found at path {model_data_path}, downloading...")
-            self.download_file(self.model_data_url, model_data_path)
+            self.download_file(model_data_url, model_data_path)
 
         # Loading model data
         self.logger.debug("Loading model data...")
-        model_data_object = json.load(open(model_data_path))
+        model_data_object = json.load(open(model_data_path, encoding="utf-8"))
         model_data = model_data_object[model_hash]
         self.logger.debug(f"Model data loaded: {model_data}")
 
-        separator_params = {
-            "model_name": self.model_name,
+        # Identify model_type based on the file extension
+        file_extension = model_filename.split(".")[-1]
+        if file_extension == "onnx":
+            model_type = "MDX"
+        elif file_extension == "pth":
+            model_type = "VR"
+        else:
+            raise ValueError(f"Unsupported model file extension: {file_extension}")
+
+        common_params = {
+            "logger": self.logger,
+            "torch_device": self.torch_device,
+            "onnx_execution_provider": self.onnx_execution_provider,
+            "model_name": model_name,
             "model_path": model_path,
             "model_data": model_data,
             "primary_stem_path": self.primary_stem_path,
             "secondary_stem_path": self.secondary_stem_path,
             "output_format": self.output_format,
             "output_subtype": self.output_subtype,
+            "output_dir": self.output_dir,
             "normalization_threshold": self.normalization_threshold,
             "denoise_enabled": self.denoise_enabled,
             "output_single_stem": self.output_single_stem,
             "invert_using_spec": self.invert_using_spec,
             "sample_rate": self.sample_rate,
-            "hop_length": self.hop_length,
-            "segment_size": self.segment_size,
-            "overlap": self.overlap,
-            "batch_size": self.batch_size,
-            "device": self.device,
-            "onnx_execution_provider": self.onnx_execution_provider,
         }
 
-        self.model_type = model_type
+        arch_specific_params = {"hop_length": self.hop_length, "segment_size": self.segment_size, "overlap": self.overlap, "batch_size": self.batch_size}
 
-        if self.model_type == "MDX":
-            self.model_instance = MDXSeparator(logger=self.logger, write_audio=self.write_audio, separator_params=separator_params)
-        elif self.model_type == "VR":
-            self.model_instance = VRSeparator(model_data=model_data)
-        elif self.model_type == "Demucs":
-            self.model_instance = DemucsSeparator(model_data=model_data)
+        if model_type == "MDX":
+            self.model_instance = MDXSeparator(common_config=common_params, arch_config=arch_specific_params)
+        elif model_type == "VR":
+            self.model_instance = VRSeparator(common_config=common_params, arch_config=arch_specific_params)
         else:
-            raise ValueError(f"Unsupported model type: {self.model_type}")
+            raise ValueError(f"Unsupported model type: {model_type}")
 
         # Log the completion of the model load process
         self.logger.debug("Loading model completed.")
-        self.logger.info(f'Load model duration: {time.strftime("%H:%M:%S", time.gmtime(int(time.perf_counter() - self.load_model_start_time)))}')
-
-    def write_audio(self, stem_path: str, stem_source, sample_rate, stem_name=None):
-        self.logger.debug(f"Entering write_audio with stem_name: {stem_name} and stem_path: {stem_path}")
-
-        stem_source = spec_utils.normalize(self.logger, wave=stem_source, max_peak=self.normalization_threshold)
-
-        # Check if the numpy array is empty or contains very low values
-        if np.max(np.abs(stem_source)) < 1e-6:
-            self.logger.warning("Warning: stem_source array is near-silent or empty.")
-            return
-
-        # If output_dir is specified, create it and join it with stem_path
-        if self.output_dir:
-            os.makedirs(self.output_dir, exist_ok=True)
-            stem_path = os.path.join(self.output_dir, stem_path)
-
-        self.logger.debug(f"Audio data shape before processing: {stem_source.shape}")
-        self.logger.debug(f"Data type before conversion: {stem_source.dtype}")
-
-        # Ensure the audio data is in the correct format (e.g., int16)
-        if stem_source.dtype != np.int16:
-            stem_source = (stem_source * 32767).astype(np.int16)
-            self.logger.debug("Converted stem_source to int16.")
-
-        # Correctly interleave stereo channels
-        stem_source_interleaved = np.empty((2 * stem_source.shape[0],), dtype=np.int16)
-        stem_source_interleaved[0::2] = stem_source[:, 0]  # Left channel
-        stem_source_interleaved[1::2] = stem_source[:, 1]  # Right channel
-
-        self.logger.debug(f"Interleaved audio data shape: {stem_source_interleaved.shape}")
-
-        # Create a pydub AudioSegment
-        try:
-            audio_segment = AudioSegment(stem_source_interleaved.tobytes(), frame_rate=self.sample_rate, sample_width=stem_source.dtype.itemsize, channels=2)
-            self.logger.debug("Created AudioSegment successfully.")
-        except Exception as e:
-            self.logger.error(f"Error creating AudioSegment: {e}")
-            return
-
-        # Determine file format based on the file extension
-        file_format = stem_path.lower().split(".")[-1]
-
-        # For m4a files, specify mp4 as the container format as the extension doesn't match the format name
-        if file_format == "m4a":
-            file_format = "mp4"
-        elif file_format == "mka":
-            file_format = "matroska"
-
-        # Export using the determined format
-        try:
-            audio_segment.export(stem_path, format=file_format)
-            self.logger.debug(f"Exported audio file successfully to {stem_path}")
-        except Exception as e:
-            self.logger.error(f"Error exporting audio file: {e}")
+        self.logger.info(f'Load model duration: {time.strftime("%H:%M:%S", time.gmtime(int(time.perf_counter() - load_model_start_time)))}')
 
     def separate(self, audio_file_path):
+        """
+        Separates the audio file into different stems (e.g., vocals, instruments) using the loaded model.
+
+        This method takes the path to an audio file, processes it through the loaded separation model, and returns
+        the paths to the output files containing the separated audio stems. It handles the entire flow from loading
+        the audio, running the separation, clearing up resources, and logging the process.
+
+        Parameters:
+        - audio_file_path (str): The path to the audio file to be separated.
+
+        Returns:
+        - output_files (list of str): A list containing the paths to the separated audio stem files.
+        """
         # Starting the separation process
         self.logger.info(f"Starting separation process for audio_file_path: {audio_file_path}")
-        self.separate_start_time = time.perf_counter()
+        separate_start_time = time.perf_counter()
 
         # Run separation method for the loaded model
         output_files = self.model_instance.separate(audio_file_path)
@@ -379,6 +397,6 @@ class Separator:
 
         # Log the completion of the separation process
         self.logger.debug("Separation process completed.")
-        self.logger.info(f'Separation duration: {time.strftime("%H:%M:%S", time.gmtime(int(time.perf_counter() - self.separate_start_time)))}')
+        self.logger.info(f'Separation duration: {time.strftime("%H:%M:%S", time.gmtime(int(time.perf_counter() - separate_start_time)))}')
 
         return output_files
