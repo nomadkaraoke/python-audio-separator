@@ -54,7 +54,7 @@ def main():
     parser.add_argument("--mdx_overlap", type=float, default=0.25, help="Optional: mdx_overlap (default: %(default)s). Example: --mdx_overlap=0.25")
     parser.add_argument("--mdx_batch_size", type=int, default=1, help="Optional: mdx_batch_size (default: %(default)s). Example: --mdx_batch_size=4")
 
-    parser.add_argument("--vr_batch_size", type=int, default=16, help="Optional: vr_batch_size (default: %(default)s). Example: --vr_batch_size=4")
+    parser.add_argument("--vr_batch_size", type=int, default=4, help="Optional: vr_batch_size (default: %(default)s). Example: --vr_batch_size=16")
     parser.add_argument("--vr_window_size", type=int, default=512, help="Optional: vr_window_size (default: %(default)s). Example: --vr_window_size=256")
     parser.add_argument("--vr_aggression", type=int, default=5, help="Optional: vr_aggression (default: %(default)s). Example: --vr_aggression=2")
 
