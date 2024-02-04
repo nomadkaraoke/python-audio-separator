@@ -20,10 +20,8 @@ def common_expected_args():
         "output_single_stem": None,
         "invert_using_spec": False,
         "sample_rate": 44100,
-        "hop_length": 1024,
-        "segment_size": 256,
-        "overlap": 0.25,
-        "batch_size": 1,
+        "mdx_params": {"hop_length": 1024, "segment_size": 256, "overlap": 0.25, "batch_size": 1},
+        "vr_params": {"batch_size": 16, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False},
     }
 
 
@@ -83,8 +81,8 @@ def test_cli_invalid_log_level():
 
 
 # Test using model name argument
-def test_cli_model_name_argument(common_expected_args):
-    test_args = ["cli.py", "test_audio.mp3", "--model_name=Custom_Model"]
+def test_cli_model_filename_argument(common_expected_args):
+    test_args = ["cli.py", "test_audio.mp3", "--model_filename=Custom_Model.onnx"]
     with patch("sys.argv", test_args):
         with patch("audio_separator.separator.Separator") as mock_separator:
             mock_separator_instance = mock_separator.return_value
@@ -93,7 +91,7 @@ def test_cli_model_name_argument(common_expected_args):
 
             # Assertions
             mock_separator.assert_called_once_with(**common_expected_args)
-            mock_separator_instance.load_model.assert_called_once_with("Custom_Model")
+            mock_separator_instance.load_model.assert_called_once_with("Custom_Model.onnx")
 
 
 # Test using output directory argument

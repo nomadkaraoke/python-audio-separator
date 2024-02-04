@@ -58,10 +58,14 @@ def main():
     parser.add_argument("--vr_window_size", type=int, default=512, help="Optional: vr_window_size (default: %(default)s). Example: --vr_window_size=256")
     parser.add_argument("--vr_aggression", type=int, default=5, help="Optional: vr_aggression (default: %(default)s). Example: --vr_aggression=2")
 
-    # parser.add_argument("--vr_enable_tta", type=int, default=, help="Optional: vr_enable_tta (default: %(default)s). Example: --vr_enable_tta=")
-    # parser.add_argument("--vr_", type=int, default=, help="Optional: vr_ (default: %(default)s). Example: --vr_=")
-    # parser.add_argument("--vr_", type=int, default=, help="Optional: vr_ (default: %(default)s). Example: --vr_=")
-    # parser.add_argument("--vr_", type=int, default=, help="Optional: vr_ (default: %(default)s). Example: --vr_=")
+    parser.add_argument("--vr_enable_tta", type=lambda x: (str(x).lower() == "true"), default=False, help="Optional: vr_enable_tta (default: %(default)s). Example: --vr_enable_tta=True")
+    parser.add_argument(
+        "--vr_enable_post_process", type=lambda x: (str(x).lower() == "true"), default=False, help="Optional: vr_enable_post_process (default: %(default)s). Example: --vr_enable_post_process=True"
+    )
+    parser.add_argument("--vr_post_process_threshold", type=float, default=0.2, help="Optional: vr_post_process_threshold (default: %(default)s). Example: --vr_post_process_threshold=0.1")
+    parser.add_argument(
+        "--vr_high_end_process", type=lambda x: (str(x).lower() == "true"), default=False, help="Optional: vr_high_end_process (default: %(default)s). Example: --vr_high_end_process=True"
+    )
 
     args = parser.parse_args()
 
@@ -100,10 +104,10 @@ def main():
             "batch_size": args.vr_batch_size,
             "window_size": args.vr_window_size,
             "aggression": args.vr_aggression,
-            "enable_tta": False,
-            "enable_post_process": False,
-            "post_process_threshold": 0.2,
-            "high_end_process": False,
+            "enable_tta": args.vr_enable_tta,
+            "enable_post_process": args.vr_enable_post_process,
+            "post_process_threshold": args.vr_post_process_threshold,
+            "high_end_process": args.vr_high_end_process,
         },
     )
 
