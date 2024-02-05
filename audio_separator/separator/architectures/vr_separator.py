@@ -61,7 +61,7 @@ class VRSeparator(CommonSeparator):
         # Note: Having this selected will increase the time it takes to complete a conversion
         self.enable_tta = arch_config.get("enable_tta", False)
 
-        # This option can potentially identify leftover instrumental artifacts within the vocal outputs. \nThis option may improve the separation of some songs.
+        # This option can potentially identify leftover instrumental artifacts within the vocal outputs; may improve the separation of some songs.
         # Note: Selecting this option can adversely affect the conversion process, depending on the track. Because of this, it is only recommended as a last resort.
         self.enable_post_process = arch_config.get("enable_post_process", False)
 
@@ -76,10 +76,10 @@ class VRSeparator(CommonSeparator):
         # Andrew note: for some reason, lower batch sizes seem to cause broken output for VR arch; need to investigate why
         self.batch_size = arch_config.get("batch_size", 16)
 
-        # 'Select window size to balance quality and speed:\n\n'
-        # '• 1024 - Quick but lesser quality.\n'
-        # '• 512 - Medium speed and quality.\n'
-        # '• 320 - Takes longer but may offer better quality.'
+        # Select window size to balance quality and speed:
+        # - 1024 - Quick but lesser quality.
+        # - 512 - Medium speed and quality.
+        # - 320 - Takes longer but may offer better quality.
         self.window_size = arch_config.get("window_size", 512)
 
         # The application will mirror the missing frequency range of the output.

@@ -4,25 +4,25 @@
 [![Conda Version](https://img.shields.io/conda/vn/conda-forge/audio-separator.svg)](https://anaconda.org/conda-forge/audio-separator)
 [![Docker pulls](https://img.shields.io/docker/pulls/beveradb/audio-separator.svg)](https://hub.docker.com/r/beveradb/audio-separator/tags)
 
-Summary: Easy to use vocal separation on CLI or as a python package, using the amazing MDX-Net models from UVR trained by @Anjok07
+Summary: Easy to use audio stem separation from the command line or as a dependency in your own Python project, using the amazing MDX-Net and VR Arch models available in UVR by @Anjok07 & @aufr33.
 
-Audio Separator is a Python package that allows you to separate an audio file into two stems, primary and secondary, using a model in the ONNX format trained by @Anjok07 for use with UVR (https://github.com/Anjok07/ultimatevocalremovergui).
+Audio Separator is a Python package that allows you to separate an audio file into various stems, using models trained by @Anjok07 for use with UVR (https://github.com/Anjok07/ultimatevocalremovergui).
 
-The primary stem typically contains the instrumental part of the audio, while the secondary stem contains the vocals, but in some models this is reversed.
+The simplest (and probably most utilized) use case for this package is to separate an audio file into two stems, Instrumental and Vocals which can be very useful for producing Karaoke videos! However, the models available in UVR can separate audio into many more stems, such as Drums, Bass, Piano, Guitar, and perform other audio processing tasks such as denoising and removing echo / reverb.
 
 ## Features
 
-- Separate audio into instrumental and vocal stems.
+- Separate audio into multiple stems, e.g. instrumental and vocals.
 - Supports all common audio formats (WAV, MP3, FLAC, M4A, etc.)
-- Ability to specify a pre-trained deep learning model in ONNX format.
+- Ability to inference using a pre-trained model in PTH or ONNX format.
 - CLI support for easy use in scripts and batch processing.
 - Python API for integration into other projects.
 
 ## Installation 🛠️
 
-### 🎮 Nvidia GPU with CUDA acceleration
+### 🎮 Nvidia GPU with CUDA or 🧪 Google Colab
 
-💬 If successfully configured, you should see this log message when running audio-separator:
+💬 If successfully configured, you should see this log message when running `audio-separator --env_info`:
  `ONNXruntime has CUDAExecutionProvider available, enabling acceleration`
 
 Conda: `conda install pytorch=*=*cuda* onnxruntime=*=*cuda* audio-separator -c pytorch -c conda-forge`
@@ -31,16 +31,13 @@ Pip: `pip install "audio-separator[gpu]"`
 
 Docker: `beveradb/audio-separator:gpu`
 
-### 🧪 Google Colab
+###  Apple Silicon, macOS Sonoma+ with CoreML acceleration
 
-Colab has recently upgraded to CUDA 12, which isn't yet supported by the official ONNX Runtime releases.
+💬 If successfully configured, you should see this log message when running `audio-separator --env_info`:
+ `ONNXruntime has CoreMLExecutionProvider available, enabling acceleration`
 
-To get `audio-separator` working with GPU acceleration on colab, first install this `onnxruntime-gpu` wheel (which I built with CUDA 12 support):
+Pip: `pip install "audio-separator[silicon]"`
 
-`pip install https://github.com/karaokenerds/python-audio-separator/releases/download/v0.12.1/onnxruntime_gpu-1.17.0-cp310-cp310-linux_x86_64.whl`
-
-Then install audio-separator:
-`pip install "audio-separator[gpu]"`
 
 ### 🐢 No hardware acceleration, CPU only:
 
@@ -50,16 +47,14 @@ Pip: `pip install "audio-separator[cpu]"`
 
 Docker: `beveradb/audio-separator`
 
-###  Apple Silicon, macOS Sonoma+ with CoreML acceleration
 
-💬 If successfully configured, you should see this log message when running audio-separator:
- `ONNXruntime has CoreMLExecutionProvider available, enabling acceleration`
+### 🎥 FFmpeg dependency
 
-Pip: `pip install "audio-separator[silicon]"`
+💬 If successfully configured, you should see a `FFmpeg installed` log message when running `audio-separator --env_info`
 
-### FFmpeg dependency (if using pip)
+If you installed `audio-separator` using `conda` or `docker`, FFmpeg should already be avaialble in your environment.
 
-If you installed `audio-separator` using `pip`, you'll separately need to ensure you have `ffmpeg` installed.
+If not, you'll separately need to ensure you have `ffmpeg` installed.
 This should be easy to install on most platforms, e.g.:
 
 🐧 Debian/Ubuntu: `apt-get update; apt-get install -y ffmpeg`
@@ -116,34 +111,54 @@ If the GPU isn't being detected, make sure your docker runtime environment is pa
 You can use Audio Separator via the command line:
 
 ```sh
-usage: audio-separator [-h] [-v] [--log_level LOG_LEVEL] [--model_name MODEL_NAME] [--model_file_dir MODEL_FILE_DIR] [--output_dir OUTPUT_DIR] [--output_format OUTPUT_FORMAT] [--denoise DENOISE] [--normalize NORMALIZE]
-                       [--single_stem SINGLE_STEM] [--invert_spect INVERT_SPECT] [--samplerate SAMPLERATE] [--adjust ADJUST] [--dim_c DIM_C] [--hop HOP] [--segment_size SEGMENT_SIZE] [--overlap overlap] [--batch_size BATCH_SIZE]
+usage: audio-separator [-h] [-v] [-d] [-e] [-m] [--log_level LOG_LEVEL] [--model_filename MODEL_FILENAME] [--output_format OUTPUT_FORMAT] [--output_dir OUTPUT_DIR] [--model_file_dir MODEL_FILE_DIR] [--denoise]
+                       [--invert_spect] [--normalization NORMALIZATION] [--single_stem SINGLE_STEM] [--sample_rate SAMPLE_RATE] [--mdx_segment_size MDX_SEGMENT_SIZE] [--mdx_overlap MDX_OVERLAP]
+                       [--mdx_batch_size MDX_BATCH_SIZE] [--mdx_hop_length MDX_HOP_LENGTH] [--vr_batch_size VR_BATCH_SIZE] [--vr_window_size VR_WINDOW_SIZE] [--vr_aggression VR_AGGRESSION] [--vr_enable_tta]
+                       [--vr_high_end_process] [--vr_enable_post_process] [--vr_post_process_threshold VR_POST_PROCESS_THRESHOLD]
                        [audio_file]
 
 Separate audio file into different stems.
 
 positional arguments:
-  audio_file                       The audio file path to separate, in any common format.
+  audio_file                                             The audio file path to separate, in any common format.
 
 options:
-  -h, --help                       show this help message and exit
-  -v, --version                    show program's version number and exit
-  --log_level LOG_LEVEL            Optional: logging level, e.g. info, debug, warning (default: info). Example: --log_level=debug
-  --model_name MODEL_NAME          Optional: model name to be used for separation (default: UVR_MDXNET_KARA_2). Example: --model_name=UVR-MDX-NET-Inst_HQ_3
-  --model_file_dir MODEL_FILE_DIR  Optional: model files directory (default: /tmp/audio-separator-models/). Example: --model_file_dir=/app/models
-  --output_dir OUTPUT_DIR          Optional: directory to write output files (default: <current dir>). Example: --output_dir=/app/separated
-  --output_format OUTPUT_FORMAT    Optional: output format for separated files, any common format (default: FLAC). Example: --output_format=MP3
-  --denoise DENOISE                Optional: enable or disable denoising during separation (default: True). Example: --denoise=False
-  --normalize NORMALIZE            Optional: enable or disable normalization during separation (default: True). Example: --normalize=False
-  --single_stem SINGLE_STEM        Optional: output only single stem, either instrumental or vocals. Example: --single_stem=instrumental
-  --invert_spect INVERT_SPECT      Optional: invert secondary stem using spectogram (default: True). Example: --invert_spect=False
-  --samplerate SAMPLERATE          Optional: samplerate (default: 44100). Example: --samplerate=44100
-  --adjust ADJUST                  Optional: adjust (default: 1). Example: --adjust=1
-  --dim_c DIM_C                    Optional: dim_c (default: 4). Example: --dim_c=4
-  --hop HOP                        Optional: hop (default: 1024). Example: --hop=1024
-  --segment_size SEGMENT_SIZE      Optional: segment_size (default: 256). Example: --segment_size=256
-  --overlap overlap        Optional: overlap (default: 0.25). Example: --overlap=0.25
-  --batch_size BATCH_SIZE          Optional: batch_size (default: 4). Example: --batch_size=4
+  -h, --help                                             show this help message and exit
+
+Info and Debugging:
+  -v, --version                                          show program's version number and exit
+  -d, --debug                                            enable debug logging, equivalent to --log_level=debug
+  -e, --env_info                                         print environment information and exit.
+  -m, --list_models                                      list all supported models and exit.
+  --log_level LOG_LEVEL                                  log level, e.g. info, debug, warning (default: info)
+
+Separation I/O Params:
+  --model_filename MODEL_FILENAME                        model to use for separation (default: 2_HP-UVR.pth). Example: --model_filename=UVR_MDXNET_KARA_2.onnx
+  --output_format OUTPUT_FORMAT                          output format for separated files, any common format (default: FLAC). Example: --output_format=MP3
+  --output_dir OUTPUT_DIR                                directory to write output files (default: <current dir>). Example: --output_dir=/app/separated
+  --model_file_dir MODEL_FILE_DIR                        model files directory (default: /tmp/audio-separator-models/). Example: --model_file_dir=/app/models
+
+Common Separation Parameters:
+  --denoise                                              enable denoising during separation (default: False). Example: --denoise
+  --invert_spect                                         invert secondary stem using spectogram (default: False). Example: --invert_spect
+  --normalization NORMALIZATION                          max peak amplitude to normalize input and output audio to (default: 0.9). Example: --normalization=0.7
+  --single_stem SINGLE_STEM                              output only single stem, either instrumental or vocals. Example: --single_stem=instrumental
+  --sample_rate SAMPLE_RATE                              modify the sample rate of the output audio (default: 44100). Example: --sample_rate=44100
+
+MDX Architecture Parameters:
+  --mdx_segment_size MDX_SEGMENT_SIZE                    larger consumes more resources, but may give better results (default: 256). Example: --mdx_segment_size=256
+  --mdx_overlap MDX_OVERLAP                              amount of overlap between prediction windows, 0.001-0.999. higher is better but slower (default: 0.25). Example: --mdx_overlap=0.25
+  --mdx_batch_size MDX_BATCH_SIZE                        larger consumes more RAM but may process slightly faster (default: 1). Example: --mdx_batch_size=4
+  --mdx_hop_length MDX_HOP_LENGTH                        usually called stride in neural networks, only change if you know what you're doing (default: 1024). Example: --mdx_hop_length=1024
+
+VR Architecture Parameters:
+  --vr_batch_size VR_BATCH_SIZE                          number of batches to process at a time. higher = more RAM, slightly faster processing (default: 4). Example: --vr_batch_size=16
+  --vr_window_size VR_WINDOW_SIZE                        balance quality and speed. 1024 = fast but lower, 320 = slower but better quality. (default: 512). Example: --vr_window_size=320
+  --vr_aggression VR_AGGRESSION                          intensity of primary stem extraction, -100 - 100. typically 5 for vocals & instrumentals (default: 5). Example: --vr_aggression=2
+  --vr_enable_tta                                        enable Test-Time-Augmentation; slow but improves quality (default: False). Example: --vr_enable_tta
+  --vr_high_end_process                                  mirror the missing frequency range of the output (default: False). Example: --vr_high_end_process
+  --vr_enable_post_process                               identify leftover artifacts within vocal output; may improve separation for some songs (default: False). Example: --vr_enable_post_process
+  --vr_post_process_threshold VR_POST_PROCESS_THRESHOLD  threshold for post_process feature: 0.1-0.3 (default: 0.2). Example: --vr_post_process_threshold=0.1
 ```
 
 Example:
@@ -164,7 +179,7 @@ from audio_separator.separator import Separator
 # Initialize the Separator class (with optional configuration properties below)
 separator = Separator()
 
-# Load a machine learning model (if unspecified, defaults to 'UVR-MDX-NET-Inst_HQ_3')
+# Load a machine learning model (if unspecified, defaults to 'UVR-MDX-NET-Inst_HQ_3.onnx')
 separator.load_model()
 
 # Perform the separation on specific audio files without reloading the model
@@ -187,7 +202,7 @@ from audio_separator.separator import Separator
 separator = Separator()
 
 # Load a model
-separator.load_model('UVR-MDX-NET-Inst_HQ_3')
+separator.load_model('UVR-MDX-NET-Inst_HQ_3.onnx')
 
 # Separate multiple audio files without reloading the model
 output_file_paths_1 = separator.separate('audio1.wav')
@@ -205,28 +220,26 @@ output_file_paths_6 = separator.separate('audio3.wav')
 
 ## Parameters for the Separator class
 
-- audio_file: The path to the audio file to be separated. Supports all common formats (WAV, MP3, FLAC, M4A, etc.)
-- log_level: (Optional) Logging level, e.g. info, debug, warning. Default: INFO
-- log_formatter: (Optional) The log format. Default: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-- model_name: (Optional) The name of the model to use for separation. Defaults to 'UVR-MDX-NET-Inst_HQ_3', a very powerful model for Karaoke instrumental tracks.
+- log_level: (Optional) Logging level, e.g., INFO, DEBUG, WARNING. Default: DEBUG
+- log_formatter: (Optional) The log format. Default: None, which falls back to '%(asctime)s - %(levelname)s - %(module)s - %(message)s'
 - model_file_dir: (Optional) Directory to cache model files in. Default: /tmp/audio-separator-models/
-- output_dir: (Optional) Directory where the separated files will be saved. If not specified, outputs to current dir.
+- output_dir: (Optional) Directory where the separated files will be saved. If not specified, uses the current directory.
+- primary_stem_output_path: (Optional) The path for saving the primary stem. Default: None
+- secondary_stem_output_path: (Optional) The path for saving the secondary stem. Default: None
 - output_format: (Optional) Format to encode output files, any common format (WAV, MP3, FLAC, M4A, etc.). Default: WAV
-- enable_denoise: (Optional) Flag to enable or disable denoising as part of the separation process. Default: True
-- normalization_enabled: (Optional) Flag to enable or disable normalization as part of the separation process. Default: False
-- output_single_stem: (Optional) Output only single stem, either instrumental or vocals.
-- invert_secondary_stem_using_spectogram=True,
-- samplerate: (Optional) Modify the sample rate of the output audio. Default: 44100
-- hop_length: (Optional) Hop length; advanced parameter used by the separation process. Default: 1024
-- segment_size: (Optional) Segment size; advanced parameter used by the separation process. Default: 256
-- overlap: (Optional) Overlap; advanced parameter used by the separation process. Default: 0.25
-- batch_size: (Optional) Batch Size; advanced parameter used by the separation process. Default: 4
+- normalization_threshold: (Optional) The threshold for audio normalization. Default: 0.9
+- enable_denoise: (Optional) Flag to enable or disable denoising as part of the separation process. Default: False
+- output_single_stem: (Optional) Output only a single stem, either 'instrumental' or 'vocals'. Default: None
+- invert_using_spec: (Optional) Flag to invert using spectrogram. Default: False
+- sample_rate: (Optional) Modify the sample rate of the output audio. Default: 44100
+- mdx_params: (Optional) MDX Architecture Specific Attributes & Defaults. Default: {"hop_length": 1024, "segment_size": 256, "overlap": 0.25, "batch_size": 1}
+- vr_params: (Optional) VR Architecture Specific Attributes & Defaults. Default: {"batch_size": 16, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False}
 
 ## Requirements 📋
 
 Python >= 3.9
 
-Libraries: onnx, onnxruntime, numpy, librosa, torch, wget, six
+Libraries: torch, onnx, onnxruntime, numpy, librosa, requests, six, tqdm, pydub
 
 ## Developing Locally
 
@@ -235,7 +248,7 @@ This project uses Poetry for dependency management and packaging. Follow these s
 ### Prerequisites
 
 - Make sure you have Python 3.9 or newer installed on your machine.
-- Install Poetry by following the installation guide here.
+- Install Conda (I recommend Miniforge: https://github.com/conda-forge/miniforge) to manage your Python virtual environments
 
 ### Clone the Repository
 
@@ -248,21 +261,23 @@ cd audio-separator
 
 Replace YOUR_USERNAME with your GitHub username if you've forked the repository, or use the main repository URL if you have the permissions.
 
+### Create and activate the Conda Environment
+
+To create and activate the conda environment, use the following commands:
+
+```
+conda env create
+conda activate audio-separator-dev
+```
+
 ### Install Dependencies
 
-Run the following command to install the project dependencies:
+Once you're inside the conda env, run the following command to install the project dependencies:
 
 ```
 poetry install
 ```
 
-### Activate the Virtual Environment
-
-To activate the virtual environment, use the following command:
-
-```
-poetry shell
-```
 
 ### Running the Command-Line Interface Locally
 
@@ -277,7 +292,7 @@ audio-separator path/to/your/audio-file.wav
 Once you are done with your development work, you can exit the virtual environment by simply typing:
 
 ```
-exit
+conda deactivate
 ```
 
 ### Building the Package

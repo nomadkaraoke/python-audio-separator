@@ -49,6 +49,7 @@ class CommonSeparator:
     def __init__(self, config):
 
         self.logger: Logger = config.get("logger")
+        self.log_level: int = config.get("log_level")
 
         # Inferencing device / acceleration config
         self.torch_device = config.get("torch_device")
@@ -84,25 +85,6 @@ class CommonSeparator:
         self.is_karaoke = self.model_data.get("is_karaoke", False)
         self.is_bv_model = self.model_data.get("is_bv_model", False)
         self.bv_model_rebalance = self.model_data.get("is_bv_model_rebalanced", 0)
-
-        # In UVR, these variables are set but either aren't useful or are better handled in audio-separator.
-        # Leaving these comments explaining to help myself or future developers understand why these aren't in audio-separator.
-
-        # "chunks" is not actually used for anything in UVR...
-        # self.chunks = 0
-
-        # "adjust" is hard-coded to 1 in UVR, and only used as a multiplier in run_model, so it does nothing.
-        # self.adjust = 1
-
-        # "hop" is hard-coded to 1024 in UVR. We have a "hop_length" parameter instead
-        # self.hop = 1024
-
-        # "margin" maps to sample rate and is set from the GUI in UVR (default: 44100). We have a "sample_rate" parameter instead.
-        # self.margin = 44100
-
-        # "dim_c" is hard-coded to 4 in UVR, seems to be a parameter for the number of channels, and is only used for checkpoint models.
-        # We haven't implemented support for the checkpoint models here, so we're not using it.
-        # self.dim_c = 4
 
         self.logger.debug(f"Common params: model_name={self.model_name}, model_path={self.model_path}")
         self.logger.debug(f"Common params: primary_stem_output_path={self.primary_stem_output_path}, secondary_stem_output_path={self.secondary_stem_output_path}")

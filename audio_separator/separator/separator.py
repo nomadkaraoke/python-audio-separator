@@ -4,6 +4,8 @@ from importlib import metadata
 import os
 import gc
 import platform
+import subprocess
+
 import hashlib
 import json
 import time
@@ -114,13 +116,7 @@ class Separator:
             self.output_format = "WAV"
 
         self.normalization_threshold = normalization_threshold
-        self.logger.debug(f"Normalization threshold set to {normalization_threshold}, waveform will lowered to this max amplitude to avoid clipping.")
-
         self.enable_denoise = enable_denoise
-        if self.enable_denoise:
-            self.logger.debug(f"Denoising enabled, model will be run twice to reduce noise in output audio.")
-        else:
-            self.logger.debug(f"Denoising disabled, model will only be run once. This is twice as fast, but may result in noisier output audio.")
 
         self.output_single_stem = output_single_stem
         if output_single_stem is not None:
@@ -156,6 +152,7 @@ class Separator:
         This method sets up the PyTorch and/or ONNX Runtime inferencing device, using GPU hardware acceleration if available.
         """
         self.log_system_info()
+        self.check_ffmpeg_installed()
         self.log_onnxruntime_packages()
         self.setup_torch_device()
 
@@ -172,6 +169,18 @@ class Separator:
 
         python_version = platform.python_version()
         self.logger.info(f"Python Version: {python_version}")
+
+    def check_ffmpeg_installed(self):
+        """
+        This method checks if ffmpeg is installed and logs its version.
+        """
+        try:
+            ffmpeg_version_output = subprocess.check_output(["ffmpeg", "-version"], text=True)
+            first_line = ffmpeg_version_output.splitlines()[0]
+            self.logger.info(f"FFmpeg installed: {first_line}")
+        except FileNotFoundError:
+            self.logger.error("FFmpeg is not installed. Please install FFmpeg to use this package.")
+            raise
 
     def log_onnxruntime_packages(self):
         """
@@ -232,7 +241,7 @@ class Separator:
 
         if "CoreMLExecutionProvider" in ort_providers:
             self.logger.info("ONNXruntime has CoreMLExecutionProvider available, enabling acceleration")
-            self.onnx_execution_provider = ["CoreMLExecutionProvider"]
+            self.onnx_execution_provider = ["CoreMLExecutionProvider", "CPUExecutionProvider"]
         else:
             self.logger.warning("CoreMLExecutionProvider not available in ONNXruntime, so acceleration will NOT be enabled")
 
@@ -250,8 +259,7 @@ class Separator:
         """
         This method returns the MD5 hash of a given model file.
         """
-
-        self.logger.error(f"Attempting to calculate hash of model file {model_path}")
+        self.logger.debug(f"Calculating hash of model file {model_path}")
         try:
             # Open the model file in binary read mode
             with open(model_path, "rb") as f:
@@ -302,7 +310,7 @@ class Separator:
             self.download_file("https://raw.githubusercontent.com/TRvlvr/application_data/main/filelists/download_checks.json", download_checks_path)
 
         model_downloads_list = json.load(open(download_checks_path, encoding="utf-8"))
-        self.logger.debug(f"Model download list loaded: {model_downloads_list}")
+        self.logger.debug(f"Model download list loaded")
 
         # model_downloads_list JSON structure / example snippet:
         # {
@@ -354,7 +362,7 @@ class Separator:
         }
         return model_files_grouped
 
-    def load_model(self, model_filename="2_HP-UVR.pth"):
+    def load_model(self, model_filename="UVR-MDX-NET-Inst_HQ_3.onnx"):
         """
         This method loads the separation model into memory, downloading it first if necessary.
         """
@@ -489,6 +497,7 @@ class Separator:
 
         common_params = {
             "logger": self.logger,
+            "log_level": self.log_level,
             "torch_device": self.torch_device,
             "torch_device_cpu": self.torch_device_cpu,
             "torch_device_mps": self.torch_device_mps,
@@ -535,6 +544,13 @@ class Separator:
         # Starting the separation process
         self.logger.info(f"Starting separation process for audio_file_path: {audio_file_path}")
         separate_start_time = time.perf_counter()
+
+        self.logger.debug(f"Normalization threshold set to {self.normalization_threshold}, waveform will lowered to this max amplitude to avoid clipping.")
+
+        if self.enable_denoise:
+            self.logger.debug(f"Denoising enabled, model will be run twice to reduce noise in output audio.")
+        else:
+            self.logger.debug(f"Denoising disabled, model will only be run once. This is twice as fast, but may result in noisier output audio.")
 
         # Run separation method for the loaded model
         output_files = self.model_instance.separate(audio_file_path)

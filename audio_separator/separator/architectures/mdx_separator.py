@@ -21,17 +21,18 @@ class MDXSeparator(CommonSeparator):
     def __init__(self, common_config, arch_config):
         super().__init__(config=common_config)
 
-        self.hop_length = arch_config.get("hop_length")
+        # Initializing user-configurable parameters, passed through with an mdx_from the CLI or Separator instance
+
+        # Pick a segment size to balance speed, resource use, and quality:
+        # - Smaller sizes consume less resources.
+        # - Bigger sizes consume more resources, but may provide better results.
+        # - Default size is 256. Quality can change based on your pick.
         self.segment_size = arch_config.get("segment_size")
+
+        # This option controls the amount of overlap between prediction windows.
+        #  - Higher values can provide better results, but will lead to longer processing times.
+        #  - For Non-MDX23C models: You can choose between 0.001-0.999
         self.overlap = arch_config.get("overlap")
-
-        # Initializing model parameters
-        self.compensate = self.model_data["compensate"]
-        self.dim_f = self.model_data["mdx_dim_f_set"]
-        self.dim_t = 2 ** self.model_data["mdx_dim_t_set"]
-        self.n_fft = self.model_data["mdx_n_fft_scale_set"]
-
-        self.config_yaml = self.model_data.get("config_yaml", None)
 
         # Number of batches to be processed at a time.
         # - Higher values mean more RAM usage but slightly faster processing times.
@@ -40,14 +41,61 @@ class MDXSeparator(CommonSeparator):
         # BATCH_SIZE = ('1', ''2', '3', '4', '5', '6', '7', '8', '9', '10')
         self.batch_size = arch_config.get("batch_size", 1)
 
-        self.logger.debug(f"Model params: primary_stem={self.primary_stem_name}, secondary_stem={self.secondary_stem_name}")
-        self.logger.debug(f"Model params: batch_size={self.batch_size}, compensate={self.compensate}, segment_size={self.segment_size}, dim_f={self.dim_f}, dim_t={self.dim_t}")
-        self.logger.debug(f"Model params: n_fft={self.n_fft}, hop={self.hop_length}")
+        # hop_length is equivalent to the more commonly used term "stride" in convolutional neural networks
+        # In machine learning, particularly in the context of convolutional neural networks (CNNs),
+        # the term "stride" refers to the number of pixels by which we move the filter across the input image.
+        # Strides are a crucial component in the convolution operation, a fundamental building block of CNNs used primarily in the field of computer vision.
+        # Stride is a parameter that dictates the movement of the kernel, or filter, across the input data, such as an image.
+        # When performing a convolution operation, the stride determines how many units the filter shifts at each step.
+        # The choice of stride affects the model in several ways:
+        # Output Size: A larger stride will result in a smaller output spatial dimension.
+        # Computational Efficiency: Increasing the stride can decrease the computational load.
+        # Field of View: A higher stride means that each step of the filter takes into account a wider area of the input image.
+        #   This can be beneficial when the model needs to capture more global features rather than focusing on finer details.
+        self.hop_length = arch_config.get("hop_length")
+
+        self.logger.debug(f"MDX arch params: batch_size={self.batch_size}, segment_size={self.segment_size}")
+        self.logger.debug(f"MDX arch params: overlap={self.overlap}, hop_length={self.hop_length}")
+
+        # Initializing model-specific parameters from model_data JSON
+        self.compensate = self.model_data["compensate"]
+        self.dim_f = self.model_data["mdx_dim_f_set"]
+        self.dim_t = 2 ** self.model_data["mdx_dim_t_set"]
+        self.n_fft = self.model_data["mdx_n_fft_scale_set"]
+        self.config_yaml = self.model_data.get("config_yaml", None)
+
+        self.logger.debug(f"MDX arch params: compensate={self.compensate}, dim_f={self.dim_f}, dim_t={self.dim_t}, n_fft={self.n_fft}")
+        self.logger.debug(f"MDX arch params: config_yaml={self.config_yaml}")
+
+        # In UVR, these variables are set but either aren't useful or are better handled in audio-separator.
+        # Leaving these comments explaining to help myself or future developers understand why these aren't in audio-separator.
+
+        # "chunks" is not actually used for anything in UVR...
+        # self.chunks = 0
+
+        # "adjust" is hard-coded to 1 in UVR, and only used as a multiplier in run_model, so it does nothing.
+        # self.adjust = 1
+
+        # "hop" is hard-coded to 1024 in UVR. We have a "hop_length" parameter instead
+        # self.hop = 1024
+
+        # "margin" maps to sample rate and is set from the GUI in UVR (default: 44100). We have a "sample_rate" parameter instead.
+        # self.margin = 44100
+
+        # "dim_c" is hard-coded to 4 in UVR, seems to be a parameter for the number of channels, and is only used for checkpoint models.
+        # We haven't implemented support for the checkpoint models here, so we're not using it.
+        # self.dim_c = 4
 
         # Loading the model for inference
         self.logger.debug("Loading ONNX model for inference...")
         if self.segment_size == self.dim_t:
-            ort_inference_session = ort.InferenceSession(self.model_path, providers=self.onnx_execution_provider)
+            ort_session_options = ort.SessionOptions()
+            if self.log_level > 10:
+                ort_session_options.log_severity_level = 3
+            else:
+                ort_session_options.log_severity_level = 0
+
+            ort_inference_session = ort.InferenceSession(self.model_path, providers=self.onnx_execution_provider, sess_options=ort_session_options)
             self.model_run = lambda spek: ort_inference_session.run(None, {"input": spek.cpu().numpy()})[0]
             self.logger.debug("Model loaded successfully using ONNXruntime inferencing session.")
         else:

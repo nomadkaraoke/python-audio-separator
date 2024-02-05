@@ -128,7 +128,7 @@ def test_cli_output_format_argument(common_expected_args):
 
 # Test using denoise argument
 def test_cli_denoise_argument(common_expected_args):
-    test_args = ["cli.py", "test_audio.mp3", "--denoise=True"]
+    test_args = ["cli.py", "test_audio.mp3", "--denoise"]
     with patch("sys.argv", test_args):
         with patch("audio_separator.separator.Separator") as mock_separator:
             mock_separator_instance = mock_separator.return_value
@@ -144,7 +144,7 @@ def test_cli_denoise_argument(common_expected_args):
 
 # Test using normalization_threshold argument
 def test_cli_normalization_threshold_argument(common_expected_args):
-    test_args = ["cli.py", "test_audio.mp3", "--normalization_threshold=0.75"]
+    test_args = ["cli.py", "test_audio.mp3", "--normalization=0.75"]
     with patch("sys.argv", test_args):
         with patch("audio_separator.separator.Separator") as mock_separator:
             mock_separator_instance = mock_separator.return_value
@@ -176,7 +176,7 @@ def test_cli_single_stem_argument(common_expected_args):
 
 # Test using invert spectrogram argument
 def test_cli_invert_spectrogram_argument(common_expected_args):
-    test_args = ["cli.py", "test_audio.mp3", "--invert_spect=True"]
+    test_args = ["cli.py", "test_audio.mp3", "--invert_spect"]
     with patch("sys.argv", test_args):
         with patch("audio_separator.separator.Separator") as mock_separator:
             mock_separator_instance = mock_separator.return_value
