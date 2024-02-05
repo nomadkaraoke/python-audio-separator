@@ -24,11 +24,11 @@ def main():
     info_params.add_argument("-v", "--version", action="version", version=f"%(prog)s {package_version}")
     info_params.add_argument("-d", "--debug", action="store_true", help="enable debug logging, equivalent to --log_level=debug")
     info_params.add_argument("-e", "--env_info", action="store_true", help="print environment information and exit.")
-    info_params.add_argument("-m", "--list_models", action="store_true", help="list all supported models and exit.")
+    info_params.add_argument("-l", "--list_models", action="store_true", help="list all supported models and exit.")
     info_params.add_argument("--log_level", default="info", help="log level, e.g. info, debug, warning (default: %(default)s)")
 
     io_params = parser.add_argument_group("Separation I/O Params")
-    io_params.add_argument("--model_filename", default="UVR-MDX-NET-Inst_HQ_3.onnx", help="model to use for separation (default: %(default)s). Example: --model_filename=2_HP-UVR.pth")
+    io_params.add_argument("-m", "--model_filename", default="UVR-MDX-NET-Inst_HQ_3.onnx", help="model to use for separation (default: %(default)s). Example: -m 2_HP-UVR.pth")
     io_params.add_argument("--output_format", default="FLAC", help="output format for separated files, any common format (default: %(default)s). Example: --output_format=MP3")
     io_params.add_argument("--output_dir", default=None, help="directory to write output files (default: <current dir>). Example: --output_dir=/app/separated")
     io_params.add_argument("--model_file_dir", default="/tmp/audio-separator-models/", help="model files directory (default: %(default)s). Example: --model_file_dir=/app/models")

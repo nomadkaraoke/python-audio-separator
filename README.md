@@ -110,10 +110,10 @@ If the GPU isn't being detected, make sure your docker runtime environment is pa
 You can use Audio Separator via the command line:
 
 ```sh
-usage: audio-separator [-h] [-v] [-d] [-e] [-m] [--log_level LOG_LEVEL] [--model_filename MODEL_FILENAME] [--output_format OUTPUT_FORMAT] [--output_dir OUTPUT_DIR] [--model_file_dir MODEL_FILE_DIR] [--denoise]
-                       [--invert_spect] [--normalization NORMALIZATION] [--single_stem SINGLE_STEM] [--sample_rate SAMPLE_RATE] [--mdx_segment_size MDX_SEGMENT_SIZE] [--mdx_overlap MDX_OVERLAP]
-                       [--mdx_batch_size MDX_BATCH_SIZE] [--mdx_hop_length MDX_HOP_LENGTH] [--vr_batch_size VR_BATCH_SIZE] [--vr_window_size VR_WINDOW_SIZE] [--vr_aggression VR_AGGRESSION] [--vr_enable_tta]
-                       [--vr_high_end_process] [--vr_enable_post_process] [--vr_post_process_threshold VR_POST_PROCESS_THRESHOLD]
+usage: audio-separator [-h] [-v] [-d] [-e] [-l] [--log_level LOG_LEVEL] [-m MODEL_FILENAME] [--output_format OUTPUT_FORMAT] [--output_dir OUTPUT_DIR] [--model_file_dir MODEL_FILE_DIR] [--denoise] [--invert_spect]
+                       [--normalization NORMALIZATION] [--single_stem SINGLE_STEM] [--sample_rate SAMPLE_RATE] [--mdx_segment_size MDX_SEGMENT_SIZE] [--mdx_overlap MDX_OVERLAP] [--mdx_batch_size MDX_BATCH_SIZE]
+                       [--mdx_hop_length MDX_HOP_LENGTH] [--vr_batch_size VR_BATCH_SIZE] [--vr_window_size VR_WINDOW_SIZE] [--vr_aggression VR_AGGRESSION] [--vr_enable_tta] [--vr_high_end_process]
+                       [--vr_enable_post_process] [--vr_post_process_threshold VR_POST_PROCESS_THRESHOLD]
                        [audio_file]
 
 Separate audio file into different stems.
@@ -128,11 +128,11 @@ Info and Debugging:
   -v, --version                                          show program's version number and exit
   -d, --debug                                            enable debug logging, equivalent to --log_level=debug
   -e, --env_info                                         print environment information and exit.
-  -m, --list_models                                      list all supported models and exit.
+  -l, --list_models                                      list all supported models and exit.
   --log_level LOG_LEVEL                                  log level, e.g. info, debug, warning (default: info)
 
 Separation I/O Params:
-  --model_filename MODEL_FILENAME                        model to use for separation (default: 2_HP-UVR.pth). Example: --model_filename=UVR_MDXNET_KARA_2.onnx
+  -m MODEL_FILENAME, --model_filename MODEL_FILENAME     model to use for separation (default: UVR-MDX-NET-Inst_HQ_3.onnx). Example: -m 2_HP-UVR.pth
   --output_format OUTPUT_FORMAT                          output format for separated files, any common format (default: FLAC). Example: --output_format=MP3
   --output_dir OUTPUT_DIR                                directory to write output files (default: <current dir>). Example: --output_dir=/app/separated
   --model_file_dir MODEL_FILE_DIR                        model files directory (default: /tmp/audio-separator-models/). Example: --model_file_dir=/app/models
