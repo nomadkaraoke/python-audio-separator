@@ -38,14 +38,12 @@ tqdm = "*"
 pydub = ">=0.25"
 onnx = ">=1.14"
 onnx2torch = ">=1.5"
-onnxruntime = { version = "*", optional = true }
-onnxruntime-gpu = { version = "*", optional = true }
-onnxruntime-silicon = { version = "*", optional = true }
+onnxruntime = { version = ">=1.17", optional = true }
+onnxruntime-gpu = { version = ">=1.17", optional = true }
 
 [tool.poetry.extras]
 cpu = ["onnxruntime"]
 gpu = ["onnxruntime-gpu"]
-silicon = ["onnxruntime-silicon"]
 
 [tool.poetry.scripts]
 audio-separator = 'audio_separator.utils.cli:main'

@@ -31,13 +31,12 @@ Pip: `pip install "audio-separator[gpu]"`
 
 Docker: `beveradb/audio-separator:gpu`
 
-###  Apple Silicon, macOS Sonoma+ with CoreML acceleration
+###  Apple Silicon, macOS Sonoma+ with M1 or newer CPU (CoreML acceleration)
 
 💬 If successfully configured, you should see this log message when running `audio-separator --env_info`:
  `ONNXruntime has CoreMLExecutionProvider available, enabling acceleration`
 
-Pip: `pip install "audio-separator[silicon]"`
-
+Pip: `pip install "audio-separator[cpu]"`
 
 ### 🐢 No hardware acceleration, CPU only:
 
