@@ -116,7 +116,7 @@ class CascadedNet(nn.Module):
         aux2 = torch.cat([l2, h2], dim=2)
 
         # Prepare input for the third stage by concatenating all previous outputs with the original input.
-        f3_in = torch.cat([x, aux1, aux2], dim=1)
+        f3_in = torch.cat([input_tensor, aux1, aux2], dim=1)
 
         # Process through the third stage network.
         f3 = self.stg3_full_band_net(f3_in)

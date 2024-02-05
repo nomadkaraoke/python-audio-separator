@@ -139,10 +139,10 @@ class LSTMModule(nn.Module):
         # Extract features and prepare for LSTM
         hidden = self.conv(input_tensor)[:, 0]  # N, nbins, nframes
         hidden = hidden.permute(2, 0, 1)  # nframes, N, nbins
-        h, _ = self.lstm(h)
+        hidden, _ = self.lstm(hidden)
 
         # Apply dense layer and reshape to match expected output format
-        hidden = self.dense(h.reshape(-1, hidden.size()[-1]))  # nframes * N, nbins
+        hidden = self.dense(hidden.reshape(-1, hidden.size()[-1]))  # nframes * N, nbins
         hidden = hidden.reshape(nframes, N, 1, nbins)
         hidden = hidden.permute(1, 2, 3, 0)
 
