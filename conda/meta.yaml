@@ -44,16 +44,5 @@ requirements:
     - poetry
     - llvmlite
   run:
-    - python >=3.9
-    - requests
-    - numpy
-    - librosa
-    - six
-    - pydub
-    - pytorch
-    - torchvision
-    - torchaudio
+    - python >=3.9,<3.12
     - ffmpeg >=6
-    - onnx
-    - onnxruntime
-    - onnx2torch
