@@ -5,6 +5,7 @@ import soundfile as sf
 import math
 import platform
 import traceback
+from audio_separator.separator.uvr_lib_v5 import pyrb
 from scipy.signal import correlate, hilbert
 import io
 
@@ -27,10 +28,6 @@ progress_value = 0
 last_update_time = 0
 is_macos = False
 
-if OPERATING_SYSTEM == "Windows":
-    from pyrubberband import pyrb
-else:
-    from audio_separator.separator.uvr_lib_v5 import pyrb
 
 if OPERATING_SYSTEM == "Darwin":
     wav_resolution = "polyphase" if SYSTEM_PROC == ARM or ARM in SYSTEM_ARCH else "sinc_fastest"
