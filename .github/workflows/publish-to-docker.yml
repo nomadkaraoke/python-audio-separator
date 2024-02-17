@@ -56,17 +56,29 @@ jobs:
             beveradb/audio-separator:cpu
             beveradb/audio-separator:latest
 
-      - name: Build and push Docker image for GPU
+      - name: Build and push Docker image for CUDA 11 GPU
         if: ${{ github.ref == 'refs/heads/main' }}
         uses: docker/build-push-action@v5
         with:
-          file: Dockerfile.gpu
+          file: Dockerfile.cuda11
           context: .
           platforms: linux/amd64
           push: true
           tags: |
             beveradb/audio-separator:gpu-${{ env.VERSION }}
             beveradb/audio-separator:gpu
+
+      - name: Build and push Docker image for CUDA 12 GPU
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: docker/build-push-action@v5
+        with:
+          file: Dockerfile.cuda12
+          context: .
+          platforms: linux/amd64
+          push: true
+          tags: |
+            beveradb/audio-separator:cuda12-${{ env.VERSION }}
+            beveradb/audio-separator:cuda12
 
       # Deliberately commented out because Github CI can't build this runpod image due to disk space limits
       # Instead, I build this (17GB) image locally and push it to Docker Hub manually.
