@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "audio-separator"
-version = "0.14.4"
+version = "0.14.5"
 description = "Easy to use vocal separation, using MDX-Net models from UVR trained by @Anjok07"
 authors = ["Andrew Beveridge <andrew@beveridge.uk>"]
 license = "MIT"
@@ -32,7 +32,7 @@ python = ">=3.9"
 requests = ">=2"
 numpy = ">=1.23"
 librosa = ">=0.10"
-samplerate = "^0.2.1"
+samplerate = "0.1.0"
 six = ">=1.16"
 torch = "*"
 tqdm = "*"
