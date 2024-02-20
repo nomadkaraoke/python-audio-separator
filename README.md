@@ -67,19 +67,24 @@ In theory, all you should need to do to get `audio-separator` working with a GPU
 
 However, sometimes getting both PyTorch and ONNX Runtime working with CUDA support can be a bit tricky so it may not work that easily.
 
-You may need to reinstall both packages directly, allowing pip to calculate the right versions for your platform:
+You may need to reinstall both packages directly, allowing pip to calculate the right versions for your platform, for example:
 
 - `pip uninstall torch onnxruntime`
 - `pip cache purge`
 - `pip install --force-reinstall torch torchvision torchaudio`
 - `pip install --force-reinstall onnxruntime-gpu`
 
-Depending on your hardware, you may get better performance with the optimum version of onnxruntime:
-- `pip install --force-reinstall "optimum[onnxruntime-gpu]"`
+I generally recommend installing the latest version of PyTorch for your environment using the command recommended by the wizard here:
+https://pytorch.org/get-started/locally/
 
+### Multiple CUDA library versions may be needed 
 Depending on your CUDA version and environment, you may need to install specific version(s) of CUDA libraries for ONNX Runtime to use your GPU.
-On Google Colab, for example, the default environment is now CUDA 12 but ONNX Runtime still needs CUDA 11 libraries to work.
-You can install the CUDA 11 libraries alongside CUDA 12 like so:
+
+🧪 Google Colab, for example, now uses CUDA 12 by default, but ONNX Runtime still needs CUDA 11 libraries to work.
+
+If you see the error `Failed to load library` or `cannot open shared object file` when you run `audio-separator`, this is likely the issue.
+
+You can install the CUDA 11 libraries _alongside_ CUDA 12 like so:
 - `apt update; apt install nvidia-cuda-toolkit`
 
 > Note: if anyone knows how to make this cleaner so we can support both different platform-specific dependencies for hardware acceleration without a separate installation process for each, please let me know or raise a PR!
