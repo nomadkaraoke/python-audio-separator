@@ -1,0 +1,16 @@
+# Runpod Base image: https://github.com/runpod/containers/blob/main/official-templates/base/Dockerfile
+FROM runpod/base:0.5.0-cuda11.8.0
+
+RUN apt-get update && apt-get install -y \
+    ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN python3 -m pip install --upgrade pip
+
+# Install the CUDA 11 compatible version of ONNXRuntime (The default CUDA version for ORT is 11.8)
+# See https://onnxruntime.ai/docs/install/
+RUN pip install onnxruntime-gpu
+
+# Install audio-separator without any specific onnxruntime (onnxruntime should already be satisfied by the above)
+RUN --mount=type=cache,target=/root/.cache \
+    pip3 install "audio-separator"
