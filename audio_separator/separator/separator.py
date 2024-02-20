@@ -14,13 +14,13 @@ import warnings
 import requests
 import torch
 import onnxruntime as ort
-from audio_separator.separator.architectures import MDXSeparator, VRSeparator
+from audio_separator.separator.architectures import MDXSeparator, VRSeparator, DemucsSeparator
 
 
 class Separator:
     """
     The Separator class is designed to facilitate the separation of audio sources from a given audio file.
-    It supports various separation architectures and models, including MDX and VR. The class provides
+    It supports various separation architectures and models, including MDX, VR, and Demucs. The class provides
     functionalities to configure separation parameters, load models, and perform audio source separation.
     It also handles logging, normalization, and output formatting of the separated audio stems.
 
@@ -56,6 +56,9 @@ class Separator:
         enable_post_process: False
         post_process_threshold: 0.2
         high_end_process: False
+
+    Demucs Architecture Specific Attributes & Defaults:
+        model_path: The path to the Demucs model file.
     """
 
     def __init__(
@@ -74,6 +77,7 @@ class Separator:
         sample_rate=44100,
         mdx_params={"hop_length": 1024, "segment_size": 256, "overlap": 0.25, "batch_size": 1},
         vr_params={"batch_size": 16, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False},
+        demucs_params={},
     ):
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(log_level)
@@ -132,7 +136,7 @@ class Separator:
 
         # These are parameters which users may want to configure so we expose them to the top-level Separator class,
         # even though they are specific to a single model architecture
-        self.arch_specific_params = {"MDX": mdx_params, "VR": vr_params}
+        self.arch_specific_params = {"MDX": mdx_params, "VR": vr_params, "Demucs": demucs_params}
 
         self.torch_device = None
         self.torch_device_cpu = None
@@ -359,7 +363,7 @@ class Separator:
         model_files_grouped = {
             "VR": model_downloads_list["vr_download_list"],
             "MDX": model_downloads_list["mdx_download_list"],
-            # "Demucs": list(model_downloads_list["demucs_download_list"].keys()),
+            "Demucs": model_downloads_list["demucs_download_list"],
             # "MDX23": list(model_downloads_list["mdx23_download_list"].keys()),
             # "MDX23C": list(model_downloads_list["mdx23c_download_list"].keys())
         }
@@ -378,6 +382,7 @@ class Separator:
         model_data_url_prefix = "https://raw.githubusercontent.com/TRvlvr/application_data/main"
         vr_model_data_url = f"{model_data_url_prefix}/vr_model_data/model_data_new.json"
         mdx_model_data_url = f"{model_data_url_prefix}/mdx_model_data/model_data_new.json"
+        demucs_model_data_url = f"{model_data_url_prefix}/demucs_model_data/model_data_new.json"
 
         # Setting up the model path
         model_name = model_filename.split(".")[0]
@@ -407,10 +412,17 @@ class Separator:
             self.logger.debug(f"MDX model data not found at path {mdx_model_data_path}, downloading...")
             self.download_file(mdx_model_data_url, mdx_model_data_path)
 
+        demucs_model_data_path = os.path.join(self.model_file_dir, "demucs_model_data.json")
+        self.logger.debug(f"Demucs model data path set to {demucs_model_data_path}")
+        if not os.path.isfile(demucs_model_data_path):
+            self.logger.debug(f"Demucs model data not found at path {demucs_model_data_path}, downloading...")
+            self.download_file(demucs_model_data_url, demucs_model_data_path)
+
         # Loading model data
-        self.logger.debug("Loading MDX and VR model parameters from UVR model data files...")
+        self.logger.debug("Loading MDX, VR, and Demucs model parameters from UVR model data files...")
         vr_model_data_object = json.load(open(vr_model_data_path, encoding="utf-8"))
         mdx_model_data_object = json.load(open(mdx_model_data_path, encoding="utf-8"))
+        demucs_model_data_object = json.load(open(demucs_model_data_path, encoding="utf-8"))
 
         # vr_model_data_object JSON structure / example snippet:
         # {
@@ -493,6 +505,9 @@ class Separator:
         elif model_hash in vr_model_data_object:
             model_data = vr_model_data_object[model_hash]
             model_type = "VR"
+        elif model_hash in demucs_model_data_object:
+            model_data = demucs_model_data_object[model_hash]
+            model_type = "Demucs"
         else:
             raise ValueError(f"Unsupported Model File: parameters for MD5 hash {model_hash} could not be found in the UVR model data file.")
 
@@ -523,6 +538,8 @@ class Separator:
             self.model_instance = MDXSeparator(common_config=common_params, arch_config=self.arch_specific_params["MDX"])
         elif model_type == "VR":
             self.model_instance = VRSeparator(common_config=common_params, arch_config=self.arch_specific_params["VR"])
+        elif model_type == "Demucs":
+            self.model_instance = DemucsSeparator(common_config=common_params, arch_config=self.arch_specific_params["Demucs"])
         else:
             raise ValueError(f"Unsupported model type: {model_type}")
 
