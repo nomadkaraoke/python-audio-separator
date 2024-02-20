@@ -77,8 +77,10 @@ You may need to reinstall both packages directly, allowing pip to calculate the 
 Depending on your hardware, you may get better performance with the optimum version of onnxruntime:
 - `pip install --force-reinstall "optimum[onnxruntime-gpu]"`
 
-Depending on your CUDA version and hardware, you may need to install torch from the `cu118` index instead:
-- `pip install --force-reinstall torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118`
+Depending on your CUDA version and environment, you may need to install specific version(s) of CUDA libraries for ONNX Runtime to use your GPU.
+On Google Colab, for example, the default environment is now CUDA 12 but ONNX Runtime still needs CUDA 11 libraries to work.
+You can install the CUDA 11 libraries alongside CUDA 12 like so:
+- `apt update; apt install nvidia-cuda-toolkit`
 
 > Note: if anyone knows how to make this cleaner so we can support both different platform-specific dependencies for hardware acceleration without a separate installation process for each, please let me know or raise a PR!
 
