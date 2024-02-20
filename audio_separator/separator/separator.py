@@ -8,6 +8,7 @@ import subprocess
 
 import hashlib
 import json
+import yaml
 import time
 import logging
 import warnings
@@ -360,41 +361,73 @@ class Separator:
         # }
 
         # Return object with list of model names, which are the keys in vr_download_list, mdx_download_list, demucs_download_list, mdx23_download_list, mdx23c_download_list, grouped by type: VR, MDX, Demucs, MDX23, MDX23C
-        model_files_grouped = {
+        model_files_grouped_by_type = {
             "VR": model_downloads_list["vr_download_list"],
             "MDX": model_downloads_list["mdx_download_list"],
             "Demucs": model_downloads_list["demucs_download_list"],
             # "MDX23": list(model_downloads_list["mdx23_download_list"].keys()),
             # "MDX23C": list(model_downloads_list["mdx23c_download_list"].keys())
         }
-        return model_files_grouped
+        return model_files_grouped_by_type
 
-    def load_model(self, model_filename="UVR-MDX-NET-Inst_HQ_3.onnx"):
+    def download_model_files(self, model_filename):
         """
-        This method loads the separation model into memory, downloading it first if necessary.
+        This method downloads the model files for a given model filename, if they are not already present.
         """
-        self.logger.info(f"Loading model {model_filename}...")
+        model_path = os.path.join(self.model_file_dir, f"{model_filename}")
 
-        load_model_start_time = time.perf_counter()
-
-        # Model data and configuration sources from UVR
+        supported_model_files_grouped = self.list_supported_model_files()
         model_repo_url_prefix = "https://github.com/TRvlvr/model_repo/releases/download/all_public_uvr_models"
+
+        self.logger.debug(f"Searching for model_filename {model_filename} in supported_model_files_grouped")
+        for model_type, model_list in supported_model_files_grouped.items():
+            for model_friendly_name, model_download_list in model_list.items():
+                # If model_download_list is a string, this model only requires a single file so we can just download it
+                if isinstance(model_download_list, str) and model_download_list == model_filename:
+                    self.logger.debug(f"Single file model identified: {model_friendly_name}")
+
+                    # Check if model file exists, if not, download it
+                    if not os.path.isfile(model_path):
+                        self.logger.debug(f"Model not found at path {model_path}, downloading...")
+                        self.download_file(f"{model_repo_url_prefix}/{model_filename}", model_path)
+
+                    self.logger.debug(f"Returning path for single model file: {model_path}")
+                    return model_type, model_friendly_name, model_path
+
+                # If it's a dict, iterate through each entry check if any of them match model_filename
+                # If the value is a full URL, download it from that URL.
+                # If it's just a filename, add the model repo prefix to get the URL to download.
+                elif isinstance(model_download_list, dict):
+                    this_model_matches_input_filename = False
+                    for file_name, file_url in model_download_list.items():
+                        if file_name == model_filename:
+                            self.logger.debug(f"Found input filename {model_filename} in multi-file model: {model_friendly_name}")
+                            this_model_matches_input_filename = True
+
+                    if this_model_matches_input_filename:
+                        self.logger.debug(f"Multi-file model identified: {model_friendly_name}, iterating through files to download")
+
+                        for file_name, file_url in model_download_list.items():
+                            full_file_url = f"{model_repo_url_prefix}/{file_url}" if not file_url.startswith("http") else file_url
+                            self.logger.info(f"Downloading {file_name} from {full_file_url}...")
+                            self.download_file(full_file_url, os.path.join(self.model_file_dir, file_name))
+
+                        self.logger.debug(f"All files downloaded for model {model_friendly_name}, returning initial path {model_path}")
+                        return model_type, model_friendly_name, model_path
+
+    def load_model_data_using_hash(self, model_path):
+        """
+        This method loads model-specific parameters from UVR model data files.
+        These parameters are critical to inferencing using a given model, as they need to match whatever was used during training.
+        The correct parameters are identified by calculating the hash of the model file and looking up the hash in the UVR data files.
+        """
+        # Model data and configuration sources from UVR
         model_data_url_prefix = "https://raw.githubusercontent.com/TRvlvr/application_data/main"
+
         vr_model_data_url = f"{model_data_url_prefix}/vr_model_data/model_data_new.json"
         mdx_model_data_url = f"{model_data_url_prefix}/mdx_model_data/model_data_new.json"
-        demucs_model_data_url = f"{model_data_url_prefix}/demucs_model_data/model_data_new.json"
 
-        # Setting up the model path
-        model_name = model_filename.split(".")[0]
-        model_path = os.path.join(self.model_file_dir, f"{model_filename}")
-        self.logger.debug(f"Model path set to {model_path}")
-
-        # Check if model file exists, if not, download it
-        if not os.path.isfile(model_path):
-            self.logger.debug(f"Model not found at path {model_path}, downloading...")
-            self.download_file(f"{model_repo_url_prefix}/{model_filename}", model_path)
-
-        # Calculating hash for the downloaded model
+        # Calculate hash for the downloaded model
         self.logger.debug("Calculating MD5 hash for model file to identify model parameters from UVR data...")
         model_hash = self.get_model_hash(model_path)
         self.logger.debug(f"Model {model_path} has hash {model_hash}")
@@ -412,17 +445,10 @@ class Separator:
             self.logger.debug(f"MDX model data not found at path {mdx_model_data_path}, downloading...")
             self.download_file(mdx_model_data_url, mdx_model_data_path)
 
-        demucs_model_data_path = os.path.join(self.model_file_dir, "demucs_model_data.json")
-        self.logger.debug(f"Demucs model data path set to {demucs_model_data_path}")
-        if not os.path.isfile(demucs_model_data_path):
-            self.logger.debug(f"Demucs model data not found at path {demucs_model_data_path}, downloading...")
-            self.download_file(demucs_model_data_url, demucs_model_data_path)
-
         # Loading model data
-        self.logger.debug("Loading MDX, VR, and Demucs model parameters from UVR model data files...")
+        self.logger.debug("Loading MDX and VR model parameters from UVR model data files...")
         vr_model_data_object = json.load(open(vr_model_data_path, encoding="utf-8"))
         mdx_model_data_object = json.load(open(mdx_model_data_path, encoding="utf-8"))
-        demucs_model_data_object = json.load(open(demucs_model_data_path, encoding="utf-8"))
 
         # vr_model_data_object JSON structure / example snippet:
         # {
@@ -501,17 +527,41 @@ class Separator:
 
         if model_hash in mdx_model_data_object:
             model_data = mdx_model_data_object[model_hash]
-            model_type = "MDX"
         elif model_hash in vr_model_data_object:
             model_data = vr_model_data_object[model_hash]
-            model_type = "VR"
-        elif model_hash in demucs_model_data_object:
-            model_data = demucs_model_data_object[model_hash]
-            model_type = "Demucs"
         else:
             raise ValueError(f"Unsupported Model File: parameters for MD5 hash {model_hash} could not be found in the UVR model data file.")
 
-        self.logger.debug(f"Model data loaded: {model_data}")
+        self.logger.debug(f"Model data loaded from UVR JSON using hash {model_hash}: {model_data}")
+        return model_data
+
+    def load_model_data_from_yaml(self, model_path):
+        """
+        This method loads model-specific parameters from the YAML file for that model.
+        The parameters in the YAML are critical to inferencing, as they need to match whatever was used during training.
+        """
+        model_data = yaml.load(open(model_path, encoding="utf-8"), Loader=yaml.FullLoader)
+
+        self.logger.debug(f"Model data loaded from YAML file: {model_data}")
+        return model_data
+
+    def load_model(self, model_filename="UVR-MDX-NET-Inst_HQ_3.onnx"):
+        """
+        This method loads the separation model into memory, downloading it first if necessary.
+        """
+        self.logger.info(f"Loading model {model_filename}...")
+
+        load_model_start_time = time.perf_counter()
+
+        # Setting up the model path
+        model_name = model_filename.split(".")[0]
+        model_type, model_friendly_name, model_path = self.download_model_files(model_filename)
+        self.logger.debug(f"Model downloaded, friendly name: {model_friendly_name}")
+
+        if model_path.lower().endswith(".yaml"):
+            model_data = self.load_model_data_from_yaml(model_path)
+        else:
+            model_data = self.load_model_data_using_hash(model_path)
 
         common_params = {
             "logger": self.logger,
