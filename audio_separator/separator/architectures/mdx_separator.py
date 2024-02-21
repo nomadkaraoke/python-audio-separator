@@ -2,7 +2,6 @@
 
 import os
 import torch
-import librosa
 import onnxruntime as ort
 import numpy as np
 import onnx2torch
@@ -19,6 +18,8 @@ class MDXSeparator(CommonSeparator):
     """
 
     def __init__(self, common_config, arch_config):
+        # Any configuration values which can be shared between architectures should be set already in CommonSeparator,
+        # e.g. user-specified functionality choices (self.output_single_stem) or common model parameters (self.primary_stem_name)
         super().__init__(config=common_config)
 
         # Initializing user-configurable parameters, passed through with an mdx_from the CLI or Separator instance
@@ -434,41 +435,3 @@ class MDXSeparator(CommonSeparator):
         self.logger.debug(f"Inverse STFT applied. Returning result with shape: {result.shape}")
 
         return result
-
-    def prepare_mix(self, mix):
-        """
-        Prepares the mix for processing. This includes loading the audio from a file if necessary,
-        ensuring the mix is in the correct format, and converting mono to stereo if needed.
-        """
-        # Store the original path or the mix itself for later checks
-        audio_path = mix
-
-        # Check if the input is a file path (string) and needs to be loaded
-        if not isinstance(mix, np.ndarray):
-            self.logger.debug(f"Loading audio from file: {mix}")
-            mix, sr = librosa.load(mix, mono=False, sr=self.sample_rate)
-            self.logger.debug(f"Audio loaded. Sample rate: {sr}, Audio shape: {mix.shape}")
-        else:
-            # Transpose the mix if it's already an ndarray (expected shape: [channels, samples])
-            self.logger.debug("Transposing the provided mix array.")
-            mix = mix.T
-            self.logger.debug(f"Transposed mix shape: {mix.shape}")
-
-        # If the original input was a filepath, check if the loaded mix is empty
-        if isinstance(audio_path, str):
-            if not np.any(mix):
-                error_msg = f"Audio file {audio_path} is empty or not valid"
-                self.logger.error(error_msg)
-                raise ValueError(error_msg)
-            else:
-                self.logger.debug("Audio file is valid and contains data.")
-
-        # Ensure the mix is in stereo format
-        if mix.ndim == 1:
-            self.logger.debug("Mix is mono. Converting to stereo.")
-            mix = np.asfortranarray([mix, mix])
-            self.logger.debug("Converted to stereo mix.")
-
-        # Final log indicating successful preparation of the mix
-        self.logger.debug("Mix preparation completed.")
-        return mix

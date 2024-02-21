@@ -2,7 +2,10 @@
 
 from logging import Logger
 import os
+import gc
 import numpy as np
+import librosa
+import torch
 from pydub import AudioSegment
 from audio_separator.separator.uvr_lib_v5 import spec_utils
 
@@ -80,7 +83,7 @@ class CommonSeparator:
         self.sample_rate = config.get("sample_rate")
 
         # Model specific properties
-        self.primary_stem_name = self.model_data["primary_stem"]
+        self.primary_stem_name = self.model_data.get("primary_stem", "Vocals")
         self.secondary_stem_name = "Vocals" if self.primary_stem_name == "Instrumental" else "Instrumental"
         self.is_karaoke = self.model_data.get("is_karaoke", False)
         self.is_bv_model = self.model_data.get("is_bv_model", False)
@@ -94,7 +97,7 @@ class CommonSeparator:
         self.logger.debug(f"Common params: invert_using_spec={self.invert_using_spec}, sample_rate={self.sample_rate}")
 
         self.logger.debug(f"Common params: primary_stem_name={self.primary_stem_name}, secondary_stem_name={self.secondary_stem_name}")
-        self.logger.debug(f"Common params: is_karaoke={self.is_karaoke}, is_bv_model={self.is_bv_model}, bv_model_rebalance={self.bv_model_rebalance}")        
+        self.logger.debug(f"Common params: is_karaoke={self.is_karaoke}, is_bv_model={self.is_bv_model}, bv_model_rebalance={self.bv_model_rebalance}")
 
         self.cached_sources_map = {}
 
@@ -156,6 +159,44 @@ class CommonSeparator:
         """
         self.cached_sources_map[model_architecture] = {**self.cached_sources_map.get(model_architecture, {}), **{model_name: sources}}
 
+    def prepare_mix(self, mix):
+        """
+        Prepares the mix for processing. This includes loading the audio from a file if necessary,
+        ensuring the mix is in the correct format, and converting mono to stereo if needed.
+        """
+        # Store the original path or the mix itself for later checks
+        audio_path = mix
+
+        # Check if the input is a file path (string) and needs to be loaded
+        if not isinstance(mix, np.ndarray):
+            self.logger.debug(f"Loading audio from file: {mix}")
+            mix, sr = librosa.load(mix, mono=False, sr=self.sample_rate)
+            self.logger.debug(f"Audio loaded. Sample rate: {sr}, Audio shape: {mix.shape}")
+        else:
+            # Transpose the mix if it's already an ndarray (expected shape: [channels, samples])
+            self.logger.debug("Transposing the provided mix array.")
+            mix = mix.T
+            self.logger.debug(f"Transposed mix shape: {mix.shape}")
+
+        # If the original input was a filepath, check if the loaded mix is empty
+        if isinstance(audio_path, str):
+            if not np.any(mix):
+                error_msg = f"Audio file {audio_path} is empty or not valid"
+                self.logger.error(error_msg)
+                raise ValueError(error_msg)
+            else:
+                self.logger.debug("Audio file is valid and contains data.")
+
+        # Ensure the mix is in stereo format
+        if mix.ndim == 1:
+            self.logger.debug("Mix is mono. Converting to stereo.")
+            mix = np.asfortranarray([mix, mix])
+            self.logger.debug("Converted to stereo mix.")
+
+        # Final log indicating successful preparation of the mix
+        self.logger.debug("Mix preparation completed.")
+        return mix
+
     def write_audio(self, stem_path: str, stem_source):
         """
         Writes the separated audio source to a file.
@@ -212,3 +253,16 @@ class CommonSeparator:
             self.logger.debug(f"Exported audio file successfully to {stem_path}")
         except (IOError, ValueError) as e:
             self.logger.error(f"Error exporting audio file: {e}")
+
+    def clear_gpu_cache(self):
+        """
+        This method clears the GPU cache to free up memory.
+        """
+        self.logger.debug("Running garbage collection...")
+        gc.collect()
+        if self.torch_device == torch.device("mps"):
+            self.logger.debug("Clearing MPS cache...")
+            torch.mps.empty_cache()
+        if self.torch_device == torch.device("cuda"):
+            self.logger.debug("Clearing CUDA cache...")
+            torch.cuda.empty_cache()

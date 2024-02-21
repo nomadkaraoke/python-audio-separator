@@ -2,7 +2,6 @@
 
 from importlib import metadata
 import os
-import gc
 import platform
 import subprocess
 
@@ -15,7 +14,6 @@ import warnings
 import requests
 import torch
 import onnxruntime as ort
-from audio_separator.separator.architectures import MDXSeparator, VRSeparator, DemucsSeparator
 
 
 class Separator:
@@ -300,19 +298,6 @@ class Separator:
         else:
             raise RuntimeError(f"Failed to download file from {url}, response code: {response.status_code}")
 
-    def clear_gpu_cache(self):
-        """
-        This method clears the GPU cache to free up memory.
-        """
-        self.logger.debug("Running garbage collection...")
-        gc.collect()
-        if self.torch_device == torch.device("mps"):
-            self.logger.debug("Clearing MPS cache...")
-            torch.mps.empty_cache()
-        if self.torch_device == torch.device("cuda"):
-            self.logger.debug("Clearing CUDA cache...")
-            torch.cuda.empty_cache()
-
     def list_supported_model_files(self):
         """
         This method lists the supported model files for audio-separator, by fetching the same file UVR uses to list these.
@@ -364,11 +349,14 @@ class Separator:
         #     }
         # }
 
+        # Only show Demucs v4 models as we've only implemented support for v4
+        filtered_demucs_v4 = {key: value for key, value in model_downloads_list["demucs_download_list"].items() if key.startswith("Demucs v4")}
+
         # Return object with list of model names, which are the keys in vr_download_list, mdx_download_list, demucs_download_list, mdx23_download_list, mdx23c_download_list, grouped by type: VR, MDX, Demucs, MDX23, MDX23C
         model_files_grouped_by_type = {
             "VR": model_downloads_list["vr_download_list"],
             "MDX": model_downloads_list["mdx_download_list"],
-            "Demucs": model_downloads_list["demucs_download_list"],
+            "Demucs": filtered_demucs_v4,
             "MDX23": model_downloads_list["mdx23_download_list"],
             "MDX23C": model_downloads_list["mdx23c_download_list"],
         }
@@ -606,7 +594,15 @@ class Separator:
         if model_type not in self.arch_specific_params:
             raise ValueError(f"Model type not supported (yet): {model_type}")
 
-        self.model_instance = MDXSeparator(common_config=common_params, arch_config=self.arch_specific_params[model_type])
+        # Instantiate the appropriate separator class depending on the model type
+        separator_classes = {"MDX": "MDXSeparator", "VR": "VRSeparator", "Demucs": "DemucsSeparator"}
+
+        if model_type not in separator_classes:
+            raise ValueError(f"Model type not supported (yet): {model_type}")
+
+        module = __import__("audio_separator.separator.architectures", fromlist=[separator_classes[model_type]])
+        separator_class = getattr(module, separator_classes[model_type])
+        self.model_instance = separator_class(common_config=common_params, arch_config=self.arch_specific_params[model_type])
 
         # Log the completion of the model load process
         self.logger.debug("Loading model completed.")
@@ -641,7 +637,7 @@ class Separator:
         output_files = self.model_instance.separate(audio_file_path)
 
         # Clear GPU cache to free up memory
-        self.clear_gpu_cache()
+        self.model_instance.clear_gpu_cache()
 
         # Unset the audio file to prevent accidental re-separation of the same file
         self.logger.debug("Clearing audio file...")

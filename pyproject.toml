@@ -41,6 +41,10 @@ onnx = ">=1.14"
 onnx2torch = ">=1.5"
 onnxruntime = { version = ">=1.17", optional = true }
 onnxruntime-gpu = { version = ">=1.17", optional = true }
+julius = "^0.2.7"
+omegaconf = "^2.3.0"
+diffq = "^0.2.4"
+einops = "^0.7.0"
 
 [tool.poetry.extras]
 cpu = ["onnxruntime"]
