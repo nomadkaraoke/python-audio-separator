@@ -281,10 +281,15 @@ class Separator:
             # Attempt to open the file again, read its entire content, and calculate the MD5 hash
             return hashlib.md5(open(model_path, "rb").read()).hexdigest()
 
-    def download_file(self, url, output_path):
+    def download_file_if_not_exists(self, url, output_path):
         """
-        This method downloads a file from a given URL to a given output path.
+        This method downloads a file from a given URL to a given output path, if the file does not already exist.
         """
+
+        if os.path.isfile(output_path):
+            self.logger.debug(f"File already exists at {output_path}, skipping download")
+            return
+
         self.logger.debug(f"Downloading file from {url} to {output_path} with timeout 300s")
         response = requests.get(url, stream=True, timeout=300)
 
@@ -293,7 +298,7 @@ class Separator:
                 for chunk in response.iter_content(chunk_size=8192):
                     f.write(chunk)
         else:
-            self.logger.error(f"Failed to download file from {url}")
+            raise RuntimeError(f"Failed to download file from {url}, response code: {response.status_code}")
 
     def clear_gpu_cache(self):
         """
@@ -314,8 +319,7 @@ class Separator:
         """
         download_checks_path = os.path.join(self.model_file_dir, "download_checks.json")
 
-        if not os.path.isfile(download_checks_path):
-            self.download_file("https://raw.githubusercontent.com/TRvlvr/application_data/main/filelists/download_checks.json", download_checks_path)
+        self.download_file_if_not_exists("https://raw.githubusercontent.com/TRvlvr/application_data/main/filelists/download_checks.json", download_checks_path)
 
         model_downloads_list = json.load(open(download_checks_path, encoding="utf-8"))
         self.logger.debug(f"Model download list loaded")
@@ -365,8 +369,8 @@ class Separator:
             "VR": model_downloads_list["vr_download_list"],
             "MDX": model_downloads_list["mdx_download_list"],
             "Demucs": model_downloads_list["demucs_download_list"],
-            # "MDX23": list(model_downloads_list["mdx23_download_list"].keys()),
-            # "MDX23C": list(model_downloads_list["mdx23c_download_list"].keys())
+            "MDX23": model_downloads_list["mdx23_download_list"],
+            "MDX23C": model_downloads_list["mdx23c_download_list"],
         }
         return model_files_grouped_by_type
 
@@ -386,10 +390,7 @@ class Separator:
                 if isinstance(model_download_list, str) and model_download_list == model_filename:
                     self.logger.debug(f"Single file model identified: {model_friendly_name}")
 
-                    # Check if model file exists, if not, download it
-                    if not os.path.isfile(model_path):
-                        self.logger.debug(f"Model not found at path {model_path}, downloading...")
-                        self.download_file(f"{model_repo_url_prefix}/{model_filename}", model_path)
+                    self.download_file_if_not_exists(f"{model_repo_url_prefix}/{model_filename}", model_path)
 
                     self.logger.debug(f"Returning path for single model file: {model_path}")
                     return model_type, model_friendly_name, model_path
@@ -400,7 +401,7 @@ class Separator:
                 elif isinstance(model_download_list, dict):
                     this_model_matches_input_filename = False
                     for file_name, file_url in model_download_list.items():
-                        if file_name == model_filename:
+                        if file_name == model_filename or file_url == model_filename:
                             self.logger.debug(f"Found input filename {model_filename} in multi-file model: {model_friendly_name}")
                             this_model_matches_input_filename = True
 
@@ -408,12 +409,22 @@ class Separator:
                         self.logger.debug(f"Multi-file model identified: {model_friendly_name}, iterating through files to download")
 
                         for file_name, file_url in model_download_list.items():
-                            full_file_url = f"{model_repo_url_prefix}/{file_url}" if not file_url.startswith("http") else file_url
-                            self.logger.info(f"Downloading {file_name} from {full_file_url}...")
-                            self.download_file(full_file_url, os.path.join(self.model_file_dir, file_name))
+                            # Demucs models have full URLs to download from Facebook repos
+                            if file_url.startswith("http"):
+                                full_file_url = file_url
+                            # Checkpoint models apparently use the key as the filename, the value is a filename of a YAML config file...
+                            elif file_name.endswith(".ckpt"):
+                                full_file_url = f"{model_repo_url_prefix}/{file_name}"
+                            # MDX and VR models have the model filename as the value mapped to the model name
+                            else:
+                                full_file_url = f"{model_repo_url_prefix}/{file_url}"
+
+                            self.download_file_if_not_exists(full_file_url, os.path.join(self.model_file_dir, file_name))
 
                         self.logger.debug(f"All files downloaded for model {model_friendly_name}, returning initial path {model_path}")
                         return model_type, model_friendly_name, model_path
+
+        raise ValueError(f"Model file {model_filename} not found in supported model files")
 
     def load_model_data_using_hash(self, model_path):
         """
@@ -426,6 +437,7 @@ class Separator:
 
         vr_model_data_url = f"{model_data_url_prefix}/vr_model_data/model_data_new.json"
         mdx_model_data_url = f"{model_data_url_prefix}/mdx_model_data/model_data_new.json"
+        mdx_c_configs_url_prefix = f"{model_data_url_prefix}/mdx_model_data/mdx_c_configs"
 
         # Calculate hash for the downloaded model
         self.logger.debug("Calculating MD5 hash for model file to identify model parameters from UVR data...")
@@ -435,15 +447,11 @@ class Separator:
         # Setting up the path for model data and checking its existence
         vr_model_data_path = os.path.join(self.model_file_dir, "vr_model_data.json")
         self.logger.debug(f"VR model data path set to {vr_model_data_path}")
-        if not os.path.isfile(vr_model_data_path):
-            self.logger.debug(f"VR model data not found at path {vr_model_data_path}, downloading...")
-            self.download_file(vr_model_data_url, vr_model_data_path)
+        self.download_file_if_not_exists(vr_model_data_url, vr_model_data_path)
 
         mdx_model_data_path = os.path.join(self.model_file_dir, "mdx_model_data.json")
         self.logger.debug(f"MDX model data path set to {mdx_model_data_path}")
-        if not os.path.isfile(mdx_model_data_path):
-            self.logger.debug(f"MDX model data not found at path {mdx_model_data_path}, downloading...")
-            self.download_file(mdx_model_data_url, mdx_model_data_path)
+        self.download_file_if_not_exists(mdx_model_data_url, mdx_model_data_path)
 
         # Loading model data
         self.logger.debug("Loading MDX and VR model parameters from UVR model data files...")
@@ -533,6 +541,17 @@ class Separator:
             raise ValueError(f"Unsupported Model File: parameters for MD5 hash {model_hash} could not be found in the UVR model data file.")
 
         self.logger.debug(f"Model data loaded from UVR JSON using hash {model_hash}: {model_data}")
+
+        # MDX_C model data is actually stored in a YAML file which has to be downloaded separately
+        if "config_yaml" in model_data:
+            self.logger.debug(f"Model data had config_yaml key, fetching actual model data YAML from MDX_C config URL")
+
+            mdxc_model_data_path = os.path.join(self.model_file_dir, model_data["config_yaml"])
+            self.logger.debug(f"MDX_C model data path set to {mdxc_model_data_path}")
+            self.download_file_if_not_exists(f"{mdx_c_configs_url_prefix}/{model_data['config_yaml']}", mdxc_model_data_path)
+
+            model_data = self.load_model_data_from_yaml(mdxc_model_data_path)
+
         return model_data
 
     def load_model_data_from_yaml(self, model_path):
@@ -584,14 +603,10 @@ class Separator:
             "sample_rate": self.sample_rate,
         }
 
-        if model_type == "MDX":
-            self.model_instance = MDXSeparator(common_config=common_params, arch_config=self.arch_specific_params["MDX"])
-        elif model_type == "VR":
-            self.model_instance = VRSeparator(common_config=common_params, arch_config=self.arch_specific_params["VR"])
-        elif model_type == "Demucs":
-            self.model_instance = DemucsSeparator(common_config=common_params, arch_config=self.arch_specific_params["Demucs"])
-        else:
-            raise ValueError(f"Unsupported model type: {model_type}")
+        if model_type not in self.arch_specific_params:
+            raise ValueError(f"Model type not supported (yet): {model_type}")
+
+        self.model_instance = MDXSeparator(common_config=common_params, arch_config=self.arch_specific_params[model_type])
 
         # Log the completion of the model load process
         self.logger.debug("Loading model completed.")
