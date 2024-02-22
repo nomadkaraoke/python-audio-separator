@@ -34,7 +34,6 @@ def main():
     io_params.add_argument("--model_file_dir", default="/tmp/audio-separator-models/", help="model files directory (default: %(default)s). Example: --model_file_dir=/app/models")
 
     common_params = parser.add_argument_group("Common Separation Parameters")
-    common_params.add_argument("--denoise", action="store_true", help="enable denoising during separation (default: %(default)s). Example: --denoise")
     common_params.add_argument("--invert_spect", action="store_true", help="invert secondary stem using spectogram (default: %(default)s). Example: --invert_spect")
     common_params.add_argument("--normalization", type=float, default=0.9, help="max peak amplitude to normalize input and output audio to (default: %(default)s). Example: --normalization=0.7")
     common_params.add_argument("--single_stem", default=None, help="output only single stem, either instrumental or vocals. Example: --single_stem=instrumental")
@@ -49,6 +48,7 @@ def main():
     mdx_params.add_argument(
         "--mdx_hop_length", type=int, default=1024, help="usually called stride in neural networks, only change if you know what you're doing (default: %(default)s). Example: --mdx_hop_length=1024"
     )
+    mdx_params.add_argument("--mdx_enable_denoise", action="store_true", help="enable denoising during separation (default: %(default)s). Example: --mdx_enable_denoise")
 
     vr_params = parser.add_argument_group("VR Architecture Parameters")
     vr_params.add_argument(
@@ -69,8 +69,21 @@ def main():
     )
     vr_params.add_argument("--vr_post_process_threshold", type=float, default=0.2, help="threshold for post_process feature: 0.1-0.3 (default: %(default)s). Example: --vr_post_process_threshold=0.1")
 
-    # demucs_params = parser.add_argument_group("Demucs Architecture Parameters")
-    # demucs_params.add_argument()
+    demucs_params = parser.add_argument_group("Demucs Architecture Parameters")
+    demucs_params.add_argument("--demucs_stem", default="All Stems", help="stem to extract from audio file, e.g. Vocals, Drums, Bass, Other (default: %(default)s). Example: --demucs_stem=vocals")
+    demucs_params.add_argument(
+        "--demucs_segment_size",
+        type=str,
+        default="Default",
+        help="size of segments into which the audio is split, 1-100. higher = slower but better quality (default: %(default)s). Example: --demucs_segment_size=256",
+    )
+    demucs_params.add_argument(
+        "--demucs_shifts", type=int, default=2, help="number of predictions with random shifts, higher = slower but better quality (default: %(default)s). Example: --demucs_shifts=4"
+    )
+    demucs_params.add_argument(
+        "--demucs_overlap", type=float, default=0.25, help="overlap between prediction windows, 0.001-0.999. higher = slower but better quality (default: %(default)s). Example: --demucs_overlap=0.25"
+    )
+    demucs_params.add_argument("--demucs_segments_enabled", type=bool, default=True, help="enable segment-wise processing (default: %(default)s). Example: --demucs_segments_enabled=False")
 
     args = parser.parse_args()
 
@@ -109,12 +122,17 @@ def main():
         model_file_dir=args.model_file_dir,
         output_dir=args.output_dir,
         output_format=args.output_format,
-        enable_denoise=args.denoise,
         normalization_threshold=args.normalization,
         output_single_stem=args.single_stem,
         invert_using_spec=args.invert_spect,
         sample_rate=args.sample_rate,
-        mdx_params={"hop_length": args.mdx_hop_length, "segment_size": args.mdx_segment_size, "overlap": args.mdx_overlap, "batch_size": args.mdx_batch_size},
+        mdx_params={
+            "hop_length": args.mdx_hop_length,
+            "segment_size": args.mdx_segment_size,
+            "overlap": args.mdx_overlap,
+            "batch_size": args.mdx_batch_size,
+            "enable_denoise": args.mdx_enable_denoise,
+        },
         vr_params={
             "batch_size": args.vr_batch_size,
             "window_size": args.vr_window_size,
@@ -123,6 +141,13 @@ def main():
             "enable_post_process": args.vr_enable_post_process,
             "post_process_threshold": args.vr_post_process_threshold,
             "high_end_process": args.vr_high_end_process,
+        },
+        demucs_params={
+            "selected_stem": args.demucs_stem,
+            "segment_size": args.demucs_segment_size,
+            "shifts": args.demucs_shifts,
+            "overlap": args.demucs_overlap,
+            "segments_enabled": args.demucs_segments_enabled,
         },
     )
 

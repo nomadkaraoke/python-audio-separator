@@ -15,6 +15,8 @@ import requests
 import torch
 import onnxruntime as ort
 
+from audio_separator.separator.common_separator import CommonSeparator
+
 
 class Separator:
     """
@@ -36,7 +38,6 @@ class Separator:
         secondary_stem_output_path (str): The path for saving the secondary stem.
         output_format (str): The format of the output audio file.
         normalization_threshold (float): The threshold for audio normalization.
-        enable_denoise (bool): Flag to enable or disable denoising.
         output_single_stem (str): Option to output a single stem.
         invert_using_spec (bool): Flag to invert using spectrogram.
         sample_rate (int): The sample rate of the audio.
@@ -46,6 +47,7 @@ class Separator:
         segment_size (int): The segment size for processing.
         overlap (float): The overlap between segments.
         batch_size (int): The batch size for processing.
+        enable_denoise (bool): Flag to enable or disable denoising.
 
     VR Architecture Specific Attributes & Defaults:
         batch_size: 16
@@ -70,13 +72,12 @@ class Separator:
         secondary_stem_output_path=None,
         output_format="WAV",
         normalization_threshold=0.9,
-        enable_denoise=False,
         output_single_stem=None,
         invert_using_spec=False,
         sample_rate=44100,
-        mdx_params={"hop_length": 1024, "segment_size": 256, "overlap": 0.25, "batch_size": 1},
+        mdx_params={"hop_length": 1024, "segment_size": 256, "overlap": 0.25, "batch_size": 1, "enable_denoise": False},
         vr_params={"batch_size": 16, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False},
-        demucs_params={},
+        demucs_params={"selected_stem": CommonSeparator.ALL_STEMS, "segment_size": "Default", "shifts": 2, "overlap": 0.25, "segments_enabled": True},
     ):
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(log_level)
@@ -119,7 +120,6 @@ class Separator:
             self.output_format = "WAV"
 
         self.normalization_threshold = normalization_threshold
-        self.enable_denoise = enable_denoise
 
         self.output_single_stem = output_single_stem
         if output_single_stem is not None:
@@ -585,7 +585,6 @@ class Separator:
             "output_format": self.output_format,
             "output_dir": self.output_dir,
             "normalization_threshold": self.normalization_threshold,
-            "enable_denoise": self.enable_denoise,
             "output_single_stem": self.output_single_stem,
             "invert_using_spec": self.invert_using_spec,
             "sample_rate": self.sample_rate,
@@ -627,11 +626,6 @@ class Separator:
         separate_start_time = time.perf_counter()
 
         self.logger.debug(f"Normalization threshold set to {self.normalization_threshold}, waveform will lowered to this max amplitude to avoid clipping.")
-
-        if self.enable_denoise:
-            self.logger.debug(f"Denoising enabled, model will be run twice to reduce noise in output audio.")
-        else:
-            self.logger.debug(f"Denoising disabled, model will only be run once. This is twice as fast, but may result in noisier output audio.")
 
         # Run separation method for the loaded model
         output_files = self.model_instance.separate(audio_file_path)

@@ -55,8 +55,11 @@ class MDXSeparator(CommonSeparator):
         #   This can be beneficial when the model needs to capture more global features rather than focusing on finer details.
         self.hop_length = arch_config.get("hop_length")
 
+        # If enabled, model will be run twice to reduce noise in output audio.
+        self.enable_denoise = arch_config.get("enable_denoise")
+
         self.logger.debug(f"MDX arch params: batch_size={self.batch_size}, segment_size={self.segment_size}")
-        self.logger.debug(f"MDX arch params: overlap={self.overlap}, hop_length={self.hop_length}")
+        self.logger.debug(f"MDX arch params: overlap={self.overlap}, hop_length={self.hop_length}, enable_denoise={self.enable_denoise}")
 
         # Initializing model-specific parameters from model_data JSON
         self.compensate = self.model_data["compensate"]
