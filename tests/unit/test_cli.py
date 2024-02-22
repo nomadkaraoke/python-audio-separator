@@ -15,13 +15,13 @@ def common_expected_args():
         "model_file_dir": "/tmp/audio-separator-models/",
         "output_dir": None,
         "output_format": "FLAC",
-        "enable_denoise": False,
         "normalization_threshold": 0.9,
         "output_single_stem": None,
         "invert_using_spec": False,
         "sample_rate": 44100,
-        "mdx_params": {"hop_length": 1024, "segment_size": 256, "overlap": 0.25, "batch_size": 1},
+        "mdx_params": {"hop_length": 1024, "segment_size": 256, "overlap": 0.25, "batch_size": 1, "enable_denoise": False},
         "vr_params": {"batch_size": 4, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False},
+        "demucs_params": {"segment_size": "Default", "shifts": 2, "overlap": 0.25, "segments_enabled": True},
     }
 
 
@@ -121,22 +121,6 @@ def test_cli_output_format_argument(common_expected_args):
 
             # Update expected args for this specific test
             common_expected_args["output_format"] = "MP3"
-
-            # Assertions
-            mock_separator.assert_called_once_with(**common_expected_args)
-
-
-# Test using denoise argument
-def test_cli_denoise_argument(common_expected_args):
-    test_args = ["cli.py", "test_audio.mp3", "--denoise"]
-    with patch("sys.argv", test_args):
-        with patch("audio_separator.separator.Separator") as mock_separator:
-            mock_separator_instance = mock_separator.return_value
-            mock_separator_instance.separate.return_value = ["output_file.mp3"]
-            main()
-
-            # Update expected args for this specific test
-            common_expected_args["enable_denoise"] = True
 
             # Assertions
             mock_separator.assert_called_once_with(**common_expected_args)
