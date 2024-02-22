@@ -36,7 +36,7 @@ def main():
     common_params = parser.add_argument_group("Common Separation Parameters")
     common_params.add_argument("--invert_spect", action="store_true", help="invert secondary stem using spectogram (default: %(default)s). Example: --invert_spect")
     common_params.add_argument("--normalization", type=float, default=0.9, help="max peak amplitude to normalize input and output audio to (default: %(default)s). Example: --normalization=0.7")
-    common_params.add_argument("--single_stem", default=None, help="output only single stem, either instrumental or vocals. Example: --single_stem=instrumental")
+    common_params.add_argument("--single_stem", default=None, help="output only single stem, e.g. Instrumental, Vocals, Drums, Bass, Guitar, Piano, Other. Example: --single_stem=Instrumental")
     common_params.add_argument("--sample_rate", type=int, default=44100, help="modify the sample rate of the output audio (default: %(default)s). Example: --sample_rate=44100")
 
     mdx_params = parser.add_argument_group("MDX Architecture Parameters")
@@ -70,7 +70,6 @@ def main():
     vr_params.add_argument("--vr_post_process_threshold", type=float, default=0.2, help="threshold for post_process feature: 0.1-0.3 (default: %(default)s). Example: --vr_post_process_threshold=0.1")
 
     demucs_params = parser.add_argument_group("Demucs Architecture Parameters")
-    demucs_params.add_argument("--demucs_stem", default="All Stems", help="stem to extract from audio file, e.g. Vocals, Drums, Bass, Other (default: %(default)s). Example: --demucs_stem=vocals")
     demucs_params.add_argument(
         "--demucs_segment_size",
         type=str,
@@ -143,7 +142,6 @@ def main():
             "high_end_process": args.vr_high_end_process,
         },
         demucs_params={
-            "selected_stem": args.demucs_stem,
             "segment_size": args.demucs_segment_size,
             "shifts": args.demucs_shifts,
             "overlap": args.demucs_overlap,

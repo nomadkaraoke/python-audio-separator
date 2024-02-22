@@ -117,10 +117,11 @@ If the GPU isn't being detected, make sure your docker runtime environment is pa
 You can use Audio Separator via the command line:
 
 ```sh
-usage: audio-separator [-h] [-v] [-d] [-e] [-l] [--log_level LOG_LEVEL] [-m MODEL_FILENAME] [--output_format OUTPUT_FORMAT] [--output_dir OUTPUT_DIR] [--model_file_dir MODEL_FILE_DIR] [--denoise] [--invert_spect]
+usage: audio-separator [-h] [-v] [-d] [-e] [-l] [--log_level LOG_LEVEL] [-m MODEL_FILENAME] [--output_format OUTPUT_FORMAT] [--output_dir OUTPUT_DIR] [--model_file_dir MODEL_FILE_DIR] [--invert_spect]
                        [--normalization NORMALIZATION] [--single_stem SINGLE_STEM] [--sample_rate SAMPLE_RATE] [--mdx_segment_size MDX_SEGMENT_SIZE] [--mdx_overlap MDX_OVERLAP] [--mdx_batch_size MDX_BATCH_SIZE]
-                       [--mdx_hop_length MDX_HOP_LENGTH] [--vr_batch_size VR_BATCH_SIZE] [--vr_window_size VR_WINDOW_SIZE] [--vr_aggression VR_AGGRESSION] [--vr_enable_tta] [--vr_high_end_process]
-                       [--vr_enable_post_process] [--vr_post_process_threshold VR_POST_PROCESS_THRESHOLD]
+                       [--mdx_hop_length MDX_HOP_LENGTH] [--mdx_enable_denoise] [--vr_batch_size VR_BATCH_SIZE] [--vr_window_size VR_WINDOW_SIZE] [--vr_aggression VR_AGGRESSION] [--vr_enable_tta]
+                       [--vr_high_end_process] [--vr_enable_post_process] [--vr_post_process_threshold VR_POST_PROCESS_THRESHOLD] [--demucs_stem DEMUCS_STEM] [--demucs_segment_size DEMUCS_SEGMENT_SIZE]
+                       [--demucs_shifts DEMUCS_SHIFTS] [--demucs_overlap DEMUCS_OVERLAP] [--demucs_segments_enabled DEMUCS_SEGMENTS_ENABLED]
                        [audio_file]
 
 Separate audio file into different stems.
@@ -145,7 +146,6 @@ Separation I/O Params:
   --model_file_dir MODEL_FILE_DIR                        model files directory (default: /tmp/audio-separator-models/). Example: --model_file_dir=/app/models
 
 Common Separation Parameters:
-  --denoise                                              enable denoising during separation (default: False). Example: --denoise
   --invert_spect                                         invert secondary stem using spectogram (default: False). Example: --invert_spect
   --normalization NORMALIZATION                          max peak amplitude to normalize input and output audio to (default: 0.9). Example: --normalization=0.7
   --single_stem SINGLE_STEM                              output only single stem, either instrumental or vocals. Example: --single_stem=instrumental
@@ -156,6 +156,7 @@ MDX Architecture Parameters:
   --mdx_overlap MDX_OVERLAP                              amount of overlap between prediction windows, 0.001-0.999. higher is better but slower (default: 0.25). Example: --mdx_overlap=0.25
   --mdx_batch_size MDX_BATCH_SIZE                        larger consumes more RAM but may process slightly faster (default: 1). Example: --mdx_batch_size=4
   --mdx_hop_length MDX_HOP_LENGTH                        usually called stride in neural networks, only change if you know what you're doing (default: 1024). Example: --mdx_hop_length=1024
+  --mdx_enable_denoise                                   enable denoising during separation (default: False). Example: --mdx_enable_denoise
 
 VR Architecture Parameters:
   --vr_batch_size VR_BATCH_SIZE                          number of batches to process at a time. higher = more RAM, slightly faster processing (default: 4). Example: --vr_batch_size=16
@@ -165,6 +166,13 @@ VR Architecture Parameters:
   --vr_high_end_process                                  mirror the missing frequency range of the output (default: False). Example: --vr_high_end_process
   --vr_enable_post_process                               identify leftover artifacts within vocal output; may improve separation for some songs (default: False). Example: --vr_enable_post_process
   --vr_post_process_threshold VR_POST_PROCESS_THRESHOLD  threshold for post_process feature: 0.1-0.3 (default: 0.2). Example: --vr_post_process_threshold=0.1
+
+Demucs Architecture Parameters:
+  --demucs_stem DEMUCS_STEM                              stem to extract from audio file, e.g. Vocals, Drums, Bass, Other (default: All Stems). Example: --demucs_stem=vocals
+  --demucs_segment_size DEMUCS_SEGMENT_SIZE              size of segments into which the audio is split, 1-100. higher = slower but better quality (default: Default). Example: --demucs_segment_size=256
+  --demucs_shifts DEMUCS_SHIFTS                          number of predictions with random shifts, higher = slower but better quality (default: 2). Example: --demucs_shifts=4
+  --demucs_overlap DEMUCS_OVERLAP                        overlap between prediction windows, 0.001-0.999. higher = slower but better quality (default: 0.25). Example: --demucs_overlap=0.25
+  --demucs_segments_enabled DEMUCS_SEGMENTS_ENABLED      enable segment-wise processing (default: True). Example: --demucs_segments_enabled=False
 ```
 
 Example:
@@ -234,12 +242,12 @@ output_file_paths_6 = separator.separate('audio3.wav')
 - secondary_stem_output_path: (Optional) The path for saving the secondary stem. Default: None
 - output_format: (Optional) Format to encode output files, any common format (WAV, MP3, FLAC, M4A, etc.). Default: WAV
 - normalization_threshold: (Optional) The threshold for audio normalization. Default: 0.9
-- enable_denoise: (Optional) Flag to enable or disable denoising as part of the separation process. Default: False
 - output_single_stem: (Optional) Output only a single stem, either 'instrumental' or 'vocals'. Default: None
 - invert_using_spec: (Optional) Flag to invert using spectrogram. Default: False
 - sample_rate: (Optional) Modify the sample rate of the output audio. Default: 44100
 - mdx_params: (Optional) MDX Architecture Specific Attributes & Defaults. Default: {"hop_length": 1024, "segment_size": 256, "overlap": 0.25, "batch_size": 1}
 - vr_params: (Optional) VR Architecture Specific Attributes & Defaults. Default: {"batch_size": 16, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False}
+- demucs_params: (Optional) VR Architecture Specific Attributes & Defaults. {"segment_size": "Default", "shifts": 2, "overlap": 0.25, "segments_enabled": True}
 
 ## Requirements 📋
 

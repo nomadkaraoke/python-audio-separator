@@ -36,14 +36,6 @@ class DemucsSeparator(CommonSeparator):
 
         # Initializing user-configurable parameters, passed through with an mdx_from the CLI or Separator instance
 
-        # 'Select a stem for extraction with the chosen model:\n\n'
-        # '• All Stems - Extracts all available stems.\n'
-        # '• Vocals - Only the "vocals" stem.\n'
-        # '• Other - Only the "other" stem.\n'
-        # '• Bass - Only the "bass" stem.\n'
-        # '• Drums - Only the "drums" stem.'
-        self.selected_stem = arch_config.get("selected_stem", [CommonSeparator.ALL_STEMS])
-
         # Adjust segments to manage RAM or V-RAM usage:
         # - Smaller sizes consume less resources.
         # - Bigger sizes consume more resources, but may provide better results.
@@ -73,7 +65,7 @@ class DemucsSeparator(CommonSeparator):
         self.segments_enabled = arch_config.get("segments_enabled", True)
 
         self.logger.debug(f"Demucs arch params: segment_size={self.segment_size}, segments_enabled={self.segments_enabled}")
-        self.logger.debug(f"Demucs arch params: shifts={self.shifts}, overlap={self.overlap}, selected_stem={self.selected_stem}")
+        self.logger.debug(f"Demucs arch params: shifts={self.shifts}, overlap={self.overlap}")
 
         self.demucs_source_map = DEMUCS_4_SOURCE_MAPPER
 
@@ -147,6 +139,11 @@ class DemucsSeparator(CommonSeparator):
 
         self.logger.debug("Processing for all stems...")
         for stem_name, stem_value in self.demucs_source_map.items():
+            if self.output_single_stem is not None:
+                if stem_name.lower() != self.output_single_stem.lower():
+                    self.logger.debug(f"Skipping writing stem {stem_name} as output_single_stem is set to {self.output_single_stem}...")
+                    continue
+
             stem_path = os.path.join(f"{self.audio_file_base}_({stem_name})_{self.model_name}.{self.output_format.lower()}")
             stem_source = source[stem_value].T
 

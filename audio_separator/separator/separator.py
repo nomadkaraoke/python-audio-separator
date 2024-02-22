@@ -77,7 +77,7 @@ class Separator:
         sample_rate=44100,
         mdx_params={"hop_length": 1024, "segment_size": 256, "overlap": 0.25, "batch_size": 1, "enable_denoise": False},
         vr_params={"batch_size": 16, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False},
-        demucs_params={"selected_stem": CommonSeparator.ALL_STEMS, "segment_size": "Default", "shifts": 2, "overlap": 0.25, "segments_enabled": True},
+        demucs_params={"segment_size": "Default", "shifts": 2, "overlap": 0.25, "segments_enabled": True},
     ):
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(log_level)
@@ -123,8 +123,6 @@ class Separator:
 
         self.output_single_stem = output_single_stem
         if output_single_stem is not None:
-            if output_single_stem.lower() not in {"instrumental", "vocals"}:
-                raise ValueError("output_single_stem must be either 'instrumental' or 'vocals'")
             self.logger.debug(f"Single stem output requested, only one output file ({output_single_stem}) will be written")
 
         self.invert_using_spec = invert_using_spec
@@ -357,8 +355,8 @@ class Separator:
             "VR": model_downloads_list["vr_download_list"],
             "MDX": model_downloads_list["mdx_download_list"],
             "Demucs": filtered_demucs_v4,
-            "MDX23": model_downloads_list["mdx23_download_list"],
-            "MDX23C": model_downloads_list["mdx23c_download_list"],
+            # "MDX23": model_downloads_list["mdx23_download_list"],
+            # "MDX23C": model_downloads_list["mdx23c_download_list"],
         }
         return model_files_grouped_by_type
 
