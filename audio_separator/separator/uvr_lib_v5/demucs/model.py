@@ -28,7 +28,7 @@ class BLSTM(nn.Module):
 
 def rescale_conv(conv, reference):
     std = conv.weight.std().detach()
-    scale = (std / reference)**0.5
+    scale = (std / reference) ** 0.5
     conv.weight.data /= scale
     if conv.bias is not None:
         conv.bias.data /= scale
@@ -60,21 +60,9 @@ def downsample(x, stride):
 
 class Demucs(nn.Module):
     @capture_init
-    def __init__(self,
-                 sources=4,
-                 audio_channels=2,
-                 channels=64,
-                 depth=6,
-                 rewrite=True,
-                 glu=True,
-                 upsample=False,
-                 rescale=0.1,
-                 kernel_size=8,
-                 stride=4,
-                 growth=2.,
-                 lstm_layers=2,
-                 context=3,
-                 samplerate=44100):
+    def __init__(
+        self, sources=4, audio_channels=2, channels=64, depth=6, rewrite=True, glu=True, upsample=False, rescale=0.1, kernel_size=8, stride=4, growth=2.0, lstm_layers=2, context=3, samplerate=44100
+    ):
         """
         Args:
             sources (int): number of sources to separate
@@ -144,9 +132,7 @@ class Demucs(nn.Module):
             if rewrite:
                 decode += [nn.Conv1d(channels, ch_scale * channels, context), activation]
             if upsample:
-                decode += [
-                    nn.Conv1d(channels, out_channels, kernel_size, stride=1),
-                ]
+                decode += [nn.Conv1d(channels, out_channels, kernel_size, stride=1)]
             else:
                 decode += [nn.ConvTranspose1d(channels, out_channels, kernel_size, stride)]
             if index > 0:

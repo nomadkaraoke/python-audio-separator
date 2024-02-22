@@ -280,12 +280,7 @@ class HTDemucs(nn.Module):
                 "norm": norm,
                 "rewrite": rewrite,
                 "norm_groups": norm_groups,
-                "dconv_kw": {
-                    "depth": dconv_depth,
-                    "compress": dconv_comp,
-                    "init": dconv_init,
-                    "gelu": True,
-                },
+                "dconv_kw": {"depth": dconv_depth, "compress": dconv_comp, "init": dconv_init, "gelu": True},
             }
             kwt = dict(kw)
             kwt["freq"] = 0
@@ -302,18 +297,9 @@ class HTDemucs(nn.Module):
                 chout_z = max(chout, chout_z)
                 chout = chout_z
 
-            enc = HEncLayer(
-                chin_z, chout_z, dconv=dconv_mode & 1, context=context_enc, **kw
-            )
+            enc = HEncLayer(chin_z, chout_z, dconv=dconv_mode & 1, context=context_enc, **kw)
             if freq:
-                tenc = HEncLayer(
-                    chin,
-                    chout,
-                    dconv=dconv_mode & 1,
-                    context=context_enc,
-                    empty=last_freq,
-                    **kwt
-                )
+                tenc = HEncLayer(chin, chout, dconv=dconv_mode & 1, context=context_enc, empty=last_freq, **kwt)
                 self.tencoder.append(tenc)
 
             if multi:
@@ -324,26 +310,11 @@ class HTDemucs(nn.Module):
                 chin_z = chin
                 if self.cac:
                     chin_z *= 2
-            dec = HDecLayer(
-                chout_z,
-                chin_z,
-                dconv=dconv_mode & 2,
-                last=index == 0,
-                context=context,
-                **kw_dec
-            )
+            dec = HDecLayer(chout_z, chin_z, dconv=dconv_mode & 2, last=index == 0, context=context, **kw_dec)
             if multi:
                 dec = MultiWrap(dec, multi_freqs)
             if freq:
-                tdec = HDecLayer(
-                    chout,
-                    chin,
-                    dconv=dconv_mode & 2,
-                    empty=last_freq,
-                    last=index == 0,
-                    context=context,
-                    **kwt
-                )
+                tdec = HDecLayer(chout, chin, dconv=dconv_mode & 2, empty=last_freq, last=index == 0, context=context, **kwt)
                 self.tdecoder.insert(0, tdec)
             self.decoder.insert(0, dec)
 
@@ -357,9 +328,7 @@ class HTDemucs(nn.Module):
                 else:
                     freqs //= stride
             if index == 0 and freq_emb:
-                self.freq_emb = ScaledEmbedding(
-                    freqs, chin_z, smooth=emb_smooth, scale=emb_scale
-                )
+                self.freq_emb = ScaledEmbedding(freqs, chin_z, smooth=emb_smooth, scale=emb_scale)
                 self.freq_emb_scale = freq_emb
 
         if rescale:
@@ -368,15 +337,9 @@ class HTDemucs(nn.Module):
         transformer_channels = channels * growth ** (depth - 1)
         if bottom_channels:
             self.channel_upsampler = nn.Conv1d(transformer_channels, bottom_channels, 1)
-            self.channel_downsampler = nn.Conv1d(
-                bottom_channels, transformer_channels, 1
-            )
-            self.channel_upsampler_t = nn.Conv1d(
-                transformer_channels, bottom_channels, 1
-            )
-            self.channel_downsampler_t = nn.Conv1d(
-                bottom_channels, transformer_channels, 1
-            )
+            self.channel_downsampler = nn.Conv1d(bottom_channels, transformer_channels, 1)
+            self.channel_upsampler_t = nn.Conv1d(transformer_channels, bottom_channels, 1)
+            self.channel_downsampler_t = nn.Conv1d(bottom_channels, transformer_channels, 1)
 
             transformer_channels = bottom_channels
 
@@ -436,7 +399,7 @@ class HTDemucs(nn.Module):
 
         z = spectro(x, nfft, hl)[..., :-1, :]
         assert z.shape[-1] == le + 4, (z.shape, x.shape, le)
-        z = z[..., 2: 2 + le]
+        z = z[..., 2 : 2 + le]
         return z
 
     def _ispec(self, z, length=None, scale=0):
@@ -446,7 +409,7 @@ class HTDemucs(nn.Module):
         pad = hl // 2 * 3
         le = hl * int(math.ceil(length / hl)) + 2 * pad
         x = ispectro(z, hl, length=le)
-        x = x[..., pad: pad + length]
+        x = x[..., pad : pad + length]
         return x
 
     def _magnitude(self, z):
@@ -493,12 +456,7 @@ class HTDemucs(nn.Module):
             out = []
             for pos in range(0, T, wiener_win_len):
                 frame = slice(pos, pos + wiener_win_len)
-                z_out = wiener(
-                    mag_out[sample, frame],
-                    mix_stft[sample, frame],
-                    niters,
-                    residual=residual,
-                )
+                z_out = wiener(mag_out[sample, frame], mix_stft[sample, frame], niters, residual=residual)
                 out.append(z_out.transpose(-1, -2))
             outs.append(torch.cat(out, dim=0))
         out = torch.view_as_complex(torch.stack(outs, 0))
@@ -519,9 +477,7 @@ class HTDemucs(nn.Module):
             return length
         training_length = int(self.segment * self.samplerate)
         if training_length < length:
-            raise ValueError(
-                    f"Given length {length} is longer than "
-                    f"training length {training_length}")
+            raise ValueError(f"Given length {length} is longer than " f"training length {training_length}")
         return training_length
 
     def forward(self, mix):
@@ -629,11 +585,11 @@ class HTDemucs(nn.Module):
         # demucs issue #435 ##432
         # NOTE: in this case z already is on cpu
         # TODO: remove this when mps supports complex numbers
-        
+
         device_type = x.device.type
-        device_load = f"{device_type}:{x.device.index}" if not device_type == 'mps' else device_type
+        device_load = f"{device_type}:{x.device.index}" if not device_type == "mps" else device_type
         x_is_other_gpu = not device_type in ["cuda", "cpu"]
-        
+
         if x_is_other_gpu:
             x = x.cpu()
 

@@ -4,6 +4,7 @@ import torch.nn as nn
 from torch import Tensor
 from torch.utils.data import DataLoader
 
+
 def atan2(y, x):
     r"""Element-wise arctangent function of y/x.
     Returns a new tensor with signed angles in radians.
@@ -149,13 +150,7 @@ def _invert(M: torch.Tensor, out: Optional[torch.Tensor] = None) -> torch.Tensor
 # Now define the signal-processing low-level functions used by the Separator
 
 
-def expectation_maximization(
-    y: torch.Tensor,
-    x: torch.Tensor,
-    iterations: int = 2,
-    eps: float = 1e-10,
-    batch_size: int = 200,
-):
+def expectation_maximization(y: torch.Tensor, x: torch.Tensor, iterations: int = 2, eps: float = 1e-10, batch_size: int = 200):
     r"""Expectation maximization algorithm, for refining source separation
     estimates.
 
@@ -246,22 +241,11 @@ def expectation_maximization(
     (nb_frames, nb_bins, nb_channels) = x.shape[:-1]
     nb_sources = y.shape[-1]
 
-    regularization = torch.cat(
-        (
-            torch.eye(nb_channels, dtype=x.dtype, device=x.device)[..., None],
-            torch.zeros((nb_channels, nb_channels, 1), dtype=x.dtype, device=x.device),
-        ),
-        dim=2,
-    )
-    regularization = torch.sqrt(torch.as_tensor(eps)) * (
-        regularization[None, None, ...].expand((-1, nb_bins, -1, -1, -1))
-    )
+    regularization = torch.cat((torch.eye(nb_channels, dtype=x.dtype, device=x.device)[..., None], torch.zeros((nb_channels, nb_channels, 1), dtype=x.dtype, device=x.device)), dim=2)
+    regularization = torch.sqrt(torch.as_tensor(eps)) * (regularization[None, None, ...].expand((-1, nb_bins, -1, -1, -1)))
 
     # allocate the spatial covariance matrices
-    R = [
-        torch.zeros((nb_bins, nb_channels, nb_channels, 2), dtype=x.dtype, device=x.device)
-        for j in range(nb_sources)
-    ]
+    R = [torch.zeros((nb_bins, nb_channels, nb_channels, 2), dtype=x.dtype, device=x.device) for j in range(nb_sources)]
     weight: torch.Tensor = torch.zeros((nb_bins,), dtype=x.dtype, device=x.device)
 
     v: torch.Tensor = torch.zeros((nb_frames, nb_bins, nb_sources), dtype=x.dtype, device=x.device)
@@ -313,17 +297,9 @@ def expectation_maximization(
                 gain = torch.zeros_like(inv_Cxx)
 
                 # computes multichannel Wiener gain as v_j R_j inv_Cxx
-                indices = torch.cartesian_prod(
-                    torch.arange(nb_channels),
-                    torch.arange(nb_channels),
-                    torch.arange(nb_channels),
-                )
+                indices = torch.cartesian_prod(torch.arange(nb_channels), torch.arange(nb_channels), torch.arange(nb_channels))
                 for index in indices:
-                    gain[:, :, index[0], index[1], :] = _mul_add(
-                        R[j][None, :, index[0], index[2], :].clone(),
-                        inv_Cxx[:, :, index[2], index[1], :],
-                        gain[:, :, index[0], index[1], :],
-                    )
+                    gain[:, :, index[0], index[1], :] = _mul_add(R[j][None, :, index[0], index[2], :].clone(), inv_Cxx[:, :, index[2], index[1], :], gain[:, :, index[0], index[1], :])
                 gain = gain * v[t, ..., None, None, None, j]
 
                 # apply it to the mixture
@@ -333,15 +309,7 @@ def expectation_maximization(
     return y, v, R
 
 
-def wiener(
-    targets_spectrograms: torch.Tensor,
-    mix_stft: torch.Tensor,
-    iterations: int = 1,
-    softmask: bool = False,
-    residual: bool = False,
-    scale_factor: float = 10.0,
-    eps: float = 1e-10,
-):
+def wiener(targets_spectrograms: torch.Tensor, mix_stft: torch.Tensor, iterations: int = 1, softmask: bool = False, residual: bool = False, scale_factor: float = 10.0, eps: float = 1e-10):
     """Wiener-based separation for multichannel audio.
 
     The method uses the (possibly multichannel) spectrograms  of the
@@ -430,21 +398,13 @@ def wiener(
     if softmask:
         # if we use softmask, we compute the ratio mask for all targets and
         # multiply by the mix stft
-        y = (
-            mix_stft[..., None]
-            * (
-                targets_spectrograms
-                / (eps + torch.sum(targets_spectrograms, dim=-1, keepdim=True).to(mix_stft.dtype))
-            )[..., None, :]
-        )
+        y = mix_stft[..., None] * (targets_spectrograms / (eps + torch.sum(targets_spectrograms, dim=-1, keepdim=True).to(mix_stft.dtype)))[..., None, :]
     else:
         # otherwise, we just multiply the targets spectrograms with mix phase
         # we tacitly assume that we have magnitude estimates.
         angle = atan2(mix_stft[..., 1], mix_stft[..., 0])[..., None]
         nb_sources = targets_spectrograms.shape[-1]
-        y = torch.zeros(
-            mix_stft.shape + (nb_sources,), dtype=mix_stft.dtype, device=mix_stft.device
-        )
+        y = torch.zeros(mix_stft.shape + (nb_sources,), dtype=mix_stft.dtype, device=mix_stft.device)
         y[..., 0, :] = targets_spectrograms * torch.cos(angle)
         y[..., 1, :] = targets_spectrograms * torch.sin(angle)
 
@@ -458,10 +418,7 @@ def wiener(
 
     # we need to refine the estimates. Scales down the estimates for
     # numerical stability
-    max_abs = torch.max(
-        torch.as_tensor(1.0, dtype=mix_stft.dtype, device=mix_stft.device),
-        torch.sqrt(_norm(mix_stft)).max() / scale_factor,
-    )
+    max_abs = torch.max(torch.as_tensor(1.0, dtype=mix_stft.dtype, device=mix_stft.device), torch.sqrt(_norm(mix_stft)).max() / scale_factor)
 
     mix_stft = mix_stft / max_abs
     y = y / max_abs
@@ -487,16 +444,8 @@ def _covariance(y_j):
             just y_j * conj(y_j.T): empirical covariance for each TF bin.
     """
     (nb_frames, nb_bins, nb_channels) = y_j.shape[:-1]
-    Cj = torch.zeros(
-        (nb_frames, nb_bins, nb_channels, nb_channels, 2),
-        dtype=y_j.dtype,
-        device=y_j.device,
-    )
+    Cj = torch.zeros((nb_frames, nb_bins, nb_channels, nb_channels, 2), dtype=y_j.dtype, device=y_j.device)
     indices = torch.cartesian_prod(torch.arange(nb_channels), torch.arange(nb_channels))
     for index in indices:
-        Cj[:, :, index[0], index[1], :] = _mul_add(
-            y_j[:, :, index[0], :],
-            _conj(y_j[:, :, index[1], :]),
-            Cj[:, :, index[0], index[1], :],
-        )
+        Cj[:, :, index[0], index[1], :] = _mul_add(y_j[:, :, index[0], :], _conj(y_j[:, :, index[1], :]), Cj[:, :, index[0], index[1], :])
     return Cj

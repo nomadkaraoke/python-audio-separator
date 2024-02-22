@@ -53,8 +53,7 @@ def overlap_and_add(signal, frame_step):
 
     subframe_signal = signal.view(*outer_dimensions, -1, subframe_length)
 
-    frame = torch.arange(0, output_subframes,
-                         device=signal.device).unfold(0, subframes_per_frame, subframe_step)
+    frame = torch.arange(0, output_subframes, device=signal.device).unfold(0, subframes_per_frame, subframe_step)
     frame = frame.long()  # signal may in GPU or CPU
     frame = frame.contiguous().view(-1)
 
@@ -66,21 +65,7 @@ def overlap_and_add(signal, frame_step):
 
 class ConvTasNet(nn.Module):
     @capture_init
-    def __init__(self,
-                 sources,
-                 N=256,
-                 L=20,
-                 B=256,
-                 H=512,
-                 P=3,
-                 X=8,
-                 R=4,
-                 audio_channels=2,
-                 norm_type="gLN",
-                 causal=False,
-                 mask_nonlinear='relu',
-                 samplerate=44100,
-                 segment_length=44100 * 2 * 4):
+    def __init__(self, sources, N=256, L=20, B=256, H=512, P=3, X=8, R=4, audio_channels=2, norm_type="gLN", causal=False, mask_nonlinear="relu", samplerate=44100, segment_length=44100 * 2 * 4):
         """
         Args:
             sources: list of sources
@@ -108,8 +93,7 @@ class ConvTasNet(nn.Module):
         self.segment_length = segment_length
         # Components
         self.encoder = Encoder(L, N, audio_channels)
-        self.separator = TemporalConvNet(
-            N, B, H, P, X, R, self.C, norm_type, causal, mask_nonlinear)
+        self.separator = TemporalConvNet(N, B, H, P, X, R, self.C, norm_type, causal, mask_nonlinear)
         self.decoder = Decoder(N, L, audio_channels)
         # init
         for p in self.parameters():
@@ -138,8 +122,8 @@ class ConvTasNet(nn.Module):
 
 
 class Encoder(nn.Module):
-    """Estimation of the nonnegative mixture weight by a 1-D conv layer.
-    """
+    """Estimation of the nonnegative mixture weight by a 1-D conv layer."""
+
     def __init__(self, L, N, audio_channels):
         super(Encoder, self).__init__()
         # Hyper-parameter
@@ -188,7 +172,7 @@ class Decoder(nn.Module):
 
 
 class TemporalConvNet(nn.Module):
-    def __init__(self, N, B, H, P, X, R, C, norm_type="gLN", causal=False, mask_nonlinear='relu'):
+    def __init__(self, N, B, H, P, X, R, C, norm_type="gLN", causal=False, mask_nonlinear="relu"):
         """
         Args:
             N: Number of filters in autoencoder
@@ -218,23 +202,13 @@ class TemporalConvNet(nn.Module):
             for x in range(X):
                 dilation = 2**x
                 padding = (P - 1) * dilation if causal else (P - 1) * dilation // 2
-                blocks += [
-                    TemporalBlock(B,
-                                  H,
-                                  P,
-                                  stride=1,
-                                  padding=padding,
-                                  dilation=dilation,
-                                  norm_type=norm_type,
-                                  causal=causal)
-                ]
+                blocks += [TemporalBlock(B, H, P, stride=1, padding=padding, dilation=dilation, norm_type=norm_type, causal=causal)]
             repeats += [nn.Sequential(*blocks)]
         temporal_conv_net = nn.Sequential(*repeats)
         # [M, B, K] -> [M, C*N, K]
         mask_conv1x1 = nn.Conv1d(B, C * N, 1, bias=False)
         # Put together
-        self.network = nn.Sequential(layer_norm, bottleneck_conv1x1, temporal_conv_net,
-                                     mask_conv1x1)
+        self.network = nn.Sequential(layer_norm, bottleneck_conv1x1, temporal_conv_net, mask_conv1x1)
 
     def forward(self, mixture_w):
         """
@@ -247,9 +221,9 @@ class TemporalConvNet(nn.Module):
         M, N, K = mixture_w.size()
         score = self.network(mixture_w)  # [M, N, K] -> [M, C*N, K]
         score = score.view(M, self.C, N, K)  # [M, C*N, K] -> [M, C, N, K]
-        if self.mask_nonlinear == 'softmax':
+        if self.mask_nonlinear == "softmax":
             est_mask = F.softmax(score, dim=1)
-        elif self.mask_nonlinear == 'relu':
+        elif self.mask_nonlinear == "relu":
             est_mask = F.relu(score)
         else:
             raise ValueError("Unsupported mask non-linear function")
@@ -257,23 +231,14 @@ class TemporalConvNet(nn.Module):
 
 
 class TemporalBlock(nn.Module):
-    def __init__(self,
-                 in_channels,
-                 out_channels,
-                 kernel_size,
-                 stride,
-                 padding,
-                 dilation,
-                 norm_type="gLN",
-                 causal=False):
+    def __init__(self, in_channels, out_channels, kernel_size, stride, padding, dilation, norm_type="gLN", causal=False):
         super(TemporalBlock, self).__init__()
         # [M, B, K] -> [M, H, K]
         conv1x1 = nn.Conv1d(in_channels, out_channels, 1, bias=False)
         prelu = nn.PReLU()
         norm = chose_norm(norm_type, out_channels)
         # [M, H, K] -> [M, B, K]
-        dsconv = DepthwiseSeparableConv(out_channels, in_channels, kernel_size, stride, padding,
-                                        dilation, norm_type, causal)
+        dsconv = DepthwiseSeparableConv(out_channels, in_channels, kernel_size, stride, padding, dilation, norm_type, causal)
         # Put together
         self.net = nn.Sequential(conv1x1, prelu, norm, dsconv)
 
@@ -292,26 +257,11 @@ class TemporalBlock(nn.Module):
 
 
 class DepthwiseSeparableConv(nn.Module):
-    def __init__(self,
-                 in_channels,
-                 out_channels,
-                 kernel_size,
-                 stride,
-                 padding,
-                 dilation,
-                 norm_type="gLN",
-                 causal=False):
+    def __init__(self, in_channels, out_channels, kernel_size, stride, padding, dilation, norm_type="gLN", causal=False):
         super(DepthwiseSeparableConv, self).__init__()
         # Use `groups` option to implement depthwise convolution
         # [M, H, K] -> [M, H, K]
-        depthwise_conv = nn.Conv1d(in_channels,
-                                   in_channels,
-                                   kernel_size,
-                                   stride=stride,
-                                   padding=padding,
-                                   dilation=dilation,
-                                   groups=in_channels,
-                                   bias=False)
+        depthwise_conv = nn.Conv1d(in_channels, in_channels, kernel_size, stride=stride, padding=padding, dilation=dilation, groups=in_channels, bias=False)
         if causal:
             chomp = Chomp1d(padding)
         prelu = nn.PReLU()
@@ -335,8 +285,8 @@ class DepthwiseSeparableConv(nn.Module):
 
 
 class Chomp1d(nn.Module):
-    """To ensure the output length is the same as the input.
-    """
+    """To ensure the output length is the same as the input."""
+
     def __init__(self, chomp_size):
         super(Chomp1d, self).__init__()
         self.chomp_size = chomp_size
@@ -348,12 +298,12 @@ class Chomp1d(nn.Module):
         Returns:
             [M, H, K]
         """
-        return x[:, :, :-self.chomp_size].contiguous()
+        return x[:, :, : -self.chomp_size].contiguous()
 
 
 def chose_norm(norm_type, channel_size):
     """The input of normlization will be (M, C, K), where M is batch size,
-       C is channel size and K is sequence length.
+    C is channel size and K is sequence length.
     """
     if norm_type == "gLN":
         return GlobalLayerNorm(channel_size)
@@ -370,6 +320,7 @@ def chose_norm(norm_type, channel_size):
 # TODO: Use nn.LayerNorm to impl cLN to speed up
 class ChannelwiseLayerNorm(nn.Module):
     """Channel-wise Layer Normalization (cLN)"""
+
     def __init__(self, channel_size):
         super(ChannelwiseLayerNorm, self).__init__()
         self.gamma = nn.Parameter(torch.Tensor(1, channel_size, 1))  # [1, N, 1]
@@ -395,6 +346,7 @@ class ChannelwiseLayerNorm(nn.Module):
 
 class GlobalLayerNorm(nn.Module):
     """Global Layer Normalization (gLN)"""
+
     def __init__(self, channel_size):
         super(GlobalLayerNorm, self).__init__()
         self.gamma = nn.Parameter(torch.Tensor(1, channel_size, 1))  # [1, N, 1]
@@ -429,24 +381,24 @@ if __name__ == "__main__":
     encoder = Encoder(L, N)
     encoder.conv1d_U.weight.data = torch.randint(2, encoder.conv1d_U.weight.size())
     mixture_w = encoder(mixture)
-    print('mixture', mixture)
-    print('U', encoder.conv1d_U.weight)
-    print('mixture_w', mixture_w)
-    print('mixture_w size', mixture_w.size())
+    print("mixture", mixture)
+    print("U", encoder.conv1d_U.weight)
+    print("mixture_w", mixture_w)
+    print("mixture_w size", mixture_w.size())
 
     # test TemporalConvNet
     separator = TemporalConvNet(N, B, H, P, X, R, C, norm_type=norm_type, causal=causal)
     est_mask = separator(mixture_w)
-    print('est_mask', est_mask)
+    print("est_mask", est_mask)
 
     # test Decoder
     decoder = Decoder(N, L)
     est_mask = torch.randint(2, (B, K, C, N))
     est_source = decoder(mixture_w, est_mask)
-    print('est_source', est_source)
+    print("est_source", est_source)
 
     # test Conv-TasNet
     conv_tasnet = ConvTasNet(N, L, B, H, P, X, R, C, norm_type=norm_type)
     est_source = conv_tasnet(mixture)
-    print('est_source', est_source)
-    print('est_source size', est_source.size())
+    print("est_source", est_source)
+    print("est_source size", est_source.size())

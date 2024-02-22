@@ -17,13 +17,14 @@ from .demucs import DConv, rescale_module
 from .states import capture_init
 from .spec import spectro, ispectro
 
-def pad1d(x: torch.Tensor, paddings: tp.Tuple[int, int], mode: str = 'constant', value: float = 0.):
+
+def pad1d(x: torch.Tensor, paddings: tp.Tuple[int, int], mode: str = "constant", value: float = 0.0):
     """Tiny wrapper around F.pad, just to allow for reflect padding on small input.
     If this is the case, we insert extra 0 padding to the right before the reflection happen."""
     x0 = x
     length = x.shape[-1]
     padding_left, padding_right = paddings
-    if mode == 'reflect':
+    if mode == "reflect":
         max_pad = max(padding_left, padding_right)
         if length <= max_pad:
             extra_pad = max_pad - length + 1
@@ -33,16 +34,17 @@ def pad1d(x: torch.Tensor, paddings: tp.Tuple[int, int], mode: str = 'constant',
             x = F.pad(x, (extra_pad_left, extra_pad_right))
     out = F.pad(x, paddings, mode, value)
     assert out.shape[-1] == length + padding_left + padding_right
-    assert (out[..., padding_left: padding_left + length] == x0).all()
+    assert (out[..., padding_left : padding_left + length] == x0).all()
     return out
+
 
 class ScaledEmbedding(nn.Module):
     """
     Boost learning rate for embeddings (with `scale`).
     Also, can make embeddings continuous with `smooth`.
     """
-    def __init__(self, num_embeddings: int, embedding_dim: int,
-                 scale: float = 10., smooth=False):
+
+    def __init__(self, num_embeddings: int, embedding_dim: int, scale: float = 10.0, smooth=False):
         super().__init__()
         self.embedding = nn.Embedding(num_embeddings, embedding_dim)
         if smooth:
@@ -63,9 +65,7 @@ class ScaledEmbedding(nn.Module):
 
 
 class HEncLayer(nn.Module):
-    def __init__(self, chin, chout, kernel_size=8, stride=4, norm_groups=1, empty=False,
-                 freq=True, dconv=True, norm=True, context=0, dconv_kw={}, pad=True,
-                 rewrite=True):
+    def __init__(self, chin, chout, kernel_size=8, stride=4, norm_groups=1, empty=False, freq=True, dconv=True, norm=True, context=0, dconv_kw={}, pad=True, rewrite=True):
         """Encoder layer. This used both by the time and the frequency branch.
 
         Args:
@@ -162,6 +162,7 @@ class MultiWrap(nn.Module):
     This is a bit over-engineered to avoid edge artifacts when splitting
     the frequency bands, but it is possible the naive implementation would work as well...
     """
+
     def __init__(self, layer, split_ratios):
         """
         Args:
@@ -184,7 +185,7 @@ class MultiWrap(nn.Module):
             else:
                 lay.pad = False
             for m in lay.modules():
-                if hasattr(m, 'reset_parameters'):
+                if hasattr(m, "reset_parameters"):
                     m.reset_parameters()
             self.layers.append(lay)
 
@@ -230,13 +231,12 @@ class MultiWrap(nn.Module):
                 s = skip[:, :, start:limit]
                 out, _ = layer(y, s, None)
                 if outs:
-                    outs[-1][:, :, -layer.stride:] += (
-                        out[:, :, :layer.stride] - layer.conv_tr.bias.view(1, -1, 1, 1))
-                    out = out[:, :, layer.stride:]
+                    outs[-1][:, :, -layer.stride :] += out[:, :, : layer.stride] - layer.conv_tr.bias.view(1, -1, 1, 1)
+                    out = out[:, :, layer.stride :]
                 if ratio == 1:
-                    out = out[:, :, :-layer.stride // 2, :]
+                    out = out[:, :, : -layer.stride // 2, :]
                 if start == 0:
-                    out = out[:, :, layer.stride // 2:, :]
+                    out = out[:, :, layer.stride // 2 :, :]
                 outs.append(out)
                 layer.last = last
                 start = limit
@@ -250,9 +250,9 @@ class MultiWrap(nn.Module):
 
 
 class HDecLayer(nn.Module):
-    def __init__(self, chin, chout, last=False, kernel_size=8, stride=4, norm_groups=1, empty=False,
-                 freq=True, dconv=True, norm=True, context=1, dconv_kw={}, pad=True,
-                 context_freq=True, rewrite=True):
+    def __init__(
+        self, chin, chout, last=False, kernel_size=8, stride=4, norm_groups=1, empty=False, freq=True, dconv=True, norm=True, context=1, dconv_kw={}, pad=True, context_freq=True, rewrite=True
+    ):
         """
         Same as HEncLayer but for decoder. See `HEncLayer` for documentation.
         """
@@ -289,8 +289,7 @@ class HDecLayer(nn.Module):
             if context_freq:
                 self.rewrite = klass(chin, 2 * chin, 1 + 2 * context, 1, context)
             else:
-                self.rewrite = klass(chin, 2 * chin, [1, 1 + 2 * context], 1,
-                                     [0, context])
+                self.rewrite = klass(chin, 2 * chin, [1, 1 + 2 * context], 1, [0, context])
             self.norm1 = norm_fn(2 * chin)
 
         self.dconv = None
@@ -322,9 +321,9 @@ class HDecLayer(nn.Module):
         z = self.norm2(self.conv_tr(y))
         if self.freq:
             if self.pad:
-                z = z[..., self.pad:-self.pad, :]
+                z = z[..., self.pad : -self.pad, :]
         else:
-            z = z[..., self.pad:self.pad + length]
+            z = z[..., self.pad : self.pad + length]
             assert z.shape[-1] == length, (z.shape[-1], length)
         if not self.last:
             z = F.gelu(z)
@@ -358,53 +357,55 @@ class HDemucs(nn.Module):
 
     Unlike classic Demucs, there is no resampling here, and normalization is always applied.
     """
+
     @capture_init
-    def __init__(self,
-                 sources,
-                 # Channels
-                 audio_channels=2,
-                 channels=48,
-                 channels_time=None,
-                 growth=2,
-                 # STFT
-                 nfft=4096,
-                 wiener_iters=0,
-                 end_iters=0,
-                 wiener_residual=False,
-                 cac=True,
-                 # Main structure
-                 depth=6,
-                 rewrite=True,
-                 hybrid=True,
-                 hybrid_old=False,
-                 # Frequency branch
-                 multi_freqs=None,
-                 multi_freqs_depth=2,
-                 freq_emb=0.2,
-                 emb_scale=10,
-                 emb_smooth=True,
-                 # Convolutions
-                 kernel_size=8,
-                 time_stride=2,
-                 stride=4,
-                 context=1,
-                 context_enc=0,
-                 # Normalization
-                 norm_starts=4,
-                 norm_groups=4,
-                 # DConv residual branch
-                 dconv_mode=1,
-                 dconv_depth=2,
-                 dconv_comp=4,
-                 dconv_attn=4,
-                 dconv_lstm=4,
-                 dconv_init=1e-4,
-                 # Weight init
-                 rescale=0.1,
-                 # Metadata
-                 samplerate=44100,
-                 segment=4 * 10):
-        
+    def __init__(
+        self,
+        sources,
+        # Channels
+        audio_channels=2,
+        channels=48,
+        channels_time=None,
+        growth=2,
+        # STFT
+        nfft=4096,
+        wiener_iters=0,
+        end_iters=0,
+        wiener_residual=False,
+        cac=True,
+        # Main structure
+        depth=6,
+        rewrite=True,
+        hybrid=True,
+        hybrid_old=False,
+        # Frequency branch
+        multi_freqs=None,
+        multi_freqs_depth=2,
+        freq_emb=0.2,
+        emb_scale=10,
+        emb_smooth=True,
+        # Convolutions
+        kernel_size=8,
+        time_stride=2,
+        stride=4,
+        context=1,
+        context_enc=0,
+        # Normalization
+        norm_starts=4,
+        norm_groups=4,
+        # DConv residual branch
+        dconv_mode=1,
+        dconv_depth=2,
+        dconv_comp=4,
+        dconv_attn=4,
+        dconv_lstm=4,
+        dconv_init=1e-4,
+        # Weight init
+        rescale=0.1,
+        # Metadata
+        samplerate=44100,
+        segment=4 * 10,
+    ):
         """
         Args:
             sources (list[str]): list of source names.
@@ -449,7 +450,7 @@ class HDemucs(nn.Module):
 
         """
         super().__init__()
-        
+
         self.cac = cac
         self.wiener_residual = wiener_residual
         self.audio_channels = audio_channels
@@ -509,42 +510,33 @@ class HDemucs(nn.Module):
                 last_freq = True
 
             kw = {
-                'kernel_size': ker,
-                'stride': stri,
-                'freq': freq,
-                'pad': pad,
-                'norm': norm,
-                'rewrite': rewrite,
-                'norm_groups': norm_groups,
-                'dconv_kw': {
-                    'lstm': lstm,
-                    'attn': attn,
-                    'depth': dconv_depth,
-                    'compress': dconv_comp,
-                    'init': dconv_init,
-                    'gelu': True,
-                }
+                "kernel_size": ker,
+                "stride": stri,
+                "freq": freq,
+                "pad": pad,
+                "norm": norm,
+                "rewrite": rewrite,
+                "norm_groups": norm_groups,
+                "dconv_kw": {"lstm": lstm, "attn": attn, "depth": dconv_depth, "compress": dconv_comp, "init": dconv_init, "gelu": True},
             }
             kwt = dict(kw)
-            kwt['freq'] = 0
-            kwt['kernel_size'] = kernel_size
-            kwt['stride'] = stride
-            kwt['pad'] = True
+            kwt["freq"] = 0
+            kwt["kernel_size"] = kernel_size
+            kwt["stride"] = stride
+            kwt["pad"] = True
             kw_dec = dict(kw)
             multi = False
             if multi_freqs and index < multi_freqs_depth:
                 multi = True
-                kw_dec['context_freq'] = False
+                kw_dec["context_freq"] = False
 
             if last_freq:
                 chout_z = max(chout, chout_z)
                 chout = chout_z
 
-            enc = HEncLayer(chin_z, chout_z,
-                            dconv=dconv_mode & 1, context=context_enc, **kw)
+            enc = HEncLayer(chin_z, chout_z, dconv=dconv_mode & 1, context=context_enc, **kw)
             if hybrid and freq:
-                tenc = HEncLayer(chin, chout, dconv=dconv_mode & 1, context=context_enc,
-                                 empty=last_freq, **kwt)
+                tenc = HEncLayer(chin, chout, dconv=dconv_mode & 1, context=context_enc, empty=last_freq, **kwt)
                 self.tencoder.append(tenc)
 
             if multi:
@@ -555,13 +547,11 @@ class HDemucs(nn.Module):
                 chin_z = chin
                 if self.cac:
                     chin_z *= 2
-            dec = HDecLayer(chout_z, chin_z, dconv=dconv_mode & 2,
-                            last=index == 0, context=context, **kw_dec)
+            dec = HDecLayer(chout_z, chin_z, dconv=dconv_mode & 2, last=index == 0, context=context, **kw_dec)
             if multi:
                 dec = MultiWrap(dec, multi_freqs)
             if hybrid and freq:
-                tdec = HDecLayer(chout, chin, dconv=dconv_mode & 2, empty=last_freq,
-                                 last=index == 0, context=context, **kwt)
+                tdec = HDecLayer(chout, chin, dconv=dconv_mode & 2, empty=last_freq, last=index == 0, context=context, **kwt)
                 self.tdecoder.insert(0, tdec)
             self.decoder.insert(0, dec)
 
@@ -575,8 +565,7 @@ class HDemucs(nn.Module):
                 else:
                     freqs //= stride
             if index == 0 and freq_emb:
-                self.freq_emb = ScaledEmbedding(
-                    freqs, chin_z, smooth=emb_smooth, scale=emb_scale)
+                self.freq_emb = ScaledEmbedding(freqs, chin_z, smooth=emb_smooth, scale=emb_scale)
                 self.freq_emb_scale = freq_emb
 
         if rescale:
@@ -599,18 +588,18 @@ class HDemucs(nn.Module):
             le = int(math.ceil(x.shape[-1] / hl))
             pad = hl // 2 * 3
             if not self.hybrid_old:
-                x = pad1d(x, (pad, pad + le * hl - x.shape[-1]), mode='reflect')
+                x = pad1d(x, (pad, pad + le * hl - x.shape[-1]), mode="reflect")
             else:
                 x = pad1d(x, (pad, pad + le * hl - x.shape[-1]))
 
         z = spectro(x, nfft, hl)[..., :-1, :]
         if self.hybrid:
             assert z.shape[-1] == le + 4, (z.shape, x.shape, le)
-            z = z[..., 2:2+le]
+            z = z[..., 2 : 2 + le]
         return z
 
     def _ispec(self, z, length=None, scale=0):
-        hl = self.hop_length // (4 ** scale)
+        hl = self.hop_length // (4**scale)
         z = F.pad(z, (0, 0, 0, 1))
         if self.hybrid:
             z = F.pad(z, (2, 2))
@@ -621,7 +610,7 @@ class HDemucs(nn.Module):
                 le = hl * int(math.ceil(length / hl))
             x = ispectro(z, hl, length=le)
             if not self.hybrid_old:
-                x = x[..., pad:pad + length]
+                x = x[..., pad : pad + length]
             else:
                 x = x[..., :length]
         else:
@@ -672,9 +661,7 @@ class HDemucs(nn.Module):
             out = []
             for pos in range(0, T, wiener_win_len):
                 frame = slice(pos, pos + wiener_win_len)
-                z_out = wiener(
-                    mag_out[sample, frame], mix_stft[sample, frame], niters,
-                    residual=residual)
+                z_out = wiener(mag_out[sample, frame], mix_stft[sample, frame], niters, residual=residual)
                 out.append(z_out.transpose(-1, -2))
             outs.append(torch.cat(out, dim=0))
         out = torch.view_as_complex(torch.stack(outs, 0))
@@ -769,16 +756,16 @@ class HDemucs(nn.Module):
         S = len(self.sources)
         x = x.view(B, S, -1, Fq, T)
         x = x * std[:, None] + mean[:, None]
-        
+
         # to cpu as non-cuda GPUs don't support complex numbers
         # demucs issue #435 ##432
         # NOTE: in this case z already is on cpu
         # TODO: remove this when mps supports complex numbers
-        
+
         device_type = x.device.type
-        device_load = f"{device_type}:{x.device.index}" if not device_type == 'mps' else device_type
+        device_load = f"{device_type}:{x.device.index}" if not device_type == "mps" else device_type
         x_is_other_gpu = not device_type in ["cuda", "cpu"]
-        
+
         if x_is_other_gpu:
             x = x.cpu()
 

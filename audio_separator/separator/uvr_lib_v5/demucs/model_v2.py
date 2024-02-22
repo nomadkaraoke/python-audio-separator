@@ -29,7 +29,7 @@ class BLSTM(nn.Module):
 
 def rescale_conv(conv, reference):
     std = conv.weight.std().detach()
-    scale = (std / reference)**0.5
+    scale = (std / reference) ** 0.5
     conv.weight.data /= scale
     if conv.bias is not None:
         conv.bias.data /= scale
@@ -40,41 +40,45 @@ def rescale_module(module, reference):
         if isinstance(sub, (nn.Conv1d, nn.ConvTranspose1d)):
             rescale_conv(sub, reference)
 
+
 def auto_load_demucs_model_v2(sources, demucs_model_name):
-    
-    if '48' in demucs_model_name:
-        channels=48
-    elif 'unittest' in demucs_model_name:
-        channels=4
+
+    if "48" in demucs_model_name:
+        channels = 48
+    elif "unittest" in demucs_model_name:
+        channels = 4
     else:
-        channels=64
-    
-    if 'tasnet' in demucs_model_name:
+        channels = 64
+
+    if "tasnet" in demucs_model_name:
         init_demucs_model = ConvTasNet(sources, X=10)
     else:
         init_demucs_model = Demucs(sources, channels=channels)
-        
+
     return init_demucs_model
+
 
 class Demucs(nn.Module):
     @capture_init
-    def __init__(self,
-                 sources,
-                 audio_channels=2,
-                 channels=64,
-                 depth=6,
-                 rewrite=True,
-                 glu=True,
-                 rescale=0.1,
-                 resample=True,
-                 kernel_size=8,
-                 stride=4,
-                 growth=2.,
-                 lstm_layers=2,
-                 context=3,
-                 normalize=False,
-                 samplerate=44100,
-                 segment_length=4 * 10 * 44100):
+    def __init__(
+        self,
+        sources,
+        audio_channels=2,
+        channels=64,
+        depth=6,
+        rewrite=True,
+        glu=True,
+        rescale=0.1,
+        resample=True,
+        kernel_size=8,
+        stride=4,
+        growth=2.0,
+        lstm_layers=2,
+        context=3,
+        normalize=False,
+        samplerate=44100,
+        segment_length=4 * 10 * 44100,
+    ):
         """
         Args:
             sources (list[str]): list of source names

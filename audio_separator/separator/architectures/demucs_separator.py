@@ -1,4 +1,5 @@
 import os
+import sys
 import torch
 import numpy as np
 from pathlib import Path
@@ -81,6 +82,8 @@ class DemucsSeparator(CommonSeparator):
         self.audio_file_base = None
         self.demucs_model_instance = None
 
+        sys.path.insert(0, "/Users/andrew/Projects/python-audio-separator/audio_separator/separator/uvr_lib_v5")
+
     def separate(self, audio_file_path):
         self.logger.debug("SeperateDemucs: Starting separation process...")
         source = None
@@ -112,6 +115,9 @@ class DemucsSeparator(CommonSeparator):
         self.clear_gpu_cache()
         self.logger.debug("SeperateDemucs: Model and GPU cache cleared after demixing.")
 
+        output_files = []
+        self.logger.debug("Processing output files...")
+
         if isinstance(inst_source, np.ndarray):
             self.logger.debug("SeperateDemucs: Processing instance source...")
             source_reshape = spec_utils.reshape_sources(inst_source[self.demucs_source_map[CommonSeparator.VOCAL_STEM]], source[self.demucs_source_map[CommonSeparator.VOCAL_STEM]])
@@ -127,84 +133,21 @@ class DemucsSeparator(CommonSeparator):
                 self.logger.debug("SeperateDemucs: Setting source map to 4 or 6-stem...")
                 self.demucs_source_map = DEMUCS_6_SOURCE_MAPPER if len(source) == 6 else DEMUCS_4_SOURCE_MAPPER
 
-        # if self.selected_stem == CommonSeparator.ALL_STEMS:
-
         self.logger.debug("SeperateDemucs: Processing for all stems...")
         for stem_name, stem_value in self.demucs_source_map.items():
             stem_path = os.path.join(f"{self.audio_file_base}_({stem_name})_{self.model_name}.{self.output_format.lower()}")
             stem_source = source[stem_value].T
 
             self.final_process(stem_path, stem_source, stem_name)
+            output_files.append(stem_path)
 
-        # else:
-        #     def secondary_save(sec_stem_name, source, raw_mixture=None, is_inst_mixture=False):
-        #         self.logger.debug(f"SeperateDemucs: Saving secondary stem: {sec_stem_name}")
-        #         secondary_source = self.secondary_source if not is_inst_mixture else None
-        #         secondary_stem_path = os.path.join(self.export_path, f"{self.audio_file_base}_({sec_stem_name}).wav")
-        #         secondary_source_secondary = None
-
-        #         if not isinstance(secondary_source, np.ndarray):
-        #             if self.is_demucs_combine_stems:
-        #                 source = list(source)
-        #                 if is_inst_mixture:
-        #                     source = [i for n, i in enumerate(source) if not n in [self.demucs_source_map[self.primary_stem], self.demucs_source_map[CommonSeparator.VOCAL_STEM]]]
-        #                 else:
-        #                     source.pop(self.demucs_source_map[self.primary_stem])
-
-        #                 source = source[: len(source) - 2] if is_no_piano_guitar else source
-        #                 secondary_source = np.zeros_like(source[0])
-        #                 for i in source:
-        #                     secondary_source += i
-        #                 secondary_source = secondary_source.T
-        #             else:
-        #                 if not isinstance(raw_mixture, np.ndarray):
-        #                     raw_mixture = self.prepare_mix(self.audio_file)
-
-        #                 secondary_source = source[self.demucs_source_map[self.primary_stem]]
-
-        #                 if self.is_invert_spec:
-        #                     secondary_source = spec_utils.invert_stem(raw_mixture, secondary_source)
-        #                 else:
-        #                     raw_mixture = spec_utils.reshape_sources(secondary_source, raw_mixture)
-        #                     secondary_source = -secondary_source.T + raw_mixture.T
-
-        #         if not is_inst_mixture:
-        #             self.secondary_source = secondary_source
-        #             secondary_source_secondary = self.secondary_source_secondary
-        #             self.secondary_source = self.process_secondary_stem(secondary_source, secondary_source_secondary)
-        #             self.secondary_source_map = {self.secondary_stem: self.secondary_source}
-
-        #         self.write_audio(secondary_stem_path, secondary_source, samplerate, stem_name=sec_stem_name)
-
-        #     secondary_save(self.secondary_stem, source, raw_mixture=mix)
-
-        #     if self.is_demucs_pre_proc_model_inst_mix and self.pre_proc_model and not self.is_4_stem_ensemble:
-        #         secondary_save(f"{self.secondary_stem} {CommonSeparator.INST_STEM}", source, raw_mixture=inst_mix, is_inst_mixture=True)
-
-        #     if not self.is_secondary_stem_only:
-        #         primary_stem_path = os.path.join(self.export_path, f"{self.audio_file_base}_({self.primary_stem}).wav")
-        #         if not isinstance(self.primary_source, np.ndarray):
-        #             self.primary_source = source[self.demucs_source_map[self.primary_stem]].T
-
-        #         self.primary_source_map = self.final_process(primary_stem_path, self.primary_source, self.secondary_source_primary, self.primary_stem, samplerate)
-
-        #     secondary_sources = {**self.primary_source_map, **self.secondary_source_map}
-
-        #     self.process_vocal_split_chain(secondary_sources)
-
-        #     if self.is_secondary_model:
-        #         return secondary_sources
+        return output_files
 
     def demix_demucs(self, mix):
         """
         Demixes the input mix using the demucs model.
         """
         self.logger.debug("SeperateDemucs: Starting demixing process in demix_demucs...")
-        org_mix = mix
-
-        # if self.is_pitch_change:
-        #     self.logger.debug("SeperateDemucs: Applying pitch change...")
-        #     mix, sr_pitched = spec_utils.change_pitch_semitones(mix, 44100, semitone_shift=-self.semitone_shift)
 
         processed = {}
         mix = torch.tensor(mix, dtype=torch.float32)
@@ -223,6 +166,7 @@ class DemucsSeparator(CommonSeparator):
                 static_shifts=1 if self.shifts == 0 else self.shifts,
                 set_progress_bar=None,
                 device=self.torch_device,
+                progress=True,
             )[0]
 
         sources = (sources * ref.std() + ref.mean()).cpu().numpy()
@@ -230,11 +174,6 @@ class DemucsSeparator(CommonSeparator):
         processed[mix] = sources[:, :, 0:None].copy()
         sources = list(processed.values())
         sources = [s[:, :, 0:None] for s in sources]
-        # sources = [self.pitch_fix(s[:,:,0:None], sr_pitched, org_mix) if self.is_pitch_change else s[:,:,0:None] for s in sources]
         sources = np.concatenate(sources, axis=-1)
-
-        # if self.is_pitch_change:
-        #     self.logger.debug("SeperateDemucs: Fixing pitch post-demixing...")
-        #     sources = np.stack([self.pitch_fix(stem, sr_pitched, org_mix) for stem in sources])
 
         return sources

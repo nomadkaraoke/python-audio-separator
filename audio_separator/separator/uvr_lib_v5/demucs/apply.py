@@ -237,7 +237,7 @@ def apply_model(model, mix, shifts=1, split=True, overlap=0.25, transition_power
             futures.append((future, offset))
             offset += segment
         if progress:
-            futures = tqdm.tqdm(futures, unit_scale=scale, ncols=120, unit="seconds")
+            futures = tqdm.tqdm(futures)
         for future, offset in futures:
             if set_progress_bar:
                 fut_length = len(futures) * bag_num * static_shifts
