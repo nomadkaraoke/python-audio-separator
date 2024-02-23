@@ -171,6 +171,9 @@ class Separator:
         python_version = platform.python_version()
         self.logger.info(f"Python Version: {python_version}")
 
+        pytorch_version = torch.__version__
+        self.logger.info(f"PyTorch Version: {pytorch_version}")
+
     def check_ffmpeg_installed(self):
         """
         This method checks if ffmpeg is installed and logs its version.
@@ -245,7 +248,7 @@ class Separator:
 
         if "CoreMLExecutionProvider" in ort_providers:
             self.logger.info("ONNXruntime has CoreMLExecutionProvider available, enabling acceleration")
-            self.onnx_execution_provider = ["CoreMLExecutionProvider", "CPUExecutionProvider"]
+            self.onnx_execution_provider = ["CoreMLExecutionProvider"]
         else:
             self.logger.warning("CoreMLExecutionProvider not available in ONNXruntime, so acceleration will NOT be enabled")
 
