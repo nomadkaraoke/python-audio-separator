@@ -3,6 +3,7 @@
 [![PyPI version](https://badge.fury.io/py/audio-separator.svg)](https://badge.fury.io/py/audio-separator)
 [![Conda Version](https://img.shields.io/conda/vn/conda-forge/audio-separator.svg)](https://anaconda.org/conda-forge/audio-separator)
 [![Docker pulls](https://img.shields.io/docker/pulls/beveradb/audio-separator.svg)](https://hub.docker.com/r/beveradb/audio-separator/tags)
+[![codecov](https://codecov.io/gh/karaokenerds/audio-separator/graph/badge.svg?token=LL8VBV0UC8)](https://codecov.io/gh/karaokenerds/audio-separator)
 
 Summary: Easy to use audio stem separation from the command line or as a dependency in your own Python project, using the amazing MDX-Net and VR Arch models available in UVR by @Anjok07 & @aufr33.
 

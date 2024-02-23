@@ -23,9 +23,14 @@ jobs:
 
       - name: Install Poetry dependencies (CPU)
         run: poetry install -E cpu
-      
-      - name: Run pytest with coverage
-        run: poetry run pytest --cov=audio_separator --cov-report=term-missing
+
+      - name: Run unit tests with coverage
+        run: poetry run pytest tests/unit --cov=./ --cov-report=xml
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
       # - name: Run pytest integration tests
       #   run: poetry run pytest tests/integration
