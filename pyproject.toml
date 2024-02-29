@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "audio-separator"
-version = "0.15.1"
+version = "0.15.2"
 description = "Easy to use audio stem separation, using various models from UVR trained primarily by @Anjok07"
 authors = ["Andrew Beveridge <andrew@beveridge.uk>"]
 license = "MIT"
@@ -41,9 +41,10 @@ onnx = ">=1.14"
 onnx2torch = ">=1.5"
 onnxruntime = { version = ">=1.17", optional = true }
 onnxruntime-gpu = { version = ">=1.17", optional = true }
-julius = "^0.2.7"
-diffq = "^0.2.4"
-einops = "^0.7.0"
+julius = ">=0.2"
+diffq = ">=0.2"
+einops = ">=0.7"
+pyyaml = "*"
 
 [tool.poetry.extras]
 cpu = ["onnxruntime"]
