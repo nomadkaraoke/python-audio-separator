@@ -15,7 +15,6 @@ import io
 from pathlib import Path
 import warnings
 
-from omegaconf import OmegaConf
 from diffq import DiffQuantizer, UniformQuantizer, restore_quantized_state
 import torch
 
@@ -99,14 +98,6 @@ def save_with_checksum(content, path):
 
     path = path.parent / (path.stem + "-" + sig + path.suffix)
     path.write_bytes(buf.getvalue())
-
-
-def serialize_model(model, training_args, quantizer=None, half=True):
-    args, kwargs = model._init_args_kwargs
-    klass = model.__class__
-
-    state = get_state(model, quantizer, half)
-    return {"klass": klass, "args": args, "kwargs": kwargs, "state": state, "training_args": OmegaConf.to_container(training_args, resolve=True)}
 
 
 def copy_state(state):
