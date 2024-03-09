@@ -91,7 +91,7 @@ def test_cli_model_filename_argument(common_expected_args):
 
             # Assertions
             mock_separator.assert_called_once_with(**common_expected_args)
-            mock_separator_instance.load_model.assert_called_once_with("Custom_Model.onnx")
+            mock_separator_instance.load_model.assert_called_once_with(model_filename="Custom_Model.onnx")
 
 
 # Test using output directory argument

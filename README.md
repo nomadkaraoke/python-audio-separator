@@ -179,7 +179,7 @@ Demucs Architecture Parameters:
 Example:
 
 ```
-audio-separator /path/to/your/audio.wav --model_name UVR_MDXNET_KARA_2
+audio-separator /path/to/your/audio.wav --model_filename UVR_MDXNET_KARA_2.onnx
 ```
 
 This command will process the file and generate two new files in the current directory, one for each stem.
@@ -217,7 +217,7 @@ from audio_separator.separator import Separator
 separator = Separator()
 
 # Load a model
-separator.load_model('UVR-MDX-NET-Inst_HQ_3.onnx')
+separator.load_model(model_filename='UVR-MDX-NET-Inst_HQ_3.onnx')
 
 # Separate multiple audio files without reloading the model
 output_file_paths_1 = separator.separate('audio1.wav')
@@ -225,7 +225,7 @@ output_file_paths_2 = separator.separate('audio2.wav')
 output_file_paths_3 = separator.separate('audio3.wav')
 
 # Load a different model
-separator.load_model('UVR_MDXNET_KARA_2')
+separator.load_model(model_filename='UVR_MDXNET_KARA_2.onnx')
 
 # Separate the same files with the new model
 output_file_paths_4 = separator.separate('audio1.wav')

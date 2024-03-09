@@ -149,7 +149,7 @@ def main():
         },
     )
 
-    separator.load_model(args.model_filename)
+    separator.load_model(model_filename=args.model_filename)
 
     output_files = separator.separate(args.audio_file)
 
