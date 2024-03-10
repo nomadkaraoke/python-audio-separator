@@ -21,6 +21,27 @@ The simplest (and probably most utilized) use case for this package is to separa
 
 ## Installation 🛠️
 
+### 🐳 Docker
+
+If you're able to use docker, you don't actually need to _install_ anything - there are [images published on Docker Hub](https://hub.docker.com/r/beveradb/audio-separator/tags) for GPU (CUDA) and CPU inferencing, for both `amd64` and `arm64` platforms.
+
+You probably want to volume-mount a folder containing whatever file you want to separate, which can then also be used as the output folder.
+
+For instance, if your current directory has the file `input.wav`, you could execute `audio-separator` as shown below (see [usage](#usage-) section for more details):
+
+```
+docker run -it -v `pwd`:/workdir beveradb/audio-separator input.wav
+```
+
+If you're using a machine with a GPU, you'll want to use the GPU specific image and pass in the GPU device to the container, like this:
+
+```
+docker run -it --gpus all -v `pwd`:/workdir beveradb/audio-separator:gpu input.wav
+```
+
+If the GPU isn't being detected, make sure your docker runtime environment is passing through the GPU correctly - there are [various guides](https://www.celantur.com/blog/run-cuda-in-docker-on-linux/) online to help with that.
+
+
 ### 🎮 Nvidia GPU with CUDA or 🧪 Google Colab
 
 💬 If successfully configured, you should see this log message when running `audio-separator --env_info`:
@@ -90,32 +111,26 @@ You can install the CUDA 11 libraries _alongside_ CUDA 12 like so:
 
 > Note: if anyone knows how to make this cleaner so we can support both different platform-specific dependencies for hardware acceleration without a separate installation process for each, please let me know or raise a PR!
 
-## Usage in Docker 🐳
-
-There are [images published on Docker Hub](https://hub.docker.com/r/beveradb/audio-separator/tags) for GPU (CUDA) and CPU inferencing, for both `amd64` and `arm64` platforms.
-
-You probably want to volume-mount a folder containing whatever file you want to separate, which can then also be used as the output folder.
-
-For example, if the current directory contains your input file `input.wav`, you could run `audio-separator` like so:
-
-```
-docker run -it -v `pwd`:/workdir beveradb/audio-separator input.wav
-```
-
-If you're using a machine with a GPU, you'll want to use the GPU specific image and pass in the GPU device to the container, like this:
-
-```
-docker run -it --gpus all -v `pwd`:/workdir beveradb/audio-separator:gpu input.wav
-```
-
-If the GPU isn't being detected, make sure your docker runtime environment is passing through the GPU correctly - there are [various guides](https://www.celantur.com/blog/run-cuda-in-docker-on-linux/) online to help with that.
-
 
 ## Usage 🚀
 
 ### Command Line Interface (CLI)
 
-You can use Audio Separator via the command line:
+You can use Audio Separator via the command line, for example:
+
+```
+audio-separator /path/to/your/input/audio.wav --model_filename UVR-MDX-NET-Inst_HQ_3.onnx
+```
+
+This command will download the specified model file, process the `audio.wav` input audio and generate two new files in the current directory, one containing vocals and one containing instrumental.
+
+**Note:** You do not need to download any files yourself - audio-separator does that automatically for you!
+
+To see a list of supported models, run `audio-separator --list_models`
+
+Any file listed in the list models output can be specified (with file extension) with the model_filename parameter (e.g. `--model_filename UVR_MDXNET_KARA_2.onnx`) and it will be automatically downloaded to the `--model_file_dir` (default: `/tmp/audio-separator-models/`) folder on first usage.
+
+### Full command-line interface options:
 
 ```sh
 usage: audio-separator [-h] [-v] [-d] [-e] [-l] [--log_level LOG_LEVEL] [-m MODEL_FILENAME] [--output_format OUTPUT_FORMAT] [--output_dir OUTPUT_DIR] [--model_file_dir MODEL_FILE_DIR] [--invert_spect]
@@ -175,14 +190,6 @@ Demucs Architecture Parameters:
   --demucs_overlap DEMUCS_OVERLAP                        overlap between prediction windows, 0.001-0.999. higher = slower but better quality (default: 0.25). Example: --demucs_overlap=0.25
   --demucs_segments_enabled DEMUCS_SEGMENTS_ENABLED      enable segment-wise processing (default: True). Example: --demucs_segments_enabled=False
 ```
-
-Example:
-
-```
-audio-separator /path/to/your/audio.wav --model_filename UVR_MDXNET_KARA_2.onnx
-```
-
-This command will process the file and generate two new files in the current directory, one for each stem.
 
 ### As a Dependency in a Python Project
 
