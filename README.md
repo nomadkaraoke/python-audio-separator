@@ -352,3 +352,7 @@ This project is licensed under the MIT [License](LICENSE).
 ## Contact 💌
 
 For questions or feedback, please raise an issue or reach out to @beveradb ([Andrew Beveridge](mailto:andrew@beveridge.uk)) directly.
+
+## Sponsors
+
+<!-- sponsors --><!-- sponsors -->
