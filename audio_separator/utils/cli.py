@@ -87,7 +87,7 @@ def main():
     mdxc_params = parser.add_argument_group("MDXC Architecture Parameters")
     mdxc_params.add_argument("--mdxc_segment_size", type=int, default=256, help="larger consumes more resources, but may give better results (default: %(default)s). Example: --mdxc_segment_size=256")
     mdxc_params.add_argument(
-        "--mdxc_overlap", type=float, default=8, help="amount of overlap between prediction windows, 0.001-0.999. higher is better but slower (default: %(default)s). Example: --mdxc_overlap=0.25"
+        "--mdxc_overlap", type=int, default=8, help="amount of overlap between prediction windows, 2-50. higher is better but slower (default: %(default)s). Example: --mdxc_overlap=8"
     )
     mdxc_params.add_argument("--mdxc_batch_size", type=int, default=1, help="larger consumes more RAM but may process slightly faster (default: %(default)s). Example: --mdxc_batch_size=4")
 
@@ -157,7 +157,7 @@ def main():
         mdxc_prams={
             'segment_size': args.mdx_segment_size,
             "batch_size": args.mdxc_batch_size,
-            "overlap_mdx23": args.mdxc_overlap
+            "overlap": args.mdxc_overlap
         }
         # todo mdxc 
     )
