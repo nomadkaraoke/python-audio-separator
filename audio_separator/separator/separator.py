@@ -78,6 +78,7 @@ class Separator:
         mdx_params={"hop_length": 1024, "segment_size": 256, "overlap": 0.25, "batch_size": 1, "enable_denoise": False},
         vr_params={"batch_size": 16, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False},
         demucs_params={"segment_size": "Default", "shifts": 2, "overlap": 0.25, "segments_enabled": True},
+        mdxc_prams = {'segment_size': 256,"batch_size": 1,"overlap": 8}
     ):
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(log_level)
@@ -133,7 +134,7 @@ class Separator:
 
         # These are parameters which users may want to configure so we expose them to the top-level Separator class,
         # even though they are specific to a single model architecture
-        self.arch_specific_params = {"MDX": mdx_params, "VR": vr_params, "Demucs": demucs_params}
+        self.arch_specific_params = {"MDX": mdx_params, "VR": vr_params, "Demucs": demucs_params, "MDXC":mdxc_prams}
 
         self.torch_device = None
         self.torch_device_cpu = None
@@ -359,7 +360,7 @@ class Separator:
             "MDX": model_downloads_list["mdx_download_list"],
             "Demucs": filtered_demucs_v4,
             # "MDX23": model_downloads_list["mdx23_download_list"],
-            # "MDX23C": model_downloads_list["mdx23c_download_list"],
+            "MDXC": model_downloads_list["mdx23c_download_list"],
         }
         return model_files_grouped_by_type
 
@@ -595,7 +596,7 @@ class Separator:
             raise ValueError(f"Model type not supported (yet): {model_type}")
 
         # Instantiate the appropriate separator class depending on the model type
-        separator_classes = {"MDX": "MDXSeparator", "VR": "VRSeparator", "Demucs": "DemucsSeparator"}
+        separator_classes = {"MDX": "MDXSeparator", "VR": "VRSeparator", "Demucs": "DemucsSeparator","MDXC":"MDXCSeparator"}
 
         if model_type not in separator_classes:
             raise ValueError(f"Model type not supported (yet): {model_type}")

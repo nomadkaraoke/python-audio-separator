@@ -45,6 +45,7 @@ julius = ">=0.2"
 diffq = ">=0.2"
 einops = ">=0.7"
 pyyaml = "*"
+ml_collections = "*"
 
 [tool.poetry.extras]
 cpu = ["onnxruntime"]
