@@ -1,23 +1,35 @@
-from numpy._typing import NDArray
-from audio_separator.separator.common_separator import CommonSeparator
+import os
+import sys
 
 import torch
-import os
-from ml_collections import ConfigDict
-
-from ..uvr_lib_v5.tfc_tdf_v3 import TFC_TDF_net
-from ..uvr_lib_v5 import spec_utils
-
 import librosa
 import numpy as np
 import audioread
+from numpy._typing import NDArray
+from tqdm import tqdm
+from ml_collections import ConfigDict
 
-from tqdm import *
+from audio_separator.separator.common_separator import CommonSeparator
+from audio_separator.separator.uvr_lib_v5.tfc_tdf_v3 import TFC_TDF_net
+from audio_separator.separator.uvr_lib_v5 import spec_utils
 
 
 class MDXCSeparator(CommonSeparator):
+    """
+    MDXCSeparator is responsible for separating audio sources using MDXC models.
+    It initializes with configuration parameters and prepares the model for separation tasks.
+    """
+
     def __init__(self, common_config, arch_config):
+        # Any configuration values which can be shared between architectures should be set already in CommonSeparator,
+        # e.g. user-specified functionality choices (self.output_single_stem) or common model parameters (self.primary_stem_name)
         super().__init__(config=common_config)
+
+        # Model data is basic overview metadata about the model, e.g. which stem is primary and whether it's a karaoke model
+        # It's loaded in from model_data_new.json in Separator.load_model and there are JSON examples in that method
+        # The instance variable self.model_data is passed through from Separator and set in CommonSeparator
+        self.logger.debug(f"Model data: {self.model_data}")
+        
         self.segment_size = arch_config.get("segment_size")
         self.overlap = arch_config.get("overlap")
         self.batch_size = arch_config.get("batch_size", 1)
@@ -44,9 +56,17 @@ class MDXCSeparator(CommonSeparator):
         model_data = common_config["model_data"]
         model_data = ConfigDict(model_data)
         device = self.torch_device
-        model = TFC_TDF_net(model_data, device=device)
-        model.load_state_dict(torch.load(model_path, map_location="cpu"))
-        model.to(device).eval()
+
+        try:
+            model = TFC_TDF_net(model_data, device=device)
+            model.load_state_dict(torch.load(model_path, map_location="cpu"))
+            model.to(device).eval()
+        except RuntimeError as e:
+            self.logger.error("An error occurred while loading the model file. This often occurs when the model file is corrupt or incomplete.")
+            self.logger.error(f"Error message: {e}")
+            self.logger.error(f"Please try deleting the model file from path {model_path} and run audio-separator again to re-download it.")
+            sys.exit(1)
+
         self.model_data = model_data
         self.model_run = model
 
@@ -130,7 +150,7 @@ class MDXCSeparator(CommonSeparator):
         self.logger.debug("Normalizing mix before demixing...")
         mix = spec_utils.normalize(wave=mix, max_peak=self.normalization_threshold)
 
-        source = self.demix(mix, self.other_metadata, self.model_run, self.model_data, self.torch_device)
+        source = self.demix(mix=mix, prams=self.other_metadata, model=self.model_run, model_data=self.model_data, device=self.torch_device)
         stems = self.rename_stems(source)
 
         output_files = []
