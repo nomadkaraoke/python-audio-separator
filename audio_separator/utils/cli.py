@@ -154,12 +154,11 @@ def main():
             "overlap": args.demucs_overlap,
             "segments_enabled": args.demucs_segments_enabled,
         },
-        mdxc_prams={
+        mdxc_params={
             'segment_size': args.mdx_segment_size,
             "batch_size": args.mdxc_batch_size,
             "overlap": args.mdxc_overlap
         }
-        # todo mdxc 
     )
 
     separator.load_model(model_filename=args.model_filename)
