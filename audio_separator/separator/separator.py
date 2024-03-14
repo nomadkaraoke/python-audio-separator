@@ -618,6 +618,7 @@ class Separator:
             raise ValueError(f"Model type not supported (yet): {model_type}")
 
         module = __import__("audio_separator.separator.architectures", fromlist=[separator_classes[model_type]])
+
         separator_class = getattr(module, separator_classes[model_type])
         self.model_instance = separator_class(common_config=common_params, arch_config=self.arch_specific_params[model_type])
 
