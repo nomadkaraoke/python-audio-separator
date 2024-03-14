@@ -4,18 +4,17 @@ from importlib import metadata
 import os
 import platform
 import subprocess
+import time
+import logging
+import warnings
 
 import hashlib
 import json
 import yaml
-import time
-import logging
-import warnings
 import requests
 import torch
 import onnxruntime as ort
-
-from audio_separator.separator.common_separator import CommonSeparator
+from tqdm import tqdm
 
 
 class Separator:
@@ -294,9 +293,17 @@ class Separator:
         response = requests.get(url, stream=True, timeout=300)
 
         if response.status_code == 200:
+            total_size_in_bytes = int(response.headers.get("content-length", 0))
+            progress_bar = tqdm(total=total_size_in_bytes, unit="iB", unit_scale=True)
+
             with open(output_path, "wb") as f:
                 for chunk in response.iter_content(chunk_size=8192):
+                    progress_bar.update(len(chunk))
                     f.write(chunk)
+            progress_bar.close()
+
+            if total_size_in_bytes != 0 and progress_bar.n != total_size_in_bytes:
+                raise RuntimeError("ERROR, something went wrong")
         else:
             raise RuntimeError(f"Failed to download file from {url}, response code: {response.status_code}")
 
