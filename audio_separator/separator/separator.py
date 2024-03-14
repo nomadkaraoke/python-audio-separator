@@ -78,7 +78,7 @@ class Separator:
         mdx_params={"hop_length": 1024, "segment_size": 256, "overlap": 0.25, "batch_size": 1, "enable_denoise": False},
         vr_params={"batch_size": 16, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False},
         demucs_params={"segment_size": "Default", "shifts": 2, "overlap": 0.25, "segments_enabled": True},
-        mdxc_prams = {"segment_size": 256,"batch_size": 1,"overlap": 8}
+        mdxc_prams={"segment_size": 256, "batch_size": 1, "overlap": 8},
     ):
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(log_level)
@@ -134,7 +134,7 @@ class Separator:
 
         # These are parameters which users may want to configure so we expose them to the top-level Separator class,
         # even though they are specific to a single model architecture
-        self.arch_specific_params = {"MDX": mdx_params, "VR": vr_params, "Demucs": demucs_params, "MDXC":mdxc_prams}
+        self.arch_specific_params = {"MDX": mdx_params, "VR": vr_params, "Demucs": demucs_params, "MDXC": mdxc_prams}
 
         self.torch_device = None
         self.torch_device_cpu = None
@@ -398,18 +398,27 @@ class Separator:
                     if this_model_matches_input_filename:
                         self.logger.debug(f"Multi-file model identified: {model_friendly_name}, iterating through files to download")
 
-                        for file_name, file_url in model_download_list.items():
-                            # Demucs models have full URLs to download from Facebook repos
-                            if file_url.startswith("http"):
-                                full_file_url = file_url
-                            # Checkpoint models apparently use the key as the filename, the value is a filename of a YAML config file...
-                            elif file_name.endswith(".ckpt"):
-                                full_file_url = f"{model_repo_url_prefix}/{file_name}"
-                            # MDX and VR models have the model filename as the value mapped to the model name
-                            else:
-                                full_file_url = f"{model_repo_url_prefix}/{file_url}"
+                        for config_key, config_value in model_download_list.items():
+                            self.logger.debug(f"Attempting to identify download URL for config pair: {config_key} -> {config_value}")
 
-                            self.download_file_if_not_exists(full_file_url, os.path.join(self.model_file_dir, file_name))
+                            # Demucs models have full URLs to download from Facebook repos, and config_key is set to the file name
+                            if config_value.startswith("http"):
+                                self.download_file_if_not_exists(config_value, os.path.join(self.model_file_dir, config_key))
+
+                            # Checkpoint models apparently use config_key as the model filename, but the value is a YAML config file name...
+                            # Both need to be downloaded, so we'll download the actual model file using config_key first,
+                            # but also download the YAML config file later in load_model_data_using_hash...
+                            elif config_key.endswith(".ckpt"):
+                                download_url = f"{model_repo_url_prefix}/{config_key}"
+                                self.download_file_if_not_exists(download_url, os.path.join(self.model_file_dir, config_key))
+
+                                # We'll check for this value later in load_model_data_using_hash and download this config file if needed
+                                self.arch_specific_params["MDXC"]["yaml_config_filename"] = config_value
+
+                            # MDX and VR models have config_value set to the model filename
+                            else:
+                                download_url = f"{model_repo_url_prefix}/{config_value}"
+                                self.download_file_if_not_exists(download_url, os.path.join(self.model_file_dir, config_value))
 
                         self.logger.debug(f"All files downloaded for model {model_friendly_name}, returning initial path {model_path}")
                         return model_type, model_friendly_name, model_path
@@ -427,7 +436,7 @@ class Separator:
 
         vr_model_data_url = f"{model_data_url_prefix}/vr_model_data/model_data_new.json"
         mdx_model_data_url = f"{model_data_url_prefix}/mdx_model_data/model_data_new.json"
-        mdx_c_configs_url_prefix = f"{model_data_url_prefix}/mdx_model_data/mdx_c_configs"
+        mdxc_configs_url_prefix = f"{model_data_url_prefix}/mdx_model_data/mdx_c_configs"
 
         # Calculate hash for the downloaded model
         self.logger.debug("Calculating MD5 hash for model file to identify model parameters from UVR data...")
@@ -523,24 +532,27 @@ class Separator:
         #     }
         # }
 
-        if model_hash in mdx_model_data_object:
-            model_data = mdx_model_data_object[model_hash]
-        elif model_hash in vr_model_data_object:
-            model_data = vr_model_data_object[model_hash]
-        else:
-            raise ValueError(f"Unsupported Model File: parameters for MD5 hash {model_hash} could not be found in the UVR model data file.")
+        model_data = None
 
-        self.logger.debug(f"Model data loaded from UVR JSON using hash {model_hash}: {model_data}")
+        if model_hash in mdx_model_data_object or model_hash in vr_model_data_object:
+            if model_hash in mdx_model_data_object:
+                model_data = mdx_model_data_object[model_hash]
+            elif model_hash in vr_model_data_object:
+                model_data = vr_model_data_object[model_hash]
 
-        # MDX_C model data is actually stored in a YAML file which has to be downloaded separately
-        if "config_yaml" in model_data:
-            self.logger.debug(f"Model data had config_yaml key, fetching actual model data YAML from MDX_C config URL")
+            self.logger.debug(f"Model data loaded from UVR JSON using hash {model_hash}: {model_data}")
 
-            mdxc_model_data_path = os.path.join(self.model_file_dir, model_data["config_yaml"])
-            self.logger.debug(f"MDX_C model data path set to {mdxc_model_data_path}")
-            self.download_file_if_not_exists(f"{mdx_c_configs_url_prefix}/{model_data['config_yaml']}", mdxc_model_data_path)
+        if "yaml_config_filename" in self.arch_specific_params["MDXC"]:
+            # MDXC model data is actually stored in a YAML file which has to be downloaded separately
+            mdxc_config_yaml_filename = self.arch_specific_params["MDXC"]["yaml_config_filename"]
+            mdxc_model_data_path = os.path.join(self.model_file_dir, mdxc_config_yaml_filename)
+            self.logger.debug(f"MDXC model data path set to {mdxc_model_data_path}")
 
+            self.download_file_if_not_exists(f"{mdxc_configs_url_prefix}/{mdxc_config_yaml_filename}", mdxc_model_data_path)
             model_data = self.load_model_data_from_yaml(mdxc_model_data_path)
+
+        if model_data is None:
+            raise ValueError(f"Unsupported Model File: parameters for MD5 hash {model_hash} could not be found in UVR model data file or YAML config.")
 
         return model_data
 
@@ -596,7 +608,7 @@ class Separator:
             raise ValueError(f"Model type not supported (yet): {model_type}")
 
         # Instantiate the appropriate separator class depending on the model type
-        separator_classes = {"MDX": "MDXSeparator", "VR": "VRSeparator", "Demucs": "DemucsSeparator","MDXC":"MDXCSeparator"}
+        separator_classes = {"MDX": "MDXSeparator", "VR": "VRSeparator", "Demucs": "DemucsSeparator", "MDXC": "MDXCSeparator"}
 
         if model_type not in separator_classes:
             raise ValueError(f"Model type not supported (yet): {model_type}")
