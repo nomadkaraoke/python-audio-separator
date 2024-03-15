@@ -46,6 +46,7 @@ diffq = ">=0.2"
 einops = ">=0.7"
 pyyaml = "*"
 ml_collections = "*"
+resampy = ">=0.4"
 
 [tool.poetry.extras]
 cpu = ["onnxruntime"]

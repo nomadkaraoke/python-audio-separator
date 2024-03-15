@@ -32,14 +32,20 @@ class MDXCSeparator(CommonSeparator):
         # While there are similarities between architectures for some of these (e.g. batch_size), they are deliberately configured
         # this way as they have architecture-specific default values.
         self.segment_size = arch_config.get("segment_size", 256)
-        self.use_default_segment_size = arch_config.get("use_default_segment_size", False)
+        self.use_model_segment_size = arch_config.get("use_model_segment_size", False)
 
         self.overlap = arch_config.get("overlap", 8)
         self.batch_size = arch_config.get("batch_size", 1)
-        self.semitone_shift = arch_config.get("semitone_shift", 0)
+
+        # Amount of pitch shift to apply during processing (this does NOT affect the pitch of the output audio):
+        # • Whole numbers indicate semitones.
+        # • Using higher pitches may cut the upper bandwidth, even in high-quality models.
+        # • Upping the pitch can be better for tracks with deeper vocals.
+        # • Dropping the pitch may take more processing time but works well for tracks with high-pitched vocals.
+        self.pitch_shift = arch_config.get("pitch_shift", 0)
 
         self.logger.debug(f"MDXC arch params: batch_size={self.batch_size}, segment_size={self.segment_size}, overlap={self.overlap}")
-        self.logger.debug(f"MDXC arch params: use_default_segment_size={self.use_default_segment_size}, semitone_shift={self.semitone_shift}")
+        self.logger.debug(f"MDXC arch params: use_model_segment_size={self.use_model_segment_size}, pitch_shift={self.pitch_shift}")
 
         self.load_model()
 
@@ -125,6 +131,22 @@ class MDXCSeparator(CommonSeparator):
             output_files.append(self.primary_stem_output_path)
         return output_files
 
+    def pitch_fix(self, source, sr_pitched, org_mix):
+        """
+        Change the pitch of the source audio by a number of semitones.
+
+        Args:
+            source (np.ndarray): The source audio to be pitch-shifted.
+            sr_pitched (int): The sample rate of the pitch-shifted audio.
+            org_mix (np.ndarray): The original mix, used to match the shape of the pitch-shifted audio.
+
+        Returns:
+            np.ndarray: The pitch-shifted source audio.
+        """
+        source = spec_utils.change_pitch_semitones(source, sr_pitched, semitone_shift=self.pitch_shift)[0]
+        source = spec_utils.match_array_shapes(source, org_mix)
+        return source
+
     def demix(self, mix: np.ndarray) -> dict:
         """
         Demixes the input mix into primary and secondary sources using the model and model data.
@@ -136,19 +158,19 @@ class MDXCSeparator(CommonSeparator):
         """
         orig_mix = mix
 
-        if self.semitone_shift != 0:
-            self.logger.debug(f"Shifting pitch by {self.semitone_shift} semitones...")
-            mix, sample_rate = spec_utils.change_pitch_semitones(mix, self.sample_rate, semitone_shift=-self.semitone_shift)
+        if self.pitch_shift != 0:
+            self.logger.debug(f"Shifting pitch by -{self.pitch_shift} semitones...")
+            mix, sample_rate = spec_utils.change_pitch_semitones(mix, self.sample_rate, semitone_shift=-self.pitch_shift)
 
         mix = torch.tensor(mix, dtype=torch.float32)
 
         try:
-            num_target_instruments = self.model_run.num_target_instruments
+            num_stems = self.model_run.num_target_instruments
         except AttributeError:
-            num_target_instruments = self.model_run.module.num_target_instruments
-        self.logger.debug(f"Number of target instruments: {num_target_instruments}")
+            num_stems = self.model_run.module.num_target_instruments
+        self.logger.debug(f"Number of stems: {num_stems}")
 
-        if self.use_default_segment_size:
+        if self.use_model_segment_size:
             mdx_segment_size = self.model_data_cfgdict.inference.dim_t
             self.logger.debug(f"Using model default segment size: {mdx_segment_size}")
         else:
@@ -177,7 +199,7 @@ class MDXCSeparator(CommonSeparator):
         # accumulated_outputs is used to accumulate the output from processing each batch of chunks through the model.
         # It starts as a tensor of zeros and is updated in-place as the model processes each batch.
         # The variable holds the combined result of all processed batches, which, after post-processing, represents the separated audio sources.
-        accumulated_outputs = torch.zeros(num_target_instruments, *mix.shape) if num_target_instruments > 1 else torch.zeros_like(mix)
+        accumulated_outputs = torch.zeros(num_stems, *mix.shape) if num_stems > 1 else torch.zeros_like(mix)
         accumulated_outputs = accumulated_outputs.to(self.torch_device)
 
         with torch.no_grad():
@@ -194,23 +216,42 @@ class MDXCSeparator(CommonSeparator):
                     accumulated_outputs[..., count * hop_size : count * hop_size + chunk_size] += individual_output
                     count += 1
 
-        estimated_sources = accumulated_outputs[..., chunk_size - hop_size : -(pad_size + chunk_size - hop_size)] / self.overlap
+        self.logger.debug("Calculating inferenced outputs based on accumulated outputs and overlap")
+        inferenced_outputs = accumulated_outputs[..., chunk_size - hop_size : -(pad_size + chunk_size - hop_size)] / self.overlap
+        self.logger.debug("Deleting accumulated outputs to free up memory")
         del accumulated_outputs
 
-        # TODO: Investigate this, it looks like a broken use of lambda and probably does work
-        # Need to test with the semitone_shift parameter set as that would trigger this code path
-        pitch_fix = lambda s: pitch_fix(s, sample_rate, orig_mix, self.semitone_shift)
+        if num_stems > 1:
+            self.logger.debug("Number of stems is greater than 1, detaching individual sources and correcting pitch if necessary...")
 
-        if num_target_instruments > 1:
-            self.logger.debug("Number of target instruments is greater than 1, detaching individual sources and correcting pitch if necessary...")
-            sources = {key: pitch_fix(value) if self.semitone_shift != 0 else value for key, value in zip(self.model_data_cfgdict.training.instruments, estimated_sources.cpu().detach().numpy())}
-            del estimated_sources
+            sources = {}
+
+            # Iterates over each instrument specified in the model's configuration and its corresponding separated audio source.
+            # self.model_data_cfgdict.training.instruments provides the list of stems.
+            # estimated_sources.cpu().detach().numpy() converts the separated sources tensor to a NumPy array for processing.
+            # Each iteration provides an instrument name ('key') and its separated audio ('value') for further processing.
+            for key, value in zip(self.model_data_cfgdict.training.instruments, inferenced_outputs.cpu().detach().numpy()):
+                self.logger.debug(f"Processing instrument: {key}")
+                if self.pitch_shift != 0:
+                    self.logger.debug(f"Applying pitch correction for {key}")
+                    sources[key] = self.pitch_fix(value, sample_rate, orig_mix)
+                else:
+                    sources[key] = value
+
+            self.logger.debug("Deleting inferenced outputs to free up memory")
+            del inferenced_outputs
+
+            self.logger.debug("Returning separated sources")
             return sources
 
-        estimated_source = estimated_sources.cpu().detach().numpy()
-        del estimated_sources
+        self.logger.debug("Detaching inferenced output for single instrument scenario")
+        inferenced_output = inferenced_outputs.cpu().detach().numpy()
+        self.logger.debug("Deleting inferenced outputs to free up memory")
+        del inferenced_outputs
 
-        if self.semitone_shift != 0:
-            return pitch_fix(estimated_source)
-        else:
-            return estimated_source
+        if self.pitch_shift != 0:
+            self.logger.debug("Applying pitch correction for single instrument")
+            return self.pitch_fix(inferenced_output, sample_rate, orig_mix)
+
+        self.logger.debug("Returning inferenced output for single instrument")
+        return inferenced_output
