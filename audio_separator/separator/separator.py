@@ -132,6 +132,9 @@ class Separator:
         self.onnx_execution_provider = None
         self.model_instance = None
 
+        self.model_is_uvr_vip = False
+        self.model_friendly_name = None
+
         self.setup_accelerated_inferencing_device()
 
     def setup_accelerated_inferencing_device(self):
@@ -347,12 +350,19 @@ class Separator:
         # Return object with list of model names, which are the keys in vr_download_list, mdx_download_list, demucs_download_list, mdx23_download_list, mdx23c_download_list, grouped by type: VR, MDX, Demucs, MDX23, MDX23C
         model_files_grouped_by_type = {
             "VR": model_downloads_list["vr_download_list"],
-            "MDX": model_downloads_list["mdx_download_list"],
+            "MDX": {**model_downloads_list["mdx_download_list"], **model_downloads_list["mdx_download_vip_list"]},
             "Demucs": filtered_demucs_v4,
-            "MDXC": model_downloads_list["mdx23c_download_list"],
-            # "MDX23": model_downloads_list["mdx23_download_list"],
+            "MDXC": {**model_downloads_list["mdx23c_download_list"], **model_downloads_list["mdx23c_download_vip_list"]},
         }
         return model_files_grouped_by_type
+
+    def print_uvr_vip_message(self):
+        """
+        This method prints a message to the user if they have downloaded a VIP model, reminding them to support Anjok07 on Patreon.
+        """
+        if self.model_is_uvr_vip:
+            self.logger.warning(f"The model: '{self.model_friendly_name}' is a VIP model, intended by Anjok07 for access by paying subscribers only.")
+            self.logger.warning("If you are not already subscribed, please consider supporting the developer of UVR, Anjok07 by subscribing here: https://patreon.com/uvr")
 
     def download_model_files(self, model_filename):
         """
@@ -361,21 +371,27 @@ class Separator:
         model_path = os.path.join(self.model_file_dir, f"{model_filename}")
 
         supported_model_files_grouped = self.list_supported_model_files()
-        model_repo_url_prefix = "https://github.com/TRvlvr/model_repo/releases/download/all_public_uvr_models"
+        public_model_repo_url_prefix = "https://github.com/TRvlvr/model_repo/releases/download/all_public_uvr_models"
+        vip_model_repo_url_prefix = "https://github.com/Anjok0109/ai_magic/releases/download/v5"
 
         yaml_config_filename = None
 
         self.logger.debug(f"Searching for model_filename {model_filename} in supported_model_files_grouped")
         for model_type, model_list in supported_model_files_grouped.items():
             for model_friendly_name, model_download_list in model_list.items():
+                self.model_is_uvr_vip = "VIP" in model_friendly_name
+                model_repo_url_prefix = vip_model_repo_url_prefix if self.model_is_uvr_vip else public_model_repo_url_prefix
+
                 # If model_download_list is a string, this model only requires a single file so we can just download it
                 if isinstance(model_download_list, str) and model_download_list == model_filename:
                     self.logger.debug(f"Single file model identified: {model_friendly_name}")
+                    self.model_friendly_name = model_friendly_name
 
                     self.download_file_if_not_exists(f"{model_repo_url_prefix}/{model_filename}", model_path)
+                    self.print_uvr_vip_message()
 
                     self.logger.debug(f"Returning path for single model file: {model_path}")
-                    return model_type, model_friendly_name, model_path, yaml_config_filename
+                    return model_filename, model_type, model_friendly_name, model_path, yaml_config_filename
 
                 # If it's a dict, iterate through each entry check if any of them match model_filename
                 # If the value is a full URL, download it from that URL.
@@ -389,6 +405,8 @@ class Separator:
 
                     if this_model_matches_input_filename:
                         self.logger.debug(f"Multi-file model identified: {model_friendly_name}, iterating through files to download")
+                        self.model_friendly_name = model_friendly_name
+                        self.print_uvr_vip_message()
 
                         for config_key, config_value in model_download_list.items():
                             self.logger.debug(f"Attempting to identify download URL for config pair: {config_key} -> {config_value}")
@@ -402,6 +420,14 @@ class Separator:
                             elif config_key.endswith(".ckpt"):
                                 download_url = f"{model_repo_url_prefix}/{config_key}"
                                 self.download_file_if_not_exists(download_url, os.path.join(self.model_file_dir, config_key))
+
+                                # In case the user specified the YAML filename as the model input instead of the model filename, correct that
+                                if model_filename.endswith(".yaml"):
+                                    self.logger.warning(f"The model name you've specified, {model_filename} is actually a model config file, not a model file itself.")
+                                    self.logger.warning(f"We found a model matching this config file: {config_key} so we'll use that model file for this run.")
+                                    self.logger.warning("To prevent confusing / inconsistent behaviour in future, specify an actual model filename instead.")
+                                    model_filename = config_key
+                                    model_path = os.path.join(self.model_file_dir, f"{model_filename}")
 
                                 # For MDXC models, the config_value is the YAML file which needs to be downloaded separately from the application_data repo
                                 yaml_config_filename = config_value
@@ -419,7 +445,7 @@ class Separator:
                                 self.download_file_if_not_exists(download_url, os.path.join(self.model_file_dir, config_value))
 
                         self.logger.debug(f"All files downloaded for model {model_friendly_name}, returning initial path {model_path}")
-                        return model_type, model_friendly_name, model_path, yaml_config_filename
+                        return model_filename, model_type, model_friendly_name, model_path, yaml_config_filename
 
         raise ValueError(f"Model file {model_filename} not found in supported model files")
 
@@ -562,8 +588,8 @@ class Separator:
         load_model_start_time = time.perf_counter()
 
         # Setting up the model path
+        model_filename, model_type, model_friendly_name, model_path, yaml_config_filename = self.download_model_files(model_filename)
         model_name = model_filename.split(".")[0]
-        model_type, model_friendly_name, model_path, yaml_config_filename = self.download_model_files(model_filename)
         self.logger.debug(f"Model downloaded, friendly name: {model_friendly_name}, model_path: {model_path}")
 
         if model_path.lower().endswith(".yaml"):
@@ -638,6 +664,9 @@ class Separator:
 
         # Unset more separation params to prevent accidentally re-using the wrong source files or output paths
         self.model_instance.clear_file_specific_paths()
+
+        # Remind the user one more time if they used a VIP model, so the message doesn't get lost in the logs
+        self.print_uvr_vip_message()
 
         # Log the completion of the separation process
         self.logger.debug("Separation process completed.")

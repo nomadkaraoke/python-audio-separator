@@ -67,7 +67,7 @@ class MDXCSeparator(CommonSeparator):
 
         try:
             self.model_run = TFC_TDF_net(self.model_data_cfgdict, device=self.torch_device)
-            self.model_run.load_state_dict(torch.load(self.model_path, map_location="cpu"))
+            self.model_run.load_state_dict(torch.load(self.model_path, map_location=self.torch_device))
             self.model_run.to(self.torch_device).eval()
         except RuntimeError as e:
             self.logger.error(f"Error: {e}")
@@ -121,7 +121,7 @@ class MDXCSeparator(CommonSeparator):
 
         if not self.output_single_stem or self.output_single_stem.lower() == self.primary_stem_name.lower():
             self.primary_stem_output_path = os.path.join(f"{self.audio_file_base}_({self.primary_stem_name})_{self.model_name}.{self.output_format.lower()}")
-            
+
             if not isinstance(self.primary_source, np.ndarray):
                 self.primary_source = source.T
 
