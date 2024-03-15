@@ -53,8 +53,6 @@ class MDXCSeparator(CommonSeparator):
         self.secondary_source = None
         self.audio_file_path = None
         self.audio_file_base = None
-        self.primary_source_map = None
-        self.secondary_source_map = None
 
         self.logger.info("MDXC Separator initialisation complete")
 
@@ -94,7 +92,7 @@ class MDXCSeparator(CommonSeparator):
         self.audio_file_path = audio_file_path
         self.audio_file_base = os.path.splitext(os.path.basename(audio_file_path))[0]
 
-        self.logger.debug("Preparing mix...")
+        self.logger.debug(f"Preparing mix for input audio file {self.audio_file_path}...")
         mix = self.prepare_mix(self.audio_file_path)
 
         self.logger.debug("Normalizing mix before demixing...")
@@ -115,19 +113,20 @@ class MDXCSeparator(CommonSeparator):
             self.secondary_source = spec_utils.normalize(wave=source[self.secondary_stem_name], max_peak=self.normalization_threshold).T
 
         if not self.output_single_stem or self.output_single_stem.lower() == self.secondary_stem_name.lower():
-            self.logger.info(f"Saving {self.secondary_stem_name} stem...")
-            if not self.secondary_stem_output_path:
-                self.secondary_stem_output_path = os.path.join(f"{self.audio_file_base}_({self.secondary_stem_name})_{self.model_name}.{self.output_format.lower()}")
-            self.secondary_source_map = self.final_process(self.secondary_stem_output_path, self.secondary_source, self.secondary_stem_name)
+            self.secondary_stem_output_path = os.path.join(f"{self.audio_file_base}_({self.secondary_stem_name})_{self.model_name}.{self.output_format.lower()}")
+
+            self.logger.info(f"Saving {self.secondary_stem_name} stem to {self.secondary_stem_output_path}...")
+            self.final_process(self.secondary_stem_output_path, self.secondary_source, self.secondary_stem_name)
             output_files.append(self.secondary_stem_output_path)
 
         if not self.output_single_stem or self.output_single_stem.lower() == self.primary_stem_name.lower():
-            self.logger.info(f"Saving {self.primary_stem_name} stem...")
-            if not self.primary_stem_output_path:
-                self.primary_stem_output_path = os.path.join(f"{self.audio_file_base}_({self.primary_stem_name})_{self.model_name}.{self.output_format.lower()}")
+            self.primary_stem_output_path = os.path.join(f"{self.audio_file_base}_({self.primary_stem_name})_{self.model_name}.{self.output_format.lower()}")
+            
             if not isinstance(self.primary_source, np.ndarray):
                 self.primary_source = source.T
-            self.primary_source_map = self.final_process(self.primary_stem_output_path, self.primary_source, self.primary_stem_name)
+
+            self.logger.info(f"Saving {self.primary_stem_name} stem to {self.primary_stem_output_path}...")
+            self.final_process(self.primary_stem_output_path, self.primary_source, self.primary_stem_name)
             output_files.append(self.primary_stem_output_path)
         return output_files
 

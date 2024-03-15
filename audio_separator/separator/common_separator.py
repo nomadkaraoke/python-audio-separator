@@ -65,12 +65,6 @@ class CommonSeparator:
         self.model_path = config.get("model_path")
         self.model_data = config.get("model_data")
 
-        # Optional custom output paths for the primary and secondary stems
-        # If left as None, the arch-specific class decides the output filename, e.g. something like:
-        # f"{self.audio_file_base}_({self.primary_stem_name})_{self.model_name}.{self.output_format.lower()}"
-        self.primary_stem_output_path = config.get("primary_stem_output_path")
-        self.secondary_stem_output_path = config.get("secondary_stem_output_path")
-
         # Output directory and format
         self.output_dir = config.get("output_dir")
         self.output_format = config.get("output_format")
@@ -90,7 +84,6 @@ class CommonSeparator:
         self.bv_model_rebalance = self.model_data.get("is_bv_model_rebalanced", 0)
 
         self.logger.debug(f"Common params: model_name={self.model_name}, model_path={self.model_path}")
-        self.logger.debug(f"Common params: primary_stem_output_path={self.primary_stem_output_path}, secondary_stem_output_path={self.secondary_stem_output_path}")
         self.logger.debug(f"Common params: output_dir={self.output_dir}, output_format={self.output_format}")
         self.logger.debug(f"Common params: normalization_threshold={self.normalization_threshold}")
         self.logger.debug(f"Common params: enable_denoise={self.enable_denoise}, output_single_stem={self.output_single_stem}")
@@ -98,6 +91,16 @@ class CommonSeparator:
 
         self.logger.debug(f"Common params: primary_stem_name={self.primary_stem_name}, secondary_stem_name={self.secondary_stem_name}")
         self.logger.debug(f"Common params: is_karaoke={self.is_karaoke}, is_bv_model={self.is_bv_model}, bv_model_rebalance={self.bv_model_rebalance}")
+
+        # File-specific variables which need to be cleared between processing different audio inputs
+        self.audio_file_path = None
+        self.audio_file_base = None
+
+        self.primary_source = None
+        self.secondary_source = None
+
+        self.primary_stem_output_path = None
+        self.secondary_stem_output_path = None
 
         self.cached_sources_map = {}
 
@@ -266,3 +269,18 @@ class CommonSeparator:
         if self.torch_device == torch.device("cuda"):
             self.logger.debug("Clearing CUDA cache...")
             torch.cuda.empty_cache()
+
+    def clear_file_specific_paths(self):
+        """
+        Clears the file-specific variables which need to be cleared between processing different audio inputs.
+        """
+        self.logger.info("Clearing input audio file paths, sources and stems...")
+
+        self.audio_file_path = None
+        self.audio_file_base = None
+
+        self.primary_source = None
+        self.secondary_source = None
+
+        self.primary_stem_output_path = None
+        self.secondary_stem_output_path = None

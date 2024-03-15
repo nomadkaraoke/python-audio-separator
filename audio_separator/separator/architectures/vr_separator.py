@@ -127,7 +127,7 @@ class VRSeparator(CommonSeparator):
         self.audio_file_path = audio_file_path
         self.audio_file_base = os.path.splitext(os.path.basename(audio_file_path))[0]
 
-        self.logger.debug("Starting inference...")
+        self.logger.debug(f"Starting separation for input audio file {self.audio_file_path}...")
 
         nn_arch_sizes = [31191, 33966, 56817, 123821, 123812, 129605, 218409, 537238, 537227]  # default
         vr_5_1_models = [56817, 218409]
@@ -167,10 +167,7 @@ class VRSeparator(CommonSeparator):
 
         # Save and process the primary stem if needed
         if not self.output_single_stem or self.output_single_stem.lower() == self.primary_stem_name.lower():
-            self.logger.info(f"Saving {self.primary_stem_name} stem...")
-            if not self.primary_stem_output_path:
-                self.primary_stem_output_path = os.path.join(f"{self.audio_file_base}_({self.primary_stem_name})_{self.model_name}.{self.output_format.lower()}")
-
+            self.logger.debug(f"Processing primary stem: {self.primary_stem_name}")
             if not isinstance(self.primary_source, np.ndarray):
                 self.primary_source = self.spec_to_wav(y_spec).T
                 self.logger.debug("Converting primary source spectrogram to waveform.")
@@ -178,16 +175,14 @@ class VRSeparator(CommonSeparator):
                     self.primary_source = librosa.resample(self.primary_source.T, orig_sr=self.model_samplerate, target_sr=44100).T
                     self.logger.debug("Resampling primary source to 44100Hz.")
 
-            self.primary_source_map = self.final_process(self.primary_stem_output_path, self.primary_source, self.primary_stem_name)
-            self.logger.debug("Primary stem processed.")
+            self.primary_stem_output_path = os.path.join(f"{self.audio_file_base}_({self.primary_stem_name})_{self.model_name}.{self.output_format.lower()}")
+
+            self.logger.info(f"Saving {self.primary_stem_name} stem to {self.primary_stem_output_path}...")
+            self.final_process(self.primary_stem_output_path, self.primary_source, self.primary_stem_name)
             output_files.append(self.primary_stem_output_path)
 
         # Save and process the secondary stem if needed
         if not self.output_single_stem or self.output_single_stem.lower() == self.secondary_stem_name.lower():
-            self.logger.info(f"Saving {self.secondary_stem_name} stem...")
-            if not self.secondary_stem_output_path:
-                self.secondary_stem_output_path = os.path.join(f"{self.audio_file_base}_({self.secondary_stem_name})_{self.model_name}.{self.output_format.lower()}")
-
             self.logger.debug(f"Processing secondary stem: {self.secondary_stem_name}")
             if not isinstance(self.secondary_source, np.ndarray):
                 self.secondary_source = self.spec_to_wav(v_spec).T
@@ -196,8 +191,10 @@ class VRSeparator(CommonSeparator):
                     self.secondary_source = librosa.resample(self.secondary_source.T, orig_sr=self.model_samplerate, target_sr=44100).T
                     self.logger.debug("Resampling secondary source to 44100Hz.")
 
-            self.secondary_source_map = self.final_process(self.secondary_stem_output_path, self.secondary_source, self.secondary_stem_name)
-            self.logger.debug("Secondary stem processed.")
+            self.secondary_stem_output_path = os.path.join(f"{self.audio_file_base}_({self.secondary_stem_name})_{self.model_name}.{self.output_format.lower()}")
+
+            self.logger.info(f"Saving {self.secondary_stem_name} stem to {self.secondary_stem_output_path}...")
+            self.final_process(self.secondary_stem_output_path, self.secondary_source, self.secondary_stem_name)
             output_files.append(self.secondary_stem_output_path)
 
         # Not yet implemented from UVR features:

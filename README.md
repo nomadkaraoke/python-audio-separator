@@ -212,10 +212,9 @@ separator = Separator()
 separator.load_model()
 
 # Perform the separation on specific audio files without reloading the model
-primary_stem_output_path, secondary_stem_output_path = separator.separate('audio1.wav')
+output_files = separator.separate('audio1.wav')
 
-print(f'Primary stem saved at {primary_stem_output_path}')
-print(f'Secondary stem saved at {secondary_stem_output_path}')
+print(f"Separation complete! Output file(s): {' '.join(output_files)}")
 ```
 
 #### Batch processing, or processing with multiple models
@@ -253,8 +252,6 @@ output_file_paths_6 = separator.separate('audio3.wav')
 - log_formatter: (Optional) The log format. Default: None, which falls back to '%(asctime)s - %(levelname)s - %(module)s - %(message)s'
 - model_file_dir: (Optional) Directory to cache model files in. Default: /tmp/audio-separator-models/
 - output_dir: (Optional) Directory where the separated files will be saved. If not specified, uses the current directory.
-- primary_stem_output_path: (Optional) The path for saving the primary stem. Default: None
-- secondary_stem_output_path: (Optional) The path for saving the secondary stem. Default: None
 - output_format: (Optional) Format to encode output files, any common format (WAV, MP3, FLAC, M4A, etc.). Default: WAV
 - normalization_threshold: (Optional) The threshold for audio normalization. Default: 0.9
 - output_single_stem: (Optional) Output only a single stem, either 'instrumental' or 'vocals'. Default: None

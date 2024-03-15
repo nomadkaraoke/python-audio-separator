@@ -33,8 +33,6 @@ class Separator:
         log_formatter (logging.Formatter): The logging formatter.
         model_file_dir (str): The directory where model files are stored.
         output_dir (str): The directory where output files will be saved.
-        primary_stem_output_path (str): The path for saving the primary stem.
-        secondary_stem_output_path (str): The path for saving the secondary stem.
         output_format (str): The format of the output audio file.
         normalization_threshold (float): The threshold for audio normalization.
         output_single_stem (str): Option to output a single stem.
@@ -63,12 +61,10 @@ class Separator:
 
     def __init__(
         self,
-        log_level=logging.DEBUG,
+        log_level=logging.INFO,
         log_formatter=None,
         model_file_dir="/tmp/audio-separator-models/",
         output_dir=None,
-        primary_stem_output_path=None,
-        secondary_stem_output_path=None,
         output_format="WAV",
         normalization_threshold=0.9,
         output_single_stem=None,
@@ -105,12 +101,6 @@ class Separator:
         self.model_file_dir = model_file_dir
         self.output_dir = output_dir
 
-        # Allow the user to specify the output paths for the primary and secondary stems
-        # If left as None, the arch-specific class decides the output filename, typically e.g. something like:
-        # f"{self.audio_file_base}_({self.primary_stem_name})_{self.model_name}.{self.output_format.lower()}"
-        self.primary_stem_output_path = primary_stem_output_path
-        self.secondary_stem_output_path = secondary_stem_output_path
-
         # Create the model directory if it does not exist
         os.makedirs(self.model_file_dir, exist_ok=True)
 
@@ -141,10 +131,6 @@ class Separator:
 
         self.onnx_execution_provider = None
         self.model_instance = None
-        self.audio_file_path = None
-        self.audio_file_base = None
-        self.primary_source = None
-        self.secondary_source = None
 
         self.setup_accelerated_inferencing_device()
 
@@ -598,8 +584,6 @@ class Separator:
             "model_name": model_name,
             "model_path": model_path,
             "model_data": model_data,
-            "primary_stem_output_path": self.primary_stem_output_path,
-            "secondary_stem_output_path": self.secondary_stem_output_path,
             "output_format": self.output_format,
             "output_dir": self.output_dir,
             "normalization_threshold": self.normalization_threshold,
@@ -652,17 +636,8 @@ class Separator:
         # Clear GPU cache to free up memory
         self.model_instance.clear_gpu_cache()
 
-        # Unset the audio file to prevent accidental re-separation of the same file
-        self.logger.debug("Clearing audio file...")
-        self.audio_file_path = None
-        self.audio_file_base = None
-
         # Unset more separation params to prevent accidentally re-using the wrong source files or output paths
-        self.logger.debug("Clearing sources and stems...")
-        self.primary_source = None
-        self.secondary_source = None
-        self.primary_stem_output_path = None
-        self.secondary_stem_output_path = None
+        self.model_instance.clear_file_specific_paths()
 
         # Log the completion of the separation process
         self.logger.debug("Separation process completed.")
