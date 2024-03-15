@@ -5,8 +5,6 @@ import json
 import sys
 from importlib import metadata
 
-from audio_separator.separator import Separator
-
 
 def main():
     """Main entry point for the CLI."""
@@ -103,9 +101,7 @@ def main():
     mdxc_use_model_segment_size_help = "use model default segment size instead of the value from the config file. Example: --mdxc_use_model_segment_size"
     mdxc_overlap_help = "amount of overlap between prediction windows, 2-50. higher is better but slower (default: %(default)s). Example: --mdxc_overlap=8"
     mdxc_batch_size_help = "larger consumes more RAM but may process slightly faster (default: %(default)s). Example: --mdxc_batch_size=4"
-    mdxc_pitch_shift_help = (
-        "shift audio pitch by a number of semitones while processing. may improve output for deep/high vocals. (default: %(default)s). Example: --mdxc_pitch_shift=2"
-    )
+    mdxc_pitch_shift_help = "shift audio pitch by a number of semitones while processing. may improve output for deep/high vocals. (default: %(default)s). Example: --mdxc_pitch_shift=2"
 
     mdxc_params = parser.add_argument_group("MDXC Architecture Parameters")
     mdxc_params.add_argument("--mdxc_segment_size", type=int, default=256, help=mdxc_segment_size_help)
@@ -122,6 +118,8 @@ def main():
         log_level = getattr(logging, args.log_level.upper())
 
     logger.setLevel(log_level)
+
+    from audio_separator.separator import Separator
 
     if args.env_info:
         separator = Separator()
