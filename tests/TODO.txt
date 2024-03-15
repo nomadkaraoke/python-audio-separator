@@ -1,0 +1,9 @@
+- Test running CLI with minimal input file for each major supported model (e.g. at least 1 from each architecture) outputs expected files
+- Test running CLI with pre-warmed cache directory containing model files does not repeat download
+- Test running CLI with corrupt model files in cache directory throws expected error
+- Test loading the separation class rather than using the CLI works as expected with all major supported models
+- Test processing multiple files in a row outputs separate expected files
+- Test processing file with multiple different models outputs separate expected files
+- Test each of the architecure specific parameters works as expected in both CLI and class mode
+- Generate oscillogram and spectrogram of model output for a short test file for each major supported model and compare to expected output to ensure separation is actually separating stems
+- Add a few different test files with different properties, e.g. background noise, stems present, or genre of music and ensure separation works as expected for each

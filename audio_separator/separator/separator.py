@@ -4,18 +4,17 @@ from importlib import metadata
 import os
 import platform
 import subprocess
+import time
+import logging
+import warnings
 
 import hashlib
 import json
 import yaml
-import time
-import logging
-import warnings
 import requests
 import torch
 import onnxruntime as ort
-
-from audio_separator.separator.common_separator import CommonSeparator
+from tqdm import tqdm
 
 
 class Separator:
@@ -78,6 +77,7 @@ class Separator:
         mdx_params={"hop_length": 1024, "segment_size": 256, "overlap": 0.25, "batch_size": 1, "enable_denoise": False},
         vr_params={"batch_size": 16, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False},
         demucs_params={"segment_size": "Default", "shifts": 2, "overlap": 0.25, "segments_enabled": True},
+        mdxc_params={"segment_size": 256, "batch_size": 1, "overlap": 8},
     ):
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(log_level)
@@ -133,7 +133,7 @@ class Separator:
 
         # These are parameters which users may want to configure so we expose them to the top-level Separator class,
         # even though they are specific to a single model architecture
-        self.arch_specific_params = {"MDX": mdx_params, "VR": vr_params, "Demucs": demucs_params}
+        self.arch_specific_params = {"MDX": mdx_params, "VR": vr_params, "Demucs": demucs_params, "MDXC": mdxc_params}
 
         self.torch_device = None
         self.torch_device_cpu = None
@@ -293,9 +293,14 @@ class Separator:
         response = requests.get(url, stream=True, timeout=300)
 
         if response.status_code == 200:
+            total_size_in_bytes = int(response.headers.get("content-length", 0))
+            progress_bar = tqdm(total=total_size_in_bytes, unit="iB", unit_scale=True)
+
             with open(output_path, "wb") as f:
                 for chunk in response.iter_content(chunk_size=8192):
+                    progress_bar.update(len(chunk))
                     f.write(chunk)
+            progress_bar.close()
         else:
             raise RuntimeError(f"Failed to download file from {url}, response code: {response.status_code}")
 
@@ -358,8 +363,8 @@ class Separator:
             "VR": model_downloads_list["vr_download_list"],
             "MDX": model_downloads_list["mdx_download_list"],
             "Demucs": filtered_demucs_v4,
+            "MDXC": model_downloads_list["mdx23c_download_list"],
             # "MDX23": model_downloads_list["mdx23_download_list"],
-            # "MDX23C": model_downloads_list["mdx23c_download_list"],
         }
         return model_files_grouped_by_type
 
@@ -372,6 +377,8 @@ class Separator:
         supported_model_files_grouped = self.list_supported_model_files()
         model_repo_url_prefix = "https://github.com/TRvlvr/model_repo/releases/download/all_public_uvr_models"
 
+        yaml_config_filename = None
+
         self.logger.debug(f"Searching for model_filename {model_filename} in supported_model_files_grouped")
         for model_type, model_list in supported_model_files_grouped.items():
             for model_friendly_name, model_download_list in model_list.items():
@@ -382,7 +389,7 @@ class Separator:
                     self.download_file_if_not_exists(f"{model_repo_url_prefix}/{model_filename}", model_path)
 
                     self.logger.debug(f"Returning path for single model file: {model_path}")
-                    return model_type, model_friendly_name, model_path
+                    return model_type, model_friendly_name, model_path, yaml_config_filename
 
                 # If it's a dict, iterate through each entry check if any of them match model_filename
                 # If the value is a full URL, download it from that URL.
@@ -397,23 +404,50 @@ class Separator:
                     if this_model_matches_input_filename:
                         self.logger.debug(f"Multi-file model identified: {model_friendly_name}, iterating through files to download")
 
-                        for file_name, file_url in model_download_list.items():
-                            # Demucs models have full URLs to download from Facebook repos
-                            if file_url.startswith("http"):
-                                full_file_url = file_url
-                            # Checkpoint models apparently use the key as the filename, the value is a filename of a YAML config file...
-                            elif file_name.endswith(".ckpt"):
-                                full_file_url = f"{model_repo_url_prefix}/{file_name}"
-                            # MDX and VR models have the model filename as the value mapped to the model name
-                            else:
-                                full_file_url = f"{model_repo_url_prefix}/{file_url}"
+                        for config_key, config_value in model_download_list.items():
+                            self.logger.debug(f"Attempting to identify download URL for config pair: {config_key} -> {config_value}")
 
-                            self.download_file_if_not_exists(full_file_url, os.path.join(self.model_file_dir, file_name))
+                            # Demucs models have full URLs to download from Facebook repos, and config_key is set to the file name
+                            if config_value.startswith("http"):
+                                self.download_file_if_not_exists(config_value, os.path.join(self.model_file_dir, config_key))
+
+                            # Checkpoint models apparently use config_key as the model filename, but the value is a YAML config file name...
+                            # Both need to be downloaded, but the model data YAML file actually comes from the application data repo...
+                            elif config_key.endswith(".ckpt"):
+                                download_url = f"{model_repo_url_prefix}/{config_key}"
+                                self.download_file_if_not_exists(download_url, os.path.join(self.model_file_dir, config_key))
+
+                                # For MDXC models, the config_value is the YAML file which needs to be downloaded separately from the application_data repo
+                                yaml_config_filename = config_value
+                                yaml_config_filepath = os.path.join(self.model_file_dir, yaml_config_filename)
+
+                                # Repo for model data and configuration sources from UVR
+                                model_data_url_prefix = "https://raw.githubusercontent.com/TRvlvr/application_data/main"
+                                yaml_config_url = f"{model_data_url_prefix}/mdx_model_data/mdx_c_configs/{yaml_config_filename}"
+
+                                self.download_file_if_not_exists(f"{yaml_config_url}", yaml_config_filepath)
+
+                            # MDX and VR models have config_value set to the model filename
+                            else:
+                                download_url = f"{model_repo_url_prefix}/{config_value}"
+                                self.download_file_if_not_exists(download_url, os.path.join(self.model_file_dir, config_value))
 
                         self.logger.debug(f"All files downloaded for model {model_friendly_name}, returning initial path {model_path}")
-                        return model_type, model_friendly_name, model_path
+                        return model_type, model_friendly_name, model_path, yaml_config_filename
 
         raise ValueError(f"Model file {model_filename} not found in supported model files")
+
+    def load_model_data_from_yaml(self, yaml_config_filename):
+        """
+        This method loads model-specific parameters from the YAML file for that model.
+        The parameters in the YAML are critical to inferencing, as they need to match whatever was used during training.
+        """
+        model_data_yaml_filepath = os.path.join(self.model_file_dir, yaml_config_filename)
+        self.logger.debug(f"Loading model data from YAML at path {model_data_yaml_filepath}")
+
+        model_data = yaml.load(open(model_data_yaml_filepath, encoding="utf-8"), Loader=yaml.FullLoader)
+        self.logger.debug(f"Model data loaded from YAML file: {model_data}")
+        return model_data
 
     def load_model_data_using_hash(self, model_path):
         """
@@ -426,7 +460,6 @@ class Separator:
 
         vr_model_data_url = f"{model_data_url_prefix}/vr_model_data/model_data_new.json"
         mdx_model_data_url = f"{model_data_url_prefix}/mdx_model_data/model_data_new.json"
-        mdx_c_configs_url_prefix = f"{model_data_url_prefix}/mdx_model_data/mdx_c_configs"
 
         # Calculate hash for the downloaded model
         self.logger.debug("Calculating MD5 hash for model file to identify model parameters from UVR data...")
@@ -527,35 +560,16 @@ class Separator:
         elif model_hash in vr_model_data_object:
             model_data = vr_model_data_object[model_hash]
         else:
-            raise ValueError(f"Unsupported Model File: parameters for MD5 hash {model_hash} could not be found in the UVR model data file.")
+            raise ValueError(f"Unsupported Model File: parameters for MD5 hash {model_hash} could not be found in UVR model data file for MDX or VR arch.")
 
         self.logger.debug(f"Model data loaded from UVR JSON using hash {model_hash}: {model_data}")
 
-        # MDX_C model data is actually stored in a YAML file which has to be downloaded separately
-        if "config_yaml" in model_data:
-            self.logger.debug(f"Model data had config_yaml key, fetching actual model data YAML from MDX_C config URL")
-
-            mdxc_model_data_path = os.path.join(self.model_file_dir, model_data["config_yaml"])
-            self.logger.debug(f"MDX_C model data path set to {mdxc_model_data_path}")
-            self.download_file_if_not_exists(f"{mdx_c_configs_url_prefix}/{model_data['config_yaml']}", mdxc_model_data_path)
-
-            model_data = self.load_model_data_from_yaml(mdxc_model_data_path)
-
-        return model_data
-
-    def load_model_data_from_yaml(self, model_path):
-        """
-        This method loads model-specific parameters from the YAML file for that model.
-        The parameters in the YAML are critical to inferencing, as they need to match whatever was used during training.
-        """
-        model_data = yaml.load(open(model_path, encoding="utf-8"), Loader=yaml.FullLoader)
-
-        self.logger.debug(f"Model data loaded from YAML file: {model_data}")
         return model_data
 
     def load_model(self, model_filename="UVR-MDX-NET-Inst_HQ_3.onnx"):
         """
-        This method loads the separation model into memory, downloading it first if necessary.
+        This method instantiates the architecture-specific separation class,
+        loading the separation model into memory, downloading it first if necessary.
         """
         self.logger.info(f"Loading model {model_filename}...")
 
@@ -563,11 +577,14 @@ class Separator:
 
         # Setting up the model path
         model_name = model_filename.split(".")[0]
-        model_type, model_friendly_name, model_path = self.download_model_files(model_filename)
-        self.logger.debug(f"Model downloaded, friendly name: {model_friendly_name}")
+        model_type, model_friendly_name, model_path, yaml_config_filename = self.download_model_files(model_filename)
+        self.logger.debug(f"Model downloaded, friendly name: {model_friendly_name}, model_path: {model_path}")
 
         if model_path.lower().endswith(".yaml"):
-            model_data = self.load_model_data_from_yaml(model_path)
+            yaml_config_filename = model_path
+
+        if yaml_config_filename is not None:
+            model_data = self.load_model_data_from_yaml(yaml_config_filename)
         else:
             model_data = self.load_model_data_using_hash(model_path)
 
@@ -595,12 +612,13 @@ class Separator:
             raise ValueError(f"Model type not supported (yet): {model_type}")
 
         # Instantiate the appropriate separator class depending on the model type
-        separator_classes = {"MDX": "MDXSeparator", "VR": "VRSeparator", "Demucs": "DemucsSeparator"}
+        separator_classes = {"MDX": "MDXSeparator", "VR": "VRSeparator", "Demucs": "DemucsSeparator", "MDXC": "MDXCSeparator"}
 
         if model_type not in separator_classes:
             raise ValueError(f"Model type not supported (yet): {model_type}")
 
         module = __import__("audio_separator.separator.architectures", fromlist=[separator_classes[model_type]])
+
         separator_class = getattr(module, separator_classes[model_type])
         self.model_instance = separator_class(common_config=common_params, arch_config=self.arch_specific_params[model_type])
 

@@ -5,7 +5,7 @@
 [![Docker pulls](https://img.shields.io/docker/pulls/beveradb/audio-separator.svg)](https://hub.docker.com/r/beveradb/audio-separator/tags)
 [![codecov](https://codecov.io/gh/karaokenerds/python-audio-separator/graph/badge.svg?token=N7YK4ET5JP)](https://codecov.io/gh/karaokenerds/python-audio-separator)
 
-Summary: Easy to use audio stem separation from the command line or as a dependency in your own Python project, using the amazing MDX-Net and VR Arch models available in UVR by @Anjok07 & @aufr33.
+Summary: Easy to use audio stem separation from the command line or as a dependency in your own Python project, using the amazing MDX-Net, VR Arch, Demucs and MDXC models available in UVR by @Anjok07 & @aufr33.
 
 Audio Separator is a Python package that allows you to separate an audio file into various stems, using models trained by @Anjok07 for use with UVR (https://github.com/Anjok07/ultimatevocalremovergui).
 
@@ -136,8 +136,9 @@ Any file listed in the list models output can be specified (with file extension)
 usage: audio-separator [-h] [-v] [-d] [-e] [-l] [--log_level LOG_LEVEL] [-m MODEL_FILENAME] [--output_format OUTPUT_FORMAT] [--output_dir OUTPUT_DIR] [--model_file_dir MODEL_FILE_DIR] [--invert_spect]
                        [--normalization NORMALIZATION] [--single_stem SINGLE_STEM] [--sample_rate SAMPLE_RATE] [--mdx_segment_size MDX_SEGMENT_SIZE] [--mdx_overlap MDX_OVERLAP] [--mdx_batch_size MDX_BATCH_SIZE]
                        [--mdx_hop_length MDX_HOP_LENGTH] [--mdx_enable_denoise] [--vr_batch_size VR_BATCH_SIZE] [--vr_window_size VR_WINDOW_SIZE] [--vr_aggression VR_AGGRESSION] [--vr_enable_tta]
-                       [--vr_high_end_process] [--vr_enable_post_process] [--vr_post_process_threshold VR_POST_PROCESS_THRESHOLD] [--demucs_stem DEMUCS_STEM] [--demucs_segment_size DEMUCS_SEGMENT_SIZE]
-                       [--demucs_shifts DEMUCS_SHIFTS] [--demucs_overlap DEMUCS_OVERLAP] [--demucs_segments_enabled DEMUCS_SEGMENTS_ENABLED]
+                       [--vr_high_end_process] [--vr_enable_post_process] [--vr_post_process_threshold VR_POST_PROCESS_THRESHOLD] [--demucs_segment_size DEMUCS_SEGMENT_SIZE] [--demucs_shifts DEMUCS_SHIFTS]
+                       [--demucs_overlap DEMUCS_OVERLAP] [--demucs_segments_enabled DEMUCS_SEGMENTS_ENABLED] [--mdxc_segment_size MDXC_SEGMENT_SIZE] [--mdxc_use_model_segment_size] [--mdxc_overlap MDXC_OVERLAP]
+                       [--mdxc_batch_size MDXC_BATCH_SIZE] [--mdxc_pitch_shift MDXC_PITCH_SHIFT]
                        [audio_file]
 
 Separate audio file into different stems.
@@ -149,11 +150,11 @@ options:
   -h, --help                                             show this help message and exit
 
 Info and Debugging:
-  -v, --version                                          show program's version number and exit
-  -d, --debug                                            enable debug logging, equivalent to --log_level=debug
-  -e, --env_info                                         print environment information and exit.
-  -l, --list_models                                      list all supported models and exit.
-  --log_level LOG_LEVEL                                  log level, e.g. info, debug, warning (default: info)
+  -v, --version                                          Show the program's version number and exit.
+  -d, --debug                                            Enable debug logging, equivalent to --log_level=debug.
+  -e, --env_info                                         Print environment information and exit.
+  -l, --list_models                                      List all supported models and exit.
+  --log_level LOG_LEVEL                                  Log level, e.g. info, debug, warning (default: info).
 
 Separation I/O Params:
   -m MODEL_FILENAME, --model_filename MODEL_FILENAME     model to use for separation (default: UVR-MDX-NET-Inst_HQ_3.onnx). Example: -m 2_HP-UVR.pth
@@ -164,7 +165,7 @@ Separation I/O Params:
 Common Separation Parameters:
   --invert_spect                                         invert secondary stem using spectogram (default: False). Example: --invert_spect
   --normalization NORMALIZATION                          max peak amplitude to normalize input and output audio to (default: 0.9). Example: --normalization=0.7
-  --single_stem SINGLE_STEM                              output only single stem, either instrumental or vocals. Example: --single_stem=instrumental
+  --single_stem SINGLE_STEM                              output only single stem, e.g. Instrumental, Vocals, Drums, Bass, Guitar, Piano, Other. Example: --single_stem=Instrumental
   --sample_rate SAMPLE_RATE                              modify the sample rate of the output audio (default: 44100). Example: --sample_rate=44100
 
 MDX Architecture Parameters:
@@ -184,11 +185,17 @@ VR Architecture Parameters:
   --vr_post_process_threshold VR_POST_PROCESS_THRESHOLD  threshold for post_process feature: 0.1-0.3 (default: 0.2). Example: --vr_post_process_threshold=0.1
 
 Demucs Architecture Parameters:
-  --demucs_stem DEMUCS_STEM                              stem to extract from audio file, e.g. Vocals, Drums, Bass, Other (default: All Stems). Example: --demucs_stem=vocals
   --demucs_segment_size DEMUCS_SEGMENT_SIZE              size of segments into which the audio is split, 1-100. higher = slower but better quality (default: Default). Example: --demucs_segment_size=256
   --demucs_shifts DEMUCS_SHIFTS                          number of predictions with random shifts, higher = slower but better quality (default: 2). Example: --demucs_shifts=4
   --demucs_overlap DEMUCS_OVERLAP                        overlap between prediction windows, 0.001-0.999. higher = slower but better quality (default: 0.25). Example: --demucs_overlap=0.25
   --demucs_segments_enabled DEMUCS_SEGMENTS_ENABLED      enable segment-wise processing (default: True). Example: --demucs_segments_enabled=False
+
+MDXC Architecture Parameters:
+  --mdxc_segment_size MDXC_SEGMENT_SIZE                  larger consumes more resources, but may give better results (default: 256). Example: --mdxc_segment_size=256
+  --mdxc_use_model_segment_size                          use model default segment size instead of the value from the config file. Example: --mdxc_use_model_segment_size
+  --mdxc_overlap MDXC_OVERLAP                            amount of overlap between prediction windows, 2-50. higher is better but slower (default: 8). Example: --mdxc_overlap=8
+  --mdxc_batch_size MDXC_BATCH_SIZE                      larger consumes more RAM but may process slightly faster (default: 1). Example: --mdxc_batch_size=4
+  --mdxc_pitch_shift MDXC_PITCH_SHIFT                    shift audio pitch by a number of semitones while processing. may improve output for deep/high vocals. (default: 0). Example: --mdxc_pitch_shift=2
 ```
 
 ### As a Dependency in a Python Project
@@ -348,6 +355,7 @@ This project is licensed under the MIT [License](LICENSE).
 - [Kuielab & Woosung Choi](https://github.com/kuielab) - Developed the original MDX-Net AI code. 
 - [KimberleyJSN](https://github.com/KimberleyJensen) - Advised and aided the implementation of the training scripts for MDX-Net and Demucs. Thank you!
 - [Hv](https://github.com/NaJeongMo/Colab-for-MDX_B) - Helped implement chunks into the MDX-Net AI code. Thank you!
+- [zhzhongshi](https://github.com/zhzhongshi) - Helped add support for the MDXC models in `audio-separator`. Thank you!
 
 ## Contact 💌
 

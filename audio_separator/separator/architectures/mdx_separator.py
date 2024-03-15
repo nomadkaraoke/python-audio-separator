@@ -90,8 +90,28 @@ class MDXSeparator(CommonSeparator):
         # We haven't implemented support for the checkpoint models here, so we're not using it.
         # self.dim_c = 4
 
-        # Loading the model for inference
+        self.load_model()
+
+        self.n_bins = 0
+        self.trim = 0
+        self.chunk_size = 0
+        self.gen_size = 0
+        self.stft = None
+
+        self.primary_source = None
+        self.secondary_source = None
+        self.audio_file_path = None
+        self.audio_file_base = None
+        self.secondary_source_map = None
+        self.primary_source_map = None
+
+    def load_model(self):
+        """
+        Load the model into memory from file on disk, initialize it with config from the model data,
+        and prepare for inferencing using hardware accelerated Torch device.
+        """
         self.logger.debug("Loading ONNX model for inference...")
+
         if self.segment_size == self.dim_t:
             ort_session_options = ort.SessionOptions()
             if self.log_level > 10:
@@ -106,19 +126,6 @@ class MDXSeparator(CommonSeparator):
             self.model_run = onnx2torch.convert(self.model_path)
             self.model_run.to(self.torch_device).eval()
             self.logger.warning("Model converted from onnx to pytorch due to segment size not matching dim_t, processing may be slower.")
-
-        self.n_bins = 0
-        self.trim = 0
-        self.chunk_size = 0
-        self.gen_size = 0
-        self.stft = None
-
-        self.primary_source = None
-        self.secondary_source = None
-        self.audio_file_path = None
-        self.audio_file_base = None
-        self.secondary_source_map = None
-        self.primary_source_map = None
 
     def separate(self, audio_file_path):
         """
