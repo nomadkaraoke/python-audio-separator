@@ -5,3 +5,5 @@
 - Test processing multiple files in a row outputs separate expected files
 - Test processing file with multiple different models outputs separate expected files
 - Test each of the architecure specific parameters works as expected in both CLI and class mode
+- Generate oscillogram and spectrogram of model output for a short test file for each major supported model and compare to expected output to ensure separation is actually separating stems
+- Add a few different test files with different properties, e.g. background noise, stems present, or genre of music and ensure separation works as expected for each

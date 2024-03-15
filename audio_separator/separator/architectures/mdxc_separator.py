@@ -2,10 +2,7 @@ import os
 import sys
 
 import torch
-import librosa
 import numpy as np
-import audioread
-from numpy._typing import NDArray
 from tqdm import tqdm
 from ml_collections import ConfigDict
 
@@ -29,118 +26,65 @@ class MDXCSeparator(CommonSeparator):
         # It's loaded in from model_data_new.json in Separator.load_model and there are JSON examples in that method
         # The instance variable self.model_data is passed through from Separator and set in CommonSeparator
         self.logger.debug(f"Model data: {self.model_data}")
-        
-        self.segment_size = arch_config.get("segment_size")
-        self.overlap = arch_config.get("overlap")
+
+        # Arch Config is the MDXC architecture specific user configuration options, which should all be configurable by the user
+        # either by their Separator class instantiation or by passing in a CLI parameter.
+        # While there are similarities between architectures for some of these (e.g. batch_size), they are deliberately configured
+        # this way as they have architecture-specific default values.
+        self.segment_size = arch_config.get("segment_size", 256)
+        self.use_default_segment_size = arch_config.get("use_default_segment_size", False)
+
+        self.overlap = arch_config.get("overlap", 8)
         self.batch_size = arch_config.get("batch_size", 1)
+        self.semitone_shift = arch_config.get("semitone_shift", 0)
 
         self.logger.debug(f"MDXC arch params: batch_size={self.batch_size}, segment_size={self.segment_size}, overlap={self.overlap}")
+        self.logger.debug(f"MDXC arch params: use_default_segment_size={self.use_default_segment_size}, semitone_shift={self.semitone_shift}")
 
-        # Loading the model for inference
-        self.logger.debug("Loading Checkpoint model for inference...")
-        other_metadata = {"segment_size": self.segment_size, "overlap_mdx23": self.overlap, "batch_size": self.batch_size}
-        self.device = self.torch_device
-        self.init_metadata()
-        self.update_metadata(other_metadata)
-        self.load_model(common_config)
+        self.load_model()
 
-    def init_metadata(self):
-        prams = {"is_mdx_c_seg_def": False, "segment_size": 256, "batch_size": 1, "overlap_mdx23": 8, "semitone_shift": 0}
-        self.other_metadata = prams
-
-    def update_metadata(self, other_metadata):
-        self.other_metadata.update(other_metadata)
-
-    def load_model(self, common_config):
-        model_path = common_config["model_path"]
-        model_data = common_config["model_data"]
-        model_data = ConfigDict(model_data)
-        device = self.torch_device
-
-        try:
-            model = TFC_TDF_net(model_data, device=device)
-            model.load_state_dict(torch.load(model_path, map_location="cpu"))
-            model.to(device).eval()
-        except RuntimeError as e:
-            self.logger.error("An error occurred while loading the model file. This often occurs when the model file is corrupt or incomplete.")
-            self.logger.error(f"Error message: {e}")
-            self.logger.error(f"Please try deleting the model file from path {model_path} and run audio-separator again to re-download it.")
-            sys.exit(1)
-
-        self.model_data = model_data
-        self.model_run = model
-
-    def rerun_mp3(self, audio_file: NDArray, sample_rate: int = 44100):
-        with audioread.audio_open(audio_file) as f:
-            track_length = int(f.duration)
-        return librosa.load(audio_file, duration=track_length, mono=False, sr=sample_rate)[0]
-
-    def demix(self, mix: np.ndarray, prams: dict, model: torch.nn.Module, model_data: ConfigDict, device: str = "cpu") -> dict:
-
-        sr_pitched = 441000
-        org_mix = mix
-        semitone_shift = prams["semitone_shift"]
-        if semitone_shift != 0:
-            mix, sr_pitched = spec_utils.change_pitch_semitones(mix, 44100, semitone_shift=-semitone_shift)
-
-        mix = torch.tensor(mix, dtype=torch.float32)
-
-        try:
-            S = model.num_target_instruments
-        except Exception as e:
-            S = model.module.num_target_instruments
-
-        if prams["is_mdx_c_seg_def"]:
-            mdx_segment_size = model_data.inference.dim_t
-        else:
-            mdx_segment_size = prams["segment_size"]
-
-        batch_size = prams["batch_size"]
-        chunk_size = model_data.audio.hop_length * (mdx_segment_size - 1)
-        overlap = prams["overlap_mdx23"]
-
-        hop_size = chunk_size // overlap
-        mix_shape = mix.shape[1]
-        pad_size = hop_size - (mix_shape - chunk_size) % hop_size
-        mix = torch.cat([torch.zeros(2, chunk_size - hop_size), mix, torch.zeros(2, pad_size + chunk_size - hop_size)], 1)
-
-        chunks = mix.unfold(1, chunk_size, hop_size).transpose(0, 1)
-        batches = [chunks[i : i + batch_size] for i in range(0, len(chunks), batch_size)]
-
-        X = torch.zeros(S, *mix.shape) if S > 1 else torch.zeros_like(mix)
-        X = X.to(device)
-
-        with torch.no_grad():
-            cnt = 0
-            for batch in tqdm(batches):
-                x = model(batch.to(device))
-                for w in x:
-                    X[..., cnt * hop_size : cnt * hop_size + chunk_size] += w
-                    cnt += 1
-
-        estimated_sources = X[..., chunk_size - hop_size : -(pad_size + chunk_size - hop_size)] / overlap
-        del X
-        pitch_fix = lambda s: pitch_fix(s, sr_pitched, org_mix, semitone_shift)
-
-        if S > 1:
-            sources = {k: pitch_fix(v) if semitone_shift != 0 else v for k, v in zip(model_data.training.instruments, estimated_sources.cpu().detach().numpy())}
-            del estimated_sources
-            return sources
-
-        est_s = estimated_sources.cpu().detach().numpy()
-        del estimated_sources
-
-        if semitone_shift != 0:
-            return pitch_fix(est_s)
-        else:
-            return est_s
-
-    def rename_stems(self, stems: dict) -> dict:
-        return {k.lower(): v for k, v in stems.items()}
-
-    def separate(self, audio_file_path):
         self.primary_source = None
         self.secondary_source = None
+        self.audio_file_path = None
+        self.audio_file_base = None
+        self.primary_source_map = None
+        self.secondary_source_map = None
+
+        self.logger.info("MDXC Separator initialisation complete")
+
+    def load_model(self):
+        """
+        Load the model into memory from file on disk, initialize it with config from the model data,
+        and prepare for inferencing using hardware accelerated Torch device.
+        """
+        self.logger.debug("Loading checkpoint model for inference...")
+
+        self.model_data_cfgdict = ConfigDict(self.model_data)
+
+        try:
+            self.model_run = TFC_TDF_net(self.model_data_cfgdict, device=self.torch_device)
+            self.model_run.load_state_dict(torch.load(self.model_path, map_location="cpu"))
+            self.model_run.to(self.torch_device).eval()
+        except RuntimeError as e:
+            self.logger.error(f"Error: {e}")
+            self.logger.error("An error occurred while loading the model file. This often occurs when the model file is corrupt or incomplete.")
+            self.logger.error(f"Please try deleting the model file from {self.model_path} and run audio-separator again to re-download it.")
+            sys.exit(1)
+
+    def separate(self, audio_file_path):
+        """
+        Separates the audio file into primary and secondary sources based on the model's configuration.
+        It processes the mix, demixes it into sources, normalizes the sources, and saves the output files.
+
+        Args:
+            audio_file_path (str): The path to the audio file to be processed.
+
+        Returns:
+            list: A list of paths to the output files generated by the separation process.
+        """
+        self.primary_source = None
+        self.secondary_source = None
+
         self.audio_file_path = audio_file_path
         self.audio_file_base = os.path.splitext(os.path.basename(audio_file_path))[0]
 
@@ -150,30 +94,29 @@ class MDXCSeparator(CommonSeparator):
         self.logger.debug("Normalizing mix before demixing...")
         mix = spec_utils.normalize(wave=mix, max_peak=self.normalization_threshold)
 
-        source = self.demix(mix=mix, prams=self.other_metadata, model=self.model_run, model_data=self.model_data, device=self.torch_device)
-        stems = self.rename_stems(source)
+        source = self.demix(mix=mix)
+        self.logger.debug("Demixing completed.")
 
         output_files = []
-
         self.logger.debug("Processing output files...")
 
         if not isinstance(self.primary_source, np.ndarray):
             self.logger.debug("Normalizing primary source...")
-            self.primary_source = spec_utils.normalize(wave=stems["vocals"], max_peak=self.normalization_threshold).T
+            self.primary_source = spec_utils.normalize(wave=source[self.primary_stem_name], max_peak=self.normalization_threshold).T
 
         if not isinstance(self.secondary_source, np.ndarray):
-            self.logger.debug("Normalizing primary source...")
-            self.secondary_source = spec_utils.normalize(wave=stems["instrumental"], max_peak=self.normalization_threshold).T
+            self.logger.debug("Normalizing secondary source...")
+            self.secondary_source = spec_utils.normalize(wave=source[self.secondary_stem_name], max_peak=self.normalization_threshold).T
 
         if not self.output_single_stem or self.output_single_stem.lower() == self.secondary_stem_name.lower():
-            self.logger.info(f"Saving {self.secondary_stem_name} Instrumental stem...")
+            self.logger.info(f"Saving {self.secondary_stem_name} stem...")
             if not self.secondary_stem_output_path:
                 self.secondary_stem_output_path = os.path.join(f"{self.audio_file_base}_({self.secondary_stem_name})_{self.model_name}.{self.output_format.lower()}")
             self.secondary_source_map = self.final_process(self.secondary_stem_output_path, self.secondary_source, self.secondary_stem_name)
             output_files.append(self.secondary_stem_output_path)
 
         if not self.output_single_stem or self.output_single_stem.lower() == self.primary_stem_name.lower():
-            self.logger.info(f"Saving {self.primary_stem_name} Vocals stem...")
+            self.logger.info(f"Saving {self.primary_stem_name} stem...")
             if not self.primary_stem_output_path:
                 self.primary_stem_output_path = os.path.join(f"{self.audio_file_base}_({self.primary_stem_name})_{self.model_name}.{self.output_format.lower()}")
             if not isinstance(self.primary_source, np.ndarray):
@@ -181,3 +124,93 @@ class MDXCSeparator(CommonSeparator):
             self.primary_source_map = self.final_process(self.primary_stem_output_path, self.primary_source, self.primary_stem_name)
             output_files.append(self.primary_stem_output_path)
         return output_files
+
+    def demix(self, mix: np.ndarray) -> dict:
+        """
+        Demixes the input mix into primary and secondary sources using the model and model data.
+
+        Args:
+            mix (np.ndarray): The mix to be demixed.
+        Returns:
+            dict: A dictionary containing the demixed sources.
+        """
+        orig_mix = mix
+
+        if self.semitone_shift != 0:
+            self.logger.debug(f"Shifting pitch by {self.semitone_shift} semitones...")
+            mix, sample_rate = spec_utils.change_pitch_semitones(mix, self.sample_rate, semitone_shift=-self.semitone_shift)
+
+        mix = torch.tensor(mix, dtype=torch.float32)
+
+        try:
+            num_target_instruments = self.model_run.num_target_instruments
+        except AttributeError:
+            num_target_instruments = self.model_run.module.num_target_instruments
+        self.logger.debug(f"Number of target instruments: {num_target_instruments}")
+
+        if self.use_default_segment_size:
+            mdx_segment_size = self.model_data_cfgdict.inference.dim_t
+            self.logger.debug(f"Using model default segment size: {mdx_segment_size}")
+        else:
+            mdx_segment_size = self.segment_size
+            self.logger.debug(f"Using configured segment size: {mdx_segment_size}")
+
+        chunk_size = self.model_data_cfgdict.audio.hop_length * (mdx_segment_size - 1)
+        self.logger.debug(f"Chunk size: {chunk_size}")
+
+        hop_size = chunk_size // self.overlap
+        self.logger.debug(f"Hop size: {hop_size}")
+
+        mix_shape = mix.shape[1]
+        pad_size = hop_size - (mix_shape - chunk_size) % hop_size
+        self.logger.debug(f"Pad size: {pad_size}")
+
+        mix = torch.cat([torch.zeros(2, chunk_size - hop_size), mix, torch.zeros(2, pad_size + chunk_size - hop_size)], 1)
+        self.logger.debug(f"Mix shape: {mix.shape}")
+
+        chunks = mix.unfold(1, chunk_size, hop_size).transpose(0, 1)
+        self.logger.debug(f"Chunks length: {len(chunks)} and shape: {chunks.shape}")
+
+        batches = [chunks[i : i + self.batch_size] for i in range(0, len(chunks), self.batch_size)]
+        self.logger.debug(f"Batch size: {self.batch_size}, number of batches: {len(batches)}")
+
+        # accumulated_outputs is used to accumulate the output from processing each batch of chunks through the model.
+        # It starts as a tensor of zeros and is updated in-place as the model processes each batch.
+        # The variable holds the combined result of all processed batches, which, after post-processing, represents the separated audio sources.
+        accumulated_outputs = torch.zeros(num_target_instruments, *mix.shape) if num_target_instruments > 1 else torch.zeros_like(mix)
+        accumulated_outputs = accumulated_outputs.to(self.torch_device)
+
+        with torch.no_grad():
+            count = 0
+            for batch in tqdm(batches):
+                # Since the model processes the audio data in batches, single_batch_result temporarily holds the model's output
+                # for each batch before it is accumulated into accumulated_outputs.
+                single_batch_result = self.model_run(batch.to(self.torch_device))
+
+                # Each individual output tensor from the current batch's processing result.
+                # Since single_batch_result can contain multiple output tensors (one for each piece of audio in the batch),
+                # individual_output is used to iterate through these tensors and accumulate them into accumulated_outputs.
+                for individual_output in single_batch_result:
+                    accumulated_outputs[..., count * hop_size : count * hop_size + chunk_size] += individual_output
+                    count += 1
+
+        estimated_sources = accumulated_outputs[..., chunk_size - hop_size : -(pad_size + chunk_size - hop_size)] / self.overlap
+        del accumulated_outputs
+
+        # TODO: Investigate this, it looks like a broken use of lambda and probably does work
+        # Need to test with the semitone_shift parameter set as that would trigger this code path
+        pitch_fix = lambda s: pitch_fix(s, sample_rate, orig_mix, self.semitone_shift)
+
+        if num_target_instruments > 1:
+            self.logger.debug("Number of target instruments is greater than 1, detaching individual sources and correcting pitch if necessary...")
+            sources = {key: pitch_fix(value) if self.semitone_shift != 0 else value for key, value in zip(self.model_data_cfgdict.training.instruments, estimated_sources.cpu().detach().numpy())}
+            del estimated_sources
+            return sources
+
+        estimated_source = estimated_sources.cpu().detach().numpy()
+        del estimated_sources
+
+        if self.semitone_shift != 0:
+            return pitch_fix(estimated_source)
+        else:
+            return estimated_source
