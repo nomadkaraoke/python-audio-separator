@@ -355,6 +355,7 @@ This project is licensed under the MIT [License](LICENSE).
 - [Kuielab & Woosung Choi](https://github.com/kuielab) - Developed the original MDX-Net AI code. 
 - [KimberleyJSN](https://github.com/KimberleyJensen) - Advised and aided the implementation of the training scripts for MDX-Net and Demucs. Thank you!
 - [Hv](https://github.com/NaJeongMo/Colab-for-MDX_B) - Helped implement chunks into the MDX-Net AI code. Thank you!
+- [zhzhongshi](https://github.com/zhzhongshi) - Helped add support for the MDXC models in `audio-separator`. Thank you!
 
 ## Contact 💌
 
