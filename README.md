@@ -44,6 +44,8 @@ If the GPU isn't being detected, make sure your docker runtime environment is pa
 
 ### 🎮 Nvidia GPU with CUDA or 🧪 Google Colab
 
+**Supported CUDA Versions:** 11.8 and 12.2
+
 💬 If successfully configured, you should see this log message when running `audio-separator --env_info`:
  `ONNXruntime has CUDAExecutionProvider available, enabling acceleration`
 
