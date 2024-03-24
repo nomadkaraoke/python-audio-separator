@@ -150,6 +150,17 @@ class VRSeparator(CommonSeparator):
         y_spec, v_spec = self.inference_vr(self.loading_mix(), self.torch_device, self.aggressiveness)
         self.logger.debug("Inference completed.")
 
+        # Sanitize y_spec and v_spec to replace NaN and infinite values
+        y_spec = np.nan_to_num(y_spec, nan=0.0, posinf=0.0, neginf=0.0)
+        v_spec = np.nan_to_num(v_spec, nan=0.0, posinf=0.0, neginf=0.0)
+
+        self.logger.debug("Sanitization completed. Replaced NaN and infinite values in y_spec and v_spec.")
+
+        # After inference_vr call
+        self.logger.debug(f"Inference VR completed. y_spec shape: {y_spec.shape}, v_spec shape: {v_spec.shape}")
+        self.logger.debug(f"y_spec stats - min: {np.min(y_spec)}, max: {np.max(y_spec)}, isnan: {np.isnan(y_spec).any()}, isinf: {np.isinf(y_spec).any()}")
+        self.logger.debug(f"v_spec stats - min: {np.min(v_spec)}, max: {np.max(v_spec)}, isnan: {np.isnan(v_spec).any()}, isinf: {np.isinf(v_spec).any()}")
+
         # Not yet implemented from UVR features:
         #
         # if not self.is_vocal_split_model:
@@ -169,6 +180,8 @@ class VRSeparator(CommonSeparator):
         if not self.output_single_stem or self.output_single_stem.lower() == self.primary_stem_name.lower():
             self.logger.debug(f"Processing primary stem: {self.primary_stem_name}")
             if not isinstance(self.primary_source, np.ndarray):
+                self.logger.debug(f"Preparing to convert spectrogram to waveform. Spec shape: {y_spec.shape}")
+
                 self.primary_source = self.spec_to_wav(y_spec).T
                 self.logger.debug("Converting primary source spectrogram to waveform.")
                 if not self.model_samplerate == 44100:
@@ -185,6 +198,8 @@ class VRSeparator(CommonSeparator):
         if not self.output_single_stem or self.output_single_stem.lower() == self.secondary_stem_name.lower():
             self.logger.debug(f"Processing secondary stem: {self.secondary_stem_name}")
             if not isinstance(self.secondary_source, np.ndarray):
+                self.logger.debug(f"Preparing to convert spectrogram to waveform. Spec shape: {v_spec.shape}")
+
                 self.secondary_source = self.spec_to_wav(v_spec).T
                 self.logger.debug("Converting secondary source spectrogram to waveform.")
                 if not self.model_samplerate == 44100:

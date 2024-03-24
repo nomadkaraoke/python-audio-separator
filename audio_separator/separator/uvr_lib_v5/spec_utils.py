@@ -367,7 +367,13 @@ def cmb_spectrogram_to_wave(spec_m, mp, extra_bins_h=None, extra_bins=None, is_v
                     spec_s *= get_lp_filter_mask(spec_s.shape[1], bp["lpf_start"], bp["lpf_stop"])
                 else:
                     spec_s = fft_lp_filter(spec_s, bp["lpf_start"], bp["lpf_stop"])
-                wave = librosa.resample(spectrogram_to_wave(spec_s, bp["hl"], mp, d, is_v51_model), orig_sr=bp["sr"], target_sr=sr, res_type=wav_resolution)
+
+                try:
+                    wave = librosa.resample(spectrogram_to_wave(spec_s, bp["hl"], mp, d, is_v51_model), orig_sr=bp["sr"], target_sr=sr, res_type=wav_resolution)
+                except ValueError as e:
+                    print(f"Error during resampling: {e}")
+                    print(f"Spec_s shape: {spec_s.shape}, SR: {sr}, Res type: {wav_resolution}")
+
             else:  # mid
                 if is_v51_model:
                     spec_s *= get_hp_filter_mask(spec_s.shape[1], bp["hpf_start"], bp["hpf_stop"] - 1)
@@ -377,7 +383,12 @@ def cmb_spectrogram_to_wave(spec_m, mp, extra_bins_h=None, extra_bins=None, is_v
                     spec_s = fft_lp_filter(spec_s, bp["lpf_start"], bp["lpf_stop"])
 
                 wave2 = np.add(wave, spectrogram_to_wave(spec_s, bp["hl"], mp, d, is_v51_model))
-                wave = librosa.resample(wave2, orig_sr=bp["sr"], target_sr=sr, res_type=wav_resolution)
+
+                try:
+                    wave = librosa.resample(wave2, orig_sr=bp["sr"], target_sr=sr, res_type=wav_resolution)
+                except ValueError as e:
+                    print(f"Error during resampling: {e}")
+                    print(f"Spec_s shape: {spec_s.shape}, SR: {sr}, Res type: {wav_resolution}")
 
     return wave
 
@@ -463,6 +474,9 @@ def adjust_aggr(mask, is_non_accom_stem, aggressiveness):
         if is_non_accom_stem:
             aggr = 1 - aggr
 
+        if np.any(aggr > 10) or np.any(aggr < -10):
+            print(f"Warning: Extreme aggressiveness values detected: {aggr}")
+
         aggr = [aggr, aggr]
 
         if aggressiveness["aggr_correction"] is not None:
@@ -497,6 +511,9 @@ def istft(spec, hl):
 
 
 def spec_effects(wave, algorithm="Default", value=None):
+    if np.isnan(wave).any() or np.isinf(wave).any():
+        print(f"Warning: Detected NaN or infinite values in wave input. Shape: {wave.shape}")
+
     spec = [stft(wave[0], 2048, 1024), stft(wave[1], 2048, 1024)]
     if algorithm == "Min_Mag":
         v_spec_m = np.where(np.abs(spec[1]) <= np.abs(spec[0]), spec[1], spec[0])
