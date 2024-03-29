@@ -2,11 +2,13 @@
 
 from importlib import metadata
 import os
+import sys
 import platform
 import subprocess
 import time
 import logging
 import warnings
+import importlib
 
 import hashlib
 import json
@@ -618,18 +620,22 @@ class Separator:
             "sample_rate": self.sample_rate,
         }
 
-        if model_type not in self.arch_specific_params:
-            raise ValueError(f"Model type not supported (yet): {model_type}")
-
         # Instantiate the appropriate separator class depending on the model type
-        separator_classes = {"MDX": "MDXSeparator", "VR": "VRSeparator", "Demucs": "DemucsSeparator", "MDXC": "MDXCSeparator"}
+        separator_classes = {"MDX": "mdx_separator.MDXSeparator", "VR": "vr_separator.VRSeparator", "Demucs": "demucs_separator.DemucsSeparator", "MDXC": "mdxc_separator.MDXCSeparator"}
 
-        if model_type not in separator_classes:
+        if model_type not in self.arch_specific_params or model_type not in separator_classes:
             raise ValueError(f"Model type not supported (yet): {model_type}")
 
-        module = __import__("audio_separator.separator.architectures", fromlist=[separator_classes[model_type]])
+        if model_type == "Demucs" and sys.version_info < (3, 10):
+            raise Exception("Demucs models require Python version 3.10 or newer.")
 
-        separator_class = getattr(module, separator_classes[model_type])
+        self.logger.debug(f"Importing module for model type {model_type}: {separator_classes[model_type]}")
+
+        module_name, class_name = separator_classes[model_type].split(".")
+        module = importlib.import_module(f"audio_separator.separator.architectures.{module_name}")
+        separator_class = getattr(module, class_name)
+
+        self.logger.debug(f"Instantiating separator class for model type {model_type}: {separator_class}")
         self.model_instance = separator_class(common_config=common_params, arch_config=self.arch_specific_params[model_type])
 
         # Log the completion of the model load process

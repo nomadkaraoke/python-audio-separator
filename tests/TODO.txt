@@ -9,3 +9,5 @@
 - Add a few different test files with different properties, e.g. background noise, stems present, or genre of music and ensure separation works as expected for each
 - Test that processing more than one distinct input file in sequence outputs separate files (not overwriting the first output with the second)
 - Test that every model returned by list_models actually works
+- Test each model architecture at least once using each supported Python version, to ensure we actually do legitimately support all of them!
+- Test that loading a model of one architecture does NOT load the code from any other architecture
