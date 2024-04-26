@@ -456,7 +456,12 @@ class Separator:
         This method loads model-specific parameters from the YAML file for that model.
         The parameters in the YAML are critical to inferencing, as they need to match whatever was used during training.
         """
-        model_data_yaml_filepath = os.path.join(self.model_file_dir, yaml_config_filename)
+        # Verify if the YAML filename includes a full path or just the filename
+        if not os.path.exists(yaml_config_filename):
+            model_data_yaml_filepath = os.path.join(self.model_file_dir, yaml_config_filename)
+        else:
+            model_data_yaml_filepath = yaml_config_filename
+            
         self.logger.debug(f"Loading model data from YAML at path {model_data_yaml_filepath}")
 
         model_data = yaml.load(open(model_data_yaml_filepath, encoding="utf-8"), Loader=yaml.FullLoader)
