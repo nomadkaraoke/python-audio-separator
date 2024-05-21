@@ -343,7 +343,21 @@ class Separator:
         #             "MDX23C Model: MDX23C-InstVoc HQ": {
         #                     "MDX23C-8KFFT-InstVoc_HQ.ckpt": "model_2_stem_full_band_8k.yaml"
         #             }
-        #     }
+        #     },
+        #     "roformer_download_list": {
+        #             "Roformer Model: BS-Roformer-Viperx-1297": {
+        #                     "model_bs_roformer_ep_317_sdr_12.9755.ckpt": "model_bs_roformer_ep_317_sdr_12.9755.yaml"
+        #             },
+        #             "Roformer Model: BS-Roformer-Viperx-1296": {
+        #                     "model_bs_roformer_ep_368_sdr_12.9628.ckpt": "model_bs_roformer_ep_368_sdr_12.9628.yaml"
+        #             },
+        #             "Roformer Model: BS-Roformer-Viperx-1053": {
+        #                     "model_bs_roformer_ep_937_sdr_10.5309.ckpt": "model_bs_roformer_ep_937_sdr_10.5309.yaml"
+        #             },
+        #             "Roformer Model: Mel-Roformer-Viperx-1143": {
+        #                     "model_mel_band_roformer_ep_3005_sdr_11.4360.ckpt": "model_mel_band_roformer_ep_3005_sdr_11.4360.yaml"
+        #             }
+        #     },
         # }
 
         # Only show Demucs v4 models as we've only implemented support for v4
@@ -354,7 +368,7 @@ class Separator:
             "VR": model_downloads_list["vr_download_list"],
             "MDX": {**model_downloads_list["mdx_download_list"], **model_downloads_list["mdx_download_vip_list"]},
             "Demucs": filtered_demucs_v4,
-            "MDXC": {**model_downloads_list["mdx23c_download_list"], **model_downloads_list["mdx23c_download_vip_list"]},
+            "MDXC": {**model_downloads_list["mdx23c_download_list"], **model_downloads_list["mdx23c_download_vip_list"], **model_downloads_list["roformer_download_list"]},
         }
         return model_files_grouped_by_type
 
@@ -461,11 +475,15 @@ class Separator:
             model_data_yaml_filepath = os.path.join(self.model_file_dir, yaml_config_filename)
         else:
             model_data_yaml_filepath = yaml_config_filename
-            
+
         self.logger.debug(f"Loading model data from YAML at path {model_data_yaml_filepath}")
 
         model_data = yaml.load(open(model_data_yaml_filepath, encoding="utf-8"), Loader=yaml.FullLoader)
         self.logger.debug(f"Model data loaded from YAML file: {model_data}")
+
+        if "roformer" in model_data_yaml_filepath:
+            model_data["is_roformer"] = True
+
         return model_data
 
     def load_model_data_using_hash(self, model_path):

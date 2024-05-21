@@ -85,10 +85,10 @@ class MDXCSeparator(CommonSeparator):
                     raise ValueError("Unknown Roformer model type in the configuration.")
 
                 # Load model checkpoint
-                checkpoint = torch.load(self.model_path, map_location=self.torch_device)
+                checkpoint = torch.load(self.model_path, map_location="cpu")
                 self.model_run = model if not isinstance(model, torch.nn.DataParallel) else model.module
                 self.model_run.load_state_dict(checkpoint)
-                self.model_run.to(self.torch_device).eval()
+                self.model_run.to(self.torch_device_cpu).eval()
 
             else:
                 self.logger.debug("Loading TFC_TDF_net model...")
@@ -132,11 +132,11 @@ class MDXCSeparator(CommonSeparator):
         self.logger.debug("Processing output files...")
 
         if not isinstance(self.primary_source, np.ndarray):
-            self.logger.debug("Normalizing primary source...")
+            self.logger.debug(f"Normalizing primary source for primary stem {self.primary_stem_name}...")
             self.primary_source = spec_utils.normalize(wave=source[self.primary_stem_name], max_peak=self.normalization_threshold).T
 
         if not isinstance(self.secondary_source, np.ndarray):
-            self.logger.debug("Normalizing secondary source...")
+            self.logger.debug(f"Normalizing secondary source for secondary stem {self.secondary_stem_name}...")
             self.secondary_source = spec_utils.normalize(wave=source[self.secondary_stem_name], max_peak=self.normalization_threshold).T
 
         if not self.output_single_stem or self.output_single_stem.lower() == self.secondary_stem_name.lower():
@@ -178,7 +178,7 @@ class MDXCSeparator(CommonSeparator):
         Adds the overlapping part of the result to the result tensor.
         """
         if self.torch_device == "mps":
-            x = x.to(self.torch_device)
+            x = x.to(self.torch_device_cpu)
         result[..., start : start + length] += x[..., :length] * weights[:length]
         return result
 
@@ -219,16 +219,18 @@ class MDXCSeparator(CommonSeparator):
             self.logger.debug(f"Step: {step}")
 
             # Create a weighting table and convert it to a PyTorch tensor
-            window = torch.tensor(signal.hamming(chunk_size), dtype=torch.float32)
+            window = torch.tensor(signal.windows.hamming(chunk_size), dtype=torch.float32)
+
+            device = next(self.model_run.parameters()).device
 
             # Transfer to the weighting plate for the same device as the other tensors
-            window = window.to(self.torch_device)
+            window = window.to(device)
 
             # with torch.cuda.amp.autocast():
             with torch.no_grad():
                 req_shape = (len(self.model_data_cfgdict.training.instruments),) + tuple(mix.shape)
-                result = torch.zeros(req_shape, dtype=torch.float32).to(self.torch_device)
-                counter = torch.zeros(req_shape, dtype=torch.float32).to(self.torch_device)
+                result = torch.zeros(req_shape, dtype=torch.float32).to(device)
+                counter = torch.zeros(req_shape, dtype=torch.float32).to(device)
 
                 for i in tqdm(range(0, mix.shape[1], step)):
                     part = mix[:, i : i + chunk_size]
@@ -236,7 +238,7 @@ class MDXCSeparator(CommonSeparator):
                     if i + chunk_size > mix.shape[1]:
                         part = mix[:, -chunk_size:]
                         length = chunk_size
-                    part = part.to(self.torch_device)
+                    part = part.to(device)
                     x = self.model_run(part.unsqueeze(0))[0]
                     if i + chunk_size > mix.shape[1]:
                         # Corrigido para adicionar corretamente ao final do tensor
@@ -331,8 +333,16 @@ class MDXCSeparator(CommonSeparator):
             self.logger.debug("Returning separated sources")
             return sources
 
-        self.logger.debug("Detaching inferenced output for single instrument scenario")
-        inferenced_output = inferenced_outputs.cpu().detach().numpy()
+        if self.is_roformer:
+            sources = {
+                self.model_data_cfgdict.training.instruments[0]: inferenced_outputs[0].cpu().detach().numpy(),
+                self.model_data_cfgdict.training.instruments[1]: inferenced_outputs[1].cpu().detach().numpy(),
+            }
+            return sources
+        else:
+            self.logger.debug("Detaching inferenced output for single instrument scenario")
+            inferenced_output = inferenced_outputs.cpu().detach().numpy()
+
         self.logger.debug("Deleting inferenced outputs to free up memory")
         del inferenced_outputs
 
