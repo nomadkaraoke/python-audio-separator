@@ -603,7 +603,7 @@ class Separator:
 
         return model_data
 
-    def load_model(self, model_filename="UVR-MDX-NET-Inst_HQ_3.onnx"):
+    def load_model(self, model_filename="model_mel_band_roformer_ep_3005_sdr_11.4360.ckpt"):
         """
         This method instantiates the architecture-specific separation class,
         loading the separation model into memory, downloading it first if necessary.

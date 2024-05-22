@@ -40,7 +40,7 @@ def main():
     model_file_dir_help = "model files directory (default: %(default)s). Example: --model_file_dir=/app/models"
 
     io_params = parser.add_argument_group("Separation I/O Params")
-    io_params.add_argument("-m", "--model_filename", default="UVR-MDX-NET-Inst_HQ_3.onnx", help=model_filename_help)
+    io_params.add_argument("-m", "--model_filename", default="model_mel_band_roformer_ep_3005_sdr_11.4360.ckpt", help=model_filename_help)
     io_params.add_argument("--output_format", default="FLAC", help=output_format_help)
     io_params.add_argument("--output_dir", default=None, help=output_dir_help)
     io_params.add_argument("--model_file_dir", default="/tmp/audio-separator-models/", help=model_file_dir_help)
