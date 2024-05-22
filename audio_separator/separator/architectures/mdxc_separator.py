@@ -180,64 +180,44 @@ class MDXCSeparator(CommonSeparator):
         return source
 
     def overlap_add(self, result, x, weights, start, length):
-        """
-        Adds the overlapping part of the result to the result tensor.
-        """
-        if self.torch_device == "mps":
-            x = x.to(self.torch_device_cpu)
+        x = x.to(result.device)
+        weights = weights.to(result.device)
         result[..., start : start + length] += x[..., :length] * weights[:length]
         return result
 
     def demix(self, mix: np.ndarray) -> dict:
-        """
-        Demixes the input mix into primary and secondary sources using the model and model data.
-
-        Args:
-            mix (np.ndarray): The mix to be demixed.
-        Returns:
-            dict: A dictionary containing the demixed sources.
-        """
         orig_mix = mix
-
         if self.pitch_shift != 0:
             self.logger.debug(f"Shifting pitch by -{self.pitch_shift} semitones...")
             mix, sample_rate = spec_utils.change_pitch_semitones(mix, self.sample_rate, semitone_shift=-self.pitch_shift)
-
+        
         if self.is_roformer:
             mix = torch.tensor(mix, dtype=torch.float32)
-
             if self.override_model_segment_size:
                 mdx_segment_size = self.segment_size
                 self.logger.debug(f"Using configured segment size: {mdx_segment_size}")
             else:
                 mdx_segment_size = self.model_data_cfgdict.inference.dim_t
                 self.logger.debug(f"Using model default segment size: {mdx_segment_size}")
-
-            # num_stems aka "S" in UVR
+            
             num_stems = 1 if self.model_data_cfgdict.training.target_instrument else len(self.model_data_cfgdict.training.instruments)
             self.logger.debug(f"Number of stems: {num_stems}")
-
-            # chunk_size aka "C" in UVR
+            
             chunk_size = self.model_data_cfgdict.audio.hop_length * (mdx_segment_size - 1)
             self.logger.debug(f"Chunk size: {chunk_size}")
-
+            
             step = int(self.overlap * self.model_data_cfgdict.audio.sample_rate)
             self.logger.debug(f"Step: {step}")
-
-            # Create a weighting table and convert it to a PyTorch tensor
+            
             window = torch.tensor(signal.windows.hamming(chunk_size), dtype=torch.float32)
-
             device = next(self.model_run.parameters()).device
-
-            # Transfer to the weighting plate for the same device as the other tensors
             window = window.to(device)
-
-            # with torch.cuda.amp.autocast():
+            
             with torch.no_grad():
                 req_shape = (len(self.model_data_cfgdict.training.instruments),) + tuple(mix.shape)
                 result = torch.zeros(req_shape, dtype=torch.float32).to(device)
                 counter = torch.zeros(req_shape, dtype=torch.float32).to(device)
-
+                
                 for i in tqdm(range(0, mix.shape[1], step)):
                     part = mix[:, i : i + chunk_size]
                     length = part.shape[-1]
@@ -247,109 +227,73 @@ class MDXCSeparator(CommonSeparator):
                     part = part.to(device)
                     x = self.model_run(part.unsqueeze(0))[0]
                     if i + chunk_size > mix.shape[1]:
-                        # Corrigido para adicionar corretamente ao final do tensor
                         result = self.overlap_add(result, x, window, result.shape[-1] - chunk_size, length)
                         counter[..., result.shape[-1] - chunk_size :] += window[:length]
                     else:
                         result = self.overlap_add(result, x, window, i, length)
                         counter[..., i : i + length] += window[:length]
-
-            inferenced_outputs = result / counter.clamp(min=1e-10)
-
+                
+                inferenced_outputs = result / counter.clamp(min=1e-10)
+        
         else:
             mix = torch.tensor(mix, dtype=torch.float32)
-
             try:
                 num_stems = self.model_run.num_target_instruments
             except AttributeError:
                 num_stems = self.model_run.module.num_target_instruments
             self.logger.debug(f"Number of stems: {num_stems}")
-
+            
             if self.override_model_segment_size:
                 mdx_segment_size = self.segment_size
                 self.logger.debug(f"Using configured segment size: {mdx_segment_size}")
             else:
                 mdx_segment_size = self.model_data_cfgdict.inference.dim_t
                 self.logger.debug(f"Using model default segment size: {mdx_segment_size}")
-
+            
             chunk_size = self.model_data_cfgdict.audio.hop_length * (mdx_segment_size - 1)
             self.logger.debug(f"Chunk size: {chunk_size}")
-
+            
             hop_size = chunk_size // self.overlap
             self.logger.debug(f"Hop size: {hop_size}")
-
+            
             mix_shape = mix.shape[1]
             pad_size = hop_size - (mix_shape - chunk_size) % hop_size
             self.logger.debug(f"Pad size: {pad_size}")
-
+            
             mix = torch.cat([torch.zeros(2, chunk_size - hop_size), mix, torch.zeros(2, pad_size + chunk_size - hop_size)], 1)
             self.logger.debug(f"Mix shape: {mix.shape}")
-
+            
             chunks = mix.unfold(1, chunk_size, hop_size).transpose(0, 1)
             self.logger.debug(f"Chunks length: {len(chunks)} and shape: {chunks.shape}")
-
+            
             batches = [chunks[i : i + self.batch_size] for i in range(0, len(chunks), self.batch_size)]
             self.logger.debug(f"Batch size: {self.batch_size}, number of batches: {len(batches)}")
-
-            # accumulated_outputs is used to accumulate the output from processing each batch of chunks through the model.
-            # It starts as a tensor of zeros and is updated in-place as the model processes each batch.
-            # The variable holds the combined result of all processed batches, which, after post-processing, represents the separated audio sources.
+            
             accumulated_outputs = torch.zeros(num_stems, *mix.shape) if num_stems > 1 else torch.zeros_like(mix)
             accumulated_outputs = accumulated_outputs.to(self.torch_device)
-
+            
             with torch.no_grad():
                 count = 0
                 for batch in tqdm(batches):
-                    # Since the model processes the audio data in batches, single_batch_result temporarily holds the model's output
-                    # for each batch before it is accumulated into accumulated_outputs.
                     single_batch_result = self.model_run(batch.to(self.torch_device))
-
-                    # Each individual output tensor from the current batch's processing result.
-                    # Since single_batch_result can contain multiple output tensors (one for each piece of audio in the batch),
-                    # individual_output is used to iterate through these tensors and accumulate them into accumulated_outputs.
                     for individual_output in single_batch_result:
                         accumulated_outputs[..., count * hop_size : count * hop_size + chunk_size] += individual_output
                         count += 1
-
-            self.logger.debug("Calculating inferenced outputs based on accumulated outputs and overlap")
-            inferenced_outputs = accumulated_outputs[..., chunk_size - hop_size : -(pad_size + chunk_size - hop_size)] / self.overlap
-            self.logger.debug("Deleting accumulated outputs to free up memory")
-            del accumulated_outputs
-
-        if num_stems > 1 or self.is_vocal_main_target:
-            self.logger.debug("Number of stems is greater than 1 or vocals are main target, detaching individual sources and correcting pitch if necessary...")
-
-            sources = {}
-
-            # Iterates over each instrument specified in the model's configuration and its corresponding separated audio source.
-            # self.model_data_cfgdict.training.instruments provides the list of stems.
-            # estimated_sources.cpu().detach().numpy() converts the separated sources tensor to a NumPy array for processing.
-            # Each iteration provides an instrument name ('key') and its separated audio ('value') for further processing.
-            for key, value in zip(self.model_data_cfgdict.training.instruments, inferenced_outputs.cpu().detach().numpy()):
-                self.logger.debug(f"Processing instrument: {key}")
+                
+                inferenced_outputs = accumulated_outputs[..., chunk_size - hop_size : -(pad_size + chunk_size - hop_size)] / self.overlap
+                del accumulated_outputs
+            
+            if num_stems > 1 or self.is_vocal_main_target:
+                sources = {k: v.cpu().detach().numpy() for k, v in zip(self.model_data_cfgdict.training.instruments, inferenced_outputs.cpu().detach().numpy())}
                 if self.pitch_shift != 0:
-                    self.logger.debug(f"Applying pitch correction for {key}")
-                    sources[key] = self.pitch_fix(value, sample_rate, orig_mix)
-                else:
-                    sources[key] = value
-
-            if self.is_vocal_main_target:
-                self.logger.debug("Vocals are main target, detaching vocals and matching array shapes if necessary...")
-                if sources["Vocals"].shape[1] != orig_mix.shape[1]:
-                    sources["Vocals"] = spec_utils.match_array_shapes(sources["Vocals"], orig_mix)
-                sources["Instrumental"] = orig_mix - sources["Vocals"]
-
-            self.logger.debug("Deleting inferenced outputs to free up memory")
-            del inferenced_outputs
-
-            self.logger.debug("Returning separated sources")
-            return sources
-        else:
-            self.logger.debug("Processing single source...")
-
-            if self.is_roformer:
-                sources = {k: v.cpu().detach().numpy() for k, v in zip([self.model_data_cfgdict.training.target_instrument], inferenced_outputs)}
-                inferenced_output = sources[self.model_data_cfgdict.training.target_instrument]
+                    for key in sources:
+                        sources[key] = self.pitch_fix(sources[key], sample_rate, orig_mix)
+                if self.is_vocal_main_target:
+                    if sources["Vocals"].shape[1] != orig_mix.shape[1]:
+                        sources["Vocals"] = spec_utils.match_array_shapes(sources["Vocals"], orig_mix)
+                    sources["Instrumental"] = orig_mix - sources["Vocals"]
+                del inferenced_outputs
+                return sources
             else:
                 inferenced_output = inferenced_outputs.cpu().detach().numpy()
 
