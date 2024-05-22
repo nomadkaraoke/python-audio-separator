@@ -133,7 +133,6 @@ class MDXCSeparator(CommonSeparator):
 
         source = self.demix(mix=mix)
         self.logger.debug("Demixing completed.")
-        self.logger.info(source)
 
         output_files = []
         self.logger.debug("Processing output files...")
