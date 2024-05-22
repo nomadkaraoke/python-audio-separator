@@ -40,7 +40,7 @@ def main():
     model_file_dir_help = "model files directory (default: %(default)s). Example: --model_file_dir=/app/models"
 
     io_params = parser.add_argument_group("Separation I/O Params")
-    io_params.add_argument("-m", "--model_filename", default="UVR-MDX-NET-Inst_HQ_3.onnx", help=model_filename_help)
+    io_params.add_argument("-m", "--model_filename", default="model_mel_band_roformer_ep_3005_sdr_11.4360.ckpt", help=model_filename_help)
     io_params.add_argument("--output_format", default="FLAC", help=output_format_help)
     io_params.add_argument("--output_dir", default=None, help=output_dir_help)
     io_params.add_argument("--model_file_dir", default="/tmp/audio-separator-models/", help=model_file_dir_help)
@@ -98,14 +98,14 @@ def main():
     demucs_params.add_argument("--demucs_segments_enabled", type=bool, default=True, help=demucs_segments_enabled_help)
 
     mdxc_segment_size_help = "larger consumes more resources, but may give better results (default: %(default)s). Example: --mdxc_segment_size=256"
-    mdxc_use_model_segment_size_help = "use model default segment size instead of the value from the config file. Example: --mdxc_use_model_segment_size"
+    mdxc_override_model_segment_size_help = "override model default segment size instead of using the model default value. Example: --mdxc_override_model_segment_size"
     mdxc_overlap_help = "amount of overlap between prediction windows, 2-50. higher is better but slower (default: %(default)s). Example: --mdxc_overlap=8"
     mdxc_batch_size_help = "larger consumes more RAM but may process slightly faster (default: %(default)s). Example: --mdxc_batch_size=4"
     mdxc_pitch_shift_help = "shift audio pitch by a number of semitones while processing. may improve output for deep/high vocals. (default: %(default)s). Example: --mdxc_pitch_shift=2"
 
     mdxc_params = parser.add_argument_group("MDXC Architecture Parameters")
     mdxc_params.add_argument("--mdxc_segment_size", type=int, default=256, help=mdxc_segment_size_help)
-    mdxc_params.add_argument("--mdxc_use_model_segment_size", action="store_true", help=mdxc_use_model_segment_size_help)
+    mdxc_params.add_argument("--mdxc_override_model_segment_size", action="store_true", help=mdxc_override_model_segment_size_help)
     mdxc_params.add_argument("--mdxc_overlap", type=int, default=8, help=mdxc_overlap_help)
     mdxc_params.add_argument("--mdxc_batch_size", type=int, default=1, help=mdxc_batch_size_help)
     mdxc_params.add_argument("--mdxc_pitch_shift", type=int, default=0, help=mdxc_pitch_shift_help)
@@ -167,7 +167,7 @@ def main():
             "segment_size": args.mdxc_segment_size,
             "batch_size": args.mdxc_batch_size,
             "overlap": args.mdxc_overlap,
-            "use_model_segment_size": args.mdxc_use_model_segment_size,
+            "override_model_segment_size": args.mdxc_override_model_segment_size,
             "pitch_shift": args.mdxc_pitch_shift,
         },
     )

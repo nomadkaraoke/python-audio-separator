@@ -139,8 +139,8 @@ usage: audio-separator [-h] [-v] [-d] [-e] [-l] [--log_level LOG_LEVEL] [-m MODE
                        [--normalization NORMALIZATION] [--single_stem SINGLE_STEM] [--sample_rate SAMPLE_RATE] [--mdx_segment_size MDX_SEGMENT_SIZE] [--mdx_overlap MDX_OVERLAP] [--mdx_batch_size MDX_BATCH_SIZE]
                        [--mdx_hop_length MDX_HOP_LENGTH] [--mdx_enable_denoise] [--vr_batch_size VR_BATCH_SIZE] [--vr_window_size VR_WINDOW_SIZE] [--vr_aggression VR_AGGRESSION] [--vr_enable_tta]
                        [--vr_high_end_process] [--vr_enable_post_process] [--vr_post_process_threshold VR_POST_PROCESS_THRESHOLD] [--demucs_segment_size DEMUCS_SEGMENT_SIZE] [--demucs_shifts DEMUCS_SHIFTS]
-                       [--demucs_overlap DEMUCS_OVERLAP] [--demucs_segments_enabled DEMUCS_SEGMENTS_ENABLED] [--mdxc_segment_size MDXC_SEGMENT_SIZE] [--mdxc_use_model_segment_size] [--mdxc_overlap MDXC_OVERLAP]
-                       [--mdxc_batch_size MDXC_BATCH_SIZE] [--mdxc_pitch_shift MDXC_PITCH_SHIFT]
+                       [--demucs_overlap DEMUCS_OVERLAP] [--demucs_segments_enabled DEMUCS_SEGMENTS_ENABLED] [--mdxc_segment_size MDXC_SEGMENT_SIZE] [--mdxc_override_model_segment_size]
+                       [--mdxc_overlap MDXC_OVERLAP] [--mdxc_batch_size MDXC_BATCH_SIZE] [--mdxc_pitch_shift MDXC_PITCH_SHIFT]
                        [audio_file]
 
 Separate audio file into different stems.
@@ -194,7 +194,7 @@ Demucs Architecture Parameters:
 
 MDXC Architecture Parameters:
   --mdxc_segment_size MDXC_SEGMENT_SIZE                  larger consumes more resources, but may give better results (default: 256). Example: --mdxc_segment_size=256
-  --mdxc_use_model_segment_size                          use model default segment size instead of the value from the config file. Example: --mdxc_use_model_segment_size
+  --mdxc_override_model_segment_size                     override model default segment size instead of using the model default value. Example: --mdxc_override_model_segment_size
   --mdxc_overlap MDXC_OVERLAP                            amount of overlap between prediction windows, 2-50. higher is better but slower (default: 8). Example: --mdxc_overlap=8
   --mdxc_batch_size MDXC_BATCH_SIZE                      larger consumes more RAM but may process slightly faster (default: 1). Example: --mdxc_batch_size=4
   --mdxc_pitch_shift MDXC_PITCH_SHIFT                    shift audio pitch by a number of semitones while processing. may improve output for deep/high vocals. (default: 0). Example: --mdxc_pitch_shift=2
