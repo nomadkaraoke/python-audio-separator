@@ -139,7 +139,6 @@ class MDXCSeparator(CommonSeparator):
 
         if not isinstance(self.primary_source, np.ndarray):
             self.logger.debug(f"Normalizing primary source for primary stem {self.primary_stem_name}...")
-            self.logger.info(source)
             self.primary_source = spec_utils.normalize(wave=source[self.primary_stem_name], max_peak=self.normalization_threshold).T
 
         if not isinstance(self.secondary_source, np.ndarray):
