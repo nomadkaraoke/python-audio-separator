@@ -92,7 +92,7 @@ class VRSeparator(CommonSeparator):
         # - Bigger values mean deeper extractions.
         # - Typically, it's set to 5 for vocals & instrumentals.
         # - Values beyond 5 might muddy the sound for non-vocal models.
-        self.aggression = arch_config.get("aggression", 5)
+        self.aggression = float(int(arch_config.get("aggression", 5)) / 100)
 
         self.aggressiveness = {"value": self.aggression, "split_bin": self.model_params.param["band"][1]["crop_stop"], "aggr_correction": self.model_params.param.get("aggr_correction")}
 
