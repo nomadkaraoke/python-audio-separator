@@ -94,7 +94,7 @@ class MDXCSeparator(CommonSeparator):
                 checkpoint = torch.load(self.model_path, map_location="cpu")
                 self.model_run = model if not isinstance(model, torch.nn.DataParallel) else model.module
                 self.model_run.load_state_dict(checkpoint)
-                self.model_run.to(self.torch_device_cpu).eval()
+                self.model_run.to(self.torch_device).eval()
 
             else:
                 self.logger.debug("Loading TFC_TDF_net model...")
@@ -183,8 +183,8 @@ class MDXCSeparator(CommonSeparator):
         """
         Adds the overlapping part of the result to the result tensor.
         """
-        if self.torch_device == "mps":
-            x = x.to(self.torch_device_cpu)
+        x = x.to(result.device)
+        weights = weights.to(result.device)
         result[..., start : start + length] += x[..., :length] * weights[:length]
         return result
 
