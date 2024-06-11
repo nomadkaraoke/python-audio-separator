@@ -105,6 +105,7 @@ class Separator:
 
         # Create the model directory if it does not exist
         os.makedirs(self.model_file_dir, exist_ok=True)
+        os.makedirs(self.output_dir, exist_ok=True)
 
         self.output_format = output_format
 
@@ -112,16 +113,25 @@ class Separator:
             self.output_format = "WAV"
 
         self.normalization_threshold = normalization_threshold
+        if normalization_threshold <= 0 or normalization_threshold > 1:
+            raise ValueError("The normalization_threshold must be greater than 0 and less than or equal to 1.")
 
         self.output_single_stem = output_single_stem
         if output_single_stem is not None:
-            self.logger.debug(f"Single stem output requested, only one output file ({output_single_stem}) will be written")
+            self.logger.debug(f"Single stem output requested, so only one output file ({output_single_stem}) will be written")
 
         self.invert_using_spec = invert_using_spec
         if self.invert_using_spec:
-            self.logger.debug(f"Secondary step will be inverted using spectogram rather than waveform. This may improve quality, but is slightly slower.")
+            self.logger.debug(f"Secondary step will be inverted using spectogram rather than waveform. This may improve quality but is slightly slower.")
 
-        self.sample_rate = sample_rate
+        try:
+            self.sample_rate = int(sample_rate)
+            if self.sample_rate <= 0:
+                raise ValueError(f"The sample rate setting is {self.sample_rate} but it must be a non-zero whole number.")
+            if self.sample_rate > 12800000:
+                raise ValueError(f"The sample rate setting is {self.sample_rate}. Enter something less ambitious.")
+        except ValueError:
+            raise ValueError("The sample rate must be a non-zero whole number. Please provide a valid integer.")
 
         # These are parameters which users may want to configure so we expose them to the top-level Separator class,
         # even though they are specific to a single model architecture
