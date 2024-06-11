@@ -7,9 +7,9 @@
 
 Summary: Easy to use audio stem separation from the command line or as a dependency in your own Python project, using the amazing MDX-Net, VR Arch, Demucs and MDXC models available in UVR by @Anjok07 & @aufr33.
 
-Audio Separator is a Python package that allows you to separate an audio file into various stems, using models trained by @Anjok07 for use with UVR (https://github.com/Anjok07/ultimatevocalremovergui).
+Audio Separator is a Python package that allows you to separate an audio file into various stems, using models trained by @Anjok07 for use with UVR (<https://github.com/Anjok07/ultimatevocalremovergui>).
 
-The simplest (and probably most utilized) use case for this package is to separate an audio file into two stems, Instrumental and Vocals which can be very useful for producing Karaoke videos! However, the models available in UVR can separate audio into many more stems, such as Drums, Bass, Piano, Guitar, and perform other audio processing tasks such as denoising and removing echo / reverb.
+The simplest (and probably most used) use case for this package is to separate an audio file into two stems, Instrumental and Vocals, which can be very useful for producing karaoke videos! However, the models available in UVR can separate audio into many more stems, such as Drums, Bass, Piano, and Guitar, and perform other audio processing tasks, such as denoising or removing echo/reverb.
 
 ## Features
 
@@ -29,18 +29,17 @@ You probably want to volume-mount a folder containing whatever file you want to 
 
 For instance, if your current directory has the file `input.wav`, you could execute `audio-separator` as shown below (see [usage](#usage-) section for more details):
 
-```
+```sh
 docker run -it -v `pwd`:/workdir beveradb/audio-separator input.wav
 ```
 
 If you're using a machine with a GPU, you'll want to use the GPU specific image and pass in the GPU device to the container, like this:
 
-```
+```sh
 docker run -it --gpus all -v `pwd`:/workdir beveradb/audio-separator:gpu input.wav
 ```
 
 If the GPU isn't being detected, make sure your docker runtime environment is passing through the GPU correctly - there are [various guides](https://www.celantur.com/blog/run-cuda-in-docker-on-linux/) online to help with that.
-
 
 ### 🎮 Nvidia GPU with CUDA or 🧪 Google Colab
 
@@ -62,7 +61,7 @@ Docker: `beveradb/audio-separator:gpu`
 
 Pip: `pip install "audio-separator[cpu]"`
 
-### 🐢 No hardware acceleration, CPU only:
+### 🐢 No hardware acceleration, CPU only
 
 Conda: `conda install audio-separator-c pytorch -c conda-forge`
 
@@ -70,20 +69,17 @@ Pip: `pip install "audio-separator[cpu]"`
 
 Docker: `beveradb/audio-separator`
 
-
 ### 🎥 FFmpeg dependency
 
-💬 If successfully configured, you should see a `FFmpeg installed` log message when running `audio-separator --env_info`
+💬 To test if `audio-separator` has been successfully configured to use FFmpeg, run `audio-separator --env_info`. The log will show `FFmpeg installed`.
 
 If you installed `audio-separator` using `conda` or `docker`, FFmpeg should already be avaialble in your environment.
 
-If not, you'll separately need to ensure you have `ffmpeg` installed.
-This should be easy to install on most platforms, e.g.:
+You may need to separately install FFmpeg. It should be easy to install on most platforms, e.g.:
 
 🐧 Debian/Ubuntu: `apt-get update; apt-get install -y ffmpeg`
 
  macOS:`brew update; brew install ffmpeg`
-
 
 ## GPU / CUDA specific installation steps with Pip
 
@@ -99,9 +95,10 @@ You may need to reinstall both packages directly, allowing pip to calculate the 
 - `pip install --force-reinstall onnxruntime-gpu`
 
 I generally recommend installing the latest version of PyTorch for your environment using the command recommended by the wizard here:
-https://pytorch.org/get-started/locally/
+<https://pytorch.org/get-started/locally/>
 
-### Multiple CUDA library versions may be needed 
+### Multiple CUDA library versions may be needed
+
 Depending on your CUDA version and environment, you may need to install specific version(s) of CUDA libraries for ONNX Runtime to use your GPU.
 
 🧪 Google Colab, for example, now uses CUDA 12 by default, but ONNX Runtime still needs CUDA 11 libraries to work.
@@ -109,10 +106,9 @@ Depending on your CUDA version and environment, you may need to install specific
 If you see the error `Failed to load library` or `cannot open shared object file` when you run `audio-separator`, this is likely the issue.
 
 You can install the CUDA 11 libraries _alongside_ CUDA 12 like so:
-- `apt update; apt install nvidia-cuda-toolkit`
+`apt update; apt install nvidia-cuda-toolkit`
 
 > Note: if anyone knows how to make this cleaner so we can support both different platform-specific dependencies for hardware acceleration without a separate installation process for each, please let me know or raise a PR!
-
 
 ## Usage 🚀
 
@@ -120,7 +116,7 @@ You can install the CUDA 11 libraries _alongside_ CUDA 12 like so:
 
 You can use Audio Separator via the command line, for example:
 
-```
+```sh
 audio-separator /path/to/your/input/audio.wav --model_filename UVR-MDX-NET-Inst_HQ_3.onnx
 ```
 
@@ -132,7 +128,7 @@ To see a list of supported models, run `audio-separator --list_models`
 
 Any file listed in the list models output can be specified (with file extension) with the model_filename parameter (e.g. `--model_filename UVR_MDXNET_KARA_2.onnx`) and it will be automatically downloaded to the `--model_file_dir` (default: `/tmp/audio-separator-models/`) folder on first usage.
 
-### Full command-line interface options:
+### Full command-line interface options
 
 ```sh
 usage: audio-separator [-h] [-v] [-d] [-e] [-l] [--log_level LOG_LEVEL] [-m MODEL_FILENAME] [--output_format OUTPUT_FORMAT] [--output_dir OUTPUT_DIR] [--model_file_dir MODEL_FILE_DIR] [--invert_spect]
@@ -153,7 +149,7 @@ options:
 
 Info and Debugging:
   -v, --version                                          Show the program's version number and exit.
-  -d, --debug                                            Enable debug logging, equivalent to --log_level=debug.
+  -d, --debug                                            Enable debug logging, equivalent to --log_level=debug
   -e, --env_info                                         Print environment information and exit.
   -l, --list_models                                      List all supported models and exit.
   --log_level LOG_LEVEL                                  Log level, e.g. info, debug, warning (default: info).
@@ -166,19 +162,19 @@ Separation I/O Params:
 
 Common Separation Parameters:
   --invert_spect                                         invert secondary stem using spectogram (default: False). Example: --invert_spect
-  --normalization NORMALIZATION                          max peak amplitude to normalize input and output audio to (default: 0.9). Example: --normalization=0.7
+  --normalization NORMALIZATION                          value by which to multiply the amplitude of the output files (default: 0.9). Example: --normalization=0.7
   --single_stem SINGLE_STEM                              output only single stem, e.g. Instrumental, Vocals, Drums, Bass, Guitar, Piano, Other. Example: --single_stem=Instrumental
-  --sample_rate SAMPLE_RATE                              modify the sample rate of the output audio (default: 44100). Example: --sample_rate=44100
+  --sample_rate SAMPLE_RATE                              set the sample rate of the output audio (default: 44100). Example: --sample_rate=44100
 
 MDX Architecture Parameters:
   --mdx_segment_size MDX_SEGMENT_SIZE                    larger consumes more resources, but may give better results (default: 256). Example: --mdx_segment_size=256
   --mdx_overlap MDX_OVERLAP                              amount of overlap between prediction windows, 0.001-0.999. higher is better but slower (default: 0.25). Example: --mdx_overlap=0.25
   --mdx_batch_size MDX_BATCH_SIZE                        larger consumes more RAM but may process slightly faster (default: 1). Example: --mdx_batch_size=4
-  --mdx_hop_length MDX_HOP_LENGTH                        usually called stride in neural networks, only change if you know what you're doing (default: 1024). Example: --mdx_hop_length=1024
-  --mdx_enable_denoise                                   enable denoising during separation (default: False). Example: --mdx_enable_denoise
+  --mdx_hop_length MDX_HOP_LENGTH                        usually called stride in neural networks; only change if you know what you're doing (default: 1024). Example: --mdx_hop_length=1024
+  --mdx_enable_denoise                                   enable denoising after separation (default: False). Example: --mdx_enable_denoise
 
 VR Architecture Parameters:
-  --vr_batch_size VR_BATCH_SIZE                          number of batches to process at a time. higher = more RAM, slightly faster processing (default: 4). Example: --vr_batch_size=16
+  --vr_batch_size VR_BATCH_SIZE                          number of "batches" to process at a time. higher = more RAM, slightly faster processing (default: 4). Example: --vr_batch_size=16
   --vr_window_size VR_WINDOW_SIZE                        balance quality and speed. 1024 = fast but lower, 320 = slower but better quality. (default: 512). Example: --vr_window_size=320
   --vr_aggression VR_AGGRESSION                          intensity of primary stem extraction, -100 - 100. typically 5 for vocals & instrumentals (default: 5). Example: --vr_aggression=2
   --vr_enable_tta                                        enable Test-Time-Augmentation; slow but improves quality (default: False). Example: --vr_enable_tta
@@ -204,13 +200,13 @@ MDXC Architecture Parameters:
 
 You can use Audio Separator in your own Python project. Here's how you can use it:
 
-```
+```python
 from audio_separator.separator import Separator
 
-# Initialize the Separator class (with optional configuration properties below)
+# Initialize the Separator class (with optional configuration properties, below)
 separator = Separator()
 
-# Load a machine learning model (if unspecified, defaults to 'UVR-MDX-NET-Inst_HQ_3.onnx')
+# Load a machine learning model (if unspecified, defaults to 'model_mel_band_roformer_ep_3005_sdr_11.4360.ckpt')
 separator.load_model()
 
 # Perform the separation on specific audio files without reloading the model
@@ -219,16 +215,16 @@ output_files = separator.separate('audio1.wav')
 print(f"Separation complete! Output file(s): {' '.join(output_files)}")
 ```
 
-#### Batch processing, or processing with multiple models
+#### Batch processing and processing with multiple models
 
-You can process multiple separations without reloading the model, to save time and memory.
+You can process multiple files without reloading the model to save time and memory.
 
 You only need to load a model when choosing or changing models. See example below:
 
-```
+```python
 from audio_separator.separator import Separator
 
-# Initialize the Separator with other configuration properties below
+# Initialize the Separator with other configuration properties, below
 separator = Separator()
 
 # Load a model
@@ -250,15 +246,15 @@ output_file_paths_6 = separator.separate('audio3.wav')
 
 ## Parameters for the Separator class
 
-- log_level: (Optional) Logging level, e.g., INFO, DEBUG, WARNING. Default: DEBUG
+- log_level: (Optional) Logging level, e.g., INFO, DEBUG, WARNING. Default: logging.INFO
 - log_formatter: (Optional) The log format. Default: None, which falls back to '%(asctime)s - %(levelname)s - %(module)s - %(message)s'
 - model_file_dir: (Optional) Directory to cache model files in. Default: /tmp/audio-separator-models/
 - output_dir: (Optional) Directory where the separated files will be saved. If not specified, uses the current directory.
 - output_format: (Optional) Format to encode output files, any common format (WAV, MP3, FLAC, M4A, etc.). Default: WAV
-- normalization_threshold: (Optional) The threshold for audio normalization. Default: 0.9
-- output_single_stem: (Optional) Output only a single stem, either 'instrumental' or 'vocals'. Default: None
+- normalization_threshold: (Optional) The amount by which the amplitude of the output audio will be multiplied. Default: 0.9
+- output_single_stem: (Optional) Output only a single stem, such as 'Instrumental' and 'Vocals'. Default: None
 - invert_using_spec: (Optional) Flag to invert using spectrogram. Default: False
-- sample_rate: (Optional) Modify the sample rate of the output audio. Default: 44100
+- sample_rate: (Optional) Set the sample rate of the output audio. Default: 44100
 - mdx_params: (Optional) MDX Architecture Specific Attributes & Defaults. Default: {"hop_length": 1024, "segment_size": 256, "overlap": 0.25, "batch_size": 1}
 - vr_params: (Optional) VR Architecture Specific Attributes & Defaults. Default: {"batch_size": 16, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False}
 - demucs_params: (Optional) VR Architecture Specific Attributes & Defaults. {"segment_size": "Default", "shifts": 2, "overlap": 0.25, "segments_enabled": True}
@@ -276,13 +272,13 @@ This project uses Poetry for dependency management and packaging. Follow these s
 ### Prerequisites
 
 - Make sure you have Python 3.9 or newer installed on your machine.
-- Install Conda (I recommend Miniforge: https://github.com/conda-forge/miniforge) to manage your Python virtual environments
+- Install Conda (I recommend Miniforge: <https://github.com/conda-forge/miniforge>) to manage your Python virtual environments
 
 ### Clone the Repository
 
 Clone the repository to your local machine:
 
-```
+```sh
 git clone https://github.com/YOUR_USERNAME/audio-separator.git
 cd audio-separator
 ```
@@ -293,7 +289,7 @@ Replace YOUR_USERNAME with your GitHub username if you've forked the repository,
 
 To create and activate the conda environment, use the following commands:
 
-```
+```sh
 conda env create
 conda activate audio-separator-dev
 ```
@@ -302,16 +298,15 @@ conda activate audio-separator-dev
 
 Once you're inside the conda env, run the following command to install the project dependencies:
 
-```
+```sh
 poetry install
 ```
-
 
 ### Running the Command-Line Interface Locally
 
 You can run the CLI command directly within the virtual environment. For example:
 
-```
+```sh
 audio-separator path/to/your/audio-file.wav
 ```
 
@@ -319,7 +314,7 @@ audio-separator path/to/your/audio-file.wav
 
 Once you are done with your development work, you can exit the virtual environment by simply typing:
 
-```
+```sh
 conda deactivate
 ```
 
@@ -327,7 +322,7 @@ conda deactivate
 
 To build the package for distribution, use the following command:
 
-```
+```sh
 poetry build
 ```
 
@@ -337,7 +332,7 @@ This will generate the distribution packages in the dist directory - but for now
 
 Contributions are very much welcome! Please fork the repository and submit a pull request with your changes, and I'll try to review, merge and publish promptly!
 
-- This project is 100% open-source and free for anyone to use and modify as they wish. 
+- This project is 100% open-source and free for anyone to use and modify as they wish.
 - If the maintenance workload for this repo somehow becomes too much for me I'll ask for volunteers to share maintainership of the repo, though I don't think that is very likely
 - Development and support for the MDX-Net separation models is part of the main [UVR project](https://github.com/Anjok07/ultimatevocalremovergui), this repo is just a CLI/Python package wrapper to simplify running those models programmatically. So, if you want to try and improve the actual models, please get involved in the UVR project and look for guidance there!
 
@@ -351,7 +346,7 @@ This project is licensed under the MIT [License](LICENSE).
 
 - [Anjok07](https://github.com/Anjok07) - Author of [Ultimate Vocal Remover GUI](https://github.com/Anjok07/ultimatevocalremovergui), which almost all of the code in this repo was copied from! Definitely deserving of credit for anything good from this project. Thank you!
 - [DilanBoskan](https://github.com/DilanBoskan) - Your contributions at the start of this project were essential to the success of UVR. Thank you!
-- [Kuielab & Woosung Choi](https://github.com/kuielab) - Developed the original MDX-Net AI code. 
+- [Kuielab & Woosung Choi](https://github.com/kuielab) - Developed the original MDX-Net AI code.
 - [KimberleyJSN](https://github.com/KimberleyJensen) - Advised and aided the implementation of the training scripts for MDX-Net and Demucs. Thank you!
 - [Hv](https://github.com/NaJeongMo/Colab-for-MDX_B) - Helped implement chunks into the MDX-Net AI code. Thank you!
 - [zhzhongshi](https://github.com/zhzhongshi) - Helped add support for the MDXC models in `audio-separator`. Thank you!
