@@ -101,6 +101,11 @@ class Separator:
         self.logger.info(f"Separator version {package_version} instantiating with output_dir: {output_dir}, output_format: {output_format}")
 
         self.model_file_dir = model_file_dir
+
+        if output_dir is None:
+            output_dir = os.getcwd()
+            self.logger.info("Output directory not specified. Using current working directory.")
+
         self.output_dir = output_dir
 
         # Create the model directory if it does not exist
