@@ -457,11 +457,10 @@ class BSRoformer(Module):
         """
 
         original_device = raw_audio.device
-        
         x_is_mps = True if original_device.type == 'mps' else False
         
-        if x_is_mps:
-            raw_audio = raw_audio.cpu()
+        # if x_is_mps:
+        #     raw_audio = raw_audio.cpu()
 
         device = raw_audio.device
 
@@ -478,16 +477,16 @@ class BSRoformer(Module):
 
         stft_window = self.stft_window_fn(device=device)
 
-        stft_repr = torch.stft(raw_audio, **self.stft_kwargs, window=stft_window, return_complex=True).to(device)
+        stft_repr = torch.stft(raw_audio, **self.stft_kwargs, window=stft_window, return_complex=True)
         stft_repr = torch.view_as_real(stft_repr)
 
         stft_repr = unpack_one(stft_repr, batch_audio_channel_packed_shape, '* f t c')
         stft_repr = rearrange(stft_repr,
                               'b s f t c -> b (f s) t c')  # merge stereo / mono into the frequency, with frequency leading dimension, for band splitting
 
-        x = rearrange(stft_repr, 'b f t c -> b t (f c)').to(device)
+        x = rearrange(stft_repr, 'b f t c -> b t (f c)')
 
-        x = self.band_split(x).to(device)
+        x = self.band_split(x)
 
         # axial / hierarchical attention
 
@@ -502,27 +501,26 @@ class BSRoformer(Module):
             else:
                 time_transformer, freq_transformer = transformer_block
 
-            x = rearrange(x, 'b t f d -> b f t d').to(device)
+            x = rearrange(x, 'b t f d -> b f t d')
             x, ps = pack([x], '* t d')
 
-            x = time_transformer(x).to(device)
+            x = time_transformer(x)
 
             x, = unpack(x, ps, '* t d')
-            x = rearrange(x, 'b f t d -> b t f d').to(device)
+            x = rearrange(x, 'b f t d -> b t f d')
             x, ps = pack([x], '* f d')
 
-            x = freq_transformer(x).to(device)
+            x = freq_transformer(x)
 
             x, = unpack(x, ps, '* f d')
 
-        x = self.final_norm(x).to(device)
+        x = self.final_norm(x)
 
-
-        mask = torch.stack([fn(x).to(device) for fn in self.mask_estimators], dim=1)
-        mask = rearrange(mask, 'b n t (f c) -> b n f t c', c=2).to(device)
+        mask = torch.stack([fn(x) for fn in self.mask_estimators], dim=1)
+        mask = rearrange(mask, 'b n t (f c) -> b n f t c', c=2)
         
-        if x_is_mps:
-            mask = mask.to(device)
+        # if x_is_mps:
+        #     mask = mask.to('cpu')
 
         # modulate frequency representation
 
@@ -530,8 +528,8 @@ class BSRoformer(Module):
 
         # complex number multiplication
 
-        stft_repr = torch.view_as_complex(stft_repr).to(device)
-        mask = torch.view_as_complex(mask).to(device)
+        stft_repr = torch.view_as_complex(stft_repr)
+        mask = torch.view_as_complex(mask)
 
         stft_repr = stft_repr * mask
 
@@ -539,12 +537,15 @@ class BSRoformer(Module):
 
         stft_repr = rearrange(stft_repr, 'b n (f s) t -> (b n s) f t', s=self.audio_channels)
 
-        recon_audio = torch.istft(stft_repr, **self.stft_kwargs, window=stft_window, return_complex=False).to(device)
+        recon_audio = torch.istft(stft_repr.cpu() if x_is_mps else stft_repr,
+                                  **self.stft_kwargs,
+                                  window=stft_window.cpu() if x_is_mps else stft_window,
+                                  return_complex=False).to(device)
 
         recon_audio = rearrange(recon_audio, '(b n s) t -> b n s t', s=self.audio_channels, n=self.num_stems)
 
         if self.num_stems == 1:
-            recon_audio = rearrange(recon_audio, 'b 1 s t -> b s t').to(device)
+            recon_audio = rearrange(recon_audio, 'b 1 s t -> b s t')
 
         # if a target is passed in, calculate loss for learning
 
@@ -555,11 +556,11 @@ class BSRoformer(Module):
             assert target.ndim == 4 and target.shape[1] == self.num_stems
 
         if target.ndim == 2:
-            target = rearrange(target, '... t -> ... 1 t').to(device)
+            target = rearrange(target, '... t -> ... 1 t')
 
-        target = target[..., :recon_audio.shape[-1]].to(device)
+        target = target[..., :recon_audio.shape[-1]]
 
-        loss = F.l1_loss(recon_audio, target).to(device)
+        loss = F.l1_loss(recon_audio, target)
 
         multi_stft_resolution_loss = 0.
 
@@ -572,10 +573,10 @@ class BSRoformer(Module):
                 **self.multi_stft_kwargs,
             )
 
-            recon_Y = torch.stft(rearrange(recon_audio, '... s t -> (... s) t'), **res_stft_kwargs).to(device)
-            target_Y = torch.stft(rearrange(target, '... s t -> (... s) t'), **res_stft_kwargs).to(device)
+            recon_Y = torch.stft(rearrange(recon_audio, '... s t -> (... s) t'), **res_stft_kwargs)
+            target_Y = torch.stft(rearrange(target, '... s t -> (... s) t'), **res_stft_kwargs)
 
-            multi_stft_resolution_loss += F.l1_loss(recon_Y, target_Y).to(device)
+            multi_stft_resolution_loss = multi_stft_resolution_loss + F.l1_loss(recon_Y, target_Y)
 
         weighted_multi_resolution_loss = multi_stft_resolution_loss * self.multi_stft_resolution_loss_weight
 
@@ -584,15 +585,15 @@ class BSRoformer(Module):
 
         if not return_loss_breakdown:
             # Move the result back to the original device if it was moved to CPU for MPS compatibility
-            if x_is_mps:
-                total_loss = total_loss.to(original_device)
+            # if x_is_mps:
+            #     total_loss = total_loss.to(original_device)
             return total_loss
 
         # For detailed loss breakdown, ensure all components are moved back to the original device for MPS
-        if x_is_mps:
-            loss = loss.to(original_device)
-            multi_stft_resolution_loss = multi_stft_resolution_loss.to(original_device)
-            weighted_multi_resolution_loss = weighted_multi_resolution_loss.to(original_device)
+        # if x_is_mps:
+        #     loss = loss.to(original_device)
+        #     multi_stft_resolution_loss = multi_stft_resolution_loss.to(original_device)
+        #     weighted_multi_resolution_loss = weighted_multi_resolution_loss.to(original_device)
 
         return total_loss, (loss, multi_stft_resolution_loss)
 
