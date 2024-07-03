@@ -457,11 +457,10 @@ class BSRoformer(Module):
         """
 
         original_device = raw_audio.device
-        
         x_is_mps = True if original_device.type == 'mps' else False
         
-        if x_is_mps:
-            raw_audio = raw_audio.cpu()
+        # if x_is_mps:
+        #     raw_audio = raw_audio.cpu()
 
         device = raw_audio.device
 
@@ -517,13 +516,11 @@ class BSRoformer(Module):
 
         x = self.final_norm(x)
 
-        num_stems = len(self.mask_estimators)
-
         mask = torch.stack([fn(x) for fn in self.mask_estimators], dim=1)
         mask = rearrange(mask, 'b n t (f c) -> b n f t c', c=2)
         
-        if x_is_mps:
-            mask = mask.to('cpu')
+        # if x_is_mps:
+        #     mask = mask.to('cpu')
 
         # modulate frequency representation
 
@@ -540,11 +537,14 @@ class BSRoformer(Module):
 
         stft_repr = rearrange(stft_repr, 'b n (f s) t -> (b n s) f t', s=self.audio_channels)
 
-        recon_audio = torch.istft(stft_repr, **self.stft_kwargs, window=stft_window, return_complex=False)
+        recon_audio = torch.istft(stft_repr.cpu() if x_is_mps else stft_repr,
+                                  **self.stft_kwargs,
+                                  window=stft_window.cpu() if x_is_mps else stft_window,
+                                  return_complex=False).to(device)
 
-        recon_audio = rearrange(recon_audio, '(b n s) t -> b n s t', s=self.audio_channels, n=num_stems)
+        recon_audio = rearrange(recon_audio, '(b n s) t -> b n s t', s=self.audio_channels, n=self.num_stems)
 
-        if num_stems == 1:
+        if self.num_stems == 1:
             recon_audio = rearrange(recon_audio, 'b 1 s t -> b s t')
 
         # if a target is passed in, calculate loss for learning
@@ -585,15 +585,15 @@ class BSRoformer(Module):
 
         if not return_loss_breakdown:
             # Move the result back to the original device if it was moved to CPU for MPS compatibility
-            if x_is_mps:
-                total_loss = total_loss.to(original_device)
+            # if x_is_mps:
+            #     total_loss = total_loss.to(original_device)
             return total_loss
 
         # For detailed loss breakdown, ensure all components are moved back to the original device for MPS
-        if x_is_mps:
-            loss = loss.to(original_device)
-            multi_stft_resolution_loss = multi_stft_resolution_loss.to(original_device)
-            weighted_multi_resolution_loss = weighted_multi_resolution_loss.to(original_device)
+        # if x_is_mps:
+        #     loss = loss.to(original_device)
+        #     multi_stft_resolution_loss = multi_stft_resolution_loss.to(original_device)
+        #     weighted_multi_resolution_loss = weighted_multi_resolution_loss.to(original_device)
 
         return total_loss, (loss, multi_stft_resolution_loss)
 
