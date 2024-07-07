@@ -440,7 +440,11 @@ class BSRoformer(Module):
 
     def forward(self, raw_audio, target=None, return_loss_breakdown=False):
         """ einops b - batch f - freq t - time s - audio channel (1 for mono, 2 for stereo) n - number of 'stems' c - complex (2) d - feature dimension """
-        device = 'cuda' if torch.cuda.is_available() else 'cpu'
+        original_device = raw_audio.device
+        if original_device.type == 'mps':
+            device = 'mps'
+        else:
+            device = 'cuda' if torch.cuda.is_available() else 'cpu'
         raw_audio = raw_audio.to(device)
         self.to(device)
         
