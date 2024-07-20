@@ -261,7 +261,7 @@ output_file_paths_6 = separator.separate('audio3.wav')
 
 ## Requirements 📋
 
-Python >= 3.9
+Python >= 3.10
 
 Libraries: torch, onnx, onnxruntime, numpy, librosa, requests, six, tqdm, pydub
 
@@ -271,7 +271,7 @@ This project uses Poetry for dependency management and packaging. Follow these s
 
 ### Prerequisites
 
-- Make sure you have Python 3.9 or newer installed on your machine.
+- Make sure you have Python 3.10 or newer installed on your machine.
 - Install Conda (I recommend Miniforge: <https://github.com/conda-forge/miniforge>) to manage your Python virtual environments
 
 ### Clone the Repository

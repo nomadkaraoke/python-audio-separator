@@ -139,12 +139,12 @@ def main():
         logger.info(f"Model {args.model_filename} downloaded successfully.")
         sys.exit(0)
 
-    logger.info(f"Separator version {package_version} beginning with input file: {args.audio_file}")
-
     if not hasattr(args, "audio_file"):
         parser.print_help()
         sys.exit(1)
-
+    
+    logger.info(f"Separator version {package_version} beginning with input file: {args.audio_file}")
+    
     separator = Separator(
         log_formatter=log_formatter,
         log_level=log_level,

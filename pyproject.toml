@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "audio-separator"
-version = "0.18.0"
+version = "0.18.1"
 description = "Easy to use audio stem separation, using various models from UVR trained primarily by @Anjok07"
 authors = ["Andrew Beveridge <andrew@beveridge.uk>"]
 license = "MIT"
@@ -22,13 +22,12 @@ classifiers = [
     "Intended Audience :: Science/Research",
     "Topic :: Multimedia :: Sound/Audio",
     "Topic :: Multimedia :: Sound/Audio :: Mixers",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.9"
+python = ">=3.10"
 requests = ">=2"
 numpy = ">=1.23"
 librosa = ">=0.10"
