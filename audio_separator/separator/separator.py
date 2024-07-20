@@ -158,12 +158,12 @@ class Separator:
         """
         This method sets up the PyTorch and/or ONNX Runtime inferencing device, using GPU hardware acceleration if available.
         """
-        self.log_system_info()
+        system_info = self.get_system_info()
         self.check_ffmpeg_installed()
         self.log_onnxruntime_packages()
-        self.setup_torch_device()
+        self.setup_torch_device(system_info)
 
-    def log_system_info(self):
+    def get_system_info(self):
         """
         This method logs the system information, including the operating system, CPU archutecture and Python version
         """
@@ -179,6 +179,7 @@ class Separator:
 
         pytorch_version = torch.__version__
         self.logger.info(f"PyTorch Version: {pytorch_version}")
+        return system_info
 
     def check_ffmpeg_installed(self):
         """
@@ -210,7 +211,7 @@ class Separator:
         if onnxruntime_cpu_package is not None:
             self.logger.info(f"ONNX Runtime CPU package installed with version: {onnxruntime_cpu_package.version}")
 
-    def setup_torch_device(self):
+    def setup_torch_device(self, system_info):
         """
         This method sets up the PyTorch and/or ONNX Runtime inferencing device, using GPU hardware acceleration if available.
         """
@@ -222,7 +223,7 @@ class Separator:
         if torch.cuda.is_available():
             self.configure_cuda(ort_providers)
             hardware_acceleration_enabled = True
-        elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+        elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available() and system_info.processor == "arm":
             self.configure_mps(ort_providers)
             hardware_acceleration_enabled = True
 
@@ -247,7 +248,7 @@ class Separator:
         """
         This method configures the Apple Silicon MPS/CoreML device for PyTorch and ONNX Runtime, if available.
         """
-        self.logger.info("Apple Silicon MPS/CoreML is available in Torch, setting Torch device to MPS")
+        self.logger.info("Apple Silicon MPS/CoreML is available in Torch and processor is ARM, setting Torch device to MPS")
         self.torch_device_mps = torch.device("mps")
 
         self.torch_device = self.torch_device_mps
