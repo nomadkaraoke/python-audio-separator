@@ -222,9 +222,6 @@ class Separator:
         if torch.cuda.is_available():
             self.configure_cuda(ort_providers)
             hardware_acceleration_enabled = True
-        elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
-            self.configure_mps(ort_providers)
-            hardware_acceleration_enabled = True
 
         if not hardware_acceleration_enabled:
             self.logger.info("No hardware acceleration could be configured, running in CPU mode")
