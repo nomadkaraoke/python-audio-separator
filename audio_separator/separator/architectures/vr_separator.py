@@ -181,7 +181,7 @@ class VRSeparator(CommonSeparator):
         if self.output_single_stem and (self.output_single_stem.lower() != self.primary_stem_name.lower() and self.output_single_stem.lower() != self.secondary_stem_name.lower()):
             # If so, reset output_single_stem to None to save both stems
             self.output_single_stem = None
-            self.logger.warning(f"The output_single_stem setting '{self.output_single_stem}' does not match any of the output files: '{self.primary_stem_name}' and '{self.secondary_stem_name}'. For this model '{self.model_name}' with architecture '{self.arch_name}', the output_single_stem setting will be ignored and all output files will be saved.")
+            self.logger.warning(f"The output_single_stem setting '{self.output_single_stem}' does not match any of the output files: '{self.primary_stem_name}' and '{self.secondary_stem_name}'. For this model '{self.model_name}', the output_single_stem setting will be ignored and all output files will be saved.")
 
         # Save and process the primary stem if needed
         if not self.output_single_stem or self.output_single_stem.lower() == self.primary_stem_name.lower():

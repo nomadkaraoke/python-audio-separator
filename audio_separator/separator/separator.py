@@ -718,3 +718,23 @@ class Separator:
         self.logger.info(f'Separation duration: {time.strftime("%H:%M:%S", time.gmtime(int(time.perf_counter() - separate_start_time)))}')
 
         return output_files
+
+    def download_model_and_data(self, model_filename):
+        """
+        Downloads the model file without loading it into memory.
+        """
+        self.logger.info(f"Downloading model {model_filename}...")
+
+        model_filename, model_type, model_friendly_name, model_path, yaml_config_filename = self.download_model_files(model_filename)
+
+        if model_path.lower().endswith(".yaml"):
+            yaml_config_filename = model_path
+
+        if yaml_config_filename is not None:
+            model_data = self.load_model_data_from_yaml(yaml_config_filename)
+        else:
+            model_data = self.load_model_data_using_hash(model_path)
+
+        model_data_dict_size = len(model_data)
+
+        self.logger.info(f"Model downloaded, type: {model_type}, friendly name: {model_friendly_name}, model_path: {model_path}, model_data: {model_data_dict_size} items")

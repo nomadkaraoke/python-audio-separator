@@ -38,12 +38,14 @@ def main():
     output_format_help = "output format for separated files, any common format (default: %(default)s). Example: --output_format=MP3"
     output_dir_help = "directory to write output files (default: <current dir>). Example: --output_dir=/app/separated"
     model_file_dir_help = "model files directory (default: %(default)s). Example: --model_file_dir=/app/models"
+    download_model_only_help = "Download a single model file only, without performing separation."
 
     io_params = parser.add_argument_group("Separation I/O Params")
-    io_params.add_argument("-m", "--model_filename", default="model_mel_band_roformer_ep_3005_sdr_11.4360.ckpt", help=model_filename_help)
+    io_params.add_argument("-m", "--model_filename", default="model_bs_roformer_ep_317_sdr_12.9755.yaml", help=model_filename_help)
     io_params.add_argument("--output_format", default="FLAC", help=output_format_help)
     io_params.add_argument("--output_dir", default=None, help=output_dir_help)
     io_params.add_argument("--model_file_dir", default="/tmp/audio-separator-models/", help=model_file_dir_help)
+    io_params.add_argument("--download_model_only", action="store_true", help=download_model_only_help)
 
     invert_spect_help = "invert secondary stem using spectogram (default: %(default)s). Example: --invert_spect"
     normalization_help = "max peak amplitude to normalize input and output audio to (default: %(default)s). Example: --normalization=0.7"
@@ -130,11 +132,18 @@ def main():
         print(json.dumps(separator.list_supported_model_files(), indent=4, sort_keys=True))
         sys.exit(0)
 
+    if args.download_model_only:
+        logger.info(f"Separator version {package_version} downloading model {args.model_filename} to directory {args.model_file_dir}")
+        separator = Separator(log_formatter=log_formatter, log_level=log_level, model_file_dir=args.model_file_dir)
+        separator.download_model_and_data(args.model_filename)
+        logger.info(f"Model {args.model_filename} downloaded successfully.")
+        sys.exit(0)
+
+    logger.info(f"Separator version {package_version} beginning with input file: {args.audio_file}")
+
     if not hasattr(args, "audio_file"):
         parser.print_help()
         sys.exit(1)
-
-    logger.info(f"Separator version {package_version} beginning with input file: {args.audio_file}")
 
     separator = Separator(
         log_formatter=log_formatter,
