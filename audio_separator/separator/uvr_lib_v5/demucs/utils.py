@@ -22,7 +22,6 @@ import socket
 import tempfile
 import warnings
 import zlib
-import tkinter as tk
 
 from diffq import UniformQuantizer, DiffQuantizer
 import torch as th
