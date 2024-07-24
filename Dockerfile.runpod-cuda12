@@ -1,5 +1,5 @@
 # Runpod Base image: https://github.com/runpod/containers/blob/main/official-templates/base/Dockerfile
-FROM runpod/base:0.5.0-cuda12.1.0
+FROM runpod/base:0.6.2-cuda12.1.0
 
 RUN apt-get update && apt-get install -y \
     ffmpeg \
