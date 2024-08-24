@@ -36,6 +36,7 @@ def main():
 
     model_filename_help = "model to use for separation (default: %(default)s). Example: -m 2_HP-UVR.pth"
     output_format_help = "output format for separated files, any common format (default: %(default)s). Example: --output_format=MP3"
+    output_bitrate_help = "output bitrate for separated files, any ffmpeg-compatible bitrate (default: %(default)s). Example: --output_bitrate=320k"
     output_dir_help = "directory to write output files (default: <current dir>). Example: --output_dir=/app/separated"
     model_file_dir_help = "model files directory (default: %(default)s). Example: --model_file_dir=/app/models"
     download_model_only_help = "Download a single model file only, without performing separation."
@@ -43,6 +44,7 @@ def main():
     io_params = parser.add_argument_group("Separation I/O Params")
     io_params.add_argument("-m", "--model_filename", default="model_bs_roformer_ep_317_sdr_12.9755.yaml", help=model_filename_help)
     io_params.add_argument("--output_format", default="FLAC", help=output_format_help)
+    io_params.add_argument("--output_bitrate", default=None, help=output_bitrate_help)
     io_params.add_argument("--output_dir", default=None, help=output_dir_help)
     io_params.add_argument("--model_file_dir", default="/tmp/audio-separator-models/", help=model_file_dir_help)
     io_params.add_argument("--download_model_only", action="store_true", help=download_model_only_help)
@@ -142,15 +144,16 @@ def main():
     if not hasattr(args, "audio_file"):
         parser.print_help()
         sys.exit(1)
-    
+
     logger.info(f"Separator version {package_version} beginning with input file: {args.audio_file}")
-    
+
     separator = Separator(
         log_formatter=log_formatter,
         log_level=log_level,
         model_file_dir=args.model_file_dir,
         output_dir=args.output_dir,
         output_format=args.output_format,
+        output_bitrate=args.output_bitrate,
         normalization_threshold=args.normalization,
         output_single_stem=args.single_stem,
         invert_using_spec=args.invert_spect,
