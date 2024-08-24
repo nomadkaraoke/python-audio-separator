@@ -302,6 +302,15 @@ Once you're inside the conda env, run the following command to install the proje
 poetry install
 ```
 
+Install extra dependencies depending if you're running with GPU or CPU.
+```sh
+poetry install --extras "cpu"
+```
+or
+```sh
+poetry install --extras "gpu"
+```
+
 ### Running the Command-Line Interface Locally
 
 You can run the CLI command directly within the virtual environment. For example:
