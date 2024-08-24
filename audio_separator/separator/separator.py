@@ -36,6 +36,7 @@ class Separator:
         model_file_dir (str): The directory where model files are stored.
         output_dir (str): The directory where output files will be saved.
         output_format (str): The format of the output audio file.
+        output_bitrate (str): The bitrate of the output audio file.
         normalization_threshold (float): The threshold for audio normalization.
         output_single_stem (str): Option to output a single stem.
         invert_using_spec (bool): Flag to invert using spectrogram.
@@ -68,6 +69,7 @@ class Separator:
         model_file_dir="/tmp/audio-separator-models/",
         output_dir=None,
         output_format="WAV",
+        output_bitrate=None,
         normalization_threshold=0.9,
         output_single_stem=None,
         invert_using_spec=False,
@@ -113,6 +115,7 @@ class Separator:
         os.makedirs(self.output_dir, exist_ok=True)
 
         self.output_format = output_format
+        self.output_bitrate = output_bitrate
 
         if self.output_format is None:
             self.output_format = "WAV"
@@ -652,6 +655,7 @@ class Separator:
             "model_path": model_path,
             "model_data": model_data,
             "output_format": self.output_format,
+            "output_bitrate": self.output_bitrate,
             "output_dir": self.output_dir,
             "normalization_threshold": self.normalization_threshold,
             "output_single_stem": self.output_single_stem,
