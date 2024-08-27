@@ -15,6 +15,7 @@ def common_expected_args():
         "model_file_dir": "/tmp/audio-separator-models/",
         "output_dir": None,
         "output_format": "FLAC",
+        "output_bitrate": None,
         "normalization_threshold": 0.9,
         "output_single_stem": None,
         "invert_using_spec": False,
