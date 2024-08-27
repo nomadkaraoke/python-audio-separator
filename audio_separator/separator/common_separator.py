@@ -68,6 +68,7 @@ class CommonSeparator:
         # Output directory and format
         self.output_dir = config.get("output_dir")
         self.output_format = config.get("output_format")
+        self.output_bitrate = config.get("output_bitrate")
 
         # Functional options which are applicable to all architectures and the user may tweak to affect the output
         self.normalization_threshold = config.get("normalization_threshold")
@@ -250,9 +251,12 @@ class CommonSeparator:
         elif file_format == "mka":
             file_format = "matroska"
 
+        # Set the bitrate to 320k for mp3 files if output_bitrate is not specified
+        bitrate = "320k" if file_format == "mp3" and self.output_bitrate is None else self.output_bitrate
+
         # Export using the determined format
         try:
-            audio_segment.export(stem_path, format=file_format)
+            audio_segment.export(stem_path, format=file_format, bitrate=bitrate)
             self.logger.debug(f"Exported audio file successfully to {stem_path}")
         except (IOError, ValueError) as e:
             self.logger.error(f"Error exporting audio file: {e}")
