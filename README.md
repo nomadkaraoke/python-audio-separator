@@ -366,4 +366,4 @@ For questions or feedback, please raise an issue or reach out to @beveradb ([And
 
 ## Sponsors
 
-<!-- sponsors --><a href="https://github.com/empz"><img src="https://github.com/empz.png" width="60px" alt="Emiliano Parizzi" /></a><!-- sponsors -->
+<!-- sponsors --><a href="https://github.com/empz"><img src="https:&#x2F;&#x2F;avatars.githubusercontent.com&#x2F;u&#x2F;412489?u&#x3D;c7bcf936f5d6b486dea8f26eb9453a59e4f522fa&amp;v&#x3D;4" width="60px" alt="Emiliano Parizzi" /></a><!-- sponsors -->
