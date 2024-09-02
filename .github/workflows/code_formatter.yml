@@ -1,0 +1,51 @@
+name: Форматировщик кода
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  push_format:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Проверка кода
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: Настройка Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Установка Black
+        run: pip install black
+
+      - name: Запуск Black
+        run: black .
+
+      - name: Фиксация изменений
+        continue-on-error: true
+        id: commitback
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add --all
+          git commit -m "Рутинная работа"
+
+      - name: Создание Pull Request
+        if: steps.commitback.outcome == 'success'
+        continue-on-error: true
+        uses: peter-evans/create-pull-request@v5
+        with:
+          delete-branch: true
+          body: "Автоматическое применение изменений форматировщика кода"
+          title: "Рутинная работа"
+          commit-message: "Рутинная работа"
+          branch: formatter-main
