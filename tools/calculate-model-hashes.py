@@ -80,12 +80,19 @@ def iterate_and_hash(directory):
     vr_model_data = load_json_data(VR_MODEL_DATA_LOCAL_PATH)
     mdx_model_data = load_json_data(MDX_MODEL_DATA_LOCAL_PATH)
 
-    combined_model_params = {**vr_model_data, **mdx_model_data}
+    combined_model_params = {
+        **vr_model_data,
+        **mdx_model_data,
+    }
 
     model_info_list = []
     for file, file_path in sorted(model_files):
         file_hash = get_model_hash(file_path)
-        model_info = {"file": file, "hash": file_hash, "params": combined_model_params.get(file_hash, "Parameters not found")}
+        model_info = {
+            "file": file,
+            "hash": file_hash,
+            "params": combined_model_params.get(file_hash, "Parameters not found"),
+        }
         model_info_list.append(model_info)
 
     print(f"Writing model info list to {OUTPUT_PATH}")

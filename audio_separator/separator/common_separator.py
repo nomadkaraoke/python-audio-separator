@@ -47,7 +47,19 @@ class CommonSeparator:
     LEAD_VOCAL_STEM_LABEL = "Lead Vocals"
     BV_VOCAL_STEM_LABEL = "Backing Vocals"
 
-    NON_ACCOM_STEMS = (VOCAL_STEM, OTHER_STEM, BASS_STEM, DRUM_STEM, GUITAR_STEM, PIANO_STEM, SYNTH_STEM, STRINGS_STEM, WOODWINDS_STEM, BRASS_STEM, WIND_INST_STEM)
+    NON_ACCOM_STEMS = (
+        VOCAL_STEM,
+        OTHER_STEM,
+        BASS_STEM,
+        DRUM_STEM,
+        GUITAR_STEM,
+        PIANO_STEM,
+        SYNTH_STEM,
+        STRINGS_STEM,
+        WOODWINDS_STEM,
+        BRASS_STEM,
+        WIND_INST_STEM,
+    )
 
     def __init__(self, config):
 

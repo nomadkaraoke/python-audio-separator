@@ -174,7 +174,12 @@ def main():
             "post_process_threshold": args.vr_post_process_threshold,
             "high_end_process": args.vr_high_end_process,
         },
-        demucs_params={"segment_size": args.demucs_segment_size, "shifts": args.demucs_shifts, "overlap": args.demucs_overlap, "segments_enabled": args.demucs_segments_enabled},
+        demucs_params={
+            "segment_size": args.demucs_segment_size,
+            "shifts": args.demucs_shifts,
+            "overlap": args.demucs_overlap,
+            "segments_enabled": args.demucs_segments_enabled,
+        },
         mdxc_params={
             "segment_size": args.mdxc_segment_size,
             "batch_size": args.mdxc_batch_size,
