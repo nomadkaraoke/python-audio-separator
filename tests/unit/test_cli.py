@@ -20,35 +20,10 @@ def common_expected_args():
         "output_single_stem": None,
         "invert_using_spec": False,
         "sample_rate": 44100,
-        "mdx_params": {
-            "hop_length": 1024,
-            "segment_size": 256,
-            "overlap": 0.25,
-            "batch_size": 1,
-            "enable_denoise": False,
-        },
-        "vr_params": {
-            "batch_size": 4,
-            "window_size": 512,
-            "aggression": 5,
-            "enable_tta": False,
-            "enable_post_process": False,
-            "post_process_threshold": 0.2,
-            "high_end_process": False,
-        },
-        "demucs_params": {
-            "segment_size": "Default",
-            "shifts": 2,
-            "overlap": 0.25,
-            "segments_enabled": True,
-        },
-        "mdxc_params": {
-            "segment_size": 256,
-            "batch_size": 1,
-            "overlap": 8,
-            "override_model_segment_size": False,
-            "pitch_shift": 0,
-        },
+        "mdx_params": {"hop_length": 1024, "segment_size": 256, "overlap": 0.25, "batch_size": 1, "enable_denoise": False},
+        "vr_params": {"batch_size": 4, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False},
+        "demucs_params": {"segment_size": "Default", "shifts": 2, "overlap": 0.25, "segments_enabled": True},
+        "mdxc_params": {"segment_size": 256, "batch_size": 1, "overlap": 8, "override_model_segment_size": False, "pitch_shift": 0},
     }
 
 
@@ -86,14 +61,21 @@ def test_cli_multiple_filenames(capsys):
 
 
 # Test the CLI with a specific audio file
-def test_cli_with_audio_file(capsys):
-    test_args = ["cli.py", "test_audio.mp3"]
+def test_cli_with_audio_file(capsys, common_expected_args):
+    test_args = ["cli.py", "test_audio.mp3", "--model_filename=UVR-MDX-NET-Inst_HQ_4.onnx"]
     with patch("audio_separator.separator.Separator.separate") as mock_separate:
         mock_separate.return_value = ["output_file.mp3"]
         with patch("sys.argv", test_args):
             # Call the main function in cli.py
             main()
-    # Check if the separate
+
+    # Update expected args for this specific test
+    common_expected_args["model_file_dir"] = "/tmp/audio-separator-models/"
+
+    # Check if the separate method was called with the correct arguments
+    mock_separate.assert_called_once()
+
+    # Assertions
     assert mock_separate.called
 
 
