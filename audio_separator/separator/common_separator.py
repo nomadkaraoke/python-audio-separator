@@ -46,20 +46,11 @@ class CommonSeparator:
     BV_VOCAL_STEM_I = "with_backing_vocals"
     LEAD_VOCAL_STEM_LABEL = "Lead Vocals"
     BV_VOCAL_STEM_LABEL = "Backing Vocals"
+    NO_STEM = "No "
 
-    NON_ACCOM_STEMS = (
-        VOCAL_STEM,
-        OTHER_STEM,
-        BASS_STEM,
-        DRUM_STEM,
-        GUITAR_STEM,
-        PIANO_STEM,
-        SYNTH_STEM,
-        STRINGS_STEM,
-        WOODWINDS_STEM,
-        BRASS_STEM,
-        WIND_INST_STEM,
-    )
+    STEM_PAIR_MAPPER = {VOCAL_STEM: INST_STEM, INST_STEM: VOCAL_STEM, LEAD_VOCAL_STEM: BV_VOCAL_STEM, BV_VOCAL_STEM: LEAD_VOCAL_STEM, PRIMARY_STEM: SECONDARY_STEM}
+
+    NON_ACCOM_STEMS = (VOCAL_STEM, OTHER_STEM, BASS_STEM, DRUM_STEM, GUITAR_STEM, PIANO_STEM, SYNTH_STEM, STRINGS_STEM, WOODWINDS_STEM, BRASS_STEM, WIND_INST_STEM)
 
     def __init__(self, config):
 
@@ -91,7 +82,7 @@ class CommonSeparator:
 
         # Model specific properties
         self.primary_stem_name = self.model_data.get("primary_stem", "Vocals")
-        self.secondary_stem_name = "Vocals" if self.primary_stem_name == "Instrumental" else "Instrumental"
+        self.secondary_stem_name = self.secondary_stem(self.primary_stem_name)
         self.is_karaoke = self.model_data.get("is_karaoke", False)
         self.is_bv_model = self.model_data.get("is_bv_model", False)
         self.bv_model_rebalance = self.model_data.get("is_bv_model_rebalanced", 0)
@@ -116,6 +107,17 @@ class CommonSeparator:
         self.secondary_stem_output_path = None
 
         self.cached_sources_map = {}
+
+    def secondary_stem(self, primary_stem: str):
+        """Determines secondary stem name based on the primary stem name."""
+        primary_stem = primary_stem if primary_stem else self.NO_STEM
+
+        if primary_stem in self.STEM_PAIR_MAPPER:
+            secondary_stem = self.STEM_PAIR_MAPPER[primary_stem]
+        else:
+            secondary_stem = primary_stem.replace(self.NO_STEM, "") if self.NO_STEM in primary_stem else f"{self.NO_STEM}{primary_stem}"
+
+        return secondary_stem
 
     def separate(self, audio_file_path):
         """
