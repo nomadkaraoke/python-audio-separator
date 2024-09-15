@@ -7,6 +7,7 @@ import numpy as np
 import librosa
 import torch
 from pydub import AudioSegment
+import soundfile as sf
 from audio_separator.separator.uvr_lib_v5 import spec_utils
 
 
@@ -217,9 +218,28 @@ class CommonSeparator:
 
     def write_audio(self, stem_path: str, stem_source):
         """
-        Writes the separated audio source to a file.
+        Writes the separated audio source to a file using pydub or soundfile
+        Pydub supports a much wider range of audio formats and produces better encoded lossy files for some formats.
+        Soundfile is used for very large files (longer than 1 hour), as pydub has memory issues with large files:
+        https://github.com/jiaaro/pydub/issues/135
         """
-        self.logger.debug(f"Entering write_audio with stem_path: {stem_path}")
+        # Get the duration of the input audio file
+        duration_seconds = librosa.get_duration(filename=self.audio_file_path)
+        duration_hours = duration_seconds / 3600
+        self.logger.info(f"Audio duration is {duration_hours:.2f} hours ({duration_seconds:.2f} seconds).")
+        
+        if duration_hours >= 1:
+            self.logger.warning(f"Using soundfile for writing.")
+            self.write_audio_soundfile(stem_path, stem_source)
+        else:
+            self.logger.info(f"Using pydub for writing.")
+            self.write_audio_pydub(stem_path, stem_source)
+
+    def write_audio_pydub(self, stem_path: str, stem_source):
+        """
+        Writes the separated audio source to a file using pydub (ffmpeg)
+        """
+        self.logger.debug(f"Entering write_audio_pydub with stem_path: {stem_path}")
 
         stem_source = spec_utils.normalize(wave=stem_source, max_peak=self.normalization_threshold)
 
@@ -273,6 +293,41 @@ class CommonSeparator:
             audio_segment.export(stem_path, format=file_format, bitrate=bitrate)
             self.logger.debug(f"Exported audio file successfully to {stem_path}")
         except (IOError, ValueError) as e:
+            self.logger.error(f"Error exporting audio file: {e}")
+
+    def write_audio_soundfile(self, stem_path: str, stem_source):
+        """
+        Writes the separated audio source to a file using soundfile library.
+        """
+        self.logger.debug(f"Entering write_audio_soundfile with stem_path: {stem_path}")
+
+        # Correctly interleave stereo channels if needed
+        if stem_source.shape[1] == 2:
+            # If the audio is already interleaved, ensure it's in the correct order
+            # Check if the array is Fortran contiguous (column-major)
+            if stem_source.flags["F_CONTIGUOUS"]:
+                # Convert to C contiguous (row-major)
+                stem_source = np.ascontiguousarray(stem_source)
+            # Otherwise, perform interleaving
+            else:
+                stereo_interleaved = np.empty((2 * stem_source.shape[0],), dtype=np.int16)
+                # Left channel
+                stereo_interleaved[0::2] = stem_source[:, 0]
+                # Right channel
+                stereo_interleaved[1::2] = stem_source[:, 1]
+                stem_source = stereo_interleaved
+
+        self.logger.debug(f"Interleaved audio data shape: {stem_source.shape}")
+
+        """
+        Write audio using soundfile (for formats other than M4A).
+        """
+        # Save audio using soundfile
+        try:
+            # Specify the subtype to define the sample width
+            sf.write(stem_path, stem_source, self.sample_rate)
+            self.logger.debug(f"Exported audio file successfully to {stem_path}")
+        except Exception as e:
             self.logger.error(f"Error exporting audio file: {e}")
 
     def clear_gpu_cache(self):
