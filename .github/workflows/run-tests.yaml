@@ -58,7 +58,11 @@ jobs:
         run: poetry install -E cpu
 
       - name: Run unit tests with coverage
-        run: poetry run pytest tests/unit --cov=./ --cov-report=xml
+        run: |
+          export PYTORCH_MPS_HIGH_WATERMARK_RATIO=0.0
+          poetry run pytest tests/unit --cov=./ --cov-report=xml
+        env:
+          PYTORCH_ENABLE_MPS_FALLBACK: 1
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
