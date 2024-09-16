@@ -62,8 +62,11 @@ class MDXCSeparator(CommonSeparator):
         self.audio_file_path = None
         self.audio_file_base = None
 
-        self.is_vocal_main_target = True if self.model_data_cfgdict.training.target_instrument == "Vocals" else False
-        self.logger.debug(f"is_vocal_main_target: {self.is_vocal_main_target}")
+        self.is_primary_stem_main_target = False
+        if self.model_data_cfgdict.training.target_instrument == "Vocals" or len(self.model_data_cfgdict.training.instruments) > 1:
+            self.is_primary_stem_main_target = True
+
+        self.logger.debug(f"is_primary_stem_main_target: {self.is_primary_stem_main_target}")
 
         self.logger.info("MDXC Separator initialisation complete")
 
@@ -137,22 +140,25 @@ class MDXCSeparator(CommonSeparator):
         output_files = []
         self.logger.debug("Processing output files...")
 
-        if not isinstance(self.primary_source, np.ndarray):
-            self.logger.debug(f"Normalizing primary source for primary stem {self.primary_stem_name}...")
-            self.primary_source = spec_utils.normalize(wave=source[self.primary_stem_name], max_peak=self.normalization_threshold).T
+        if isinstance(source, dict):
+            self.logger.debug("Source is a dict, processing each stem...")
 
-        if not isinstance(self.secondary_source, np.ndarray):
-            self.logger.debug(f"Normalizing secondary source for secondary stem {self.secondary_stem_name}...")
-            self.secondary_source = spec_utils.normalize(wave=source[self.secondary_stem_name], max_peak=self.normalization_threshold).T
+            if not isinstance(self.primary_source, np.ndarray):
+                self.logger.debug(f"Normalizing primary source for primary stem {self.primary_stem_name}...")
+                self.primary_source = spec_utils.normalize(wave=source[self.primary_stem_name], max_peak=self.normalization_threshold).T
 
-        if not self.output_single_stem or self.output_single_stem.lower() == self.secondary_stem_name.lower():
-            self.secondary_stem_output_path = os.path.join(f"{self.audio_file_base}_({self.secondary_stem_name})_{self.model_name}.{self.output_format.lower()}")
+            if not isinstance(self.secondary_source, np.ndarray):
+                self.logger.debug(f"Normalizing secondary source for secondary stem {self.secondary_stem_name}...")
+                self.secondary_source = spec_utils.normalize(wave=source[self.secondary_stem_name], max_peak=self.normalization_threshold).T
 
-            self.logger.info(f"Saving {self.secondary_stem_name} stem to {self.secondary_stem_output_path}...")
-            self.final_process(self.secondary_stem_output_path, self.secondary_source, self.secondary_stem_name)
-            output_files.append(self.secondary_stem_output_path)
+            if not self.output_single_stem or self.output_single_stem.lower() == self.secondary_stem_name.lower():
+                self.secondary_stem_output_path = os.path.join(f"{self.audio_file_base}_({self.secondary_stem_name})_{self.model_name}.{self.output_format.lower()}")
 
-        if not self.output_single_stem or self.output_single_stem.lower() == self.primary_stem_name.lower():
+                self.logger.info(f"Saving {self.secondary_stem_name} stem to {self.secondary_stem_output_path}...")
+                self.final_process(self.secondary_stem_output_path, self.secondary_source, self.secondary_stem_name)
+                output_files.append(self.secondary_stem_output_path)
+
+        if not isinstance(source, dict) or not self.output_single_stem or self.output_single_stem.lower() == self.primary_stem_name.lower():
             self.primary_stem_output_path = os.path.join(f"{self.audio_file_base}_({self.primary_stem_name})_{self.model_name}.{self.output_format.lower()}")
 
             if not isinstance(self.primary_source, np.ndarray):
@@ -161,6 +167,7 @@ class MDXCSeparator(CommonSeparator):
             self.logger.info(f"Saving {self.primary_stem_name} stem to {self.primary_stem_output_path}...")
             self.final_process(self.primary_stem_output_path, self.primary_source, self.primary_stem_name)
             output_files.append(self.primary_stem_output_path)
+
         return output_files
 
     def pitch_fix(self, source, sr_pitched, orig_mix):
@@ -316,7 +323,7 @@ class MDXCSeparator(CommonSeparator):
             self.logger.debug("Deleting accumulated outputs to free up memory")
             del accumulated_outputs
 
-        if num_stems > 1 or self.is_vocal_main_target:
+        if num_stems > 1 or self.is_primary_stem_main_target:
             self.logger.debug("Number of stems is greater than 1 or vocals are main target, detaching individual sources and correcting pitch if necessary...")
 
             sources = {}
@@ -333,11 +340,11 @@ class MDXCSeparator(CommonSeparator):
                 else:
                     sources[key] = value
 
-            if self.is_vocal_main_target:
-                self.logger.debug("Vocals are main target, detaching vocals and matching array shapes if necessary...")
-                if sources["Vocals"].shape[1] != orig_mix.shape[1]:
-                    sources["Vocals"] = spec_utils.match_array_shapes(sources["Vocals"], orig_mix)
-                sources["Instrumental"] = orig_mix - sources["Vocals"]
+            if self.is_primary_stem_main_target:
+                self.logger.debug(f"Primary stem: {self.primary_stem_name} is main target, detaching and matching array shapes if necessary...")
+                if sources[self.primary_stem_name].shape[1] != orig_mix.shape[1]:
+                    sources[self.primary_stem_name] = spec_utils.match_array_shapes(sources[self.primary_stem_name], orig_mix)
+                sources[self.secondary_stem_name] = orig_mix - sources[self.primary_stem_name]
 
             self.logger.debug("Deleting inferenced outputs to free up memory")
             del inferenced_outputs

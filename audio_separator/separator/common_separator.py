@@ -82,8 +82,21 @@ class CommonSeparator:
         self.sample_rate = config.get("sample_rate")
 
         # Model specific properties
-        self.primary_stem_name = self.model_data.get("primary_stem", "Vocals")
-        self.secondary_stem_name = self.secondary_stem(self.primary_stem_name)
+
+        # Check if model_data has a "training" key with "instruments" list
+        self.primary_stem_name = None
+        self.secondary_stem_name = None
+
+        if "training" in self.model_data and "instruments" in self.model_data["training"]:
+            instruments = self.model_data["training"]["instruments"]
+            if instruments:
+                self.primary_stem_name = instruments[0]
+                self.secondary_stem_name = instruments[1] if len(instruments) > 1 else self.secondary_stem(self.primary_stem_name)
+
+        if self.primary_stem_name is None:
+            self.primary_stem_name = self.model_data.get("primary_stem", "Vocals")
+            self.secondary_stem_name = self.secondary_stem(self.primary_stem_name)
+
         self.is_karaoke = self.model_data.get("is_karaoke", False)
         self.is_bv_model = self.model_data.get("is_bv_model", False)
         self.bv_model_rebalance = self.model_data.get("is_bv_model_rebalanced", 0)
@@ -227,7 +240,7 @@ class CommonSeparator:
         duration_seconds = librosa.get_duration(filename=self.audio_file_path)
         duration_hours = duration_seconds / 3600
         self.logger.info(f"Audio duration is {duration_hours:.2f} hours ({duration_seconds:.2f} seconds).")
-        
+
         if duration_hours >= 1:
             self.logger.warning(f"Using soundfile for writing.")
             self.write_audio_soundfile(stem_path, stem_source)

@@ -5,6 +5,18 @@
     "roformer_download_list": {
         "Roformer Model: Mel-Roformer-Karaoke-Aufr33-Viperx": {
             "mel_band_roformer_karaoke_aufr33_viperx_sdr_10.1956.ckpt": "mel_band_roformer_karaoke_aufr33_viperx_sdr_10.1956_config.yaml"
+        },
+        "Roformer Model: Mel-Roformer-Denoise-Aufr33": {
+            "denoise_mel_band_roformer_aufr33_sdr_27.9959.ckpt": "denoise_mel_band_roformer_aufr33_sdr_27.9959_config.yaml"
+        },
+        "Roformer Model: Mel-Roformer-Denoise-Aufr33-Aggr": {
+            "denoise_mel_band_roformer_aufr33_aggr_sdr_27.9768.ckpt": "denoise_mel_band_roformer_aufr33_aggr_sdr_27.9768_config.yaml"
+        },
+        "Roformer Model: Mel-Roformer-Crowd-Aufr33-Viperx": {
+            "mel_band_roformer_crowd_aufr33_viperx_sdr_8.7144.ckpt": "mel_band_roformer_crowd_aufr33_viperx_sdr_8.7144_config.yaml"
+        },
+        "Roformer Model: BS-Roformer-De-Reverb": {
+            "deverb_bs_roformer_8_384dim_10depth.ckpt": "deverb_bs_roformer_8_384dim_10depth_config.yaml"
         }
     }
 }
