@@ -1,0 +1,10 @@
+{
+    "vr_download_list": {},
+    "mdx_download_list": {},
+    "mdx23c_download_list": {},
+    "roformer_download_list": {
+        "Roformer Model: Mel-Roformer-Karaoke-Aufr33-Viperx": {
+            "mel_band_roformer_karaoke_aufr33_viperx_sdr_10.1956.ckpt": "mel_band_roformer_karaoke_aufr33_viperx_sdr_10.1956_config.yaml"
+        }
+    }
+}
