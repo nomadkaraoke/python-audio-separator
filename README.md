@@ -198,7 +198,7 @@ MDXC Architecture Parameters:
 
 ### As a Dependency in a Python Project
 
-You can use Audio Separator in your own Python project. Here's how you can use it:
+You can use Audio Separator in your own Python project. Here's a minimal example using the default two stem (Instrumental and Vocals) model:
 
 ```python
 from audio_separator.separator import Separator
@@ -214,6 +214,63 @@ output_files = separator.separate('audio1.wav')
 
 print(f"Separation complete! Output file(s): {' '.join(output_files)}")
 ```
+
+#### Using different models to extract different stems
+
+Here's an example of how you can process a single input file with multiple different models to get desired results.
+
+This example [came from a user]([url](https://github.com/nomadkaraoke/python-audio-separator/issues/111#issuecomment-2353780618)) who wanted the following outputs:
+
+- `Vocals.wav`
+- `Instrumental.wav`
+- `Vocals (Reverb).wav`
+- `Vocals (No Reverb).wav`
+- `Lead Vocals.wav`
+- `Backing Vocals.wav`
+
+To achieve this, they used the following code, leveraging three different models in sequence and renaming the output files:
+
+```python
+import os
+from audio_separator.separator import Separator
+
+input = "/content/input.mp3"
+output = "/content/out"
+
+separator = Separator(output_dir=output, vr_params={"batch_size": 1})
+
+# Vocals and Instrumental
+vocals = os.path.join(output, 'Vocals.wav')
+instrumental = os.path.join(output, 'Instrumental.wav')
+
+# Vocals with Reverb and Vocals without Reverb
+vocals_reverb = os.path.join(output, 'Vocals (Reverb).wav')
+vocals_no_reverb = os.path.join(output, 'Vocals (No Reverb).wav')
+
+# Lead Vocals and Backing Vocals
+lead_vocals = os.path.join(output, 'Lead Vocals.wav')
+backing_vocals = os.path.join(output, 'Backing Vocals.wav')
+
+# Splitting a track into Vocal and Instrumental
+separator.load_model(model_filename='model_bs_roformer_ep_317_sdr_12.9755.ckpt')
+voc_inst = separator.separate(input)
+os.rename(os.path.join(output, voc_inst[0]), instrumental) # Rename file to “Instrumental.wav”
+os.rename(os.path.join(output, voc_inst[1]), vocals) # Rename file to “Vocals.wav”
+
+# Applying DeEcho-DeReverb to Vocals
+separator.load_model(model_filename='UVR-DeEcho-DeReverb.pth')
+voc_no_reverb = separator.separate(vocals)
+os.rename(os.path.join(output, voc_no_reverb[0]), vocals_no_reverb) # Rename file to “Vocals (No Reverb).wav”
+os.rename(os.path.join(output, voc_no_reverb[1]), vocals_reverb) # Rename file to “Vocals (Reverb).wav”
+
+# Separating Back Vocals from Main Vocals
+separator.load_model(model_filename='mel_band_roformer_karaoke_aufr33_viperx_sdr_10.1956.ckpt')
+backing_voc = separator.separate(vocals_no_reverb)
+os.rename(os.path.join(output, backing_voc[0]), backing_vocals) # Rename file to “Backing Vocals.wav”
+os.rename(os.path.join(output, backing_voc[1]), lead_vocals) # Rename file to “Lead Vocals.wav”
+```
+
+Thanks to @Bebra777228 for contributing this example!
 
 #### Batch processing and processing with multiple models
 
