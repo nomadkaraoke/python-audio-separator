@@ -10,8 +10,8 @@ from scipy import signal
 from audio_separator.separator.common_separator import CommonSeparator
 from audio_separator.separator.uvr_lib_v5 import spec_utils
 from audio_separator.separator.uvr_lib_v5.tfc_tdf_v3 import TFC_TDF_net
-from audio_separator.separator.uvr_lib_v5.mel_band_roformer import MelBandRoformer
-from audio_separator.separator.uvr_lib_v5.bs_roformer import BSRoformer
+from audio_separator.separator.uvr_lib_v5.roformer.mel_band_roformer import MelBandRoformer
+from audio_separator.separator.uvr_lib_v5.roformer.bs_roformer import BSRoformer
 
 
 class MDXCSeparator(CommonSeparator):
