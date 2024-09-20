@@ -74,7 +74,7 @@ class VRSeparator(CommonSeparator):
         # - Batch size value has no effect on output quality.
 
         # Andrew note: for some reason, lower batch sizes seem to cause broken output for VR arch; need to investigate why
-        self.batch_size = arch_config.get("batch_size", 16)
+        self.batch_size = arch_config.get("batch_size", 1)
 
         # Select window size to balance quality and speed:
         # - 1024 - Quick but lesser quality.
