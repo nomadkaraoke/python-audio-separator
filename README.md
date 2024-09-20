@@ -237,7 +237,7 @@ from audio_separator.separator import Separator
 input = "/content/input.mp3"
 output = "/content/output"
 
-separator = Separator(output_dir=output, vr_params={"batch_size": 1})
+separator = Separator(output_dir=output)
 
 # Vocals and Instrumental
 vocals = os.path.join(output, 'Vocals.wav')
