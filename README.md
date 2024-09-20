@@ -174,7 +174,7 @@ MDX Architecture Parameters:
   --mdx_enable_denoise                                   enable denoising after separation (default: False). Example: --mdx_enable_denoise
 
 VR Architecture Parameters:
-  --vr_batch_size VR_BATCH_SIZE                          number of "batches" to process at a time. higher = more RAM, slightly faster processing (default: 4). Example: --vr_batch_size=16
+  --vr_batch_size VR_BATCH_SIZE                          number of "batches" to process at a time. higher = more RAM, slightly faster processing (default: 1). Example: --vr_batch_size=16
   --vr_window_size VR_WINDOW_SIZE                        balance quality and speed. 1024 = fast but lower, 320 = slower but better quality. (default: 512). Example: --vr_window_size=320
   --vr_aggression VR_AGGRESSION                          intensity of primary stem extraction, -100 - 100. typically 5 for vocals & instrumentals (default: 5). Example: --vr_aggression=2
   --vr_enable_tta                                        enable Test-Time-Augmentation; slow but improves quality (default: False). Example: --vr_enable_tta
@@ -235,7 +235,7 @@ import os
 from audio_separator.separator import Separator
 
 input = "/content/input.mp3"
-output = "/content/out"
+output = "/content/output"
 
 separator = Separator(output_dir=output, vr_params={"batch_size": 1})
 
@@ -313,7 +313,7 @@ output_file_paths_6 = separator.separate('audio3.wav')
 - invert_using_spec: (Optional) Flag to invert using spectrogram. Default: False
 - sample_rate: (Optional) Set the sample rate of the output audio. Default: 44100
 - mdx_params: (Optional) MDX Architecture Specific Attributes & Defaults. Default: {"hop_length": 1024, "segment_size": 256, "overlap": 0.25, "batch_size": 1}
-- vr_params: (Optional) VR Architecture Specific Attributes & Defaults. Default: {"batch_size": 16, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False}
+- vr_params: (Optional) VR Architecture Specific Attributes & Defaults. Default: {"batch_size": 1, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False}
 - demucs_params: (Optional) VR Architecture Specific Attributes & Defaults. {"segment_size": "Default", "shifts": 2, "overlap": 0.25, "segments_enabled": True}
 
 ## Requirements 📋
