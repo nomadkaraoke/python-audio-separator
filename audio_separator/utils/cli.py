@@ -82,7 +82,7 @@ def main():
     vr_post_process_threshold_help = "threshold for post_process feature: 0.1-0.3 (default: %(default)s). Example: --vr_post_process_threshold=0.1"
 
     vr_params = parser.add_argument_group("VR Architecture Parameters")
-    vr_params.add_argument("--vr_batch_size", type=int, default=4, help=vr_batch_size_help)
+    vr_params.add_argument("--vr_batch_size", type=int, default=1, help=vr_batch_size_help)
     vr_params.add_argument("--vr_window_size", type=int, default=512, help=vr_window_size_help)
     vr_params.add_argument("--vr_aggression", type=int, default=5, help=vr_aggression_help)
     vr_params.add_argument("--vr_enable_tta", action="store_true", help=vr_enable_tta_help)
