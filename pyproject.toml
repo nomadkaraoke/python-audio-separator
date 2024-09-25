@@ -65,3 +65,4 @@ pytest-cov = "^4.1.0"
 
 [tool.black]
 line-length = 140
+
