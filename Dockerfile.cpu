@@ -4,7 +4,9 @@ FROM python:3.11-slim
 # Set the working directory in the container
 WORKDIR /workdir
 
-RUN apt-get update; apt-get install -y ffmpeg
+# Install necessary packages
+RUN apt-get update && apt-get install -y ffmpeg build-essential
+
 RUN python -m pip install --upgrade pip
 
 RUN --mount=type=cache,target=/root/.cache \
