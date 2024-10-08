@@ -57,7 +57,7 @@ def separate_audio_from_link(link):
     return instrumental, vocals, vocals_no_reverb, vocals_reverb, lead_vocals, backing_vocals
 
 # Define the Gradio Interface
-with gr.Blocks(theme="NoCrypt/miku@1.2.2", title="Audio Separator Demo") as demo:
+with gr.Blocks(theme="NoCrypt/miku@1.2.2") as demo:
     gr.Markdown("# Audio Separator Gradio demo")
 
     with gr.Row():
@@ -66,13 +66,16 @@ with gr.Blocks(theme="NoCrypt/miku@1.2.2", title="Audio Separator Demo") as demo
             separate_button = gr.Button("Download and Separate Audio")
         
         with gr.Column():
-            instrumental_output = gr.Audio(label="Instrumental Output")
-            vocals_output = gr.Audio(label="Vocals Output")
-            vocals_no_reverb_output = gr.Audio(label="Vocals No Reverb Output")
-            vocals_reverb_output = gr.Audio(label="Vocals Reverb Output")
+            with gr.Accordion("Instrumental and Vocal output"):
+                instrumental_output = gr.Audio(label="Instrumental Output")
+                vocals_output = gr.Audio(label="Vocals Output")
+            with gr.Accordion("Reverb output"):
+                vocals_no_reverb_output = gr.Audio(label="Vocals No Reverb Output")
+                vocals_reverb_output = gr.Audio(label="Vocals Reverb Output")
             lead_vocals_output = gr.Audio(label="Lead Vocals Output")
             backing_vocals_output = gr.Audio(label="Backing Vocals Output")
 
+    
     # Define button functionality
     separate_button.click(
         separate_audio_from_link,
