@@ -151,7 +151,7 @@ class MDXSeparator(CommonSeparator):
         mix = self.prepare_mix(self.audio_file_path)
 
         self.logger.debug("Normalizing mix before demixing...")
-        mix = spec_utils.normalize(wave=mix, max_peak=self.normalization_threshold)
+        mix = spec_utils.normalize(wave=mix, max_peak=self.normalization_threshold, min_peak=self.amplification_threshold)
 
         # Start the demixing process
         source = self.demix(mix)
@@ -166,7 +166,7 @@ class MDXSeparator(CommonSeparator):
         # Normalize and transpose the primary source if it's not already an array
         if not isinstance(self.primary_source, np.ndarray):
             self.logger.debug("Normalizing primary source...")
-            self.primary_source = spec_utils.normalize(wave=source, max_peak=self.normalization_threshold).T
+            self.primary_source = spec_utils.normalize(wave=source, max_peak=self.normalization_threshold, min_peak=self.amplification_threshold).T
 
         # Process the secondary source if not already an array
         if not isinstance(self.secondary_source, np.ndarray):

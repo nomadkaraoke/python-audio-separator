@@ -37,10 +37,12 @@ class Separator:
         output_dir (str): The directory where output files will be saved.
         output_format (str): The format of the output audio file.
         output_bitrate (str): The bitrate of the output audio file.
+        amplification_threshold (float): The threshold for audio amplification.
         normalization_threshold (float): The threshold for audio normalization.
         output_single_stem (str): Option to output a single stem.
         invert_using_spec (bool): Flag to invert using spectrogram.
         sample_rate (int): The sample rate of the audio.
+        use_soundfile (bool): Use soundfile for audio writing, can solve OOM issues.
 
     MDX Architecture Specific Attributes:
         hop_length (int): The hop length for STFT.
@@ -71,9 +73,11 @@ class Separator:
         output_format="WAV",
         output_bitrate=None,
         normalization_threshold=0.9,
+        amplification_threshold=0.6,
         output_single_stem=None,
         invert_using_spec=False,
         sample_rate=44100,
+        use_soundfile=False,
         mdx_params={"hop_length": 1024, "segment_size": 256, "overlap": 0.25, "batch_size": 1, "enable_denoise": False},
         vr_params={"batch_size": 1, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False},
         demucs_params={"segment_size": "Default", "shifts": 2, "overlap": 0.25, "segments_enabled": True},
@@ -123,6 +127,10 @@ class Separator:
         self.normalization_threshold = normalization_threshold
         if normalization_threshold <= 0 or normalization_threshold > 1:
             raise ValueError("The normalization_threshold must be greater than 0 and less than or equal to 1.")
+        
+        self.amplification_threshold = amplification_threshold
+        if amplification_threshold <= 0 or amplification_threshold > 1:
+            raise ValueError("The amplification_threshold must be greater than 0 and less than or equal to 1.")
 
         self.output_single_stem = output_single_stem
         if output_single_stem is not None:
@@ -140,6 +148,8 @@ class Separator:
                 raise ValueError(f"The sample rate setting is {self.sample_rate}. Enter something less ambitious.")
         except ValueError:
             raise ValueError("The sample rate must be a non-zero whole number. Please provide a valid integer.")
+        
+        self.use_soundfile = use_soundfile
 
         # These are parameters which users may want to configure so we expose them to the top-level Separator class,
         # even though they are specific to a single model architecture
@@ -684,9 +694,11 @@ class Separator:
             "output_bitrate": self.output_bitrate,
             "output_dir": self.output_dir,
             "normalization_threshold": self.normalization_threshold,
+            "amplification_threshold": self.amplification_threshold,
             "output_single_stem": self.output_single_stem,
             "invert_using_spec": self.invert_using_spec,
             "sample_rate": self.sample_rate,
+            "use_soundfile": self.use_soundfile
         }
 
         # Instantiate the appropriate separator class depending on the model type
@@ -730,6 +742,7 @@ class Separator:
         separate_start_time = time.perf_counter()
 
         self.logger.debug(f"Normalization threshold set to {self.normalization_threshold}, waveform will lowered to this max amplitude to avoid clipping.")
+        self.logger.debug(f"Amplification threshold set to {self.amplification_threshold}, waveform will scaled up to this max amplitude if below it.")
 
         # Run separation method for the loaded model
         output_files = self.model_instance.separate(audio_file_path)

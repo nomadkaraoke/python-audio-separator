@@ -96,8 +96,8 @@ def make_padding(width, cropsize, offset):
     return left, right, roi_size
 
 
-def normalize(wave, max_peak=1.0):
-    """Normalize audio waveform to a specified peak value.
+def normalize(wave, max_peak=1.0, min_peak=None):
+    """Normalize (or amplify) audio waveform to a specified peak value.
 
     Args:
         wave (array-like): Audio waveform.
@@ -109,6 +109,8 @@ def normalize(wave, max_peak=1.0):
     maxv = np.abs(wave).max()
     if maxv > max_peak:
         wave *= max_peak / maxv
+    elif min_peak is not None and maxv < min_peak:
+        wave *= min_peak / maxv
 
     return wave
 

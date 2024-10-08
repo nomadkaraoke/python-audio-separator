@@ -76,10 +76,12 @@ class CommonSeparator:
 
         # Functional options which are applicable to all architectures and the user may tweak to affect the output
         self.normalization_threshold = config.get("normalization_threshold")
+        self.amplification_threshold = config.get("amplification_threshold")
         self.enable_denoise = config.get("enable_denoise")
         self.output_single_stem = config.get("output_single_stem")
         self.invert_using_spec = config.get("invert_using_spec")
         self.sample_rate = config.get("sample_rate")
+        self.use_soundfile = config.get("use_soundfile")
 
         # Model specific properties
 
@@ -103,7 +105,7 @@ class CommonSeparator:
 
         self.logger.debug(f"Common params: model_name={self.model_name}, model_path={self.model_path}")
         self.logger.debug(f"Common params: output_dir={self.output_dir}, output_format={self.output_format}")
-        self.logger.debug(f"Common params: normalization_threshold={self.normalization_threshold}")
+        self.logger.debug(f"Common params: normalization_threshold={self.normalization_threshold}, amplification_threshold={self.amplification_threshold}")
         self.logger.debug(f"Common params: enable_denoise={self.enable_denoise}, output_single_stem={self.output_single_stem}")
         self.logger.debug(f"Common params: invert_using_spec={self.invert_using_spec}, sample_rate={self.sample_rate}")
 
@@ -241,7 +243,7 @@ class CommonSeparator:
         duration_hours = duration_seconds / 3600
         self.logger.info(f"Audio duration is {duration_hours:.2f} hours ({duration_seconds:.2f} seconds).")
 
-        if duration_hours >= 1:
+        if self.use_soundfile:
             self.logger.warning(f"Using soundfile for writing.")
             self.write_audio_soundfile(stem_path, stem_source)
         else:
@@ -254,7 +256,7 @@ class CommonSeparator:
         """
         self.logger.debug(f"Entering write_audio_pydub with stem_path: {stem_path}")
 
-        stem_source = spec_utils.normalize(wave=stem_source, max_peak=self.normalization_threshold)
+        stem_source = spec_utils.normalize(wave=stem_source, max_peak=self.normalization_threshold, min_peak=self.amplification_threshold)
 
         # Check if the numpy array is empty or contains very low values
         if np.max(np.abs(stem_source)) < 1e-6:
