@@ -51,14 +51,18 @@ def main():
 
     invert_spect_help = "invert secondary stem using spectogram (default: %(default)s). Example: --invert_spect"
     normalization_help = "max peak amplitude to normalize input and output audio to (default: %(default)s). Example: --normalization=0.7"
+    amplification_help = "min peak amplitude to amplify input and output audio to (default: %(default)s). Example: --amplification=0.4"
     single_stem_help = "output only single stem, e.g. Instrumental, Vocals, Drums, Bass, Guitar, Piano, Other. Example: --single_stem=Instrumental"
     sample_rate_help = "modify the sample rate of the output audio (default: %(default)s). Example: --sample_rate=44100"
+    use_soundfile_help = "Use soundfile to write audio output (default: %(default)s). Example: --use_soundfile"
 
     common_params = parser.add_argument_group("Common Separation Parameters")
     common_params.add_argument("--invert_spect", action="store_true", help=invert_spect_help)
     common_params.add_argument("--normalization", type=float, default=0.9, help=normalization_help)
+    common_params.add_argument("--amplification", type=float, default=0.6, help=amplification_help)
     common_params.add_argument("--single_stem", default=None, help=single_stem_help)
     common_params.add_argument("--sample_rate", type=int, default=44100, help=sample_rate_help)
+    common_params.add_argument("--use_soundfile", action="store_true", help=use_soundfile_help)
 
     mdx_segment_size_help = "larger consumes more resources, but may give better results (default: %(default)s). Example: --mdx_segment_size=256"
     mdx_overlap_help = "amount of overlap between prediction windows, 0.001-0.999. higher is better but slower (default: %(default)s). Example: --mdx_overlap=0.25"
@@ -155,6 +159,7 @@ def main():
         output_format=args.output_format,
         output_bitrate=args.output_bitrate,
         normalization_threshold=args.normalization,
+        amplification_threshold=args.amplification,
         output_single_stem=args.single_stem,
         invert_using_spec=args.invert_spect,
         sample_rate=args.sample_rate,
