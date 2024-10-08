@@ -394,6 +394,41 @@ poetry build
 
 This will generate the distribution packages in the dist directory - but for now only @beveradb will be able to publish to PyPI.
 
+
+## How to Use the in Colab 
+
+1. **Link Input**:
+
+![step 1](https://github.com/user-attachments/assets/edb41e74-2082-43d8-9dde-30cc4eee3423)
+
+
+   - **video_url**: This input is where you paste the URL of the audio or video you want to download. It can be from various platforms supported by yt-dlp. For a full list of supported websites, refer to [this link](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md).
+
+   - Example: 
+     ``` 
+     https://www.youtube.com/watch?v=exampleID 
+     ```
+
+2. **Input Audio File for Separation**:
+
+![2 and 3](https://github.com/user-attachments/assets/a040a17f-dad1-447a-afef-39fbbe59e556)
+
+
+   - **input**: This is the file path of the audio you want to separate. After downloading the audio file, you will need to specify this path to continue with separation.
+
+   - Example:
+     ``` 
+     /content/ytdl/your_downloaded_audio.wav 
+     ```
+
+3. **Output Directory**:
+   - **output**: This is the path where the separated files will be saved. It defaults to `/content/output` but can be changed to another directory if desired.
+
+   - Example:
+     ``` 
+     /content/custom_output 
+     ```
+
 ## Contributing 🤝
 
 Contributions are very much welcome! Please fork the repository and submit a pull request with your changes, and I'll try to review, merge and publish promptly!
