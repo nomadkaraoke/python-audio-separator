@@ -15,6 +15,7 @@ import json
 import yaml
 import requests
 import torch
+import torch.amp.autocast_mode as autocast_mode
 import onnxruntime as ort
 from tqdm import tqdm
 
@@ -725,14 +726,20 @@ class Separator:
         Returns:
         - output_files (list of str): A list containing the paths to the separated audio stem files.
         """
+        if not (self.torch_device and self.model_instance):
+            raise ValueError("Initialization failed or model not loaded. Please load a model before attempting to separate.")
+
         # Starting the separation process
         self.logger.info(f"Starting separation process for audio_file_path: {audio_file_path}")
         separate_start_time = time.perf_counter()
 
         self.logger.debug(f"Normalization threshold set to {self.normalization_threshold}, waveform will lowered to this max amplitude to avoid clipping.")
 
-        # Run separation method for the loaded model
-        output_files = self.model_instance.separate(audio_file_path)
+        # Run separation method for the loaded model with autocast enabled if supported by the device.
+        with autocast_mode.autocast(
+            self.torch_device.type, enabled=autocast_mode.is_autocast_available(self.torch_device.type)
+        ):
+            output_files = self.model_instance.separate(audio_file_path)
 
         # Clear GPU cache to free up memory
         self.model_instance.clear_gpu_cache()

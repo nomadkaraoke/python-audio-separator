@@ -239,29 +239,28 @@ class MDXCSeparator(CommonSeparator):
             # Transfer to the weighting plate for the same device as the other tensors
             window = window.to(device)
 
-            with torch.cuda.amp.autocast():
-                with torch.no_grad():
-                    req_shape = (len(self.model_data_cfgdict.training.instruments),) + tuple(mix.shape)
-                    result = torch.zeros(req_shape, dtype=torch.float32).to(device)
-                    counter = torch.zeros(req_shape, dtype=torch.float32).to(device)
+            with torch.no_grad():
+                req_shape = (len(self.model_data_cfgdict.training.instruments),) + tuple(mix.shape)
+                result = torch.zeros(req_shape, dtype=torch.float32).to(device)
+                counter = torch.zeros(req_shape, dtype=torch.float32).to(device)
 
-                    for i in tqdm(range(0, mix.shape[1], step)):
-                        part = mix[:, i : i + chunk_size]
-                        length = part.shape[-1]
-                        if i + chunk_size > mix.shape[1]:
-                            part = mix[:, -chunk_size:]
-                            length = chunk_size
-                        part = part.to(device)
-                        x = self.model_run(part.unsqueeze(0))[0]
-                        if i + chunk_size > mix.shape[1]:
-                            # Corrigido para adicionar corretamente ao final do tensor
-                            result = self.overlap_add(result, x, window, result.shape[-1] - chunk_size, length)
-                            counter[..., result.shape[-1] - chunk_size :] += window[:length]
-                        else:
-                            result = self.overlap_add(result, x, window, i, length)
-                            counter[..., i : i + length] += window[:length]
+                for i in tqdm(range(0, mix.shape[1], step)):
+                    part = mix[:, i : i + chunk_size]
+                    length = part.shape[-1]
+                    if i + chunk_size > mix.shape[1]:
+                        part = mix[:, -chunk_size:]
+                        length = chunk_size
+                    part = part.to(device)
+                    x = self.model_run(part.unsqueeze(0))[0]
+                    if i + chunk_size > mix.shape[1]:
+                        # Corrigido para adicionar corretamente ao final do tensor
+                        result = self.overlap_add(result, x, window, result.shape[-1] - chunk_size, length)
+                        counter[..., result.shape[-1] - chunk_size :] += window[:length]
+                    else:
+                        result = self.overlap_add(result, x, window, i, length)
+                        counter[..., i : i + length] += window[:length]
 
-                inferenced_outputs = result / counter.clamp(min=1e-10)
+            inferenced_outputs = result / counter.clamp(min=1e-10)
 
         else:
             mix = torch.tensor(mix, dtype=torch.float32)
