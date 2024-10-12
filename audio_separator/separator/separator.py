@@ -736,9 +736,13 @@ class Separator:
         self.logger.debug(f"Normalization threshold set to {self.normalization_threshold}, waveform will lowered to this max amplitude to avoid clipping.")
 
         # Run separation method for the loaded model with autocast enabled if supported by the device.
-        with autocast_mode.autocast(
-            self.torch_device.type, enabled=autocast_mode.is_autocast_available(self.torch_device.type)
-        ):
+        output_files = None
+        if autocast_mode.is_autocast_available(self.torch_device.type):
+            self.logger.debug("Autocast enabled.")
+            with autocast_mode.autocast(self.torch_device.type):
+                output_files = self.model_instance.separate(audio_file_path)
+        else:
+            self.logger.debug("Autocast disabled.")
             output_files = self.model_instance.separate(audio_file_path)
 
         # Clear GPU cache to free up memory
