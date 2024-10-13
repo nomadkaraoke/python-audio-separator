@@ -20,6 +20,7 @@ def common_expected_args():
         "output_single_stem": None,
         "invert_using_spec": False,
         "sample_rate": 44100,
+        "use_autocast": False,
         "mdx_params": {"hop_length": 1024, "segment_size": 256, "overlap": 0.25, "batch_size": 1, "enable_denoise": False},
         "vr_params": {"batch_size": 1, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False},
         "demucs_params": {"segment_size": "Default", "shifts": 2, "overlap": 0.25, "segments_enabled": True},
@@ -178,6 +179,21 @@ def test_cli_invert_spectrogram_argument(common_expected_args):
 
             # Update expected args for this specific test
             common_expected_args["invert_using_spec"] = True
+
+            # Assertions
+            mock_separator.assert_called_once_with(**common_expected_args)
+
+# Test using use_autocast argument
+def test_cli_use_autocast_argument(common_expected_args):
+    test_args = ["cli.py", "test_audio.mp3", "--use_autocast"]
+    with patch("sys.argv", test_args):
+        with patch("audio_separator.separator.Separator") as mock_separator:
+            mock_separator_instance = mock_separator.return_value
+            mock_separator_instance.separate.return_value = ["output_file.mp3"]
+            main()
+
+            # Update expected args for this specific test
+            common_expected_args["use_autocast"] = True
 
             # Assertions
             mock_separator.assert_called_once_with(**common_expected_args)

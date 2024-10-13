@@ -42,6 +42,7 @@ class Separator:
         output_single_stem (str): Option to output a single stem.
         invert_using_spec (bool): Flag to invert using spectrogram.
         sample_rate (int): The sample rate of the audio.
+        use_autocast (bool): Flag to use PyTorch autocast for faster inference.
 
     MDX Architecture Specific Attributes:
         hop_length (int): The hop length for STFT.
@@ -75,6 +76,7 @@ class Separator:
         output_single_stem=None,
         invert_using_spec=False,
         sample_rate=44100,
+        use_autocast=False,
         mdx_params={"hop_length": 1024, "segment_size": 256, "overlap": 0.25, "batch_size": 1, "enable_denoise": False},
         vr_params={"batch_size": 1, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False},
         demucs_params={"segment_size": "Default", "shifts": 2, "overlap": 0.25, "segments_enabled": True},
@@ -141,6 +143,8 @@ class Separator:
                 raise ValueError(f"The sample rate setting is {self.sample_rate}. Enter something less ambitious.")
         except ValueError:
             raise ValueError("The sample rate must be a non-zero whole number. Please provide a valid integer.")
+
+        self.use_autocast = use_autocast
 
         # These are parameters which users may want to configure so we expose them to the top-level Separator class,
         # even though they are specific to a single model architecture
@@ -737,7 +741,7 @@ class Separator:
 
         # Run separation method for the loaded model with autocast enabled if supported by the device.
         output_files = None
-        if autocast_mode.is_autocast_available(self.torch_device.type):
+        if self.use_autocast and autocast_mode.is_autocast_available(self.torch_device.type):
             self.logger.debug("Autocast available.")
             with autocast_mode.autocast(self.torch_device.type):
                 output_files = self.model_instance.separate(audio_file_path)
