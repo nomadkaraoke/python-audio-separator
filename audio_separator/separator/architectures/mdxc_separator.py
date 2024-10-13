@@ -132,7 +132,7 @@ class MDXCSeparator(CommonSeparator):
         mix = self.prepare_mix(self.audio_file_path)
 
         self.logger.debug("Normalizing mix before demixing...")
-        mix = spec_utils.normalize(wave=mix, max_peak=self.normalization_threshold)
+        mix = spec_utils.normalize(wave=mix, max_peak=self.normalization_threshold, min_peak=self.amplification_threshold)
 
         source = self.demix(mix=mix)
         self.logger.debug("Demixing completed.")
@@ -145,11 +145,11 @@ class MDXCSeparator(CommonSeparator):
 
             if not isinstance(self.primary_source, np.ndarray):
                 self.logger.debug(f"Normalizing primary source for primary stem {self.primary_stem_name}...")
-                self.primary_source = spec_utils.normalize(wave=source[self.primary_stem_name], max_peak=self.normalization_threshold).T
+                self.primary_source = spec_utils.normalize(wave=source[self.primary_stem_name], max_peak=self.normalization_threshold, min_peak=self.amplification_threshold).T
 
             if not isinstance(self.secondary_source, np.ndarray):
                 self.logger.debug(f"Normalizing secondary source for secondary stem {self.secondary_stem_name}...")
-                self.secondary_source = spec_utils.normalize(wave=source[self.secondary_stem_name], max_peak=self.normalization_threshold).T
+                self.secondary_source = spec_utils.normalize(wave=source[self.secondary_stem_name], max_peak=self.normalization_threshold, min_peak=self.amplification_threshold).T
 
             if not self.output_single_stem or self.output_single_stem.lower() == self.secondary_stem_name.lower():
                 self.secondary_stem_output_path = os.path.join(f"{self.audio_file_base}_({self.secondary_stem_name})_{self.model_name}.{self.output_format.lower()}")

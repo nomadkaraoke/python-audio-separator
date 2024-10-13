@@ -17,6 +17,7 @@ def common_expected_args():
         "output_format": "FLAC",
         "output_bitrate": None,
         "normalization_threshold": 0.9,
+        "amplification_threshold": 0.6,
         "output_single_stem": None,
         "invert_using_spec": False,
         "sample_rate": 44100,
@@ -151,6 +152,20 @@ def test_cli_normalization_threshold_argument(common_expected_args):
             # Assertions
             mock_separator.assert_called_once_with(**common_expected_args)
 
+# Test using normalization_threshold argument
+def test_cli_amplification_threshold_argument(common_expected_args):
+    test_args = ["cli.py", "test_audio.mp3", "--amplification=0.75"]
+    with patch("sys.argv", test_args):
+        with patch("audio_separator.separator.Separator") as mock_separator:
+            mock_separator_instance = mock_separator.return_value
+            mock_separator_instance.separate.return_value = ["output_file.mp3"]
+            main()
+
+            # Update expected args for this specific test
+            common_expected_args["amplification_threshold"] = 0.75
+
+            # Assertions
+            mock_separator.assert_called_once_with(**common_expected_args)
 
 # Test using single stem argument
 def test_cli_single_stem_argument(common_expected_args):

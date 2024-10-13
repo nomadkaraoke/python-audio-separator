@@ -4,6 +4,7 @@
 [![Conda Version](https://img.shields.io/conda/vn/conda-forge/audio-separator.svg)](https://anaconda.org/conda-forge/audio-separator)
 [![Docker pulls](https://img.shields.io/docker/pulls/beveradb/audio-separator.svg)](https://hub.docker.com/r/beveradb/audio-separator/tags)
 [![codecov](https://codecov.io/gh/karaokenerds/python-audio-separator/graph/badge.svg?token=N7YK4ET5JP)](https://codecov.io/gh/karaokenerds/python-audio-separator)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/blane187gt/python-audio-separator/blob/main/audio_separator_Colab_work.ipynb)
 
 Summary: Easy to use audio stem separation from the command line or as a dependency in your own Python project, using the amazing MDX-Net, VR Arch, Demucs and MDXC models available in UVR by @Anjok07 & @aufr33.
 
@@ -310,9 +311,11 @@ output_file_paths_6 = separator.separate('audio3.wav')
 - output_dir: (Optional) Directory where the separated files will be saved. If not specified, uses the current directory.
 - output_format: (Optional) Format to encode output files, any common format (WAV, MP3, FLAC, M4A, etc.). Default: WAV
 - normalization_threshold: (Optional) The amount by which the amplitude of the output audio will be multiplied. Default: 0.9
+- amplification_threshold: (Optional) The minimum amplitude level at which the waveform will be amplified. If the peak amplitude of the audio is below this threshold, the waveform will be scaled up to meet it. Default: 0.6
 - output_single_stem: (Optional) Output only a single stem, such as 'Instrumental' and 'Vocals'. Default: None
 - invert_using_spec: (Optional) Flag to invert using spectrogram. Default: False
 - sample_rate: (Optional) Set the sample rate of the output audio. Default: 44100
+- use_soundfile: (Optional) Use soundfile for output writing, can solve OOM issues, especially on longer audio. 
 - use_autocast: (Optional) Flag to use PyTorch autocast for faster inference.　Do not use for CPU inference. Default: False
 - mdx_params: (Optional) MDX Architecture Specific Attributes & Defaults. Default: {"hop_length": 1024, "segment_size": 256, "overlap": 0.25, "batch_size": 1}
 - vr_params: (Optional) VR Architecture Specific Attributes & Defaults. Default: {"batch_size": 1, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False}
@@ -395,6 +398,41 @@ poetry build
 ```
 
 This will generate the distribution packages in the dist directory - but for now only @beveradb will be able to publish to PyPI.
+
+
+## How to Use the in Colab 
+
+1. **Link Input**:
+
+![step 1](https://github.com/user-attachments/assets/edb41e74-2082-43d8-9dde-30cc4eee3423)
+
+
+   - **video_url**: This input is where you paste the URL of the audio or video you want to download. It can be from various platforms supported by yt-dlp. For a full list of supported websites, refer to [this link](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md).
+
+   - Example: 
+     ``` 
+     https://www.youtube.com/watch?v=exampleID 
+     ```
+
+2. **Input Audio File for Separation**:
+
+![2 and 3](https://github.com/user-attachments/assets/a040a17f-dad1-447a-afef-39fbbe59e556)
+
+
+   - **input**: This is the file path of the audio you want to separate. After downloading the audio file, you will need to specify this path to continue with separation.
+
+   - Example:
+     ``` 
+     /content/ytdl/your_downloaded_audio.wav 
+     ```
+
+3. **Output Directory**:
+   - **output**: This is the path where the separated files will be saved. It defaults to `/content/output` but can be changed to another directory if desired.
+
+   - Example:
+     ``` 
+     /content/custom_output 
+     ```
 
 ## Contributing 🤝
 
