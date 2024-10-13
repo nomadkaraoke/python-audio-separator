@@ -738,11 +738,11 @@ class Separator:
         # Run separation method for the loaded model with autocast enabled if supported by the device.
         output_files = None
         if autocast_mode.is_autocast_available(self.torch_device.type):
-            self.logger.debug("Autocast enabled.")
+            self.logger.debug("Autocast available.")
             with autocast_mode.autocast(self.torch_device.type):
                 output_files = self.model_instance.separate(audio_file_path)
         else:
-            self.logger.debug("Autocast disabled.")
+            self.logger.debug("Autocast unavailable.")
             output_files = self.model_instance.separate(audio_file_path)
 
         # Clear GPU cache to free up memory
