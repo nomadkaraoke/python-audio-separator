@@ -155,8 +155,6 @@ class Separator:
         self.use_soundfile = use_soundfile
         self.use_autocast = use_autocast
 
-        self.use_autocast = use_autocast
-
         # These are parameters which users may want to configure so we expose them to the top-level Separator class,
         # even though they are specific to a single model architecture
         self.arch_specific_params = {"MDX": mdx_params, "VR": vr_params, "Demucs": demucs_params, "MDXC": mdxc_params}
