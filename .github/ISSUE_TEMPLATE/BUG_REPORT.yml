@@ -18,6 +18,9 @@ body:
       options:
         - label: I have searched and found no existing issues.
           required: true
+  - type: markdown
+    attributes:
+      value: "---"
   - type: textarea
     id: screenshots
     attributes:
