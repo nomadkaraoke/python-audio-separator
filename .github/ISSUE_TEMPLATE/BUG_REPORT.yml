@@ -32,6 +32,9 @@ body:
       label: Logs
       description: Please include the full stack trace of the errors you encounter.
       render: shell
+  - type: markdown
+    attributes:
+      value: "---"
   - type: textarea
     id: system-info
     attributes:
