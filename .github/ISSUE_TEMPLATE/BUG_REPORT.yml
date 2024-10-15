@@ -1,0 +1,60 @@
+name: Bug report
+description: Report a problem you encountered
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: Describe the bug
+      description: Please provide a concise description of the bug.
+      placeholder: Bug description
+    validations:
+      required: true
+  - type: checkboxes
+    attributes:
+      label: Have you searched for existing issues?  🔎
+      description: Please search to see if there is already an issue for the problem you encountered.
+      options:
+        - label: I have searched and found no existing issues.
+          required: true
+  - type: markdown
+    attributes:
+      value: "---"
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots or Videos
+      description: Add screenshots, gifs, or videos to help explain your problem.
+      placeholder: Upload screenshots, gifs, and videos here.
+    validations:
+      required: false
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Please include the full stack trace of the errors you encounter.
+      render: shell
+  - type: markdown
+    attributes:
+      value: "---"
+  - type: textarea
+    id: system-info
+    attributes:
+      label: System Info
+      description: Provide information about your system.
+      value: |
+        Operating System: 
+        Python version: 
+        Other...
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Information
+      description: Add any other useful information about the problem here.
+      placeholder: Is there any additional helpful information you can share?
+    validations:
+      required: false
