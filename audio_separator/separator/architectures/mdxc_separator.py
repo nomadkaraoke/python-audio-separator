@@ -211,6 +211,8 @@ class MDXCSeparator(CommonSeparator):
             mix, sample_rate = spec_utils.change_pitch_semitones(mix, self.sample_rate, semitone_shift=-self.pitch_shift)
 
         if self.is_roformer:
+            # Note: Currently, for Roformer models, `batch_size` is not utilized due to negligible performance improvements.
+
             mix = torch.tensor(mix, dtype=torch.float32)
 
             if self.override_model_segment_size:
