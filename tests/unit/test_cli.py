@@ -3,7 +3,7 @@ import logging
 from audio_separator.utils.cli import main
 import subprocess
 from unittest import mock
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch, MagicMock, mock_open
 
 
 # Common fixture for expected arguments
@@ -51,16 +51,33 @@ def test_cli_no_args(capsys):
 
 
 # Test with multiple filename arguments
-def test_cli_multiple_filenames(capsys):
+def test_cli_multiple_filenames():
     test_args = ["cli.py", "test1.mp3", "test2.mp3"]
-    with patch("sys.argv", test_args):
-        # Expecting the application to raise a SystemExit due to unrecognized arguments
-        with pytest.raises(SystemExit):
-            main()
-        captured = capsys.readouterr()
 
-        # Check if the correct error message is displayed
-        assert "unrecognized arguments" in captured.err
+    # Mock the open function to prevent actual file operations
+    mock_file = mock_open()
+
+    # Create a mock logger
+    mock_logger = MagicMock()
+
+    # Patch multiple functions to prevent actual file operations and separations
+    with patch("sys.argv", test_args), patch("builtins.open", mock_file), patch("audio_separator.separator.Separator.separate") as mock_separate, patch(
+        "audio_separator.separator.Separator.load_model"
+    ), patch("logging.getLogger", return_value=mock_logger):
+
+        # Mock the separate method to return some dummy output
+        mock_separate.return_value = ["output_file1.mp3", "output_file2.mp3"]
+
+        # Call the main function
+        main()
+
+        # Check if separate was called twice (once for each input file)
+        assert mock_separate.call_count == 2
+
+        # Check if the logger captured information about both files
+        log_messages = [call[0][0] for call in mock_logger.info.call_args_list]
+        assert any("test1.mp3" in msg and "test2.mp3" in msg for msg in log_messages)
+        assert any("Separation complete" in msg for msg in log_messages)
 
 
 # Test the CLI with a specific audio file
@@ -156,6 +173,7 @@ def test_cli_normalization_threshold_argument(common_expected_args):
             # Assertions
             mock_separator.assert_called_once_with(**expected_args)
 
+
 # Test using normalization_threshold argument
 def test_cli_amplification_threshold_argument(common_expected_args):
     test_args = ["cli.py", "test_audio.mp3", "--amplification=0.75"]
@@ -171,6 +189,7 @@ def test_cli_amplification_threshold_argument(common_expected_args):
 
             # Assertions
             mock_separator.assert_called_once_with(**expected_args)
+
 
 # Test using single stem argument
 def test_cli_single_stem_argument(common_expected_args):

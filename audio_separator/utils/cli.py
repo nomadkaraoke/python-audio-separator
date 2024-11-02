@@ -42,7 +42,7 @@ def main():
     download_model_only_help = "Download a single model file only, without performing separation."
 
     io_params = parser.add_argument_group("Separation I/O Params")
-    io_params.add_argument("-m", "--model_filename", default="model_mel_band_roformer_ep_3005_sdr_11.4360.ckpt", help=model_filename_help)
+    io_params.add_argument("-m", "--model_filename", default="model_bs_roformer_ep_317_sdr_12.9755.yaml", help=model_filename_help)
     io_params.add_argument("--output_format", default="FLAC", help=output_format_help)
     io_params.add_argument("--output_bitrate", default=None, help=output_bitrate_help)
     io_params.add_argument("--output_dir", default=None, help=output_dir_help)
@@ -151,7 +151,7 @@ def main():
         parser.print_help()
         sys.exit(1)
 
-    logger.info(f"Separator version {package_version} beginning with input file(s): {", ".join(args.audio_files)}")
+    logger.info(f"Separator version {package_version} beginning with input file(s): {', '.join(args.audio_files)}")
 
     separator = Separator(
         log_formatter=log_formatter,
