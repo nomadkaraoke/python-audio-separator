@@ -133,7 +133,7 @@ Any file listed in the list models output can be specified (with file extension)
 
 ```sh
 usage: audio-separator [-h] [-v] [-d] [-e] [-l] [--log_level LOG_LEVEL] [-m MODEL_FILENAME] [--output_format OUTPUT_FORMAT] [--output_dir OUTPUT_DIR] [--model_file_dir MODEL_FILE_DIR] [--invert_spect]
-                       [--normalization NORMALIZATION] [--single_stem SINGLE_STEM] [--sample_rate SAMPLE_RATE] [--mdx_segment_size MDX_SEGMENT_SIZE] [--mdx_overlap MDX_OVERLAP] [--mdx_batch_size MDX_BATCH_SIZE]
+                       [--normalization NORMALIZATION] [--single_stem SINGLE_STEM] [--sample_rate SAMPLE_RATE] [--use_autocast] [--mdx_segment_size MDX_SEGMENT_SIZE] [--mdx_overlap MDX_OVERLAP] [--mdx_batch_size MDX_BATCH_SIZE]
                        [--mdx_hop_length MDX_HOP_LENGTH] [--mdx_enable_denoise] [--vr_batch_size VR_BATCH_SIZE] [--vr_window_size VR_WINDOW_SIZE] [--vr_aggression VR_AGGRESSION] [--vr_enable_tta]
                        [--vr_high_end_process] [--vr_enable_post_process] [--vr_post_process_threshold VR_POST_PROCESS_THRESHOLD] [--demucs_segment_size DEMUCS_SEGMENT_SIZE] [--demucs_shifts DEMUCS_SHIFTS]
                        [--demucs_overlap DEMUCS_OVERLAP] [--demucs_segments_enabled DEMUCS_SEGMENTS_ENABLED] [--mdxc_segment_size MDXC_SEGMENT_SIZE] [--mdxc_override_model_segment_size]
@@ -166,6 +166,7 @@ Common Separation Parameters:
   --normalization NORMALIZATION                          value by which to multiply the amplitude of the output files (default: 0.9). Example: --normalization=0.7
   --single_stem SINGLE_STEM                              output only single stem, e.g. Instrumental, Vocals, Drums, Bass, Guitar, Piano, Other. Example: --single_stem=Instrumental
   --sample_rate SAMPLE_RATE                              set the sample rate of the output audio (default: 44100). Example: --sample_rate=44100
+  --use_autocast                                         use PyTorch autocast for faster inference (default: False). Do not use for CPU inference. Example: --use_autocast
 
 MDX Architecture Parameters:
   --mdx_segment_size MDX_SEGMENT_SIZE                    larger consumes more resources, but may give better results (default: 256). Example: --mdx_segment_size=256
@@ -315,6 +316,7 @@ output_file_paths_6 = separator.separate('audio3.wav')
 - invert_using_spec: (Optional) Flag to invert using spectrogram. Default: False
 - sample_rate: (Optional) Set the sample rate of the output audio. Default: 44100
 - use_soundfile: (Optional) Use soundfile for output writing, can solve OOM issues, especially on longer audio. 
+- use_autocast: (Optional) Flag to use PyTorch autocast for faster inference.　Do not use for CPU inference. Default: False
 - mdx_params: (Optional) MDX Architecture Specific Attributes & Defaults. Default: {"hop_length": 1024, "segment_size": 256, "overlap": 0.25, "batch_size": 1}
 - vr_params: (Optional) VR Architecture Specific Attributes & Defaults. Default: {"batch_size": 1, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False}
 - demucs_params: (Optional) VR Architecture Specific Attributes & Defaults. {"segment_size": "Default", "shifts": 2, "overlap": 0.25, "segments_enabled": True}
