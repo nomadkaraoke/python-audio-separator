@@ -17,7 +17,7 @@ def main():
 
     parser = argparse.ArgumentParser(description="Separate audio file into different stems.", formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, max_help_position=60))
 
-    parser.add_argument("audio_file", nargs="?", help="The audio file path to separate, in any common format.", default=argparse.SUPPRESS)
+    parser.add_argument("audio_files", nargs="*", help="The audio file paths to separate, in any common format.", default=argparse.SUPPRESS)
 
     package_version = metadata.distribution("audio-separator").version
 
@@ -147,11 +147,11 @@ def main():
         logger.info(f"Model {args.model_filename} downloaded successfully.")
         sys.exit(0)
 
-    if not hasattr(args, "audio_file"):
+    if not hasattr(args, "audio_files"):
         parser.print_help()
         sys.exit(1)
 
-    logger.info(f"Separator version {package_version} beginning with input file: {args.audio_file}")
+    logger.info(f"Separator version {package_version} beginning with input file(s): {", ".join(args.audio_files)}")
 
     separator = Separator(
         log_formatter=log_formatter,
@@ -200,6 +200,7 @@ def main():
 
     separator.load_model(model_filename=args.model_filename)
 
-    output_files = separator.separate(args.audio_file)
+    for audio_file in args.audio_files:
+        output_files = separator.separate(audio_file)
 
-    logger.info(f"Separation complete! Output file(s): {' '.join(output_files)}")
+        logger.info(f"Separation complete! Output file(s): {' '.join(output_files)}")
