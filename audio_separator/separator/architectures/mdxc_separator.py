@@ -241,7 +241,6 @@ class MDXCSeparator(CommonSeparator):
             # Transfer to the weighting plate for the same device as the other tensors
             window = window.to(device)
 
-            # with torch.cuda.amp.autocast():
             with torch.no_grad():
                 req_shape = (len(self.model_data_cfgdict.training.instruments),) + tuple(mix.shape)
                 result = torch.zeros(req_shape, dtype=torch.float32).to(device)
