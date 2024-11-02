@@ -317,9 +317,10 @@ output_file_paths_6 = separator.separate('audio3.wav')
 - sample_rate: (Optional) Set the sample rate of the output audio. Default: 44100
 - use_soundfile: (Optional) Use soundfile for output writing, can solve OOM issues, especially on longer audio. 
 - use_autocast: (Optional) Flag to use PyTorch autocast for faster inference.　Do not use for CPU inference. Default: False
-- mdx_params: (Optional) MDX Architecture Specific Attributes & Defaults. Default: {"hop_length": 1024, "segment_size": 256, "overlap": 0.25, "batch_size": 1}
+- mdx_params: (Optional) MDX Architecture Specific Attributes & Defaults. Default: {"hop_length": 1024, "segment_size": 256, "overlap": 0.25, "batch_size": 1, "enable_denoise": False}
 - vr_params: (Optional) VR Architecture Specific Attributes & Defaults. Default: {"batch_size": 1, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False}
-- demucs_params: (Optional) VR Architecture Specific Attributes & Defaults. {"segment_size": "Default", "shifts": 2, "overlap": 0.25, "segments_enabled": True}
+- demucs_params: (Optional) Demucs Architecture Specific Attributes & Defaults. {"segment_size": "Default", "shifts": 2, "overlap": 0.25, "segments_enabled": True}
+- mdxc_params: (Optional) MDXC Architecture Specific Attributes & Defaults. Default: {"segment_size": 256, "override_model_segment_size": False, "batch_size": 1, "overlap": 8, "pitch_shift": 0}
 
 ## Requirements 📋
 
