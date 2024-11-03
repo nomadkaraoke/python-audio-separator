@@ -737,7 +737,7 @@ class Separator:
         self.logger.debug("Loading model completed.")
         self.logger.info(f'Load model duration: {time.strftime("%H:%M:%S", time.gmtime(int(time.perf_counter() - load_model_start_time)))}')
 
-    def separate(self, audio_file_path):
+    def separate(self, audio_file_path, primary_output_name=None, secondary_output_name=None):
         """
         Separates the audio file into different stems (e.g., vocals, instruments) using the loaded model.
 
@@ -747,6 +747,8 @@ class Separator:
 
         Parameters:
         - audio_file_path (str): The path to the audio file to be separated.
+        - primary_output_name (str, optional): Custom name for the primary output file. Defaults to None.
+        - secondary_output_name (str, optional): Custom name for the secondary output file. Defaults to None.
 
         Returns:
         - output_files (list of str): A list containing the paths to the separated audio stem files.
@@ -766,10 +768,10 @@ class Separator:
         if self.use_autocast and autocast_mode.is_autocast_available(self.torch_device.type):
             self.logger.debug("Autocast available.")
             with autocast_mode.autocast(self.torch_device.type):
-                output_files = self.model_instance.separate(audio_file_path)
+                output_files = self.model_instance.separate(audio_file_path, primary_output_name, secondary_output_name)
         else:
             self.logger.debug("Autocast unavailable.")
-            output_files = self.model_instance.separate(audio_file_path)
+            output_files = self.model_instance.separate(audio_file_path, primary_output_name, secondary_output_name)
 
         # Clear GPU cache to free up memory
         self.model_instance.clear_gpu_cache()
