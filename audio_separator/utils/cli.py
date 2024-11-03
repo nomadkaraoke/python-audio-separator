@@ -56,6 +56,8 @@ def main():
     sample_rate_help = "modify the sample rate of the output audio (default: %(default)s). Example: --sample_rate=44100"
     use_soundfile_help = "Use soundfile to write audio output (default: %(default)s). Example: --use_soundfile"
     use_autocast_help = "use PyTorch autocast for faster inference (default: %(default)s). Do not use for CPU inference. Example: --use_autocast"
+    primary_output_name_help = "Custom name for the primary output file (default: %(default)s). Example: --primary_output_name=custom_primary_output"
+    secondary_output_name_help = "Custom name for the secondary output file (default: %(default)s). Example: --secondary_output_name=custom_secondary_output"
 
     common_params = parser.add_argument_group("Common Separation Parameters")
     common_params.add_argument("--invert_spect", action="store_true", help=invert_spect_help)
@@ -65,6 +67,8 @@ def main():
     common_params.add_argument("--sample_rate", type=int, default=44100, help=sample_rate_help)
     common_params.add_argument("--use_soundfile", action="store_true", help=use_soundfile_help)
     common_params.add_argument("--use_autocast", action="store_true", help=use_autocast_help)
+    common_params.add_argument("--primary_output_name", default=None, help=primary_output_name_help)
+    common_params.add_argument("--secondary_output_name", default=None, help=secondary_output_name_help)
 
     mdx_segment_size_help = "larger consumes more resources, but may give better results (default: %(default)s). Example: --mdx_segment_size=256"
     mdx_overlap_help = "amount of overlap between prediction windows, 0.001-0.999. higher is better but slower (default: %(default)s). Example: --mdx_overlap=0.25"
@@ -201,6 +205,6 @@ def main():
     separator.load_model(model_filename=args.model_filename)
 
     for audio_file in args.audio_files:
-        output_files = separator.separate(audio_file)
+        output_files = separator.separate(audio_file, primary_output_name=args.primary_output_name, secondary_output_name=args.secondary_output_name)
 
         logger.info(f"Separation complete! Output file(s): {' '.join(output_files)}")
