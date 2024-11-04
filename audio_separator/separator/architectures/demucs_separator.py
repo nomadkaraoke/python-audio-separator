@@ -80,7 +80,7 @@ class DemucsSeparator(CommonSeparator):
 
         self.logger.info("Demucs Separator initialisation complete")
 
-    def separate(self, audio_file_path):
+    def separate(self, audio_file_path, primary_output_name=None, secondary_output_name=None):
         """
         Separates the audio file into its component stems using the Demucs model.
         """
