@@ -42,7 +42,7 @@ onnx2torch = ">=1.5"
 onnxruntime = { version = ">=1.17", optional = true }
 onnxruntime-gpu = { version = ">=1.17", optional = true }
 julius = ">=0.2"
-diffq = ">=0.2"
+diffq-fixed = ">=0.2"
 einops = ">=0.7"
 pyyaml = "*"
 ml_collections = "*"
