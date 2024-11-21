@@ -412,7 +412,7 @@ This will generate the distribution packages in the dist directory - but for now
 
 3. **New Option**:
 
-   - **modl**: This is where you can select a models. 
+   - **model**: This is where you can select a models. 
 
 ![new feature](https://github.com/user-attachments/assets/b7959e41-97b5-4b18-9183-f8d98d4ae6f7)
 
