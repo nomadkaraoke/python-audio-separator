@@ -6,9 +6,9 @@
 [![codecov](https://codecov.io/gh/karaokenerds/python-audio-separator/graph/badge.svg?token=N7YK4ET5JP)](https://codecov.io/gh/karaokenerds/python-audio-separator)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/blane187gt/python-audio-separator/blob/main/audio_separator_Colab_work.ipynb)
 
-Summary: Easy to use audio stem separation from the command line or as a dependency in your own Python project, using the amazing MDX-Net, VR Arch, Demucs and MDXC models available in UVR by @Anjok07 & @aufr33.
+**Summary:** Easy to use audio stem separation from the command line or as a dependency in your own Python project, using the amazing MDX-Net, VR Arch, Demucs and MDXC models available in UVR by @Anjok07 & @aufr33.
 
-Audio Separator is a Python package that allows you to separate an audio file into various stems, using models trained by @Anjok07 for use with UVR (<https://github.com/Anjok07/ultimatevocalremovergui>).
+Audio Separator is a Python package that allows you to separate an audio file into various stems, using models trained by @Anjok07 for use with [Ultimate Vocal Remover](https://github.com/Anjok07/ultimatevocalremovergui).
 
 The simplest (and probably most used) use case for this package is to separate an audio file into two stems, Instrumental and Vocals, which can be very useful for producing karaoke videos! However, the models available in UVR can separate audio into many more stems, such as Drums, Bass, Piano, and Guitar, and perform other audio processing tasks, such as denoising or removing echo/reverb.
 
@@ -49,26 +49,47 @@ If the GPU isn't being detected, make sure your docker runtime environment is pa
 💬 If successfully configured, you should see this log message when running `audio-separator --env_info`:
  `ONNXruntime has CUDAExecutionProvider available, enabling acceleration`
 
-Conda: `conda install pytorch=*=*cuda* onnxruntime=*=*cuda* audio-separator -c pytorch -c conda-forge`
+Conda:
+```sh
+conda install pytorch=*=*cuda* onnxruntime=*=*cuda* audio-separator -c pytorch -c conda-forge
+```
 
-Pip: `pip install "audio-separator[gpu]"`
+Pip:
+```sh
+pip install "audio-separator[gpu]"
+```
 
-Docker: `beveradb/audio-separator:gpu`
+Docker:
+```sh
+beveradb/audio-separator:gpu
+```
 
 ###  Apple Silicon, macOS Sonoma+ with M1 or newer CPU (CoreML acceleration)
 
 💬 If successfully configured, you should see this log message when running `audio-separator --env_info`:
  `ONNXruntime has CoreMLExecutionProvider available, enabling acceleration`
 
-Pip: `pip install "audio-separator[cpu]"`
+Pip:
+```sh
+pip install "audio-separator[cpu]"
+```
 
 ### 🐢 No hardware acceleration, CPU only
 
-Conda: `conda install audio-separator-c pytorch -c conda-forge`
+Conda:
+```sh
+conda install audio-separator-c pytorch -c conda-forge
+```
 
-Pip: `pip install "audio-separator[cpu]"`
+Pip:
+```sh
+pip install "audio-separator[cpu]"
+```
 
-Docker: `beveradb/audio-separator`
+Docker:
+```sh
+beveradb/audio-separator
+```
 
 ### 🎥 FFmpeg dependency
 
@@ -78,9 +99,15 @@ If you installed `audio-separator` using `conda` or `docker`, FFmpeg should alre
 
 You may need to separately install FFmpeg. It should be easy to install on most platforms, e.g.:
 
-🐧 Debian/Ubuntu: `apt-get update; apt-get install -y ffmpeg`
+🐧 Debian/Ubuntu:
+```sh
+apt-get update; apt-get install -y ffmpeg
+```
 
- macOS:`brew update; brew install ffmpeg`
+ macOS:
+```sh
+brew update; brew install ffmpeg
+```
 
 ## GPU / CUDA specific installation steps with Pip
 
@@ -107,7 +134,9 @@ Depending on your CUDA version and environment, you may need to install specific
 If you see the error `Failed to load library` or `cannot open shared object file` when you run `audio-separator`, this is likely the issue.
 
 You can install the CUDA 11 libraries _alongside_ CUDA 12 like so:
-`apt update; apt install nvidia-cuda-toolkit`
+```sh
+apt update; apt install nvidia-cuda-toolkit
+```
 
 If you encounter the following messages when running on Google Colab or in another environment:
 ```
@@ -157,57 +186,57 @@ positional arguments:
   audio_file                                             The audio file path to separate, in any common format.
 
 options:
-  -h, --help                                             show this help message and exit
+  -h, --help                                             Show this help message and exit.
 
 Info and Debugging:
-  -v, --version                                          Show the program's version number and exit.
-  -d, --debug                                            Enable debug logging, equivalent to --log_level=debug
+  -v, --version                                          Show the program version number and exit.
+  -d, --debug                                            Enable debug logging, equivalent to --log_level=debug.
   -e, --env_info                                         Print environment information and exit.
   -l, --list_models                                      List all supported models and exit.
-  --log_level LOG_LEVEL                                  Log level, e.g. info, debug, warning (default: info).
+  --log_level LOG_LEVEL                                  Log level, e.g., info, debug, warning (default: info).
 
 Separation I/O Params:
-  -m MODEL_FILENAME, --model_filename MODEL_FILENAME     model to use for separation (default: UVR-MDX-NET-Inst_HQ_3.onnx). Example: -m 2_HP-UVR.pth
-  --output_format OUTPUT_FORMAT                          output format for separated files, any common format (default: FLAC). Example: --output_format=MP3
-  --output_dir OUTPUT_DIR                                directory to write output files (default: <current dir>). Example: --output_dir=/app/separated
-  --model_file_dir MODEL_FILE_DIR                        model files directory (default: /tmp/audio-separator-models/). Example: --model_file_dir=/app/models
+  -m MODEL_FILENAME, --model_filename MODEL_FILENAME     Model to use for separation (default: UVR-MDX-NET-Inst_HQ_3.onnx). Example: -m 2_HP-UVR.pth
+  --output_format OUTPUT_FORMAT                          Output format for separated files, any common format (default: FLAC). Example: --output_format=MP3
+  --output_dir OUTPUT_DIR                                Directory to write output files (default: <current dir>). Example: --output_dir=/app/separated
+  --model_file_dir MODEL_FILE_DIR                        Model files directory (default: /tmp/audio-separator-models/). Example: --model_file_dir=/app/models
 
 Common Separation Parameters:
-  --invert_spect                                         invert secondary stem using spectogram (default: False). Example: --invert_spect
-  --normalization NORMALIZATION                          value by which to multiply the amplitude of the output files (default: 0.9). Example: --normalization=0.7
-  --single_stem SINGLE_STEM                              output only single stem, e.g. Instrumental, Vocals, Drums, Bass, Guitar, Piano, Other. Example: --single_stem=Instrumental
-  --sample_rate SAMPLE_RATE                              set the sample rate of the output audio (default: 44100). Example: --sample_rate=44100
-  --use_autocast                                         use PyTorch autocast for faster inference (default: False). Do not use for CPU inference. Example: --use_autocast
-  --custom_output_names                                  custom names for all output files in JSON format (default: None). Example: --custom_output_names='{"Vocals": "vocals_output", "Drums": "drums_output"}'
+  --invert_spect                                         Invert secondary stem using spectogram (default: False). Example: --invert_spect
+  --normalization NORMALIZATION                          Value by which to multiply the amplitude of the output files (default: 0.9). Example: --normalization=0.7
+  --single_stem SINGLE_STEM                              Output only single stem, e.g., Instrumental, Vocals, Drums, Bass, Guitar, Piano, Other. Example: --single_stem=Instrumental
+  --sample_rate SAMPLE_RATE                              Set the sample rate of the output audio (default: 44100). Example: --sample_rate=44100
+  --use_autocast                                         Use PyTorch autocast for faster inference (default: False). Do not use for CPU inference. Example: --use_autocast
+  --custom_output_names                                  Custom names for all output files in JSON format (default: None). Example: --custom_output_names='{"Vocals": "vocals_output", "Drums": "drums_output"}'
 
 MDX Architecture Parameters:
-  --mdx_segment_size MDX_SEGMENT_SIZE                    larger consumes more resources, but may give better results (default: 256). Example: --mdx_segment_size=256
-  --mdx_overlap MDX_OVERLAP                              amount of overlap between prediction windows, 0.001-0.999. higher is better but slower (default: 0.25). Example: --mdx_overlap=0.25
-  --mdx_batch_size MDX_BATCH_SIZE                        larger consumes more RAM but may process slightly faster (default: 1). Example: --mdx_batch_size=4
-  --mdx_hop_length MDX_HOP_LENGTH                        usually called stride in neural networks; only change if you know what you're doing (default: 1024). Example: --mdx_hop_length=1024
-  --mdx_enable_denoise                                   enable denoising after separation (default: False). Example: --mdx_enable_denoise
+  --mdx_segment_size MDX_SEGMENT_SIZE                    Larger consumes more resources, but may give better results (default: 256). Example: --mdx_segment_size=256
+  --mdx_overlap MDX_OVERLAP                              Amount of overlap between prediction windows, 0.001-0.999. Higher is better but slower (default: 0.25). Example: --mdx_overlap=0.25
+  --mdx_batch_size MDX_BATCH_SIZE                        Larger consumes more RAM but may process slightly faster (default: 1). Example: --mdx_batch_size=4
+  --mdx_hop_length MDX_HOP_LENGTH                        Usually called stride in neural networks; only change if you know what you do (default: 1024). Example: --mdx_hop_length=1024
+  --mdx_enable_denoise                                   Enable denoising after separation (default: False). Example: --mdx_enable_denoise
 
 VR Architecture Parameters:
-  --vr_batch_size VR_BATCH_SIZE                          number of "batches" to process at a time. higher = more RAM, slightly faster processing (default: 1). Example: --vr_batch_size=16
-  --vr_window_size VR_WINDOW_SIZE                        balance quality and speed. 1024 = fast but lower, 320 = slower but better quality. (default: 512). Example: --vr_window_size=320
-  --vr_aggression VR_AGGRESSION                          intensity of primary stem extraction, -100 - 100. typically 5 for vocals & instrumentals (default: 5). Example: --vr_aggression=2
-  --vr_enable_tta                                        enable Test-Time-Augmentation; slow but improves quality (default: False). Example: --vr_enable_tta
-  --vr_high_end_process                                  mirror the missing frequency range of the output (default: False). Example: --vr_high_end_process
-  --vr_enable_post_process                               identify leftover artifacts within vocal output; may improve separation for some songs (default: False). Example: --vr_enable_post_process
-  --vr_post_process_threshold VR_POST_PROCESS_THRESHOLD  threshold for post_process feature: 0.1-0.3 (default: 0.2). Example: --vr_post_process_threshold=0.1
+  --vr_batch_size VR_BATCH_SIZE                          Number of "batches" to process at a time. Higher = more RAM, slightly faster processing (default: 1). Example: --vr_batch_size=16
+  --vr_window_size VR_WINDOW_SIZE                        Balance quality and speed. 1024 = fast but lower, 320 = slower but better quality (default: 512). Example: --vr_window_size=320
+  --vr_aggression VR_AGGRESSION                          Intensity of primary stem extraction, -100 - 100. Typically 5 for vocals & instrumentals (default: 5). Example: --vr_aggression=2
+  --vr_enable_tta                                        Enable Test-Time-Augmentation; slow but improves quality (default: False). Example: --vr_enable_tta
+  --vr_high_end_process                                  Mirror the missing frequency range of the output (default: False). Example: --vr_high_end_process
+  --vr_enable_post_process                               Identify leftover artifacts within vocal output; may improve separation for some songs (default: False). Example: --vr_enable_post_process
+  --vr_post_process_threshold VR_POST_PROCESS_THRESHOLD  Threshold for post_process feature: 0.1-0.3 (default: 0.2). Example: --vr_post_process_threshold=0.1
 
 Demucs Architecture Parameters:
-  --demucs_segment_size DEMUCS_SEGMENT_SIZE              size of segments into which the audio is split, 1-100. higher = slower but better quality (default: Default). Example: --demucs_segment_size=256
-  --demucs_shifts DEMUCS_SHIFTS                          number of predictions with random shifts, higher = slower but better quality (default: 2). Example: --demucs_shifts=4
-  --demucs_overlap DEMUCS_OVERLAP                        overlap between prediction windows, 0.001-0.999. higher = slower but better quality (default: 0.25). Example: --demucs_overlap=0.25
-  --demucs_segments_enabled DEMUCS_SEGMENTS_ENABLED      enable segment-wise processing (default: True). Example: --demucs_segments_enabled=False
+  --demucs_segment_size DEMUCS_SEGMENT_SIZE              Size of segments into which the audio is split, 1-100. Higher = slower but better quality (default: Default). Example: --demucs_segment_size=256
+  --demucs_shifts DEMUCS_SHIFTS                          Number of predictions with random shifts, higher = slower but better quality (default: 2). Example: --demucs_shifts=4
+  --demucs_overlap DEMUCS_OVERLAP                        Overlap between prediction windows, 0.001-0.999. Higher = slower but better quality (default: 0.25). Example: --demucs_overlap=0.25
+  --demucs_segments_enabled DEMUCS_SEGMENTS_ENABLED      Enable segment-wise processing (default: True). Example: --demucs_segments_enabled=False
 
 MDXC Architecture Parameters:
-  --mdxc_segment_size MDXC_SEGMENT_SIZE                  larger consumes more resources, but may give better results (default: 256). Example: --mdxc_segment_size=256
-  --mdxc_override_model_segment_size                     override model default segment size instead of using the model default value. Example: --mdxc_override_model_segment_size
-  --mdxc_overlap MDXC_OVERLAP                            amount of overlap between prediction windows, 2-50. higher is better but slower (default: 8). Example: --mdxc_overlap=8
-  --mdxc_batch_size MDXC_BATCH_SIZE                      larger consumes more RAM but may process slightly faster (default: 1). Example: --mdxc_batch_size=4
-  --mdxc_pitch_shift MDXC_PITCH_SHIFT                    shift audio pitch by a number of semitones while processing. may improve output for deep/high vocals. (default: 0). Example: --mdxc_pitch_shift=2
+  --mdxc_segment_size MDXC_SEGMENT_SIZE                  Larger consumes more resources, but may give better results (default: 256). Example: --mdxc_segment_size=256
+  --mdxc_override_model_segment_size                     Override model default segment size instead of using the model default value. Example: --mdxc_override_model_segment_size
+  --mdxc_overlap MDXC_OVERLAP                            Amount of overlap between prediction windows, 2-50. Higher is better but slower (default: 8). Example: --mdxc_overlap=8
+  --mdxc_batch_size MDXC_BATCH_SIZE                      Larger consumes more RAM but may process slightly faster (default: 1). Example: --mdxc_batch_size=4
+  --mdxc_pitch_shift MDXC_PITCH_SHIFT                    Shift audio pitch by a number of semitones while processing. May improve output for deep/high vocals (default: 0). Example: --mdxc_pitch_shift=2
 ```
 
 ### As a Dependency in a Python Project
@@ -312,22 +341,22 @@ You can also rename specific stems:
 
 ## Parameters for the Separator class
 
-- log_level: (Optional) Logging level, e.g., INFO, DEBUG, WARNING. Default: logging.INFO
-- log_formatter: (Optional) The log format. Default: None, which falls back to '%(asctime)s - %(levelname)s - %(module)s - %(message)s'
-- model_file_dir: (Optional) Directory to cache model files in. Default: /tmp/audio-separator-models/
-- output_dir: (Optional) Directory where the separated files will be saved. If not specified, uses the current directory.
-- output_format: (Optional) Format to encode output files, any common format (WAV, MP3, FLAC, M4A, etc.). Default: WAV
-- normalization_threshold: (Optional) The amount by which the amplitude of the output audio will be multiplied. Default: 0.9
-- amplification_threshold: (Optional) The minimum amplitude level at which the waveform will be amplified. If the peak amplitude of the audio is below this threshold, the waveform will be scaled up to meet it. Default: 0.6
-- output_single_stem: (Optional) Output only a single stem, such as 'Instrumental' and 'Vocals'. Default: None
-- invert_using_spec: (Optional) Flag to invert using spectrogram. Default: False
-- sample_rate: (Optional) Set the sample rate of the output audio. Default: 44100
-- use_soundfile: (Optional) Use soundfile for output writing, can solve OOM issues, especially on longer audio.
-- use_autocast: (Optional) Flag to use PyTorch autocast for faster inference. Do not use for CPU inference. Default: False
-- mdx_params: (Optional) MDX Architecture Specific Attributes & Defaults. Default: {"hop_length": 1024, "segment_size": 256, "overlap": 0.25, "batch_size": 1, "enable_denoise": False}
-- vr_params: (Optional) VR Architecture Specific Attributes & Defaults. Default: {"batch_size": 1, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False}
-- demucs_params: (Optional) Demucs Architecture Specific Attributes & Defaults. {"segment_size": "Default", "shifts": 2, "overlap": 0.25, "segments_enabled": True}
-- mdxc_params: (Optional) MDXC Architecture Specific Attributes & Defaults. Default: {"segment_size": 256, "override_model_segment_size": False, "batch_size": 1, "overlap": 8, "pitch_shift": 0}
+- **`log_level`:** (Optional) Logging level, e.g., INFO, DEBUG, WARNING. `Default: logging.INFO`
+- **`log_formatter`:** (Optional) The log format. Default: None, which falls back to '%(asctime)s - %(levelname)s - %(module)s - %(message)s'
+- **`model_file_dir`:** (Optional) Directory to cache model files in. `Default: /tmp/audio-separator-models/`
+- **`output_dir`:** (Optional) Directory where the separated files will be saved. If not specified, uses the current directory.
+- **`output_format`:** (Optional) Format to encode output files, any common format (WAV, MP3, FLAC, M4A, etc.). `Default: WAV`
+- **`normalization_threshold`:** (Optional) The amount by which the amplitude of the output audio will be multiplied. `Default: 0.9`
+- **`amplification_threshold`:** (Optional) The minimum amplitude level at which the waveform will be amplified. If the peak amplitude of the audio is below this threshold, the waveform will be scaled up to meet it. `Default: 0.6`
+- **`output_single_stem`:** (Optional) Output only a single stem, such as 'Instrumental' and 'Vocals'. `Default: None`
+- **`invert_using_spec`:** (Optional) Flag to invert using spectrogram. `Default: False`
+- **`sample_rate`:** (Optional) Set the sample rate of the output audio. `Default: 44100`
+- **`use_soundfile`:** (Optional) Use soundfile for output writing, can solve OOM issues, especially on longer audio.
+- **`use_autocast`:** (Optional) Flag to use PyTorch autocast for faster inference. Do not use for CPU inference. `Default: False`
+- **`mdx_params`:** (Optional) MDX Architecture Specific Attributes & Defaults. `Default: {"hop_length": 1024, "segment_size": 256, "overlap": 0.25, "batch_size": 1, "enable_denoise": False}`
+- **`vr_params`:** (Optional) VR Architecture Specific Attributes & Defaults. `Default: {"batch_size": 1, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False}`
+- **`demucs_params`:** (Optional) Demucs Architecture Specific Attributes & Defaults. `Default: {"segment_size": "Default", "shifts": 2, "overlap": 0.25, "segments_enabled": True}`
+- **`mdxc_params`:** (Optional) MDXC Architecture Specific Attributes & Defaults. `Default: {"segment_size": 256, "override_model_segment_size": False, "batch_size": 1, "overlap": 8, "pitch_shift": 0}`
 
 ## Requirements 📋
 
@@ -342,7 +371,7 @@ This project uses Poetry for dependency management and packaging. Follow these s
 ### Prerequisites
 
 - Make sure you have Python 3.10 or newer installed on your machine.
-- Install Conda (I recommend Miniforge: <https://github.com/conda-forge/miniforge>) to manage your Python virtual environments
+- Install Conda (I recommend Miniforge: [Miniforge GitHub](https://github.com/conda-forge/miniforge)) to manage your Python virtual environments
 
 ### Clone the Repository
 
@@ -353,7 +382,7 @@ git clone https://github.com/YOUR_USERNAME/audio-separator.git
 cd audio-separator
 ```
 
-Replace YOUR_USERNAME with your GitHub username if you've forked the repository, or use the main repository URL if you have the permissions.
+Replace `YOUR_USERNAME` with your GitHub username if you've forked the repository, or use the main repository URL if you have the permissions.
 
 ### Create and activate the Conda Environment
 
