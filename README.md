@@ -272,7 +272,7 @@ In this case, the output file names will be: `vocals_output.wav` and `instrument
 
 You can also rename specific stems:
 
-- To rename the primary stem:
+- To rename the Vocals stem:
   ```python
   output_names = {
       "Vocals": "vocals_output",
@@ -280,7 +280,7 @@ You can also rename specific stems:
   output_files = separator.separate('audio1.wav', output_names)
   ```
   > The output files will be named: `vocals_output.wav` and `audio1_(Instrumental)_model_mel_band_roformer_ep_3005_sdr_11.wav`
-- To rename the secondary stem:
+- To rename the Instrumental stem:
   ```python
   output_names = {
       "Instrumental": "instrumental_output",
