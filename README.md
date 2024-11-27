@@ -288,7 +288,7 @@ You can also rename specific stems:
   output_files = separator.separate('audio1.wav', output_names)
   ```
   > The output files will be named: `audio1_(Vocals)_model_mel_band_roformer_ep_3005_sdr_11.wav` and `instrumental_output.wav`
-- Список стемов для моделей демукс:
+- List of stems for Demucs models:
   - htdemucs_6s.yaml
     ```python
     output_names = {
@@ -300,7 +300,7 @@ You can also rename specific stems:
       "Piano": "piano_output",
     }
     ```
-  - Остальные модели
+  - Other Demucs models
     ```python
     output_names = {
       "Vocals": "vocals_output",
@@ -408,7 +408,7 @@ poetry build
 This will generate the distribution packages in the dist directory - but for now only @beveradb will be able to publish to PyPI.
 
 
-## How to Use the in Colab 
+## How to Use in Colab
 
 1. **Link Input**:
 
