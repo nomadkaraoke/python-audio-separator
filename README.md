@@ -292,21 +292,21 @@ You can also rename specific stems:
   - htdemucs_6s.yaml
     ```python
     output_names = {
-      "Vocals": "vocals_output",
-      "Drums": "drums_output",
-      "Bass": "bass_output",
-      "Other": "other_output",
-      "Guitar": "guitar_output",
-      "Piano": "piano_output",
+        "Vocals": "vocals_output",
+        "Drums": "drums_output",
+        "Bass": "bass_output",
+        "Other": "other_output",
+        "Guitar": "guitar_output",
+        "Piano": "piano_output",
     }
     ```
   - Other Demucs models
     ```python
     output_names = {
-      "Vocals": "vocals_output",
-      "Drums": "drums_output",
-      "Bass": "bass_output",
-      "Other": "other_output",
+        "Vocals": "vocals_output",
+        "Drums": "drums_output",
+        "Bass": "bass_output",
+        "Other": "other_output",
     }
     ```
 
