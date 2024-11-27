@@ -178,6 +178,7 @@ Common Separation Parameters:
   --single_stem SINGLE_STEM                              output only single stem, e.g. Instrumental, Vocals, Drums, Bass, Guitar, Piano, Other. Example: --single_stem=Instrumental
   --sample_rate SAMPLE_RATE                              set the sample rate of the output audio (default: 44100). Example: --sample_rate=44100
   --use_autocast                                         use PyTorch autocast for faster inference (default: False). Do not use for CPU inference. Example: --use_autocast
+  --custom_output_names                                  custom names for all output files in JSON format (default: None). Example: --custom_output_names='{"Vocals": "vocals_output", "Drums": "drums_output"}'
 
 MDX Architecture Parameters:
   --mdx_segment_size MDX_SEGMENT_SIZE                    larger consumes more resources, but may give better results (default: 256). Example: --mdx_segment_size=256
@@ -261,22 +262,53 @@ output_file_paths_6 = separator.separate('audio3.wav')
 
 You can rename the output files by specifying the desired names. For example:
 ```python
-output_files = separator.separate('audio1.wav', 'stem1', 'stem2')
+output_names = {
+    "Vocals": "vocals_output",
+    "Instrumental": "instrumental_output",
+}
+output_files = separator.separate('audio1.wav', output_names)
 ```
-In this case, the output file names will be: `stem1.wav` and `stem2.wav`.
+In this case, the output file names will be: `vocals_output.wav` and `instrumental_output.wav`.
 
 You can also rename specific stems:
 
 - To rename the primary stem:
   ```python
-  output_files = separator.separate('audio1.wav', primary_output_name='stem1')
+  output_names = {
+      "Vocals": "vocals_output",
+  }
+  output_files = separator.separate('audio1.wav', output_names)
   ```
-  > The output files will be named: `stem1.wav` and `audio1_(Instrumental)_model_mel_band_roformer_ep_3005_sdr_11.wav`
+  > The output files will be named: `vocals_output.wav` and `audio1_(Instrumental)_model_mel_band_roformer_ep_3005_sdr_11.wav`
 - To rename the secondary stem:
   ```python
-  output_files = separator.separate('audio1.wav', secondary_output_name='stem2')
+  output_names = {
+      "Instrumental": "instrumental_output",
+  }
+  output_files = separator.separate('audio1.wav', output_names)
   ```
-  > The output files will be named: `audio1_(Vocals)_model_mel_band_roformer_ep_3005_sdr_11.wav` and `stem2.wav`
+  > The output files will be named: `audio1_(Vocals)_model_mel_band_roformer_ep_3005_sdr_11.wav` and `instrumental_output.wav`
+- Список стемов для моделей демукс:
+  - htdemucs_6s.yaml
+    ```python
+    output_names = {
+      "Vocals": "vocals_output",
+      "Drums": "drums_output",
+      "Bass": "bass_output",
+      "Other": "other_output",
+      "Guitar": "guitar_output",
+      "Piano": "piano_output",
+    }
+    ```
+  - Остальные модели
+    ```python
+    output_names = {
+      "Vocals": "vocals_output",
+      "Drums": "drums_output",
+      "Bass": "bass_output",
+      "Other": "other_output",
+    }
+    ```
 
 ## Parameters for the Separator class
 
