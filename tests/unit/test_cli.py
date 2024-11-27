@@ -1,3 +1,4 @@
+import json
 import pytest
 import logging
 from audio_separator.utils.cli import main
@@ -261,7 +262,7 @@ def test_cli_use_autocast_argument(common_expected_args):
 # Test using custom_output_names argument
 def test_cli_Vocals_output_name_argument(common_expected_args):
     custom_vocals_names = {"Vocals": "vocals_output"}
-    test_args = ["cli.py", "test_audio.mp3", f"--custom_output_names={custom_vocals_names}"]
+    test_args = ["cli.py", "test_audio.mp3", f"--custom_output_names={json.dumps(custom_vocals_names)}"]
     with patch("sys.argv", test_args):
         with patch("audio_separator.separator.Separator") as mock_separator:
             mock_separator_instance = mock_separator.return_value
