@@ -737,7 +737,7 @@ class Separator:
         self.logger.debug("Loading model completed.")
         self.logger.info(f'Load model duration: {time.strftime("%H:%M:%S", time.gmtime(int(time.perf_counter() - load_model_start_time)))}')
 
-    def separate(self, audio_file_path, primary_output_name=None, secondary_output_name=None):
+    def separate(self, audio_file_path, custom_output_names=None):
         """
         Separates the audio file into different stems (e.g., vocals, instruments) using the loaded model.
 
@@ -747,8 +747,7 @@ class Separator:
 
         Parameters:
         - audio_file_path (str): The path to the audio file to be separated.
-        - primary_output_name (str, optional): Custom name for the primary output file. Defaults to None.
-        - secondary_output_name (str, optional): Custom name for the secondary output file. Defaults to None.
+        - custom_output_names (dict, optional): Custom names for the output files. Defaults to None.
 
         Returns:
         - output_files (list of str): A list containing the paths to the separated audio stem files.
@@ -760,18 +759,18 @@ class Separator:
         self.logger.info(f"Starting separation process for audio_file_path: {audio_file_path}")
         separate_start_time = time.perf_counter()
 
-        self.logger.debug(f"Normalization threshold set to {self.normalization_threshold}, waveform will lowered to this max amplitude to avoid clipping.")
-        self.logger.debug(f"Amplification threshold set to {self.amplification_threshold}, waveform will scaled up to this max amplitude if below it.")
+        self.logger.debug(f"Normalization threshold set to {self.normalization_threshold}, waveform will be lowered to this max amplitude to avoid clipping.")
+        self.logger.debug(f"Amplification threshold set to {self.amplification_threshold}, waveform will be scaled up to this max amplitude if below it.")
 
         # Run separation method for the loaded model with autocast enabled if supported by the device.
         output_files = None
         if self.use_autocast and autocast_mode.is_autocast_available(self.torch_device.type):
             self.logger.debug("Autocast available.")
             with autocast_mode.autocast(self.torch_device.type):
-                output_files = self.model_instance.separate(audio_file_path, primary_output_name, secondary_output_name)
+                output_files = self.model_instance.separate(audio_file_path, custom_output_names)
         else:
             self.logger.debug("Autocast unavailable.")
-            output_files = self.model_instance.separate(audio_file_path, primary_output_name, secondary_output_name)
+            output_files = self.model_instance.separate(audio_file_path, custom_output_names)
 
         # Clear GPU cache to free up memory
         self.model_instance.clear_gpu_cache()
