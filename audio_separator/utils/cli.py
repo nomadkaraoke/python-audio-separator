@@ -200,5 +200,5 @@ def main():
     separator.load_model(model_filename=args.model_filename)
 
     for audio_file in args.audio_files:
-        output_files = separator.separate(audio_file_path=audio_file, custom_output_names=args.custom_output_names)
+        output_files = separator.separate(audio_file, custom_output_names=args.custom_output_names)
         logger.info(f"Separation complete! Output file(s): {' '.join(output_files)}")
