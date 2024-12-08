@@ -1,3 +1,4 @@
+import json
 import pytest
 import logging
 from audio_separator.utils.cli import main
@@ -258,9 +259,10 @@ def test_cli_use_autocast_argument(common_expected_args):
             mock_separator.assert_called_once_with(**common_expected_args)
 
 
-# Test using primary_output_name argument
-def test_cli_primary_output_name_argument(common_expected_args):
-    test_args = ["cli.py", "test_audio.mp3", "--primary_output_name=custom_primary_output"]
+# Test using custom_output_names argument
+def test_cli_Vocals_output_name_argument(common_expected_args):
+    custom_vocals_names = {"Vocals": "vocals_output"}
+    test_args = ["cli.py", "test_audio.mp3", f"--custom_output_names={json.dumps(custom_vocals_names)}"]
     with patch("sys.argv", test_args):
         with patch("audio_separator.separator.Separator") as mock_separator:
             mock_separator_instance = mock_separator.return_value
@@ -269,12 +271,13 @@ def test_cli_primary_output_name_argument(common_expected_args):
 
             # Assertions
             mock_separator.assert_called_once_with(**common_expected_args)
-            mock_separator_instance.separate.assert_called_once_with("test_audio.mp3", primary_output_name="custom_primary_output", secondary_output_name=None)
+            mock_separator_instance.separate.assert_called_once_with("test_audio.mp3", custom_output_names=custom_vocals_names)
 
 
-# Test using secondary_output_name argument
-def test_cli_secondary_output_name_argument(common_expected_args):
-    test_args = ["cli.py", "test_audio.mp3", "--secondary_output_name=custom_secondary_output"]
+# Test using custom_output_names argument
+def test_cli_Instrumental_output_name_argument(common_expected_args):
+    custom_instrumental_names = {"Instrumental": "instrumental_output"}
+    test_args = ["cli.py", "test_audio.mp3", f"--custom_output_names={json.dumps(custom_instrumental_names)}"]
     with patch("sys.argv", test_args):
         with patch("audio_separator.separator.Separator") as mock_separator:
             mock_separator_instance = mock_separator.return_value
@@ -283,12 +286,16 @@ def test_cli_secondary_output_name_argument(common_expected_args):
 
             # Assertions
             mock_separator.assert_called_once_with(**common_expected_args)
-            mock_separator_instance.separate.assert_called_once_with("test_audio.mp3", primary_output_name=None, secondary_output_name="custom_secondary_output")
+            mock_separator_instance.separate.assert_called_once_with("test_audio.mp3", custom_output_names=custom_instrumental_names)
 
 
-# Test using both primary_output_name and secondary_output_name arguments
-def test_cli_both_output_names_argument(common_expected_args):
-    test_args = ["cli.py", "test_audio.mp3", "--primary_output_name=custom_primary_output", "--secondary_output_name=custom_secondary_output"]
+# Test using custom_output_names arguments
+def test_cli_custom_output_names_argument(common_expected_args):
+    custom_names = {
+        "Vocals": "vocals_output",
+        "Instrumental": "instrumental_output",
+    }
+    test_args = ["cli.py", "test_audio.mp3", f"--custom_output_names={json.dumps(custom_names)}"]
     with patch("sys.argv", test_args):
         with patch("audio_separator.separator.Separator") as mock_separator:
             mock_separator_instance = mock_separator.return_value
@@ -297,4 +304,26 @@ def test_cli_both_output_names_argument(common_expected_args):
 
             # Assertions
             mock_separator.assert_called_once_with(**common_expected_args)
-            mock_separator_instance.separate.assert_called_once_with("test_audio.mp3", primary_output_name="custom_primary_output", secondary_output_name="custom_secondary_output")
+            mock_separator_instance.separate.assert_called_once_with("test_audio.mp3", custom_output_names=custom_names)
+
+
+# Test using custom_output_names arguments
+def test_cli_demucs_output_names_argument(common_expected_args):
+    demucs_output_names = {
+        "Vocals": "vocals_output",
+        "Drums": "drums_output",
+        "Bass": "bass_output",
+        "Other": "other_output",
+        "Guitar": "guitar_output",
+        "Piano": "piano_output"
+    }
+    test_args = ["cli.py", "test_audio.mp3", f"--custom_output_names={json.dumps(demucs_output_names)}", "--model_filename=htdemucs_6s.yaml"]
+    with patch("sys.argv", test_args):
+        with patch("audio_separator.separator.Separator") as mock_separator:
+            mock_separator_instance = mock_separator.return_value
+            mock_separator_instance.separate.return_value = ["output_file.mp3"]
+            main()
+
+            # Assertions
+            mock_separator.assert_called_once_with(**common_expected_args)
+            mock_separator_instance.separate.assert_called_once_with("test_audio.mp3", custom_output_names=demucs_output_names)

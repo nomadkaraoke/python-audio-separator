@@ -372,3 +372,12 @@ class CommonSeparator:
 
         self.primary_stem_output_path = None
         self.secondary_stem_output_path = None
+
+    def get_stem_output_path(self, stem_name, custom_output_names):
+        """
+        Gets the output path for a stem based on the stem name and custom output names.
+        """
+        if custom_output_names and stem_name in custom_output_names:
+            return os.path.join(f"{custom_output_names[stem_name]}.{self.output_format.lower()}")
+        else:
+            return os.path.join(f"{self.audio_file_base}_({stem_name})_{self.model_name}.{self.output_format.lower()}")
