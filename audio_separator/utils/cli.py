@@ -59,7 +59,7 @@ def main():
     common_params = parser.add_argument_group("Common Separation Parameters")
     common_params.add_argument("--invert_spect", action="store_true", help=invert_spect_help)
     common_params.add_argument("--normalization", type=float, default=0.9, help=normalization_help)
-    common_params.add_argument("--amplification", type=float, default=0.6, help=amplification_help)
+    common_params.add_argument("--amplification", type=float, default=0.0, help=amplification_help)
     common_params.add_argument("--single_stem", default=None, help=single_stem_help)
     common_params.add_argument("--sample_rate", type=int, default=44100, help=sample_rate_help)
     common_params.add_argument("--use_soundfile", action="store_true", help=use_soundfile_help)

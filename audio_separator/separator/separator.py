@@ -85,7 +85,7 @@ class Separator:
         output_format="WAV",
         output_bitrate=None,
         normalization_threshold=0.9,
-        amplification_threshold=0.6,
+        amplification_threshold=0.0,
         output_single_stem=None,
         invert_using_spec=False,
         sample_rate=44100,
@@ -142,8 +142,8 @@ class Separator:
             raise ValueError("The normalization_threshold must be greater than 0 and less than or equal to 1.")
         
         self.amplification_threshold = amplification_threshold
-        if amplification_threshold <= 0 or amplification_threshold > 1:
-            raise ValueError("The amplification_threshold must be greater than 0 and less than or equal to 1.")
+        if amplification_threshold < 0 or amplification_threshold > 1:
+            raise ValueError("The amplification_threshold must be greater than or equal to 0 and less than or equal to 1.")
 
         self.output_single_stem = output_single_stem
         if output_single_stem is not None:

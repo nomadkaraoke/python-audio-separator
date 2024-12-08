@@ -18,7 +18,7 @@ def common_expected_args():
         "output_format": "FLAC",
         "output_bitrate": None,
         "normalization_threshold": 0.9,
-        "amplification_threshold": 0.6,
+        "amplification_threshold": 0.0,
         "output_single_stem": None,
         "invert_using_spec": False,
         "sample_rate": 44100,
