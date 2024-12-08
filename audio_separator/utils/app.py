@@ -459,11 +459,20 @@ with gr.Blocks(
                   batch_size = gr.Slider(minimum=1, maximum=16, step=1, value=1, label="Batch Size", info="Larger consumes more RAM but may process slightly faster.")
 
         with gr.Accordion("Rename Stems", open=False):
-            gr.HTML("<h3> NAME - Input File Name </h3>")
-            gr.HTML("<h3> STEM - Stem Name (e.g., Vocals, Instrumental) </h3>")
-            gr.HTML("<h3> MODEL - Model Name (e.g., BS-Roformer-Viperx-1297) </h3>")
-            gr.HTML("<h3> Usage Example: NAME_(STEM)_MODEL </h3>")
-            gr.HTML("<h3> Output File Name: Music_(Vocals)_BS-Roformer-Viperx-1297 </h3>")
+            gr.Markdown(
+                """
+                Keys for automatic determination of input file names, stems, and models to simplify the construction of output file names.
+            
+                Keys:
+                * NAME - Input File Name
+                * STEM - Stem Name (e.g., Vocals, Instrumental)
+                * MODEL - Model Name (e.g., BS-Roformer-Viperx-1297)
+
+                Example:
+                * Usage: NAME_(STEM)_MODEL
+                * Output File Name: Music_(Vocals)_BS-Roformer-Viperx-1297
+                """
+            )
             with gr.Row():
                 vocals_stem = gr.Textbox(value="NAME_(STEM)_MODEL", label="Vocals Stem", info="Output example: Music_(Vocals)_BS-Roformer-Viperx-1297", placeholder="NAME_(STEM)_MODEL")
                 instrumental_stem = gr.Textbox(value="NAME_(STEM)_MODEL", label="Instrumental Stem", info="Output example: Music_(Instrumental)_BS-Roformer-Viperx-1297", placeholder="NAME_(STEM)_MODEL")
