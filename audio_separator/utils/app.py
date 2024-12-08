@@ -464,9 +464,9 @@ with gr.Blocks(
                 Keys for automatic determination of input file names, stems, and models to simplify the construction of output file names.
             
                 Keys:
-                * NAME - Input File Name
-                * STEM - Stem Name (e.g., Vocals, Instrumental)
-                * MODEL - Model Name (e.g., BS-Roformer-Viperx-1297)
+                * **NAME** - Input File Name
+                * **STEM** - Stem Name (e.g., Vocals, Instrumental)
+                * **MODEL** - Model Name (e.g., BS-Roformer-Viperx-1297)
 
                 Example:
                 * Usage: NAME_(STEM)_MODEL
