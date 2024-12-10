@@ -17,6 +17,12 @@
         },
         "Roformer Model: BS-Roformer-De-Reverb": {
             "deverb_bs_roformer_8_384dim_10depth.ckpt": "deverb_bs_roformer_8_384dim_10depth_config.yaml"
+        },
+        "Roformer Model: Mel-Roformer-Vocals-Kim": {
+            "vocals_mel_band_roformer.ckpt": "vocals_mel_band_roformer.yaml"
+        },
+        "Roformer Model:  MelBand Roformer Kim | Inst V1 (E) by Unwa": {
+            "melband_roformer_inst_v1e.ckpt": "config_melbandroformer_inst.yaml"
         }
     }
 }
