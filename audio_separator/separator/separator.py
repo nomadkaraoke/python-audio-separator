@@ -420,6 +420,7 @@ class Separator:
                 **model_downloads_list["mdx23c_download_list"],
                 **model_downloads_list["mdx23c_download_vip_list"],
                 **model_downloads_list["roformer_download_list"],
+                **audio_separator_models_list["mdx23c_download_list"],
                 **audio_separator_models_list["roformer_download_list"],
             },
         }

@@ -348,7 +348,7 @@ You can also rename specific stems:
 - **`output_dir`:** (Optional) Directory where the separated files will be saved. If not specified, uses the current directory.
 - **`output_format`:** (Optional) Format to encode output files, any common format (WAV, MP3, FLAC, M4A, etc.). `Default: WAV`
 - **`normalization_threshold`:** (Optional) The amount by which the amplitude of the output audio will be multiplied. `Default: 0.9`
-- **`amplification_threshold`:** (Optional) The minimum amplitude level at which the waveform will be amplified. If the peak amplitude of the audio is below this threshold, the waveform will be scaled up to meet it. `Default: 0.6`
+- **`amplification_threshold`:** (Optional) The minimum amplitude level at which the waveform will be amplified. If the peak amplitude of the audio is below this threshold, the waveform will be scaled up to meet it. `Default: 0.0`
 - **`output_single_stem`:** (Optional) Output only a single stem, such as 'Instrumental' and 'Vocals'. `Default: None`
 - **`invert_using_spec`:** (Optional) Flag to invert using spectrogram. `Default: False`
 - **`sample_rate`:** (Optional) Set the sample rate of the output audio. `Default: 44100`
