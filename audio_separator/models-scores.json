@@ -17563,35 +17563,5 @@
         "ISR": 16.2412
       }
     }
-  },
-  "kuielab_a_other.onnx": {
-    "model_name": "MDX-Net Model: kuielab_a_other",
-    "track_scores": [],
-    "median_scores": {}
-  },
-  "kuielab_a_bass.onnx": {
-    "model_name": "MDX-Net Model: kuielab_a_bass",
-    "track_scores": [],
-    "median_scores": {}
-  },
-  "kuielab_a_drums.onnx": {
-    "model_name": "MDX-Net Model: kuielab_a_drums",
-    "track_scores": [],
-    "median_scores": {}
-  },
-  "kuielab_b_other.onnx": {
-    "model_name": "MDX-Net Model: kuielab_b_other",
-    "track_scores": [],
-    "median_scores": {}
-  },
-  "kuielab_b_bass.onnx": {
-    "model_name": "MDX-Net Model: kuielab_b_bass",
-    "track_scores": [],
-    "median_scores": {}
-  },
-  "kuielab_b_drums.onnx": {
-    "model_name": "MDX-Net Model: kuielab_b_drums",
-    "track_scores": [],
-    "median_scores": {}
   }
 }
