@@ -143,7 +143,7 @@ def calculate_median_scores(track_scores):
         if any(metrics.values()):  # Only include stems that have scores
             median_scores[stem] = {metric: float(f"{np.median(values):.6g}") for metric, values in metrics.items() if values}  # Only include metrics that have values
 
-    return median_scores if median_scores else None
+    return median_scores
 
 
 def cleanup_combined_results(combined_results):
@@ -191,54 +191,52 @@ def main():
         # Process all models for this track
         for model_type, models in models_by_type.items():
             for model_name, model_info in models.items():
-                test_model = None
-                if isinstance(model_info, str):
-                    test_model = model_info
-                elif isinstance(model_info, dict):
-                    for file_name in model_info.keys():
-                        if file_name.endswith((".onnx", ".pth", ".ckpt")):
-                            test_model = file_name
-                            break
+                # Get the filename from the model_info dictionary
+                test_model = model_info.get("filename")
 
-                if test_model:
-                    # Initialize model entry if it doesn't exist
-                    if test_model not in combined_results:
-                        combined_results[test_model] = {"model_name": model_name, "track_scores": [], "median_scores": None}
+                # Skip if no filename is found
+                if not test_model:
+                    logger.warning(f"No filename found for model {model_name}, skipping...")
+                    continue
 
-                    # Check if track already evaluated
-                    track_already_evaluated = any(
-                        track_score["track_name"] == track_name for track_score in combined_results[test_model]["track_scores"] if track_score is not None  # Handle null entries
-                    )
+                # Initialize model entry if it doesn't exist
+                if test_model not in combined_results:
+                    combined_results[test_model] = {"model_name": model_name, "track_scores": [], "median_scores": {}}
 
-                    if track_already_evaluated:
-                        logger.info(f"Skipping already evaluated track {track_name} for model: {test_model}")
+                # Check if track already evaluated
+                track_already_evaluated = any(track_score["track_name"] == track_name for track_score in combined_results[test_model]["track_scores"] if track_score is not None)
+
+                if track_already_evaluated:
+                    logger.info(f"Skipping already evaluated track {track_name} for model: {test_model}")
+                    continue
+
+                # Process the model
+                logger.info(f"Processing model: {test_model}")
+                try:
+                    _, model_results = evaluate_track(track_name, track_path, test_model, mus)
+                    if model_results:
+                        combined_results[test_model]["track_scores"].append(model_results)
                     else:
-                        logger.info(f"Processing model: {test_model}")
-                        try:
-                            _, model_results = evaluate_track(track_name, track_path, test_model, mus)
-                            if model_results:
-                                combined_results[test_model]["track_scores"].append(model_results)
-                            else:
-                                logger.info(f"Skipping model {test_model} for track {track_name} due to no evaluatable stems")
-                        except Exception as e:
-                            logger.error(f"Error evaluating model {test_model} with track {track_name}: {str(e)}")
-                            continue
+                        logger.info(f"Skipping model {test_model} for track {track_name} due to no evaluatable stems")
+                except Exception as e:
+                    logger.error(f"Error evaluating model {test_model} with track {track_name}: {str(e)}")
+                    logger.exception(f"Exception details: ", exc_info=e)
+                    continue
 
-                    # Only calculate and update median scores if there are any track scores
-                    if combined_results[test_model]["track_scores"]:
-                        median_scores = calculate_median_scores(combined_results[test_model]["track_scores"])
-                        combined_results[test_model]["median_scores"] = median_scores
-                    else:
-                        # Remove the model entry if there are no track scores
-                        del combined_results[test_model]
+                # Update and save results
+                if combined_results[test_model]["track_scores"]:
+                    median_scores = calculate_median_scores(combined_results[test_model]["track_scores"])
+                    combined_results[test_model]["median_scores"] = median_scores
+                else:
+                    del combined_results[test_model]
 
-                    # Save results after each model (whether evaluated or skipped)
-                    os.makedirs(os.path.dirname(combined_results_path), exist_ok=True)
-                    with open(combined_results_path, "w") as f:
-                        json.dump(combined_results, f, indent=2)
+                # Save results after each model
+                os.makedirs(os.path.dirname(combined_results_path), exist_ok=True)
+                with open(combined_results_path, "w") as f:
+                    json.dump(combined_results, f, indent=2)
 
-                    if not track_already_evaluated:
-                        logger.info(f"Updated combined results file with {test_model} - {track_name}")
+                if not track_already_evaluated:
+                    logger.info(f"Updated combined results file with {test_model} - {track_name}")
 
     logger.info("Evaluation complete")
     return 0

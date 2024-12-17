@@ -348,6 +348,88 @@ class Separator:
         """
         This method lists the supported model files for audio-separator, by fetching the same file UVR uses to list these.
         Also includes model performance scores where available.
+
+        Example response object:
+
+        {
+            "MDX": {
+                "MDX-Net Model VIP: UVR-MDX-NET-Inst_full_292": {
+                "filename": "UVR-MDX-NET-Inst_full_292.onnx",
+                "scores": {
+                    "vocals": {
+                    "SDR": 10.6497,
+                    "SIR": 20.3786,
+                    "SAR": 10.692,
+                    "ISR": 14.848
+                    },
+                    "instrumental": {
+                    "SDR": 15.2149,
+                    "SIR": 25.6075,
+                    "SAR": 17.1363,
+                    "ISR": 17.7893
+                    }
+                },
+                "download_files": [
+                    "UVR-MDX-NET-Inst_full_292.onnx"
+                ]
+                }
+            },
+            "Demucs": {
+                "Demucs v4: htdemucs_ft": {
+                "filename": "htdemucs_ft.yaml",
+                "scores": {
+                    "vocals": {
+                    "SDR": 11.2685,
+                    "SIR": 21.257,
+                    "SAR": 11.0359,
+                    "ISR": 19.3753
+                    },
+                    "drums": {
+                    "SDR": 13.235,
+                    "SIR": 23.3053,
+                    "SAR": 13.0313,
+                    "ISR": 17.2889
+                    },
+                    "bass": {
+                    "SDR": 9.72743,
+                    "SIR": 19.5435,
+                    "SAR": 9.20801,
+                    "ISR": 13.5037
+                    }
+                },
+                "download_files": [
+                    "https://dl.fbaipublicfiles.com/demucs/hybrid_transformer/f7e0c4bc-ba3fe64a.th",
+                    "https://dl.fbaipublicfiles.com/demucs/hybrid_transformer/d12395a8-e57c48e6.th",
+                    "https://dl.fbaipublicfiles.com/demucs/hybrid_transformer/92cfc3b6-ef3bcb9c.th",
+                    "https://dl.fbaipublicfiles.com/demucs/hybrid_transformer/04573f0d-f3cf25b2.th",
+                    "https://github.com/TRvlvr/model_repo/releases/download/all_public_uvr_models/htdemucs_ft.yaml"
+                ]
+                }
+            },
+            "MDXC": {
+                "MDX23C Model: MDX23C-InstVoc HQ": {
+                "filename": "MDX23C-8KFFT-InstVoc_HQ.ckpt",
+                "scores": {
+                    "vocals": {
+                    "SDR": 11.9504,
+                    "SIR": 23.1166,
+                    "SAR": 12.093,
+                    "ISR": 15.4782
+                    },
+                    "instrumental": {
+                    "SDR": 16.3035,
+                    "SIR": 26.6161,
+                    "SAR": 18.5167,
+                    "ISR": 18.3939
+                    }
+                },
+                "download_files": [
+                    "MDX23C-8KFFT-InstVoc_HQ.ckpt",
+                    "model_2_stem_full_band_8k.yaml"
+                ]
+                }
+            }
+        }
         """
         download_checks_path = os.path.join(self.model_file_dir, "download_checks.json")
 
@@ -356,95 +438,53 @@ class Separator:
         model_downloads_list = json.load(open(download_checks_path, encoding="utf-8"))
         self.logger.debug(f"UVR model download list loaded")
 
-        # model_downloads_list JSON structure / example snippet:
-        # {
-        #     "vr_download_list": {
-        #             "VR Arch Single Model v5: 1_HP-UVR": "1_HP-UVR.pth",
-        #             "VR Arch Single Model v5: UVR-DeNoise by FoxJoy": "UVR-DeNoise.pth",
-        #     },
-        #     "mdx_download_list": {
-        #             "MDX-Net Model: UVR-MDX-NET Inst HQ 3": "UVR-MDX-NET-Inst_HQ_3.onnx",
-        #             "MDX-Net Model: UVR-MDX-NET Karaoke 2": "UVR_MDXNET_KARA_2.onnx",
-        #             "MDX-Net Model: Kim Vocal 2": "Kim_Vocal_2.onnx",
-        #             "MDX-Net Model: kuielab_b_drums": "kuielab_b_drums.onnx"
-        #     },
-        #     "demucs_download_list": {
-        #             "Demucs v4: htdemucs_ft": {
-        #                     "f7e0c4bc-ba3fe64a.th": "https://dl.fbaipublicfiles.com/demucs/hybrid_transformer/f7e0c4bc-ba3fe64a.th",
-        #                     "d12395a8-e57c48e6.th": "https://dl.fbaipublicfiles.com/demucs/hybrid_transformer/d12395a8-e57c48e6.th",
-        #                     "92cfc3b6-ef3bcb9c.th": "https://dl.fbaipublicfiles.com/demucs/hybrid_transformer/92cfc3b6-ef3bcb9c.th",
-        #                     "04573f0d-f3cf25b2.th": "https://dl.fbaipublicfiles.com/demucs/hybrid_transformer/04573f0d-f3cf25b2.th",
-        #                     "htdemucs_ft.yaml": "https://github.com/TRvlvr/model_repo/releases/download/all_public_uvr_models/htdemucs_ft.yaml"
-        #             },
-        #             "Demucs v4: htdemucs": {
-        #                     "955717e8-8726e21a.th": "https://dl.fbaipublicfiles.com/demucs/hybrid_transformer/955717e8-8726e21a.th",
-        #                     "htdemucs.yaml": "https://github.com/TRvlvr/model_repo/releases/download/all_public_uvr_models/htdemucs.yaml"
-        #             },
-        #             "Demucs v1: tasnet": {
-        #                     "tasnet.th": "https://dl.fbaipublicfiles.com/demucs/v2.0/tasnet.th"
-        #             },
-        #     },
-        #     "mdx23_download_list": {
-        #             "MDX23C Model: MDX23C_D1581": {
-        #                     "MDX23C_D1581.ckpt": "model_2_stem_061321.yaml"
-        #             }
-        #     },
-        #     "mdx23c_download_list": {
-        #             "MDX23C Model: MDX23C-InstVoc HQ": {
-        #                     "MDX23C-8KFFT-InstVoc_HQ.ckpt": "model_2_stem_full_band_8k.yaml"
-        #             }
-        #     },
-        #     "roformer_download_list": {
-        #             "Roformer Model: BS-Roformer-Viperx-1297": {
-        #                     "model_bs_roformer_ep_317_sdr_12.9755.ckpt": "model_bs_roformer_ep_317_sdr_12.9755.yaml"
-        #             },
-        #             "Roformer Model: BS-Roformer-Viperx-1296": {
-        #                     "model_bs_roformer_ep_368_sdr_12.9628.ckpt": "model_bs_roformer_ep_368_sdr_12.9628.yaml"
-        #             },
-        #             "Roformer Model: BS-Roformer-Viperx-1053": {
-        #                     "model_bs_roformer_ep_937_sdr_10.5309.ckpt": "model_bs_roformer_ep_937_sdr_10.5309.yaml"
-        #             },
-        #             "Roformer Model: Mel-Roformer-Viperx-1143": {
-        #                     "model_mel_band_roformer_ep_3005_sdr_11.4360.ckpt": "model_mel_band_roformer_ep_3005_sdr_11.4360.yaml"
-        #             }
-        #     },
-        # }
-
-        # Load the model scores
-        with resources.open_text("audio_separator", "models-scores.json") as f:
-            model_scores = json.load(f)
-        self.logger.debug(f"Model scores loaded")
+        # Load the model scores with error handling
+        model_scores = {}
+        try:
+            with resources.open_text("audio_separator", "models-scores.json") as f:
+                model_scores = json.load(f)
+            self.logger.debug(f"Model scores loaded")
+        except json.JSONDecodeError as e:
+            self.logger.warning(f"Failed to load model scores: {str(e)}")
+            self.logger.warning("Continuing without model scores")
 
         # Only show Demucs v4 models as we've only implemented support for v4
         filtered_demucs_v4 = {key: value for key, value in model_downloads_list["demucs_download_list"].items() if key.startswith("Demucs v4")}
 
-        # Modified Demucs handling to use YAML files as identifiers
+        # Modified Demucs handling to use YAML files as identifiers and include download files
         demucs_models = {}
         for name, files in filtered_demucs_v4.items():
             # Find the YAML file in the model files
             yaml_file = next((filename for filename in files.keys() if filename.endswith(".yaml")), None)
             if yaml_file:
-                demucs_models[name] = {"filename": yaml_file, "scores": model_scores.get(yaml_file, {}).get("median_scores", {})}
+                demucs_models[name] = {
+                    "filename": yaml_file,
+                    "scores": model_scores.get(yaml_file, {}).get("median_scores", {}),
+                    "download_files": list(files.values()),  # List of all download URLs/filenames
+                }
 
         # Load the JSON file using importlib.resources
         with resources.open_text("audio_separator", "models.json") as f:
             audio_separator_models_list = json.load(f)
         self.logger.debug(f"Audio-Separator model list loaded")
 
-        # Return object with list of model names, which are the keys in vr_download_list, mdx_download_list, demucs_download_list, mdx23_download_list, mdx23c_download_list,
-        # grouped by type: VR, MDX, Demucs, MDX23, MDX23C, including their scores
+        # Return object with list of model names
         model_files_grouped_by_type = {
             "VR": {
-                name: {"filename": filename, "scores": model_scores.get(filename, {}).get("median_scores", {})}
+                name: {"filename": filename, "scores": model_scores.get(filename, {}).get("median_scores", {}), "download_files": [filename]}  # Just the filename for VR models
                 for name, filename in {**model_downloads_list["vr_download_list"], **audio_separator_models_list["vr_download_list"]}.items()
             },
             "MDX": {
-                name: {"filename": filename, "scores": model_scores.get(filename, {}).get("median_scores", {})}
+                name: {"filename": filename, "scores": model_scores.get(filename, {}).get("median_scores", {}), "download_files": [filename]}  # Just the filename for MDX models
                 for name, filename in {**model_downloads_list["mdx_download_list"], **model_downloads_list["mdx_download_vip_list"], **audio_separator_models_list["mdx_download_list"]}.items()
             },
             "Demucs": demucs_models,
             "MDXC": {
-                name: {"filename": next(iter(files.keys())), "scores": model_scores.get(next(iter(files.keys())), {}).get("median_scores", {})}
+                name: {
+                    "filename": next(iter(files.keys())),
+                    "scores": model_scores.get(next(iter(files.keys())), {}).get("median_scores", {}),
+                    "download_files": list(files.keys()) + list(files.values()),  # List of both model filenames and config filenames
+                }
                 for name, files in {
                     **model_downloads_list["mdx23c_download_list"],
                     **model_downloads_list["mdx23c_download_vip_list"],
@@ -454,6 +494,7 @@ class Separator:
                 }.items()
             },
         }
+
         return model_files_grouped_by_type
 
     def print_uvr_vip_message(self):
@@ -467,101 +508,65 @@ class Separator:
     def download_model_files(self, model_filename):
         """
         This method downloads the model files for a given model filename, if they are not already present.
+        Returns tuple of (model_filename, model_type, model_friendly_name, model_path, yaml_config_filename)
         """
         model_path = os.path.join(self.model_file_dir, f"{model_filename}")
 
         supported_model_files_grouped = self.list_supported_model_files()
         public_model_repo_url_prefix = "https://github.com/TRvlvr/model_repo/releases/download/all_public_uvr_models"
         vip_model_repo_url_prefix = "https://github.com/Anjok0109/ai_magic/releases/download/v5"
-
         audio_separator_models_repo_url_prefix = "https://github.com/nomadkaraoke/python-audio-separator/releases/download/model-configs"
 
         yaml_config_filename = None
 
         self.logger.debug(f"Searching for model_filename {model_filename} in supported_model_files_grouped")
-        for model_type, model_list in supported_model_files_grouped.items():
-            for model_friendly_name, model_download_list in model_list.items():
+
+        # Iterate through model types (MDX, Demucs, MDXC)
+        for model_type, models in supported_model_files_grouped.items():
+            # Iterate through each model in this type
+            for model_friendly_name, model_info in models.items():
                 self.model_is_uvr_vip = "VIP" in model_friendly_name
                 model_repo_url_prefix = vip_model_repo_url_prefix if self.model_is_uvr_vip else public_model_repo_url_prefix
 
-                # If model_download_list is a string, this model only requires a single file so we can just download it
-                if isinstance(model_download_list, str) and model_download_list == model_filename:
-                    self.logger.debug(f"Single file model identified: {model_friendly_name}")
+                # Check if this model matches our target filename
+                if model_info["filename"] == model_filename or model_filename in model_info["download_files"]:
+                    self.logger.debug(f"Found matching model: {model_friendly_name}")
                     self.model_friendly_name = model_friendly_name
-
-                    try:
-                        self.download_file_if_not_exists(f"{model_repo_url_prefix}/{model_filename}", model_path)
-                    except RuntimeError:
-                        self.logger.debug("Model not found in UVR repo, attempting to download from audio-separator models repo...")
-                        self.download_file_if_not_exists(f"{audio_separator_models_repo_url_prefix}/{model_filename}", model_path)
-
                     self.print_uvr_vip_message()
 
-                    self.logger.debug(f"Returning path for single model file: {model_path}")
+                    # Download each required file for this model
+                    for file_to_download in model_info["download_files"]:
+                        # For URLs, extract just the filename portion
+                        if file_to_download.startswith("http"):
+                            filename = file_to_download.split("/")[-1]
+                            download_path = os.path.join(self.model_file_dir, filename)
+                            self.download_file_if_not_exists(file_to_download, download_path)
+                            continue
+
+                        download_path = os.path.join(self.model_file_dir, file_to_download)
+
+                        # For MDXC models, handle YAML config files specially
+                        if model_type == "MDXC" and file_to_download.endswith(".yaml"):
+                            yaml_config_filename = file_to_download
+                            try:
+                                yaml_url = f"{model_repo_url_prefix}/mdx_model_data/mdx_c_configs/{file_to_download}"
+                                self.download_file_if_not_exists(yaml_url, download_path)
+                            except RuntimeError:
+                                self.logger.debug("YAML config not found in UVR repo, trying audio-separator models repo...")
+                                yaml_url = f"{audio_separator_models_repo_url_prefix}/{file_to_download}"
+                                self.download_file_if_not_exists(yaml_url, download_path)
+                            continue
+
+                        # For regular model files, try UVR repo first, then audio-separator repo
+                        try:
+                            download_url = f"{model_repo_url_prefix}/{file_to_download}"
+                            self.download_file_if_not_exists(download_url, download_path)
+                        except RuntimeError:
+                            self.logger.debug("Model not found in UVR repo, trying audio-separator models repo...")
+                            download_url = f"{audio_separator_models_repo_url_prefix}/{file_to_download}"
+                            self.download_file_if_not_exists(download_url, download_path)
+
                     return model_filename, model_type, model_friendly_name, model_path, yaml_config_filename
-
-                # If it's a dict, iterate through each entry check if any of them match model_filename
-                # If the value is a full URL, download it from that URL.
-                # If it's just a filename, add the model repo prefix to get the URL to download.
-                elif isinstance(model_download_list, dict):
-                    this_model_matches_input_filename = False
-                    for file_name, file_url in model_download_list.items():
-                        if file_name == model_filename or file_url == model_filename:
-                            self.logger.debug(f"Found input filename {model_filename} in multi-file model: {model_friendly_name}")
-                            this_model_matches_input_filename = True
-
-                    if this_model_matches_input_filename:
-                        self.logger.debug(f"Multi-file model identified: {model_friendly_name}, iterating through files to download")
-                        self.model_friendly_name = model_friendly_name
-                        self.print_uvr_vip_message()
-
-                        for config_key, config_value in model_download_list.items():
-                            self.logger.debug(f"Attempting to identify download URL for config pair: {config_key} -> {config_value}")
-
-                            # Demucs models have full URLs to download from Facebook repos, and config_key is set to the file name
-                            if config_value.startswith("http"):
-                                self.download_file_if_not_exists(config_value, os.path.join(self.model_file_dir, config_key))
-
-                            # Checkpoint models apparently use config_key as the model filename, but the value is a YAML config file name...
-                            # Both need to be downloaded, but the model data YAML file actually comes from the application data repo...
-                            elif config_key.endswith(".ckpt"):
-                                try:
-                                    download_url = f"{model_repo_url_prefix}/{config_key}"
-                                    self.download_file_if_not_exists(download_url, os.path.join(self.model_file_dir, config_key))
-                                except RuntimeError:
-                                    self.logger.debug("Model not found in UVR repo, attempting to download from audio-separator models repo...")
-                                    download_url = f"{audio_separator_models_repo_url_prefix}/{config_key}"
-                                    self.download_file_if_not_exists(download_url, os.path.join(self.model_file_dir, config_key))
-
-                                # In case the user specified the YAML filename as the model input instead of the model filename, correct that
-                                if model_filename.endswith(".yaml"):
-                                    self.logger.warning(f"The model name you've specified, {model_filename} is actually a model config file, not a model file itself.")
-                                    self.logger.warning(f"We found a model matching this config file: {config_key} so we'll use that model file for this run.")
-                                    self.logger.warning("To prevent confusing / inconsistent behaviour in future, specify an actual model filename instead.")
-                                    model_filename = config_key
-                                    model_path = os.path.join(self.model_file_dir, f"{model_filename}")
-
-                                # For MDXC models, the config_value is the YAML file which needs to be downloaded separately from the application_data repo
-                                yaml_config_filename = config_value
-                                yaml_config_filepath = os.path.join(self.model_file_dir, yaml_config_filename)
-
-                                try:
-                                    # Repo for model data and configuration sources from UVR
-                                    model_data_url_prefix = "https://raw.githubusercontent.com/TRvlvr/application_data/main"
-                                    yaml_config_url = f"{model_data_url_prefix}/mdx_model_data/mdx_c_configs/{yaml_config_filename}"
-                                    self.download_file_if_not_exists(f"{yaml_config_url}", yaml_config_filepath)
-                                except RuntimeError:
-                                    self.logger.debug("Model YAML config file not found in UVR repo, attempting to download from audio-separator models repo...")
-                                    yaml_config_url = f"{audio_separator_models_repo_url_prefix}/{yaml_config_filename}"
-                                    self.download_file_if_not_exists(f"{yaml_config_url}", yaml_config_filepath)
-
-                            # MDX and VR models have config_value set to the model filename
-                            else:
-                                download_url = f"{model_repo_url_prefix}/{config_value}"
-                                self.download_file_if_not_exists(download_url, os.path.join(self.model_file_dir, config_value))
-
-                        self.logger.debug(f"All files downloaded for model {model_friendly_name}, returning initial path {model_path}")
-                        return model_filename, model_type, model_friendly_name, model_path, yaml_config_filename
 
         raise ValueError(f"Model file {model_filename} not found in supported model files")
 
