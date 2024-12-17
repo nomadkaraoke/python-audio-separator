@@ -11,6 +11,8 @@
 *.wav
 *.flac
 *.mp3
+tests/model-metrics/results
+tests/model-metrics/datasets
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

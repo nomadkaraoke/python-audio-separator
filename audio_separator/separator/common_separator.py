@@ -377,7 +377,10 @@ class CommonSeparator:
         """
         Gets the output path for a stem based on the stem name and custom output names.
         """
-        if custom_output_names and stem_name in custom_output_names:
-            return os.path.join(f"{custom_output_names[stem_name]}.{self.output_format.lower()}")
-        else:
-            return os.path.join(f"{self.audio_file_base}_({stem_name})_{self.model_name}.{self.output_format.lower()}")
+        # Convert custom_output_names keys to lowercase for case-insensitive comparison
+        if custom_output_names:
+            custom_output_names_lower = {k.lower(): v for k, v in custom_output_names.items()}
+            if stem_name.lower() in custom_output_names_lower:
+                return os.path.join(f"{custom_output_names_lower[stem_name.lower()]}.{self.output_format.lower()}")
+
+        return os.path.join(f"{self.audio_file_base}_({stem_name})_{self.model_name}.{self.output_format.lower()}")
