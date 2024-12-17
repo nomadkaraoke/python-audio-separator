@@ -5349,6 +5349,16 @@
       null,
       null,
       null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null
     ],
     "median_scores": null
@@ -5356,6 +5366,16 @@
   "UVR-De-Echo-Aggressive.pth": {
     "model_name": "VR Arch Single Model v5: UVR-De-Echo-Aggressive by FoxJoy",
     "track_scores": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null,
       null,
       null,
@@ -5385,6 +5405,16 @@
       null,
       null,
       null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null
     ],
     "median_scores": null
@@ -5392,6 +5422,16 @@
   "UVR-DeEcho-DeReverb.pth": {
     "model_name": "VR Arch Single Model v5: UVR-DeEcho-DeReverb by FoxJoy",
     "track_scores": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null,
       null,
       null,
@@ -5421,6 +5461,16 @@
       null,
       null,
       null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null
     ],
     "median_scores": null
@@ -5428,6 +5478,16 @@
   "UVR-DeNoise.pth": {
     "model_name": "VR Arch Single Model v5: UVR-DeNoise by FoxJoy",
     "track_scores": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null,
       null,
       null,
@@ -6476,6 +6536,16 @@
   "UVR-De-Reverb-aufr33-jarredou.pth": {
     "model_name": "VR Arch Single Model v4: UVR-De-Reverb by aufr33-jarredou",
     "track_scores": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null,
       null,
       null,
@@ -10418,6 +10488,16 @@
       null,
       null,
       null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null
     ],
     "median_scores": null
@@ -10425,6 +10505,16 @@
   "UVR-MDX-NET_Crowd_HQ_1.onnx": {
     "model_name": "MDX-Net Model: UVR-MDX-NET Crowd HQ 1 By Aufr33",
     "track_scores": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null,
       null,
       null,
@@ -10660,6 +10750,16 @@
       null,
       null,
       null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null
     ]
   },
@@ -10676,12 +10776,32 @@
       null,
       null,
       null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null
     ]
   },
   "kuielab_a_drums.onnx": {
     "model_name": "MDX-Net Model: kuielab_a_drums",
     "track_scores": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null,
       null,
       null,
@@ -10915,6 +11035,16 @@
       null,
       null,
       null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null
     ]
   },
@@ -10931,12 +11061,32 @@
       null,
       null,
       null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null
     ]
   },
   "kuielab_b_drums.onnx": {
     "model_name": "MDX-Net Model: kuielab_b_drums",
     "track_scores": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null,
       null,
       null,
@@ -12152,20 +12302,37 @@
             "ISR": 17.7963
           }
         }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "vocals": {
+            "SDR": 10.7913,
+            "SIR": 20.3711,
+            "SAR": 8.6833,
+            "ISR": 10.9428
+          },
+          "instrumental": {
+            "SDR": 14.5405,
+            "SIR": 16.5369,
+            "SAR": 14.3339,
+            "ISR": 17.1808
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.45552,
-        "SIR": 17.7825,
-        "SAR": 10.3182,
-        "ISR": 13.9445
+        "SDR": 9.46487,
+        "SIR": 18.7702,
+        "SAR": 10.0434,
+        "ISR": 13.8946
       },
       "instrumental": {
-        "SDR": 14.2153,
-        "SIR": 23.4988,
-        "SAR": 16.5377,
-        "ISR": 17.1453
+        "SDR": 14.2692,
+        "SIR": 22.5876,
+        "SAR": 16.4255,
+        "ISR": 17.1808
       }
     }
   },
@@ -12341,20 +12508,37 @@
             "ISR": 16.2788
           }
         }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "vocals": {
+            "SDR": 10.6352,
+            "SIR": 16.3377,
+            "SAR": 9.74293,
+            "ISR": 11.9466
+          },
+          "instrumental": {
+            "SDR": 14.0272,
+            "SIR": 18.334,
+            "SAR": 14.8331,
+            "ISR": 15.5219
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.42155,
-        "SIR": 15.7095,
-        "SAR": 10.7686,
-        "ISR": 14.288
+        "SDR": 9.46007,
+        "SIR": 16.3377,
+        "SAR": 10.5141,
+        "ISR": 14.2015
       },
       "instrumental": {
-        "SDR": 13.7039,
-        "SIR": 24.0987,
-        "SAR": 16.6214,
-        "ISR": 15.9502
+        "SDR": 13.7105,
+        "SIR": 23.5832,
+        "SAR": 16.6048,
+        "ISR": 15.7591
       }
     }
   },
@@ -12530,20 +12714,37 @@
             "ISR": 16.6125
           }
         }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "vocals": {
+            "SDR": 11.119,
+            "SIR": 17.5241,
+            "SAR": 10.1873,
+            "ISR": 12.0741
+          },
+          "instrumental": {
+            "SDR": 14.4694,
+            "SIR": 18.2688,
+            "SAR": 15.2649,
+            "ISR": 15.8977
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.75977,
-        "SIR": 16.0109,
-        "SAR": 11.1034,
-        "ISR": 14.6972
+        "SDR": 9.79824,
+        "SIR": 16.4021,
+        "SAR": 10.9665,
+        "ISR": 14.6775
       },
       "instrumental": {
-        "SDR": 14.0,
-        "SIR": 24.9297,
-        "SAR": 17.0709,
-        "ISR": 15.9798
+        "SDR": 14.078,
+        "SIR": 23.8069,
+        "SAR": 17.0147,
+        "ISR": 15.8977
       }
     }
   },
@@ -12719,20 +12920,37 @@
             "ISR": 18.6237
           }
         }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "vocals": {
+            "SDR": 11.7741,
+            "SIR": 20.7192,
+            "SAR": 10.2936,
+            "ISR": 12.4045
+          },
+          "instrumental": {
+            "SDR": 15.4307,
+            "SIR": 19.0908,
+            "SAR": 15.7516,
+            "ISR": 17.4509
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.98906,
-        "SIR": 18.9451,
-        "SAR": 10.692,
-        "ISR": 14.848
+        "SDR": 10.1643,
+        "SIR": 20.038,
+        "SAR": 10.6419,
+        "ISR": 14.8021
       },
       "instrumental": {
-        "SDR": 14.9621,
-        "SIR": 25.6075,
-        "SAR": 17.1363,
-        "ISR": 17.7893
+        "SDR": 15.0332,
+        "SIR": 24.6499,
+        "SAR": 17.0918,
+        "ISR": 17.5681
       }
     }
   },
@@ -13044,20 +13262,37 @@
             "ISR": 19.2428
           }
         }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "vocals": {
+            "SDR": 13.3743,
+            "SIR": 22.9828,
+            "SAR": 12.1323,
+            "ISR": 13.2697
+          },
+          "instrumental": {
+            "SDR": 16.9206,
+            "SIR": 20.6224,
+            "SAR": 17.3149,
+            "ISR": 18.0976
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 11.0057,
-        "SIR": 23.1166,
-        "SAR": 11.7683,
-        "ISR": 15.4782
+        "SDR": 11.3468,
+        "SIR": 23.0322,
+        "SAR": 12.0537,
+        "ISR": 15.2706
       },
       "instrumental": {
-        "SDR": 16.0006,
-        "SIR": 26.6161,
-        "SAR": 18.5167,
-        "ISR": 18.3939
+        "SDR": 16.2384,
+        "SIR": 26.1264,
+        "SAR": 18.1076,
+        "ISR": 18.2059
       }
     }
   },
@@ -13233,20 +13468,37 @@
             "ISR": 19.0089
           }
         }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "vocals": {
+            "SDR": 12.5858,
+            "SIR": 22.691,
+            "SAR": 11.3572,
+            "ISR": 12.6234
+          },
+          "instrumental": {
+            "SDR": 16.3815,
+            "SIR": 19.7589,
+            "SAR": 16.6567,
+            "ISR": 17.9925
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.2371,
-        "SIR": 21.3809,
-        "SAR": 11.1536,
-        "ISR": 14.6269
+        "SDR": 10.4242,
+        "SIR": 22.1936,
+        "SAR": 11.1974,
+        "ISR": 14.4769
       },
       "instrumental": {
-        "SDR": 15.3969,
-        "SIR": 25.1947,
-        "SAR": 17.9232,
-        "ISR": 18.1397
+        "SDR": 15.4926,
+        "SIR": 25.1382,
+        "SAR": 17.878,
+        "ISR": 17.9925
       }
     }
   },
@@ -13422,20 +13674,37 @@
             "ISR": 19.2638
           }
         }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "vocals": {
+            "SDR": 13.3367,
+            "SIR": 22.7857,
+            "SAR": 11.9941,
+            "ISR": 13.3302
+          },
+          "instrumental": {
+            "SDR": 17.0059,
+            "SIR": 20.9584,
+            "SAR": 17.2229,
+            "ISR": 18.1922
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.9603,
-        "SIR": 23.3541,
-        "SAR": 11.7047,
-        "ISR": 15.5404
+        "SDR": 11.2569,
+        "SIR": 23.254,
+        "SAR": 11.9624,
+        "ISR": 15.3601
       },
       "instrumental": {
-        "SDR": 16.0549,
-        "SIR": 26.674,
-        "SAR": 18.3822,
-        "ISR": 18.5845
+        "SDR": 16.2552,
+        "SIR": 26.414,
+        "SAR": 18.0355,
+        "ISR": 18.3799
       }
     }
   },
@@ -13611,20 +13880,37 @@
             "ISR": 19.659
           }
         }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "vocals": {
+            "SDR": 14.9516,
+            "SIR": 23.7946,
+            "SAR": 13.8535,
+            "ISR": 14.9136
+          },
+          "instrumental": {
+            "SDR": 17.9353,
+            "SIR": 23.4625,
+            "SAR": 18.7001,
+            "ISR": 18.0127
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 11.9874,
-        "SIR": 26.6159,
-        "SAR": 12.8438,
-        "ISR": 16.1485
+        "SDR": 12.867,
+        "SIR": 25.2781,
+        "SAR": 13.8535,
+        "ISR": 15.8931
       },
       "instrumental": {
-        "SDR": 16.6411,
-        "SIR": 28.4844,
-        "SAR": 19.1165,
-        "ISR": 18.9152
+        "SDR": 16.9951,
+        "SIR": 28.4274,
+        "SAR": 18.7001,
+        "ISR": 18.6872
       }
     }
   },
@@ -13800,26 +14086,54 @@
             "ISR": 19.6592
           }
         }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "vocals": {
+            "SDR": 15.0142,
+            "SIR": 24.4319,
+            "SAR": 13.9425,
+            "ISR": 14.8489
+          },
+          "instrumental": {
+            "SDR": 17.9607,
+            "SIR": 23.2911,
+            "SAR": 18.8132,
+            "ISR": 18.2128
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 12.0227,
-        "SIR": 26.7321,
-        "SAR": 12.8628,
-        "ISR": 16.1499
+        "SDR": 12.9164,
+        "SIR": 25.3319,
+        "SAR": 13.8997,
+        "ISR": 15.8762
       },
       "instrumental": {
-        "SDR": 16.6352,
-        "SIR": 28.3656,
-        "SAR": 19.1326,
-        "ISR": 18.9672
+        "SDR": 17.0029,
+        "SIR": 28.2637,
+        "SAR": 18.8132,
+        "ISR": 18.6887
       }
     }
   },
   "model_bs_roformer_ep_937_sdr_10.5309.ckpt": {
     "model_name": "Roformer Model: BS-Roformer-Viperx-1053",
     "track_scores": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null,
       null,
       null,
@@ -14005,26 +14319,54 @@
             "ISR": 19.2833
           }
         }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "vocals": {
+            "SDR": 12.3493,
+            "SIR": 23.4189,
+            "SAR": 10.9716,
+            "ISR": 12.805
+          },
+          "instrumental": {
+            "SDR": 15.8693,
+            "SIR": 19.1707,
+            "SAR": 16.1595,
+            "ISR": 18.0875
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.7865,
-        "SIR": 23.2634,
-        "SAR": 11.4264,
-        "ISR": 14.9177
+        "SDR": 11.3702,
+        "SIR": 23.4189,
+        "SAR": 10.9716,
+        "ISR": 14.8978
       },
       "instrumental": {
-        "SDR": 15.2867,
-        "SIR": 25.3539,
-        "SAR": 17.2392,
-        "ISR": 18.4872
+        "SDR": 15.5256,
+        "SIR": 24.9302,
+        "SAR": 16.8541,
+        "ISR": 18.0875
       }
     }
   },
   "MDX23C-De-Reverb-aufr33-jarredou.ckpt": {
     "model_name": "MDX23C Model: MDX23C De-Reverb by aufr33-jarredou",
     "track_scores": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null,
       null,
       null,
@@ -14208,26 +14550,54 @@
             "ISR": 19.5439
           }
         }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "vocals": {
+            "SDR": 14.8564,
+            "SIR": 34.9158,
+            "SAR": 6.86828,
+            "ISR": 8.52586
+          },
+          "instrumental": {
+            "SDR": 17.5753,
+            "SIR": 12.3389,
+            "SAR": 13.2117,
+            "ISR": 19.5608
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.02395,
-        "SIR": 29.246,
-        "SAR": 6.29602,
-        "ISR": 8.71898
+        "SDR": 8.44766,
+        "SIR": 29.7966,
+        "SAR": 6.36113,
+        "ISR": 8.71611
       },
       "instrumental": {
-        "SDR": 14.815,
-        "SIR": 17.4754,
-        "SAR": 15.4927,
-        "ISR": 19.455
+        "SDR": 16.0015,
+        "SIR": 16.6469,
+        "SAR": 14.2308,
+        "ISR": 19.4711
       }
     }
   },
   "denoise_mel_band_roformer_aufr33_sdr_27.9959.ckpt": {
     "model_name": "Roformer Model: Mel-Roformer-Denoise-Aufr33",
     "track_scores": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null,
       null,
       null,
@@ -14250,6 +14620,17 @@
       null,
       null,
       null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null
     ]
   },
@@ -14264,12 +14645,34 @@
       null,
       null,
       null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null
     ]
   },
   "deverb_bs_roformer_8_384dim_10depth.ckpt": {
     "model_name": "Roformer Model: BS-Roformer-De-Reverb",
     "track_scores": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null,
       null,
       null,
@@ -14438,14 +14841,31 @@
             "ISR": 19.0481
           }
         }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "vocals": {
+            "SDR": 14.5588,
+            "SIR": 25.579,
+            "SAR": 13.4438,
+            "ISR": 14.0793
+          },
+          "other": {
+            "SDR": 0.498385,
+            "SIR": 18.8493,
+            "SAR": -0.577695,
+            "ISR": 17.5357
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 11.0534,
-        "SIR": 24.62,
-        "SAR": 11.8893,
-        "ISR": 15.4179
+        "SDR": 11.8251,
+        "SIR": 25.0995,
+        "SAR": 12.6666,
+        "ISR": 15.1467
       }
     }
   },
@@ -14604,14 +15024,31 @@
             "ISR": 19.0926
           }
         }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "vocals": {
+            "SDR": 14.4877,
+            "SIR": 26.4602,
+            "SAR": 13.1553,
+            "ISR": 13.696
+          },
+          "other": {
+            "SDR": 0.48458,
+            "SIR": 17.6172,
+            "SAR": -0.58263,
+            "ISR": 17.6945
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.9469,
-        "SIR": 26.5467,
-        "SAR": 11.7642,
-        "ISR": 15.4123
+        "SDR": 11.7066,
+        "SIR": 26.5035,
+        "SAR": 12.4597,
+        "ISR": 15.218
       }
     }
   },
@@ -14787,26 +15224,54 @@
             "ISR": 19.3009
           }
         }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "vocals": {
+            "SDR": 11.8784,
+            "SIR": 25.13,
+            "SAR": 10.8475,
+            "ISR": 12.1154
+          },
+          "instrumental": {
+            "SDR": 16.0379,
+            "SIR": 19.0503,
+            "SAR": 16.2796,
+            "ISR": 18.5254
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.5869,
-        "SIR": 25.6853,
-        "SAR": 11.6054,
-        "ISR": 13.6769
+        "SDR": 11.2203,
+        "SIR": 25.3613,
+        "SAR": 10.9775,
+        "ISR": 13.6732
       },
       "instrumental": {
-        "SDR": 15.1897,
-        "SIR": 24.0485,
-        "SAR": 17.4804,
-        "ISR": 18.9926
+        "SDR": 15.1993,
+        "SIR": 23.9173,
+        "SAR": 17.4485,
+        "ISR": 18.7944
       }
     }
   },
   "dereverb_mel_band_roformer_anvuew_sdr_19.1729.ckpt": {
     "model_name": "Roformer Model: MelBand Roformer | De-Reverb by anvuew",
     "track_scores": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null,
       null,
       null,
@@ -14832,6 +15297,17 @@
       null,
       null,
       null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null
     ],
     "median_scores": null
@@ -14848,6 +15324,16 @@
       null,
       null,
       null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null
     ],
     "median_scores": null
@@ -14855,6 +15341,15 @@
   "dereverb-echo_mel_band_roformer_sdr_13.4843_v2.ckpt": {
     "model_name": "Roformer Model: MelBand Roformer | De-Reverb-Echo V2 by Sucial",
     "track_scores": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null,
       null,
       null,
@@ -16042,6 +16537,15 @@
       null,
       null,
       null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null
     ],
     "median_scores": null
@@ -16049,6 +16553,15 @@
   "aspiration_mel_band_roformer_sdr_18.9845.ckpt": {
     "model_name": "Roformer Model: MelBand Roformer | Aspiration by Sucial",
     "track_scores": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null,
       null,
       null,
@@ -16072,6 +16585,15 @@
       null,
       null,
       null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null
     ],
     "median_scores": null
@@ -16079,6 +16601,15 @@
   "mel_band_roformer_bleed_suppressor_v1.ckpt": {
     "model_name": "Roformer Model: MelBand Roformer | Bleed Suppressor V1 by unwa-97chris",
     "track_scores": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null,
       null,
       null,

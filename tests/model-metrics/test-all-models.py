@@ -77,9 +77,14 @@ def evaluate_track(track_name, track_path, test_model, mus_db):
 
         # Move and rename the results file
         test_results = os.path.join(output_dir, "test", f"{track_name}.json")
+        train_results = os.path.join(output_dir, "train", f"{track_name}.json")
+
         if os.path.exists(test_results):
             os.rename(test_results, results_file)
             os.rmdir(os.path.join(output_dir, "test"))
+        elif os.path.exists(train_results):
+            os.rename(train_results, results_file)
+            os.rmdir(os.path.join(output_dir, "train"))
 
     # Calculate aggregate scores for available stems
     results_store = museval.EvalStore()
