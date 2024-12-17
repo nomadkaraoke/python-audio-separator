@@ -94,7 +94,9 @@ def evaluate_track(track_name, track_path, test_model, mus_db):
     for stem in ["vocals", "drums", "bass", "other", "accompaniment"]:
         try:
             stem_scores = {metric: float(f"{agg_scores.loc[(test_model, stem, metric)]:.6g}") for metric in ["SDR", "SIR", "SAR", "ISR"]}
-            model_results["scores"][stem] = stem_scores
+            # Rename 'accompaniment' to 'instrumental' in the output
+            output_stem = "instrumental" if stem == "accompaniment" else stem
+            model_results["scores"][output_stem] = stem_scores
         except KeyError:
             continue
 
@@ -110,6 +112,33 @@ def convert_decimal_to_float(obj):
     elif isinstance(obj, list):
         return [convert_decimal_to_float(x) for x in obj]
     return obj
+
+
+def calculate_median_scores(track_scores):
+    """Calculate median scores across all tracks for each stem and metric"""
+    # Initialize containers for each stem's metrics
+    stem_metrics = {
+        "vocals": {"SDR": [], "SIR": [], "SAR": [], "ISR": []},
+        "drums": {"SDR": [], "SIR": [], "SAR": [], "ISR": []},
+        "bass": {"SDR": [], "SIR": [], "SAR": [], "ISR": []},
+        "instrumental": {"SDR": [], "SIR": [], "SAR": [], "ISR": []},
+    }
+
+    # Collect all scores for each stem and metric
+    for track_score in track_scores:
+        if track_score is not None and "scores" in track_score:
+            for stem, metrics in track_score["scores"].items():
+                if stem in stem_metrics:
+                    for metric, value in metrics.items():
+                        stem_metrics[stem][metric].append(value)
+
+    # Calculate medians for each stem and metric
+    median_scores = {}
+    for stem, metrics in stem_metrics.items():
+        if any(metrics.values()):  # Only include stems that have scores
+            median_scores[stem] = {metric: float(f"{np.median(values):.6g}") for metric, values in metrics.items() if values}  # Only include metrics that have values
+
+    return median_scores if median_scores else None
 
 
 def main():
@@ -133,56 +162,60 @@ def main():
         with open(combined_results_path) as f:
             combined_results = json.load(f)
 
-    # Process all models
-    for model_type, models in models_by_type.items():
-        for model_name, model_info in models.items():
-            test_model = None
-            if isinstance(model_info, str):
-                test_model = model_info
-            elif isinstance(model_info, dict):
-                for file_name in model_info.keys():
-                    if file_name.endswith((".onnx", ".pth", ".ckpt")):
-                        test_model = file_name
-                        break
+    # Process all tracks in MUSDB18
+    for track in mus.tracks:
+        track_name = track.name
+        track_path = os.path.dirname(track.path)
+        logger.info(f"Processing track: {track_name}")
 
-            if test_model:
-                # Initialize model entry if it doesn't exist
-                if test_model not in combined_results:
-                    combined_results[test_model] = {"model_name": model_name, "track_scores": []}
+        # Process all models for this track
+        for model_type, models in models_by_type.items():
+            for model_name, model_info in models.items():
+                test_model = None
+                if isinstance(model_info, str):
+                    test_model = model_info
+                elif isinstance(model_info, dict):
+                    for file_name in model_info.keys():
+                        if file_name.endswith((".onnx", ".pth", ".ckpt")):
+                            test_model = file_name
+                            break
 
-                # Process each track in MUSDB18
-                for track in mus.tracks:
-                    track_name = track.name
-                    track_path = os.path.dirname(track.path)
+                if test_model:
+                    # Initialize model entry if it doesn't exist
+                    if test_model not in combined_results:
+                        combined_results[test_model] = {"model_name": model_name, "track_scores": [], "median_scores": None}
 
-                    # Skip if track already evaluated for this model
+                    # Check if track already evaluated
                     track_already_evaluated = any(
                         track_score["track_name"] == track_name for track_score in combined_results[test_model]["track_scores"] if track_score is not None  # Handle null entries
                     )
 
                     if track_already_evaluated:
                         logger.info(f"Skipping already evaluated track {track_name} for model: {test_model}")
-                        continue
-
-                    logger.info(f"Processing model: {test_model} with track: {track_name}")
-                    try:
-                        _, model_results = evaluate_track(track_name, track_path, test_model, mus)
-                        if model_results:
-                            combined_results[test_model]["track_scores"].append(model_results)
-                        else:
+                    else:
+                        logger.info(f"Processing model: {test_model}")
+                        try:
+                            _, model_results = evaluate_track(track_name, track_path, test_model, mus)
+                            if model_results:
+                                combined_results[test_model]["track_scores"].append(model_results)
+                            else:
+                                combined_results[test_model]["track_scores"].append(None)
+                        except Exception as e:
+                            logger.error(f"Error evaluating model {test_model} with track {track_name}: {str(e)}")
                             combined_results[test_model]["track_scores"].append(None)
+                            continue
 
-                        # Save results after each successful evaluation
-                        os.makedirs(os.path.dirname(combined_results_path), exist_ok=True)
-                        with open(combined_results_path, "w") as f:
-                            json.dump(combined_results, f, indent=2)
+                    # Calculate and update median scores regardless of whether track was evaluated
+                    median_scores = calculate_median_scores(combined_results[test_model]["track_scores"])
+                    combined_results[test_model]["median_scores"] = median_scores
 
+                    # Save results after each model (whether evaluated or skipped)
+                    os.makedirs(os.path.dirname(combined_results_path), exist_ok=True)
+                    with open(combined_results_path, "w") as f:
+                        json.dump(combined_results, f, indent=2)
+
+                    if not track_already_evaluated:
                         logger.info(f"Updated combined results file with {test_model} - {track_name}")
-
-                    except Exception as e:
-                        logger.error(f"Error evaluating model {test_model} with track {track_name}: {str(e)}")
-                        combined_results[test_model]["track_scores"].append(None)
-                        continue
 
     logger.info("Evaluation complete")
     return 0
