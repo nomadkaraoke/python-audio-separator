@@ -92,10 +92,10 @@ class Separator:
         sample_rate=44100,
         use_soundfile=False,
         use_autocast=False,
-        mdx_params=None,
-        vr_params=None,
-        demucs_params=None,
-        mdxc_params=None,
+        mdx_params={},
+        vr_params={},
+        demucs_params={},
+        mdxc_params={},
         info_only=False,
     ):
         """Initialize the separator."""
