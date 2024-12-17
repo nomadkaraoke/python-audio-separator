@@ -3006,44 +3006,87 @@
             "ISR": 29.182
           }
         }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 4.05476,
+            "SIR": 14.7077,
+            "SAR": 3.82144,
+            "ISR": 7.84507
+          },
+          "instrumental": {
+            "SDR": 15.1911,
+            "SIR": 19.3774,
+            "SAR": 19.53,
+            "ISR": 18.7747
+          }
+        }
       }
-    ]
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 6.88091,
+        "SIR": 19.4379,
+        "SAR": 6.98352,
+        "ISR": 10.9296
+      },
+      "instrumental": {
+        "SDR": 15.269,
+        "SIR": 19.5076,
+        "SAR": 18.4309,
+        "ISR": 23.9783
+      }
+    }
   },
   "17_HP-Wind_Inst-UVR.pth": {
     "model_name": "VR Arch Single Model v5: 17_HP-Wind_Inst-UVR",
     "track_scores": [
+      null,
       null
-    ]
+    ],
+    "median_scores": null
   },
   "UVR-De-Echo-Aggressive.pth": {
     "model_name": "VR Arch Single Model v5: UVR-De-Echo-Aggressive by FoxJoy",
     "track_scores": [
+      null,
       null
-    ]
+    ],
+    "median_scores": null
   },
   "UVR-De-Echo-Normal.pth": {
     "model_name": "VR Arch Single Model v5: UVR-De-Echo-Normal by FoxJoy",
     "track_scores": [
+      null,
       null
-    ]
+    ],
+    "median_scores": null
   },
   "UVR-DeEcho-DeReverb.pth": {
     "model_name": "VR Arch Single Model v5: UVR-DeEcho-DeReverb by FoxJoy",
     "track_scores": [
+      null,
       null
-    ]
+    ],
+    "median_scores": null
   },
   "UVR-DeNoise-Lite.pth": {
     "model_name": "VR Arch Single Model v5: UVR-DeNoise-Lite by FoxJoy",
     "track_scores": [
+      null,
       null
-    ]
+    ],
+    "median_scores": null
   },
   "UVR-DeNoise.pth": {
     "model_name": "VR Arch Single Model v5: UVR-DeNoise by FoxJoy",
     "track_scores": [
+      null,
       null
-    ]
+    ],
+    "median_scores": null
   },
   "UVR-BVE-4B_SN-44100-1.pth": {
     "model_name": "VR Arch Single Model v5: UVR-BVE-4B_SN-44100-1",
@@ -3064,8 +3107,39 @@
             "ISR": 17.7096
           }
         }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 0.0143,
+            "SIR": 5.71885,
+            "SAR": 0.00389,
+            "ISR": 2.65473
+          },
+          "instrumental": {
+            "SDR": 12.0434,
+            "SIR": 13.2314,
+            "SAR": 20.3884,
+            "ISR": 18.1082
+          }
+        }
       }
-    ]
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 0.00689,
+        "SIR": 0.202505,
+        "SAR": -0.07286,
+        "ISR": 1.45655
+      },
+      "instrumental": {
+        "SDR": 9.00258,
+        "SIR": 9.3382,
+        "SAR": 21.6397,
+        "ISR": 17.9089
+      }
+    }
   },
   "MGM_HIGHEND_v4.pth": {
     "model_name": "VR Arch Single Model v4: MGM_HIGHEND_v4",
@@ -3086,8 +3160,39 @@
             "ISR": 30.2887
           }
         }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 3.90158,
+            "SIR": 15.9598,
+            "SAR": 3.37143,
+            "ISR": 6.56793
+          },
+          "instrumental": {
+            "SDR": 14.4628,
+            "SIR": 17.3509,
+            "SAR": 18.4845,
+            "ISR": 18.8014
+          }
+        }
       }
-    ]
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 6.3402,
+        "SIR": 19.6417,
+        "SAR": 6.2851,
+        "ISR": 9.89731
+      },
+      "instrumental": {
+        "SDR": 14.4931,
+        "SIR": 18.0199,
+        "SAR": 17.4403,
+        "ISR": 24.545
+      }
+    }
   },
   "MGM_LOWEND_A_v4.pth": {
     "model_name": "VR Arch Single Model v4: MGM_LOWEND_A_v4",
@@ -3108,8 +3213,39 @@
             "ISR": 23.8171
           }
         }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 4.13243,
+            "SIR": 17.8811,
+            "SAR": 3.52338,
+            "ISR": 6.90286
+          },
+          "instrumental": {
+            "SDR": 14.9123,
+            "SIR": 18.3341,
+            "SAR": 19.4275,
+            "ISR": 18.9589
+          }
+        }
       }
-    ]
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 6.9153,
+        "SIR": 21.0996,
+        "SAR": 6.63037,
+        "ISR": 10.2917
+      },
+      "instrumental": {
+        "SDR": 14.8539,
+        "SIR": 18.9201,
+        "SAR": 18.0127,
+        "ISR": 21.388
+      }
+    }
   },
   "MGM_LOWEND_B_v4.pth": {
     "model_name": "VR Arch Single Model v4: MGM_LOWEND_B_v4",
@@ -3130,8 +3266,39 @@
             "ISR": 25.1904
           }
         }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 3.9675,
+            "SIR": 15.4909,
+            "SAR": 2.98769,
+            "ISR": 8.2918
+          },
+          "instrumental": {
+            "SDR": 14.8575,
+            "SIR": 19.7225,
+            "SAR": 17.7783,
+            "ISR": 18.5521
+          }
+        }
       }
-    ]
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 6.79057,
+        "SIR": 19.2555,
+        "SAR": 6.23242,
+        "ISR": 11.681
+      },
+      "instrumental": {
+        "SDR": 15.0101,
+        "SIR": 20.3607,
+        "SAR": 17.0154,
+        "ISR": 21.8712
+      }
+    }
   },
   "MGM_MAIN_v4.pth": {
     "model_name": "VR Arch Single Model v4: MGM_MAIN_v4",
@@ -3152,12 +3319,45 @@
             "ISR": 30.7065
           }
         }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 3.72751,
+            "SIR": 19.3325,
+            "SAR": 3.02685,
+            "ISR": 5.7645
+          },
+          "instrumental": {
+            "SDR": 14.4502,
+            "SIR": 16.2785,
+            "SAR": 19.0347,
+            "ISR": 19.0905
+          }
+        }
       }
-    ]
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 6.43322,
+        "SIR": 21.5149,
+        "SAR": 6.28377,
+        "ISR": 9.51645
+      },
+      "instrumental": {
+        "SDR": 14.6523,
+        "SIR": 17.6344,
+        "SAR": 17.9531,
+        "ISR": 24.8985
+      }
+    }
   },
   "UVR-De-Reverb-aufr33-jarredou.pth": {
     "model_name": "VR Arch Single Model v4: UVR-De-Reverb by aufr33-jarredou",
-    "track_scores": []
+    "track_scores": [
+      null
+    ]
   },
   "UVR-MDX-NET-Inst_HQ_1.onnx": {
     "model_name": "MDX-Net Model: UVR-MDX-NET Inst HQ 1",
@@ -3178,8 +3378,39 @@
             "ISR": 18.6577
           }
         }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 5.26685,
+            "SIR": 19.0489,
+            "SAR": 5.43294,
+            "ISR": 9.16527
+          },
+          "instrumental": {
+            "SDR": 16.5292,
+            "SIR": 23.6979,
+            "SAR": 19.953,
+            "ISR": 18.9037
+          }
+        }
       }
-    ]
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 8.27972,
+        "SIR": 20.8537,
+        "SAR": 8.51877,
+        "ISR": 12.6242
+      },
+      "instrumental": {
+        "SDR": 16.1246,
+        "SIR": 25.6686,
+        "SAR": 18.9352,
+        "ISR": 18.7807
+      }
+    }
   },
   "UVR-MDX-NET-Inst_HQ_2.onnx": {
     "model_name": "MDX-Net Model: UVR-MDX-NET Inst HQ 2",
@@ -3200,8 +3431,39 @@
             "ISR": 18.2691
           }
         }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 5.75013,
+            "SIR": 18.1092,
+            "SAR": 5.6745,
+            "ISR": 10.305
+          },
+          "instrumental": {
+            "SDR": 16.5295,
+            "SIR": 25.0494,
+            "SAR": 19.9577,
+            "ISR": 18.7263
+          }
+        }
       }
-    ]
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 8.51961,
+        "SIR": 19.9362,
+        "SAR": 8.7171,
+        "ISR": 13.2895
+      },
+      "instrumental": {
+        "SDR": 16.0438,
+        "SIR": 26.6479,
+        "SAR": 18.9915,
+        "ISR": 18.4977
+      }
+    }
   },
   "UVR-MDX-NET-Inst_HQ_3.onnx": {
     "model_name": "MDX-Net Model: UVR-MDX-NET Inst HQ 3",
@@ -3222,8 +3484,39 @@
             "ISR": 18.3418
           }
         }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 5.62282,
+            "SIR": 18.7143,
+            "SAR": 5.72698,
+            "ISR": 9.80979
+          },
+          "instrumental": {
+            "SDR": 16.512,
+            "SIR": 24.6836,
+            "SAR": 19.931,
+            "ISR": 18.8168
+          }
+        }
       }
-    ]
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 8.49496,
+        "SIR": 20.3356,
+        "SAR": 8.74944,
+        "ISR": 13.1262
+      },
+      "instrumental": {
+        "SDR": 16.078,
+        "SIR": 26.6107,
+        "SAR": 18.9933,
+        "ISR": 18.5793
+      }
+    }
   },
   "UVR-MDX-NET-Inst_HQ_4.onnx": {
     "model_name": "MDX-Net Model: UVR-MDX-NET Inst HQ 4",
@@ -3244,8 +3537,39 @@
             "ISR": 18.2594
           }
         }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 5.85686,
+            "SIR": 19.2837,
+            "SAR": 5.7082,
+            "ISR": 10.1135
+          },
+          "instrumental": {
+            "SDR": 16.7591,
+            "SIR": 25.0221,
+            "SAR": 20.0476,
+            "ISR": 19.0067
+          }
+        }
       }
-    ]
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 8.45388,
+        "SIR": 20.1033,
+        "SAR": 8.64365,
+        "ISR": 13.2854
+      },
+      "instrumental": {
+        "SDR": 16.029,
+        "SIR": 26.8179,
+        "SAR": 18.9034,
+        "ISR": 18.633
+      }
+    }
   },
   "UVR_MDXNET_Main.onnx": {
     "model_name": "MDX-Net Model: UVR-MDX-NET Main",
@@ -3266,8 +3590,39 @@
             "ISR": 19.2268
           }
         }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 5.63812,
+            "SIR": 17.4406,
+            "SAR": 5.78804,
+            "ISR": 10.1273
+          },
+          "instrumental": {
+            "SDR": 16.5084,
+            "SIR": 24.7649,
+            "SAR": 19.8021,
+            "ISR": 18.7235
+          }
+        }
       }
-    ]
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 9.00826,
+        "SIR": 23.1985,
+        "SAR": 9.40687,
+        "ISR": 13.0684
+      },
+      "instrumental": {
+        "SDR": 16.5514,
+        "SIR": 26.1339,
+        "SAR": 19.741,
+        "ISR": 18.9751
+      }
+    }
   },
   "UVR-MDX-NET-Inst_Main.onnx": {
     "model_name": "MDX-Net Model: UVR-MDX-NET Inst Main",
@@ -3288,8 +3643,39 @@
             "ISR": 18.0963
           }
         }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 5.94817,
+            "SIR": 18.4295,
+            "SAR": 5.567,
+            "ISR": 9.73235
+          },
+          "instrumental": {
+            "SDR": 16.4933,
+            "SIR": 24.3046,
+            "SAR": 19.8225,
+            "ISR": 18.7949
+          }
+        }
       }
-    ]
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 8.37623,
+        "SIR": 19.3837,
+        "SAR": 8.40635,
+        "ISR": 12.9485
+      },
+      "instrumental": {
+        "SDR": 15.8241,
+        "SIR": 26.114,
+        "SAR": 18.6544,
+        "ISR": 18.4456
+      }
+    }
   },
   "UVR_MDXNET_1_9703.onnx": {
     "model_name": "MDX-Net Model: UVR-MDX-NET 1",
@@ -3310,8 +3696,39 @@
             "ISR": 18.979
           }
         }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 5.5934,
+            "SIR": 17.0409,
+            "SAR": 5.26672,
+            "ISR": 10.3872
+          },
+          "instrumental": {
+            "SDR": 16.4668,
+            "SIR": 24.9046,
+            "SAR": 19.569,
+            "ISR": 18.5774
+          }
+        }
       }
-    ]
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 8.74765,
+        "SIR": 21.841,
+        "SAR": 8.72356,
+        "ISR": 13.0804
+      },
+      "instrumental": {
+        "SDR": 16.2337,
+        "SIR": 25.7145,
+        "SAR": 19.1805,
+        "ISR": 18.7782
+      }
+    }
   },
   "UVR_MDXNET_2_9682.onnx": {
     "model_name": "MDX-Net Model: UVR-MDX-NET 2",
@@ -3332,8 +3749,39 @@
             "ISR": 19.0538
           }
         }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 5.46453,
+            "SIR": 17.675,
+            "SAR": 4.99802,
+            "ISR": 9.81412
+          },
+          "instrumental": {
+            "SDR": 16.3486,
+            "SIR": 24.0614,
+            "SAR": 19.3918,
+            "ISR": 18.7301
+          }
+        }
       }
-    ]
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 8.53441,
+        "SIR": 22.4348,
+        "SAR": 8.48716,
+        "ISR": 12.5095
+      },
+      "instrumental": {
+        "SDR": 16.1411,
+        "SIR": 24.9421,
+        "SAR": 18.9588,
+        "ISR": 18.892
+      }
+    }
   },
   "UVR_MDXNET_3_9662.onnx": {
     "model_name": "MDX-Net Model: UVR-MDX-NET 3",
@@ -3354,8 +3802,39 @@
             "ISR": 19.0627
           }
         }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 5.42437,
+            "SIR": 18.0352,
+            "SAR": 4.82973,
+            "ISR": 9.64703
+          },
+          "instrumental": {
+            "SDR": 16.4386,
+            "SIR": 24.5125,
+            "SAR": 19.4329,
+            "ISR": 18.7654
+          }
+        }
       }
-    ]
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 8.62463,
+        "SIR": 22.6819,
+        "SAR": 8.42882,
+        "ISR": 12.6507
+      },
+      "instrumental": {
+        "SDR": 16.1778,
+        "SIR": 25.459,
+        "SAR": 18.943,
+        "ISR": 18.914
+      }
+    }
   },
   "UVR-MDX-NET-Inst_1.onnx": {
     "model_name": "MDX-Net Model: UVR-MDX-NET Inst 1",
@@ -3376,8 +3855,39 @@
             "ISR": 18.3199
           }
         }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 5.82133,
+            "SIR": 18.827,
+            "SAR": 5.68742,
+            "ISR": 9.93487
+          },
+          "instrumental": {
+            "SDR": 16.4818,
+            "SIR": 24.78,
+            "SAR": 19.7198,
+            "ISR": 18.7803
+          }
+        }
       }
-    ]
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 8.72377,
+        "SIR": 20.6341,
+        "SAR": 8.89531,
+        "ISR": 13.1619
+      },
+      "instrumental": {
+        "SDR": 16.0776,
+        "SIR": 26.6127,
+        "SAR": 19.1287,
+        "ISR": 18.5501
+      }
+    }
   },
   "UVR-MDX-NET-Inst_2.onnx": {
     "model_name": "MDX-Net Model: UVR-MDX-NET Inst 2",
@@ -3398,8 +3908,39 @@
             "ISR": 18.6941
           }
         }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 5.81251,
+            "SIR": 18.688,
+            "SAR": 5.91282,
+            "ISR": 10.5675
+          },
+          "instrumental": {
+            "SDR": 16.6667,
+            "SIR": 25.3572,
+            "SAR": 19.8788,
+            "ISR": 18.9157
+          }
+        }
       }
-    ]
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 8.73146,
+        "SIR": 21.0973,
+        "SAR": 8.99346,
+        "ISR": 13.46
+      },
+      "instrumental": {
+        "SDR": 16.2892,
+        "SIR": 26.8357,
+        "SAR": 19.194,
+        "ISR": 18.8049
+      }
+    }
   },
   "UVR-MDX-NET-Inst_3.onnx": {
     "model_name": "MDX-Net Model: UVR-MDX-NET Inst 3",
@@ -3420,8 +3961,39 @@
             "ISR": 18.5211
           }
         }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 5.77412,
+            "SIR": 16.6923,
+            "SAR": 5.69646,
+            "ISR": 9.88816
+          },
+          "instrumental": {
+            "SDR": 16.5002,
+            "SIR": 24.725,
+            "SAR": 19.8214,
+            "ISR": 18.6737
+          }
+        }
       }
-    ]
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 8.69721,
+        "SIR": 19.8541,
+        "SAR": 8.96543,
+        "ISR": 13.0533
+      },
+      "instrumental": {
+        "SDR": 16.138,
+        "SIR": 26.4776,
+        "SAR": 19.1729,
+        "ISR": 18.5974
+      }
+    }
   },
   "UVR_MDXNET_KARA.onnx": {
     "model_name": "MDX-Net Model: UVR-MDX-NET Karaoke",
@@ -3442,8 +4014,39 @@
             "ISR": 19.1189
           }
         }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 2.5289,
+            "SIR": 11.2152,
+            "SAR": 2.35093,
+            "ISR": 5.35324
+          },
+          "instrumental": {
+            "SDR": 15.417,
+            "SIR": 19.1696,
+            "SAR": 18.0835,
+            "ISR": 18.3171
+          }
+        }
       }
-    ]
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 6.6682,
+        "SIR": 19.2364,
+        "SAR": 6.79092,
+        "ISR": 9.36042
+      },
+      "instrumental": {
+        "SDR": 15.6835,
+        "SIR": 21.0827,
+        "SAR": 18.2898,
+        "ISR": 18.718
+      }
+    }
   },
   "UVR_MDXNET_KARA_2.onnx": {
     "model_name": "MDX-Net Model: UVR-MDX-NET Karaoke 2",
@@ -3464,8 +4067,39 @@
             "ISR": 18.3328
           }
         }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 4.00209,
+            "SIR": 14.6178,
+            "SAR": 4.02018,
+            "ISR": 6.89909
+          },
+          "instrumental": {
+            "SDR": 16.0738,
+            "SIR": 21.7738,
+            "SAR": 19.382,
+            "ISR": 18.5912
+          }
+        }
       }
-    ]
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 7.02694,
+        "SIR": 17.4903,
+        "SAR": 7.15349,
+        "ISR": 10.6709
+      },
+      "instrumental": {
+        "SDR": 15.636,
+        "SIR": 23.2033,
+        "SAR": 18.3479,
+        "ISR": 18.462
+      }
+    }
   },
   "UVR_MDXNET_9482.onnx": {
     "model_name": "MDX-Net Model: UVR_MDXNET_9482",
@@ -3486,8 +4120,39 @@
             "ISR": 19.0291
           }
         }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 4.70393,
+            "SIR": 15.5526,
+            "SAR": 4.81548,
+            "ISR": 9.38948
+          },
+          "instrumental": {
+            "SDR": 16.1586,
+            "SIR": 23.716,
+            "SAR": 19.3851,
+            "ISR": 18.5291
+          }
+        }
       }
-    ]
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 8.10996,
+        "SIR": 21.1978,
+        "SAR": 8.33079,
+        "ISR": 12.1337
+      },
+      "instrumental": {
+        "SDR": 16.0263,
+        "SIR": 24.5101,
+        "SAR": 18.9173,
+        "ISR": 18.7791
+      }
+    }
   },
   "UVR-MDX-NET-Voc_FT.onnx": {
     "model_name": "MDX-Net Model: UVR-MDX-NET Voc FT",
@@ -3508,8 +4173,39 @@
             "ISR": 19.2326
           }
         }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 5.85247,
+            "SIR": 18.6162,
+            "SAR": 5.85353,
+            "ISR": 9.82122
+          },
+          "instrumental": {
+            "SDR": 16.5346,
+            "SIR": 24.6446,
+            "SAR": 19.9257,
+            "ISR": 18.9024
+          }
+        }
       }
-    ]
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 9.04129,
+        "SIR": 23.858,
+        "SAR": 9.51777,
+        "ISR": 12.9212
+      },
+      "instrumental": {
+        "SDR": 16.5706,
+        "SIR": 26.1689,
+        "SAR": 19.7673,
+        "ISR": 19.0675
+      }
+    }
   },
   "Kim_Vocal_1.onnx": {
     "model_name": "MDX-Net Model: Kim Vocal 1",
@@ -3530,8 +4226,39 @@
             "ISR": 19.2202
           }
         }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 5.7787,
+            "SIR": 19.3037,
+            "SAR": 5.83443,
+            "ISR": 9.62516
+          },
+          "instrumental": {
+            "SDR": 16.6193,
+            "SIR": 24.5137,
+            "SAR": 19.9734,
+            "ISR": 18.9958
+          }
+        }
       }
-    ]
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 9.0254,
+        "SIR": 24.2343,
+        "SAR": 9.40086,
+        "ISR": 12.8152
+      },
+      "instrumental": {
+        "SDR": 16.5433,
+        "SIR": 26.0265,
+        "SAR": 19.7527,
+        "ISR": 19.108
+      }
+    }
   },
   "Kim_Vocal_2.onnx": {
     "model_name": "MDX-Net Model: Kim Vocal 2",
@@ -3552,8 +4279,39 @@
             "ISR": 19.1949
           }
         }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 5.78748,
+            "SIR": 18.1983,
+            "SAR": 5.91704,
+            "ISR": 10.1435
+          },
+          "instrumental": {
+            "SDR": 16.5766,
+            "SIR": 24.9934,
+            "SAR": 19.8726,
+            "ISR": 18.7919
+          }
+        }
       }
-    ]
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 9.03824,
+        "SIR": 23.4501,
+        "SAR": 9.52632,
+        "ISR": 13.1845
+      },
+      "instrumental": {
+        "SDR": 16.5825,
+        "SIR": 26.5358,
+        "SAR": 19.7944,
+        "ISR": 18.9934
+      }
+    }
   },
   "Kim_Inst.onnx": {
     "model_name": "MDX-Net Model: Kim Inst",
@@ -3574,20 +4332,55 @@
             "ISR": 18.5538
           }
         }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 5.26277,
+            "SIR": 19.5259,
+            "SAR": 4.96245,
+            "ISR": 8.62868
+          },
+          "instrumental": {
+            "SDR": 16.55,
+            "SIR": 23.7871,
+            "SAR": 19.7671,
+            "ISR": 18.9284
+          }
+        }
       }
-    ]
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 8.47053,
+        "SIR": 21.4271,
+        "SAR": 8.50418,
+        "ISR": 12.4575
+      },
+      "instrumental": {
+        "SDR": 16.17,
+        "SIR": 25.9474,
+        "SAR": 19.1041,
+        "ISR": 18.7411
+      }
+    }
   },
   "Reverb_HQ_By_FoxJoy.onnx": {
     "model_name": "MDX-Net Model: Reverb HQ By FoxJoy",
     "track_scores": [
+      null,
       null
-    ]
+    ],
+    "median_scores": null
   },
   "UVR-MDX-NET_Crowd_HQ_1.onnx": {
     "model_name": "MDX-Net Model: UVR-MDX-NET Crowd HQ 1 By Aufr33",
     "track_scores": [
+      null,
       null
-    ]
+    ],
+    "median_scores": null
   },
   "kuielab_a_vocals.onnx": {
     "model_name": "MDX-Net Model: kuielab_a_vocals",
@@ -3608,22 +4401,58 @@
             "ISR": 19.13
           }
         }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 6.03051,
+            "SIR": 19.0287,
+            "SAR": 6.30829,
+            "ISR": 10.7322
+          },
+          "instrumental": {
+            "SDR": 16.4026,
+            "SIR": 25.2452,
+            "SAR": 20.0441,
+            "ISR": 18.8
+          }
+        }
       }
-    ]
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 8.67085,
+        "SIR": 23.251,
+        "SAR": 9.16545,
+        "ISR": 12.3288
+      },
+      "instrumental": {
+        "SDR": 16.2711,
+        "SIR": 24.445,
+        "SAR": 19.5583,
+        "ISR": 18.965
+      }
+    }
   },
   "kuielab_a_other.onnx": {
     "model_name": "MDX-Net Model: kuielab_a_other",
     "track_scores": [
+      null,
       null
     ]
   },
   "kuielab_a_bass.onnx": {
     "model_name": "MDX-Net Model: kuielab_a_bass",
-    "track_scores": []
+    "track_scores": [
+      null
+    ]
   },
   "kuielab_a_drums.onnx": {
     "model_name": "MDX-Net Model: kuielab_a_drums",
-    "track_scores": []
+    "track_scores": [
+      null
+    ]
   },
   "kuielab_b_vocals.onnx": {
     "model_name": "MDX-Net Model: kuielab_b_vocals",
@@ -3644,22 +4473,58 @@
             "ISR": 18.9523
           }
         }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 5.30456,
+            "SIR": 21.1354,
+            "SAR": 4.92979,
+            "ISR": 8.8335
+          },
+          "instrumental": {
+            "SDR": 16.2972,
+            "SIR": 23.2941,
+            "SAR": 19.5481,
+            "ISR": 19.0885
+          }
+        }
       }
-    ]
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 8.48043,
+        "SIR": 23.7538,
+        "SAR": 8.36019,
+        "ISR": 11.9469
+      },
+      "instrumental": {
+        "SDR": 16.1172,
+        "SIR": 24.4696,
+        "SAR": 18.978,
+        "ISR": 19.0204
+      }
+    }
   },
   "kuielab_b_other.onnx": {
     "model_name": "MDX-Net Model: kuielab_b_other",
     "track_scores": [
+      null,
       null
     ]
   },
   "kuielab_b_bass.onnx": {
     "model_name": "MDX-Net Model: kuielab_b_bass",
-    "track_scores": []
+    "track_scores": [
+      null
+    ]
   },
   "kuielab_b_drums.onnx": {
     "model_name": "MDX-Net Model: kuielab_b_drums",
-    "track_scores": []
+    "track_scores": [
+      null
+    ]
   },
   "UVR-MDX-NET_Main_340.onnx": {
     "model_name": "MDX-Net Model VIP: UVR-MDX-NET_Main_340",
@@ -3680,8 +4545,39 @@
             "ISR": 19.1598
           }
         }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 5.59047,
+            "SIR": 19.3254,
+            "SAR": 5.54795,
+            "ISR": 9.92554
+          },
+          "instrumental": {
+            "SDR": 16.5772,
+            "SIR": 24.8953,
+            "SAR": 19.8876,
+            "ISR": 18.9964
+          }
+        }
       }
-    ]
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 9.01994,
+        "SIR": 23.9804,
+        "SAR": 9.23348,
+        "ISR": 13.2887
+      },
+      "instrumental": {
+        "SDR": 16.5342,
+        "SIR": 26.6064,
+        "SAR": 19.4998,
+        "ISR": 19.0781
+      }
+    }
   },
   "UVR-MDX-NET_Main_390.onnx": {
     "model_name": "MDX-Net Model VIP: UVR-MDX-NET_Main_390",
@@ -3702,8 +4598,39 @@
             "ISR": 18.6295
           }
         }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 3.20541,
+            "SIR": 16.7913,
+            "SAR": 5.91045,
+            "ISR": 9.75897
+          },
+          "instrumental": {
+            "SDR": 12.3509,
+            "SIR": 18.2773,
+            "SAR": 15.1963,
+            "ISR": 17.5234
+          }
+        }
       }
-    ]
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 4.04885,
+        "SIR": 22.8324,
+        "SAR": 9.44913,
+        "ISR": 8.02524
+      },
+      "instrumental": {
+        "SDR": 10.6928,
+        "SIR": 13.7361,
+        "SAR": 15.2632,
+        "ISR": 18.0765
+      }
+    }
   },
   "UVR-MDX-NET_Main_406.onnx": {
     "model_name": "MDX-Net Model VIP: UVR-MDX-NET_Main_406",
@@ -3724,8 +4651,39 @@
             "ISR": 19.1259
           }
         }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 5.85269,
+            "SIR": 17.2346,
+            "SAR": 5.75262,
+            "ISR": 10.9493
+          },
+          "instrumental": {
+            "SDR": 16.5944,
+            "SIR": 26.387,
+            "SAR": 19.5127,
+            "ISR": 18.6513
+          }
+        }
       }
-    ]
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 9.2985,
+        "SIR": 22.7979,
+        "SAR": 9.41546,
+        "ISR": 14.5832
+      },
+      "instrumental": {
+        "SDR": 16.476,
+        "SIR": 27.8064,
+        "SAR": 19.3793,
+        "ISR": 18.8886
+      }
+    }
   },
   "UVR-MDX-NET_Main_427.onnx": {
     "model_name": "MDX-Net Model VIP: UVR-MDX-NET_Main_427",
@@ -3746,8 +4704,39 @@
             "ISR": 19.2178
           }
         }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 5.82906,
+            "SIR": 17.6647,
+            "SAR": 5.943,
+            "ISR": 10.1517
+          },
+          "instrumental": {
+            "SDR": 16.5208,
+            "SIR": 25.1407,
+            "SAR": 20.0019,
+            "ISR": 18.7475
+          }
+        }
       }
-    ]
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 9.07373,
+        "SIR": 23.3531,
+        "SAR": 9.513,
+        "ISR": 13.1689
+      },
+      "instrumental": {
+        "SDR": 16.5618,
+        "SIR": 26.5866,
+        "SAR": 19.7811,
+        "ISR": 18.9826
+      }
+    }
   },
   "UVR-MDX-NET_Main_438.onnx": {
     "model_name": "MDX-Net Model VIP: UVR-MDX-NET_Main_438",
@@ -3768,8 +4757,39 @@
             "ISR": 19.1815
           }
         }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 5.53862,
+            "SIR": 16.0907,
+            "SAR": 5.62231,
+            "ISR": 9.7587
+          },
+          "instrumental": {
+            "SDR": 16.5526,
+            "SIR": 24.6013,
+            "SAR": 19.8913,
+            "ISR": 18.7021
+          }
+        }
       }
-    ]
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 8.90576,
+        "SIR": 22.3737,
+        "SAR": 9.43196,
+        "ISR": 12.8374
+      },
+      "instrumental": {
+        "SDR": 16.5254,
+        "SIR": 26.0771,
+        "SAR": 19.7313,
+        "ISR": 18.9418
+      }
+    }
   },
   "UVR-MDX-NET_Inst_82_beta.onnx": {
     "model_name": "MDX-Net Model VIP: UVR-MDX-NET_Inst_82_beta",

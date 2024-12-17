@@ -67,7 +67,7 @@ class Separator:
         shifts: 2
         overlap: 0.25
         segments_enabled: True
-        
+
     MDXC Architecture Specific Attributes & Defaults:
         segment_size: 256
         override_model_segment_size: False
@@ -140,7 +140,7 @@ class Separator:
         self.normalization_threshold = normalization_threshold
         if normalization_threshold <= 0 or normalization_threshold > 1:
             raise ValueError("The normalization_threshold must be greater than 0 and less than or equal to 1.")
-        
+
         self.amplification_threshold = amplification_threshold
         if amplification_threshold < 0 or amplification_threshold > 1:
             raise ValueError("The amplification_threshold must be greater than or equal to 0 and less than or equal to 1.")
@@ -161,7 +161,7 @@ class Separator:
                 raise ValueError(f"The sample rate setting is {self.sample_rate}. Enter something less ambitious.")
         except ValueError:
             raise ValueError("The sample rate must be a non-zero whole number. Please provide a valid integer.")
-        
+
         self.use_soundfile = use_soundfile
         self.use_autocast = use_autocast
 
@@ -582,85 +582,19 @@ class Separator:
         self.logger.debug(f"MDX model data path set to {mdx_model_data_path}")
         self.download_file_if_not_exists(mdx_model_data_url, mdx_model_data_path)
 
-        # Loading model data
+        # Loading model data from UVR
         self.logger.debug("Loading MDX and VR model parameters from UVR model data files...")
         vr_model_data_object = json.load(open(vr_model_data_path, encoding="utf-8"))
         mdx_model_data_object = json.load(open(mdx_model_data_path, encoding="utf-8"))
 
-        # vr_model_data_object JSON structure / example snippet:
-        # {
-        #     "0d0e6d143046b0eecc41a22e60224582": {
-        #         "vr_model_param": "3band_44100_mid",
-        #         "primary_stem": "Instrumental"
-        #     },
-        #     "6b5916069a49be3fe29d4397ecfd73fa": {
-        #         "vr_model_param": "3band_44100_msb2",
-        #         "primary_stem": "Instrumental",
-        #         "is_karaoke": true
-        #     },
-        #     "0ec76fd9e65f81d8b4fbd13af4826ed8": {
-        #         "vr_model_param": "4band_v3",
-        #         "primary_stem": "No Woodwinds"
-        #     },
-        #     "0fb9249ffe4ffc38d7b16243f394c0ff": {
-        #         "vr_model_param": "4band_v3",
-        #         "primary_stem": "No Reverb"
-        #     },
-        #     "6857b2972e1754913aad0c9a1678c753": {
-        #         "vr_model_param": "4band_v3",
-        #         "primary_stem": "No Echo",
-        #         "nout": 48,
-        #         "nout_lstm": 128
-        #     },
-        #     "944950a9c5963a5eb70b445d67b7068a": {
-        #         "vr_model_param": "4band_v3_sn",
-        #         "primary_stem": "Vocals",
-        #         "nout": 64,
-        #         "nout_lstm": 128,
-        #         "is_karaoke": false,
-        #         "is_bv_model": true,
-        #         "is_bv_model_rebalanced": 0.9
-        #     }
-        # }
+        # Load additional model data from audio-separator
+        self.logger.debug("Loading additional model parameters from audio-separator model data file...")
+        with resources.open_text("audio_separator", "model-data.json") as f:
+            audio_separator_model_data = json.load(f)
 
-        # mdx_model_data_object JSON structure / example snippet:
-        # {
-        #     "0ddfc0eb5792638ad5dc27850236c246": {
-        #         "compensate": 1.035,
-        #         "mdx_dim_f_set": 2048,
-        #         "mdx_dim_t_set": 8,
-        #         "mdx_n_fft_scale_set": 6144,
-        #         "primary_stem": "Vocals"
-        #     },
-        #     "26d308f91f3423a67dc69a6d12a8793d": {
-        #         "compensate": 1.035,
-        #         "mdx_dim_f_set": 2048,
-        #         "mdx_dim_t_set": 9,
-        #         "mdx_n_fft_scale_set": 8192,
-        #         "primary_stem": "Other"
-        #     },
-        #     "2cdd429caac38f0194b133884160f2c6": {
-        #         "compensate": 1.045,
-        #         "mdx_dim_f_set": 3072,
-        #         "mdx_dim_t_set": 8,
-        #         "mdx_n_fft_scale_set": 7680,
-        #         "primary_stem": "Instrumental"
-        #     },
-        #     "2f5501189a2f6db6349916fabe8c90de": {
-        #         "compensate": 1.035,
-        #         "mdx_dim_f_set": 2048,
-        #         "mdx_dim_t_set": 8,
-        #         "mdx_n_fft_scale_set": 6144,
-        #         "primary_stem": "Vocals",
-        #         "is_karaoke": true
-        #     },
-        #     "2154254ee89b2945b97a7efed6e88820": {
-        #         "config_yaml": "model_2_stem_061321.yaml"
-        #     },
-        #     "116f6f9dabb907b53d847ed9f7a9475f": {
-        #         "config_yaml": "model_2_stem_full_band_8k.yaml"
-        #     }
-        # }
+        # Merge the model data objects, with audio-separator data taking precedence
+        vr_model_data_object = {**vr_model_data_object, **audio_separator_model_data.get("vr_model_data", {})}
+        mdx_model_data_object = {**mdx_model_data_object, **audio_separator_model_data.get("mdx_model_data", {})}
 
         if model_hash in mdx_model_data_object:
             model_data = mdx_model_data_object[model_hash]
@@ -669,7 +603,7 @@ class Separator:
         else:
             raise ValueError(f"Unsupported Model File: parameters for MD5 hash {model_hash} could not be found in UVR model data file for MDX or VR arch.")
 
-        self.logger.debug(f"Model data loaded from UVR JSON using hash {model_hash}: {model_data}")
+        self.logger.debug(f"Model data loaded using hash {model_hash}: {model_data}")
 
         return model_data
 
@@ -713,7 +647,7 @@ class Separator:
             "output_single_stem": self.output_single_stem,
             "invert_using_spec": self.invert_using_spec,
             "sample_rate": self.sample_rate,
-            "use_soundfile": self.use_soundfile
+            "use_soundfile": self.use_soundfile,
         }
 
         # Instantiate the appropriate separator class depending on the model type

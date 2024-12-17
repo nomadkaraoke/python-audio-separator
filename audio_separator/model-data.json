@@ -1,0 +1,14 @@
+{
+    "vr_model_data": {
+        "97dc361a7a88b2c4542f68364b32c7f6": {
+            "vr_model_param": "4band_v4_ms_fullband",
+            "primary_stem": "Dry",
+            "nout": 32,
+            "nout_lstm": 128,
+            "is_karaoke": false,
+            "is_bv_model": false,
+            "is_bv_model_rebalanced": 0.0
+        }
+    },
+    "mdx_model_data": {}
+}
