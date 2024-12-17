@@ -11,11 +11,2034 @@
             "SAR": 10.1785,
             "ISR": 15.0739
           },
-          "instrumental": {
+          "accompaniment": {
             "SDR": 15.7431,
             "SIR": 20.9606,
             "SAR": 17.3032,
             "ISR": 29.0623
+          }
+        }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 5.24871,
+            "SIR": 15.4624,
+            "SAR": 4.83391,
+            "ISR": 8.8857
+          },
+          "accompaniment": {
+            "SDR": 14.8927,
+            "SIR": 19.3158,
+            "SAR": 18.24,
+            "ISR": 18.8107
+          }
+        }
+      },
+      {
+        "track_name": "ANiMAL - Clinic A",
+        "scores": {
+          "vocals": {
+            "SDR": 5.43096,
+            "SIR": 12.0094,
+            "SAR": 5.75084,
+            "ISR": 12.7187
+          },
+          "accompaniment": {
+            "SDR": 10.6068,
+            "SIR": 18.0944,
+            "SAR": 12.3348,
+            "ISR": 14.9249
+          }
+        }
+      },
+      {
+        "track_name": "ANiMAL - Easy Tiger",
+        "scores": {
+          "vocals": {
+            "SDR": 8.37912,
+            "SIR": 18.9104,
+            "SAR": 8.54122,
+            "ISR": 15.3526
+          },
+          "accompaniment": {
+            "SDR": 15.3357,
+            "SIR": 21.73,
+            "SAR": 16.6099,
+            "ISR": 21.9107
+          }
+        }
+      },
+      {
+        "track_name": "ANiMAL - Rockshow",
+        "scores": {
+          "vocals": {
+            "SDR": 2.68601,
+            "SIR": 5.35433,
+            "SAR": 4.00494,
+            "ISR": 12.7504
+          },
+          "accompaniment": {
+            "SDR": 11.3974,
+            "SIR": 21.6121,
+            "SAR": 13.2817,
+            "ISR": 15.9813
+          }
+        }
+      },
+      {
+        "track_name": "Actions - Devil's Words",
+        "scores": {
+          "vocals": {
+            "SDR": 9.77937,
+            "SIR": 20.2537,
+            "SAR": 9.60245,
+            "ISR": 13.3208
+          },
+          "accompaniment": {
+            "SDR": 12.781,
+            "SIR": 15.3895,
+            "SAR": 13.3742,
+            "ISR": 23.1482
+          }
+        }
+      },
+      {
+        "track_name": "Actions - One Minute Smile",
+        "scores": {
+          "vocals": {
+            "SDR": 8.84219,
+            "SIR": 16.1098,
+            "SAR": 9.47788,
+            "ISR": 13.4743
+          },
+          "accompaniment": {
+            "SDR": 11.0084,
+            "SIR": 15.7127,
+            "SAR": 12.9399,
+            "ISR": 19.7754
+          }
+        }
+      },
+      {
+        "track_name": "Actions - South Of The Water",
+        "scores": {
+          "vocals": {
+            "SDR": 9.73747,
+            "SIR": 18.9403,
+            "SAR": 10.333,
+            "ISR": 14.4066
+          },
+          "accompaniment": {
+            "SDR": 14.318,
+            "SIR": 18.8837,
+            "SAR": 15.8694,
+            "ISR": 22.3595
+          }
+        }
+      },
+      {
+        "track_name": "Aimee Norwich - Child",
+        "scores": {
+          "vocals": {
+            "SDR": 5.91892,
+            "SIR": 20.3204,
+            "SAR": 5.93576,
+            "ISR": 10.5446
+          },
+          "accompaniment": {
+            "SDR": 17.9788,
+            "SIR": 23.2555,
+            "SAR": 21.5719,
+            "ISR": 21.9236
+          }
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Goodbye Bolero",
+        "scores": {
+          "vocals": {
+            "SDR": 9.15237,
+            "SIR": 25.8856,
+            "SAR": 9.99461,
+            "ISR": 12.9868
+          },
+          "accompaniment": {
+            "SDR": 12.4142,
+            "SIR": 16.693,
+            "SAR": 15.1214,
+            "ISR": 18.7991
+          }
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "vocals": {
+            "SDR": 9.03781,
+            "SIR": 18.0127,
+            "SAR": 7.57484,
+            "ISR": 10.4891
+          },
+          "accompaniment": {
+            "SDR": 13.3057,
+            "SIR": 14.2951,
+            "SAR": 13.8743,
+            "ISR": 24.6434
+          }
+        }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 10.2091,
+            "SIR": 23.0624,
+            "SAR": 10.6547,
+            "ISR": 17.3402
+          },
+          "accompaniment": {
+            "SDR": 13.2878,
+            "SIR": 20.8786,
+            "SAR": 14.4586,
+            "ISR": 22.0027
+          }
+        }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 10.0986,
+            "SIR": 20.6672,
+            "SAR": 9.75169,
+            "ISR": 15.2152
+          },
+          "accompaniment": {
+            "SDR": 14.9512,
+            "SIR": 21.3993,
+            "SAR": 16.138,
+            "ISR": 27.0006
+          }
+        }
+      },
+      {
+        "track_name": "Auctioneer - Our Future Faces",
+        "scores": {
+          "vocals": {
+            "SDR": 6.76939,
+            "SIR": 17.5586,
+            "SAR": 6.98892,
+            "ISR": 12.3147
+          },
+          "accompaniment": {
+            "SDR": 14.8124,
+            "SIR": 20.1259,
+            "SAR": 15.7944,
+            "ISR": 24.8105
+          }
+        }
+      },
+      {
+        "track_name": "AvaLuna - Waterduct",
+        "scores": {
+          "vocals": {
+            "SDR": 7.43502,
+            "SIR": 18.5542,
+            "SAR": 7.8475,
+            "ISR": 13.134
+          },
+          "accompaniment": {
+            "SDR": 15.5321,
+            "SIR": 20.5767,
+            "SAR": 16.245,
+            "ISR": 18.7807
+          }
+        }
+      },
+      {
+        "track_name": "BigTroubles - Phantom",
+        "scores": {
+          "vocals": {
+            "SDR": 3.57991,
+            "SIR": 16.4946,
+            "SAR": 3.3243,
+            "ISR": 7.31346
+          },
+          "accompaniment": {
+            "SDR": 14.8819,
+            "SIR": 17.3794,
+            "SAR": 18.4389,
+            "ISR": 29.5074
+          }
+        }
+      },
+      {
+        "track_name": "Bill Chudziak - Children Of No-one",
+        "scores": {
+          "vocals": {
+            "SDR": 8.2519,
+            "SIR": 19.1926,
+            "SAR": 8.72244,
+            "ISR": 14.1103
+          },
+          "accompaniment": {
+            "SDR": 13.3555,
+            "SIR": 18.9906,
+            "SAR": 15.1787,
+            "ISR": 19.5638
+          }
+        }
+      },
+      {
+        "track_name": "Black Bloc - If You Want Success",
+        "scores": {
+          "vocals": {
+            "SDR": 6.89595,
+            "SIR": 22.4832,
+            "SAR": 6.83054,
+            "ISR": 10.5802
+          },
+          "accompaniment": {
+            "SDR": 13.7255,
+            "SIR": 17.3371,
+            "SAR": 16.0628,
+            "ISR": 21.1358
+          }
+        }
+      },
+      {
+        "track_name": "Celestial Shore - Die For Us",
+        "scores": {
+          "vocals": {
+            "SDR": -20.544,
+            "SIR": -37.706,
+            "SAR": 0.60976,
+            "ISR": 0.2973
+          },
+          "accompaniment": {
+            "SDR": 11.6498,
+            "SIR": 49.0042,
+            "SAR": 12.4641,
+            "ISR": 16.1127
+          }
+        }
+      },
+      {
+        "track_name": "Chris Durban - Celebrate",
+        "scores": {
+          "vocals": {
+            "SDR": 6.08146,
+            "SIR": 15.5686,
+            "SAR": 5.40936,
+            "ISR": 8.49432
+          },
+          "accompaniment": {
+            "SDR": 16.2047,
+            "SIR": 17.0075,
+            "SAR": 16.996,
+            "ISR": 26.9043
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Air Traffic",
+        "scores": {
+          "vocals": {
+            "SDR": 8.09982,
+            "SIR": 18.5838,
+            "SAR": 8.74048,
+            "ISR": 13.0896
+          },
+          "accompaniment": {
+            "SDR": 13.9941,
+            "SIR": 19.1888,
+            "SAR": 16.7467,
+            "ISR": 19.5069
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 8.99043,
+            "SIR": 18.7958,
+            "SAR": 9.75759,
+            "ISR": 14.2486
+          },
+          "accompaniment": {
+            "SDR": 18.8229,
+            "SIR": 25.0371,
+            "SAR": 19.7476,
+            "ISR": 27.6669
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": 5.56311,
+            "SIR": 18.1942,
+            "SAR": 6.0561,
+            "ISR": 11.368
+          },
+          "accompaniment": {
+            "SDR": 12.8085,
+            "SIR": 17.9619,
+            "SAR": 15.7333,
+            "ISR": 18.1057
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 3.47258,
+            "SIR": 13.2462,
+            "SAR": 3.17736,
+            "ISR": 5.63786
+          },
+          "accompaniment": {
+            "SDR": 10.3255,
+            "SIR": 12.4029,
+            "SAR": 15.0933,
+            "ISR": 19.4058
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 5.18906,
+            "SIR": 22.5721,
+            "SAR": 5.73903,
+            "ISR": 9.24557
+          },
+          "accompaniment": {
+            "SDR": 14.975,
+            "SIR": 19.4188,
+            "SAR": 17.948,
+            "ISR": 18.9743
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 6.18507,
+            "SIR": 16.4992,
+            "SAR": 6.30036,
+            "ISR": 10.0651
+          },
+          "accompaniment": {
+            "SDR": 14.1405,
+            "SIR": 18.0741,
+            "SAR": 16.8313,
+            "ISR": 26.3192
+          }
+        }
+      },
+      {
+        "track_name": "Dreamers Of The Ghetto - Heavy Love",
+        "scores": {
+          "vocals": {
+            "SDR": 7.5812,
+            "SIR": 16.1195,
+            "SAR": 7.46711,
+            "ISR": 13.4299
+          },
+          "accompaniment": {
+            "SDR": 14.0101,
+            "SIR": 18.3,
+            "SAR": 14.5392,
+            "ISR": 21.4193
+          }
+        }
+      },
+      {
+        "track_name": "Drumtracks - Ghost Bitch",
+        "scores": {
+          "vocals": {
+            "SDR": 7.76299,
+            "SIR": 18.7505,
+            "SAR": 8.23403,
+            "ISR": 11.5089
+          },
+          "accompaniment": {
+            "SDR": 9.76063,
+            "SIR": 13.0942,
+            "SAR": 11.6006,
+            "ISR": 21.6246
+          }
+        }
+      },
+      {
+        "track_name": "Faces On Film - Waiting For Ga",
+        "scores": {
+          "vocals": {
+            "SDR": 4.71433,
+            "SIR": 14.0367,
+            "SAR": 3.94581,
+            "ISR": 8.26944
+          },
+          "accompaniment": {
+            "SDR": 10.3109,
+            "SIR": 12.6439,
+            "SAR": 12.5739,
+            "ISR": 21.6968
+          }
+        }
+      },
+      {
+        "track_name": "Fergessen - Back From The Start",
+        "scores": {
+          "vocals": {
+            "SDR": 8.12746,
+            "SIR": 21.5389,
+            "SAR": 9.30687,
+            "ISR": 13.3151
+          },
+          "accompaniment": {
+            "SDR": 12.8668,
+            "SIR": 18.001,
+            "SAR": 15.5456,
+            "ISR": 17.7115
+          }
+        }
+      },
+      {
+        "track_name": "Fergessen - Nos Palpitants",
+        "scores": {
+          "vocals": {
+            "SDR": 11.7225,
+            "SIR": 22.8344,
+            "SAR": 10.58,
+            "ISR": 13.4283
+          },
+          "accompaniment": {
+            "SDR": 11.5839,
+            "SIR": 13.1001,
+            "SAR": 10.4395,
+            "ISR": 23.6291
+          }
+        }
+      },
+      {
+        "track_name": "Fergessen - The Wind",
+        "scores": {
+          "vocals": {
+            "SDR": 9.20913,
+            "SIR": 19.282,
+            "SAR": 10.0456,
+            "ISR": 13.8778
+          },
+          "accompaniment": {
+            "SDR": 11.7055,
+            "SIR": 16.7757,
+            "SAR": 13.7724,
+            "ISR": 16.9293
+          }
+        }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 10.1419,
+            "SIR": 30.1871,
+            "SAR": 10.9111,
+            "ISR": 15.3985
+          },
+          "accompaniment": {
+            "SDR": 16.1001,
+            "SIR": 22.8839,
+            "SAR": 19.7081,
+            "ISR": 19.6091
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 1.88926,
+            "SIR": 8.76664,
+            "SAR": 4.81204,
+            "ISR": 8.86849
+          },
+          "accompaniment": {
+            "SDR": 9.9125,
+            "SIR": 14.02,
+            "SAR": 12.4588,
+            "ISR": 16.7232
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 12.4278,
+            "SIR": 24.0343,
+            "SAR": 12.6541,
+            "ISR": 21.4862
+          },
+          "accompaniment": {
+            "SDR": 20.8791,
+            "SIR": 29.5482,
+            "SAR": 21.5446,
+            "ISR": 27.4235
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 10.1582,
+            "SIR": 19.0278,
+            "SAR": 11.3987,
+            "ISR": 18.4367
+          },
+          "accompaniment": {
+            "SDR": 10.827,
+            "SIR": 17.4836,
+            "SAR": 11.1509,
+            "ISR": 18.6054
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 6.23827,
+            "SIR": 17.2753,
+            "SAR": 6.55888,
+            "ISR": 10.6605
+          },
+          "accompaniment": {
+            "SDR": 11.4443,
+            "SIR": 15.754,
+            "SAR": 13.6843,
+            "ISR": 24.0501
+          }
+        }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 5.15022,
+            "SIR": 12.9594,
+            "SAR": 5.2702,
+            "ISR": 12.1
+          },
+          "accompaniment": {
+            "SDR": 14.2903,
+            "SIR": 22.4148,
+            "SAR": 17.1974,
+            "ISR": 18.2176
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 8.1041,
+            "SIR": 22.9987,
+            "SAR": 8.3819,
+            "ISR": 13.277
+          },
+          "accompaniment": {
+            "SDR": 15.2919,
+            "SIR": 20.1393,
+            "SAR": 17.1399,
+            "ISR": 29.5608
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 9.70997,
+            "SIR": 25.086,
+            "SAR": 9.61721,
+            "ISR": 13.4541
+          },
+          "accompaniment": {
+            "SDR": 16.8108,
+            "SIR": 21.3215,
+            "SAR": 18.4017,
+            "ISR": 24.6592
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 8.37693,
+            "SIR": 21.8776,
+            "SAR": 8.69275,
+            "ISR": 13.1925
+          },
+          "accompaniment": {
+            "SDR": 12.2943,
+            "SIR": 16.7404,
+            "SAR": 13.7403,
+            "ISR": 21.0744
+          }
+        }
+      },
+      {
+        "track_name": "James May - Dont Let Go",
+        "scores": {
+          "vocals": {
+            "SDR": 7.90122,
+            "SIR": 20.671,
+            "SAR": 8.24112,
+            "ISR": 12.8178
+          },
+          "accompaniment": {
+            "SDR": 14.483,
+            "SIR": 19.329,
+            "SAR": 16.6609,
+            "ISR": 27.6775
+          }
+        }
+      },
+      {
+        "track_name": "James May - If You Say",
+        "scores": {
+          "vocals": {
+            "SDR": 10.6414,
+            "SIR": 23.9604,
+            "SAR": 10.8092,
+            "ISR": 15.8994
+          },
+          "accompaniment": {
+            "SDR": 13.725,
+            "SIR": 19.4409,
+            "SAR": 15.7471,
+            "ISR": 18.9772
+          }
+        }
+      },
+      {
+        "track_name": "James May - On The Line",
+        "scores": {
+          "vocals": {
+            "SDR": 9.1032,
+            "SIR": 23.6576,
+            "SAR": 10.07,
+            "ISR": 14.3834
+          },
+          "accompaniment": {
+            "SDR": 16.0804,
+            "SIR": 20.7322,
+            "SAR": 17.8891,
+            "ISR": 30.0874
+          }
+        }
+      },
+      {
+        "track_name": "Jay Menon - Through My Eyes",
+        "scores": {
+          "vocals": {
+            "SDR": 12.3767,
+            "SIR": 22.9892,
+            "SAR": 12.1773,
+            "ISR": 18.1952
+          },
+          "accompaniment": {
+            "SDR": 13.2837,
+            "SIR": 19.6038,
+            "SAR": 13.4421,
+            "ISR": 22.8868
+          }
+        }
+      },
+      {
+        "track_name": "Johnny Lokke - Promises & Lies",
+        "scores": {
+          "vocals": {
+            "SDR": 8.27846,
+            "SIR": 20.346,
+            "SAR": 8.89653,
+            "ISR": 13.1717
+          },
+          "accompaniment": {
+            "SDR": 14.3783,
+            "SIR": 19.3105,
+            "SAR": 16.252,
+            "ISR": 25.8162
+          }
+        }
+      },
+      {
+        "track_name": "Johnny Lokke - Whisper To A Scream",
+        "scores": {
+          "vocals": {
+            "SDR": 7.28364,
+            "SIR": 20.0502,
+            "SAR": 7.9146,
+            "ISR": 11.7854
+          },
+          "accompaniment": {
+            "SDR": 14.2398,
+            "SIR": 18.7184,
+            "SAR": 16.864,
+            "ISR": 25.6083
+          }
+        }
+      },
+      {
+        "track_name": "Jokers, Jacks & Kings - Sea Of Leaves",
+        "scores": {
+          "vocals": {
+            "SDR": 8.27638,
+            "SIR": 22.4009,
+            "SAR": 9.1738,
+            "ISR": 12.7127
+          },
+          "accompaniment": {
+            "SDR": 12.2422,
+            "SIR": 16.3424,
+            "SAR": 14.3325,
+            "ISR": 26.2659
+          }
+        }
+      },
+      {
+        "track_name": "Leaf - Come Around",
+        "scores": {
+          "vocals": {
+            "SDR": 8.54021,
+            "SIR": 18.2662,
+            "SAR": 8.42697,
+            "ISR": 13.5337
+          },
+          "accompaniment": {
+            "SDR": 16.1428,
+            "SIR": 22.4261,
+            "SAR": 19.1421,
+            "ISR": 18.2148
+          }
+        }
+      },
+      {
+        "track_name": "Leaf - Summerghost",
+        "scores": {
+          "vocals": {
+            "SDR": 7.94077,
+            "SIR": 17.6513,
+            "SAR": 8.67582,
+            "ISR": 14.5572
+          },
+          "accompaniment": {
+            "SDR": 14.6138,
+            "SIR": 21.2583,
+            "SAR": 16.4567,
+            "ISR": 26.161
+          }
+        }
+      },
+      {
+        "track_name": "Leaf - Wicked",
+        "scores": {
+          "vocals": {
+            "SDR": 9.4497,
+            "SIR": 22.8932,
+            "SAR": 9.7305,
+            "ISR": 14.4864
+          },
+          "accompaniment": {
+            "SDR": 16.0164,
+            "SIR": 21.0056,
+            "SAR": 17.5031,
+            "ISR": 27.7164
+          }
+        }
+      },
+      {
+        "track_name": "Lushlife - Toynbee Suite",
+        "scores": {
+          "vocals": {
+            "SDR": 1.47467,
+            "SIR": 4.7694,
+            "SAR": 0.73314,
+            "ISR": 9.64777
+          },
+          "accompaniment": {
+            "SDR": 17.1617,
+            "SIR": 28.8821,
+            "SAR": 18.6928,
+            "ISR": 16.3707
+          }
+        }
+      },
+      {
+        "track_name": "Matthew Entwistle - Dont You Ever",
+        "scores": {
+          "vocals": {
+            "SDR": 10.1188,
+            "SIR": 19.3448,
+            "SAR": 9.90282,
+            "ISR": 17.2928
+          },
+          "accompaniment": {
+            "SDR": 15.5695,
+            "SIR": 22.5407,
+            "SAR": 16.3144,
+            "ISR": 23.2547
+          }
+        }
+      },
+      {
+        "track_name": "Meaxic - Take A Step",
+        "scores": {
+          "vocals": {
+            "SDR": 8.86668,
+            "SIR": 20.4841,
+            "SAR": 9.41665,
+            "ISR": 15.0012
+          },
+          "accompaniment": {
+            "SDR": 15.6015,
+            "SIR": 21.3811,
+            "SAR": 17.4448,
+            "ISR": 26.2467
+          }
+        }
+      },
+      {
+        "track_name": "Meaxic - You Listen",
+        "scores": {
+          "vocals": {
+            "SDR": 9.95195,
+            "SIR": 27.8077,
+            "SAR": 9.83085,
+            "ISR": 17.0117
+          },
+          "accompaniment": {
+            "SDR": 13.0332,
+            "SIR": 19.9729,
+            "SAR": 15.4035,
+            "ISR": 19.251
+          }
+        }
+      },
+      {
+        "track_name": "Music Delta - 80s Rock",
+        "scores": {
+          "vocals": {
+            "SDR": 12.3176,
+            "SIR": 21.7842,
+            "SAR": 13.3524,
+            "ISR": 17.794
+          },
+          "accompaniment": {
+            "SDR": 15.0297,
+            "SIR": 20.4311,
+            "SAR": 16.818,
+            "ISR": 24.8989
+          }
+        }
+      },
+      {
+        "track_name": "Music Delta - Beatles",
+        "scores": {
+          "vocals": {
+            "SDR": 8.90311,
+            "SIR": 19.5468,
+            "SAR": 9.37779,
+            "ISR": 14.441
+          },
+          "accompaniment": {
+            "SDR": 15.1579,
+            "SIR": 20.0639,
+            "SAR": 16.8333,
+            "ISR": 26.5716
+          }
+        }
+      },
+      {
+        "track_name": "Music Delta - Britpop",
+        "scores": {
+          "vocals": {
+            "SDR": 7.85588,
+            "SIR": 16.5715,
+            "SAR": 8.41092,
+            "ISR": 12.2971
+          },
+          "accompaniment": {
+            "SDR": 11.7304,
+            "SIR": 15.3465,
+            "SAR": 14.038,
+            "ISR": 22.12
+          }
+        }
+      },
+      {
+        "track_name": "Music Delta - Country1",
+        "scores": {
+          "vocals": {
+            "SDR": 11.0917,
+            "SIR": 21.319,
+            "SAR": 12.2027,
+            "ISR": 17.7826
+          },
+          "accompaniment": {
+            "SDR": 13.8592,
+            "SIR": 19.9921,
+            "SAR": 15.5003,
+            "ISR": 23.0152
+          }
+        }
+      },
+      {
+        "track_name": "Music Delta - Country2",
+        "scores": {
+          "vocals": {
+            "SDR": 15.2572,
+            "SIR": 23.1534,
+            "SAR": 15.7425,
+            "ISR": 23.2008
+          },
+          "accompaniment": {
+            "SDR": 17.8599,
+            "SIR": 26.9764,
+            "SAR": 18.6755,
+            "ISR": 25.4046
+          }
+        }
+      },
+      {
+        "track_name": "Music Delta - Disco",
+        "scores": {
+          "vocals": {
+            "SDR": 13.4528,
+            "SIR": 24.2075,
+            "SAR": 14.1504,
+            "ISR": 21.2015
+          },
+          "accompaniment": {
+            "SDR": 17.1899,
+            "SIR": 25.1109,
+            "SAR": 18.1604,
+            "ISR": 27.3928
+          }
+        }
+      },
+      {
+        "track_name": "Music Delta - Gospel",
+        "scores": {
+          "vocals": {
+            "SDR": 16.9336,
+            "SIR": 26.0123,
+            "SAR": 17.7841,
+            "ISR": 23.8337
+          },
+          "accompaniment": {
+            "SDR": 16.28,
+            "SIR": 24.6295,
+            "SAR": 17.1943,
+            "ISR": 25.039
+          }
+        }
+      },
+      {
+        "track_name": "Music Delta - Grunge",
+        "scores": {
+          "vocals": {
+            "SDR": 8.39405,
+            "SIR": 15.7789,
+            "SAR": 9.01484,
+            "ISR": 13.561
+          },
+          "accompaniment": {
+            "SDR": 13.5417,
+            "SIR": 19.3548,
+            "SAR": 15.7758,
+            "ISR": 22.522
+          }
+        }
+      },
+      {
+        "track_name": "Music Delta - Hendrix",
+        "scores": {
+          "vocals": {
+            "SDR": 11.1517,
+            "SIR": 13.2959,
+            "SAR": 10.6214,
+            "ISR": 18.1688
+          },
+          "accompaniment": {
+            "SDR": 15.1538,
+            "SIR": 23.2521,
+            "SAR": 15.0103,
+            "ISR": 16.5513
+          }
+        }
+      },
+      {
+        "track_name": "Music Delta - Punk",
+        "scores": {
+          "vocals": {
+            "SDR": 10.9739,
+            "SIR": 20.7058,
+            "SAR": 11.0108,
+            "ISR": 14.5884
+          },
+          "accompaniment": {
+            "SDR": 13.3328,
+            "SIR": 18.4485,
+            "SAR": 15.7827,
+            "ISR": 17.6336
+          }
+        }
+      },
+      {
+        "track_name": "Music Delta - Reggae",
+        "scores": {
+          "vocals": {
+            "SDR": 16.4373,
+            "SIR": 27.694,
+            "SAR": 16.517,
+            "ISR": 23.145
+          },
+          "accompaniment": {
+            "SDR": 18.075,
+            "SIR": 27.8346,
+            "SAR": 20.9546,
+            "ISR": 20.8391
+          }
+        }
+      },
+      {
+        "track_name": "Music Delta - Rock",
+        "scores": {
+          "vocals": {
+            "SDR": 10.4772,
+            "SIR": 17.8272,
+            "SAR": 10.8346,
+            "ISR": 14.7617
+          },
+          "accompaniment": {
+            "SDR": 10.6692,
+            "SIR": 15.6967,
+            "SAR": 12.8753,
+            "ISR": 19.6801
+          }
+        }
+      },
+      {
+        "track_name": "Music Delta - Rockabilly",
+        "scores": {
+          "vocals": {
+            "SDR": 9.78891,
+            "SIR": 19.1537,
+            "SAR": 11.056,
+            "ISR": 15.2638
+          },
+          "accompaniment": {
+            "SDR": 12.9873,
+            "SIR": 18.527,
+            "SAR": 14.6569,
+            "ISR": 23.2346
+          }
+        }
+      },
+      {
+        "track_name": "Night Panther - Fire",
+        "scores": {
+          "vocals": {
+            "SDR": 8.2892,
+            "SIR": 20.328,
+            "SAR": 8.92555,
+            "ISR": 13.1305
+          },
+          "accompaniment": {
+            "SDR": 10.0227,
+            "SIR": 14.5853,
+            "SAR": 11.2098,
+            "ISR": 21.113
+          }
+        }
+      },
+      {
+        "track_name": "North To Alaska - All The Same",
+        "scores": {
+          "vocals": {
+            "SDR": 7.72229,
+            "SIR": 20.5743,
+            "SAR": 8.11735,
+            "ISR": 13.1519
+          },
+          "accompaniment": {
+            "SDR": 14.9056,
+            "SIR": 17.939,
+            "SAR": 15.3045,
+            "ISR": 25.9492
+          }
+        }
+      },
+      {
+        "track_name": "Patrick Talbot - A Reason To Leave",
+        "scores": {
+          "vocals": {
+            "SDR": 10.3672,
+            "SIR": 27.3752,
+            "SAR": 11.019,
+            "ISR": 15.3817
+          },
+          "accompaniment": {
+            "SDR": 12.2429,
+            "SIR": 16.4682,
+            "SAR": 13.4563,
+            "ISR": 23.0365
+          }
+        }
+      },
+      {
+        "track_name": "Patrick Talbot - Set Me Free",
+        "scores": {
+          "vocals": {
+            "SDR": 9.68382,
+            "SIR": 24.8043,
+            "SAR": 10.2048,
+            "ISR": 15.0192
+          },
+          "accompaniment": {
+            "SDR": 9.6941,
+            "SIR": 14.3762,
+            "SAR": 11.5214,
+            "ISR": 17.4398
+          }
+        }
+      },
+      {
+        "track_name": "Phre The Eon - Everybody's Falling Apart",
+        "scores": {
+          "vocals": {
+            "SDR": 10.1257,
+            "SIR": 27.6994,
+            "SAR": 10.8028,
+            "ISR": 14.806
+          },
+          "accompaniment": {
+            "SDR": 15.1948,
+            "SIR": 21.7629,
+            "SAR": 18.5402,
+            "ISR": 19.0678
+          }
+        }
+      },
+      {
+        "track_name": "Port St Willow - Stay Even",
+        "scores": {
+          "vocals": {
+            "SDR": 3.4096,
+            "SIR": 6.48776,
+            "SAR": 3.59386,
+            "ISR": 9.77711
+          },
+          "accompaniment": {
+            "SDR": 9.87824,
+            "SIR": 18.1847,
+            "SAR": 11.5932,
+            "ISR": 15.065
+          }
+        }
+      },
+      {
+        "track_name": "Remember December - C U Next Time",
+        "scores": {
+          "vocals": {
+            "SDR": 7.39005,
+            "SIR": 14.6239,
+            "SAR": 7.88169,
+            "ISR": 11.7645
+          },
+          "accompaniment": {
+            "SDR": 11.8007,
+            "SIR": 15.7143,
+            "SAR": 14.1137,
+            "ISR": 17.7306
+          }
+        }
+      },
+      {
+        "track_name": "Secret Mountains - High Horse",
+        "scores": {
+          "vocals": {
+            "SDR": 4.10176,
+            "SIR": 15.6866,
+            "SAR": 4.12566,
+            "ISR": 9.67366
+          },
+          "accompaniment": {
+            "SDR": 14.0714,
+            "SIR": 18.9577,
+            "SAR": 16.0332,
+            "ISR": 21.5954
+          }
+        }
+      },
+      {
+        "track_name": "Skelpolu - Human Mistakes",
+        "scores": {
+          "vocals": {
+            "SDR": 5.84013,
+            "SIR": 18.6658,
+            "SAR": 6.25407,
+            "ISR": 11.3342
+          },
+          "accompaniment": {
+            "SDR": 16.1445,
+            "SIR": 21.3697,
+            "SAR": 18.5304,
+            "ISR": 30.5762
+          }
+        }
+      },
+      {
+        "track_name": "Skelpolu - Together Alone",
+        "scores": {
+          "vocals": {
+            "SDR": -0.27821,
+            "SIR": -30.7644,
+            "SAR": 4e-05,
+            "ISR": 2.15205
+          },
+          "accompaniment": {
+            "SDR": 22.6053,
+            "SIR": 42.7372,
+            "SAR": 28.4098,
+            "ISR": 20.9459
+          }
+        }
+      },
+      {
+        "track_name": "Snowmine - Curfews",
+        "scores": {
+          "vocals": {
+            "SDR": 5.52446,
+            "SIR": 17.4949,
+            "SAR": 5.90764,
+            "ISR": 8.694
+          },
+          "accompaniment": {
+            "SDR": 14.172,
+            "SIR": 17.8467,
+            "SAR": 17.6432,
+            "ISR": 19.4786
+          }
+        }
+      },
+      {
+        "track_name": "Spike Mullings - Mike's Sulking",
+        "scores": {
+          "vocals": {
+            "SDR": 7.15605,
+            "SIR": 20.5124,
+            "SAR": 7.18892,
+            "ISR": 11.9632
+          },
+          "accompaniment": {
+            "SDR": 13.0824,
+            "SIR": 16.9623,
+            "SAR": 14.7653,
+            "ISR": 26.9368
+          }
+        }
+      },
+      {
+        "track_name": "St Vitus - Word Gets Around",
+        "scores": {
+          "vocals": {
+            "SDR": 9.22813,
+            "SIR": 23.3858,
+            "SAR": 9.93457,
+            "ISR": 16.1074
+          },
+          "accompaniment": {
+            "SDR": 11.2343,
+            "SIR": 17.0765,
+            "SAR": 12.1632,
+            "ISR": 20.1095
+          }
+        }
+      },
+      {
+        "track_name": "Steven Clark - Bounty",
+        "scores": {
+          "vocals": {
+            "SDR": 5.55825,
+            "SIR": 12.8493,
+            "SAR": 5.33354,
+            "ISR": 8.94768
+          },
+          "accompaniment": {
+            "SDR": 11.2133,
+            "SIR": 13.9609,
+            "SAR": 13.7129,
+            "ISR": 19.35
+          }
+        }
+      },
+      {
+        "track_name": "Strand Of Oaks - Spacestation",
+        "scores": {
+          "vocals": {
+            "SDR": 5.86626,
+            "SIR": 19.4687,
+            "SAR": 5.7076,
+            "ISR": 11.3702
+          },
+          "accompaniment": {
+            "SDR": 11.7736,
+            "SIR": 16.5125,
+            "SAR": 14.0172,
+            "ISR": 25.9621
+          }
+        }
+      },
+      {
+        "track_name": "Sweet Lights - You Let Me Down",
+        "scores": {
+          "vocals": {
+            "SDR": 5.32897,
+            "SIR": 13.9379,
+            "SAR": 5.62667,
+            "ISR": 8.67216
+          },
+          "accompaniment": {
+            "SDR": 8.20879,
+            "SIR": 10.4055,
+            "SAR": 11.2874,
+            "ISR": 19.5597
+          }
+        }
+      },
+      {
+        "track_name": "Swinging Steaks - Lost My Way",
+        "scores": {
+          "vocals": {
+            "SDR": 4.16987,
+            "SIR": 15.0626,
+            "SAR": 4.73126,
+            "ISR": 9.19776
+          },
+          "accompaniment": {
+            "SDR": 11.9223,
+            "SIR": 16.9377,
+            "SAR": 14.8289,
+            "ISR": 20.5357
+          }
+        }
+      },
+      {
+        "track_name": "The Districts - Vermont",
+        "scores": {
+          "vocals": {
+            "SDR": 8.21099,
+            "SIR": 23.047,
+            "SAR": 8.73839,
+            "ISR": 15.3652
+          },
+          "accompaniment": {
+            "SDR": 10.4927,
+            "SIR": 16.5549,
+            "SAR": 11.3729,
+            "ISR": 24.5177
+          }
+        }
+      },
+      {
+        "track_name": "The Long Wait - Back Home To Blue",
+        "scores": {
+          "vocals": {
+            "SDR": 8.98413,
+            "SIR": 22.7143,
+            "SAR": 9.33408,
+            "ISR": 13.6103
+          },
+          "accompaniment": {
+            "SDR": 15.706,
+            "SIR": 18.8497,
+            "SAR": 16.8638,
+            "ISR": 28.5336
+          }
+        }
+      },
+      {
+        "track_name": "The Scarlet Brand - Les Fleurs Du Mal",
+        "scores": {
+          "vocals": {
+            "SDR": 7.51597,
+            "SIR": 22.6615,
+            "SAR": 7.65666,
+            "ISR": 11.4719
+          },
+          "accompaniment": {
+            "SDR": 10.4334,
+            "SIR": 14.1601,
+            "SAR": 12.6401,
+            "ISR": 25.7448
+          }
+        }
+      },
+      {
+        "track_name": "The So So Glos - Emergency",
+        "scores": {
+          "vocals": {
+            "SDR": 6.04714,
+            "SIR": 17.3009,
+            "SAR": 6.15763,
+            "ISR": 10.8781
+          },
+          "accompaniment": {
+            "SDR": 12.8646,
+            "SIR": 16.8644,
+            "SAR": 14.4989,
+            "ISR": 20.5527
+          }
+        }
+      },
+      {
+        "track_name": "The Wrong'Uns - Rothko",
+        "scores": {
+          "vocals": {
+            "SDR": 11.1606,
+            "SIR": 22.6829,
+            "SAR": 11.9686,
+            "ISR": 17.3157
+          },
+          "accompaniment": {
+            "SDR": 13.6624,
+            "SIR": 20.5838,
+            "SAR": 16.1242,
+            "ISR": 18.1028
+          }
+        }
+      },
+      {
+        "track_name": "Tim Taler - Stalker",
+        "scores": {
+          "vocals": {
+            "SDR": 5.93961,
+            "SIR": 15.663,
+            "SAR": 5.91303,
+            "ISR": 10.3718
+          },
+          "accompaniment": {
+            "SDR": 9.57475,
+            "SIR": 11.8168,
+            "SAR": 10.4881,
+            "ISR": 20.2676
+          }
+        }
+      },
+      {
+        "track_name": "Titanium - Haunted Age",
+        "scores": {
+          "vocals": {
+            "SDR": 4.52894,
+            "SIR": 19.3269,
+            "SAR": 4.45802,
+            "ISR": 6.82841
+          },
+          "accompaniment": {
+            "SDR": 11.0317,
+            "SIR": 13.008,
+            "SAR": 15.404,
+            "ISR": 24.6489
+          }
+        }
+      },
+      {
+        "track_name": "Traffic Experiment - Once More (With Feeling)",
+        "scores": {
+          "vocals": {
+            "SDR": 5.90885,
+            "SIR": 19.4217,
+            "SAR": 6.04031,
+            "ISR": 9.59568
+          },
+          "accompaniment": {
+            "SDR": 12.7515,
+            "SIR": 16.6174,
+            "SAR": 16.1713,
+            "ISR": 18.2182
+          }
+        }
+      },
+      {
+        "track_name": "Traffic Experiment - Sirens",
+        "scores": {
+          "vocals": {
+            "SDR": 5.72437,
+            "SIR": 19.0318,
+            "SAR": 5.51779,
+            "ISR": 9.32155
+          },
+          "accompaniment": {
+            "SDR": 10.2745,
+            "SIR": 13.0619,
+            "SAR": 12.7821,
+            "ISR": 17.5687
+          }
+        }
+      },
+      {
+        "track_name": "Triviul - Angelsaint",
+        "scores": {
+          "vocals": {
+            "SDR": 8.8076,
+            "SIR": 16.9894,
+            "SAR": 9.03124,
+            "ISR": 13.7485
+          },
+          "accompaniment": {
+            "SDR": 13.2972,
+            "SIR": 16.4494,
+            "SAR": 13.7676,
+            "ISR": 20.7918
+          }
+        }
+      },
+      {
+        "track_name": "Triviul - Dorothy",
+        "scores": {
+          "vocals": {
+            "SDR": 10.8417,
+            "SIR": 18.6024,
+            "SAR": 10.3282,
+            "ISR": 15.2514
+          },
+          "accompaniment": {
+            "SDR": 12.612,
+            "SIR": 17.1297,
+            "SAR": 13.0885,
+            "ISR": 19.0915
+          }
+        }
+      },
+      {
+        "track_name": "Voelund - Comfort Lives In Belief",
+        "scores": {
+          "vocals": {
+            "SDR": 4.84132,
+            "SIR": 15.5384,
+            "SAR": 5.42572,
+            "ISR": 8.42458
+          },
+          "accompaniment": {
+            "SDR": 8.83652,
+            "SIR": 11.2361,
+            "SAR": 11.5247,
+            "ISR": 21.6222
+          }
+        }
+      },
+      {
+        "track_name": "Wall Of Death - Femme",
+        "scores": {
+          "vocals": {
+            "SDR": 4.7405,
+            "SIR": 16.0957,
+            "SAR": 4.63136,
+            "ISR": 8.5076
+          },
+          "accompaniment": {
+            "SDR": 14.6727,
+            "SIR": 19.014,
+            "SAR": 18.4964,
+            "ISR": 19.3019
+          }
+        }
+      },
+      {
+        "track_name": "Young Griffo - Blood To Bone",
+        "scores": {
+          "vocals": {
+            "SDR": 7.90008,
+            "SIR": 26.142,
+            "SAR": 8.10088,
+            "ISR": 13.2098
+          },
+          "accompaniment": {
+            "SDR": 14.597,
+            "SIR": 20.6947,
+            "SAR": 17.6958,
+            "ISR": 19.127
+          }
+        }
+      },
+      {
+        "track_name": "Young Griffo - Facade",
+        "scores": {
+          "vocals": {
+            "SDR": 9.00132,
+            "SIR": 19.7921,
+            "SAR": 9.21459,
+            "ISR": 13.9706
+          },
+          "accompaniment": {
+            "SDR": 12.8753,
+            "SIR": 17.7815,
+            "SAR": 14.3314,
+            "ISR": 24.9184
+          }
+        }
+      },
+      {
+        "track_name": "Young Griffo - Pennies",
+        "scores": {
+          "vocals": {
+            "SDR": 8.47004,
+            "SIR": 21.1271,
+            "SAR": 8.45981,
+            "ISR": 13.2456
+          },
+          "accompaniment": {
+            "SDR": 14.295,
+            "SIR": 18.9764,
+            "SAR": 16.0033,
+            "ISR": 27.4233
+          }
+        }
+      },
+      {
+        "track_name": "AM Contra - Heart Peripheral",
+        "scores": {
+          "vocals": {
+            "SDR": 10.5019,
+            "SIR": 21.6456,
+            "SAR": 11.3157,
+            "ISR": 16.7876
+          },
+          "accompaniment": {
+            "SDR": 16.8578,
+            "SIR": 22.6781,
+            "SAR": 18.2187,
+            "ISR": 27.2291
+          }
+        }
+      },
+      {
+        "track_name": "Al James - Schoolboy Facination",
+        "scores": {
+          "vocals": {
+            "SDR": 7.42516,
+            "SIR": 15.6536,
+            "SAR": 7.46094,
+            "ISR": 10.9252
+          },
+          "accompaniment": {
+            "SDR": 9.44502,
+            "SIR": 11.724,
+            "SAR": 11.0882,
+            "ISR": 19.2465
+          }
+        }
+      },
+      {
+        "track_name": "Angels In Amplifiers - I'm Alright",
+        "scores": {
+          "vocals": {
+            "SDR": 9.22609,
+            "SIR": 21.4656,
+            "SAR": 9.49863,
+            "ISR": 14.8275
+          },
+          "accompaniment": {
+            "SDR": 12.9674,
+            "SIR": 18.8805,
+            "SAR": 14.1361,
+            "ISR": 25.3901
+          }
+        }
+      },
+      {
+        "track_name": "Arise - Run Run Run",
+        "scores": {
+          "vocals": {
+            "SDR": 8.76842,
+            "SIR": 23.6412,
+            "SAR": 9.12358,
+            "ISR": 13.5951
+          },
+          "accompaniment": {
+            "SDR": 15.928,
+            "SIR": 22.8837,
+            "SAR": 19.55,
+            "ISR": 18.998
+          }
+        }
+      },
+      {
+        "track_name": "BKS - Bulldozer",
+        "scores": {
+          "vocals": {
+            "SDR": 7.90826,
+            "SIR": 24.8657,
+            "SAR": 8.11272,
+            "ISR": 12.5669
+          },
+          "accompaniment": {
+            "SDR": 15.0931,
+            "SIR": 19.7735,
+            "SAR": 16.7143,
+            "ISR": 20.6661
+          }
+        }
+      },
+      {
+        "track_name": "BKS - Too Much",
+        "scores": {
+          "vocals": {
+            "SDR": 10.4192,
+            "SIR": 24.0879,
+            "SAR": 11.1524,
+            "ISR": 16.409
+          },
+          "accompaniment": {
+            "SDR": 14.6933,
+            "SIR": 20.4239,
+            "SAR": 16.0864,
+            "ISR": 27.5519
+          }
+        }
+      },
+      {
+        "track_name": "Ben Carrigan - We'll Talk About It All Tonight",
+        "scores": {
+          "vocals": {
+            "SDR": 5.10921,
+            "SIR": 16.6429,
+            "SAR": 5.01273,
+            "ISR": 8.69419
+          },
+          "accompaniment": {
+            "SDR": 12.264,
+            "SIR": 15.0653,
+            "SAR": 15.3341,
+            "ISR": 24.1785
+          }
+        }
+      },
+      {
+        "track_name": "Bobby Nobody - Stitch Up",
+        "scores": {
+          "vocals": {
+            "SDR": 8.5224,
+            "SIR": 20.6326,
+            "SAR": 8.72368,
+            "ISR": 13.7476
+          },
+          "accompaniment": {
+            "SDR": 13.4868,
+            "SIR": 18.8872,
+            "SAR": 15.3071,
+            "ISR": 22.5037
+          }
+        }
+      },
+      {
+        "track_name": "Buitraker - Revo X",
+        "scores": {
+          "vocals": {
+            "SDR": 5.00632,
+            "SIR": 10.3415,
+            "SAR": 4.87802,
+            "ISR": 8.83604
+          },
+          "accompaniment": {
+            "SDR": 14.3411,
+            "SIR": 18.0501,
+            "SAR": 16.5105,
+            "ISR": 22.6973
+          }
+        }
+      },
+      {
+        "track_name": "Carlos Gonzalez - A Place For Us",
+        "scores": {
+          "vocals": {
+            "SDR": 6.28909,
+            "SIR": 14.6588,
+            "SAR": 6.3358,
+            "ISR": 10.4418
+          },
+          "accompaniment": {
+            "SDR": 9.84974,
+            "SIR": 11.8716,
+            "SAR": 10.907,
+            "ISR": 18.7224
+          }
+        }
+      },
+      {
+        "track_name": "Cristina Vane - So Easy",
+        "scores": {
+          "vocals": {
+            "SDR": 9.65824,
+            "SIR": 19.5154,
+            "SAR": 10.4012,
+            "ISR": 13.8744
+          },
+          "accompaniment": {
+            "SDR": 14.4474,
+            "SIR": 17.7872,
+            "SAR": 15.6015,
+            "ISR": 23.9859
+          }
+        }
+      },
+      {
+        "track_name": "Detsky Sad - Walkie Talkie",
+        "scores": {
+          "vocals": {
+            "SDR": 10.3957,
+            "SIR": 21.9923,
+            "SAR": 10.9819,
+            "ISR": 16.5344
+          },
+          "accompaniment": {
+            "SDR": 12.6667,
+            "SIR": 20.0484,
+            "SAR": 14.8253,
+            "ISR": 17.2283
+          }
+        }
+      },
+      {
+        "track_name": "Enda Reilly - Cur An Long Ag Seol",
+        "scores": {
+          "vocals": {
+            "SDR": 9.21146,
+            "SIR": 18.6744,
+            "SAR": 0.65766,
+            "ISR": -4.79845
+          },
+          "accompaniment": {
+            "SDR": 13.1948,
+            "SIR": -0.59224,
+            "SAR": 2.70242,
+            "ISR": 18.082
+          }
+        }
+      },
+      {
+        "track_name": "Forkupines - Semantics",
+        "scores": {
+          "vocals": {
+            "SDR": 7.37951,
+            "SIR": 23.0314,
+            "SAR": 7.69145,
+            "ISR": 12.1834
+          },
+          "accompaniment": {
+            "SDR": 13.9493,
+            "SIR": 18.08,
+            "SAR": 16.1657,
+            "ISR": 24.1283
+          }
+        }
+      },
+      {
+        "track_name": "Georgia Wonder - Siren",
+        "scores": {
+          "vocals": {
+            "SDR": 6.31187,
+            "SIR": 15.7173,
+            "SAR": 6.52708,
+            "ISR": 10.8173
+          },
+          "accompaniment": {
+            "SDR": 10.9079,
+            "SIR": 14.7493,
+            "SAR": 13.2028,
+            "ISR": 22.2533
+          }
+        }
+      },
+      {
+        "track_name": "Girls Under Glass - We Feel Alright",
+        "scores": {
+          "vocals": {
+            "SDR": 4.86078,
+            "SIR": 12.7201,
+            "SAR": 4.92282,
+            "ISR": 8.4244
+          },
+          "accompaniment": {
+            "SDR": 12.58,
+            "SIR": 16.4122,
+            "SAR": 15.414,
+            "ISR": 23.3551
+          }
+        }
+      },
+      {
+        "track_name": "Hollow Ground - Ill Fate",
+        "scores": {
+          "vocals": {
+            "SDR": 7.00707,
+            "SIR": 15.5311,
+            "SAR": 7.75084,
+            "ISR": 12.5441
+          },
+          "accompaniment": {
+            "SDR": 15.917,
+            "SIR": 21.5775,
+            "SAR": 18.6675,
+            "ISR": 21.4818
+          }
+        }
+      },
+      {
+        "track_name": "James Elder & Mark M Thompson - The English Actor",
+        "scores": {
+          "vocals": {
+            "SDR": 6.99729,
+            "SIR": 18.0169,
+            "SAR": 7.35798,
+            "ISR": 11.4437
+          },
+          "accompaniment": {
+            "SDR": 11.5592,
+            "SIR": 14.4729,
+            "SAR": 13.85,
+            "ISR": 24.222
+          }
+        }
+      },
+      {
+        "track_name": "Juliet's Rescue - Heartbeats",
+        "scores": {
+          "vocals": {
+            "SDR": 9.38722,
+            "SIR": 24.2293,
+            "SAR": 9.82067,
+            "ISR": 14.9712
+          },
+          "accompaniment": {
+            "SDR": 16.8317,
+            "SIR": 21.8122,
+            "SAR": 18.5105,
+            "ISR": 31.3298
           }
         }
       }
@@ -33,7 +2056,7 @@
             "SAR": 10.0964,
             "ISR": 14.7435
           },
-          "instrumental": {
+          "accompaniment": {
             "SDR": 15.4816,
             "SIR": 20.1623,
             "SAR": 17.3278,
@@ -55,7 +2078,7 @@
             "SAR": 10.3513,
             "ISR": 15.9666
           },
-          "instrumental": {
+          "accompaniment": {
             "SDR": 16.2483,
             "SIR": 21.8777,
             "SAR": 17.4968,
@@ -77,7 +2100,7 @@
             "SAR": 10.2838,
             "ISR": 16.6347
           },
-          "instrumental": {
+          "accompaniment": {
             "SDR": 15.8716,
             "SIR": 22.3494,
             "SAR": 17.176,
@@ -99,7 +2122,7 @@
             "SAR": 9.52931,
             "ISR": 13.2465
           },
-          "instrumental": {
+          "accompaniment": {
             "SDR": 15.4412,
             "SIR": 18.7661,
             "SAR": 17.0021,
@@ -121,7 +2144,7 @@
             "SAR": 9.55387,
             "ISR": 13.5417
           },
-          "instrumental": {
+          "accompaniment": {
             "SDR": 15.6841,
             "SIR": 19.0452,
             "SAR": 17.1219,
@@ -143,7 +2166,7 @@
             "SAR": 10.3074,
             "ISR": 14.8333
           },
-          "instrumental": {
+          "accompaniment": {
             "SDR": 15.7343,
             "SIR": 20.1956,
             "SAR": 17.6699,
@@ -165,7 +2188,7 @@
             "SAR": 10.3701,
             "ISR": 14.653
           },
-          "instrumental": {
+          "accompaniment": {
             "SDR": 15.5981,
             "SIR": 20.4122,
             "SAR": 17.3973,
@@ -187,7 +2210,7 @@
             "SAR": 10.3504,
             "ISR": 14.5682
           },
-          "instrumental": {
+          "accompaniment": {
             "SDR": 15.7111,
             "SIR": 20.3581,
             "SAR": 17.6392,
@@ -209,7 +2232,7 @@
             "SAR": 9.91098,
             "ISR": 13.8572
           },
-          "instrumental": {
+          "accompaniment": {
             "SDR": 15.0055,
             "SIR": 19.9132,
             "SAR": 16.537,
@@ -231,7 +2254,7 @@
             "SAR": 9.90405,
             "ISR": 13.8069
           },
-          "instrumental": {
+          "accompaniment": {
             "SDR": 15.0352,
             "SIR": 19.8583,
             "SAR": 16.5648,
@@ -253,7 +2276,7 @@
             "SAR": 10.1294,
             "ISR": 14.3904
           },
-          "instrumental": {
+          "accompaniment": {
             "SDR": 15.2341,
             "SIR": 20.0053,
             "SAR": 17.2023,
@@ -261,6 +2284,1350 @@
           }
         }
       }
+    ]
+  },
+  "13_SP-UVR-4B-44100-1.pth": {
+    "model_name": "VR Arch Single Model v5: 13_SP-UVR-4B-44100-1",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 9.61158,
+            "SIR": 24.0425,
+            "SAR": 9.95108,
+            "ISR": 14.1401
+          },
+          "accompaniment": {
+            "SDR": 15.313,
+            "SIR": 19.913,
+            "SAR": 17.181,
+            "ISR": 29.6411
+          }
+        }
+      }
+    ]
+  },
+  "14_SP-UVR-4B-44100-2.pth": {
+    "model_name": "VR Arch Single Model v5: 14_SP-UVR-4B-44100-2",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 9.67863,
+            "SIR": 23.5652,
+            "SAR": 10.0074,
+            "ISR": 14.4707
+          },
+          "accompaniment": {
+            "SDR": 15.3879,
+            "SIR": 20.1929,
+            "SAR": 17.1843,
+            "ISR": 29.2083
+          }
+        }
+      }
+    ]
+  },
+  "15_SP-UVR-MID-44100-1.pth": {
+    "model_name": "VR Arch Single Model v5: 15_SP-UVR-MID-44100-1",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 9.79101,
+            "SIR": 24.3351,
+            "SAR": 10.1794,
+            "ISR": 13.951
+          },
+          "accompaniment": {
+            "SDR": 15.2945,
+            "SIR": 19.4523,
+            "SAR": 17.3117,
+            "ISR": 29.1805
+          }
+        }
+      }
+    ]
+  },
+  "16_SP-UVR-MID-44100-2.pth": {
+    "model_name": "VR Arch Single Model v5: 16_SP-UVR-MID-44100-2",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 9.70706,
+            "SIR": 24.168,
+            "SAR": 10.1456,
+            "ISR": 14.0142
+          },
+          "accompaniment": {
+            "SDR": 15.3468,
+            "SIR": 19.6379,
+            "SAR": 17.3318,
+            "ISR": 29.182
+          }
+        }
+      }
+    ]
+  },
+  "17_HP-Wind_Inst-UVR.pth": {
+    "model_name": "VR Arch Single Model v5: 17_HP-Wind_Inst-UVR",
+    "track_scores": [
+      null
+    ]
+  },
+  "UVR-De-Echo-Aggressive.pth": {
+    "model_name": "VR Arch Single Model v5: UVR-De-Echo-Aggressive by FoxJoy",
+    "track_scores": [
+      null
+    ]
+  },
+  "UVR-De-Echo-Normal.pth": {
+    "model_name": "VR Arch Single Model v5: UVR-De-Echo-Normal by FoxJoy",
+    "track_scores": [
+      null
+    ]
+  },
+  "UVR-DeEcho-DeReverb.pth": {
+    "model_name": "VR Arch Single Model v5: UVR-DeEcho-DeReverb by FoxJoy",
+    "track_scores": [
+      null
+    ]
+  },
+  "UVR-DeNoise-Lite.pth": {
+    "model_name": "VR Arch Single Model v5: UVR-DeNoise-Lite by FoxJoy",
+    "track_scores": [
+      null
+    ]
+  },
+  "UVR-DeNoise.pth": {
+    "model_name": "VR Arch Single Model v5: UVR-DeNoise by FoxJoy",
+    "track_scores": [
+      null
+    ]
+  },
+  "UVR-BVE-4B_SN-44100-1.pth": {
+    "model_name": "VR Arch Single Model v5: UVR-BVE-4B_SN-44100-1",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": -0.00052,
+            "SIR": -5.31384,
+            "SAR": -0.14961,
+            "ISR": 0.25838
+          },
+          "accompaniment": {
+            "SDR": 5.96176,
+            "SIR": 5.44499,
+            "SAR": 22.8911,
+            "ISR": 17.7096
+          }
+        }
+      }
+    ]
+  },
+  "MGM_HIGHEND_v4.pth": {
+    "model_name": "VR Arch Single Model v4: MGM_HIGHEND_v4",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 8.77882,
+            "SIR": 23.3237,
+            "SAR": 9.19876,
+            "ISR": 13.2267
+          },
+          "accompaniment": {
+            "SDR": 14.5235,
+            "SIR": 18.6889,
+            "SAR": 16.3961,
+            "ISR": 30.2887
+          }
+        }
+      }
+    ]
+  },
+  "MGM_LOWEND_A_v4.pth": {
+    "model_name": "VR Arch Single Model v4: MGM_LOWEND_A_v4",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 9.69816,
+            "SIR": 24.318,
+            "SAR": 9.73736,
+            "ISR": 13.6806
+          },
+          "accompaniment": {
+            "SDR": 14.7954,
+            "SIR": 19.5061,
+            "SAR": 16.5979,
+            "ISR": 23.8171
+          }
+        }
+      }
+    ]
+  },
+  "MGM_LOWEND_B_v4.pth": {
+    "model_name": "VR Arch Single Model v4: MGM_LOWEND_B_v4",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 9.61364,
+            "SIR": 23.0202,
+            "SAR": 9.47714,
+            "ISR": 15.0702
+          },
+          "accompaniment": {
+            "SDR": 15.1628,
+            "SIR": 20.9989,
+            "SAR": 16.2524,
+            "ISR": 25.1904
+          }
+        }
+      }
+    ]
+  },
+  "MGM_MAIN_v4.pth": {
+    "model_name": "VR Arch Single Model v4: MGM_MAIN_v4",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 9.13893,
+            "SIR": 23.6973,
+            "SAR": 9.54069,
+            "ISR": 13.2684
+          },
+          "accompaniment": {
+            "SDR": 14.8543,
+            "SIR": 18.9902,
+            "SAR": 16.8714,
+            "ISR": 30.7065
+          }
+        }
+      }
+    ]
+  },
+  "UVR-De-Reverb-aufr33-jarredou.pth": {
+    "model_name": "VR Arch Single Model v4: UVR-De-Reverb by aufr33-jarredou",
+    "track_scores": []
+  },
+  "UVR-MDX-NET-Inst_HQ_1.onnx": {
+    "model_name": "MDX-Net Model: UVR-MDX-NET Inst HQ 1",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 11.2926,
+            "SIR": 22.6584,
+            "SAR": 11.6046,
+            "ISR": 16.0831
+          },
+          "accompaniment": {
+            "SDR": 15.7201,
+            "SIR": 27.6394,
+            "SAR": 17.9174,
+            "ISR": 18.6577
+          }
+        }
+      }
+    ]
+  },
+  "UVR-MDX-NET-Inst_HQ_2.onnx": {
+    "model_name": "MDX-Net Model: UVR-MDX-NET Inst HQ 2",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 11.2891,
+            "SIR": 21.7631,
+            "SAR": 11.7597,
+            "ISR": 16.2739
+          },
+          "accompaniment": {
+            "SDR": 15.5581,
+            "SIR": 28.2464,
+            "SAR": 18.0253,
+            "ISR": 18.2691
+          }
+        }
+      }
+    ]
+  },
+  "UVR-MDX-NET-Inst_HQ_3.onnx": {
+    "model_name": "MDX-Net Model: UVR-MDX-NET Inst HQ 3",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 11.3671,
+            "SIR": 21.9568,
+            "SAR": 11.7719,
+            "ISR": 16.4426
+          },
+          "accompaniment": {
+            "SDR": 15.6439,
+            "SIR": 28.5379,
+            "SAR": 18.0557,
+            "ISR": 18.3418
+          }
+        }
+      }
+    ]
+  },
+  "UVR-MDX-NET-Inst_HQ_4.onnx": {
+    "model_name": "MDX-Net Model: UVR-MDX-NET Inst HQ 4",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 11.0509,
+            "SIR": 20.923,
+            "SAR": 11.5791,
+            "ISR": 16.4573
+          },
+          "accompaniment": {
+            "SDR": 15.299,
+            "SIR": 28.6137,
+            "SAR": 17.7593,
+            "ISR": 18.2594
+          }
+        }
+      }
+    ]
+  },
+  "UVR_MDXNET_Main.onnx": {
+    "model_name": "MDX-Net Model: UVR-MDX-NET Main",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 12.3784,
+            "SIR": 28.9564,
+            "SAR": 13.0257,
+            "ISR": 16.0096
+          },
+          "accompaniment": {
+            "SDR": 16.5944,
+            "SIR": 27.503,
+            "SAR": 19.6799,
+            "ISR": 19.2268
+          }
+        }
+      }
+    ]
+  },
+  "UVR-MDX-NET-Inst_Main.onnx": {
+    "model_name": "MDX-Net Model: UVR-MDX-NET Inst Main",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 10.8043,
+            "SIR": 20.338,
+            "SAR": 11.2457,
+            "ISR": 16.1646
+          },
+          "accompaniment": {
+            "SDR": 15.1549,
+            "SIR": 27.9234,
+            "SAR": 17.4862,
+            "ISR": 18.0963
+          }
+        }
+      }
+    ]
+  },
+  "UVR_MDXNET_1_9703.onnx": {
+    "model_name": "MDX-Net Model: UVR-MDX-NET 1",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 11.9019,
+            "SIR": 26.6411,
+            "SAR": 12.1804,
+            "ISR": 15.7737
+          },
+          "accompaniment": {
+            "SDR": 16.0006,
+            "SIR": 26.5245,
+            "SAR": 18.7919,
+            "ISR": 18.979
+          }
+        }
+      }
+    ]
+  },
+  "UVR_MDXNET_2_9682.onnx": {
+    "model_name": "MDX-Net Model: UVR-MDX-NET 2",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 11.6043,
+            "SIR": 27.1946,
+            "SAR": 11.9763,
+            "ISR": 15.2049
+          },
+          "accompaniment": {
+            "SDR": 15.9336,
+            "SIR": 25.8227,
+            "SAR": 18.5257,
+            "ISR": 19.0538
+          }
+        }
+      }
+    ]
+  },
+  "UVR_MDXNET_3_9662.onnx": {
+    "model_name": "MDX-Net Model: UVR-MDX-NET 3",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 11.8249,
+            "SIR": 27.3286,
+            "SAR": 12.0279,
+            "ISR": 15.6543
+          },
+          "accompaniment": {
+            "SDR": 15.9171,
+            "SIR": 26.4054,
+            "SAR": 18.4532,
+            "ISR": 19.0627
+          }
+        }
+      }
+    ]
+  },
+  "UVR-MDX-NET-Inst_1.onnx": {
+    "model_name": "MDX-Net Model: UVR-MDX-NET Inst 1",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 11.6262,
+            "SIR": 22.4413,
+            "SAR": 12.1032,
+            "ISR": 16.389
+          },
+          "accompaniment": {
+            "SDR": 15.6734,
+            "SIR": 28.4454,
+            "SAR": 18.5376,
+            "ISR": 18.3199
+          }
+        }
+      }
+    ]
+  },
+  "UVR-MDX-NET-Inst_2.onnx": {
+    "model_name": "MDX-Net Model: UVR-MDX-NET Inst 2",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 11.6504,
+            "SIR": 23.5067,
+            "SAR": 12.0741,
+            "ISR": 16.3525
+          },
+          "accompaniment": {
+            "SDR": 15.9117,
+            "SIR": 28.3142,
+            "SAR": 18.5092,
+            "ISR": 18.6941
+          }
+        }
+      }
+    ]
+  },
+  "UVR-MDX-NET-Inst_3.onnx": {
+    "model_name": "MDX-Net Model: UVR-MDX-NET Inst 3",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 11.6203,
+            "SIR": 23.016,
+            "SAR": 12.2344,
+            "ISR": 16.2185
+          },
+          "accompaniment": {
+            "SDR": 15.7759,
+            "SIR": 28.2301,
+            "SAR": 18.5244,
+            "ISR": 18.5211
+          }
+        }
+      }
+    ]
+  },
+  "UVR_MDXNET_KARA.onnx": {
+    "model_name": "MDX-Net Model: UVR-MDX-NET Karaoke",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 10.8075,
+            "SIR": 27.2576,
+            "SAR": 11.2309,
+            "ISR": 13.3676
+          },
+          "accompaniment": {
+            "SDR": 15.95,
+            "SIR": 22.9958,
+            "SAR": 18.4961,
+            "ISR": 19.1189
+          }
+        }
+      }
+    ]
+  },
+  "UVR_MDXNET_KARA_2.onnx": {
+    "model_name": "MDX-Net Model: UVR-MDX-NET Karaoke 2",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 10.0518,
+            "SIR": 20.3629,
+            "SAR": 10.2868,
+            "ISR": 14.4427
+          },
+          "accompaniment": {
+            "SDR": 15.1983,
+            "SIR": 24.6327,
+            "SAR": 17.3137,
+            "ISR": 18.3328
+          }
+        }
+      }
+    ]
+  },
+  "UVR_MDXNET_9482.onnx": {
+    "model_name": "MDX-Net Model: UVR_MDXNET_9482",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 11.516,
+            "SIR": 26.8431,
+            "SAR": 11.8461,
+            "ISR": 14.8779
+          },
+          "accompaniment": {
+            "SDR": 15.894,
+            "SIR": 25.3042,
+            "SAR": 18.4495,
+            "ISR": 19.0291
+          }
+        }
+      }
+    ]
+  },
+  "UVR-MDX-NET-Voc_FT.onnx": {
+    "model_name": "MDX-Net Model: UVR-MDX-NET Voc FT",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 12.2301,
+            "SIR": 29.0999,
+            "SAR": 13.182,
+            "ISR": 16.0212
+          },
+          "accompaniment": {
+            "SDR": 16.6065,
+            "SIR": 27.6932,
+            "SAR": 19.6089,
+            "ISR": 19.2326
+          }
+        }
+      }
+    ]
+  },
+  "Kim_Vocal_1.onnx": {
+    "model_name": "MDX-Net Model: Kim Vocal 1",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 12.2721,
+            "SIR": 29.1649,
+            "SAR": 12.9673,
+            "ISR": 16.0053
+          },
+          "accompaniment": {
+            "SDR": 16.4672,
+            "SIR": 27.5393,
+            "SAR": 19.5319,
+            "ISR": 19.2202
+          }
+        }
+      }
+    ]
+  },
+  "Kim_Vocal_2.onnx": {
+    "model_name": "MDX-Net Model: Kim Vocal 2",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 12.289,
+            "SIR": 28.7019,
+            "SAR": 13.1356,
+            "ISR": 16.2254
+          },
+          "accompaniment": {
+            "SDR": 16.5885,
+            "SIR": 28.0783,
+            "SAR": 19.7163,
+            "ISR": 19.1949
+          }
+        }
+      }
+    ]
+  },
+  "Kim_Inst.onnx": {
+    "model_name": "MDX-Net Model: Kim Inst",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 11.6783,
+            "SIR": 23.3283,
+            "SAR": 12.0459,
+            "ISR": 16.2864
+          },
+          "accompaniment": {
+            "SDR": 15.7901,
+            "SIR": 28.1077,
+            "SAR": 18.4411,
+            "ISR": 18.5538
+          }
+        }
+      }
+    ]
+  },
+  "Reverb_HQ_By_FoxJoy.onnx": {
+    "model_name": "MDX-Net Model: Reverb HQ By FoxJoy",
+    "track_scores": [
+      null
+    ]
+  },
+  "UVR-MDX-NET_Crowd_HQ_1.onnx": {
+    "model_name": "MDX-Net Model: UVR-MDX-NET Crowd HQ 1 By Aufr33",
+    "track_scores": [
+      null
+    ]
+  },
+  "kuielab_a_vocals.onnx": {
+    "model_name": "MDX-Net Model: kuielab_a_vocals",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 11.3112,
+            "SIR": 27.4733,
+            "SAR": 12.0226,
+            "ISR": 13.9254
+          },
+          "accompaniment": {
+            "SDR": 16.1396,
+            "SIR": 23.6448,
+            "SAR": 19.0724,
+            "ISR": 19.13
+          }
+        }
+      }
+    ]
+  },
+  "kuielab_a_other.onnx": {
+    "model_name": "MDX-Net Model: kuielab_a_other",
+    "track_scores": [
+      null
+    ]
+  },
+  "kuielab_a_bass.onnx": {
+    "model_name": "MDX-Net Model: kuielab_a_bass",
+    "track_scores": []
+  },
+  "kuielab_a_drums.onnx": {
+    "model_name": "MDX-Net Model: kuielab_a_drums",
+    "track_scores": []
+  },
+  "kuielab_b_vocals.onnx": {
+    "model_name": "MDX-Net Model: kuielab_b_vocals",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 11.6563,
+            "SIR": 26.3721,
+            "SAR": 11.7906,
+            "ISR": 15.0603
+          },
+          "accompaniment": {
+            "SDR": 15.9372,
+            "SIR": 25.6451,
+            "SAR": 18.4079,
+            "ISR": 18.9523
+          }
+        }
+      }
+    ]
+  },
+  "kuielab_b_other.onnx": {
+    "model_name": "MDX-Net Model: kuielab_b_other",
+    "track_scores": [
+      null
+    ]
+  },
+  "kuielab_b_bass.onnx": {
+    "model_name": "MDX-Net Model: kuielab_b_bass",
+    "track_scores": []
+  },
+  "kuielab_b_drums.onnx": {
+    "model_name": "MDX-Net Model: kuielab_b_drums",
+    "track_scores": []
+  },
+  "UVR-MDX-NET_Main_340.onnx": {
+    "model_name": "MDX-Net Model VIP: UVR-MDX-NET_Main_340",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 12.4494,
+            "SIR": 28.6354,
+            "SAR": 12.919,
+            "ISR": 16.6519
+          },
+          "accompaniment": {
+            "SDR": 16.4912,
+            "SIR": 28.3176,
+            "SAR": 19.112,
+            "ISR": 19.1598
+          }
+        }
+      }
+    ]
+  },
+  "UVR-MDX-NET_Main_390.onnx": {
+    "model_name": "MDX-Net Model VIP: UVR-MDX-NET_Main_390",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 4.8923,
+            "SIR": 28.8735,
+            "SAR": 12.9878,
+            "ISR": 6.2915
+          },
+          "accompaniment": {
+            "SDR": 9.03462,
+            "SIR": 9.19492,
+            "SAR": 15.3302,
+            "ISR": 18.6295
+          }
+        }
+      }
+    ]
+  },
+  "UVR-MDX-NET_Main_406.onnx": {
+    "model_name": "MDX-Net Model VIP: UVR-MDX-NET_Main_406",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 12.7443,
+            "SIR": 28.3612,
+            "SAR": 13.0783,
+            "ISR": 18.2171
+          },
+          "accompaniment": {
+            "SDR": 16.3575,
+            "SIR": 29.2259,
+            "SAR": 19.2459,
+            "ISR": 19.1259
+          }
+        }
+      }
+    ]
+  },
+  "UVR-MDX-NET_Main_427.onnx": {
+    "model_name": "MDX-Net Model VIP: UVR-MDX-NET_Main_427",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 12.3184,
+            "SIR": 29.0416,
+            "SAR": 13.083,
+            "ISR": 16.1862
+          },
+          "accompaniment": {
+            "SDR": 16.6029,
+            "SIR": 28.0326,
+            "SAR": 19.5602,
+            "ISR": 19.2178
+          }
+        }
+      }
+    ]
+  },
+  "UVR-MDX-NET_Main_438.onnx": {
+    "model_name": "MDX-Net Model VIP: UVR-MDX-NET_Main_438",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 12.2729,
+            "SIR": 28.6567,
+            "SAR": 13.2416,
+            "ISR": 15.9161
+          },
+          "accompaniment": {
+            "SDR": 16.4981,
+            "SIR": 27.5529,
+            "SAR": 19.5714,
+            "ISR": 19.1815
+          }
+        }
+      }
+    ]
+  },
+  "UVR-MDX-NET_Inst_82_beta.onnx": {
+    "model_name": "MDX-Net Model VIP: UVR-MDX-NET_Inst_82_beta",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 10.8156,
+            "SIR": 20.6419,
+            "SAR": 11.335,
+            "ISR": 15.3117
+          },
+          "accompaniment": {
+            "SDR": 14.9986,
+            "SIR": 25.9346,
+            "SAR": 17.6734,
+            "ISR": 17.6449
+          }
+        }
+      }
+    ]
+  },
+  "UVR-MDX-NET_Inst_90_beta.onnx": {
+    "model_name": "MDX-Net Model VIP: UVR-MDX-NET_Inst_90_beta",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 10.6498,
+            "SIR": 17.5452,
+            "SAR": 11.721,
+            "ISR": 15.5642
+          },
+          "accompaniment": {
+            "SDR": 14.3123,
+            "SIR": 26.4022,
+            "SAR": 17.7831,
+            "ISR": 16.3741
+          }
+        }
+      }
+    ]
+  },
+  "UVR-MDX-NET_Inst_187_beta.onnx": {
+    "model_name": "MDX-Net Model VIP: UVR-MDX-NET_Inst_187_beta",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 11.1344,
+            "SIR": 17.9928,
+            "SAR": 12.2004,
+            "ISR": 15.9915
+          },
+          "accompaniment": {
+            "SDR": 14.5594,
+            "SIR": 27.1713,
+            "SAR": 18.1641,
+            "ISR": 16.4753
+          }
+        }
+      }
+    ]
+  },
+  "UVR-MDX-NET-Inst_full_292.onnx": {
+    "model_name": "MDX-Net Model VIP: UVR-MDX-NET-Inst_full_292",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 11.135,
+            "SIR": 21.807,
+            "SAR": 11.5208,
+            "ISR": 16.0342
+          },
+          "accompaniment": {
+            "SDR": 15.3967,
+            "SIR": 27.4994,
+            "SAR": 17.8466,
+            "ISR": 18.241
+          }
+        }
+      }
+    ]
+  },
+  "htdemucs_ft.yaml": {
+    "model_name": "Demucs v4: htdemucs_ft",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 11.2685,
+            "SIR": 21.257,
+            "SAR": 11.0359,
+            "ISR": 19.3753
+          },
+          "drums": {
+            "SDR": 13.235,
+            "SIR": 23.3053,
+            "SAR": 13.0313,
+            "ISR": 17.2889
+          },
+          "bass": {
+            "SDR": 9.72743,
+            "SIR": 19.5435,
+            "SAR": 9.20801,
+            "ISR": 13.5037
+          },
+          "other": {
+            "SDR": 7.25411,
+            "SIR": 10.8728,
+            "SAR": 7.31316,
+            "ISR": 14.1944
+          }
+        }
+      }
+    ]
+  },
+  "htdemucs.yaml": {
+    "model_name": "Demucs v4: htdemucs",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 11.0095,
+            "SIR": 20.2894,
+            "SAR": 10.7492,
+            "ISR": 19.1796
+          },
+          "drums": {
+            "SDR": 13.011,
+            "SIR": 22.7843,
+            "SAR": 12.9744,
+            "ISR": 17.4674
+          },
+          "bass": {
+            "SDR": 9.17211,
+            "SIR": 18.7906,
+            "SAR": 8.75809,
+            "ISR": 13.0067
+          },
+          "other": {
+            "SDR": 7.16063,
+            "SIR": 10.8834,
+            "SAR": 6.9937,
+            "ISR": 14.244
+          }
+        }
+      }
+    ]
+  },
+  "hdemucs_mmi.yaml": {
+    "model_name": "Demucs v4: hdemucs_mmi",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 11.1687,
+            "SIR": 20.9333,
+            "SAR": 11.0289,
+            "ISR": 19.1138
+          },
+          "drums": {
+            "SDR": 12.4217,
+            "SIR": 23.2568,
+            "SAR": 12.3392,
+            "ISR": 16.7341
+          },
+          "bass": {
+            "SDR": 9.1504,
+            "SIR": 18.4985,
+            "SAR": 8.87331,
+            "ISR": 13.3686
+          },
+          "other": {
+            "SDR": 7.17736,
+            "SIR": 10.6928,
+            "SAR": 7.28959,
+            "ISR": 14.5021
+          }
+        }
+      }
+    ]
+  },
+  "htdemucs_6s.yaml": {
+    "model_name": "Demucs v4: htdemucs_6s",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 10.8446,
+            "SIR": 19.4989,
+            "SAR": 10.6463,
+            "ISR": 19.1945
+          },
+          "drums": {
+            "SDR": 12.8115,
+            "SIR": 22.638,
+            "SAR": 12.997,
+            "ISR": 16.9512
+          },
+          "bass": {
+            "SDR": 9.15013,
+            "SIR": 16.2437,
+            "SAR": 8.85638,
+            "ISR": 13.1591
+          },
+          "other": {
+            "SDR": 0.00053,
+            "SIR": 11.782,
+            "SAR": 0.00118,
+            "ISR": 0.2268
+          }
+        }
+      }
+    ]
+  },
+  "MDX23C-8KFFT-InstVoc_HQ.ckpt": {
+    "model_name": "MDX23C Model: MDX23C-InstVoc HQ",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 12.7312,
+            "SIR": 29.3476,
+            "SAR": 13.4577,
+            "ISR": 16.095
+          },
+          "accompaniment": {
+            "SDR": 16.8081,
+            "SIR": 27.6401,
+            "SAR": 19.9845,
+            "ISR": 19.3202
+          }
+        }
+      }
+    ]
+  },
+  "MDX23C_D1581.ckpt": {
+    "model_name": "MDX23C Model VIP: MDX23C_D1581",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 12.0391,
+            "SIR": 27.4449,
+            "SAR": 12.1722,
+            "ISR": 14.8268
+          },
+          "accompaniment": {
+            "SDR": 16.3295,
+            "SIR": 24.8897,
+            "SAR": 18.9426,
+            "ISR": 19.1322
+          }
+        }
+      }
+    ]
+  },
+  "MDX23C-8KFFT-InstVoc_HQ_2.ckpt": {
+    "model_name": "MDX23C Model VIP: MDX23C-InstVoc HQ 2",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 12.7508,
+            "SIR": 29.9531,
+            "SAR": 13.3726,
+            "ISR": 16.0716
+          },
+          "accompaniment": {
+            "SDR": 16.9593,
+            "SIR": 27.5912,
+            "SAR": 19.9074,
+            "ISR": 19.5809
+          }
+        }
+      }
+    ]
+  },
+  "model_bs_roformer_ep_317_sdr_12.9755.ckpt": {
+    "model_name": "Roformer Model: BS-Roformer-Viperx-1297",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 13.5735,
+            "SIR": 30.32,
+            "SAR": 14.0441,
+            "ISR": 17.2849
+          },
+          "accompaniment": {
+            "SDR": 17.2905,
+            "SIR": 30.0163,
+            "SAR": 20.6951,
+            "ISR": 19.3823
+          }
+        }
+      }
+    ]
+  },
+  "model_bs_roformer_ep_368_sdr_12.9628.ckpt": {
+    "model_name": "Roformer Model: BS-Roformer-Viperx-1296",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 13.5542,
+            "SIR": 30.4519,
+            "SAR": 14.0864,
+            "ISR": 17.2478
+          },
+          "accompaniment": {
+            "SDR": 17.3035,
+            "SIR": 30.0666,
+            "SAR": 20.6723,
+            "ISR": 19.3953
+          }
+        }
+      }
+    ]
+  },
+  "model_bs_roformer_ep_937_sdr_10.5309.ckpt": {
+    "model_name": "Roformer Model: BS-Roformer-Viperx-1053",
+    "track_scores": [
+      null
+    ]
+  },
+  "model_mel_band_roformer_ep_3005_sdr_11.4360.ckpt": {
+    "model_name": "Roformer Model: Mel-Roformer-Viperx-1143",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 12.3425,
+            "SIR": 29.3362,
+            "SAR": 13.0711,
+            "ISR": 16.2842
+          },
+          "accompaniment": {
+            "SDR": 16.4826,
+            "SIR": 27.7054,
+            "SAR": 19.3585,
+            "ISR": 19.247
+          }
+        }
+      }
+    ]
+  },
+  "MDX23C-De-Reverb-aufr33-jarredou.ckpt": {
+    "model_name": "MDX23C Model: MDX23C De-Reverb by aufr33-jarredou",
+    "track_scores": []
+  },
+  "mel_band_roformer_karaoke_aufr33_viperx_sdr_10.1956.ckpt": {
+    "model_name": "Roformer Model: Mel-Roformer-Karaoke-Aufr33-Viperx",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 12.883,
+            "SIR": 30.7823,
+            "SAR": 13.354,
+            "ISR": 14.825
+          },
+          "accompaniment": {
+            "SDR": 17.1356,
+            "SIR": 24.909,
+            "SAR": 20.1133,
+            "ISR": 19.4389
+          }
+        }
+      }
+    ]
+  },
+  "denoise_mel_band_roformer_aufr33_sdr_27.9959.ckpt": {
+    "model_name": "Roformer Model: Mel-Roformer-Denoise-Aufr33",
+    "track_scores": []
+  },
+  "denoise_mel_band_roformer_aufr33_aggr_sdr_27.9768.ckpt": {
+    "model_name": "Roformer Model: Mel-Roformer-Denoise-Aufr33-Aggr",
+    "track_scores": []
+  },
+  "mel_band_roformer_crowd_aufr33_viperx_sdr_8.7144.ckpt": {
+    "model_name": "Roformer Model: Mel-Roformer-Crowd-Aufr33-Viperx",
+    "track_scores": []
+  },
+  "deverb_bs_roformer_8_384dim_10depth.ckpt": {
+    "model_name": "Roformer Model: BS-Roformer-De-Reverb",
+    "track_scores": [
+      null
+    ]
+  },
+  "vocals_mel_band_roformer.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer | Vocals by Kimberley Jensen",
+    "track_scores": []
+  },
+  "mel_band_roformer_kim_ft_unwa.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer Kim | FT by unwa",
+    "track_scores": []
+  },
+  "melband_roformer_inst_v1e.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer Kim | Inst V1 (E) by Unwa",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 12.0889,
+            "SIR": 30.0273,
+            "SAR": 12.7786,
+            "ISR": 14.9145
+          },
+          "accompaniment": {
+            "SDR": 16.631,
+            "SIR": 25.3515,
+            "SAR": 19.4912,
+            "ISR": 19.3698
+          }
+        }
+      }
+    ]
+  },
+  "dereverb_mel_band_roformer_anvuew_sdr_19.1729.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer | De-Reverb by anvuew",
+    "track_scores": [
+      null
+    ]
+  },
+  "dereverb_mel_band_roformer_less_aggressive_anvuew_sdr_18.8050.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer | De-Reverb Less Aggressive by anvuew",
+    "track_scores": [
+      null
+    ]
+  },
+  "dereverb-echo_mel_band_roformer_sdr_10.0169.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer | De-Reverb-Echo by Sucial",
+    "track_scores": [
+      null
+    ]
+  },
+  "dereverb-echo_mel_band_roformer_sdr_13.4843_v2.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer | De-Reverb-Echo V2 by Sucial",
+    "track_scores": [
+      null
+    ]
+  },
+  "MelBandRoformerSYHFT.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer Kim | SYHFT by SYH99999",
+    "track_scores": []
+  },
+  "MelBandRoformerSYHFTV2.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer Kim | SYHFT V2 by SYH99999",
+    "track_scores": []
+  },
+  "MelBandRoformerSYHFTV2.5.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer Kim | SYHFT V2.5 by SYH99999",
+    "track_scores": []
+  },
+  "MelBandRoformerSYHFTV3Epsilon.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer Kim | SYHFT V3 by SYH99999",
+    "track_scores": []
+  },
+  "MelBandRoformerBigSYHFTV1.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer Kim | Big SYHFT V1 by SYH99999",
+    "track_scores": []
+  },
+  "melband_roformer_big_beta4.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer Kim | Big Beta 4 FT by unwa",
+    "track_scores": []
+  },
+  "melband_roformer_big_beta5e.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer Kim | Big Beta 5e FT by unwa",
+    "track_scores": []
+  },
+  "model_chorus_bs_roformer_ep_267_sdr_24.1275.ckpt": {
+    "model_name": "Roformer Model: BS Roformer | Chorus Male-Female by Sucial",
+    "track_scores": [
+      null
     ]
   }
 }

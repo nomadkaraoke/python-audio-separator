@@ -37,32 +37,42 @@ def evaluate_track(track_name, track_path, test_model, mus_db):
         scores = museval.TrackStore(track_name)
         scores.scores = json_data
     else:
-        # Check if separated files already exist
-        vocals_path = os.path.join(output_dir, "vocals.wav")
-        instrumental_path = os.path.join(output_dir, "instrumental.wav")
+        # Standard stem output names
+        stem_mapping = {"Vocals": "vocals", "Instrumental": "instrumental", "Drums": "drums", "Bass": "bass", "Other": "other"}
 
-        if not (os.path.exists(vocals_path) and os.path.exists(instrumental_path)):
+        # Perform separation if needed
+        if not os.path.exists(output_dir) or not os.listdir(output_dir):
             logger.info("Performing separation...")
             separator = Separator(output_dir=output_dir)
             separator.load_model(model_filename=test_model)
-            separator.separate(os.path.join(track_path, "mixture.wav"), custom_output_names={"Vocals": "vocals", "Instrumental": "instrumental"})
+            separator.separate(os.path.join(track_path, "mixture.wav"), custom_output_names=stem_mapping)
+
+        # Check which stems were actually created
+        available_stems = {}
+        for musdb_name in ["vocals", "instrumental", "drums", "bass", "other"]:
+            stem_path = os.path.join(output_dir, f"{musdb_name}.wav")
+            if os.path.exists(stem_path):
+                available_stems[musdb_name if musdb_name != "instrumental" else "accompaniment"] = stem_path
+
+        if not available_stems:
+            logger.info(f"No evaluatable stems found for model {test_model}, skipping evaluation")
+            return None, None
 
         # Get track from MUSDB
         track = next((t for t in mus_db if t.name == track_name), None)
         if track is None:
             raise ValueError(f"Track {track_name} not found in MUSDB18")
 
-        # Load estimated stems
+        # Load available stems
         estimates = {}
-        for stem_name in ["vocals", "accompaniment"]:
-            stem_path = vocals_path if stem_name == "vocals" else instrumental_path
+        for stem_name, stem_path in available_stems.items():
             audio, _ = sf.read(stem_path)
             if len(audio.shape) == 1:
                 audio = np.expand_dims(audio, axis=1)
             estimates[stem_name] = audio
 
         # Evaluate using museval
-        logger.info("Performing evaluation...")
+        logger.info(f"Evaluating stems: {list(estimates.keys())}")
         scores = museval.eval_mus_track(track, estimates, output_dir=output_dir, mode="v4")
 
         # Move and rename the results file
@@ -71,40 +81,24 @@ def evaluate_track(track_name, track_path, test_model, mus_db):
             os.rename(test_results, results_file)
             os.rmdir(os.path.join(output_dir, "test"))
 
-    # Calculate aggregate scores
+    # Calculate aggregate scores for available stems
     results_store = museval.EvalStore()
     results_store.add_track(scores.df)
     methods = museval.MethodStore()
     methods.add_evalstore(results_store, name=test_model)
     agg_scores = methods.agg_frames_tracks_scores()
 
-    # Log results
-    logger.info(
-        "Vocals (SDR, SIR, SAR, ISR): %.2f, %.2f, %.2f, %.2f",
-        agg_scores.loc[(test_model, "vocals", "SDR")],
-        agg_scores.loc[(test_model, "vocals", "SIR")],
-        agg_scores.loc[(test_model, "vocals", "SAR")],
-        agg_scores.loc[(test_model, "vocals", "ISR")],
-    )
-
-    logger.info(
-        "Accompaniment (SDR, SIR, SAR, ISR): %.2f, %.2f, %.2f, %.2f",
-        agg_scores.loc[(test_model, "accompaniment", "SDR")],
-        agg_scores.loc[(test_model, "accompaniment", "SIR")],
-        agg_scores.loc[(test_model, "accompaniment", "SAR")],
-        agg_scores.loc[(test_model, "accompaniment", "ISR")],
-    )
-
     # Return the aggregate scores in a structured format with 6 significant figures
-    model_results = {
-        "track_name": track_name,
-        "scores": {
-            "vocals": {metric: float(f"{agg_scores.loc[(test_model, 'vocals', metric)]:.6g}") for metric in ["SDR", "SIR", "SAR", "ISR"]},
-            "instrumental": {metric: float(f"{agg_scores.loc[(test_model, 'accompaniment', metric)]:.6g}") for metric in ["SDR", "SIR", "SAR", "ISR"]},
-        },
-    }
+    model_results = {"track_name": track_name, "scores": {}}
 
-    return scores, model_results
+    for stem in ["vocals", "drums", "bass", "other", "accompaniment"]:
+        try:
+            stem_scores = {metric: float(f"{agg_scores.loc[(test_model, stem, metric)]:.6g}") for metric in ["SDR", "SIR", "SAR", "ISR"]}
+            model_results["scores"][stem] = stem_scores
+        except KeyError:
+            continue
+
+    return scores, model_results if model_results["scores"] else None
 
 
 def convert_decimal_to_float(obj):
@@ -131,13 +125,6 @@ def main():
     separator = Separator()
     models_by_type = separator.list_supported_model_files()
 
-    # Get first track from MUSDB18
-    logger.info("Looking for first track in MUSDB18 dataset...")
-    first_track = next(Path(MUSDB_PATH).glob("**/mixture.wav"))
-    track_path = first_track.parent
-    track_name = track_path.name
-    logger.info(f"Found track: {track_name} at path: {track_path}")
-
     # Load existing results if available
     combined_results_path = "audio_separator/models-scores.json"
     combined_results = {}
@@ -163,28 +150,39 @@ def main():
                 if test_model not in combined_results:
                     combined_results[test_model] = {"model_name": model_name, "track_scores": []}
 
-                # Skip if track already evaluated for this model
-                track_already_evaluated = any(track_score["track_name"] == track_name for track_score in combined_results[test_model]["track_scores"])
-                if track_already_evaluated:
-                    logger.info(f"Skipping already evaluated track for model: {test_model}")
-                    continue
+                # Process each track in MUSDB18
+                for track in mus.tracks:
+                    track_name = track.name
+                    track_path = os.path.dirname(track.path)
 
-                logger.info(f"Processing model: {test_model}")
-                try:
-                    _, model_results = evaluate_track(track_name, track_path, test_model, mus)
-                    combined_results[test_model]["track_scores"].append(model_results)
+                    # Skip if track already evaluated for this model
+                    track_already_evaluated = any(
+                        track_score["track_name"] == track_name for track_score in combined_results[test_model]["track_scores"] if track_score is not None  # Handle null entries
+                    )
 
-                    # Save results after each successful evaluation
-                    os.makedirs(os.path.dirname(combined_results_path), exist_ok=True)
-                    with open(combined_results_path, "w") as f:
-                        json.dump(combined_results, f, indent=2)
+                    if track_already_evaluated:
+                        logger.info(f"Skipping already evaluated track {track_name} for model: {test_model}")
+                        continue
 
-                    logger.info(f"Updated combined results file with {test_model} - {track_name}")
+                    logger.info(f"Processing model: {test_model} with track: {track_name}")
+                    try:
+                        _, model_results = evaluate_track(track_name, track_path, test_model, mus)
+                        if model_results:
+                            combined_results[test_model]["track_scores"].append(model_results)
+                        else:
+                            combined_results[test_model]["track_scores"].append(None)
 
-                except Exception as e:
-                    logger.error(f"Error evaluating model {test_model}: {str(e)}")
-                    logger.error("Error details:", exc_info=True)
-                    continue
+                        # Save results after each successful evaluation
+                        os.makedirs(os.path.dirname(combined_results_path), exist_ok=True)
+                        with open(combined_results_path, "w") as f:
+                            json.dump(combined_results, f, indent=2)
+
+                        logger.info(f"Updated combined results file with {test_model} - {track_name}")
+
+                    except Exception as e:
+                        logger.error(f"Error evaluating model {test_model} with track {track_name}: {str(e)}")
+                        combined_results[test_model]["track_scores"].append(None)
+                        continue
 
     logger.info("Evaluation complete")
     return 0
