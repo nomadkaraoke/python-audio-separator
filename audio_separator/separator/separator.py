@@ -418,6 +418,14 @@ class Separator:
         # Only show Demucs v4 models as we've only implemented support for v4
         filtered_demucs_v4 = {key: value for key, value in model_downloads_list["demucs_download_list"].items() if key.startswith("Demucs v4")}
 
+        # Modified Demucs handling to use YAML files as identifiers
+        demucs_models = {}
+        for name, files in filtered_demucs_v4.items():
+            # Find the YAML file in the model files
+            yaml_file = next((filename for filename in files.keys() if filename.endswith(".yaml")), None)
+            if yaml_file:
+                demucs_models[name] = {"filename": yaml_file, "scores": model_scores.get(yaml_file, {}).get("median_scores", {})}
+
         # Load the JSON file using importlib.resources
         with resources.open_text("audio_separator", "models.json") as f:
             audio_separator_models_list = json.load(f)
@@ -434,7 +442,7 @@ class Separator:
                 name: {"filename": filename, "scores": model_scores.get(filename, {}).get("median_scores", {})}
                 for name, filename in {**model_downloads_list["mdx_download_list"], **model_downloads_list["mdx_download_vip_list"], **audio_separator_models_list["mdx_download_list"]}.items()
             },
-            "Demucs": {name: {"filename": next(iter(files.keys())), "scores": model_scores.get(next(iter(files.keys())), {}).get("median_scores", {})} for name, files in filtered_demucs_v4.items()},
+            "Demucs": demucs_models,
             "MDXC": {
                 name: {"filename": next(iter(files.keys())), "scores": model_scores.get(next(iter(files.keys())), {}).get("median_scores", {})}
                 for name, files in {

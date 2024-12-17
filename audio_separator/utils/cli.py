@@ -35,6 +35,7 @@ def main():
     info_params.add_argument("--log_level", default="info", help=log_level_help)
     info_params.add_argument("--sort_by", choices=["name", "filename", "vocals", "instrumental", "bass", "drums", "other"], help="Sort the model list by this criteria")
     info_params.add_argument("--limit", type=int, help="Limit the number of models shown")
+    info_params.add_argument("--list_format", choices=["pretty", "json"], default="pretty", help="Format for listing models: 'pretty' for formatted output, 'json' for raw JSON dump")
 
     model_filename_help = "Model to use for separation (default: %(default)s). Example: -m 2_HP-UVR.pth"
     output_format_help = "Output format for separated files, any common format (default: %(default)s). Example: --output_format=MP3"
@@ -140,20 +141,34 @@ def main():
 
     if args.list_models:
         separator = Separator(info_only=True)
-        models = separator.get_simplified_model_list(sort_by=args.sort_by)
 
-        # Apply limit if specified
-        if args.limit and args.limit > 0:
-            models = dict(list(models.items())[: args.limit])
+        if args.list_format == "json":
+            model_list = separator.list_supported_model_files()
+            print(json.dumps(model_list, indent=2))
+        else:
+            models = separator.get_simplified_model_list(sort_by=args.sort_by)
 
-        # Format the output for better readability
-        print("-" * 160)
-        print(f"{'Model Filename':<70} {'Arch':<8} {'Output Stems (SDR)':<50} {'Friendly Name'}")
-        print("-" * 160)
+            # Apply limit if specified
+            if args.limit and args.limit > 0:
+                models = dict(list(models.items())[: args.limit])
 
-        for filename, info in models.items():
-            stems = ", ".join(info["Stems"])
-            print(f"{filename:<70} {info['Type']:<8} {stems:<50} {info['Name']}")
+            # Calculate maximum widths for each column
+            filename_width = max(len("Model Filename"), max(len(filename) for filename in models.keys()))
+            arch_width = max(len("Arch"), max(len(info["Type"]) for info in models.values()))
+            stems_width = max(len("Output Stems (SDR)"), max(len(", ".join(info["Stems"])) for info in models.values()))
+            name_width = max(len("Friendly Name"), max(len(info["Name"]) for info in models.values()))
+
+            # Calculate total width for separator line
+            total_width = filename_width + arch_width + stems_width + name_width + 15  # 15 accounts for spacing between columns
+
+            # Format the output with dynamic widths and extra spacing
+            print("-" * total_width)
+            print(f"{'Model Filename':<{filename_width}}  {'Arch':<{arch_width}}  {'Output Stems (SDR)':<{stems_width}}  {'Friendly Name'}")
+            print("-" * total_width)
+
+            for filename, info in models.items():
+                stems = ", ".join(info["Stems"])
+                print(f"{filename:<{filename_width}}  {info['Type']:<{arch_width}}  {stems:<{stems_width}}  {info['Name']}")
 
         sys.exit(0)
 
