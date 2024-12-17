@@ -5335,174 +5335,6 @@
       }
     }
   },
-  "17_HP-Wind_Inst-UVR.pth": {
-    "model_name": "VR Arch Single Model v5: 17_HP-Wind_Inst-UVR",
-    "track_scores": [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ],
-    "median_scores": null
-  },
-  "UVR-De-Echo-Aggressive.pth": {
-    "model_name": "VR Arch Single Model v5: UVR-De-Echo-Aggressive by FoxJoy",
-    "track_scores": [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ],
-    "median_scores": null
-  },
-  "UVR-De-Echo-Normal.pth": {
-    "model_name": "VR Arch Single Model v5: UVR-De-Echo-Normal by FoxJoy",
-    "track_scores": [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ],
-    "median_scores": null
-  },
-  "UVR-DeEcho-DeReverb.pth": {
-    "model_name": "VR Arch Single Model v5: UVR-DeEcho-DeReverb by FoxJoy",
-    "track_scores": [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ],
-    "median_scores": null
-  },
-  "UVR-DeNoise-Lite.pth": {
-    "model_name": "VR Arch Single Model v5: UVR-DeNoise-Lite by FoxJoy",
-    "track_scores": [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ],
-    "median_scores": null
-  },
-  "UVR-DeNoise.pth": {
-    "model_name": "VR Arch Single Model v5: UVR-DeNoise by FoxJoy",
-    "track_scores": [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ],
-    "median_scores": null
-  },
   "UVR-BVE-4B_SN-44100-1.pth": {
     "model_name": "VR Arch Single Model v5: UVR-BVE-4B_SN-44100-1",
     "track_scores": [
@@ -6532,33 +6364,6 @@
         "ISR": 21.1946
       }
     }
-  },
-  "UVR-De-Reverb-aufr33-jarredou.pth": {
-    "model_name": "VR Arch Single Model v4: UVR-De-Reverb by aufr33-jarredou",
-    "track_scores": [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ],
-    "median_scores": null
   },
   "UVR-MDX-NET-Inst_HQ_1.onnx": {
     "model_name": "MDX-Net Model: UVR-MDX-NET Inst HQ 1",
@@ -10474,62 +10279,6 @@
       }
     }
   },
-  "Reverb_HQ_By_FoxJoy.onnx": {
-    "model_name": "MDX-Net Model: Reverb HQ By FoxJoy",
-    "track_scores": [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ],
-    "median_scores": null
-  },
-  "UVR-MDX-NET_Crowd_HQ_1.onnx": {
-    "model_name": "MDX-Net Model: UVR-MDX-NET Crowd HQ 1 By Aufr33",
-    "track_scores": [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ],
-    "median_scores": null
-  },
   "kuielab_a_vocals.onnx": {
     "model_name": "MDX-Net Model: kuielab_a_vocals",
     "track_scores": [
@@ -10736,85 +10485,6 @@
       }
     }
   },
-  "kuielab_a_other.onnx": {
-    "model_name": "MDX-Net Model: kuielab_a_other",
-    "track_scores": [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ]
-  },
-  "kuielab_a_bass.onnx": {
-    "model_name": "MDX-Net Model: kuielab_a_bass",
-    "track_scores": [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ]
-  },
-  "kuielab_a_drums.onnx": {
-    "model_name": "MDX-Net Model: kuielab_a_drums",
-    "track_scores": [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ]
-  },
   "kuielab_b_vocals.onnx": {
     "model_name": "MDX-Net Model: kuielab_b_vocals",
     "track_scores": [
@@ -11020,85 +10690,6 @@
         "ISR": 17.6048
       }
     }
-  },
-  "kuielab_b_other.onnx": {
-    "model_name": "MDX-Net Model: kuielab_b_other",
-    "track_scores": [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ]
-  },
-  "kuielab_b_bass.onnx": {
-    "model_name": "MDX-Net Model: kuielab_b_bass",
-    "track_scores": [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ]
-  },
-  "kuielab_b_drums.onnx": {
-    "model_name": "MDX-Net Model: kuielab_b_drums",
-    "track_scores": [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ]
   },
   "UVR-MDX-NET_Main_340.onnx": {
     "model_name": "MDX-Net Model VIP: UVR-MDX-NET_Main_340",
@@ -12986,7 +12577,27 @@
           }
         }
       }
-    ]
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 11.2685,
+        "SIR": 21.257,
+        "SAR": 11.0359,
+        "ISR": 19.3753
+      },
+      "drums": {
+        "SDR": 13.235,
+        "SIR": 23.3053,
+        "SAR": 13.0313,
+        "ISR": 17.2889
+      },
+      "bass": {
+        "SDR": 9.72743,
+        "SIR": 19.5435,
+        "SAR": 9.20801,
+        "ISR": 13.5037
+      }
+    }
   },
   "htdemucs.yaml": {
     "model_name": "Demucs v4: htdemucs",
@@ -13020,7 +12631,27 @@
           }
         }
       }
-    ]
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 11.0095,
+        "SIR": 20.2894,
+        "SAR": 10.7492,
+        "ISR": 19.1796
+      },
+      "drums": {
+        "SDR": 13.011,
+        "SIR": 22.7843,
+        "SAR": 12.9744,
+        "ISR": 17.4674
+      },
+      "bass": {
+        "SDR": 9.17211,
+        "SIR": 18.7906,
+        "SAR": 8.75809,
+        "ISR": 13.0067
+      }
+    }
   },
   "hdemucs_mmi.yaml": {
     "model_name": "Demucs v4: hdemucs_mmi",
@@ -13054,7 +12685,27 @@
           }
         }
       }
-    ]
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 11.1687,
+        "SIR": 20.9333,
+        "SAR": 11.0289,
+        "ISR": 19.1138
+      },
+      "drums": {
+        "SDR": 12.4217,
+        "SIR": 23.2568,
+        "SAR": 12.3392,
+        "ISR": 16.7341
+      },
+      "bass": {
+        "SDR": 9.1504,
+        "SIR": 18.4985,
+        "SAR": 8.87331,
+        "ISR": 13.3686
+      }
+    }
   },
   "htdemucs_6s.yaml": {
     "model_name": "Demucs v4: htdemucs_6s",
@@ -13088,7 +12739,27 @@
           }
         }
       }
-    ]
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 10.8446,
+        "SIR": 19.4989,
+        "SAR": 10.6463,
+        "ISR": 19.1945
+      },
+      "drums": {
+        "SDR": 12.8115,
+        "SIR": 22.638,
+        "SAR": 12.997,
+        "ISR": 16.9512
+      },
+      "bass": {
+        "SDR": 9.15013,
+        "SIR": 16.2437,
+        "SAR": 8.85638,
+        "ISR": 13.1591
+      }
+    }
   },
   "MDX23C-8KFFT-InstVoc_HQ.ckpt": {
     "model_name": "MDX23C Model: MDX23C-InstVoc HQ",
@@ -14120,33 +13791,6 @@
       }
     }
   },
-  "model_bs_roformer_ep_937_sdr_10.5309.ckpt": {
-    "model_name": "Roformer Model: BS-Roformer-Viperx-1053",
-    "track_scores": [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ],
-    "median_scores": null
-  },
   "model_mel_band_roformer_ep_3005_sdr_11.4360.ckpt": {
     "model_name": "Roformer Model: Mel-Roformer-Viperx-1143",
     "track_scores": [
@@ -14353,31 +13997,6 @@
       }
     }
   },
-  "MDX23C-De-Reverb-aufr33-jarredou.ckpt": {
-    "model_name": "MDX23C Model: MDX23C De-Reverb by aufr33-jarredou",
-    "track_scores": [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ]
-  },
   "mel_band_roformer_karaoke_aufr33_viperx_sdr_10.1956.ckpt": {
     "model_name": "Roformer Model: Mel-Roformer-Karaoke-Aufr33-Viperx",
     "track_scores": [
@@ -14583,108 +14202,6 @@
         "ISR": 19.4711
       }
     }
-  },
-  "denoise_mel_band_roformer_aufr33_sdr_27.9959.ckpt": {
-    "model_name": "Roformer Model: Mel-Roformer-Denoise-Aufr33",
-    "track_scores": [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ]
-  },
-  "denoise_mel_band_roformer_aufr33_aggr_sdr_27.9768.ckpt": {
-    "model_name": "Roformer Model: Mel-Roformer-Denoise-Aufr33-Aggr",
-    "track_scores": [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ]
-  },
-  "mel_band_roformer_crowd_aufr33_viperx_sdr_8.7144.ckpt": {
-    "model_name": "Roformer Model: Mel-Roformer-Crowd-Aufr33-Viperx",
-    "track_scores": [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ]
-  },
-  "deverb_bs_roformer_8_384dim_10depth.ckpt": {
-    "model_name": "Roformer Model: BS-Roformer-De-Reverb",
-    "track_scores": [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ],
-    "median_scores": null
   },
   "vocals_mel_band_roformer.ckpt": {
     "model_name": "Roformer Model: MelBand Roformer | Vocals by Kimberley Jensen",
@@ -15257,111 +14774,6 @@
         "ISR": 18.7944
       }
     }
-  },
-  "dereverb_mel_band_roformer_anvuew_sdr_19.1729.ckpt": {
-    "model_name": "Roformer Model: MelBand Roformer | De-Reverb by anvuew",
-    "track_scores": [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ],
-    "median_scores": null
-  },
-  "dereverb_mel_band_roformer_less_aggressive_anvuew_sdr_18.8050.ckpt": {
-    "model_name": "Roformer Model: MelBand Roformer | De-Reverb Less Aggressive by anvuew",
-    "track_scores": [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ],
-    "median_scores": null
-  },
-  "dereverb-echo_mel_band_roformer_sdr_10.0169.ckpt": {
-    "model_name": "Roformer Model: MelBand Roformer | De-Reverb-Echo by Sucial",
-    "track_scores": [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ],
-    "median_scores": null
-  },
-  "dereverb-echo_mel_band_roformer_sdr_13.4843_v2.ckpt": {
-    "model_name": "Roformer Model: MelBand Roformer | De-Reverb-Echo V2 by Sucial",
-    "track_scores": [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ],
-    "median_scores": null
   },
   "MelBandRoformerSYHFT.ckpt": {
     "model_name": "Roformer Model: MelBand Roformer Kim | SYHFT by SYH99999",
@@ -16525,101 +15937,34 @@
       }
     }
   },
-  "model_chorus_bs_roformer_ep_267_sdr_24.1275.ckpt": {
-    "model_name": "Roformer Model: BS Roformer | Chorus Male-Female by Sucial",
-    "track_scores": [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ],
+  "kuielab_a_other.onnx": {
+    "model_name": "MDX-Net Model: kuielab_a_other",
+    "track_scores": [],
     "median_scores": null
   },
-  "aspiration_mel_band_roformer_sdr_18.9845.ckpt": {
-    "model_name": "Roformer Model: MelBand Roformer | Aspiration by Sucial",
-    "track_scores": [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ],
+  "kuielab_a_bass.onnx": {
+    "model_name": "MDX-Net Model: kuielab_a_bass",
+    "track_scores": [],
     "median_scores": null
   },
-  "aspiration_mel_band_roformer_less_aggr_sdr_18.1201.ckpt": {
-    "model_name": "Roformer Model: MelBand Roformer | Aspiration Less Aggressive by Sucial",
-    "track_scores": [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ],
+  "kuielab_a_drums.onnx": {
+    "model_name": "MDX-Net Model: kuielab_a_drums",
+    "track_scores": [],
     "median_scores": null
   },
-  "mel_band_roformer_bleed_suppressor_v1.ckpt": {
-    "model_name": "Roformer Model: MelBand Roformer | Bleed Suppressor V1 by unwa-97chris",
-    "track_scores": [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ],
+  "kuielab_b_other.onnx": {
+    "model_name": "MDX-Net Model: kuielab_b_other",
+    "track_scores": [],
+    "median_scores": null
+  },
+  "kuielab_b_bass.onnx": {
+    "model_name": "MDX-Net Model: kuielab_b_bass",
+    "track_scores": [],
+    "median_scores": null
+  },
+  "kuielab_b_drums.onnx": {
+    "model_name": "MDX-Net Model: kuielab_b_drums",
+    "track_scores": [],
     "median_scores": null
   }
 }

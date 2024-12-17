@@ -146,6 +146,19 @@ def calculate_median_scores(track_scores):
     return median_scores if median_scores else None
 
 
+def cleanup_combined_results(combined_results):
+    """Remove models with no valid scores and clean up null entries"""
+    cleaned_results = {}
+    for model, data in combined_results.items():
+        # Filter out null entries from track_scores
+        valid_scores = [score for score in data["track_scores"] if score is not None]
+
+        # Only keep models that have valid scores
+        if valid_scores:
+            cleaned_results[model] = {"model_name": data["model_name"], "track_scores": valid_scores, "median_scores": calculate_median_scores(valid_scores)}
+    return cleaned_results
+
+
 def main():
     logger.info("Starting model evaluation script...")
     os.makedirs(RESULTS_PATH, exist_ok=True)
@@ -166,6 +179,8 @@ def main():
         logger.info("Loading existing combined results...")
         with open(combined_results_path) as f:
             combined_results = json.load(f)
+            # Clean up existing results
+            combined_results = cleanup_combined_results(combined_results)
 
     # Process all tracks in MUSDB18
     for track in mus.tracks:
@@ -204,15 +219,18 @@ def main():
                             if model_results:
                                 combined_results[test_model]["track_scores"].append(model_results)
                             else:
-                                combined_results[test_model]["track_scores"].append(None)
+                                logger.info(f"Skipping model {test_model} for track {track_name} due to no evaluatable stems")
                         except Exception as e:
                             logger.error(f"Error evaluating model {test_model} with track {track_name}: {str(e)}")
-                            combined_results[test_model]["track_scores"].append(None)
                             continue
 
-                    # Calculate and update median scores regardless of whether track was evaluated
-                    median_scores = calculate_median_scores(combined_results[test_model]["track_scores"])
-                    combined_results[test_model]["median_scores"] = median_scores
+                    # Only calculate and update median scores if there are any track scores
+                    if combined_results[test_model]["track_scores"]:
+                        median_scores = calculate_median_scores(combined_results[test_model]["track_scores"])
+                        combined_results[test_model]["median_scores"] = median_scores
+                    else:
+                        # Remove the model entry if there are no track scores
+                        del combined_results[test_model]
 
                     # Save results after each model (whether evaluated or skipped)
                     os.makedirs(os.path.dirname(combined_results_path), exist_ok=True)
