@@ -1,0 +1,266 @@
+{
+  "1_HP-UVR.pth": {
+    "model_name": "VR Arch Single Model v5: 1_HP-UVR",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 9.86522,
+            "SIR": 23.3587,
+            "SAR": 10.1785,
+            "ISR": 15.0739
+          },
+          "instrumental": {
+            "SDR": 15.7431,
+            "SIR": 20.9606,
+            "SAR": 17.3032,
+            "ISR": 29.0623
+          }
+        }
+      }
+    ]
+  },
+  "2_HP-UVR.pth": {
+    "model_name": "VR Arch Single Model v5: 2_HP-UVR",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 9.86277,
+            "SIR": 23.2713,
+            "SAR": 10.0964,
+            "ISR": 14.7435
+          },
+          "instrumental": {
+            "SDR": 15.4816,
+            "SIR": 20.1623,
+            "SAR": 17.3278,
+            "ISR": 28.9186
+          }
+        }
+      }
+    ]
+  },
+  "3_HP-Vocal-UVR.pth": {
+    "model_name": "VR Arch Single Model v5: 3_HP-Vocal-UVR",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 10.2015,
+            "SIR": 25.0552,
+            "SAR": 10.3513,
+            "ISR": 15.9666
+          },
+          "instrumental": {
+            "SDR": 16.2483,
+            "SIR": 21.8777,
+            "SAR": 17.4968,
+            "ISR": 30.7329
+          }
+        }
+      }
+    ]
+  },
+  "4_HP-Vocal-UVR.pth": {
+    "model_name": "VR Arch Single Model v5: 4_HP-Vocal-UVR",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 10.1621,
+            "SIR": 23.2506,
+            "SAR": 10.2838,
+            "ISR": 16.6347
+          },
+          "instrumental": {
+            "SDR": 15.8716,
+            "SIR": 22.3494,
+            "SAR": 17.176,
+            "ISR": 28.9295
+          }
+        }
+      }
+    ]
+  },
+  "5_HP-Karaoke-UVR.pth": {
+    "model_name": "VR Arch Single Model v5: 5_HP-Karaoke-UVR",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 9.3986,
+            "SIR": 23.8072,
+            "SAR": 9.52931,
+            "ISR": 13.2465
+          },
+          "instrumental": {
+            "SDR": 15.4412,
+            "SIR": 18.7661,
+            "SAR": 17.0021,
+            "ISR": 29.6517
+          }
+        }
+      }
+    ]
+  },
+  "6_HP-Karaoke-UVR.pth": {
+    "model_name": "VR Arch Single Model v5: 6_HP-Karaoke-UVR",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 9.62845,
+            "SIR": 24.0414,
+            "SAR": 9.55387,
+            "ISR": 13.5417
+          },
+          "instrumental": {
+            "SDR": 15.6841,
+            "SIR": 19.0452,
+            "SAR": 17.1219,
+            "ISR": 31.5764
+          }
+        }
+      }
+    ]
+  },
+  "7_HP2-UVR.pth": {
+    "model_name": "VR Arch Single Model v5: 7_HP2-UVR",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 9.9246,
+            "SIR": 23.9273,
+            "SAR": 10.3074,
+            "ISR": 14.8333
+          },
+          "instrumental": {
+            "SDR": 15.7343,
+            "SIR": 20.1956,
+            "SAR": 17.6699,
+            "ISR": 31.2578
+          }
+        }
+      }
+    ]
+  },
+  "8_HP2-UVR.pth": {
+    "model_name": "VR Arch Single Model v5: 8_HP2-UVR",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 9.94006,
+            "SIR": 23.715,
+            "SAR": 10.3701,
+            "ISR": 14.653
+          },
+          "instrumental": {
+            "SDR": 15.5981,
+            "SIR": 20.4122,
+            "SAR": 17.3973,
+            "ISR": 29.4197
+          }
+        }
+      }
+    ]
+  },
+  "9_HP2-UVR.pth": {
+    "model_name": "VR Arch Single Model v5: 9_HP2-UVR",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 9.89634,
+            "SIR": 23.8526,
+            "SAR": 10.3504,
+            "ISR": 14.5682
+          },
+          "instrumental": {
+            "SDR": 15.7111,
+            "SIR": 20.3581,
+            "SAR": 17.6392,
+            "ISR": 29.5016
+          }
+        }
+      }
+    ]
+  },
+  "10_SP-UVR-2B-32000-1.pth": {
+    "model_name": "VR Arch Single Model v5: 10_SP-UVR-2B-32000-1",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 9.54673,
+            "SIR": 23.3362,
+            "SAR": 9.91098,
+            "ISR": 13.8572
+          },
+          "instrumental": {
+            "SDR": 15.0055,
+            "SIR": 19.9132,
+            "SAR": 16.537,
+            "ISR": 23.2056
+          }
+        }
+      }
+    ]
+  },
+  "11_SP-UVR-2B-32000-2.pth": {
+    "model_name": "VR Arch Single Model v5: 11_SP-UVR-2B-32000-2",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 9.52838,
+            "SIR": 23.6181,
+            "SAR": 9.90405,
+            "ISR": 13.8069
+          },
+          "instrumental": {
+            "SDR": 15.0352,
+            "SIR": 19.8583,
+            "SAR": 16.5648,
+            "ISR": 23.329
+          }
+        }
+      }
+    ]
+  },
+  "12_SP-UVR-3B-44100.pth": {
+    "model_name": "VR Arch Single Model v5: 12_SP-UVR-3B-44100",
+    "track_scores": [
+      {
+        "track_name": "Moosmusic - Big Dummy Shake",
+        "scores": {
+          "vocals": {
+            "SDR": 9.70757,
+            "SIR": 23.4678,
+            "SAR": 10.1294,
+            "ISR": 14.3904
+          },
+          "instrumental": {
+            "SDR": 15.2341,
+            "SIR": 20.0053,
+            "SAR": 17.2023,
+            "ISR": 28.5095
+          }
+        }
+      }
+    ]
+  }
+}
