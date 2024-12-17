@@ -4,6 +4,8 @@ import logging
 import json
 import sys
 from importlib import metadata
+from typing import Optional
+
 
 def main():
     """Main entry point for the CLI."""
@@ -22,7 +24,7 @@ def main():
     version_help = "Show the program's version number and exit."
     debug_help = "Enable debug logging, equivalent to --log_level=debug."
     env_info_help = "Print environment information and exit."
-    list_models_help = "List all supported models and exit."
+    list_models_help = "List all supported models and exit. Use --sort_by to sort the list and --limit to show only top N results."
     log_level_help = "Log level, e.g. info, debug, warning (default: %(default)s)."
 
     info_params = parser.add_argument_group("Info and Debugging")
@@ -31,6 +33,8 @@ def main():
     info_params.add_argument("-e", "--env_info", action="store_true", help=env_info_help)
     info_params.add_argument("-l", "--list_models", action="store_true", help=list_models_help)
     info_params.add_argument("--log_level", default="info", help=log_level_help)
+    info_params.add_argument("--sort_by", choices=["name", "filename", "vocals", "instrumental", "bass", "drums", "other"], help="Sort the model list by this criteria")
+    info_params.add_argument("--limit", type=int, help="Limit the number of models shown")
 
     model_filename_help = "Model to use for separation (default: %(default)s). Example: -m 2_HP-UVR.pth"
     output_format_help = "Output format for separated files, any common format (default: %(default)s). Example: --output_format=MP3"
@@ -54,7 +58,7 @@ def main():
     sample_rate_help = "Modify the sample rate of the output audio (default: %(default)s). Example: --sample_rate=44100"
     use_soundfile_help = "Use soundfile to write audio output (default: %(default)s). Example: --use_soundfile"
     use_autocast_help = "Use PyTorch autocast for faster inference (default: %(default)s). Do not use for CPU inference. Example: --use_autocast"
-    custom_output_names_help = "Custom names for all output files in JSON format (default: %(default)s). Example: --custom_output_names='{\"Vocals\": \"vocals_output\", \"Drums\": \"drums_output\"}'"
+    custom_output_names_help = 'Custom names for all output files in JSON format (default: %(default)s). Example: --custom_output_names=\'{"Vocals": "vocals_output", "Drums": "drums_output"}\''
 
     common_params = parser.add_argument_group("Common Separation Parameters")
     common_params.add_argument("--invert_spect", action="store_true", help=invert_spect_help)
@@ -135,8 +139,22 @@ def main():
         sys.exit(0)
 
     if args.list_models:
-        separator = Separator()
-        print(json.dumps(separator.list_supported_model_files(), indent=4, sort_keys=True))
+        separator = Separator(info_only=True)
+        models = separator.get_simplified_model_list(sort_by=args.sort_by)
+
+        # Apply limit if specified
+        if args.limit and args.limit > 0:
+            models = dict(list(models.items())[: args.limit])
+
+        # Format the output for better readability
+        print("-" * 160)
+        print(f"{'Model Filename':<70} {'Arch':<8} {'Output Stems (SDR)':<50} {'Friendly Name'}")
+        print("-" * 160)
+
+        for filename, info in models.items():
+            stems = ", ".join(info["Stems"])
+            print(f"{filename:<70} {info['Type']:<8} {stems:<50} {info['Name']}")
+
         sys.exit(0)
 
     if args.download_model_only:
@@ -182,12 +200,7 @@ def main():
             "post_process_threshold": args.vr_post_process_threshold,
             "high_end_process": args.vr_high_end_process,
         },
-        demucs_params={
-            "segment_size": args.demucs_segment_size,
-            "shifts": args.demucs_shifts,
-            "overlap": args.demucs_overlap,
-            "segments_enabled": args.demucs_segments_enabled,
-        },
+        demucs_params={"segment_size": args.demucs_segment_size, "shifts": args.demucs_shifts, "overlap": args.demucs_overlap, "segments_enabled": args.demucs_segments_enabled},
         mdxc_params={
             "segment_size": args.mdxc_segment_size,
             "batch_size": args.mdxc_batch_size,

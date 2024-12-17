@@ -9,6 +9,7 @@ import time
 import logging
 import warnings
 import importlib
+from typing import Optional
 
 import hashlib
 import json
@@ -91,11 +92,13 @@ class Separator:
         sample_rate=44100,
         use_soundfile=False,
         use_autocast=False,
-        mdx_params={"hop_length": 1024, "segment_size": 256, "overlap": 0.25, "batch_size": 1, "enable_denoise": False},
-        vr_params={"batch_size": 1, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False},
-        demucs_params={"segment_size": "Default", "shifts": 2, "overlap": 0.25, "segments_enabled": True},
-        mdxc_params={"segment_size": 256, "override_model_segment_size": False, "batch_size": 1, "overlap": 8, "pitch_shift": 0},
+        mdx_params=None,
+        vr_params=None,
+        demucs_params=None,
+        mdxc_params=None,
+        info_only=False,
     ):
+        """Initialize the separator."""
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(log_level)
         self.log_level = log_level
@@ -115,15 +118,17 @@ class Separator:
         if log_level > logging.DEBUG:
             warnings.filterwarnings("ignore")
 
-        package_version = self.get_package_distribution("audio-separator").version
-
-        self.logger.info(f"Separator version {package_version} instantiating with output_dir: {output_dir}, output_format: {output_format}")
+        # Skip initialization logs if info_only is True
+        if not info_only:
+            package_version = self.get_package_distribution("audio-separator").version
+            self.logger.info(f"Separator version {package_version} instantiating with output_dir: {output_dir}, output_format: {output_format}")
 
         self.model_file_dir = model_file_dir
 
         if output_dir is None:
             output_dir = os.getcwd()
-            self.logger.info("Output directory not specified. Using current working directory.")
+            if not info_only:
+                self.logger.info("Output directory not specified. Using current working directory.")
 
         self.output_dir = output_dir
 
@@ -179,7 +184,8 @@ class Separator:
         self.model_is_uvr_vip = False
         self.model_friendly_name = None
 
-        self.setup_accelerated_inferencing_device()
+        if not info_only:
+            self.setup_accelerated_inferencing_device()
 
     def setup_accelerated_inferencing_device(self):
         """
@@ -341,6 +347,7 @@ class Separator:
     def list_supported_model_files(self):
         """
         This method lists the supported model files for audio-separator, by fetching the same file UVR uses to list these.
+        Also includes model performance scores where available.
         """
         download_checks_path = os.path.join(self.model_file_dir, "download_checks.json")
 
@@ -403,6 +410,11 @@ class Separator:
         #     },
         # }
 
+        # Load the model scores
+        with resources.open_text("audio_separator", "models-scores.json") as f:
+            model_scores = json.load(f)
+        self.logger.debug(f"Model scores loaded")
+
         # Only show Demucs v4 models as we've only implemented support for v4
         filtered_demucs_v4 = {key: value for key, value in model_downloads_list["demucs_download_list"].items() if key.startswith("Demucs v4")}
 
@@ -411,17 +423,27 @@ class Separator:
             audio_separator_models_list = json.load(f)
         self.logger.debug(f"Audio-Separator model list loaded")
 
-        # Return object with list of model names, which are the keys in vr_download_list, mdx_download_list, demucs_download_list, mdx23_download_list, mdx23c_download_list, grouped by type: VR, MDX, Demucs, MDX23, MDX23C
+        # Return object with list of model names, which are the keys in vr_download_list, mdx_download_list, demucs_download_list, mdx23_download_list, mdx23c_download_list,
+        # grouped by type: VR, MDX, Demucs, MDX23, MDX23C, including their scores
         model_files_grouped_by_type = {
-            "VR": {**model_downloads_list["vr_download_list"], **audio_separator_models_list["vr_download_list"]},
-            "MDX": {**model_downloads_list["mdx_download_list"], **model_downloads_list["mdx_download_vip_list"], **audio_separator_models_list["mdx_download_list"]},
-            "Demucs": filtered_demucs_v4,
+            "VR": {
+                name: {"filename": filename, "scores": model_scores.get(filename, {}).get("median_scores", {})}
+                for name, filename in {**model_downloads_list["vr_download_list"], **audio_separator_models_list["vr_download_list"]}.items()
+            },
+            "MDX": {
+                name: {"filename": filename, "scores": model_scores.get(filename, {}).get("median_scores", {})}
+                for name, filename in {**model_downloads_list["mdx_download_list"], **model_downloads_list["mdx_download_vip_list"], **audio_separator_models_list["mdx_download_list"]}.items()
+            },
+            "Demucs": {name: {"filename": next(iter(files.keys())), "scores": model_scores.get(next(iter(files.keys())), {}).get("median_scores", {})} for name, files in filtered_demucs_v4.items()},
             "MDXC": {
-                **model_downloads_list["mdx23c_download_list"],
-                **model_downloads_list["mdx23c_download_vip_list"],
-                **model_downloads_list["roformer_download_list"],
-                **audio_separator_models_list["mdx23c_download_list"],
-                **audio_separator_models_list["roformer_download_list"],
+                name: {"filename": next(iter(files.keys())), "scores": model_scores.get(next(iter(files.keys())), {}).get("median_scores", {})}
+                for name, files in {
+                    **model_downloads_list["mdx23c_download_list"],
+                    **model_downloads_list["mdx23c_download_vip_list"],
+                    **model_downloads_list["roformer_download_list"],
+                    **audio_separator_models_list["mdx23c_download_list"],
+                    **audio_separator_models_list["roformer_download_list"],
+                }.items()
             },
         }
         return model_files_grouped_by_type
@@ -741,3 +763,48 @@ class Separator:
         model_data_dict_size = len(model_data)
 
         self.logger.info(f"Model downloaded, type: {model_type}, friendly name: {model_friendly_name}, model_path: {model_path}, model_data: {model_data_dict_size} items")
+
+    def get_simplified_model_list(self, sort_by: Optional[str] = None):
+        """
+        Returns a simplified, user-friendly list of models with their key metrics.
+        Optionally sorts the list based on the specified criteria.
+
+        :param sort_by: Criteria to sort by. Can be "name", "filename", "vocals", "instrumental", "bass", "drums", "other"
+        """
+        model_files = self.list_supported_model_files()
+        simplified_list = {}
+
+        for model_type, models in model_files.items():
+            for name, data in models.items():
+                filename = data["filename"]
+                scores = data.get("scores") or {}
+
+                # Format stems with their SDR scores
+                stems_with_scores = []
+                stem_sdr_dict = {}
+                for stem, stem_scores in scores.items():
+                    if isinstance(stem_scores, dict) and "SDR" in stem_scores:
+                        sdr = round(stem_scores["SDR"], 1)
+                        stems_with_scores.append(f"{stem} (SDR: {sdr})")
+                        stem_sdr_dict[stem.lower()] = sdr
+
+                # If no scores available, just list the stem names
+                if not stems_with_scores and scores:
+                    stems_with_scores = list(scores.keys())
+                elif not stems_with_scores:
+                    stems_with_scores = ["Unknown"]
+
+                simplified_list[filename] = {"Name": name, "Type": model_type, "Stems": stems_with_scores, "SDR": stem_sdr_dict}
+
+        # Sort and filter the list if a sort_by parameter is provided
+        if sort_by:
+            if sort_by == "name":
+                return dict(sorted(simplified_list.items(), key=lambda x: x[1]["Name"]))
+            elif sort_by == "filename":
+                return dict(sorted(simplified_list.items()))
+            elif sort_by in ["vocals", "instrumental", "bass", "drums", "other"]:
+                # Filter out models that don't have the specified stem
+                filtered_list = {k: v for k, v in simplified_list.items() if sort_by in v["SDR"]}
+                return dict(sorted(filtered_list.items(), key=lambda x: x[1]["SDR"][sort_by], reverse=True))
+
+        return simplified_list

@@ -2434,20 +2434,37 @@
             "ISR": 24.7347
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 10.1216,
+            "SIR": 25.082,
+            "SAR": 10.8916,
+            "ISR": 16.3986
+          },
+          "instrumental": {
+            "SDR": 13.4235,
+            "SIR": 19.3639,
+            "SAR": 14.9457,
+            "ISR": 22.6478
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.94432,
-        "SIR": 18.7539,
-        "SAR": 9.16417,
-        "ISR": 13.0838
+        "SDR": 9.05059,
+        "SIR": 19.141,
+        "SAR": 9.38895,
+        "ISR": 13.316
       },
       "instrumental": {
-        "SDR": 13.1823,
-        "SIR": 18.5632,
-        "SAR": 15.0541,
-        "ISR": 21.9574
+        "SDR": 13.3029,
+        "SIR": 18.9635,
+        "SAR": 14.9999,
+        "ISR": 22.3026
       }
     }
   },
@@ -2640,20 +2657,37 @@
             "ISR": 25.775
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 11.0016,
+            "SIR": 25.9658,
+            "SAR": 11.3507,
+            "ISR": 18.836
+          },
+          "instrumental": {
+            "SDR": 14.0458,
+            "SIR": 21.9457,
+            "SAR": 14.9457,
+            "ISR": 23.2925
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.19688,
-        "SIR": 20.0665,
-        "SAR": 8.79637,
-        "ISR": 14.2979
+        "SDR": 9.41088,
+        "SIR": 20.3705,
+        "SAR": 9.18372,
+        "ISR": 14.5086
       },
       "instrumental": {
-        "SDR": 13.978,
-        "SIR": 20.2019,
-        "SAR": 15.1092,
-        "ISR": 20.3054
+        "SDR": 14.0119,
+        "SIR": 20.5256,
+        "SAR": 15.0274,
+        "ISR": 20.5763
       }
     }
   },
@@ -2846,20 +2880,37 @@
             "ISR": 22.8928
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 10.8826,
+            "SIR": 24.1573,
+            "SAR": 11.2586,
+            "ISR": 19.4754
+          },
+          "instrumental": {
+            "SDR": 13.5627,
+            "SIR": 22.4968,
+            "SAR": 14.7527,
+            "ISR": 22.4351
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.98945,
-        "SIR": 18.5671,
-        "SAR": 8.81367,
-        "ISR": 15.7367
+        "SDR": 9.20509,
+        "SIR": 19.0404,
+        "SAR": 9.15433,
+        "ISR": 15.7463
       },
       "instrumental": {
-        "SDR": 13.7151,
-        "SIR": 20.6067,
-        "SAR": 14.6142,
-        "ISR": 21.7556
+        "SDR": 13.6389,
+        "SIR": 20.7313,
+        "SAR": 14.6835,
+        "ISR": 21.9351
       }
     }
   },
@@ -3052,20 +3103,37 @@
             "ISR": 30.9008
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 10.5061,
+            "SIR": 27.6891,
+            "SAR": 11.2293,
+            "ISR": 16.4247
+          },
+          "instrumental": {
+            "SDR": 13.739,
+            "SIR": 19.5739,
+            "SAR": 15.3707,
+            "ISR": 23.5726
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 5.22375,
-        "SIR": 22.754,
-        "SAR": 4.11477,
-        "ISR": 7.16253
+        "SDR": 5.49064,
+        "SIR": 22.9856,
+        "SAR": 4.28531,
+        "ISR": 7.40913
       },
       "instrumental": {
-        "SDR": 12.2249,
-        "SIR": 13.8208,
-        "SAR": 14.6852,
-        "ISR": 22.2742
+        "SDR": 12.3399,
+        "SIR": 14.6349,
+        "SAR": 14.7576,
+        "ISR": 22.4112
       }
     }
   },
@@ -3258,20 +3326,37 @@
             "ISR": 30.7868
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 11.4136,
+            "SIR": 26.3365,
+            "SAR": 12.1671,
+            "ISR": 17.9544
+          },
+          "instrumental": {
+            "SDR": 14.4065,
+            "SIR": 20.9015,
+            "SAR": 15.8924,
+            "ISR": 23.4855
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 4.61504,
-        "SIR": 22.1346,
-        "SAR": 4.47166,
-        "ISR": 7.2008
+        "SDR": 5.0617,
+        "SIR": 22.6846,
+        "SAR": 4.47681,
+        "ISR": 7.32311
       },
       "instrumental": {
-        "SDR": 12.558,
-        "SIR": 14.0447,
-        "SAR": 15.1751,
-        "ISR": 20.5359
+        "SDR": 12.5674,
+        "SIR": 14.6288,
+        "SAR": 15.1884,
+        "ISR": 21.1774
       }
     }
   },
@@ -3464,20 +3549,37 @@
             "ISR": 23.0108
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 10.5409,
+            "SIR": 22.9143,
+            "SAR": 11.5136,
+            "ISR": 17.2841
+          },
+          "instrumental": {
+            "SDR": 13.9244,
+            "SIR": 20.2426,
+            "SAR": 15.2089,
+            "ISR": 22.1341
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.18038,
-        "SIR": 19.9206,
-        "SAR": 9.04699,
-        "ISR": 13.5006
+        "SDR": 9.18559,
+        "SIR": 20.1471,
+        "SAR": 9.46369,
+        "ISR": 13.6994
       },
       "instrumental": {
-        "SDR": 13.181,
-        "SIR": 17.7813,
-        "SAR": 15.2764,
-        "ISR": 21.1611
+        "SDR": 13.5527,
+        "SIR": 18.4594,
+        "SAR": 15.2427,
+        "ISR": 21.6476
       }
     }
   },
@@ -3670,20 +3772,37 @@
             "ISR": 25.2771
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 9.99689,
+            "SIR": 21.3627,
+            "SAR": 10.7317,
+            "ISR": 16.633
+          },
+          "instrumental": {
+            "SDR": 13.1696,
+            "SIR": 20.0343,
+            "SAR": 14.5301,
+            "ISR": 21.2391
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.91456,
-        "SIR": 19.4624,
-        "SAR": 9.02234,
-        "ISR": 12.586
+        "SDR": 9.03903,
+        "SIR": 19.7118,
+        "SAR": 9.29164,
+        "ISR": 12.7686
       },
       "instrumental": {
-        "SDR": 13.1921,
-        "SIR": 18.4534,
-        "SAR": 15.1402,
-        "ISR": 22.0859
+        "SDR": 13.1808,
+        "SIR": 18.6296,
+        "SAR": 14.8351,
+        "ISR": 21.6625
       }
     }
   },
@@ -3876,20 +3995,37 @@
             "ISR": 25.6181
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 10.1264,
+            "SIR": 22.8787,
+            "SAR": 10.9172,
+            "ISR": 16.2352
+          },
+          "instrumental": {
+            "SDR": 13.2989,
+            "SIR": 19.5949,
+            "SAR": 14.9069,
+            "ISR": 22.0512
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.95266,
-        "SIR": 19.6575,
-        "SAR": 8.92713,
-        "ISR": 12.7692
+        "SDR": 9.13121,
+        "SIR": 19.9219,
+        "SAR": 9.326,
+        "ISR": 12.8451
       },
       "instrumental": {
-        "SDR": 13.2204,
-        "SIR": 18.5896,
-        "SAR": 15.3424,
-        "ISR": 22.2958
+        "SDR": 13.2597,
+        "SIR": 18.9888,
+        "SAR": 15.1246,
+        "ISR": 22.1735
       }
     }
   },
@@ -4082,20 +4218,37 @@
             "ISR": 23.1908
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 9.81558,
+            "SIR": 22.7435,
+            "SAR": 10.4558,
+            "ISR": 16.2504
+          },
+          "instrumental": {
+            "SDR": 12.9624,
+            "SIR": 19.7632,
+            "SAR": 14.1727,
+            "ISR": 22.2328
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.67034,
-        "SIR": 18.5401,
-        "SAR": 8.48992,
-        "ISR": 12.3997
+        "SDR": 8.68528,
+        "SIR": 18.67,
+        "SAR": 8.78329,
+        "ISR": 12.5569
       },
       "instrumental": {
-        "SDR": 12.927,
-        "SIR": 18.2858,
-        "SAR": 14.9762,
-        "ISR": 19.8328
+        "SDR": 12.9447,
+        "SIR": 19.0245,
+        "SAR": 14.5745,
+        "ISR": 20.5996
       }
     }
   },
@@ -4288,20 +4441,37 @@
             "ISR": 24.1875
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 9.84797,
+            "SIR": 23.4706,
+            "SAR": 10.4109,
+            "ISR": 16.0513
+          },
+          "instrumental": {
+            "SDR": 13.0979,
+            "SIR": 19.5504,
+            "SAR": 14.4432,
+            "ISR": 22.6134
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.62613,
-        "SIR": 19.2592,
-        "SAR": 8.39931,
-        "ISR": 12.2801
+        "SDR": 8.64287,
+        "SIR": 19.2692,
+        "SAR": 8.60117,
+        "ISR": 12.3695
       },
       "instrumental": {
-        "SDR": 12.878,
-        "SIR": 18.1194,
-        "SAR": 15.0563,
-        "ISR": 19.9054
+        "SDR": 12.9879,
+        "SIR": 18.8349,
+        "SAR": 14.7497,
+        "ISR": 20.5488
       }
     }
   },
@@ -4494,20 +4664,37 @@
             "ISR": 22.9587
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 9.69846,
+            "SIR": 22.1192,
+            "SAR": 10.1502,
+            "ISR": 16.334
+          },
+          "instrumental": {
+            "SDR": 12.8085,
+            "SIR": 19.7623,
+            "SAR": 14.2077,
+            "ISR": 21.2653
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.58659,
-        "SIR": 18.6469,
-        "SAR": 7.94933,
-        "ISR": 12.0323
+        "SDR": 8.64396,
+        "SIR": 19.712,
+        "SAR": 8.45781,
+        "ISR": 12.0364
       },
       "instrumental": {
-        "SDR": 12.6868,
-        "SIR": 18.73,
-        "SAR": 15.0333,
-        "ISR": 21.1316
+        "SDR": 12.7477,
+        "SIR": 18.8546,
+        "SAR": 14.6205,
+        "ISR": 21.1985
       }
     }
   },
@@ -4700,20 +4887,37 @@
             "ISR": 24.2626
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 9.98951,
+            "SIR": 23.3727,
+            "SAR": 10.4646,
+            "ISR": 15.7627
+          },
+          "instrumental": {
+            "SDR": 12.9827,
+            "SIR": 19.2392,
+            "SAR": 14.6142,
+            "ISR": 22.2657
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.59545,
-        "SIR": 18.6996,
-        "SAR": 8.3166,
-        "ISR": 12.1635
+        "SDR": 8.62843,
+        "SIR": 19.4616,
+        "SAR": 8.75148,
+        "ISR": 12.3716
       },
       "instrumental": {
-        "SDR": 13.0206,
-        "SIR": 18.4264,
-        "SAR": 15.3373,
-        "ISR": 20.6173
+        "SDR": 13.0016,
+        "SIR": 18.8328,
+        "SAR": 14.9758,
+        "ISR": 20.6568
       }
     }
   },
@@ -4906,20 +5110,37 @@
             "ISR": 24.3331
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 10.1654,
+            "SIR": 23.8652,
+            "SAR": 10.5501,
+            "ISR": 16.4109
+          },
+          "instrumental": {
+            "SDR": 13.0762,
+            "SIR": 19.7323,
+            "SAR": 14.6128,
+            "ISR": 22.4236
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.64272,
-        "SIR": 18.2884,
-        "SAR": 8.41086,
-        "ISR": 12.7287
+        "SDR": 8.7696,
+        "SIR": 19.0993,
+        "SAR": 8.88405,
+        "ISR": 12.8259
       },
       "instrumental": {
-        "SDR": 13.0456,
-        "SIR": 18.7936,
-        "SAR": 15.1034,
-        "ISR": 21.4343
+        "SDR": 13.0609,
+        "SIR": 19.263,
+        "SAR": 14.8581,
+        "ISR": 21.599
       }
     }
   },
@@ -5112,20 +5333,37 @@
             "ISR": 25.2758
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 10.4572,
+            "SIR": 23.6427,
+            "SAR": 11.2548,
+            "ISR": 17.0547
+          },
+          "instrumental": {
+            "SDR": 13.3908,
+            "SIR": 20.3204,
+            "SAR": 15.1459,
+            "ISR": 22.239
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.63794,
-        "SIR": 19.6198,
-        "SAR": 8.19655,
-        "ISR": 12.1843
+        "SDR": 8.75437,
+        "SIR": 20.5519,
+        "SAR": 8.74247,
+        "ISR": 12.3809
       },
       "instrumental": {
-        "SDR": 13.0956,
-        "SIR": 18.0006,
-        "SAR": 15.3823,
-        "ISR": 20.7225
+        "SDR": 13.2432,
+        "SIR": 18.5598,
+        "SAR": 15.2641,
+        "ISR": 21.1035
       }
     }
   },
@@ -5318,20 +5556,37 @@
             "ISR": 25.6792
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 10.5424,
+            "SIR": 23.1182,
+            "SAR": 11.1848,
+            "ISR": 17.2389
+          },
+          "instrumental": {
+            "SDR": 13.3612,
+            "SIR": 20.5086,
+            "SAR": 15.0249,
+            "ISR": 21.9469
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.65064,
-        "SIR": 19.5123,
-        "SAR": 8.01042,
-        "ISR": 12.1769
+        "SDR": 8.74019,
+        "SIR": 20.2964,
+        "SAR": 8.63884,
+        "ISR": 12.2375
       },
       "instrumental": {
-        "SDR": 13.091,
-        "SIR": 18.2434,
-        "SAR": 15.3898,
-        "ISR": 20.5673
+        "SDR": 13.2261,
+        "SIR": 18.8104,
+        "SAR": 15.2073,
+        "ISR": 21.0088
       }
     }
   },
@@ -5524,20 +5779,37 @@
             "ISR": 18.1645
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 0.000285,
+            "SIR": -7.34197,
+            "SAR": -0.599315,
+            "ISR": 0.027645
+          },
+          "instrumental": {
+            "SDR": 3.23884,
+            "SIR": 2.59164,
+            "SAR": 37.7021,
+            "ISR": 20.0797
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 0.04364,
-        "SIR": 8.2827,
-        "SAR": -0.01832,
-        "ISR": 1.66201
+        "SDR": 0.0359425,
+        "SIR": 7.00077,
+        "SAR": -0.028,
+        "ISR": 1.6316
       },
       "instrumental": {
-        "SDR": 7.71278,
-        "SIR": 8.18763,
-        "SAR": 18.4705,
-        "ISR": 18.7354
+        "SDR": 6.83727,
+        "SIR": 8.03965,
+        "SAR": 18.6472,
+        "ISR": 19.0252
       }
     }
   },
@@ -5730,20 +6002,37 @@
             "ISR": 21.5427
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 8.93582,
+            "SIR": 19.9157,
+            "SAR": 9.31265,
+            "ISR": 15.5439
+          },
+          "instrumental": {
+            "SDR": 11.8457,
+            "SIR": 18.9899,
+            "SAR": 13.4012,
+            "ISR": 20.8239
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 7.5773,
-        "SIR": 18.6354,
-        "SAR": 7.81443,
-        "ISR": 11.376
+        "SDR": 7.75643,
+        "SIR": 19.0005,
+        "SAR": 8.11201,
+        "ISR": 11.4831
       },
       "instrumental": {
-        "SDR": 11.8171,
-        "SIR": 17.3509,
-        "SAR": 14.0378,
-        "ISR": 19.6767
+        "SDR": 11.8314,
+        "SIR": 17.3614,
+        "SAR": 13.8581,
+        "ISR": 20.2503
       }
     }
   },
@@ -5936,20 +6225,37 @@
             "ISR": 24.1904
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 9.58396,
+            "SIR": 22.3749,
+            "SAR": 10.2593,
+            "ISR": 15.5784
+          },
+          "instrumental": {
+            "SDR": 12.7627,
+            "SIR": 19.129,
+            "SAR": 14.0214,
+            "ISR": 22.4446
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.29394,
-        "SIR": 19.7166,
-        "SAR": 8.40583,
-        "ISR": 11.3473
+        "SDR": 8.3611,
+        "SIR": 19.9327,
+        "SAR": 8.53899,
+        "ISR": 11.7024
       },
       "instrumental": {
-        "SDR": 12.4535,
-        "SIR": 17.5529,
-        "SAR": 14.7534,
-        "ISR": 21.3385
+        "SDR": 12.6081,
+        "SIR": 17.9435,
+        "SAR": 14.3874,
+        "ISR": 21.3984
       }
     }
   },
@@ -6142,20 +6448,37 @@
             "ISR": 22.9792
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 9.61233,
+            "SIR": 21.3121,
+            "SAR": 9.94979,
+            "ISR": 18.7393
+          },
+          "instrumental": {
+            "SDR": 12.6227,
+            "SIR": 22.3657,
+            "SAR": 13.4869,
+            "ISR": 21.2047
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.0754,
-        "SIR": 18.714,
-        "SAR": 8.16066,
-        "ISR": 14.2194
+        "SDR": 8.13631,
+        "SIR": 18.7657,
+        "SAR": 8.27888,
+        "ISR": 14.3488
       },
       "instrumental": {
-        "SDR": 12.3989,
-        "SIR": 19.4874,
-        "SAR": 13.1423,
-        "ISR": 19.8179
+        "SDR": 12.5108,
+        "SIR": 19.605,
+        "SAR": 13.3146,
+        "ISR": 20.5011
       }
     }
   },
@@ -6348,20 +6671,37 @@
             "ISR": 24.432
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 9.13442,
+            "SIR": 21.143,
+            "SAR": 9.85519,
+            "ISR": 14.5355
+          },
+          "instrumental": {
+            "SDR": 12.3455,
+            "SIR": 18.0624,
+            "SAR": 13.9838,
+            "ISR": 21.6233
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 7.59771,
-        "SIR": 18.8094,
-        "SAR": 7.86276,
-        "ISR": 11.3929
+        "SDR": 7.80315,
+        "SIR": 19.0709,
+        "SAR": 7.97037,
+        "ISR": 11.4721
       },
       "instrumental": {
-        "SDR": 12.1292,
-        "SIR": 16.3012,
-        "SAR": 14.7213,
-        "ISR": 21.1946
+        "SDR": 12.2373,
+        "SIR": 16.5085,
+        "SAR": 14.3526,
+        "ISR": 21.3092
       }
     }
   },
@@ -6554,20 +6894,37 @@
             "ISR": 18.2727
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 14.6417,
+            "SIR": 34.6714,
+            "SAR": 16.3188,
+            "ISR": 18.0275
+          },
+          "instrumental": {
+            "SDR": 16.9108,
+            "SIR": 31.3944,
+            "SAR": 19.6994,
+            "ISR": 19.5486
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.1999,
-        "SIR": 20.4814,
-        "SAR": 10.8027,
-        "ISR": 14.7364
+        "SDR": 10.7462,
+        "SIR": 21.5699,
+        "SAR": 10.8113,
+        "ISR": 14.8815
       },
       "instrumental": {
-        "SDR": 15.2996,
-        "SIR": 24.0066,
-        "SAR": 17.1985,
-        "ISR": 18.2727
+        "SDR": 15.5099,
+        "SIR": 24.379,
+        "SAR": 17.3316,
+        "ISR": 18.4135
       }
     }
   },
@@ -6760,20 +7117,37 @@
             "ISR": 17.6246
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 14.7439,
+            "SIR": 31.6311,
+            "SAR": 16.5139,
+            "ISR": 18.1119
+          },
+          "instrumental": {
+            "SDR": 16.5368,
+            "SIR": 31.9364,
+            "SAR": 19.5184,
+            "ISR": 19.0697
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.2148,
-        "SIR": 20.4494,
-        "SAR": 10.8151,
-        "ISR": 14.9252
+        "SDR": 10.752,
+        "SIR": 20.9149,
+        "SAR": 10.874,
+        "ISR": 15.032
       },
       "instrumental": {
-        "SDR": 15.3285,
-        "SIR": 25.0494,
-        "SAR": 17.1633,
-        "ISR": 17.7572
+        "SDR": 15.4433,
+        "SIR": 25.6353,
+        "SAR": 17.3453,
+        "ISR": 17.9153
       }
     }
   },
@@ -6966,20 +7340,37 @@
             "ISR": 17.9321
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 14.8073,
+            "SIR": 33.1974,
+            "SAR": 16.5528,
+            "ISR": 18.1652
+          },
+          "instrumental": {
+            "SDR": 16.7075,
+            "SIR": 31.9164,
+            "SAR": 19.6389,
+            "ISR": 19.2246
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.2541,
-        "SIR": 20.364,
-        "SAR": 10.8039,
-        "ISR": 14.9919
+        "SDR": 10.8106,
+        "SIR": 21.1604,
+        "SAR": 10.8621,
+        "ISR": 15.0507
       },
       "instrumental": {
-        "SDR": 15.421,
-        "SIR": 24.6836,
-        "SAR": 17.3399,
-        "ISR": 17.9321
+        "SDR": 15.5325,
+        "SIR": 25.3363,
+        "SAR": 17.4272,
+        "ISR": 18.0842
       }
     }
   },
@@ -7172,20 +7563,37 @@
             "ISR": 17.7321
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 14.9312,
+            "SIR": 33.2777,
+            "SAR": 16.7505,
+            "ISR": 18.3166
+          },
+          "instrumental": {
+            "SDR": 16.7249,
+            "SIR": 32.6605,
+            "SAR": 19.9528,
+            "ISR": 19.2149
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.3066,
-        "SIR": 20.5902,
-        "SAR": 10.9632,
-        "ISR": 15.0204
+        "SDR": 10.6788,
+        "SIR": 20.7566,
+        "SAR": 11.0312,
+        "ISR": 15.1022
       },
       "instrumental": {
-        "SDR": 15.299,
-        "SIR": 25.0221,
-        "SAR": 17.3929,
-        "ISR": 17.866
+        "SDR": 15.4252,
+        "SIR": 25.1375,
+        "SAR": 17.4935,
+        "ISR": 18.0627
       }
     }
   },
@@ -7378,20 +7786,37 @@
             "ISR": 17.8215
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 14.6795,
+            "SIR": 29.4574,
+            "SAR": 16.584,
+            "ISR": 18.067
+          },
+          "instrumental": {
+            "SDR": 16.5213,
+            "SIR": 30.0026,
+            "SAR": 19.558,
+            "ISR": 18.9745
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.5073,
-        "SIR": 21.0729,
-        "SAR": 11.1117,
-        "ISR": 15.2755
+        "SDR": 11.2119,
+        "SIR": 21.2216,
+        "SAR": 11.1161,
+        "ISR": 15.298
       },
       "instrumental": {
-        "SDR": 15.7138,
-        "SIR": 25.3611,
-        "SAR": 17.2753,
-        "ISR": 17.9222
+        "SDR": 15.7983,
+        "SIR": 26.1394,
+        "SAR": 17.6708,
+        "ISR": 18.1432
       }
     }
   },
@@ -7584,20 +8009,37 @@
             "ISR": 17.6421
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 14.0137,
+            "SIR": 30.5619,
+            "SAR": 15.4912,
+            "ISR": 17.8524
+          },
+          "instrumental": {
+            "SDR": 16.3475,
+            "SIR": 31.2408,
+            "SAR": 18.919,
+            "ISR": 18.957
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.93694,
-        "SIR": 20.0372,
-        "SAR": 10.5705,
-        "ISR": 14.6172
+        "SDR": 10.3706,
+        "SIR": 20.1876,
+        "SAR": 10.7013,
+        "ISR": 14.7323
       },
       "instrumental": {
-        "SDR": 15.1549,
-        "SIR": 24.3046,
-        "SAR": 16.9541,
-        "ISR": 17.6421
+        "SDR": 15.1652,
+        "SIR": 25.2208,
+        "SAR": 17.0685,
+        "ISR": 17.8692
       }
     }
   },
@@ -7790,20 +8232,37 @@
             "ISR": 17.7091
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 14.2312,
+            "SIR": 29.9449,
+            "SAR": 15.3861,
+            "ISR": 18.2236
+          },
+          "instrumental": {
+            "SDR": 16.0657,
+            "SIR": 29.5551,
+            "SAR": 18.3979,
+            "ISR": 18.9734
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.95372,
-        "SIR": 19.629,
-        "SAR": 10.4783,
-        "ISR": 14.9202
+        "SDR": 10.5657,
+        "SIR": 20.1545,
+        "SAR": 10.624,
+        "ISR": 14.9336
       },
       "instrumental": {
-        "SDR": 15.0111,
-        "SIR": 24.9046,
-        "SAR": 16.9709,
-        "ISR": 17.7091
+        "SDR": 15.122,
+        "SIR": 25.4277,
+        "SAR": 17.0236,
+        "ISR": 17.86
       }
     }
   },
@@ -7996,20 +8455,37 @@
             "ISR": 17.8543
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 13.7488,
+            "SIR": 33.2106,
+            "SAR": 15.0597,
+            "ISR": 17.4611
+          },
+          "instrumental": {
+            "SDR": 16.1127,
+            "SIR": 28.2339,
+            "SAR": 18.4692,
+            "ISR": 19.2661
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.75154,
-        "SIR": 19.6268,
-        "SAR": 10.2813,
-        "ISR": 14.3951
+        "SDR": 10.4496,
+        "SIR": 20.3959,
+        "SAR": 10.4455,
+        "ISR": 14.4868
       },
       "instrumental": {
-        "SDR": 15.0294,
-        "SIR": 23.7215,
-        "SAR": 16.6226,
-        "ISR": 17.8543
+        "SDR": 15.0592,
+        "SIR": 23.8914,
+        "SAR": 16.7941,
+        "ISR": 18.0069
       }
     }
   },
@@ -8202,20 +8678,37 @@
             "ISR": 17.7383
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 13.9829,
+            "SIR": 33.2907,
+            "SAR": 15.0955,
+            "ISR": 18.1661
+          },
+          "instrumental": {
+            "SDR": 16.0739,
+            "SIR": 29.1211,
+            "SAR": 18.3166,
+            "ISR": 19.2621
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.85264,
-        "SIR": 19.4962,
-        "SAR": 10.3349,
-        "ISR": 15.051
+        "SDR": 10.6001,
+        "SIR": 20.425,
+        "SAR": 10.5416,
+        "ISR": 15.1694
       },
       "instrumental": {
-        "SDR": 15.1333,
-        "SIR": 24.923,
-        "SAR": 16.721,
-        "ISR": 17.7383
+        "SDR": 15.1366,
+        "SIR": 25.0598,
+        "SAR": 16.834,
+        "ISR": 17.9625
       }
     }
   },
@@ -8408,20 +8901,37 @@
             "ISR": 17.7562
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 14.683,
+            "SIR": 31.6124,
+            "SAR": 16.4119,
+            "ISR": 18.1814
+          },
+          "instrumental": {
+            "SDR": 16.7295,
+            "SIR": 32.1348,
+            "SAR": 19.7392,
+            "ISR": 19.1319
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.3391,
-        "SIR": 20.5145,
-        "SAR": 10.9266,
-        "ISR": 14.9913
+        "SDR": 10.9777,
+        "SIR": 20.6802,
+        "SAR": 10.9613,
+        "ISR": 15.0442
       },
       "instrumental": {
-        "SDR": 15.2711,
-        "SIR": 24.78,
-        "SAR": 17.4561,
-        "ISR": 17.7562
+        "SDR": 15.3947,
+        "SIR": 25.1889,
+        "SAR": 17.5812,
+        "ISR": 17.8291
       }
     }
   },
@@ -8614,20 +9124,37 @@
             "ISR": 18.2028
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 14.7007,
+            "SIR": 32.2617,
+            "SAR": 16.3188,
+            "ISR": 18.1995
+          },
+          "instrumental": {
+            "SDR": 16.7778,
+            "SIR": 32.0005,
+            "SAR": 19.7468,
+            "ISR": 19.3556
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.2217,
-        "SIR": 20.9345,
-        "SAR": 10.7796,
-        "ISR": 14.861
+        "SDR": 10.9027,
+        "SIR": 21.3897,
+        "SAR": 10.8875,
+        "ISR": 14.8844
       },
       "instrumental": {
-        "SDR": 15.3563,
-        "SIR": 25.3537,
-        "SAR": 17.3049,
-        "ISR": 18.2028
+        "SDR": 15.5553,
+        "SIR": 25.3554,
+        "SAR": 17.4893,
+        "ISR": 18.2736
       }
     }
   },
@@ -8820,20 +9347,37 @@
             "ISR": 17.8432
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 14.7543,
+            "SIR": 31.5931,
+            "SAR": 16.372,
+            "ISR": 18.2426
+          },
+          "instrumental": {
+            "SDR": 16.5709,
+            "SIR": 32.1309,
+            "SAR": 19.5579,
+            "ISR": 19.1107
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.1246,
-        "SIR": 20.3464,
-        "SAR": 10.7916,
-        "ISR": 14.8473
+        "SDR": 10.8725,
+        "SIR": 20.6758,
+        "SAR": 10.9216,
+        "ISR": 14.972
       },
       "instrumental": {
-        "SDR": 15.443,
-        "SIR": 24.725,
-        "SAR": 17.3601,
-        "ISR": 17.8432
+        "SDR": 15.5511,
+        "SIR": 25.3859,
+        "SAR": 17.4958,
+        "ISR": 17.9546
       }
     }
   },
@@ -9026,20 +9570,37 @@
             "ISR": 18.8993
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 13.5143,
+            "SIR": 32.4218,
+            "SAR": 15.1878,
+            "ISR": 16.9864
+          },
+          "instrumental": {
+            "SDR": 16.0623,
+            "SIR": 27.3009,
+            "SAR": 18.555,
+            "ISR": 19.2452
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 5.0564,
-        "SIR": 20.8422,
-        "SAR": 3.32207,
-        "ISR": 7.36285
+        "SDR": 6.05672,
+        "SIR": 21.1433,
+        "SAR": 4.61041,
+        "ISR": 7.79421
       },
       "instrumental": {
-        "SDR": 14.2172,
-        "SIR": 17.0912,
-        "SAR": 15.8817,
-        "ISR": 18.6982
+        "SDR": 14.5761,
+        "SIR": 17.4177,
+        "SAR": 16.4792,
+        "ISR": 18.7987
       }
     }
   },
@@ -9232,20 +9793,37 @@
             "ISR": 18.3492
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 14.328,
+            "SIR": 27.8906,
+            "SAR": 16.108,
+            "ISR": 18.0169
+          },
+          "instrumental": {
+            "SDR": 16.2058,
+            "SIR": 31.5902,
+            "SAR": 19.2708,
+            "ISR": 18.7522
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 5.61701,
-        "SIR": 17.1679,
-        "SAR": 4.02018,
-        "ISR": 8.25522
+        "SDR": 6.68107,
+        "SIR": 18.7654,
+        "SAR": 4.97208,
+        "ISR": 8.35778
       },
       "instrumental": {
-        "SDR": 14.4604,
-        "SIR": 17.2931,
-        "SAR": 15.5827,
-        "ISR": 18.3492
+        "SDR": 14.7703,
+        "SIR": 17.9753,
+        "SAR": 16.3953,
+        "ISR": 18.4205
       }
     }
   },
@@ -9438,20 +10016,37 @@
             "ISR": 18.0436
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 13.7058,
+            "SIR": 31.0123,
+            "SAR": 15.1995,
+            "ISR": 17.2948
+          },
+          "instrumental": {
+            "SDR": 15.9551,
+            "SIR": 28.0224,
+            "SAR": 18.3023,
+            "ISR": 19.094
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.61124,
-        "SIR": 19.4148,
-        "SAR": 10.1759,
-        "ISR": 14.1441
+        "SDR": 10.3309,
+        "SIR": 20.1305,
+        "SAR": 10.4051,
+        "ISR": 14.3002
       },
       "instrumental": {
-        "SDR": 14.9079,
-        "SIR": 23.716,
-        "SAR": 16.5918,
-        "ISR": 18.0436
+        "SDR": 14.9451,
+        "SIR": 23.9476,
+        "SAR": 16.7433,
+        "ISR": 18.0709
       }
     }
   },
@@ -9644,20 +10239,37 @@
             "ISR": 18.3353
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 14.7031,
+            "SIR": 36.3939,
+            "SAR": 16.9067,
+            "ISR": 18.0324
+          },
+          "instrumental": {
+            "SDR": 16.8544,
+            "SIR": 29.9331,
+            "SAR": 20.0558,
+            "ISR": 19.479
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.6445,
-        "SIR": 21.2362,
-        "SAR": 11.0698,
-        "ISR": 14.838
+        "SDR": 11.2044,
+        "SIR": 22.5109,
+        "SAR": 11.139,
+        "ISR": 14.9228
       },
       "instrumental": {
-        "SDR": 15.7797,
-        "SIR": 24.8091,
-        "SAR": 17.2975,
-        "ISR": 18.3353
+        "SDR": 15.8981,
+        "SIR": 25.5596,
+        "SAR": 17.7214,
+        "ISR": 18.4656
       }
     }
   },
@@ -9850,20 +10462,37 @@
             "ISR": 18.4772
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 14.7653,
+            "SIR": 37.0024,
+            "SAR": 16.72,
+            "ISR": 18.0918
+          },
+          "instrumental": {
+            "SDR": 16.8061,
+            "SIR": 30.0302,
+            "SAR": 19.9635,
+            "ISR": 19.5142
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.5123,
-        "SIR": 21.2777,
-        "SAR": 11.0353,
-        "ISR": 14.8802
+        "SDR": 11.1583,
+        "SIR": 22.8158,
+        "SAR": 11.0473,
+        "ISR": 14.8828
       },
       "instrumental": {
-        "SDR": 15.7506,
-        "SIR": 24.5137,
-        "SAR": 17.1488,
-        "ISR": 18.4772
+        "SDR": 15.8753,
+        "SIR": 25.3361,
+        "SAR": 17.5722,
+        "ISR": 18.5784
       }
     }
   },
@@ -10056,20 +10685,37 @@
             "ISR": 18.138
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 14.7466,
+            "SIR": 35.6205,
+            "SAR": 16.9331,
+            "ISR": 18.2321
+          },
+          "instrumental": {
+            "SDR": 16.8514,
+            "SIR": 30.4856,
+            "SAR": 20.2734,
+            "ISR": 19.4275
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.6233,
-        "SIR": 21.057,
-        "SAR": 11.1054,
-        "ISR": 14.9016
+        "SDR": 11.1761,
+        "SIR": 22.0985,
+        "SAR": 11.1424,
+        "ISR": 15.0734
       },
       "instrumental": {
-        "SDR": 15.6294,
-        "SIR": 25.2006,
-        "SAR": 17.3425,
-        "ISR": 18.138
+        "SDR": 15.8019,
+        "SIR": 25.9235,
+        "SAR": 17.7394,
+        "ISR": 18.3083
       }
     }
   },
@@ -10262,20 +10908,37 @@
             "ISR": 17.9899
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 14.7009,
+            "SIR": 35.0287,
+            "SAR": 16.5611,
+            "ISR": 18.2066
+          },
+          "instrumental": {
+            "SDR": 16.7921,
+            "SIR": 31.6557,
+            "SAR": 19.7944,
+            "ISR": 19.327
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.0759,
-        "SIR": 20.7305,
-        "SAR": 10.7607,
-        "ISR": 14.6787
+        "SDR": 10.7991,
+        "SIR": 21.3695,
+        "SAR": 10.8053,
+        "ISR": 14.7643
       },
       "instrumental": {
-        "SDR": 15.5184,
-        "SIR": 23.7871,
-        "SAR": 17.3564,
-        "ISR": 17.9899
+        "SDR": 15.6101,
+        "SIR": 23.8257,
+        "SAR": 17.5014,
+        "ISR": 18.122
       }
     }
   },
@@ -10468,20 +11131,37 @@
             "ISR": 16.8977
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 13.7353,
+            "SIR": 34.862,
+            "SAR": 15.9299,
+            "ISR": 16.1708
+          },
+          "instrumental": {
+            "SDR": 16.2984,
+            "SIR": 25.7474,
+            "SAR": 19.4356,
+            "ISR": 19.3742
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.0706,
-        "SIR": 19.5485,
-        "SAR": 10.8404,
-        "ISR": 13.9254
+        "SDR": 10.6909,
+        "SIR": 19.6322,
+        "SAR": 11.0274,
+        "ISR": 14.0056
       },
       "instrumental": {
-        "SDR": 15.2029,
-        "SIR": 23.9257,
-        "SAR": 17.7085,
-        "ISR": 17.6543
+        "SDR": 15.2712,
+        "SIR": 24.0196,
+        "SAR": 17.8282,
+        "ISR": 17.8582
       }
     }
   },
@@ -10674,20 +11354,37 @@
             "ISR": 17.3308
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 13.7991,
+            "SIR": 33.1809,
+            "SAR": 15.2835,
+            "ISR": 17.1035
+          },
+          "instrumental": {
+            "SDR": 16.1131,
+            "SIR": 27.4016,
+            "SAR": 18.6377,
+            "ISR": 19.297
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.57259,
-        "SIR": 19.7906,
-        "SAR": 9.90594,
-        "ISR": 12.4338
+        "SDR": 10.2131,
+        "SIR": 19.9386,
+        "SAR": 10.1407,
+        "ISR": 13.3464
       },
       "instrumental": {
-        "SDR": 14.7669,
-        "SIR": 23.4062,
-        "SAR": 16.6717,
-        "ISR": 17.6048
+        "SDR": 14.9287,
+        "SIR": 24.2212,
+        "SAR": 16.7041,
+        "ISR": 17.7508
       }
     }
   },
@@ -10880,20 +11577,37 @@
             "ISR": 18.2195
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 15.2035,
+            "SIR": 32.4611,
+            "SAR": 16.6814,
+            "ISR": 19.2902
+          },
+          "instrumental": {
+            "SDR": 16.6764,
+            "SIR": 31.1089,
+            "SAR": 19.5272,
+            "ISR": 19.2673
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.4048,
-        "SIR": 21.2136,
-        "SAR": 10.8814,
-        "ISR": 15.3374
+        "SDR": 11.1629,
+        "SIR": 22.1084,
+        "SAR": 10.9509,
+        "ISR": 15.5559
       },
       "instrumental": {
-        "SDR": 15.5718,
-        "SIR": 25.3035,
-        "SAR": 17.0213,
-        "ISR": 18.2195
+        "SDR": 15.7085,
+        "SIR": 26.4183,
+        "SAR": 17.3492,
+        "ISR": 18.321
       }
     }
   },
@@ -11086,20 +11800,37 @@
             "ISR": 16.7331
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 5.28759,
+            "SIR": 31.9377,
+            "SAR": 16.6604,
+            "ISR": 6.00972
+          },
+          "instrumental": {
+            "SDR": 6.20834,
+            "SIR": 6.00502,
+            "SAR": 16.0185,
+            "ISR": 18.6868
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 4.73706,
-        "SIR": 20.8348,
-        "SAR": 11.0354,
-        "ISR": 7.47867
+        "SDR": 4.79382,
+        "SIR": 21.5958,
+        "SAR": 11.0697,
+        "ISR": 7.36017
       },
       "instrumental": {
-        "SDR": 7.48743,
-        "SIR": 9.85028,
-        "SAR": 13.4337,
-        "ISR": 16.7331
+        "SDR": 7.38998,
+        "SIR": 9.5226,
+        "SAR": 13.8102,
+        "ISR": 16.8667
       }
     }
   },
@@ -11292,20 +12023,37 @@
             "ISR": 17.9213
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 15.6493,
+            "SIR": 32.1988,
+            "SAR": 16.6339,
+            "ISR": 21.1733
+          },
+          "instrumental": {
+            "SDR": 16.4421,
+            "SIR": 30.1763,
+            "SAR": 19.1576,
+            "ISR": 19.1986
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.7074,
-        "SIR": 21.0816,
-        "SAR": 11.1092,
-        "ISR": 16.9324
+        "SDR": 11.4362,
+        "SIR": 21.7621,
+        "SAR": 11.1182,
+        "ISR": 16.9382
       },
       "instrumental": {
-        "SDR": 15.61,
-        "SIR": 27.5545,
-        "SAR": 16.8997,
-        "ISR": 17.9213
+        "SDR": 15.6732,
+        "SIR": 28.1358,
+        "SAR": 17.2636,
+        "ISR": 18.1033
       }
     }
   },
@@ -11498,20 +12246,37 @@
             "ISR": 18.0665
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 14.7035,
+            "SIR": 32.9433,
+            "SAR": 16.7267,
+            "ISR": 18.1318
+          },
+          "instrumental": {
+            "SDR": 16.6874,
+            "SIR": 30.274,
+            "SAR": 19.6895,
+            "ISR": 19.3017
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.5803,
-        "SIR": 20.7821,
-        "SAR": 11.0791,
-        "ISR": 15.163
+        "SDR": 11.1947,
+        "SIR": 21.7445,
+        "SAR": 11.1311,
+        "ISR": 15.1982
       },
       "instrumental": {
-        "SDR": 15.7651,
-        "SIR": 25.1407,
-        "SAR": 17.2768,
-        "ISR": 18.0665
+        "SDR": 15.8529,
+        "SIR": 25.7033,
+        "SAR": 17.6692,
+        "ISR": 18.2553
       }
     }
   },
@@ -11704,20 +12469,37 @@
             "ISR": 18.2179
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 14.6332,
+            "SIR": 31.4352,
+            "SAR": 16.6358,
+            "ISR": 17.7667
+          },
+          "instrumental": {
+            "SDR": 16.6191,
+            "SIR": 29.6305,
+            "SAR": 19.7205,
+            "ISR": 19.1658
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.4693,
-        "SIR": 20.9027,
-        "SAR": 11.0578,
-        "ISR": 14.7971
+        "SDR": 11.1508,
+        "SIR": 21.6421,
+        "SAR": 11.1184,
+        "ISR": 14.9331
       },
       "instrumental": {
-        "SDR": 15.627,
-        "SIR": 24.9615,
-        "SAR": 17.515,
-        "ISR": 18.2179
+        "SDR": 15.7675,
+        "SIR": 25.7533,
+        "SAR": 17.7993,
+        "ISR": 18.2587
       }
     }
   },
@@ -11910,20 +12692,37 @@
             "ISR": 17.1808
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 13.4825,
+            "SIR": 26.7907,
+            "SAR": 15.0602,
+            "ISR": 17.5295
+          },
+          "instrumental": {
+            "SDR": 15.4544,
+            "SIR": 30.0342,
+            "SAR": 18.1195,
+            "ISR": 18.1055
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.46487,
-        "SIR": 18.7702,
-        "SAR": 10.0434,
-        "ISR": 13.8946
+        "SDR": 10.0639,
+        "SIR": 19.0901,
+        "SAR": 10.3182,
+        "ISR": 13.9445
       },
       "instrumental": {
-        "SDR": 14.2692,
-        "SIR": 22.5876,
-        "SAR": 16.4255,
-        "ISR": 17.1808
+        "SDR": 14.4048,
+        "SIR": 23.4988,
+        "SAR": 16.5377,
+        "ISR": 17.2844
       }
     }
   },
@@ -12116,20 +12915,37 @@
             "ISR": 15.5219
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 13.292,
+            "SIR": 21.7226,
+            "SAR": 15.1109,
+            "ISR": 17.633
+          },
+          "instrumental": {
+            "SDR": 14.707,
+            "SIR": 30.2118,
+            "SAR": 18.1144,
+            "ISR": 16.6277
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.46007,
-        "SIR": 16.3377,
-        "SAR": 10.5141,
-        "ISR": 14.2015
+        "SDR": 10.0476,
+        "SIR": 16.345,
+        "SAR": 10.7686,
+        "ISR": 14.288
       },
       "instrumental": {
-        "SDR": 13.7105,
-        "SIR": 23.5832,
-        "SAR": 16.6048,
-        "ISR": 15.7591
+        "SDR": 13.8689,
+        "SIR": 24.0987,
+        "SAR": 16.6214,
+        "ISR": 15.9502
       }
     }
   },
@@ -12322,20 +13138,37 @@
             "ISR": 15.8977
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 13.9378,
+            "SIR": 22.6192,
+            "SAR": 16.0801,
+            "ISR": 18.03
+          },
+          "instrumental": {
+            "SDR": 15.0557,
+            "SIR": 30.9244,
+            "SAR": 18.6909,
+            "ISR": 16.8214
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.79824,
-        "SIR": 16.4021,
-        "SAR": 10.9665,
-        "ISR": 14.6775
+        "SDR": 10.399,
+        "SIR": 16.8145,
+        "SAR": 11.1034,
+        "ISR": 14.6972
       },
       "instrumental": {
-        "SDR": 14.078,
-        "SIR": 23.8069,
-        "SAR": 17.0147,
-        "ISR": 15.8977
+        "SDR": 14.2207,
+        "SIR": 24.9297,
+        "SAR": 17.0709,
+        "ISR": 15.9968
       }
     }
   },
@@ -12528,20 +13361,37 @@
             "ISR": 17.4509
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 14.1183,
+            "SIR": 30.6671,
+            "SAR": 15.9555,
+            "ISR": 17.8021
+          },
+          "instrumental": {
+            "SDR": 16.4406,
+            "SIR": 30.4041,
+            "SAR": 19.1185,
+            "ISR": 19.0291
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.1643,
-        "SIR": 20.038,
-        "SAR": 10.6419,
-        "ISR": 14.8021
+        "SDR": 10.6497,
+        "SIR": 20.3786,
+        "SAR": 10.692,
+        "ISR": 14.848
       },
       "instrumental": {
-        "SDR": 15.0332,
-        "SIR": 24.6499,
-        "SAR": 17.0918,
-        "ISR": 17.5681
+        "SDR": 15.2149,
+        "SIR": 25.6075,
+        "SAR": 17.1363,
+        "ISR": 17.7893
       }
     }
   },
@@ -12950,20 +13800,37 @@
             "ISR": 18.0976
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 15.4204,
+            "SIR": 35.9524,
+            "SAR": 17.5186,
+            "ISR": 18.4415
+          },
+          "instrumental": {
+            "SDR": 17.2411,
+            "SIR": 32.3095,
+            "SAR": 20.8858,
+            "ISR": 19.4741
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 11.3468,
-        "SIR": 23.0322,
-        "SAR": 12.0537,
-        "ISR": 15.2706
+        "SDR": 11.9504,
+        "SIR": 23.1166,
+        "SAR": 12.093,
+        "ISR": 15.4782
       },
       "instrumental": {
-        "SDR": 16.2384,
-        "SIR": 26.1264,
-        "SAR": 18.1076,
-        "ISR": 18.2059
+        "SDR": 16.3035,
+        "SIR": 26.6161,
+        "SAR": 18.5167,
+        "ISR": 18.3939
       }
     }
   },
@@ -13156,20 +14023,37 @@
             "ISR": 17.9925
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 14.8029,
+            "SIR": 32.5823,
+            "SAR": 16.8474,
+            "ISR": 17.8622
+          },
+          "instrumental": {
+            "SDR": 16.7483,
+            "SIR": 30.1575,
+            "SAR": 19.8694,
+            "ISR": 19.2232
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.4242,
-        "SIR": 22.1936,
-        "SAR": 11.1974,
-        "ISR": 14.4769
+        "SDR": 11.0399,
+        "SIR": 22.4209,
+        "SAR": 11.2773,
+        "ISR": 14.6269
       },
       "instrumental": {
-        "SDR": 15.4926,
-        "SIR": 25.1382,
-        "SAR": 17.878,
-        "ISR": 17.9925
+        "SDR": 15.686,
+        "SIR": 25.1947,
+        "SAR": 17.9232,
+        "ISR": 18.1829
       }
     }
   },
@@ -13362,20 +14246,37 @@
             "ISR": 18.1922
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 15.3472,
+            "SIR": 37.2152,
+            "SAR": 17.3105,
+            "ISR": 18.4819
+          },
+          "instrumental": {
+            "SDR": 17.3685,
+            "SIR": 32.115,
+            "SAR": 20.7553,
+            "ISR": 19.7369
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 11.2569,
-        "SIR": 23.254,
-        "SAR": 11.9624,
-        "ISR": 15.3601
+        "SDR": 11.8751,
+        "SIR": 23.3541,
+        "SAR": 11.9782,
+        "ISR": 15.5404
       },
       "instrumental": {
-        "SDR": 16.2552,
-        "SIR": 26.414,
-        "SAR": 18.0355,
-        "ISR": 18.3799
+        "SDR": 16.3539,
+        "SIR": 26.674,
+        "SAR": 18.3822,
+        "ISR": 18.5845
       }
     }
   },
@@ -13568,20 +14469,37 @@
             "ISR": 18.0127
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 16.1394,
+            "SIR": 40.5805,
+            "SAR": 18.4321,
+            "ISR": 18.949
+          },
+          "instrumental": {
+            "SDR": 17.6222,
+            "SIR": 34.477,
+            "SAR": 21.2358,
+            "ISR": 19.7197
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 12.867,
-        "SIR": 25.2781,
-        "SAR": 13.8535,
-        "ISR": 15.8931
+        "SDR": 12.944,
+        "SIR": 26.6159,
+        "SAR": 13.8695,
+        "ISR": 16.1485
       },
       "instrumental": {
-        "SDR": 16.9951,
-        "SIR": 28.4274,
-        "SAR": 18.7001,
-        "ISR": 18.6872
+        "SDR": 17.1005,
+        "SIR": 28.4844,
+        "SAR": 19.2617,
+        "ISR": 18.9152
       }
     }
   },
@@ -13774,20 +14692,37 @@
             "ISR": 18.2128
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 16.1546,
+            "SIR": 40.5922,
+            "SAR": 18.5296,
+            "ISR": 18.8637
+          },
+          "instrumental": {
+            "SDR": 17.6162,
+            "SIR": 32.9914,
+            "SAR": 21.1756,
+            "ISR": 19.7181
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 12.9164,
-        "SIR": 25.3319,
-        "SAR": 13.8997,
-        "ISR": 15.8762
+        "SDR": 13.0329,
+        "SIR": 26.7321,
+        "SAR": 13.913,
+        "ISR": 16.1499
       },
       "instrumental": {
-        "SDR": 17.0029,
-        "SIR": 28.2637,
-        "SAR": 18.8132,
-        "ISR": 18.6887
+        "SDR": 17.1147,
+        "SIR": 28.3656,
+        "SAR": 19.3615,
+        "ISR": 18.9672
       }
     }
   },
@@ -13980,20 +14915,37 @@
             "ISR": 18.0875
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 14.5444,
+            "SIR": 36.848,
+            "SAR": 16.0659,
+            "ISR": 18.0546
+          },
+          "instrumental": {
+            "SDR": 16.5295,
+            "SIR": 30.481,
+            "SAR": 19.2078,
+            "ISR": 19.4684
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 11.3702,
-        "SIR": 23.4189,
-        "SAR": 10.9716,
-        "ISR": 14.8978
+        "SDR": 11.4606,
+        "SIR": 23.9581,
+        "SAR": 11.4913,
+        "ISR": 14.9177
       },
       "instrumental": {
-        "SDR": 15.5256,
-        "SIR": 24.9302,
-        "SAR": 16.8541,
-        "ISR": 18.0875
+        "SDR": 15.6974,
+        "SIR": 25.3539,
+        "SAR": 17.2392,
+        "ISR": 18.4874
       }
     }
   },
@@ -14186,20 +15138,37 @@
             "ISR": 19.5608
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 15.517,
+            "SIR": 39.8722,
+            "SAR": 17.9265,
+            "ISR": 18.2814
+          },
+          "instrumental": {
+            "SDR": 17.289,
+            "SIR": 32.4369,
+            "SAR": 20.7586,
+            "ISR": 19.644
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.44766,
-        "SIR": 29.7966,
-        "SAR": 6.36113,
-        "ISR": 8.71611
+        "SDR": 8.7386,
+        "SIR": 29.8483,
+        "SAR": 6.61471,
+        "ISR": 8.71898
       },
       "instrumental": {
-        "SDR": 16.0015,
-        "SIR": 16.6469,
-        "SAR": 14.2308,
-        "ISR": 19.4711
+        "SDR": 16.2059,
+        "SIR": 17.4754,
+        "SAR": 15.4927,
+        "ISR": 19.5075
       }
     }
   },
@@ -14375,14 +15344,31 @@
             "ISR": 17.5357
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 15.6277,
+            "SIR": 42.2097,
+            "SAR": 18.0326,
+            "ISR": 18.4597
+          },
+          "other": {
+            "SDR": 0.48112,
+            "SIR": 27.5168,
+            "SAR": -0.41631,
+            "ISR": 19.3874
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 11.8251,
-        "SIR": 25.0995,
-        "SAR": 12.6666,
-        "ISR": 15.1467
+        "SDR": 12.5967,
+        "SIR": 25.579,
+        "SAR": 13.4438,
+        "ISR": 15.4179
       }
     }
   },
@@ -14558,14 +15544,31 @@
             "ISR": 17.6945
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 15.568,
+            "SIR": 42.2331,
+            "SAR": 17.9423,
+            "ISR": 18.5018
+          },
+          "other": {
+            "SDR": 0.47828,
+            "SIR": 27.4917,
+            "SAR": -0.41064,
+            "ISR": 19.3727
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 11.7066,
-        "SIR": 26.5035,
-        "SAR": 12.4597,
-        "ISR": 15.218
+        "SDR": 12.4663,
+        "SIR": 26.5467,
+        "SAR": 13.1553,
+        "ISR": 15.4123
       }
     }
   },
@@ -14758,20 +15761,37 @@
             "ISR": 18.5254
           }
         }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 14.4741,
+            "SIR": 38.7534,
+            "SAR": 16.3561,
+            "ISR": 17.5507
+          },
+          "instrumental": {
+            "SDR": 16.5269,
+            "SIR": 29.414,
+            "SAR": 19.2987,
+            "ISR": 19.604
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 11.2203,
-        "SIR": 25.3613,
-        "SAR": 10.9775,
-        "ISR": 13.6732
+        "SDR": 11.2977,
+        "SIR": 25.6853,
+        "SAR": 11.6054,
+        "ISR": 13.6769
       },
       "instrumental": {
-        "SDR": 15.1993,
-        "SIR": 23.9173,
-        "SAR": 17.4485,
-        "ISR": 18.7944
+        "SDR": 15.6186,
+        "SIR": 24.0485,
+        "SAR": 17.4804,
+        "ISR": 18.9926
       }
     }
   },
@@ -14930,12 +15950,46 @@
             "ISR": 19.2716
           }
         }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "vocals": {
+            "SDR": 7.8587,
+            "SIR": 28.9034,
+            "SAR": -8.93503,
+            "ISR": 2.22495
+          },
+          "other": {
+            "SDR": -0.07087,
+            "SIR": 2.8891,
+            "SAR": 0.32758,
+            "ISR": 19.1175
+          }
+        }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 13.3293,
+            "SIR": 33.4488,
+            "SAR": -5.865,
+            "ISR": 2.87029
+          },
+          "other": {
+            "SDR": -0.76948,
+            "SIR": 2.5669,
+            "SAR": 0.18894,
+            "ISR": 19.3799
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 7.36242,
-        "SIR": 24.4344,
+        "SDR": 7.8587,
+        "SIR": 24.7638,
         "SAR": -7.1653,
         "ISR": 2.3716
       }
@@ -15096,12 +16150,46 @@
             "ISR": 19.4021
           }
         }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "vocals": {
+            "SDR": 8.47626,
+            "SIR": 28.4171,
+            "SAR": -8.79002,
+            "ISR": 2.19966
+          },
+          "other": {
+            "SDR": 0.06928,
+            "SIR": 2.83696,
+            "SAR": 0.29133,
+            "ISR": 19.1336
+          }
+        }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 12.8396,
+            "SIR": 32.1657,
+            "SAR": -5.99695,
+            "ISR": 2.81832
+          },
+          "other": {
+            "SDR": -0.97207,
+            "SIR": 2.47631,
+            "SAR": 0.31421,
+            "ISR": 19.2378
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
         "SDR": 8.77308,
-        "SIR": 24.6619,
+        "SIR": 25.6381,
         "SAR": -6.63171,
         "ISR": 2.43491
       }
@@ -15262,12 +16350,46 @@
             "ISR": 19.5124
           }
         }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "vocals": {
+            "SDR": 8.13083,
+            "SIR": 31.1122,
+            "SAR": -8.92637,
+            "ISR": 2.11411
+          },
+          "other": {
+            "SDR": 0.05511,
+            "SIR": 2.77365,
+            "SAR": 0.377655,
+            "ISR": 19.3304
+          }
+        }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 12.8844,
+            "SIR": 34.3363,
+            "SAR": -5.8707,
+            "ISR": 2.76611
+          },
+          "other": {
+            "SDR": -0.97863,
+            "SIR": 2.42401,
+            "SAR": 0.36995,
+            "ISR": 19.4227
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
         "SDR": 8.63973,
-        "SIR": 25.4151,
+        "SIR": 26.3876,
         "SAR": -6.65376,
         "ISR": 2.36155
       }
@@ -15428,12 +16550,46 @@
             "ISR": 19.4482
           }
         }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "vocals": {
+            "SDR": 9.49879,
+            "SIR": 25.7345,
+            "SAR": -7.68662,
+            "ISR": 2.44653
+          },
+          "other": {
+            "SDR": 0.17081,
+            "SIR": 3.15008,
+            "SAR": 0.01005,
+            "ISR": 18.9612
+          }
+        }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 14.2173,
+            "SIR": 37.433,
+            "SAR": -5.82431,
+            "ISR": 2.79836
+          },
+          "other": {
+            "SDR": -0.76289,
+            "SIR": 2.47047,
+            "SAR": 0.3654,
+            "ISR": 19.5669
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.39977,
-        "SIR": 23.3612,
+        "SDR": 9.40808,
+        "SIR": 24.9348,
         "SAR": -6.68533,
         "ISR": 2.49869
       }
@@ -15594,13 +16750,47 @@
             "ISR": 19.2033
           }
         }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "vocals": {
+            "SDR": 13.6794,
+            "SIR": 26.1761,
+            "SAR": 12.7406,
+            "ISR": 13.4589
+          },
+          "other": {
+            "SDR": 0.45182,
+            "SIR": 17.9291,
+            "SAR": -0.61197,
+            "ISR": 17.8266
+          }
+        }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 15.3621,
+            "SIR": 40.9233,
+            "SAR": 17.8066,
+            "ISR": 18.1758
+          },
+          "other": {
+            "SDR": 0.586795,
+            "SIR": 26.7615,
+            "SAR": -0.27375,
+            "ISR": 19.3057
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.9093,
-        "SIR": 25.5773,
-        "SAR": 11.6773,
+        "SDR": 12.2978,
+        "SIR": 26.1761,
+        "SAR": 12.7406,
         "ISR": 15.275
       }
     }
@@ -15760,13 +16950,47 @@
             "ISR": 18.9133
           }
         }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "vocals": {
+            "SDR": 14.2051,
+            "SIR": 24.8128,
+            "SAR": 12.7727,
+            "ISR": 14.4255
+          },
+          "other": {
+            "SDR": 0.4686,
+            "SIR": 19.5755,
+            "SAR": -0.67883,
+            "ISR": 17.4066
+          }
+        }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 15.5632,
+            "SIR": 38.4082,
+            "SAR": 17.4184,
+            "ISR": 18.9371
+          },
+          "other": {
+            "SDR": 0.55558,
+            "SIR": 27.9603,
+            "SAR": -0.32981,
+            "ISR": 19.1225
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.962,
-        "SIR": 23.1959,
-        "SAR": 11.629,
+        "SDR": 12.5156,
+        "SIR": 23.8458,
+        "SAR": 12.7727,
         "ISR": 16.3227
       }
     }
@@ -15926,13 +17150,47 @@
             "ISR": 18.932
           }
         }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "vocals": {
+            "SDR": 13.9148,
+            "SIR": 23.3127,
+            "SAR": 12.734,
+            "ISR": 14.1068
+          },
+          "other": {
+            "SDR": 0.49315,
+            "SIR": 18.4418,
+            "SAR": -0.69737,
+            "ISR": 16.8923
+          }
+        }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 15.5306,
+            "SIR": 38.2973,
+            "SAR": 17.6089,
+            "ISR": 18.721
+          },
+          "other": {
+            "SDR": 0.55652,
+            "SIR": 27.5824,
+            "SAR": -0.31755,
+            "ISR": 19.0682
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.9304,
-        "SIR": 22.9176,
-        "SAR": 11.777,
+        "SDR": 12.3365,
+        "SIR": 23.3127,
+        "SAR": 12.734,
         "ISR": 16.2412
       }
     }
@@ -15964,6 +17222,36 @@
   },
   "kuielab_b_drums.onnx": {
     "model_name": "MDX-Net Model: kuielab_b_drums",
+    "track_scores": [],
+    "median_scores": null
+  },
+  "denoise_mel_band_roformer_aufr33_sdr_27.9959.ckpt": {
+    "model_name": "Roformer Model: Mel-Roformer-Denoise-Aufr33",
+    "track_scores": [],
+    "median_scores": null
+  },
+  "denoise_mel_band_roformer_aufr33_aggr_sdr_27.9768.ckpt": {
+    "model_name": "Roformer Model: Mel-Roformer-Denoise-Aufr33-Aggr",
+    "track_scores": [],
+    "median_scores": null
+  },
+  "mel_band_roformer_crowd_aufr33_viperx_sdr_8.7144.ckpt": {
+    "model_name": "Roformer Model: Mel-Roformer-Crowd-Aufr33-Viperx",
+    "track_scores": [],
+    "median_scores": null
+  },
+  "aspiration_mel_band_roformer_sdr_18.9845.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer | Aspiration by Sucial",
+    "track_scores": [],
+    "median_scores": null
+  },
+  "aspiration_mel_band_roformer_less_aggr_sdr_18.1201.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer | Aspiration Less Aggressive by Sucial",
+    "track_scores": [],
+    "median_scores": null
+  },
+  "mel_band_roformer_bleed_suppressor_v1.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer | Bleed Suppressor V1 by unwa-97chris",
     "track_scores": [],
     "median_scores": null
   }
