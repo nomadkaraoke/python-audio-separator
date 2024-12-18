@@ -13795,26 +13795,55 @@
             "ISR": 20.5043
           }
         }
+      },
+      {
+        "track_name": "ANiMAL - Clinic A",
+        "scores": {
+          "vocals": {
+            "SDR": 7.87915,
+            "SIR": 19.0441,
+            "SAR": 7.86232,
+            "ISR": 14.6037
+          },
+          "drums": {
+            "SDR": 9.49839,
+            "SIR": 20.977,
+            "SAR": 10.2955,
+            "ISR": 14.0041
+          },
+          "bass": {
+            "SDR": 12.555,
+            "SIR": 20.7999,
+            "SAR": 14.0735,
+            "ISR": 15.4626
+          },
+          "other": {
+            "SDR": 8.49975,
+            "SIR": 14.2335,
+            "SAR": 9.43418,
+            "ISR": 16.7411
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.67799,
-        "SIR": 19.2005,
-        "SAR": 8.57312,
-        "ISR": 16.036
+        "SDR": 7.87915,
+        "SIR": 19.0441,
+        "SAR": 7.86232,
+        "ISR": 14.6037
       },
       "drums": {
-        "SDR": 9.1874,
-        "SIR": 20.0343,
-        "SAR": 8.75126,
-        "ISR": 13.0808
+        "SDR": 9.49839,
+        "SIR": 20.977,
+        "SAR": 10.2955,
+        "ISR": 14.0041
       },
       "bass": {
-        "SDR": 14.6668,
-        "SIR": 23.2455,
-        "SAR": 14.5646,
-        "ISR": 19.5901
+        "SDR": 12.555,
+        "SIR": 20.7999,
+        "SAR": 14.0735,
+        "ISR": 15.4626
       }
     }
   },
@@ -13849,26 +13878,55 @@
             "ISR": 14.244
           }
         }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 5.57989,
+            "SIR": 15.919,
+            "SAR": 5.6672,
+            "ISR": 12.5146
+          },
+          "drums": {
+            "SDR": 3.4786,
+            "SIR": 15.3778,
+            "SAR": 2.08293,
+            "ISR": 5.22501
+          },
+          "bass": {
+            "SDR": 18.5115,
+            "SIR": 22.9108,
+            "SAR": 19.5757,
+            "ISR": 25.8449
+          },
+          "other": {
+            "SDR": 9.94838,
+            "SIR": 15.6823,
+            "SAR": 11.0621,
+            "ISR": 19.3189
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 11.0095,
-        "SIR": 20.2894,
-        "SAR": 10.7492,
-        "ISR": 19.1796
+        "SDR": 8.29469,
+        "SIR": 18.1042,
+        "SAR": 8.2082,
+        "ISR": 15.8471
       },
       "drums": {
-        "SDR": 13.011,
-        "SIR": 22.7843,
-        "SAR": 12.9744,
-        "ISR": 17.4674
+        "SDR": 8.2448,
+        "SIR": 19.0811,
+        "SAR": 7.52867,
+        "ISR": 11.3462
       },
       "bass": {
-        "SDR": 9.17211,
-        "SIR": 18.7906,
-        "SAR": 8.75809,
-        "ISR": 13.0067
+        "SDR": 13.8418,
+        "SIR": 20.8507,
+        "SAR": 14.1669,
+        "ISR": 19.4258
       }
     }
   },
@@ -13903,26 +13961,55 @@
             "ISR": 14.5021
           }
         }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 5.56426,
+            "SIR": 15.3421,
+            "SAR": 5.81316,
+            "ISR": 13.3612
+          },
+          "drums": {
+            "SDR": 4.76153,
+            "SIR": 17.0363,
+            "SAR": 3.95759,
+            "ISR": 7.58476
+          },
+          "bass": {
+            "SDR": 19.1023,
+            "SIR": 24.9967,
+            "SAR": 20.0212,
+            "ISR": 26.5658
+          },
+          "other": {
+            "SDR": 9.95157,
+            "SIR": 16.1186,
+            "SAR": 11.1911,
+            "ISR": 18.8137
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 11.1687,
-        "SIR": 20.9333,
-        "SAR": 11.0289,
-        "ISR": 19.1138
+        "SDR": 8.36648,
+        "SIR": 18.1377,
+        "SAR": 8.42103,
+        "ISR": 16.2375
       },
       "drums": {
-        "SDR": 12.4217,
-        "SIR": 23.2568,
-        "SAR": 12.3392,
-        "ISR": 16.7341
+        "SDR": 8.59161,
+        "SIR": 20.1465,
+        "SAR": 8.1484,
+        "ISR": 12.1594
       },
       "bass": {
-        "SDR": 9.1504,
-        "SIR": 18.4985,
-        "SAR": 8.87331,
-        "ISR": 13.3686
+        "SDR": 14.1263,
+        "SIR": 21.7476,
+        "SAR": 14.4473,
+        "ISR": 19.9672
       }
     }
   },
@@ -13957,26 +14044,55 @@
             "ISR": 0.2268
           }
         }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 5.0671,
+            "SIR": 14.5366,
+            "SAR": 5.39175,
+            "ISR": 13.2148
+          },
+          "drums": {
+            "SDR": 2.79582,
+            "SIR": 16.3173,
+            "SAR": 1.06495,
+            "ISR": 4.3619
+          },
+          "bass": {
+            "SDR": 17.5429,
+            "SIR": 22.165,
+            "SAR": 19.0201,
+            "ISR": 25.5315
+          },
+          "other": {
+            "SDR": 0.00485,
+            "SIR": 12.9123,
+            "SAR": 0.02412,
+            "ISR": 0.13107
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.8446,
-        "SIR": 19.4989,
-        "SAR": 10.6463,
-        "ISR": 19.1945
+        "SDR": 7.95585,
+        "SIR": 17.0177,
+        "SAR": 8.01902,
+        "ISR": 16.2047
       },
       "drums": {
-        "SDR": 12.8115,
-        "SIR": 22.638,
-        "SAR": 12.997,
-        "ISR": 16.9512
+        "SDR": 7.80366,
+        "SIR": 19.4777,
+        "SAR": 7.03097,
+        "ISR": 10.6565
       },
       "bass": {
-        "SDR": 9.15013,
-        "SIR": 16.2437,
-        "SAR": 8.85638,
-        "ISR": 13.1591
+        "SDR": 13.3465,
+        "SIR": 19.2043,
+        "SAR": 13.9382,
+        "ISR": 19.3453
       }
     }
   },
@@ -17563,5 +17679,65 @@
         "ISR": 16.2412
       }
     }
+  },
+  "kuielab_a_other.onnx": {
+    "model_name": "MDX-Net Model: kuielab_a_other",
+    "track_scores": [],
+    "median_scores": {}
+  },
+  "kuielab_a_bass.onnx": {
+    "model_name": "MDX-Net Model: kuielab_a_bass",
+    "track_scores": [],
+    "median_scores": {}
+  },
+  "kuielab_a_drums.onnx": {
+    "model_name": "MDX-Net Model: kuielab_a_drums",
+    "track_scores": [],
+    "median_scores": {}
+  },
+  "kuielab_b_other.onnx": {
+    "model_name": "MDX-Net Model: kuielab_b_other",
+    "track_scores": [],
+    "median_scores": {}
+  },
+  "kuielab_b_bass.onnx": {
+    "model_name": "MDX-Net Model: kuielab_b_bass",
+    "track_scores": [],
+    "median_scores": {}
+  },
+  "kuielab_b_drums.onnx": {
+    "model_name": "MDX-Net Model: kuielab_b_drums",
+    "track_scores": [],
+    "median_scores": {}
+  },
+  "denoise_mel_band_roformer_aufr33_sdr_27.9959.ckpt": {
+    "model_name": "Roformer Model: Mel-Roformer-Denoise-Aufr33",
+    "track_scores": [],
+    "median_scores": {}
+  },
+  "denoise_mel_band_roformer_aufr33_aggr_sdr_27.9768.ckpt": {
+    "model_name": "Roformer Model: Mel-Roformer-Denoise-Aufr33-Aggr",
+    "track_scores": [],
+    "median_scores": {}
+  },
+  "mel_band_roformer_crowd_aufr33_viperx_sdr_8.7144.ckpt": {
+    "model_name": "Roformer Model: Mel-Roformer-Crowd-Aufr33-Viperx",
+    "track_scores": [],
+    "median_scores": {}
+  },
+  "aspiration_mel_band_roformer_sdr_18.9845.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer | Aspiration by Sucial",
+    "track_scores": [],
+    "median_scores": {}
+  },
+  "aspiration_mel_band_roformer_less_aggr_sdr_18.1201.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer | Aspiration Less Aggressive by Sucial",
+    "track_scores": [],
+    "median_scores": {}
+  },
+  "mel_band_roformer_bleed_suppressor_v1.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer | Bleed Suppressor V1 by unwa-97chris",
+    "track_scores": [],
+    "median_scores": {}
   }
 }
