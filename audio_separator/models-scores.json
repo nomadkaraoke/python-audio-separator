@@ -21216,66 +21216,6 @@
     ],
     "target_stem": "drums"
   },
-  "denoise_mel_band_roformer_aufr33_sdr_27.9959.ckpt": {
-    "model_name": "Roformer Model: Mel-Roformer-Denoise-Aufr33",
-    "track_scores": [],
-    "median_scores": {},
-    "stems": [
-      "dry",
-      "other"
-    ],
-    "target_stem": "dry"
-  },
-  "denoise_mel_band_roformer_aufr33_aggr_sdr_27.9768.ckpt": {
-    "model_name": "Roformer Model: Mel-Roformer-Denoise-Aufr33-Aggr",
-    "track_scores": [],
-    "median_scores": {},
-    "stems": [
-      "dry",
-      "other"
-    ],
-    "target_stem": "dry"
-  },
-  "mel_band_roformer_crowd_aufr33_viperx_sdr_8.7144.ckpt": {
-    "model_name": "Roformer Model: Mel-Roformer-Crowd-Aufr33-Viperx",
-    "track_scores": [],
-    "median_scores": {},
-    "stems": [
-      "crowd",
-      "other"
-    ],
-    "target_stem": "crowd"
-  },
-  "aspiration_mel_band_roformer_sdr_18.9845.ckpt": {
-    "model_name": "Roformer Model: MelBand Roformer | Aspiration by Sucial",
-    "track_scores": [],
-    "median_scores": {},
-    "stems": [
-      "aspiration",
-      "other"
-    ],
-    "target_stem": null
-  },
-  "aspiration_mel_band_roformer_less_aggr_sdr_18.1201.ckpt": {
-    "model_name": "Roformer Model: MelBand Roformer | Aspiration Less Aggressive by Sucial",
-    "track_scores": [],
-    "median_scores": {},
-    "stems": [
-      "aspiration",
-      "other"
-    ],
-    "target_stem": null
-  },
-  "mel_band_roformer_bleed_suppressor_v1.ckpt": {
-    "model_name": "Roformer Model: MelBand Roformer | Bleed Suppressor V1 by unwa-97chris",
-    "track_scores": [],
-    "median_scores": {},
-    "stems": [
-      "instrumental",
-      "bleed"
-    ],
-    "target_stem": "instrumental"
-  },
   "17_HP-Wind_Inst-UVR.pth": {
     "model_name": "VR Arch Single Model v5: 17_HP-Wind_Inst-UVR",
     "track_scores": [],
@@ -21386,6 +21326,36 @@
     ],
     "target_stem": null
   },
+  "denoise_mel_band_roformer_aufr33_sdr_27.9959.ckpt": {
+    "model_name": "Roformer Model: Mel-Roformer-Denoise-Aufr33",
+    "track_scores": [],
+    "median_scores": {},
+    "stems": [
+      "dry",
+      "other"
+    ],
+    "target_stem": "dry"
+  },
+  "denoise_mel_band_roformer_aufr33_aggr_sdr_27.9768.ckpt": {
+    "model_name": "Roformer Model: Mel-Roformer-Denoise-Aufr33-Aggr",
+    "track_scores": [],
+    "median_scores": {},
+    "stems": [
+      "dry",
+      "other"
+    ],
+    "target_stem": "dry"
+  },
+  "mel_band_roformer_crowd_aufr33_viperx_sdr_8.7144.ckpt": {
+    "model_name": "Roformer Model: Mel-Roformer-Crowd-Aufr33-Viperx",
+    "track_scores": [],
+    "median_scores": {},
+    "stems": [
+      "crowd",
+      "other"
+    ],
+    "target_stem": "crowd"
+  },
   "deverb_bs_roformer_8_384dim_10depth.ckpt": {
     "model_name": "Roformer Model: BS-Roformer-De-Reverb",
     "track_scores": [],
@@ -21445,5 +21415,35 @@
       "female"
     ],
     "target_stem": null
+  },
+  "aspiration_mel_band_roformer_sdr_18.9845.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer | Aspiration by Sucial",
+    "track_scores": [],
+    "median_scores": {},
+    "stems": [
+      "aspiration",
+      "other"
+    ],
+    "target_stem": null
+  },
+  "aspiration_mel_band_roformer_less_aggr_sdr_18.1201.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer | Aspiration Less Aggressive by Sucial",
+    "track_scores": [],
+    "median_scores": {},
+    "stems": [
+      "aspiration",
+      "other"
+    ],
+    "target_stem": null
+  },
+  "mel_band_roformer_bleed_suppressor_v1.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer | Bleed Suppressor V1 by unwa-97chris",
+    "track_scores": [],
+    "median_scores": {},
+    "stems": [
+      "instrumental",
+      "bleed"
+    ],
+    "target_stem": "instrumental"
   }
 }
