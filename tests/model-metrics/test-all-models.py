@@ -38,16 +38,7 @@ def evaluate_track(track_name, track_path, test_model, mus_db):
         scores.scores = json_data
     else:
         # Expanded stem mapping to include "no-stem" outputs
-        stem_mapping = {
-            "Vocals": "vocals",
-            "Instrumental": "instrumental",
-            "Drums": "drums",
-            "Bass": "bass",
-            "Other": "other",
-            "No Drums": "nodrums",
-            "No Bass": "nobass",
-            "No Other": "noother"
-        }
+        stem_mapping = {"Vocals": "vocals", "Instrumental": "instrumental", "Drums": "drums", "Bass": "bass", "Other": "other", "No Drums": "nodrums", "No Bass": "nobass", "No Other": "noother"}
 
         # Perform separation if needed
         if not os.path.exists(output_dir) or not os.listdir(output_dir):
@@ -58,23 +49,18 @@ def evaluate_track(track_name, track_path, test_model, mus_db):
 
         # Check which stems were actually created and pair them appropriately
         available_stems = {}
-        stem_pairs = {
-            "drums": "nodrums",
-            "bass": "nobass",
-            "other": "noother",
-            "vocals": "instrumental"
-        }
+        stem_pairs = {"drums": "nodrums", "bass": "nobass", "other": "noother", "vocals": "instrumental"}
 
         for main_stem, no_stem in stem_pairs.items():
             # Construct full file paths for both the isolated stem and its complement
             main_path = os.path.join(output_dir, f"{main_stem}.wav")
             no_stem_path = os.path.join(output_dir, f"{no_stem}.wav")
-            
+
             # Only process this pair if both files exist
             if os.path.exists(main_path) and os.path.exists(no_stem_path):
                 # Add the main stem with its path to available_stems
                 available_stems[main_stem] = main_path  # This is already using the correct musdb name
-                
+
                 # For the complement stem, always use "accompaniment" as that's what museval expects
                 available_stems["accompaniment"] = no_stem_path
 
@@ -170,31 +156,9 @@ def calculate_median_scores(track_scores):
     return median_scores
 
 
-def cleanup_combined_results(combined_results):
-    """Remove models with no valid scores and clean up null entries"""
-    cleaned_results = {}
-    for model, data in combined_results.items():
-        # Filter out null entries from track_scores
-        valid_scores = [score for score in data["track_scores"] if score is not None]
-
-        # Only keep models that have valid scores
-        if valid_scores:
-            cleaned_results[model] = {"model_name": data["model_name"], "track_scores": valid_scores, "median_scores": calculate_median_scores(valid_scores)}
-    return cleaned_results
-
-
 def main():
     logger.info("Starting model evaluation script...")
     os.makedirs(RESULTS_PATH, exist_ok=True)
-
-    # Initialize MUSDB once at the start
-    logger.info("Initializing MUSDB database...")
-    mus = musdb.DB(root=MUSDB_PATH, is_wav=True)
-
-    # Get list of all available models
-    logger.info("Getting list of available models...")
-    separator = Separator()
-    models_by_type = separator.list_supported_model_files()
 
     # Load existing results if available
     combined_results_path = "audio_separator/models-scores.json"
@@ -203,8 +167,82 @@ def main():
         logger.info("Loading existing combined results...")
         with open(combined_results_path) as f:
             combined_results = json.load(f)
-            # Clean up existing results
-            combined_results = cleanup_combined_results(combined_results)
+
+    # Define known demucs model stems
+    DEMUCS_STEMS = {
+        "htdemucs.yaml": {"instruments": ["vocals", "drums", "bass", "other"], "target_instrument": None},
+        "htdemucs_ft.yaml": {"instruments": ["vocals", "drums", "bass", "other"], "target_instrument": None},
+        "hdemucs_mmi.yaml": {"instruments": ["vocals", "drums", "bass", "other"], "target_instrument": None},
+        "htdemucs_6s.yaml": {"instruments": ["vocals", "drums", "bass", "guitar", "piano", "other"], "target_instrument": None},
+    }
+
+    # Get list of all available models
+    logger.info("Getting list of available models...")
+    separator = Separator()
+    models_by_type = separator.list_supported_model_files()
+
+    # Iterate through models and load each one
+    for model_type, models in models_by_type.items():
+        for model_name, model_info in models.items():
+            test_model = model_info.get("filename")
+            if not test_model:
+                logger.warning(f"No filename found for model {model_name}, skipping...")
+                continue
+
+            logger.info(f"Analyzing model data: {test_model}")
+            try:
+                separator.load_model(model_filename=test_model)
+                model_data = separator.model_instance.model_data
+
+                # Initialize model entry if it doesn't exist
+                if test_model not in combined_results:
+                    combined_results[test_model] = {"model_name": model_name, "track_scores": [], "median_scores": {}, "stems": [], "target_stem": None}
+
+                # Handle demucs models specially
+                if test_model in DEMUCS_STEMS:
+                    combined_results[test_model]["stems"] = [s.lower() for s in DEMUCS_STEMS[test_model]["instruments"]]
+                    combined_results[test_model]["target_stem"] = DEMUCS_STEMS[test_model]["target_instrument"].lower() if DEMUCS_STEMS[test_model]["target_instrument"] else None
+
+                # Extract stem information for other models
+                elif "training" in model_data:
+                    instruments = model_data["training"].get("instruments", [])
+                    target = model_data["training"].get("target_instrument")
+                    combined_results[test_model]["stems"] = [s.lower() for s in instruments] if instruments else []
+                    combined_results[test_model]["target_stem"] = target.lower() if target else None
+
+                elif "primary_stem" in model_data:
+                    primary_stem = model_data["primary_stem"].lower()
+                    if primary_stem == "vocals":
+                        other_stem = "instrumental"
+                    elif primary_stem == "instrumental":
+                        other_stem = "vocals"
+                    else:
+                        other_stem = "no " + primary_stem
+
+                    instruments = [primary_stem, other_stem]
+                    combined_results[test_model]["stems"] = instruments
+                    combined_results[test_model]["target_stem"] = primary_stem
+
+                else:
+                    combined_results[test_model]["stems"] = []
+                    combined_results[test_model]["target_stem"] = None
+                    logger.info("No stem information found in model data")
+
+            except Exception as e:
+                logger.error(f"Error loading model {test_model}: {str(e)}")
+                continue
+
+    # Save the combined results after model inspection
+    logger.info("Saving model stem information...")
+    os.makedirs(os.path.dirname(combined_results_path), exist_ok=True)
+    with open(combined_results_path, "w") as f:
+        json.dump(combined_results, f, indent=2)
+
+    logger.info("Model stem information saved")
+
+    # Initialize MUSDB once at the start
+    logger.info("Initializing MUSDB database...")
+    mus = musdb.DB(root=MUSDB_PATH, is_wav=True)
 
     # Process all tracks in MUSDB18
     for track in mus.tracks:
@@ -225,7 +263,37 @@ def main():
 
                 # Initialize model entry if it doesn't exist
                 if test_model not in combined_results:
-                    combined_results[test_model] = {"model_name": model_name, "track_scores": [], "median_scores": {}}
+                    combined_results[test_model] = {"model_name": model_name, "track_scores": [], "median_scores": {}, "stems": [], "target_stem": None}
+
+                # Handle demucs models specially
+                if test_model in DEMUCS_STEMS:
+                    combined_results[test_model]["stems"] = [s.lower() for s in DEMUCS_STEMS[test_model]["instruments"]]
+                    combined_results[test_model]["target_stem"] = DEMUCS_STEMS[test_model]["target_instrument"].lower() if DEMUCS_STEMS[test_model]["target_instrument"] else None
+
+                # Extract stem information for other models
+                elif "training" in model_data:
+                    instruments = model_data["training"].get("instruments", [])
+                    target = model_data["training"].get("target_instrument")
+                    combined_results[test_model]["stems"] = [s.lower() for s in instruments] if instruments else []
+                    combined_results[test_model]["target_stem"] = target.lower() if target else None
+
+                elif "primary_stem" in model_data:
+                    primary_stem = model_data["primary_stem"].lower()
+                    if primary_stem == "vocals":
+                        other_stem = "instrumental"
+                    elif primary_stem == "instrumental":
+                        other_stem = "vocals"
+                    else:
+                        other_stem = "no " + primary_stem
+
+                    instruments = [primary_stem, other_stem]
+                    combined_results[test_model]["stems"] = instruments
+                    combined_results[test_model]["target_stem"] = primary_stem
+
+                else:
+                    combined_results[test_model]["stems"] = []
+                    combined_results[test_model]["target_stem"] = None
+                    logger.info("No stem information found in model data")
 
                 # Check if track already evaluated
                 track_already_evaluated = any(track_score["track_name"] == track_name for track_score in combined_results[test_model]["track_scores"] if track_score is not None)

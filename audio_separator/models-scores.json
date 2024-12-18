@@ -2243,7 +2243,12 @@
         "SAR": 15.5456,
         "ISR": 21.9107
       }
-    }
+    },
+    "stems": [
+      "instrumental",
+      "vocals"
+    ],
+    "target_stem": "instrumental"
   },
   "2_HP-UVR.pth": {
     "model_name": "VR Arch Single Model v5: 2_HP-UVR",
@@ -2500,7 +2505,12 @@
         "SAR": 15.2239,
         "ISR": 22.7817
       }
-    }
+    },
+    "stems": [
+      "instrumental",
+      "vocals"
+    ],
+    "target_stem": "instrumental"
   },
   "3_HP-Vocal-UVR.pth": {
     "model_name": "VR Arch Single Model v5: 3_HP-Vocal-UVR",
@@ -2757,7 +2767,12 @@
         "SAR": 15.271,
         "ISR": 21.7713
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "instrumental"
+    ],
+    "target_stem": "vocals"
   },
   "4_HP-Vocal-UVR.pth": {
     "model_name": "VR Arch Single Model v5: 4_HP-Vocal-UVR",
@@ -3014,7 +3029,12 @@
         "SAR": 14.8769,
         "ISR": 22.2749
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "instrumental"
+    ],
+    "target_stem": "vocals"
   },
   "5_HP-Karaoke-UVR.pth": {
     "model_name": "VR Arch Single Model v5: 5_HP-Karaoke-UVR",
@@ -3271,7 +3291,12 @@
         "SAR": 14.7576,
         "ISR": 22.7182
       }
-    }
+    },
+    "stems": [
+      "instrumental",
+      "vocals"
+    ],
+    "target_stem": "instrumental"
   },
   "6_HP-Karaoke-UVR.pth": {
     "model_name": "VR Arch Single Model v5: 6_HP-Karaoke-UVR",
@@ -3528,7 +3553,12 @@
         "SAR": 15.1708,
         "ISR": 21.9049
       }
-    }
+    },
+    "stems": [
+      "instrumental",
+      "vocals"
+    ],
+    "target_stem": "instrumental"
   },
   "7_HP2-UVR.pth": {
     "model_name": "VR Arch Single Model v5: 7_HP2-UVR",
@@ -3785,7 +3815,12 @@
         "SAR": 15.2427,
         "ISR": 22.5724
       }
-    }
+    },
+    "stems": [
+      "instrumental",
+      "vocals"
+    ],
+    "target_stem": "instrumental"
   },
   "8_HP2-UVR.pth": {
     "model_name": "VR Arch Single Model v5: 8_HP2-UVR",
@@ -4042,7 +4077,12 @@
         "SAR": 15.1317,
         "ISR": 22.7691
       }
-    }
+    },
+    "stems": [
+      "instrumental",
+      "vocals"
+    ],
+    "target_stem": "instrumental"
   },
   "9_HP2-UVR.pth": {
     "model_name": "VR Arch Single Model v5: 9_HP2-UVR",
@@ -4299,7 +4339,12 @@
         "SAR": 15.6741,
         "ISR": 22.427
       }
-    }
+    },
+    "stems": [
+      "instrumental",
+      "vocals"
+    ],
+    "target_stem": "instrumental"
   },
   "10_SP-UVR-2B-32000-1.pth": {
     "model_name": "VR Arch Single Model v5: 10_SP-UVR-2B-32000-1",
@@ -4556,7 +4601,12 @@
         "SAR": 15.463,
         "ISR": 21.4697
       }
-    }
+    },
+    "stems": [
+      "instrumental",
+      "vocals"
+    ],
+    "target_stem": "instrumental"
   },
   "11_SP-UVR-2B-32000-2.pth": {
     "model_name": "VR Arch Single Model v5: 11_SP-UVR-2B-32000-2",
@@ -4813,7 +4863,12 @@
         "SAR": 15.4529,
         "ISR": 21.3153
       }
-    }
+    },
+    "stems": [
+      "instrumental",
+      "vocals"
+    ],
+    "target_stem": "instrumental"
   },
   "12_SP-UVR-3B-44100.pth": {
     "model_name": "VR Arch Single Model v5: 12_SP-UVR-3B-44100",
@@ -5070,7 +5125,12 @@
         "SAR": 15.235,
         "ISR": 22.112
       }
-    }
+    },
+    "stems": [
+      "instrumental",
+      "vocals"
+    ],
+    "target_stem": "instrumental"
   },
   "13_SP-UVR-4B-44100-1.pth": {
     "model_name": "VR Arch Single Model v5: 13_SP-UVR-4B-44100-1",
@@ -5327,7 +5387,12 @@
         "SAR": 15.4761,
         "ISR": 21.481
       }
-    }
+    },
+    "stems": [
+      "instrumental",
+      "vocals"
+    ],
+    "target_stem": "instrumental"
   },
   "14_SP-UVR-4B-44100-2.pth": {
     "model_name": "VR Arch Single Model v5: 14_SP-UVR-4B-44100-2",
@@ -5584,7 +5649,12 @@
         "SAR": 15.1673,
         "ISR": 22.0936
       }
-    }
+    },
+    "stems": [
+      "instrumental",
+      "vocals"
+    ],
+    "target_stem": "instrumental"
   },
   "15_SP-UVR-MID-44100-1.pth": {
     "model_name": "VR Arch Single Model v5: 15_SP-UVR-MID-44100-1",
@@ -5841,7 +5911,12 @@
         "SAR": 15.2641,
         "ISR": 21.8617
       }
-    }
+    },
+    "stems": [
+      "instrumental",
+      "vocals"
+    ],
+    "target_stem": "instrumental"
   },
   "16_SP-UVR-MID-44100-2.pth": {
     "model_name": "VR Arch Single Model v5: 16_SP-UVR-MID-44100-2",
@@ -6098,7 +6173,12 @@
         "SAR": 15.3329,
         "ISR": 21.6986
       }
-    }
+    },
+    "stems": [
+      "instrumental",
+      "vocals"
+    ],
+    "target_stem": "instrumental"
   },
   "UVR-BVE-4B_SN-44100-1.pth": {
     "model_name": "VR Arch Single Model v5: UVR-BVE-4B_SN-44100-1",
@@ -6355,7 +6435,12 @@
         "SAR": 17.136,
         "ISR": 19.6269
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "instrumental"
+    ],
+    "target_stem": "vocals"
   },
   "MGM_HIGHEND_v4.pth": {
     "model_name": "VR Arch Single Model v4: MGM_HIGHEND_v4",
@@ -6612,7 +6697,12 @@
         "SAR": 14.4859,
         "ISR": 21.1833
       }
-    }
+    },
+    "stems": [
+      "instrumental",
+      "vocals"
+    ],
+    "target_stem": "instrumental"
   },
   "MGM_LOWEND_A_v4.pth": {
     "model_name": "VR Arch Single Model v4: MGM_LOWEND_A_v4",
@@ -6869,7 +6959,12 @@
         "SAR": 15.376,
         "ISR": 21.9515
       }
-    }
+    },
+    "stems": [
+      "instrumental",
+      "vocals"
+    ],
+    "target_stem": "instrumental"
   },
   "MGM_LOWEND_B_v4.pth": {
     "model_name": "VR Arch Single Model v4: MGM_LOWEND_B_v4",
@@ -7126,7 +7221,12 @@
         "SAR": 14.2498,
         "ISR": 21.1945
       }
-    }
+    },
+    "stems": [
+      "instrumental",
+      "vocals"
+    ],
+    "target_stem": "instrumental"
   },
   "MGM_MAIN_v4.pth": {
     "model_name": "VR Arch Single Model v4: MGM_MAIN_v4",
@@ -7383,7 +7483,12 @@
         "SAR": 15.124,
         "ISR": 21.5235
       }
-    }
+    },
+    "stems": [
+      "instrumental",
+      "vocals"
+    ],
+    "target_stem": "instrumental"
   },
   "UVR-MDX-NET-Inst_HQ_1.onnx": {
     "model_name": "MDX-Net Model: UVR-MDX-NET Inst HQ 1",
@@ -7606,7 +7711,12 @@
         "SAR": 17.3316,
         "ISR": 18.4135
       }
-    }
+    },
+    "stems": [
+      "instrumental",
+      "vocals"
+    ],
+    "target_stem": "instrumental"
   },
   "UVR-MDX-NET-Inst_HQ_2.onnx": {
     "model_name": "MDX-Net Model: UVR-MDX-NET Inst HQ 2",
@@ -7829,7 +7939,12 @@
         "SAR": 17.3453,
         "ISR": 17.9153
       }
-    }
+    },
+    "stems": [
+      "instrumental",
+      "vocals"
+    ],
+    "target_stem": "instrumental"
   },
   "UVR-MDX-NET-Inst_HQ_3.onnx": {
     "model_name": "MDX-Net Model: UVR-MDX-NET Inst HQ 3",
@@ -8052,7 +8167,12 @@
         "SAR": 17.4272,
         "ISR": 18.0842
       }
-    }
+    },
+    "stems": [
+      "instrumental",
+      "vocals"
+    ],
+    "target_stem": "instrumental"
   },
   "UVR-MDX-NET-Inst_HQ_4.onnx": {
     "model_name": "MDX-Net Model: UVR-MDX-NET Inst HQ 4",
@@ -8275,7 +8395,12 @@
         "SAR": 17.4935,
         "ISR": 18.0627
       }
-    }
+    },
+    "stems": [
+      "instrumental",
+      "vocals"
+    ],
+    "target_stem": "instrumental"
   },
   "UVR_MDXNET_Main.onnx": {
     "model_name": "MDX-Net Model: UVR-MDX-NET Main",
@@ -8498,7 +8623,12 @@
         "SAR": 17.6708,
         "ISR": 18.1432
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "instrumental"
+    ],
+    "target_stem": "vocals"
   },
   "UVR-MDX-NET-Inst_Main.onnx": {
     "model_name": "MDX-Net Model: UVR-MDX-NET Inst Main",
@@ -8721,7 +8851,12 @@
         "SAR": 17.0685,
         "ISR": 17.8692
       }
-    }
+    },
+    "stems": [
+      "instrumental",
+      "vocals"
+    ],
+    "target_stem": "instrumental"
   },
   "UVR_MDXNET_1_9703.onnx": {
     "model_name": "MDX-Net Model: UVR-MDX-NET 1",
@@ -8944,7 +9079,12 @@
         "SAR": 17.0236,
         "ISR": 17.86
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "instrumental"
+    ],
+    "target_stem": "vocals"
   },
   "UVR_MDXNET_2_9682.onnx": {
     "model_name": "MDX-Net Model: UVR-MDX-NET 2",
@@ -9167,7 +9307,12 @@
         "SAR": 16.7941,
         "ISR": 18.0069
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "instrumental"
+    ],
+    "target_stem": "vocals"
   },
   "UVR_MDXNET_3_9662.onnx": {
     "model_name": "MDX-Net Model: UVR-MDX-NET 3",
@@ -9390,7 +9535,12 @@
         "SAR": 16.834,
         "ISR": 17.9625
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "instrumental"
+    ],
+    "target_stem": "vocals"
   },
   "UVR-MDX-NET-Inst_1.onnx": {
     "model_name": "MDX-Net Model: UVR-MDX-NET Inst 1",
@@ -9613,7 +9763,12 @@
         "SAR": 17.5812,
         "ISR": 17.8291
       }
-    }
+    },
+    "stems": [
+      "instrumental",
+      "vocals"
+    ],
+    "target_stem": "instrumental"
   },
   "UVR-MDX-NET-Inst_2.onnx": {
     "model_name": "MDX-Net Model: UVR-MDX-NET Inst 2",
@@ -9836,7 +9991,12 @@
         "SAR": 17.4893,
         "ISR": 18.2736
       }
-    }
+    },
+    "stems": [
+      "instrumental",
+      "vocals"
+    ],
+    "target_stem": "instrumental"
   },
   "UVR-MDX-NET-Inst_3.onnx": {
     "model_name": "MDX-Net Model: UVR-MDX-NET Inst 3",
@@ -10059,7 +10219,12 @@
         "SAR": 17.4958,
         "ISR": 17.9546
       }
-    }
+    },
+    "stems": [
+      "instrumental",
+      "vocals"
+    ],
+    "target_stem": "instrumental"
   },
   "UVR_MDXNET_KARA.onnx": {
     "model_name": "MDX-Net Model: UVR-MDX-NET Karaoke",
@@ -10282,7 +10447,12 @@
         "SAR": 16.4792,
         "ISR": 18.7987
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "instrumental"
+    ],
+    "target_stem": "vocals"
   },
   "UVR_MDXNET_KARA_2.onnx": {
     "model_name": "MDX-Net Model: UVR-MDX-NET Karaoke 2",
@@ -10505,7 +10675,12 @@
         "SAR": 16.3953,
         "ISR": 18.4205
       }
-    }
+    },
+    "stems": [
+      "instrumental",
+      "vocals"
+    ],
+    "target_stem": "instrumental"
   },
   "UVR_MDXNET_9482.onnx": {
     "model_name": "MDX-Net Model: UVR_MDXNET_9482",
@@ -10728,7 +10903,12 @@
         "SAR": 16.7433,
         "ISR": 18.0709
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "instrumental"
+    ],
+    "target_stem": "vocals"
   },
   "UVR-MDX-NET-Voc_FT.onnx": {
     "model_name": "MDX-Net Model: UVR-MDX-NET Voc FT",
@@ -10951,7 +11131,12 @@
         "SAR": 17.7214,
         "ISR": 18.4656
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "instrumental"
+    ],
+    "target_stem": "vocals"
   },
   "Kim_Vocal_1.onnx": {
     "model_name": "MDX-Net Model: Kim Vocal 1",
@@ -11174,7 +11359,12 @@
         "SAR": 17.5722,
         "ISR": 18.5784
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "instrumental"
+    ],
+    "target_stem": "vocals"
   },
   "Kim_Vocal_2.onnx": {
     "model_name": "MDX-Net Model: Kim Vocal 2",
@@ -11397,7 +11587,12 @@
         "SAR": 17.7394,
         "ISR": 18.3083
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "instrumental"
+    ],
+    "target_stem": "vocals"
   },
   "Kim_Inst.onnx": {
     "model_name": "MDX-Net Model: Kim Inst",
@@ -11620,7 +11815,12 @@
         "SAR": 17.5014,
         "ISR": 18.122
       }
-    }
+    },
+    "stems": [
+      "instrumental",
+      "vocals"
+    ],
+    "target_stem": "instrumental"
   },
   "kuielab_a_vocals.onnx": {
     "model_name": "MDX-Net Model: kuielab_a_vocals",
@@ -11843,7 +12043,12 @@
         "SAR": 17.8282,
         "ISR": 17.8582
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "instrumental"
+    ],
+    "target_stem": "vocals"
   },
   "kuielab_b_vocals.onnx": {
     "model_name": "MDX-Net Model: kuielab_b_vocals",
@@ -12066,7 +12271,12 @@
         "SAR": 16.7041,
         "ISR": 17.7508
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "instrumental"
+    ],
+    "target_stem": "vocals"
   },
   "UVR-MDX-NET_Main_340.onnx": {
     "model_name": "MDX-Net Model VIP: UVR-MDX-NET_Main_340",
@@ -12289,7 +12499,12 @@
         "SAR": 17.3492,
         "ISR": 18.321
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "instrumental"
+    ],
+    "target_stem": "vocals"
   },
   "UVR-MDX-NET_Main_390.onnx": {
     "model_name": "MDX-Net Model VIP: UVR-MDX-NET_Main_390",
@@ -12512,7 +12727,12 @@
         "SAR": 13.8102,
         "ISR": 16.8667
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "instrumental"
+    ],
+    "target_stem": "vocals"
   },
   "UVR-MDX-NET_Main_406.onnx": {
     "model_name": "MDX-Net Model VIP: UVR-MDX-NET_Main_406",
@@ -12735,7 +12955,12 @@
         "SAR": 17.2636,
         "ISR": 18.1033
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "instrumental"
+    ],
+    "target_stem": "vocals"
   },
   "UVR-MDX-NET_Main_427.onnx": {
     "model_name": "MDX-Net Model VIP: UVR-MDX-NET_Main_427",
@@ -12958,7 +13183,12 @@
         "SAR": 17.6692,
         "ISR": 18.2553
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "instrumental"
+    ],
+    "target_stem": "vocals"
   },
   "UVR-MDX-NET_Main_438.onnx": {
     "model_name": "MDX-Net Model VIP: UVR-MDX-NET_Main_438",
@@ -13181,7 +13411,12 @@
         "SAR": 17.7993,
         "ISR": 18.2587
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "instrumental"
+    ],
+    "target_stem": "vocals"
   },
   "UVR-MDX-NET_Inst_82_beta.onnx": {
     "model_name": "MDX-Net Model VIP: UVR-MDX-NET_Inst_82_beta",
@@ -13404,7 +13639,12 @@
         "SAR": 16.5377,
         "ISR": 17.2844
       }
-    }
+    },
+    "stems": [
+      "instrumental",
+      "vocals"
+    ],
+    "target_stem": "instrumental"
   },
   "UVR-MDX-NET_Inst_90_beta.onnx": {
     "model_name": "MDX-Net Model VIP: UVR-MDX-NET_Inst_90_beta",
@@ -13627,7 +13867,12 @@
         "SAR": 16.6214,
         "ISR": 15.9502
       }
-    }
+    },
+    "stems": [
+      "instrumental",
+      "vocals"
+    ],
+    "target_stem": "instrumental"
   },
   "UVR-MDX-NET_Inst_187_beta.onnx": {
     "model_name": "MDX-Net Model VIP: UVR-MDX-NET_Inst_187_beta",
@@ -13850,7 +14095,12 @@
         "SAR": 17.0709,
         "ISR": 15.9968
       }
-    }
+    },
+    "stems": [
+      "instrumental",
+      "vocals"
+    ],
+    "target_stem": "instrumental"
   },
   "UVR-MDX-NET-Inst_full_292.onnx": {
     "model_name": "MDX-Net Model VIP: UVR-MDX-NET-Inst_full_292",
@@ -14073,7 +14323,12 @@
         "SAR": 17.1363,
         "ISR": 17.7893
       }
-    }
+    },
+    "stems": [
+      "instrumental",
+      "vocals"
+    ],
+    "target_stem": "instrumental"
   },
   "htdemucs_ft.yaml": {
     "model_name": "Demucs v4: htdemucs_ft",
@@ -14504,7 +14759,14 @@
         "SAR": 11.7874,
         "ISR": 16.9151
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "drums",
+      "bass",
+      "other"
+    ],
+    "target_stem": null
   },
   "htdemucs.yaml": {
     "model_name": "Demucs v4: htdemucs",
@@ -14935,7 +15197,14 @@
         "SAR": 11.4615,
         "ISR": 16.1568
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "drums",
+      "bass",
+      "other"
+    ],
+    "target_stem": null
   },
   "hdemucs_mmi.yaml": {
     "model_name": "Demucs v4: hdemucs_mmi",
@@ -15366,7 +15635,14 @@
         "SAR": 11.623,
         "ISR": 16.9931
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "drums",
+      "bass",
+      "other"
+    ],
+    "target_stem": null
   },
   "htdemucs_6s.yaml": {
     "model_name": "Demucs v4: htdemucs_6s",
@@ -15768,7 +16044,16 @@
         "SAR": 10.7187,
         "ISR": 15.6228
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "drums",
+      "bass",
+      "guitar",
+      "piano",
+      "other"
+    ],
+    "target_stem": null
   },
   "MDX23C-8KFFT-InstVoc_HQ.ckpt": {
     "model_name": "MDX23C Model: MDX23C-InstVoc HQ",
@@ -16008,7 +16293,12 @@
         "SAR": 18.726,
         "ISR": 18.5818
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "instrumental"
+    ],
+    "target_stem": null
   },
   "MDX23C_D1581.ckpt": {
     "model_name": "MDX23C Model VIP: MDX23C_D1581",
@@ -16248,7 +16538,12 @@
         "SAR": 17.878,
         "ISR": 17.9925
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "instrumental"
+    ],
+    "target_stem": null
   },
   "MDX23C-8KFFT-InstVoc_HQ_2.ckpt": {
     "model_name": "MDX23C Model VIP: MDX23C-InstVoc HQ 2",
@@ -16488,7 +16783,12 @@
         "SAR": 18.721,
         "ISR": 18.7891
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "instrumental"
+    ],
+    "target_stem": null
   },
   "model_bs_roformer_ep_317_sdr_12.9755.ckpt": {
     "model_name": "Roformer Model: BS-Roformer-Viperx-1297",
@@ -16728,7 +17028,12 @@
         "SAR": 19.2084,
         "ISR": 18.9816
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "instrumental"
+    ],
+    "target_stem": "vocals"
   },
   "model_bs_roformer_ep_368_sdr_12.9628.ckpt": {
     "model_name": "Roformer Model: BS-Roformer-Viperx-1296",
@@ -16968,7 +17273,12 @@
         "SAR": 19.1643,
         "ISR": 18.9975
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "instrumental"
+    ],
+    "target_stem": "vocals"
   },
   "model_mel_band_roformer_ep_3005_sdr_11.4360.ckpt": {
     "model_name": "Roformer Model: Mel-Roformer-Viperx-1143",
@@ -17208,7 +17518,12 @@
         "SAR": 17.6244,
         "ISR": 18.6425
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "instrumental"
+    ],
+    "target_stem": "vocals"
   },
   "mel_band_roformer_karaoke_aufr33_viperx_sdr_10.1956.ckpt": {
     "model_name": "Roformer Model: Mel-Roformer-Karaoke-Aufr33-Viperx",
@@ -17448,7 +17763,12 @@
         "SAR": 16.0043,
         "ISR": 19.4711
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "instrumental"
+    ],
+    "target_stem": "vocals"
   },
   "vocals_mel_band_roformer.ckpt": {
     "model_name": "Roformer Model: MelBand Roformer | Vocals by Kimberley Jensen",
@@ -17648,7 +17968,12 @@
         "SAR": 13.4438,
         "ISR": 15.4179
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "other"
+    ],
+    "target_stem": "vocals"
   },
   "mel_band_roformer_kim_ft_unwa.ckpt": {
     "model_name": "Roformer Model: MelBand Roformer Kim | FT by unwa",
@@ -17865,7 +18190,12 @@
         "SAR": 13.167,
         "ISR": 15.4674
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "other"
+    ],
+    "target_stem": "vocals"
   },
   "melband_roformer_inst_v1e.ckpt": {
     "model_name": "Roformer Model: MelBand Roformer Kim | Inst V1 (E) by Unwa",
@@ -18088,7 +18418,12 @@
         "SAR": 17.4804,
         "ISR": 18.9926
       }
-    }
+    },
+    "stems": [
+      "instrumental",
+      "vocals"
+    ],
+    "target_stem": "instrumental"
   },
   "MelBandRoformerSYHFT.ckpt": {
     "model_name": "Roformer Model: MelBand Roformer Kim | SYHFT by SYH99999",
@@ -18305,7 +18640,12 @@
         "SAR": -6.95266,
         "ISR": 2.40172
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "other"
+    ],
+    "target_stem": "vocals"
   },
   "MelBandRoformerSYHFTV2.ckpt": {
     "model_name": "Roformer Model: MelBand Roformer Kim | SYHFT V2 by SYH99999",
@@ -18522,7 +18862,12 @@
         "SAR": -6.54662,
         "ISR": 2.51053
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "other"
+    ],
+    "target_stem": "vocals"
   },
   "MelBandRoformerSYHFTV2.5.ckpt": {
     "model_name": "Roformer Model: MelBand Roformer Kim | SYHFT V2.5 by SYH99999",
@@ -18739,7 +19084,12 @@
         "SAR": -6.59699,
         "ISR": 2.43645
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "other"
+    ],
+    "target_stem": "vocals"
   },
   "MelBandRoformerSYHFTV3Epsilon.ckpt": {
     "model_name": "Roformer Model: MelBand Roformer Kim | SYHFT V3 by SYH99999",
@@ -18956,7 +19306,12 @@
         "SAR": -6.47824,
         "ISR": 2.63335
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "other"
+    ],
+    "target_stem": "vocals"
   },
   "MelBandRoformerBigSYHFTV1.ckpt": {
     "model_name": "Roformer Model: MelBand Roformer Kim | Big SYHFT V1 by SYH99999",
@@ -19173,7 +19528,12 @@
         "SAR": 12.8328,
         "ISR": 15.4933
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "other"
+    ],
+    "target_stem": "vocals"
   },
   "melband_roformer_big_beta4.ckpt": {
     "model_name": "Roformer Model: MelBand Roformer Kim | Big Beta 4 FT by unwa",
@@ -19373,7 +19733,12 @@
         "SAR": 12.7727,
         "ISR": 16.3227
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "other"
+    ],
+    "target_stem": "vocals"
   },
   "melband_roformer_big_beta5e.ckpt": {
     "model_name": "Roformer Model: MelBand Roformer Kim | Big Beta 5e FT by unwa",
@@ -19590,7 +19955,12 @@
         "SAR": 12.8028,
         "ISR": 16.2651
       }
-    }
+    },
+    "stems": [
+      "vocals",
+      "other"
+    ],
+    "target_stem": "vocals"
   },
   "kuielab_a_other.onnx": {
     "model_name": "MDX-Net Model: kuielab_a_other",
@@ -19790,7 +20160,12 @@
         "SAR": 3.73319,
         "ISR": 5.60027
       }
-    }
+    },
+    "stems": [
+      "other",
+      "no other"
+    ],
+    "target_stem": "other"
   },
   "kuielab_a_bass.onnx": {
     "model_name": "MDX-Net Model: kuielab_a_bass",
@@ -19996,7 +20371,12 @@
         "SAR": 3.77969,
         "ISR": 6.3789
       }
-    }
+    },
+    "stems": [
+      "bass",
+      "no bass"
+    ],
+    "target_stem": "bass"
   },
   "kuielab_a_drums.onnx": {
     "model_name": "MDX-Net Model: kuielab_a_drums",
@@ -20202,7 +20582,12 @@
         "SAR": 5.52393,
         "ISR": 7.20048
       }
-    }
+    },
+    "stems": [
+      "drums",
+      "no drums"
+    ],
+    "target_stem": "drums"
   },
   "kuielab_b_other.onnx": {
     "model_name": "MDX-Net Model: kuielab_b_other",
@@ -20402,7 +20787,12 @@
         "SAR": 4.0042,
         "ISR": 5.96283
       }
-    }
+    },
+    "stems": [
+      "other",
+      "no other"
+    ],
+    "target_stem": "other"
   },
   "kuielab_b_bass.onnx": {
     "model_name": "MDX-Net Model: kuielab_b_bass",
@@ -20608,7 +20998,12 @@
         "SAR": 3.87341,
         "ISR": 7.82504
       }
-    }
+    },
+    "stems": [
+      "bass",
+      "no bass"
+    ],
+    "target_stem": "bass"
   },
   "kuielab_b_drums.onnx": {
     "model_name": "MDX-Net Model: kuielab_b_drums",
@@ -20814,46 +21209,241 @@
         "SAR": 5.63948,
         "ISR": 7.40509
       }
-    }
+    },
+    "stems": [
+      "drums",
+      "no drums"
+    ],
+    "target_stem": "drums"
   },
   "denoise_mel_band_roformer_aufr33_sdr_27.9959.ckpt": {
     "model_name": "Roformer Model: Mel-Roformer-Denoise-Aufr33",
     "track_scores": [],
-    "median_scores": {}
+    "median_scores": {},
+    "stems": [
+      "dry",
+      "other"
+    ],
+    "target_stem": "dry"
   },
   "denoise_mel_band_roformer_aufr33_aggr_sdr_27.9768.ckpt": {
     "model_name": "Roformer Model: Mel-Roformer-Denoise-Aufr33-Aggr",
     "track_scores": [],
-    "median_scores": {}
+    "median_scores": {},
+    "stems": [
+      "dry",
+      "other"
+    ],
+    "target_stem": "dry"
   },
   "mel_band_roformer_crowd_aufr33_viperx_sdr_8.7144.ckpt": {
     "model_name": "Roformer Model: Mel-Roformer-Crowd-Aufr33-Viperx",
     "track_scores": [],
-    "median_scores": {}
+    "median_scores": {},
+    "stems": [
+      "crowd",
+      "other"
+    ],
+    "target_stem": "crowd"
   },
   "aspiration_mel_band_roformer_sdr_18.9845.ckpt": {
     "model_name": "Roformer Model: MelBand Roformer | Aspiration by Sucial",
     "track_scores": [],
-    "median_scores": {}
+    "median_scores": {},
+    "stems": [
+      "aspiration",
+      "other"
+    ],
+    "target_stem": null
   },
   "aspiration_mel_band_roformer_less_aggr_sdr_18.1201.ckpt": {
     "model_name": "Roformer Model: MelBand Roformer | Aspiration Less Aggressive by Sucial",
     "track_scores": [],
-    "median_scores": {}
+    "median_scores": {},
+    "stems": [
+      "aspiration",
+      "other"
+    ],
+    "target_stem": null
   },
   "mel_band_roformer_bleed_suppressor_v1.ckpt": {
     "model_name": "Roformer Model: MelBand Roformer | Bleed Suppressor V1 by unwa-97chris",
     "track_scores": [],
-    "median_scores": {}
+    "median_scores": {},
+    "stems": [
+      "instrumental",
+      "bleed"
+    ],
+    "target_stem": "instrumental"
   },
   "Reverb_HQ_By_FoxJoy.onnx": {
     "model_name": "MDX-Net Model: Reverb HQ By FoxJoy",
     "track_scores": [],
-    "median_scores": {}
+    "median_scores": {},
+    "stems": [
+      "reverb",
+      "no reverb"
+    ],
+    "target_stem": "reverb"
   },
   "UVR-MDX-NET_Crowd_HQ_1.onnx": {
     "model_name": "MDX-Net Model: UVR-MDX-NET Crowd HQ 1 By Aufr33",
     "track_scores": [],
-    "median_scores": {}
+    "median_scores": {},
+    "stems": [
+      "no crowd",
+      "no no crowd"
+    ],
+    "target_stem": "no crowd"
+  },
+  "17_HP-Wind_Inst-UVR.pth": {
+    "model_name": "VR Arch Single Model v5: 17_HP-Wind_Inst-UVR",
+    "track_scores": [],
+    "median_scores": {},
+    "stems": [
+      "no woodwinds",
+      "no no woodwinds"
+    ],
+    "target_stem": "no woodwinds"
+  },
+  "UVR-De-Echo-Aggressive.pth": {
+    "model_name": "VR Arch Single Model v5: UVR-De-Echo-Aggressive by FoxJoy",
+    "track_scores": [],
+    "median_scores": {},
+    "stems": [
+      "no echo",
+      "no no echo"
+    ],
+    "target_stem": "no echo"
+  },
+  "UVR-De-Echo-Normal.pth": {
+    "model_name": "VR Arch Single Model v5: UVR-De-Echo-Normal by FoxJoy",
+    "track_scores": [],
+    "median_scores": {},
+    "stems": [
+      "no echo",
+      "no no echo"
+    ],
+    "target_stem": "no echo"
+  },
+  "UVR-DeEcho-DeReverb.pth": {
+    "model_name": "VR Arch Single Model v5: UVR-DeEcho-DeReverb by FoxJoy",
+    "track_scores": [],
+    "median_scores": {},
+    "stems": [
+      "no reverb",
+      "no no reverb"
+    ],
+    "target_stem": "no reverb"
+  },
+  "UVR-DeNoise-Lite.pth": {
+    "model_name": "VR Arch Single Model v5: UVR-DeNoise-Lite by FoxJoy",
+    "track_scores": [],
+    "median_scores": {},
+    "stems": [
+      "noise",
+      "no noise"
+    ],
+    "target_stem": "noise"
+  },
+  "UVR-DeNoise.pth": {
+    "model_name": "VR Arch Single Model v5: UVR-DeNoise by FoxJoy",
+    "track_scores": [],
+    "median_scores": {},
+    "stems": [
+      "noise",
+      "no noise"
+    ],
+    "target_stem": "noise"
+  },
+  "UVR-De-Reverb-aufr33-jarredou.pth": {
+    "model_name": "VR Arch Single Model v4: UVR-De-Reverb by aufr33-jarredou",
+    "track_scores": [],
+    "median_scores": {},
+    "stems": [
+      "dry",
+      "no dry"
+    ],
+    "target_stem": "dry"
+  },
+  "model_bs_roformer_ep_937_sdr_10.5309.ckpt": {
+    "model_name": "Roformer Model: BS-Roformer-Viperx-1053",
+    "track_scores": [],
+    "median_scores": {},
+    "stems": [
+      "no drum-bass",
+      "drum-bass"
+    ],
+    "target_stem": "no drum-bass"
+  },
+  "MDX23C-De-Reverb-aufr33-jarredou.ckpt": {
+    "model_name": "MDX23C Model: MDX23C De-Reverb by aufr33-jarredou",
+    "track_scores": [],
+    "median_scores": {},
+    "stems": [
+      "dry",
+      "no dry"
+    ],
+    "target_stem": null
+  },
+  "deverb_bs_roformer_8_384dim_10depth.ckpt": {
+    "model_name": "Roformer Model: BS-Roformer-De-Reverb",
+    "track_scores": [],
+    "median_scores": {},
+    "stems": [
+      "noreverb",
+      "reverb"
+    ],
+    "target_stem": "noreverb"
+  },
+  "dereverb_mel_band_roformer_anvuew_sdr_19.1729.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer | De-Reverb by anvuew",
+    "track_scores": [],
+    "median_scores": {},
+    "stems": [
+      "noreverb",
+      "reverb"
+    ],
+    "target_stem": "noreverb"
+  },
+  "dereverb_mel_band_roformer_less_aggressive_anvuew_sdr_18.8050.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer | De-Reverb Less Aggressive by anvuew",
+    "track_scores": [],
+    "median_scores": {},
+    "stems": [
+      "noreverb",
+      "reverb"
+    ],
+    "target_stem": "noreverb"
+  },
+  "dereverb-echo_mel_band_roformer_sdr_10.0169.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer | De-Reverb-Echo by Sucial",
+    "track_scores": [],
+    "median_scores": {},
+    "stems": [
+      "dry",
+      "no dry"
+    ],
+    "target_stem": null
+  },
+  "dereverb-echo_mel_band_roformer_sdr_13.4843_v2.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer | De-Reverb-Echo V2 by Sucial",
+    "track_scores": [],
+    "median_scores": {},
+    "stems": [
+      "dry",
+      "no dry"
+    ],
+    "target_stem": "dry"
+  },
+  "model_chorus_bs_roformer_ep_267_sdr_24.1275.ckpt": {
+    "model_name": "Roformer Model: BS Roformer | Chorus Male-Female by Sucial",
+    "track_scores": [],
+    "median_scores": {},
+    "stems": [
+      "male",
+      "female"
+    ],
+    "target_stem": null
   }
 }
