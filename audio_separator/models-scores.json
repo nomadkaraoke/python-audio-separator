@@ -2468,20 +2468,37 @@
             "ISR": 27.6831
           }
         }
+      },
+      {
+        "track_name": "Auctioneer - Our Future Faces",
+        "scores": {
+          "vocals": {
+            "SDR": 7.45618,
+            "SIR": 18.7851,
+            "SAR": 7.63734,
+            "ISR": 12.4079
+          },
+          "instrumental": {
+            "SDR": 13.487,
+            "SIR": 17.408,
+            "SAR": 15.3937,
+            "ISR": 25.7793
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.15686,
-        "SIR": 19.528,
-        "SAR": 9.61374,
-        "ISR": 13.5481
+        "SDR": 9.05059,
+        "SIR": 19.1565,
+        "SAR": 9.38895,
+        "ISR": 13.316
       },
       "instrumental": {
-        "SDR": 13.4235,
-        "SIR": 19.3639,
-        "SAR": 15.0541,
-        "ISR": 22.6478
+        "SDR": 13.4552,
+        "SIR": 18.9635,
+        "SAR": 15.2239,
+        "ISR": 22.7817
       }
     }
   },
@@ -2708,20 +2725,37 @@
             "ISR": 27.9776
           }
         }
+      },
+      {
+        "track_name": "Auctioneer - Our Future Faces",
+        "scores": {
+          "vocals": {
+            "SDR": 7.10087,
+            "SIR": 18.958,
+            "SAR": 7.08537,
+            "ISR": 13.6148
+          },
+          "instrumental": {
+            "SDR": 14.759,
+            "SIR": 21.1519,
+            "SAR": 15.4328,
+            "ISR": 25.6944
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.62488,
-        "SIR": 20.6745,
-        "SAR": 9.57108,
-        "ISR": 14.7193
+        "SDR": 9.41088,
+        "SIR": 20.3705,
+        "SAR": 9.18372,
+        "ISR": 14.5086
       },
       "instrumental": {
-        "SDR": 14.0458,
-        "SIR": 20.8494,
-        "SAR": 15.1092,
-        "ISR": 20.8473
+        "SDR": 14.4024,
+        "SIR": 20.9246,
+        "SAR": 15.271,
+        "ISR": 21.7713
       }
     }
   },
@@ -2948,20 +2982,37 @@
             "ISR": 26.8621
           }
         }
+      },
+      {
+        "track_name": "Auctioneer - Our Future Faces",
+        "scores": {
+          "vocals": {
+            "SDR": 7.12336,
+            "SIR": 17.4523,
+            "SAR": 7.43998,
+            "ISR": 14.7645
+          },
+          "instrumental": {
+            "SDR": 14.1192,
+            "SIR": 20.6636,
+            "SAR": 15.001,
+            "ISR": 23.6453
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.42073,
-        "SIR": 19.5138,
-        "SAR": 9.495,
-        "ISR": 15.7559
+        "SDR": 9.20509,
+        "SIR": 19.0404,
+        "SAR": 9.15433,
+        "ISR": 15.7463
       },
       "instrumental": {
-        "SDR": 13.7151,
-        "SIR": 20.8559,
-        "SAR": 14.7527,
-        "ISR": 22.1146
+        "SDR": 13.9171,
+        "SIR": 20.7597,
+        "SAR": 14.8769,
+        "ISR": 22.2749
       }
     }
   },
@@ -3188,20 +3239,37 @@
             "ISR": 32.1099
           }
         }
+      },
+      {
+        "track_name": "Auctioneer - Our Future Faces",
+        "scores": {
+          "vocals": {
+            "SDR": 2.83911,
+            "SIR": 23.4852,
+            "SAR": 0.77468,
+            "ISR": 4.56767
+          },
+          "instrumental": {
+            "SDR": 11.2504,
+            "SIR": 8.17764,
+            "SAR": 13.5702,
+            "ISR": 23.2439
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 5.75754,
-        "SIR": 23.2173,
-        "SAR": 4.45585,
-        "ISR": 7.65573
+        "SDR": 5.49064,
+        "SIR": 23.3097,
+        "SAR": 4.28531,
+        "ISR": 7.40913
       },
       "instrumental": {
-        "SDR": 12.455,
-        "SIR": 14.2008,
-        "SAR": 14.8301,
-        "ISR": 22.5482
+        "SDR": 12.3399,
+        "SIR": 14.0108,
+        "SAR": 14.7576,
+        "ISR": 22.7182
       }
     }
   },
@@ -3428,20 +3496,37 @@
             "ISR": 33.5654
           }
         }
+      },
+      {
+        "track_name": "Auctioneer - Our Future Faces",
+        "scores": {
+          "vocals": {
+            "SDR": 2.74924,
+            "SIR": 21.6133,
+            "SAR": 1.58186,
+            "ISR": 5.23802
+          },
+          "instrumental": {
+            "SDR": 13.426,
+            "SIR": 11.1279,
+            "SAR": 14.2701,
+            "ISR": 25.4548
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 5.50836,
-        "SIR": 23.2346,
-        "SAR": 4.48195,
-        "ISR": 7.44542
+        "SDR": 5.0617,
+        "SIR": 22.6846,
+        "SAR": 4.47681,
+        "ISR": 7.32311
       },
       "instrumental": {
-        "SDR": 12.5768,
-        "SIR": 14.2347,
-        "SAR": 15.1751,
-        "ISR": 21.8189
+        "SDR": 12.6361,
+        "SIR": 14.1397,
+        "SAR": 15.1708,
+        "ISR": 21.9049
       }
     }
   },
@@ -3668,20 +3753,37 @@
             "ISR": 28.0967
           }
         }
+      },
+      {
+        "track_name": "Auctioneer - Our Future Faces",
+        "scores": {
+          "vocals": {
+            "SDR": 8.24604,
+            "SIR": 21.1342,
+            "SAR": 8.46357,
+            "ISR": 12.9112
+          },
+          "instrumental": {
+            "SDR": 12.9823,
+            "SIR": 16.7981,
+            "SAR": 14.6151,
+            "ISR": 27.3577
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.19081,
-        "SIR": 20.3737,
-        "SAR": 9.8804,
-        "ISR": 13.8982
+        "SDR": 9.18559,
+        "SIR": 20.5895,
+        "SAR": 9.46369,
+        "ISR": 13.6994
       },
       "instrumental": {
-        "SDR": 13.9244,
-        "SIR": 19.1375,
-        "SAR": 15.2764,
-        "ISR": 22.1341
+        "SDR": 13.5527,
+        "SIR": 18.4594,
+        "SAR": 15.2427,
+        "ISR": 22.5724
       }
     }
   },
@@ -3908,20 +4010,37 @@
             "ISR": 28.4452
           }
         }
+      },
+      {
+        "track_name": "Auctioneer - Our Future Faces",
+        "scores": {
+          "vocals": {
+            "SDR": 7.69217,
+            "SIR": 19.6891,
+            "SAR": 8.05813,
+            "ISR": 12.1802
+          },
+          "instrumental": {
+            "SDR": 13.4725,
+            "SIR": 17.321,
+            "SAR": 15.1231,
+            "ISR": 25.7254
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.1635,
-        "SIR": 19.9612,
-        "SAR": 9.5192,
-        "ISR": 12.9511
+        "SDR": 9.03903,
+        "SIR": 19.8252,
+        "SAR": 9.27077,
+        "ISR": 12.7686
       },
       "instrumental": {
-        "SDR": 13.1921,
-        "SIR": 18.8059,
-        "SAR": 15.1402,
-        "ISR": 22.0859
+        "SDR": 13.3323,
+        "SIR": 18.6296,
+        "SAR": 15.1317,
+        "ISR": 22.7691
       }
     }
   },
@@ -4148,20 +4267,37 @@
             "ISR": 28.1565
           }
         }
+      },
+      {
+        "track_name": "Auctioneer - Our Future Faces",
+        "scores": {
+          "vocals": {
+            "SDR": 6.7797,
+            "SIR": 18.8522,
+            "SAR": 7.17519,
+            "ISR": 11.1195
+          },
+          "instrumental": {
+            "SDR": 14.3973,
+            "SIR": 18.1526,
+            "SAR": 16.0058,
+            "ISR": 25.9338
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.30976,
-        "SIR": 20.1864,
-        "SAR": 9.65443,
-        "ISR": 12.9209
+        "SDR": 9.13121,
+        "SIR": 19.9219,
+        "SAR": 9.29078,
+        "ISR": 12.8451
       },
       "instrumental": {
-        "SDR": 13.2989,
-        "SIR": 19.3881,
-        "SAR": 15.3424,
-        "ISR": 22.2958
+        "SDR": 13.8481,
+        "SIR": 18.9888,
+        "SAR": 15.6741,
+        "ISR": 22.427
       }
     }
   },
@@ -4388,20 +4524,37 @@
             "ISR": 26.4234
           }
         }
+      },
+      {
+        "track_name": "Auctioneer - Our Future Faces",
+        "scores": {
+          "vocals": {
+            "SDR": 6.06859,
+            "SIR": 17.2859,
+            "SAR": 6.67274,
+            "ISR": 11.3402
+          },
+          "instrumental": {
+            "SDR": 14.5972,
+            "SIR": 19.4296,
+            "SAR": 16.1956,
+            "ISR": 24.7395
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.70022,
-        "SIR": 18.7999,
-        "SAR": 9.07667,
-        "ISR": 12.714
+        "SDR": 8.68528,
+        "SIR": 18.67,
+        "SAR": 8.78329,
+        "ISR": 12.5569
       },
       "instrumental": {
-        "SDR": 12.9624,
-        "SIR": 19.7319,
-        "SAR": 14.9762,
-        "ISR": 21.3663
+        "SDR": 13.5627,
+        "SIR": 19.5808,
+        "SAR": 15.463,
+        "ISR": 21.4697
       }
     }
   },
@@ -4628,20 +4781,37 @@
             "ISR": 26.6374
           }
         }
+      },
+      {
+        "track_name": "Auctioneer - Our Future Faces",
+        "scores": {
+          "vocals": {
+            "SDR": 5.78824,
+            "SIR": 17.2413,
+            "SAR": 6.35979,
+            "ISR": 11.2602
+          },
+          "instrumental": {
+            "SDR": 14.9635,
+            "SIR": 19.5241,
+            "SAR": 16.1938,
+            "ISR": 24.8392
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.6596,
-        "SIR": 19.2793,
-        "SAR": 8.80304,
-        "ISR": 12.4588
+        "SDR": 8.64287,
+        "SIR": 19.2692,
+        "SAR": 8.60117,
+        "ISR": 12.3695
       },
       "instrumental": {
-        "SDR": 13.0979,
-        "SIR": 19.5197,
-        "SAR": 15.0563,
-        "ISR": 21.1922
+        "SDR": 13.6161,
+        "SIR": 19.5219,
+        "SAR": 15.4529,
+        "ISR": 21.3153
       }
     }
   },
@@ -4868,20 +5038,37 @@
             "ISR": 27.9267
           }
         }
+      },
+      {
+        "track_name": "Auctioneer - Our Future Faces",
+        "scores": {
+          "vocals": {
+            "SDR": 6.43966,
+            "SIR": 17.6976,
+            "SAR": 6.78796,
+            "ISR": 11.3965
+          },
+          "instrumental": {
+            "SDR": 14.0883,
+            "SIR": 18.396,
+            "SAR": 15.4366,
+            "ISR": 24.944
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.70133,
-        "SIR": 20.7771,
-        "SAR": 8.96628,
-        "ISR": 12.0406
+        "SDR": 8.64396,
+        "SIR": 19.712,
+        "SAR": 8.45781,
+        "ISR": 12.0364
       },
       "instrumental": {
-        "SDR": 12.8085,
-        "SIR": 18.9793,
-        "SAR": 15.0333,
-        "ISR": 21.2653
+        "SDR": 13.4484,
+        "SIR": 18.8546,
+        "SAR": 15.235,
+        "ISR": 22.112
       }
     }
   },
@@ -5108,20 +5295,37 @@
             "ISR": 27.4427
           }
         }
+      },
+      {
+        "track_name": "Auctioneer - Our Future Faces",
+        "scores": {
+          "vocals": {
+            "SDR": 6.6711,
+            "SIR": 18.0848,
+            "SAR": 6.89336,
+            "ISR": 11.3345
+          },
+          "instrumental": {
+            "SDR": 14.3313,
+            "SIR": 18.9451,
+            "SAR": 15.6149,
+            "ISR": 25.2544
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.6614,
-        "SIR": 20.2237,
-        "SAR": 9.18637,
-        "ISR": 12.5797
+        "SDR": 8.62843,
+        "SIR": 19.4616,
+        "SAR": 8.75148,
+        "ISR": 12.3716
       },
       "instrumental": {
-        "SDR": 13.0206,
-        "SIR": 19.2392,
-        "SAR": 15.3373,
-        "ISR": 20.6964
+        "SDR": 13.631,
+        "SIR": 19.0922,
+        "SAR": 15.4761,
+        "ISR": 21.481
       }
     }
   },
@@ -5348,20 +5552,37 @@
             "ISR": 27.503
           }
         }
+      },
+      {
+        "track_name": "Auctioneer - Our Future Faces",
+        "scores": {
+          "vocals": {
+            "SDR": 7.25203,
+            "SIR": 18.8013,
+            "SAR": 7.45612,
+            "ISR": 12.4327
+          },
+          "instrumental": {
+            "SDR": 13.614,
+            "SIR": 18.0469,
+            "SAR": 15.2312,
+            "ISR": 25.1401
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.89648,
-        "SIR": 19.9102,
-        "SAR": 9.35723,
-        "ISR": 12.9232
+        "SDR": 8.7696,
+        "SIR": 19.3558,
+        "SAR": 8.88405,
+        "ISR": 12.8259
       },
       "instrumental": {
-        "SDR": 13.0762,
-        "SIR": 19.7323,
-        "SAR": 15.1034,
-        "ISR": 21.7636
+        "SDR": 13.3451,
+        "SIR": 19.263,
+        "SAR": 15.1673,
+        "ISR": 22.0936
       }
     }
   },
@@ -5588,20 +5809,37 @@
             "ISR": 28.4553
           }
         }
+      },
+      {
+        "track_name": "Auctioneer - Our Future Faces",
+        "scores": {
+          "vocals": {
+            "SDR": 7.25525,
+            "SIR": 19.6589,
+            "SAR": 7.16343,
+            "ISR": 11.5635
+          },
+          "instrumental": {
+            "SDR": 13.1225,
+            "SIR": 16.846,
+            "SAR": 15.0242,
+            "ISR": 26.1152
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.87081,
-        "SIR": 21.4839,
-        "SAR": 9.28839,
-        "ISR": 12.5775
+        "SDR": 8.75437,
+        "SIR": 20.5714,
+        "SAR": 8.74247,
+        "ISR": 12.3809
       },
       "instrumental": {
-        "SDR": 13.3908,
-        "SIR": 19.119,
-        "SAR": 15.3823,
-        "ISR": 21.4844
+        "SDR": 13.2567,
+        "SIR": 18.5598,
+        "SAR": 15.2641,
+        "ISR": 21.8617
       }
     }
   },
@@ -5828,20 +6066,37 @@
             "ISR": 28.0676
           }
         }
+      },
+      {
+        "track_name": "Auctioneer - Our Future Faces",
+        "scores": {
+          "vocals": {
+            "SDR": 6.82749,
+            "SIR": 19.196,
+            "SAR": 6.84891,
+            "ISR": 11.0321
+          },
+          "instrumental": {
+            "SDR": 13.3009,
+            "SIR": 17.0932,
+            "SAR": 15.276,
+            "ISR": 26.1144
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.82975,
-        "SIR": 21.0804,
-        "SAR": 9.26727,
-        "ISR": 12.2981
+        "SDR": 8.74019,
+        "SIR": 20.2964,
+        "SAR": 8.63884,
+        "ISR": 12.2375
       },
       "instrumental": {
-        "SDR": 13.3612,
-        "SIR": 19.3774,
-        "SAR": 15.3898,
-        "ISR": 21.4503
+        "SDR": 13.3311,
+        "SIR": 18.8104,
+        "SAR": 15.3329,
+        "ISR": 21.6986
       }
     }
   },
@@ -6068,20 +6323,37 @@
             "ISR": 23.167
           }
         }
+      },
+      {
+        "track_name": "Auctioneer - Our Future Faces",
+        "scores": {
+          "vocals": {
+            "SDR": 0.40391,
+            "SIR": 13.7794,
+            "SAR": 0.06788,
+            "ISR": 4.86253
+          },
+          "instrumental": {
+            "SDR": 9.05201,
+            "SIR": 10.1529,
+            "SAR": 12.2732,
+            "ISR": 25.1146
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 0.04364,
-        "SIR": 8.2827,
-        "SAR": -0.01832,
-        "ISR": 1.66201
+        "SDR": 0.178258,
+        "SIR": 10.4292,
+        "SAR": -0.007215,
+        "ISR": 1.97172
       },
       "instrumental": {
-        "SDR": 7.71278,
-        "SIR": 8.18763,
-        "SAR": 18.4705,
-        "ISR": 19.3149
+        "SDR": 7.84337,
+        "SIR": 9.12331,
+        "SAR": 17.136,
+        "ISR": 19.6269
       }
     }
   },
@@ -6308,20 +6580,37 @@
             "ISR": 27.9942
           }
         }
+      },
+      {
+        "track_name": "Auctioneer - Our Future Faces",
+        "scores": {
+          "vocals": {
+            "SDR": 6.02652,
+            "SIR": 17.354,
+            "SAR": 6.1273,
+            "ISR": 10.6004
+          },
+          "instrumental": {
+            "SDR": 12.9385,
+            "SIR": 16.7924,
+            "SAR": 14.934,
+            "ISR": 25.139
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 7.93557,
-        "SIR": 19.3656,
-        "SAR": 8.4096,
-        "ISR": 11.5903
+        "SDR": 7.75643,
+        "SIR": 19.0005,
+        "SAR": 8.11201,
+        "ISR": 11.4831
       },
       "instrumental": {
-        "SDR": 11.8457,
-        "SIR": 17.3718,
-        "SAR": 14.0378,
-        "ISR": 20.8239
+        "SDR": 12.3921,
+        "SIR": 17.3614,
+        "SAR": 14.4859,
+        "ISR": 21.1833
       }
     }
   },
@@ -6548,20 +6837,37 @@
             "ISR": 28.774
           }
         }
+      },
+      {
+        "track_name": "Auctioneer - Our Future Faces",
+        "scores": {
+          "vocals": {
+            "SDR": 6.09956,
+            "SIR": 18.5909,
+            "SAR": 6.58563,
+            "ISR": 10.455
+          },
+          "instrumental": {
+            "SDR": 14.4724,
+            "SIR": 18.4273,
+            "SAR": 16.0907,
+            "ISR": 26.9517
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.42826,
-        "SIR": 20.1487,
-        "SAR": 8.67216,
-        "ISR": 12.0575
+        "SDR": 8.3611,
+        "SIR": 19.9327,
+        "SAR": 8.53899,
+        "ISR": 11.7024
       },
       "instrumental": {
-        "SDR": 12.7627,
-        "SIR": 18.3341,
-        "SAR": 14.7534,
-        "ISR": 21.4583
+        "SDR": 13.4481,
+        "SIR": 18.3807,
+        "SAR": 15.376,
+        "ISR": 21.9515
       }
     }
   },
@@ -6788,20 +7094,37 @@
             "ISR": 27.4692
           }
         }
+      },
+      {
+        "track_name": "Auctioneer - Our Future Faces",
+        "scores": {
+          "vocals": {
+            "SDR": 5.86578,
+            "SIR": 16.7447,
+            "SAR": 6.12781,
+            "ISR": 12.138
+          },
+          "instrumental": {
+            "SDR": 14.7448,
+            "SIR": 20.9252,
+            "SAR": 15.6285,
+            "ISR": 24.7113
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.19721,
-        "SIR": 18.8175,
-        "SAR": 8.39711,
-        "ISR": 14.4782
+        "SDR": 8.13631,
+        "SIR": 18.7657,
+        "SAR": 8.27888,
+        "ISR": 14.3488
       },
       "instrumental": {
-        "SDR": 12.6227,
-        "SIR": 19.7225,
-        "SAR": 13.4869,
-        "ISR": 21.1843
+        "SDR": 13.2379,
+        "SIR": 20.3098,
+        "SAR": 14.2498,
+        "ISR": 21.1945
       }
     }
   },
@@ -7028,20 +7351,37 @@
             "ISR": 29.3976
           }
         }
+      },
+      {
+        "track_name": "Auctioneer - Our Future Faces",
+        "scores": {
+          "vocals": {
+            "SDR": 5.11146,
+            "SIR": 17.0105,
+            "SAR": 5.66823,
+            "ISR": 9.53944
+          },
+          "instrumental": {
+            "SDR": 14.2027,
+            "SIR": 17.8198,
+            "SAR": 16.1186,
+            "ISR": 26.0773
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.00859,
-        "SIR": 19.3325,
-        "SAR": 8.07798,
-        "ISR": 11.5513
+        "SDR": 7.80315,
+        "SIR": 19.0709,
+        "SAR": 7.97037,
+        "ISR": 11.4721
       },
       "instrumental": {
-        "SDR": 12.3455,
-        "SIR": 16.7158,
-        "SAR": 14.7213,
-        "ISR": 21.4237
+        "SDR": 12.9406,
+        "SIR": 17.2678,
+        "SAR": 15.124,
+        "ISR": 21.5235
       }
     }
   },
@@ -13824,26 +14164,345 @@
             "ISR": 16.7411
           }
         }
+      },
+      {
+        "track_name": "ANiMAL - Easy Tiger",
+        "scores": {
+          "vocals": {
+            "SDR": 10.8088,
+            "SIR": 18.8631,
+            "SAR": 10.8714,
+            "ISR": 20.7598
+          },
+          "drums": {
+            "SDR": 12.3337,
+            "SIR": 22.0962,
+            "SAR": 12.4767,
+            "ISR": 21.6261
+          },
+          "bass": {
+            "SDR": 11.3562,
+            "SIR": 22.8976,
+            "SAR": 9.73282,
+            "ISR": 12.9839
+          },
+          "other": {
+            "SDR": 7.05993,
+            "SIR": 12.191,
+            "SAR": 6.20555,
+            "ISR": 13.8254
+          }
+        }
+      },
+      {
+        "track_name": "ANiMAL - Rockshow",
+        "scores": {
+          "vocals": {
+            "SDR": 1.95752,
+            "SIR": 4.50647,
+            "SAR": 5.77934,
+            "ISR": 15.4828
+          },
+          "drums": {
+            "SDR": 8.88779,
+            "SIR": 16.2661,
+            "SAR": 10.0191,
+            "ISR": 17.5029
+          },
+          "bass": {
+            "SDR": 4.93095,
+            "SIR": 24.8171,
+            "SAR": 5.56008,
+            "ISR": 6.97457
+          },
+          "other": {
+            "SDR": -0.39985,
+            "SIR": -2.64823,
+            "SAR": 1.72115,
+            "ISR": 4.62734
+          }
+        }
+      },
+      {
+        "track_name": "Actions - Devil's Words",
+        "scores": {
+          "vocals": {
+            "SDR": 11.8694,
+            "SIR": 20.2473,
+            "SAR": 12.2777,
+            "ISR": 20.4483
+          },
+          "drums": {
+            "SDR": 10.0244,
+            "SIR": 21.133,
+            "SAR": 10.997,
+            "ISR": 16.7617
+          },
+          "bass": {
+            "SDR": 11.6992,
+            "SIR": 21.4431,
+            "SAR": 11.629,
+            "ISR": 17.3537
+          },
+          "other": {
+            "SDR": 7.96476,
+            "SIR": 13.3619,
+            "SAR": 7.95521,
+            "ISR": 14.1681
+          }
+        }
+      },
+      {
+        "track_name": "Actions - One Minute Smile",
+        "scores": {
+          "vocals": {
+            "SDR": 8.94422,
+            "SIR": 14.9863,
+            "SAR": 9.64679,
+            "ISR": 16.4351
+          },
+          "drums": {
+            "SDR": 9.78024,
+            "SIR": 18.8449,
+            "SAR": 11.0301,
+            "ISR": 14.7087
+          },
+          "bass": {
+            "SDR": 7.90541,
+            "SIR": 9.18312,
+            "SAR": 7.63197,
+            "ISR": 16.4765
+          },
+          "other": {
+            "SDR": 6.29039,
+            "SIR": 12.3169,
+            "SAR": 6.34577,
+            "ISR": 9.87795
+          }
+        }
+      },
+      {
+        "track_name": "Actions - South Of The Water",
+        "scores": {
+          "vocals": {
+            "SDR": 11.036,
+            "SIR": 17.9162,
+            "SAR": 11.6161,
+            "ISR": 19.0923
+          },
+          "drums": {
+            "SDR": 10.1848,
+            "SIR": 20.0882,
+            "SAR": 11.3395,
+            "ISR": 16.0502
+          },
+          "bass": {
+            "SDR": 17.7502,
+            "SIR": 27.2123,
+            "SAR": 14.336,
+            "ISR": 17.6888
+          },
+          "other": {
+            "SDR": 7.87695,
+            "SIR": 12.534,
+            "SAR": 7.61291,
+            "ISR": 14.4614
+          }
+        }
+      },
+      {
+        "track_name": "Aimee Norwich - Child",
+        "scores": {
+          "vocals": {
+            "SDR": 6.68739,
+            "SIR": 19.6404,
+            "SAR": 6.70557,
+            "ISR": 12.4074
+          },
+          "drums": {
+            "SDR": 10.2345,
+            "SIR": 18.1301,
+            "SAR": 10.7862,
+            "ISR": 18.0684
+          },
+          "bass": {
+            "SDR": 17.9564,
+            "SIR": 30.6188,
+            "SAR": 16.498,
+            "ISR": 19.6131
+          },
+          "other": {
+            "SDR": 7.5472,
+            "SIR": 11.3519,
+            "SAR": 7.54351,
+            "ISR": 14.3772
+          }
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Goodbye Bolero",
+        "scores": {
+          "vocals": {
+            "SDR": 11.8404,
+            "SIR": 27.6138,
+            "SAR": 11.9268,
+            "ISR": 22.1581
+          },
+          "drums": {
+            "SDR": 8.31121,
+            "SIR": 18.0997,
+            "SAR": 8.71986,
+            "ISR": 15.0845
+          },
+          "bass": {
+            "SDR": 10.3589,
+            "SIR": 22.6435,
+            "SAR": 9.97587,
+            "ISR": 14.6063
+          },
+          "other": {
+            "SDR": 11.1281,
+            "SIR": 17.8399,
+            "SAR": 11.7408,
+            "ISR": 19.6241
+          }
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "vocals": {
+            "SDR": 11.0388,
+            "SIR": 18.5112,
+            "SAR": 10.0006,
+            "ISR": 16.282
+          },
+          "drums": {
+            "SDR": 10.2561,
+            "SIR": 19.7651,
+            "SAR": 10.3934,
+            "ISR": 16.4898
+          },
+          "bass": {
+            "SDR": 16.1016,
+            "SIR": 30.238,
+            "SAR": 15.0562,
+            "ISR": 21.7911
+          },
+          "other": {
+            "SDR": 11.3816,
+            "SIR": 15.8239,
+            "SAR": 10.451,
+            "ISR": 17.1779
+          }
+        }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 14.1298,
+            "SIR": 23.1288,
+            "SAR": 13.7556,
+            "ISR": 25.9922
+          },
+          "drums": {
+            "SDR": 11.2861,
+            "SIR": 17.9969,
+            "SAR": 11.0163,
+            "ISR": 18.9596
+          },
+          "bass": {
+            "SDR": 12.0199,
+            "SIR": 20.3359,
+            "SAR": 7.91919,
+            "ISR": 9.77948
+          },
+          "other": {
+            "SDR": 10.1695,
+            "SIR": 12.4923,
+            "SAR": 8.84543,
+            "ISR": 20.3318
+          }
+        }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 10.7932,
+            "SIR": 19.5952,
+            "SAR": 10.9821,
+            "ISR": 19.8238
+          },
+          "drums": {
+            "SDR": 12.7738,
+            "SIR": 22.425,
+            "SAR": 13.7751,
+            "ISR": 20.141
+          },
+          "bass": {
+            "SDR": 11.4445,
+            "SIR": 20.1414,
+            "SAR": 11.9458,
+            "ISR": 20.2774
+          },
+          "other": {
+            "SDR": 6.91353,
+            "SIR": 13.7917,
+            "SAR": 7.03032,
+            "ISR": 12.8673
+          }
+        }
+      },
+      {
+        "track_name": "Auctioneer - Our Future Faces",
+        "scores": {
+          "vocals": {
+            "SDR": 7.0187,
+            "SIR": 17.2363,
+            "SAR": 7.372,
+            "ISR": 15.644
+          },
+          "drums": {
+            "SDR": 7.09524,
+            "SIR": 18.0718,
+            "SAR": 7.31846,
+            "ISR": 13.0651
+          },
+          "bass": {
+            "SDR": 13.9639,
+            "SIR": 25.1196,
+            "SAR": 14.7761,
+            "ISR": 22.8725
+          },
+          "other": {
+            "SDR": 10.7082,
+            "SIR": 17.8976,
+            "SAR": 10.1184,
+            "ISR": 16.4778
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 7.87915,
-        "SIR": 19.0441,
-        "SAR": 7.86232,
-        "ISR": 14.6037
+        "SDR": 10.801,
+        "SIR": 18.9536,
+        "SAR": 10.436,
+        "ISR": 17.7637
       },
       "drums": {
-        "SDR": 9.49839,
-        "SIR": 20.977,
-        "SAR": 10.2955,
-        "ISR": 14.0041
+        "SDR": 10.1046,
+        "SIR": 19.305,
+        "SAR": 10.8916,
+        "ISR": 16.6258
       },
       "bass": {
-        "SDR": 12.555,
-        "SIR": 20.7999,
-        "SAR": 14.0735,
-        "ISR": 15.4626
+        "SDR": 11.8595,
+        "SIR": 22.7706,
+        "SAR": 11.7874,
+        "ISR": 16.9151
       }
     }
   },
@@ -13907,26 +14566,374 @@
             "ISR": 19.3189
           }
         }
+      },
+      {
+        "track_name": "ANiMAL - Clinic A",
+        "scores": {
+          "vocals": {
+            "SDR": 7.39182,
+            "SIR": 18.1421,
+            "SAR": 7.33519,
+            "ISR": 13.7516
+          },
+          "drums": {
+            "SDR": 8.40161,
+            "SIR": 19.6676,
+            "SAR": 8.92091,
+            "ISR": 12.633
+          },
+          "bass": {
+            "SDR": 11.909,
+            "SIR": 19.711,
+            "SAR": 13.632,
+            "ISR": 14.9125
+          },
+          "other": {
+            "SDR": 7.77882,
+            "SIR": 12.9784,
+            "SAR": 8.84332,
+            "ISR": 16.1011
+          }
+        }
+      },
+      {
+        "track_name": "ANiMAL - Easy Tiger",
+        "scores": {
+          "vocals": {
+            "SDR": 10.1811,
+            "SIR": 17.5339,
+            "SAR": 10.3123,
+            "ISR": 19.459
+          },
+          "drums": {
+            "SDR": 10.4373,
+            "SIR": 18.3586,
+            "SAR": 10.8625,
+            "ISR": 22.2567
+          },
+          "bass": {
+            "SDR": 9.19871,
+            "SIR": 19.7823,
+            "SAR": 8.32562,
+            "ISR": 12.5227
+          },
+          "other": {
+            "SDR": 5.53135,
+            "SIR": 10.962,
+            "SAR": 4.45932,
+            "ISR": 11.3536
+          }
+        }
+      },
+      {
+        "track_name": "ANiMAL - Rockshow",
+        "scores": {
+          "vocals": {
+            "SDR": 2.2606,
+            "SIR": 4.69423,
+            "SAR": 5.8341,
+            "ISR": 15.8249
+          },
+          "drums": {
+            "SDR": 8.19452,
+            "SIR": 14.4369,
+            "SAR": 9.44168,
+            "ISR": 18.1507
+          },
+          "bass": {
+            "SDR": 6.28668,
+            "SIR": 23.4279,
+            "SAR": 7.212,
+            "ISR": 9.27559
+          },
+          "other": {
+            "SDR": 0.55542,
+            "SIR": 1.21317,
+            "SAR": 0.23462,
+            "ISR": 4.11639
+          }
+        }
+      },
+      {
+        "track_name": "Actions - Devil's Words",
+        "scores": {
+          "vocals": {
+            "SDR": 11.4819,
+            "SIR": 19.0492,
+            "SAR": 11.8735,
+            "ISR": 20.3725
+          },
+          "drums": {
+            "SDR": 9.48768,
+            "SIR": 20.1542,
+            "SAR": 10.3816,
+            "ISR": 15.8755
+          },
+          "bass": {
+            "SDR": 11.6443,
+            "SIR": 20.7386,
+            "SAR": 11.3031,
+            "ISR": 17.2754
+          },
+          "other": {
+            "SDR": 7.58634,
+            "SIR": 13.272,
+            "SAR": 7.48369,
+            "ISR": 13.0932
+          }
+        }
+      },
+      {
+        "track_name": "Actions - One Minute Smile",
+        "scores": {
+          "vocals": {
+            "SDR": 8.82893,
+            "SIR": 14.8728,
+            "SAR": 9.54323,
+            "ISR": 16.0121
+          },
+          "drums": {
+            "SDR": 9.36481,
+            "SIR": 18.7192,
+            "SAR": 10.701,
+            "ISR": 14.2709
+          },
+          "bass": {
+            "SDR": 8.11879,
+            "SIR": 14.1439,
+            "SAR": 7.86138,
+            "ISR": 15.0381
+          },
+          "other": {
+            "SDR": 6.64456,
+            "SIR": 12.3823,
+            "SAR": 7.11786,
+            "ISR": 11.6687
+          }
+        }
+      },
+      {
+        "track_name": "Actions - South Of The Water",
+        "scores": {
+          "vocals": {
+            "SDR": 10.2856,
+            "SIR": 17.4402,
+            "SAR": 10.8917,
+            "ISR": 18.1344
+          },
+          "drums": {
+            "SDR": 9.44627,
+            "SIR": 19.3698,
+            "SAR": 10.5507,
+            "ISR": 15.4531
+          },
+          "bass": {
+            "SDR": 16.8356,
+            "SIR": 25.6126,
+            "SAR": 14.164,
+            "ISR": 17.6165
+          },
+          "other": {
+            "SDR": 7.46841,
+            "SIR": 12.1285,
+            "SAR": 7.00531,
+            "ISR": 13.5816
+          }
+        }
+      },
+      {
+        "track_name": "Aimee Norwich - Child",
+        "scores": {
+          "vocals": {
+            "SDR": 6.15287,
+            "SIR": 18.4751,
+            "SAR": 6.21281,
+            "ISR": 11.6394
+          },
+          "drums": {
+            "SDR": 9.453,
+            "SIR": 17.7372,
+            "SAR": 10.1852,
+            "ISR": 16.6252
+          },
+          "bass": {
+            "SDR": 17.4451,
+            "SIR": 29.9173,
+            "SAR": 15.9392,
+            "ISR": 19.2901
+          },
+          "other": {
+            "SDR": 7.01304,
+            "SIR": 10.2876,
+            "SAR": 7.1112,
+            "ISR": 14.2461
+          }
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Goodbye Bolero",
+        "scores": {
+          "vocals": {
+            "SDR": 10.925,
+            "SIR": 25.9155,
+            "SAR": 11.397,
+            "ISR": 20.0906
+          },
+          "drums": {
+            "SDR": 7.77766,
+            "SIR": 17.8595,
+            "SAR": 8.13634,
+            "ISR": 15.0445
+          },
+          "bass": {
+            "SDR": 10.1941,
+            "SIR": 22.6631,
+            "SAR": 9.63813,
+            "ISR": 14.0471
+          },
+          "other": {
+            "SDR": 10.9618,
+            "SIR": 17.5331,
+            "SAR": 11.5776,
+            "ISR": 19.6973
+          }
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "vocals": {
+            "SDR": 9.86742,
+            "SIR": 17.6698,
+            "SAR": 9.09544,
+            "ISR": 14.7304
+          },
+          "drums": {
+            "SDR": 9.65639,
+            "SIR": 18.3177,
+            "SAR": 9.66205,
+            "ISR": 15.5911
+          },
+          "bass": {
+            "SDR": 15.3681,
+            "SIR": 29.0374,
+            "SAR": 14.3688,
+            "ISR": 20.5504
+          },
+          "other": {
+            "SDR": 10.7408,
+            "SIR": 14.9256,
+            "SAR": 9.80483,
+            "ISR": 16.4024
+          }
+        }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 13.2306,
+            "SIR": 22.3695,
+            "SAR": 13.1633,
+            "ISR": 24.1674
+          },
+          "drums": {
+            "SDR": 10.0162,
+            "SIR": 14.3347,
+            "SAR": 9.38603,
+            "ISR": 17.3695
+          },
+          "bass": {
+            "SDR": 11.0374,
+            "SIR": 19.7294,
+            "SAR": 7.4226,
+            "ISR": 8.89045
+          },
+          "other": {
+            "SDR": 9.09514,
+            "SIR": 11.4196,
+            "SAR": 7.90024,
+            "ISR": 17.413
+          }
+        }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 10.3326,
+            "SIR": 18.4057,
+            "SAR": 10.577,
+            "ISR": 19.2448
+          },
+          "drums": {
+            "SDR": 12.174,
+            "SIR": 21.7936,
+            "SAR": 13.3275,
+            "ISR": 19.0528
+          },
+          "bass": {
+            "SDR": 10.9604,
+            "SIR": 19.8011,
+            "SAR": 11.62,
+            "ISR": 19.195
+          },
+          "other": {
+            "SDR": 6.4247,
+            "SIR": 12.8973,
+            "SAR": 6.68105,
+            "ISR": 12.1017
+          }
+        }
+      },
+      {
+        "track_name": "Auctioneer - Our Future Faces",
+        "scores": {
+          "vocals": {
+            "SDR": 6.48775,
+            "SIR": 16.9004,
+            "SAR": 6.89733,
+            "ISR": 14.7807
+          },
+          "drums": {
+            "SDR": 6.63689,
+            "SIR": 16.8225,
+            "SAR": 6.69713,
+            "ISR": 12.3227
+          },
+          "bass": {
+            "SDR": 13.5712,
+            "SIR": 23.3432,
+            "SAR": 14.5354,
+            "ISR": 22.564
+          },
+          "other": {
+            "SDR": 10.6269,
+            "SIR": 17.8247,
+            "SAR": 9.36735,
+            "ISR": 15.6004
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.29469,
-        "SIR": 18.1042,
-        "SAR": 8.2082,
-        "ISR": 15.8471
+        "SDR": 10.0243,
+        "SIR": 17.9059,
+        "SAR": 9.92777,
+        "ISR": 17.0733
       },
       "drums": {
-        "SDR": 8.2448,
-        "SIR": 19.0811,
-        "SAR": 7.52867,
-        "ISR": 11.3462
+        "SDR": 9.44964,
+        "SIR": 18.3381,
+        "SAR": 9.92363,
+        "ISR": 15.7333
       },
       "bass": {
-        "SDR": 13.8418,
-        "SIR": 20.8507,
-        "SAR": 14.1669,
-        "ISR": 19.4258
+        "SDR": 11.3408,
+        "SIR": 21.7009,
+        "SAR": 11.4615,
+        "ISR": 16.1568
       }
     }
   },
@@ -13990,26 +14997,374 @@
             "ISR": 18.8137
           }
         }
+      },
+      {
+        "track_name": "ANiMAL - Clinic A",
+        "scores": {
+          "vocals": {
+            "SDR": 7.4434,
+            "SIR": 18.4871,
+            "SAR": 7.33728,
+            "ISR": 14.0059
+          },
+          "drums": {
+            "SDR": 8.96928,
+            "SIR": 21.1526,
+            "SAR": 10.1224,
+            "ISR": 12.9924
+          },
+          "bass": {
+            "SDR": 12.7492,
+            "SIR": 19.4508,
+            "SAR": 13.3306,
+            "ISR": 16.4465
+          },
+          "other": {
+            "SDR": 7.773,
+            "SIR": 13.5621,
+            "SAR": 8.92433,
+            "ISR": 16.5778
+          }
+        }
+      },
+      {
+        "track_name": "ANiMAL - Easy Tiger",
+        "scores": {
+          "vocals": {
+            "SDR": 10.4397,
+            "SIR": 17.8346,
+            "SAR": 10.4412,
+            "ISR": 19.5344
+          },
+          "drums": {
+            "SDR": 11.3684,
+            "SIR": 20.2939,
+            "SAR": 11.5673,
+            "ISR": 21.5121
+          },
+          "bass": {
+            "SDR": 11.2627,
+            "SIR": 21.99,
+            "SAR": 9.48758,
+            "ISR": 13.1898
+          },
+          "other": {
+            "SDR": 6.23897,
+            "SIR": 11.8417,
+            "SAR": 5.5416,
+            "ISR": 12.7981
+          }
+        }
+      },
+      {
+        "track_name": "ANiMAL - Rockshow",
+        "scores": {
+          "vocals": {
+            "SDR": 2.06505,
+            "SIR": 5.26505,
+            "SAR": 5.28702,
+            "ISR": 15.1863
+          },
+          "drums": {
+            "SDR": 8.99905,
+            "SIR": 16.9155,
+            "SAR": 10.0134,
+            "ISR": 17.2106
+          },
+          "bass": {
+            "SDR": 6.30738,
+            "SIR": 20.8858,
+            "SAR": 7.01856,
+            "ISR": 8.89273
+          },
+          "other": {
+            "SDR": 0.16473,
+            "SIR": -0.41634,
+            "SAR": 0.47168,
+            "ISR": 4.62325
+          }
+        }
+      },
+      {
+        "track_name": "Actions - Devil's Words",
+        "scores": {
+          "vocals": {
+            "SDR": 11.4024,
+            "SIR": 19.8252,
+            "SAR": 11.7951,
+            "ISR": 19.8887
+          },
+          "drums": {
+            "SDR": 9.82706,
+            "SIR": 20.2907,
+            "SAR": 10.7675,
+            "ISR": 15.9836
+          },
+          "bass": {
+            "SDR": 12.2277,
+            "SIR": 21.215,
+            "SAR": 11.9833,
+            "ISR": 17.5396
+          },
+          "other": {
+            "SDR": 7.83546,
+            "SIR": 13.0879,
+            "SAR": 7.86218,
+            "ISR": 13.9801
+          }
+        }
+      },
+      {
+        "track_name": "Actions - One Minute Smile",
+        "scores": {
+          "vocals": {
+            "SDR": 8.74169,
+            "SIR": 14.1201,
+            "SAR": 9.72683,
+            "ISR": 16.3828
+          },
+          "drums": {
+            "SDR": 9.63568,
+            "SIR": 18.6127,
+            "SAR": 11.0021,
+            "ISR": 14.2895
+          },
+          "bass": {
+            "SDR": 8.64882,
+            "SIR": 15.1677,
+            "SAR": 8.37584,
+            "ISR": 14.0595
+          },
+          "other": {
+            "SDR": 6.76545,
+            "SIR": 12.2364,
+            "SAR": 7.54473,
+            "ISR": 12.0405
+          }
+        }
+      },
+      {
+        "track_name": "Actions - South Of The Water",
+        "scores": {
+          "vocals": {
+            "SDR": 10.3752,
+            "SIR": 16.6912,
+            "SAR": 11.2973,
+            "ISR": 18.7731
+          },
+          "drums": {
+            "SDR": 9.92437,
+            "SIR": 19.1125,
+            "SAR": 10.9707,
+            "ISR": 15.7898
+          },
+          "bass": {
+            "SDR": 18.0335,
+            "SIR": 28.3402,
+            "SAR": 14.6807,
+            "ISR": 17.7093
+          },
+          "other": {
+            "SDR": 7.6504,
+            "SIR": 12.427,
+            "SAR": 7.33266,
+            "ISR": 13.8777
+          }
+        }
+      },
+      {
+        "track_name": "Aimee Norwich - Child",
+        "scores": {
+          "vocals": {
+            "SDR": 6.47528,
+            "SIR": 18.6816,
+            "SAR": 6.52616,
+            "ISR": 12.4384
+          },
+          "drums": {
+            "SDR": 9.27946,
+            "SIR": 17.0606,
+            "SAR": 9.8061,
+            "ISR": 16.807
+          },
+          "bass": {
+            "SDR": 17.2024,
+            "SIR": 28.3713,
+            "SAR": 15.8922,
+            "ISR": 19.6174
+          },
+          "other": {
+            "SDR": 7.28211,
+            "SIR": 10.9266,
+            "SAR": 7.11841,
+            "ISR": 13.9155
+          }
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Goodbye Bolero",
+        "scores": {
+          "vocals": {
+            "SDR": 11.343,
+            "SIR": 27.1768,
+            "SAR": 11.8133,
+            "ISR": 20.8925
+          },
+          "drums": {
+            "SDR": 8.0797,
+            "SIR": 18.5335,
+            "SAR": 8.60186,
+            "ISR": 15.311
+          },
+          "bass": {
+            "SDR": 10.1394,
+            "SIR": 24.832,
+            "SAR": 9.70667,
+            "ISR": 13.4208
+          },
+          "other": {
+            "SDR": 11.4582,
+            "SIR": 17.4309,
+            "SAR": 11.9787,
+            "ISR": 21.244
+          }
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "vocals": {
+            "SDR": 10.166,
+            "SIR": 18.4076,
+            "SAR": 9.40416,
+            "ISR": 15.2365
+          },
+          "drums": {
+            "SDR": 9.99903,
+            "SIR": 18.2487,
+            "SAR": 10.1007,
+            "ISR": 16.4779
+          },
+          "bass": {
+            "SDR": 15.9573,
+            "SIR": 30.6784,
+            "SAR": 14.9032,
+            "ISR": 21.2961
+          },
+          "other": {
+            "SDR": 11.0211,
+            "SIR": 15.3572,
+            "SAR": 10.0456,
+            "ISR": 16.9093
+          }
+        }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 13.3994,
+            "SIR": 22.7286,
+            "SAR": 13.1524,
+            "ISR": 24.0039
+          },
+          "drums": {
+            "SDR": 10.4857,
+            "SIR": 16.1989,
+            "SAR": 10.5346,
+            "ISR": 18.7091
+          },
+          "bass": {
+            "SDR": 11.8582,
+            "SIR": 21.4109,
+            "SAR": 8.26932,
+            "ISR": 10.35
+          },
+          "other": {
+            "SDR": 9.60429,
+            "SIR": 12.8069,
+            "SAR": 8.63633,
+            "ISR": 18.5483
+          }
+        }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 10.44,
+            "SIR": 18.3898,
+            "SAR": 10.5196,
+            "ISR": 19.6375
+          },
+          "drums": {
+            "SDR": 11.9998,
+            "SIR": 20.8655,
+            "SAR": 13.0245,
+            "ISR": 19.6137
+          },
+          "bass": {
+            "SDR": 10.7698,
+            "SIR": 19.1833,
+            "SAR": 11.2627,
+            "ISR": 18.7348
+          },
+          "other": {
+            "SDR": 6.34637,
+            "SIR": 13.0994,
+            "SAR": 6.5491,
+            "ISR": 11.8594
+          }
+        }
+      },
+      {
+        "track_name": "Auctioneer - Our Future Faces",
+        "scores": {
+          "vocals": {
+            "SDR": 6.54255,
+            "SIR": 16.6517,
+            "SAR": 7.06569,
+            "ISR": 14.773
+          },
+          "drums": {
+            "SDR": 6.66935,
+            "SIR": 16.3642,
+            "SAR": 6.84015,
+            "ISR": 12.5482
+          },
+          "bass": {
+            "SDR": 14.5047,
+            "SIR": 23.776,
+            "SAR": 15.0442,
+            "ISR": 23.5945
+          },
+          "other": {
+            "SDR": 10.7118,
+            "SIR": 17.9435,
+            "SAR": 9.71123,
+            "ISR": 15.856
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.36648,
-        "SIR": 18.1377,
-        "SAR": 8.42103,
-        "ISR": 16.2375
+        "SDR": 10.2706,
+        "SIR": 18.3987,
+        "SAR": 10.084,
+        "ISR": 17.578
       },
       "drums": {
-        "SDR": 8.59161,
-        "SIR": 20.1465,
-        "SAR": 8.1484,
-        "ISR": 12.1594
+        "SDR": 9.73137,
+        "SIR": 18.5731,
+        "SAR": 10.3285,
+        "ISR": 16.2308
       },
       "bass": {
-        "SDR": 14.1263,
-        "SIR": 21.7476,
-        "SAR": 14.4473,
-        "ISR": 19.9672
+        "SDR": 12.043,
+        "SIR": 21.7005,
+        "SAR": 11.623,
+        "ISR": 16.9931
       }
     }
   },
@@ -14073,26 +15428,345 @@
             "ISR": 0.13107
           }
         }
+      },
+      {
+        "track_name": "ANiMAL - Clinic A",
+        "scores": {
+          "vocals": {
+            "SDR": 5.63418,
+            "SIR": 10.3112,
+            "SAR": 6.45533,
+            "ISR": 14.8126
+          },
+          "drums": {
+            "SDR": 6.25735,
+            "SIR": 12.8745,
+            "SAR": 6.40789,
+            "ISR": 12.4119
+          },
+          "bass": {
+            "SDR": 9.5516,
+            "SIR": 17.7919,
+            "SAR": 11.9827,
+            "ISR": 11.8647
+          },
+          "other": {
+            "SDR": 3.64451,
+            "SIR": 10.5018,
+            "SAR": 4.14296,
+            "ISR": 6.22975
+          }
+        }
+      },
+      {
+        "track_name": "ANiMAL - Easy Tiger",
+        "scores": {
+          "vocals": {
+            "SDR": 9.70294,
+            "SIR": 15.0099,
+            "SAR": 9.54043,
+            "ISR": 19.8526
+          },
+          "drums": {
+            "SDR": 7.11087,
+            "SIR": 11.8272,
+            "SAR": 7.93243,
+            "ISR": 15.9744
+          },
+          "bass": {
+            "SDR": 1.74278,
+            "SIR": 3.81685,
+            "SAR": 8.21649,
+            "ISR": 13.9148
+          },
+          "other": {
+            "SDR": 0.13952,
+            "SIR": 7.06959,
+            "SAR": -1.65524,
+            "ISR": 0.40887
+          }
+        }
+      },
+      {
+        "track_name": "ANiMAL - Rockshow",
+        "scores": {
+          "vocals": {
+            "SDR": 2.08539,
+            "SIR": 4.85948,
+            "SAR": 5.63099,
+            "ISR": 15.7776
+          },
+          "drums": {
+            "SDR": 9.07883,
+            "SIR": 17.2557,
+            "SAR": 10.2048,
+            "ISR": 16.9867
+          },
+          "bass": {
+            "SDR": 7.49909,
+            "SIR": 22.7875,
+            "SAR": 7.81107,
+            "ISR": 9.45955
+          },
+          "other": {
+            "SDR": 0.00127,
+            "SIR": 8.74872,
+            "SAR": -0.0027,
+            "ISR": 0.06903
+          }
+        }
+      },
+      {
+        "track_name": "Actions - Devil's Words",
+        "scores": {
+          "vocals": {
+            "SDR": 10.7929,
+            "SIR": 19.1612,
+            "SAR": 10.36,
+            "ISR": 15.8442
+          },
+          "drums": {
+            "SDR": 8.5171,
+            "SIR": 18.4964,
+            "SAR": 9.6957,
+            "ISR": 14.3901
+          },
+          "bass": {
+            "SDR": 10.9652,
+            "SIR": 19.6768,
+            "SAR": 10.7187,
+            "ISR": 17.096
+          },
+          "other": {
+            "SDR": 0.00125,
+            "SIR": -5.48266,
+            "SAR": -0.00771,
+            "ISR": 0.28972
+          }
+        }
+      },
+      {
+        "track_name": "Actions - One Minute Smile",
+        "scores": {
+          "vocals": {
+            "SDR": 8.20336,
+            "SIR": 14.534,
+            "SAR": 8.71192,
+            "ISR": 14.5608
+          },
+          "drums": {
+            "SDR": 8.66795,
+            "SIR": 16.6126,
+            "SAR": 10.1273,
+            "ISR": 13.5402
+          },
+          "bass": {
+            "SDR": 7.20517,
+            "SIR": 6.83853,
+            "SAR": 6.68404,
+            "ISR": 15.6228
+          },
+          "other": {
+            "SDR": 0.02392,
+            "SIR": 7.57753,
+            "SAR": -0.00311,
+            "ISR": 0.30841
+          }
+        }
+      },
+      {
+        "track_name": "Actions - South Of The Water",
+        "scores": {
+          "vocals": {
+            "SDR": 9.43828,
+            "SIR": 16.808,
+            "SAR": 10.1425,
+            "ISR": 15.452
+          },
+          "drums": {
+            "SDR": 8.94208,
+            "SIR": 17.6703,
+            "SAR": 10.1135,
+            "ISR": 14.4929
+          },
+          "bass": {
+            "SDR": 15.8599,
+            "SIR": 18.764,
+            "SAR": 14.2832,
+            "ISR": 18.077
+          },
+          "other": {
+            "SDR": 8e-05,
+            "SIR": -14.1842,
+            "SAR": -7.86712,
+            "ISR": 0.00216
+          }
+        }
+      },
+      {
+        "track_name": "Aimee Norwich - Child",
+        "scores": {
+          "vocals": {
+            "SDR": 6.30089,
+            "SIR": 18.2651,
+            "SAR": 6.41398,
+            "ISR": 12.5593
+          },
+          "drums": {
+            "SDR": 6.13333,
+            "SIR": 20.9043,
+            "SAR": 7.60224,
+            "ISR": 9.38209
+          },
+          "bass": {
+            "SDR": 15.978,
+            "SIR": 28.2875,
+            "SAR": 14.5916,
+            "ISR": 17.9402
+          },
+          "other": {
+            "SDR": 0.111825,
+            "SIR": 4.44369,
+            "SAR": -0.20347,
+            "ISR": 0.3609
+          }
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Goodbye Bolero",
+        "scores": {
+          "vocals": {
+            "SDR": 11.2096,
+            "SIR": 24.5018,
+            "SAR": 11.5893,
+            "ISR": 20.4149
+          },
+          "drums": {
+            "SDR": 7.6472,
+            "SIR": 19.1537,
+            "SAR": 7.98651,
+            "ISR": 14.0588
+          },
+          "bass": {
+            "SDR": 10.0312,
+            "SIR": 22.72,
+            "SAR": 9.88463,
+            "ISR": 13.9168
+          },
+          "other": {
+            "SDR": 0.0433,
+            "SIR": 16.9533,
+            "SAR": -0.00019,
+            "ISR": 0.27942
+          }
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "vocals": {
+            "SDR": 9.7852,
+            "SIR": 16.1949,
+            "SAR": 8.14363,
+            "ISR": 13.5847
+          },
+          "drums": {
+            "SDR": 8.81943,
+            "SIR": 18.9322,
+            "SAR": 8.76285,
+            "ISR": 11.9054
+          },
+          "bass": {
+            "SDR": 14.3802,
+            "SIR": 25.3279,
+            "SAR": 13.4473,
+            "ISR": 19.752
+          },
+          "other": {
+            "SDR": 0.00093,
+            "SIR": 9.72642,
+            "SAR": 0.00346,
+            "ISR": 0.78442
+          }
+        }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "vocals": {
+            "SDR": 12.7892,
+            "SIR": 22.1083,
+            "SAR": 12.5385,
+            "ISR": 23.5863
+          },
+          "drums": {
+            "SDR": 8.42774,
+            "SIR": 13.9938,
+            "SAR": 7.77331,
+            "ISR": 13.3034
+          },
+          "bass": {
+            "SDR": 10.1646,
+            "SIR": 21.423,
+            "SAR": 6.79117,
+            "ISR": 7.58549
+          },
+          "other": {
+            "SDR": 1.10106,
+            "SIR": 4.73975,
+            "SAR": 0.40972,
+            "ISR": 2.0314
+          }
+        }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 9.78957,
+            "SIR": 18.8723,
+            "SAR": 9.74884,
+            "ISR": 17.129
+          },
+          "drums": {
+            "SDR": 11.2418,
+            "SIR": 20.2537,
+            "SAR": 12.5271,
+            "ISR": 17.513
+          },
+          "bass": {
+            "SDR": 9.24887,
+            "SIR": 15.5493,
+            "SAR": 10.9884,
+            "ISR": 15.6575
+          },
+          "other": {
+            "SDR": 0.01212,
+            "SIR": 7.35532,
+            "SAR": -0.150605,
+            "ISR": 0.14977
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 7.95585,
-        "SIR": 17.0177,
-        "SAR": 8.01902,
-        "ISR": 16.2047
+        "SDR": 9.70294,
+        "SIR": 16.808,
+        "SAR": 9.54043,
+        "ISR": 15.7776
       },
       "drums": {
-        "SDR": 7.80366,
-        "SIR": 19.4777,
-        "SAR": 7.03097,
-        "ISR": 10.6565
+        "SDR": 8.5171,
+        "SIR": 17.6703,
+        "SAR": 8.76285,
+        "ISR": 14.0588
       },
       "bass": {
-        "SDR": 13.3465,
-        "SIR": 19.2043,
-        "SAR": 13.9382,
-        "ISR": 19.3453
+        "SDR": 10.0312,
+        "SIR": 19.6768,
+        "SAR": 10.7187,
+        "ISR": 15.6228
       }
     }
   },
@@ -14302,20 +15976,37 @@
             "ISR": 19.4741
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 12.2009,
+            "SIR": 23.8371,
+            "SAR": 12.8101,
+            "ISR": 16.0466
+          },
+          "instrumental": {
+            "SDR": 16.0736,
+            "SIR": 27.8804,
+            "SAR": 18.726,
+            "ISR": 18.6299
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 11.9504,
-        "SIR": 23.1166,
-        "SAR": 12.093,
-        "ISR": 15.4782
+        "SDR": 12.2009,
+        "SIR": 23.2009,
+        "SAR": 12.1323,
+        "ISR": 15.6858
       },
       "instrumental": {
-        "SDR": 16.3035,
-        "SIR": 26.6161,
-        "SAR": 18.5167,
-        "ISR": 18.3939
+        "SDR": 16.2384,
+        "SIR": 27.1057,
+        "SAR": 18.726,
+        "ISR": 18.5818
       }
     }
   },
@@ -14525,20 +16216,37 @@
             "ISR": 19.2232
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 11.6875,
+            "SIR": 19.4326,
+            "SAR": 12.2091,
+            "ISR": 15.9124
+          },
+          "instrumental": {
+            "SDR": 15.4387,
+            "SIR": 27.8999,
+            "SAR": 17.7655,
+            "ISR": 17.6928
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 11.0399,
-        "SIR": 22.4209,
-        "SAR": 11.2773,
-        "ISR": 14.6269
+        "SDR": 11.6556,
+        "SIR": 22.1936,
+        "SAR": 11.3572,
+        "ISR": 14.7769
       },
       "instrumental": {
-        "SDR": 15.686,
-        "SIR": 25.1947,
-        "SAR": 17.9232,
-        "ISR": 18.1829
+        "SDR": 15.4926,
+        "SIR": 25.2511,
+        "SAR": 17.878,
+        "ISR": 17.9925
       }
     }
   },
@@ -14748,20 +16456,37 @@
             "ISR": 19.7369
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 12.1742,
+            "SIR": 24.1013,
+            "SAR": 12.7593,
+            "ISR": 16.196
+          },
+          "instrumental": {
+            "SDR": 16.1898,
+            "SIR": 28.2734,
+            "SAR": 18.721,
+            "ISR": 18.8564
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 11.8751,
-        "SIR": 23.3541,
-        "SAR": 11.9782,
-        "ISR": 15.5404
+        "SDR": 12.1742,
+        "SIR": 23.4542,
+        "SAR": 11.9941,
+        "ISR": 15.7206
       },
       "instrumental": {
-        "SDR": 16.3539,
-        "SIR": 26.674,
-        "SAR": 18.3822,
-        "ISR": 18.5845
+        "SDR": 16.2552,
+        "SIR": 26.9339,
+        "SAR": 18.721,
+        "ISR": 18.7891
       }
     }
   },
@@ -14971,20 +16696,37 @@
             "ISR": 19.7197
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 12.7367,
+            "SIR": 26.4655,
+            "SAR": 13.6118,
+            "ISR": 17.0604
+          },
+          "instrumental": {
+            "SDR": 16.4724,
+            "SIR": 30.6654,
+            "SAR": 19.2084,
+            "ISR": 18.9816
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 12.944,
-        "SIR": 26.6159,
-        "SAR": 13.8695,
-        "ISR": 16.1485
+        "SDR": 12.867,
+        "SIR": 26.4655,
+        "SAR": 13.8535,
+        "ISR": 16.4038
       },
       "instrumental": {
-        "SDR": 17.1005,
-        "SIR": 28.4844,
-        "SAR": 19.2617,
-        "ISR": 18.9152
+        "SDR": 16.9951,
+        "SIR": 28.5414,
+        "SAR": 19.2084,
+        "ISR": 18.9816
       }
     }
   },
@@ -15194,20 +16936,37 @@
             "ISR": 19.7181
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 12.7157,
+            "SIR": 26.6103,
+            "SAR": 13.6576,
+            "ISR": 17.0729
+          },
+          "instrumental": {
+            "SDR": 16.436,
+            "SIR": 30.7544,
+            "SAR": 19.1643,
+            "ISR": 18.9975
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 13.0329,
-        "SIR": 26.7321,
-        "SAR": 13.913,
-        "ISR": 16.1499
+        "SDR": 12.9164,
+        "SIR": 26.6103,
+        "SAR": 13.8997,
+        "ISR": 16.4235
       },
       "instrumental": {
-        "SDR": 17.1147,
-        "SIR": 28.3656,
-        "SAR": 19.3615,
-        "ISR": 18.9672
+        "SDR": 17.0029,
+        "SIR": 28.4675,
+        "SAR": 19.1643,
+        "ISR": 18.9975
       }
     }
   },
@@ -15417,20 +17176,37 @@
             "ISR": 19.4684
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 11.9422,
+            "SIR": 23.9059,
+            "SAR": 12.4638,
+            "ISR": 16.2029
+          },
+          "instrumental": {
+            "SDR": 15.5175,
+            "SIR": 28.5661,
+            "SAR": 17.7634,
+            "ISR": 18.6425
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 11.4606,
-        "SIR": 23.9581,
-        "SAR": 11.4913,
-        "ISR": 14.9177
+        "SDR": 11.551,
+        "SIR": 23.9059,
+        "SAR": 12.011,
+        "ISR": 14.9376
       },
       "instrumental": {
-        "SDR": 15.6974,
-        "SIR": 25.3539,
-        "SAR": 17.2392,
-        "ISR": 18.4874
+        "SDR": 15.5256,
+        "SIR": 25.7777,
+        "SAR": 17.6244,
+        "ISR": 18.6425
       }
     }
   },
@@ -15640,20 +17416,37 @@
             "ISR": 19.644
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 11.2788,
+            "SIR": 28.7263,
+            "SAR": 10.0593,
+            "ISR": 11.7162
+          },
+          "instrumental": {
+            "SDR": 15.1491,
+            "SIR": 18.4602,
+            "SAR": 16.0043,
+            "ISR": 19.2895
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.7386,
-        "SIR": 29.8483,
-        "SAR": 6.61471,
-        "ISR": 8.71898
+        "SDR": 9.02955,
+        "SIR": 29.7966,
+        "SAR": 6.86828,
+        "ISR": 8.72186
       },
       "instrumental": {
-        "SDR": 16.2059,
-        "SIR": 17.4754,
-        "SAR": 15.4927,
-        "ISR": 19.5075
+        "SDR": 16.0015,
+        "SIR": 18.3039,
+        "SAR": 16.0043,
+        "ISR": 19.4711
       }
     }
   },
@@ -16046,14 +17839,31 @@
             "ISR": 19.3727
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 12.4183,
+            "SIR": 26.1056,
+            "SAR": 13.1788,
+            "ISR": 16.1269
+          },
+          "other": {
+            "SDR": -4.18164,
+            "SIR": 20.2352,
+            "SAR": -5.38024,
+            "ISR": 16.6858
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 12.4663,
-        "SIR": 26.5467,
-        "SAR": 13.1553,
-        "ISR": 15.4123
+        "SDR": 12.4423,
+        "SIR": 26.5035,
+        "SAR": 13.167,
+        "ISR": 15.4674
       }
     }
   },
@@ -16469,14 +18279,31 @@
             "ISR": 19.3799
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 9.14983,
+            "SIR": 27.5606,
+            "SAR": -5.10267,
+            "ISR": 2.80428
+          },
+          "other": {
+            "SDR": -4.72006,
+            "SIR": 1.34799,
+            "SAR": -3.36664,
+            "ISR": 18.3667
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 7.8587,
-        "SIR": 24.7638,
-        "SAR": -7.1653,
-        "ISR": 2.3716
+        "SDR": 7.98181,
+        "SIR": 24.9469,
+        "SAR": -6.95266,
+        "ISR": 2.40172
       }
     }
   },
@@ -16669,14 +18496,31 @@
             "ISR": 19.2378
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 8.49911,
+            "SIR": 25.9433,
+            "SAR": -4.99301,
+            "ISR": 2.8464
+          },
+          "other": {
+            "SDR": -4.6784,
+            "SIR": 1.34594,
+            "SAR": -3.39803,
+            "ISR": 18.3066
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.77308,
-        "SIR": 25.6381,
-        "SAR": -6.63171,
-        "ISR": 2.43491
+        "SDR": 8.6361,
+        "SIR": 25.7907,
+        "SAR": -6.54662,
+        "ISR": 2.51053
       }
     }
   },
@@ -16869,14 +18713,31 @@
             "ISR": 19.4227
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 8.459,
+            "SIR": 26.9441,
+            "SAR": -4.98987,
+            "ISR": 2.75873
+          },
+          "other": {
+            "SDR": -4.71604,
+            "SIR": 1.35969,
+            "SAR": -3.24537,
+            "ISR": 18.4479
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.63973,
-        "SIR": 26.3876,
-        "SAR": -6.65376,
-        "ISR": 2.36155
+        "SDR": 8.54936,
+        "SIR": 26.6658,
+        "SAR": -6.59699,
+        "ISR": 2.43645
       }
     }
   },
@@ -17069,14 +18930,31 @@
             "ISR": 19.5669
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 9.66433,
+            "SIR": 26.7163,
+            "SAR": -4.8794,
+            "ISR": 2.93274
+          },
+          "other": {
+            "SDR": -4.59503,
+            "SIR": 2.34488,
+            "SAR": -3.51889,
+            "ISR": 18.3138
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.40808,
-        "SIR": 24.9348,
-        "SAR": -6.68533,
-        "ISR": 2.49869
+        "SDR": 9.45343,
+        "SIR": 25.3296,
+        "SAR": -6.47824,
+        "ISR": 2.63335
       }
     }
   },
@@ -17269,14 +19147,31 @@
             "ISR": 19.3057
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 12.2176,
+            "SIR": 25.9719,
+            "SAR": 12.925,
+            "ISR": 16.0315
+          },
+          "other": {
+            "SDR": -4.17694,
+            "SIR": 20.2713,
+            "SAR": -5.35717,
+            "ISR": 16.7248
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 12.2978,
-        "SIR": 26.1761,
-        "SAR": 12.7406,
-        "ISR": 15.275
+        "SDR": 12.2577,
+        "SIR": 26.074,
+        "SAR": 12.8328,
+        "ISR": 15.4933
       }
     }
   },
@@ -17669,46 +19564,1257 @@
             "ISR": 19.0682
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 12.3716,
+            "SIR": 24.2785,
+            "SAR": 12.8717,
+            "ISR": 16.433
+          },
+          "other": {
+            "SDR": -4.17094,
+            "SIR": 20.6596,
+            "SAR": -5.43515,
+            "ISR": 16.0996
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 12.3365,
-        "SIR": 23.3127,
-        "SAR": 12.734,
-        "ISR": 16.2412
+        "SDR": 12.3541,
+        "SIR": 23.7956,
+        "SAR": 12.8028,
+        "ISR": 16.2651
       }
     }
   },
   "kuielab_a_other.onnx": {
     "model_name": "MDX-Net Model: kuielab_a_other",
-    "track_scores": [],
-    "median_scores": {}
+    "track_scores": [
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "other": {
+            "SDR": 10.2985,
+            "SIR": 23.2364,
+            "SAR": 10.8844,
+            "ISR": 15.4433
+          },
+          "instrumental": {
+            "SDR": 5.0566,
+            "SIR": 13.1137,
+            "SAR": 10.1327,
+            "ISR": 6.35631
+          }
+        }
+      },
+      {
+        "track_name": "ANiMAL - Clinic A",
+        "scores": {
+          "other": {
+            "SDR": 7.61851,
+            "SIR": 15.8185,
+            "SAR": 8.05757,
+            "ISR": 13.0745
+          },
+          "instrumental": {
+            "SDR": 2.76622,
+            "SIR": 10.1729,
+            "SAR": 3.73319,
+            "ISR": 5.413
+          }
+        }
+      },
+      {
+        "track_name": "ANiMAL - Easy Tiger",
+        "scores": {
+          "other": {
+            "SDR": 5.49128,
+            "SIR": 14.4941,
+            "SAR": 4.77523,
+            "ISR": 10.9684
+          },
+          "instrumental": {
+            "SDR": 3.74514,
+            "SIR": 8.76704,
+            "SAR": 3.87568,
+            "ISR": 9.0393
+          }
+        }
+      },
+      {
+        "track_name": "ANiMAL - Rockshow",
+        "scores": {
+          "other": {
+            "SDR": 4.50656,
+            "SIR": 12.7829,
+            "SAR": 3.94946,
+            "ISR": 10.6515
+          },
+          "instrumental": {
+            "SDR": 6.48677,
+            "SIR": 14.9738,
+            "SAR": 10.1263,
+            "ISR": 10.4038
+          }
+        }
+      },
+      {
+        "track_name": "Actions - Devil's Words",
+        "scores": {
+          "other": {
+            "SDR": 8.14388,
+            "SIR": 16.9658,
+            "SAR": 8.37129,
+            "ISR": 12.216
+          },
+          "instrumental": {
+            "SDR": 1.18375,
+            "SIR": 8.94635,
+            "SAR": 0.019145,
+            "ISR": 5.60027
+          }
+        }
+      },
+      {
+        "track_name": "Actions - One Minute Smile",
+        "scores": {
+          "other": {
+            "SDR": 7.4545,
+            "SIR": 16.4952,
+            "SAR": 7.75036,
+            "ISR": 11.9116
+          },
+          "instrumental": {
+            "SDR": 0.47187,
+            "SIR": 7.23714,
+            "SAR": -1.49364,
+            "ISR": 4.59639
+          }
+        }
+      },
+      {
+        "track_name": "Actions - South Of The Water",
+        "scores": {
+          "other": {
+            "SDR": 7.78665,
+            "SIR": 17.3403,
+            "SAR": 8.25838,
+            "ISR": 12.1739
+          },
+          "instrumental": {
+            "SDR": 2.79513,
+            "SIR": 10.4054,
+            "SAR": 2.56792,
+            "ISR": 7.6092
+          }
+        }
+      },
+      {
+        "track_name": "Aimee Norwich - Child",
+        "scores": {
+          "other": {
+            "SDR": 7.6235,
+            "SIR": 16.3783,
+            "SAR": 7.86388,
+            "ISR": 12.2587
+          },
+          "instrumental": {
+            "SDR": 7.38504,
+            "SIR": 13.2484,
+            "SAR": 12.3593,
+            "ISR": 10.5543
+          }
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Goodbye Bolero",
+        "scores": {
+          "other": {
+            "SDR": 10.9138,
+            "SIR": 17.6851,
+            "SAR": 12.1946,
+            "ISR": 16.0613
+          },
+          "instrumental": {
+            "SDR": 1.02427,
+            "SIR": 4.48848,
+            "SAR": 5.51297,
+            "ISR": 2.07418
+          }
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "other": {
+            "SDR": 10.7856,
+            "SIR": 17.8252,
+            "SAR": 10.8393,
+            "ISR": 13.8617
+          },
+          "instrumental": {
+            "SDR": 1.38582,
+            "SIR": 7.33442,
+            "SAR": 0.59428,
+            "ISR": 4.54566
+          }
+        }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "other": {
+            "SDR": 10.1912,
+            "SIR": 16.5443,
+            "SAR": 11.2273,
+            "ISR": 15.5455
+          },
+          "instrumental": {
+            "SDR": 1.61645,
+            "SIR": 6.12899,
+            "SAR": 3.15946,
+            "ISR": 3.88359
+          }
+        }
+      }
+    ],
+    "median_scores": {
+      "instrumental": {
+        "SDR": 2.76622,
+        "SIR": 8.94635,
+        "SAR": 3.73319,
+        "ISR": 5.60027
+      }
+    }
   },
   "kuielab_a_bass.onnx": {
     "model_name": "MDX-Net Model: kuielab_a_bass",
-    "track_scores": [],
-    "median_scores": {}
+    "track_scores": [
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "bass": {
+            "SDR": 16.0732,
+            "SIR": 23.7351,
+            "SAR": 18.5785,
+            "ISR": 18.8732
+          },
+          "instrumental": {
+            "SDR": 0.77436,
+            "SIR": 6.81879,
+            "SAR": 4.43829,
+            "ISR": 1.74334
+          }
+        }
+      },
+      {
+        "track_name": "ANiMAL - Clinic A",
+        "scores": {
+          "bass": {
+            "SDR": 10.4234,
+            "SIR": 21.1994,
+            "SAR": 12.4414,
+            "ISR": 13.555
+          },
+          "instrumental": {
+            "SDR": 2.16512,
+            "SIR": 5.57842,
+            "SAR": 2.94353,
+            "ISR": 3.86083
+          }
+        }
+      },
+      {
+        "track_name": "ANiMAL - Easy Tiger",
+        "scores": {
+          "bass": {
+            "SDR": 9.56121,
+            "SIR": 17.6101,
+            "SAR": 8.99326,
+            "ISR": 11.8569
+          },
+          "instrumental": {
+            "SDR": 2.66124,
+            "SIR": 6.03571,
+            "SAR": 3.04769,
+            "ISR": 6.3789
+          }
+        }
+      },
+      {
+        "track_name": "ANiMAL - Rockshow",
+        "scores": {
+          "bass": {
+            "SDR": 10.4728,
+            "SIR": 20.4749,
+            "SAR": 11.6721,
+            "ISR": 13.8727
+          },
+          "instrumental": {
+            "SDR": 2.04131,
+            "SIR": 4.08179,
+            "SAR": 3.77969,
+            "ISR": 4.65636
+          }
+        }
+      },
+      {
+        "track_name": "Actions - Devil's Words",
+        "scores": {
+          "bass": {
+            "SDR": 10.3345,
+            "SIR": 21.1304,
+            "SAR": 10.5167,
+            "ISR": 14.1136
+          },
+          "instrumental": {
+            "SDR": 1.36093,
+            "SIR": 7.13739,
+            "SAR": 0.76338,
+            "ISR": 7.76997
+          }
+        }
+      },
+      {
+        "track_name": "Actions - One Minute Smile",
+        "scores": {
+          "bass": {
+            "SDR": 8.02994,
+            "SIR": 15.4654,
+            "SAR": 6.98974,
+            "ISR": 12.0058
+          },
+          "instrumental": {
+            "SDR": 2.12083,
+            "SIR": 12.1217,
+            "SAR": 1.22223,
+            "ISR": 12.6578
+          }
+        }
+      },
+      {
+        "track_name": "Actions - South Of The Water",
+        "scores": {
+          "bass": {
+            "SDR": 14.8816,
+            "SIR": 24.8207,
+            "SAR": 14.1756,
+            "ISR": 15.9029
+          },
+          "instrumental": {
+            "SDR": 0.914555,
+            "SIR": 4.78908,
+            "SAR": 0.974005,
+            "ISR": 3.62381
+          }
+        }
+      },
+      {
+        "track_name": "Aimee Norwich - Child",
+        "scores": {
+          "bass": {
+            "SDR": 13.7034,
+            "SIR": 24.6163,
+            "SAR": 14.436,
+            "ISR": 16.2823
+          },
+          "instrumental": {
+            "SDR": 1.5507,
+            "SIR": 2.32283,
+            "SAR": 5.43508,
+            "ISR": 2.79115
+          }
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Goodbye Bolero",
+        "scores": {
+          "bass": {
+            "SDR": 8.69524,
+            "SIR": 20.9984,
+            "SAR": 8.73451,
+            "ISR": 11.4699
+          },
+          "instrumental": {
+            "SDR": 7.89635,
+            "SIR": 11.1789,
+            "SAR": 16.1208,
+            "ISR": 12.125
+          }
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "bass": {
+            "SDR": 10.9338,
+            "SIR": 20.8366,
+            "SAR": 11.0176,
+            "ISR": 13.4131
+          },
+          "instrumental": {
+            "SDR": 3.07882,
+            "SIR": 7.71596,
+            "SAR": 3.94259,
+            "ISR": 9.66354
+          }
+        }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "bass": {
+            "SDR": 10.2932,
+            "SIR": 22.0512,
+            "SAR": 7.5089,
+            "ISR": 9.02483
+          },
+          "instrumental": {
+            "SDR": 5.33401,
+            "SIR": 8.1387,
+            "SAR": 4.32716,
+            "ISR": 10.3974
+          }
+        }
+      }
+    ],
+    "median_scores": {
+      "bass": {
+        "SDR": 10.4234,
+        "SIR": 21.1304,
+        "SAR": 11.0176,
+        "ISR": 13.555
+      },
+      "instrumental": {
+        "SDR": 2.12083,
+        "SIR": 6.81879,
+        "SAR": 3.77969,
+        "ISR": 6.3789
+      }
+    }
   },
   "kuielab_a_drums.onnx": {
     "model_name": "MDX-Net Model: kuielab_a_drums",
-    "track_scores": [],
-    "median_scores": {}
+    "track_scores": [
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "drums": {
+            "SDR": 2.18069,
+            "SIR": 12.4405,
+            "SAR": 0.482,
+            "ISR": 3.95218
+          },
+          "instrumental": {
+            "SDR": 10.5281,
+            "SIR": 24.8726,
+            "SAR": 10.707,
+            "ISR": 18.0658
+          }
+        }
+      },
+      {
+        "track_name": "ANiMAL - Clinic A",
+        "scores": {
+          "drums": {
+            "SDR": 6.09482,
+            "SIR": 15.3373,
+            "SAR": 5.69309,
+            "ISR": 9.71032
+          },
+          "instrumental": {
+            "SDR": 5.95259,
+            "SIR": 12.4937,
+            "SAR": 6.345,
+            "ISR": 13.3849
+          }
+        }
+      },
+      {
+        "track_name": "ANiMAL - Easy Tiger",
+        "scores": {
+          "drums": {
+            "SDR": 7.65583,
+            "SIR": 13.2083,
+            "SAR": 8.22115,
+            "ISR": 15.202
+          },
+          "instrumental": {
+            "SDR": 1.96653,
+            "SIR": 4.93443,
+            "SAR": 1.95511,
+            "ISR": 5.13672
+          }
+        }
+      },
+      {
+        "track_name": "ANiMAL - Rockshow",
+        "scores": {
+          "drums": {
+            "SDR": 7.74451,
+            "SIR": 16.8515,
+            "SAR": 8.00592,
+            "ISR": 11.9181
+          },
+          "instrumental": {
+            "SDR": 3.37901,
+            "SIR": 5.6739,
+            "SAR": 5.9064,
+            "ISR": 6.87746
+          }
+        }
+      },
+      {
+        "track_name": "Actions - Devil's Words",
+        "scores": {
+          "drums": {
+            "SDR": 8.3774,
+            "SIR": 17.358,
+            "SAR": 8.9703,
+            "ISR": 13.4097
+          },
+          "instrumental": {
+            "SDR": 1.13225,
+            "SIR": 5.78609,
+            "SAR": -0.02352,
+            "ISR": 7.20048
+          }
+        }
+      },
+      {
+        "track_name": "Actions - One Minute Smile",
+        "scores": {
+          "drums": {
+            "SDR": 8.92681,
+            "SIR": 17.9665,
+            "SAR": 9.83928,
+            "ISR": 13.4112
+          },
+          "instrumental": {
+            "SDR": 0.60597,
+            "SIR": 6.57224,
+            "SAR": -0.71987,
+            "ISR": 5.69672
+          }
+        }
+      },
+      {
+        "track_name": "Actions - South Of The Water",
+        "scores": {
+          "drums": {
+            "SDR": 8.79356,
+            "SIR": 18.9857,
+            "SAR": 9.26457,
+            "ISR": 14.0863
+          },
+          "instrumental": {
+            "SDR": 3.21713,
+            "SIR": 9.42799,
+            "SAR": 3.47756,
+            "ISR": 8.76188
+          }
+        }
+      },
+      {
+        "track_name": "Aimee Norwich - Child",
+        "scores": {
+          "drums": {
+            "SDR": 6.5485,
+            "SIR": 14.2432,
+            "SAR": 7.06405,
+            "ISR": 11.4376
+          },
+          "instrumental": {
+            "SDR": 6.09861,
+            "SIR": 8.81919,
+            "SAR": 8.56361,
+            "ISR": 9.31477
+          }
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Goodbye Bolero",
+        "scores": {
+          "drums": {
+            "SDR": 5.91834,
+            "SIR": 13.4484,
+            "SAR": 5.95597,
+            "ISR": 11.5345
+          },
+          "instrumental": {
+            "SDR": 5.67263,
+            "SIR": 11.0306,
+            "SAR": 10.8119,
+            "ISR": 9.83723
+          }
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "drums": {
+            "SDR": 7.0039,
+            "SIR": 12.054,
+            "SAR": 6.81685,
+            "ISR": 13.0093
+          },
+          "instrumental": {
+            "SDR": 3.0156,
+            "SIR": 6.44809,
+            "SAR": 3.29406,
+            "ISR": 6.11917
+          }
+        }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "drums": {
+            "SDR": 9.15806,
+            "SIR": 15.13,
+            "SAR": 10.096,
+            "ISR": 15.7347
+          },
+          "instrumental": {
+            "SDR": 2.78024,
+            "SIR": 7.20549,
+            "SAR": 5.52393,
+            "ISR": 6.07613
+          }
+        }
+      }
+    ],
+    "median_scores": {
+      "drums": {
+        "SDR": 7.65583,
+        "SIR": 15.13,
+        "SAR": 8.00592,
+        "ISR": 13.0093
+      },
+      "instrumental": {
+        "SDR": 3.21713,
+        "SIR": 7.20549,
+        "SAR": 5.52393,
+        "ISR": 7.20048
+      }
+    }
   },
   "kuielab_b_other.onnx": {
     "model_name": "MDX-Net Model: kuielab_b_other",
-    "track_scores": [],
-    "median_scores": {}
+    "track_scores": [
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "other": {
+            "SDR": 9.64939,
+            "SIR": 22.6796,
+            "SAR": 10.5282,
+            "ISR": 13.6929
+          },
+          "instrumental": {
+            "SDR": 5.30899,
+            "SIR": 13.7586,
+            "SAR": 10.6078,
+            "ISR": 6.64791
+          }
+        }
+      },
+      {
+        "track_name": "ANiMAL - Clinic A",
+        "scores": {
+          "other": {
+            "SDR": 7.2477,
+            "SIR": 15.4396,
+            "SAR": 7.63335,
+            "ISR": 11.639
+          },
+          "instrumental": {
+            "SDR": 3.03107,
+            "SIR": 10.8778,
+            "SAR": 4.0042,
+            "ISR": 5.69864
+          }
+        }
+      },
+      {
+        "track_name": "ANiMAL - Easy Tiger",
+        "scores": {
+          "other": {
+            "SDR": 4.62974,
+            "SIR": 12.6399,
+            "SAR": 3.78679,
+            "ISR": 9.55436
+          },
+          "instrumental": {
+            "SDR": 4.20871,
+            "SIR": 9.70324,
+            "SAR": 4.30325,
+            "ISR": 9.23504
+          }
+        }
+      },
+      {
+        "track_name": "ANiMAL - Rockshow",
+        "scores": {
+          "other": {
+            "SDR": 0.4693,
+            "SIR": 0.85681,
+            "SAR": -1.61364,
+            "ISR": 2.07061
+          },
+          "instrumental": {
+            "SDR": 8.0243,
+            "SIR": 27.0428,
+            "SAR": 8.50187,
+            "ISR": 13.9945
+          }
+        }
+      },
+      {
+        "track_name": "Actions - Devil's Words",
+        "scores": {
+          "other": {
+            "SDR": 7.54582,
+            "SIR": 16.0865,
+            "SAR": 7.94442,
+            "ISR": 10.7807
+          },
+          "instrumental": {
+            "SDR": 1.41065,
+            "SIR": 9.83694,
+            "SAR": 0.046955,
+            "ISR": 5.96283
+          }
+        }
+      },
+      {
+        "track_name": "Actions - One Minute Smile",
+        "scores": {
+          "other": {
+            "SDR": 5.94498,
+            "SIR": 15.6722,
+            "SAR": 5.37025,
+            "ISR": 8.2591
+          },
+          "instrumental": {
+            "SDR": 0.95701,
+            "SIR": 10.5176,
+            "SAR": -0.81633,
+            "ISR": 5.7793
+          }
+        }
+      },
+      {
+        "track_name": "Actions - South Of The Water",
+        "scores": {
+          "other": {
+            "SDR": 7.03697,
+            "SIR": 15.627,
+            "SAR": 7.49614,
+            "ISR": 10.7276
+          },
+          "instrumental": {
+            "SDR": 3.03031,
+            "SIR": 11.1621,
+            "SAR": 2.57803,
+            "ISR": 7.89506
+          }
+        }
+      },
+      {
+        "track_name": "Aimee Norwich - Child",
+        "scores": {
+          "other": {
+            "SDR": 6.99408,
+            "SIR": 15.0626,
+            "SAR": 7.01234,
+            "ISR": 11.1562
+          },
+          "instrumental": {
+            "SDR": 7.57224,
+            "SIR": 13.75,
+            "SAR": 12.5566,
+            "ISR": 10.7771
+          }
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Goodbye Bolero",
+        "scores": {
+          "other": {
+            "SDR": 8.65245,
+            "SIR": 17.3684,
+            "SAR": 9.95854,
+            "ISR": 11.2087
+          },
+          "instrumental": {
+            "SDR": 1.7757,
+            "SIR": 7.2058,
+            "SAR": 5.30094,
+            "ISR": 3.13038
+          }
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "other": {
+            "SDR": 9.64301,
+            "SIR": 16.7565,
+            "SAR": 9.93033,
+            "ISR": 11.6496
+          },
+          "instrumental": {
+            "SDR": 1.7586,
+            "SIR": 8.82671,
+            "SAR": 1.64525,
+            "ISR": 4.98343
+          }
+        }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "other": {
+            "SDR": 9.22624,
+            "SIR": 16.3695,
+            "SAR": 10.7097,
+            "ISR": 13.1194
+          },
+          "instrumental": {
+            "SDR": 1.96556,
+            "SIR": 7.01307,
+            "SAR": 3.22011,
+            "ISR": 4.33743
+          }
+        }
+      }
+    ],
+    "median_scores": {
+      "instrumental": {
+        "SDR": 3.03031,
+        "SIR": 10.5176,
+        "SAR": 4.0042,
+        "ISR": 5.96283
+      }
+    }
   },
   "kuielab_b_bass.onnx": {
     "model_name": "MDX-Net Model: kuielab_b_bass",
-    "track_scores": [],
-    "median_scores": {}
+    "track_scores": [
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "bass": {
+            "SDR": 15.7548,
+            "SIR": 23.7323,
+            "SAR": 18.4123,
+            "ISR": 18.2626
+          },
+          "instrumental": {
+            "SDR": 0.81314,
+            "SIR": 6.97275,
+            "SAR": 4.42315,
+            "ISR": 1.81282
+          }
+        }
+      },
+      {
+        "track_name": "ANiMAL - Clinic A",
+        "scores": {
+          "bass": {
+            "SDR": 10.2335,
+            "SIR": 21.1984,
+            "SAR": 12.3839,
+            "ISR": 13.3543
+          },
+          "instrumental": {
+            "SDR": 2.2203,
+            "SIR": 5.75124,
+            "SAR": 2.93622,
+            "ISR": 3.89337
+          }
+        }
+      },
+      {
+        "track_name": "ANiMAL - Easy Tiger",
+        "scores": {
+          "bass": {
+            "SDR": 9.61002,
+            "SIR": 18.8263,
+            "SAR": 8.78097,
+            "ISR": 11.4529
+          },
+          "instrumental": {
+            "SDR": 2.7386,
+            "SIR": 6.12097,
+            "SAR": 3.13034,
+            "ISR": 6.54165
+          }
+        }
+      },
+      {
+        "track_name": "ANiMAL - Rockshow",
+        "scores": {
+          "bass": {
+            "SDR": 3.08289,
+            "SIR": 25.5082,
+            "SAR": 3.01361,
+            "ISR": 4.23416
+          },
+          "instrumental": {
+            "SDR": 4.89626,
+            "SIR": 12.1984,
+            "SAR": 4.40366,
+            "ISR": 9.55751
+          }
+        }
+      },
+      {
+        "track_name": "Actions - Devil's Words",
+        "scores": {
+          "bass": {
+            "SDR": 9.8357,
+            "SIR": 20.3337,
+            "SAR": 10.1956,
+            "ISR": 13.4856
+          },
+          "instrumental": {
+            "SDR": 1.42536,
+            "SIR": 7.40689,
+            "SAR": 0.7136,
+            "ISR": 7.82504
+          }
+        }
+      },
+      {
+        "track_name": "Actions - One Minute Smile",
+        "scores": {
+          "bass": {
+            "SDR": 5.61949,
+            "SIR": 9.35277,
+            "SAR": 5.27928,
+            "ISR": 10.6836
+          },
+          "instrumental": {
+            "SDR": 2.07579,
+            "SIR": 12.7337,
+            "SAR": 0.95736,
+            "ISR": 11.9567
+          }
+        }
+      },
+      {
+        "track_name": "Actions - South Of The Water",
+        "scores": {
+          "bass": {
+            "SDR": 14.2638,
+            "SIR": 23.7722,
+            "SAR": 13.8163,
+            "ISR": 15.413
+          },
+          "instrumental": {
+            "SDR": 0.94812,
+            "SIR": 4.98609,
+            "SAR": 0.919005,
+            "ISR": 3.65536
+          }
+        }
+      },
+      {
+        "track_name": "Aimee Norwich - Child",
+        "scores": {
+          "bass": {
+            "SDR": 13.4702,
+            "SIR": 23.2104,
+            "SAR": 14.2076,
+            "ISR": 16.4926
+          },
+          "instrumental": {
+            "SDR": 1.55335,
+            "SIR": 2.39983,
+            "SAR": 5.29428,
+            "ISR": 2.76656
+          }
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Goodbye Bolero",
+        "scores": {
+          "bass": {
+            "SDR": 7.70288,
+            "SIR": 20.2693,
+            "SAR": 7.73998,
+            "ISR": 10.0089
+          },
+          "instrumental": {
+            "SDR": 8.12446,
+            "SIR": 11.7788,
+            "SAR": 15.7118,
+            "ISR": 12.3598
+          }
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "bass": {
+            "SDR": 10.2519,
+            "SIR": 19.9879,
+            "SAR": 10.3312,
+            "ISR": 12.7349
+          },
+          "instrumental": {
+            "SDR": 3.09573,
+            "SIR": 7.95487,
+            "SAR": 3.87341,
+            "ISR": 9.70361
+          }
+        }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "bass": {
+            "SDR": 9.74868,
+            "SIR": 21.1154,
+            "SAR": 7.09004,
+            "ISR": 8.64697
+          },
+          "instrumental": {
+            "SDR": 5.17796,
+            "SIR": 8.194,
+            "SAR": 4.2851,
+            "ISR": 10.403
+          }
+        }
+      }
+    ],
+    "median_scores": {
+      "bass": {
+        "SDR": 9.8357,
+        "SIR": 21.1154,
+        "SAR": 10.1956,
+        "ISR": 12.7349
+      },
+      "instrumental": {
+        "SDR": 2.2203,
+        "SIR": 7.40689,
+        "SAR": 3.87341,
+        "ISR": 7.82504
+      }
+    }
   },
   "kuielab_b_drums.onnx": {
     "model_name": "MDX-Net Model: kuielab_b_drums",
-    "track_scores": [],
-    "median_scores": {}
+    "track_scores": [
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "drums": {
+            "SDR": 2.5684,
+            "SIR": 15.1012,
+            "SAR": 0.54169,
+            "ISR": 3.75755
+          },
+          "instrumental": {
+            "SDR": 10.5504,
+            "SIR": 25.3366,
+            "SAR": 10.7179,
+            "ISR": 18.4031
+          }
+        }
+      },
+      {
+        "track_name": "ANiMAL - Clinic A",
+        "scores": {
+          "drums": {
+            "SDR": 6.2011,
+            "SIR": 19.1452,
+            "SAR": 5.91363,
+            "ISR": 9.29231
+          },
+          "instrumental": {
+            "SDR": 6.00811,
+            "SIR": 12.5654,
+            "SAR": 6.30249,
+            "ISR": 14.0578
+          }
+        }
+      },
+      {
+        "track_name": "ANiMAL - Easy Tiger",
+        "scores": {
+          "drums": {
+            "SDR": 8.19709,
+            "SIR": 14.5978,
+            "SAR": 8.67332,
+            "ISR": 14.11
+          },
+          "instrumental": {
+            "SDR": 2.25324,
+            "SIR": 5.2431,
+            "SAR": 2.28704,
+            "ISR": 5.50651
+          }
+        }
+      },
+      {
+        "track_name": "ANiMAL - Rockshow",
+        "scores": {
+          "drums": {
+            "SDR": 7.10067,
+            "SIR": 16.2967,
+            "SAR": 7.89512,
+            "ISR": 10.2504
+          },
+          "instrumental": {
+            "SDR": 3.56954,
+            "SIR": 6.40193,
+            "SAR": 5.72985,
+            "ISR": 7.30478
+          }
+        }
+      },
+      {
+        "track_name": "Actions - Devil's Words",
+        "scores": {
+          "drums": {
+            "SDR": 8.63067,
+            "SIR": 18.6,
+            "SAR": 9.37125,
+            "ISR": 12.8421
+          },
+          "instrumental": {
+            "SDR": 1.17916,
+            "SIR": 5.92972,
+            "SAR": 0.17392,
+            "ISR": 7.40509
+          }
+        }
+      },
+      {
+        "track_name": "Actions - One Minute Smile",
+        "scores": {
+          "drums": {
+            "SDR": 8.49692,
+            "SIR": 18.744,
+            "SAR": 9.72448,
+            "ISR": 11.6189
+          },
+          "instrumental": {
+            "SDR": 0.76547,
+            "SIR": 7.22604,
+            "SAR": -0.55118,
+            "ISR": 6.21183
+          }
+        }
+      },
+      {
+        "track_name": "Actions - South Of The Water",
+        "scores": {
+          "drums": {
+            "SDR": 8.75381,
+            "SIR": 19.6976,
+            "SAR": 9.48677,
+            "ISR": 13.153
+          },
+          "instrumental": {
+            "SDR": 3.27906,
+            "SIR": 9.50116,
+            "SAR": 3.46903,
+            "ISR": 8.97561
+          }
+        }
+      },
+      {
+        "track_name": "Aimee Norwich - Child",
+        "scores": {
+          "drums": {
+            "SDR": 6.91812,
+            "SIR": 15.559,
+            "SAR": 7.41762,
+            "ISR": 11.2848
+          },
+          "instrumental": {
+            "SDR": 6.16064,
+            "SIR": 8.82203,
+            "SAR": 8.57605,
+            "ISR": 9.51061
+          }
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Goodbye Bolero",
+        "scores": {
+          "drums": {
+            "SDR": 5.84413,
+            "SIR": 15.0591,
+            "SAR": 5.80223,
+            "ISR": 9.94096
+          },
+          "instrumental": {
+            "SDR": 5.82193,
+            "SIR": 11.3604,
+            "SAR": 10.9842,
+            "ISR": 10.4279
+          }
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "drums": {
+            "SDR": 7.06685,
+            "SIR": 13.2933,
+            "SAR": 7.03635,
+            "ISR": 12.0527
+          },
+          "instrumental": {
+            "SDR": 3.0867,
+            "SIR": 6.60793,
+            "SAR": 3.4161,
+            "ISR": 6.36216
+          }
+        }
+      },
+      {
+        "track_name": "Angela Thomas Wade - Milk Cow Blues",
+        "scores": {
+          "drums": {
+            "SDR": 9.58602,
+            "SIR": 16.7514,
+            "SAR": 10.5066,
+            "ISR": 14.8305
+          },
+          "instrumental": {
+            "SDR": 2.9283,
+            "SIR": 7.34443,
+            "SAR": 5.63948,
+            "ISR": 6.3464
+          }
+        }
+      }
+    ],
+    "median_scores": {
+      "drums": {
+        "SDR": 7.10067,
+        "SIR": 16.2967,
+        "SAR": 7.89512,
+        "ISR": 11.6189
+      },
+      "instrumental": {
+        "SDR": 3.27906,
+        "SIR": 7.34443,
+        "SAR": 5.63948,
+        "ISR": 7.40509
+      }
+    }
   },
   "denoise_mel_band_roformer_aufr33_sdr_27.9959.ckpt": {
     "model_name": "Roformer Model: Mel-Roformer-Denoise-Aufr33",
@@ -17737,6 +20843,16 @@
   },
   "mel_band_roformer_bleed_suppressor_v1.ckpt": {
     "model_name": "Roformer Model: MelBand Roformer | Bleed Suppressor V1 by unwa-97chris",
+    "track_scores": [],
+    "median_scores": {}
+  },
+  "Reverb_HQ_By_FoxJoy.onnx": {
+    "model_name": "MDX-Net Model: Reverb HQ By FoxJoy",
+    "track_scores": [],
+    "median_scores": {}
+  },
+  "UVR-MDX-NET_Crowd_HQ_1.onnx": {
+    "model_name": "MDX-Net Model: UVR-MDX-NET Crowd HQ 1 By Aufr33",
     "track_scores": [],
     "median_scores": {}
   }

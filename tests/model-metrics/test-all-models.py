@@ -37,8 +37,17 @@ def evaluate_track(track_name, track_path, test_model, mus_db):
         scores = museval.TrackStore(track_name)
         scores.scores = json_data
     else:
-        # Standard stem output names
-        stem_mapping = {"Vocals": "vocals", "Instrumental": "instrumental", "Drums": "drums", "Bass": "bass", "Other": "other"}
+        # Expanded stem mapping to include "no-stem" outputs
+        stem_mapping = {
+            "Vocals": "vocals",
+            "Instrumental": "instrumental",
+            "Drums": "drums",
+            "Bass": "bass",
+            "Other": "other",
+            "No Drums": "nodrums",
+            "No Bass": "nobass",
+            "No Other": "noother"
+        }
 
         # Perform separation if needed
         if not os.path.exists(output_dir) or not os.listdir(output_dir):
@@ -47,12 +56,27 @@ def evaluate_track(track_name, track_path, test_model, mus_db):
             separator.load_model(model_filename=test_model)
             separator.separate(os.path.join(track_path, "mixture.wav"), custom_output_names=stem_mapping)
 
-        # Check which stems were actually created
+        # Check which stems were actually created and pair them appropriately
         available_stems = {}
-        for musdb_name in ["vocals", "instrumental", "drums", "bass", "other"]:
-            stem_path = os.path.join(output_dir, f"{musdb_name}.wav")
-            if os.path.exists(stem_path):
-                available_stems[musdb_name if musdb_name != "instrumental" else "accompaniment"] = stem_path
+        stem_pairs = {
+            "drums": "nodrums",
+            "bass": "nobass",
+            "other": "noother",
+            "vocals": "instrumental"
+        }
+
+        for main_stem, no_stem in stem_pairs.items():
+            # Construct full file paths for both the isolated stem and its complement
+            main_path = os.path.join(output_dir, f"{main_stem}.wav")
+            no_stem_path = os.path.join(output_dir, f"{no_stem}.wav")
+            
+            # Only process this pair if both files exist
+            if os.path.exists(main_path) and os.path.exists(no_stem_path):
+                # Add the main stem with its path to available_stems
+                available_stems[main_stem] = main_path  # This is already using the correct musdb name
+                
+                # For the complement stem, always use "accompaniment" as that's what museval expects
+                available_stems["accompaniment"] = no_stem_path
 
         if not available_stems:
             logger.info(f"No evaluatable stems found for model {test_model}, skipping evaluation")
