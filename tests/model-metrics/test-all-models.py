@@ -16,8 +16,8 @@ import pandas as pd
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
-MUSDB_PATH = "tests/model-metrics/datasets/musdb18hq"
-RESULTS_PATH = "tests/model-metrics/results"
+MUSDB_PATH = "/Volumes/Nomad4TBOne/python-audio-separator/tests/model-metrics/datasets/musdb18hq"
+RESULTS_PATH = "/Volumes/Nomad4TBOne/python-audio-separator/tests/model-metrics/results"
 
 
 def evaluate_track(track_name, track_path, test_model, mus_db):
