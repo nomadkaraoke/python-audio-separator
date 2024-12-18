@@ -287,40 +287,6 @@ def main():
                     logger.warning(f"No filename found for model {model_name}, skipping...")
                     continue
 
-                # Initialize model entry if it doesn't exist
-                if test_model not in combined_results:
-                    combined_results[test_model] = {"model_name": model_name, "track_scores": [], "median_scores": {}, "stems": [], "target_stem": None}
-
-                # Handle demucs models specially
-                if test_model in DEMUCS_STEMS:
-                    combined_results[test_model]["stems"] = [s.lower() for s in DEMUCS_STEMS[test_model]["instruments"]]
-                    combined_results[test_model]["target_stem"] = DEMUCS_STEMS[test_model]["target_instrument"].lower() if DEMUCS_STEMS[test_model]["target_instrument"] else None
-
-                # Extract stem information for other models
-                elif "training" in model_data:
-                    instruments = model_data["training"].get("instruments", [])
-                    target = model_data["training"].get("target_instrument")
-                    combined_results[test_model]["stems"] = [s.lower() for s in instruments] if instruments else []
-                    combined_results[test_model]["target_stem"] = target.lower() if target else None
-
-                elif "primary_stem" in model_data:
-                    primary_stem = model_data["primary_stem"].lower()
-                    if primary_stem == "vocals":
-                        other_stem = "instrumental"
-                    elif primary_stem == "instrumental":
-                        other_stem = "vocals"
-                    else:
-                        other_stem = "no " + primary_stem
-
-                    instruments = [primary_stem, other_stem]
-                    combined_results[test_model]["stems"] = instruments
-                    combined_results[test_model]["target_stem"] = primary_stem
-
-                else:
-                    combined_results[test_model]["stems"] = []
-                    combined_results[test_model]["target_stem"] = None
-                    logger.info("No stem information found in model data")
-
                 # Check if track already evaluated
                 track_already_evaluated = any(track_score["track_name"] == track_name for track_score in combined_results[test_model]["track_scores"] if track_score is not None)
 
