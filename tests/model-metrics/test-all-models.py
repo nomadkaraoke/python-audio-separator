@@ -311,9 +311,7 @@ def main():
                 if combined_results[test_model]["track_scores"]:
                     median_scores = calculate_median_scores(combined_results[test_model]["track_scores"])
                     combined_results[test_model]["median_scores"] = median_scores
-                else:
-                    del combined_results[test_model]
-
+                
                 # Save results after each model
                 os.makedirs(os.path.dirname(combined_results_path), exist_ok=True)
                 with open(combined_results_path, "w") as f:
