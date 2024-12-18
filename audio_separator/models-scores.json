@@ -21276,33 +21276,13 @@
     ],
     "target_stem": "instrumental"
   },
-  "Reverb_HQ_By_FoxJoy.onnx": {
-    "model_name": "MDX-Net Model: Reverb HQ By FoxJoy",
-    "track_scores": [],
-    "median_scores": {},
-    "stems": [
-      "reverb",
-      "no reverb"
-    ],
-    "target_stem": "reverb"
-  },
-  "UVR-MDX-NET_Crowd_HQ_1.onnx": {
-    "model_name": "MDX-Net Model: UVR-MDX-NET Crowd HQ 1 By Aufr33",
-    "track_scores": [],
-    "median_scores": {},
-    "stems": [
-      "no crowd",
-      "no no crowd"
-    ],
-    "target_stem": "no crowd"
-  },
   "17_HP-Wind_Inst-UVR.pth": {
     "model_name": "VR Arch Single Model v5: 17_HP-Wind_Inst-UVR",
     "track_scores": [],
     "median_scores": {},
     "stems": [
       "no woodwinds",
-      "no no woodwinds"
+      "woodwinds"
     ],
     "target_stem": "no woodwinds"
   },
@@ -21312,7 +21292,7 @@
     "median_scores": {},
     "stems": [
       "no echo",
-      "no no echo"
+      "echo"
     ],
     "target_stem": "no echo"
   },
@@ -21322,7 +21302,7 @@
     "median_scores": {},
     "stems": [
       "no echo",
-      "no no echo"
+      "echo"
     ],
     "target_stem": "no echo"
   },
@@ -21332,7 +21312,7 @@
     "median_scores": {},
     "stems": [
       "no reverb",
-      "no no reverb"
+      "reverb"
     ],
     "target_stem": "no reverb"
   },
@@ -21365,6 +21345,26 @@
       "no dry"
     ],
     "target_stem": "dry"
+  },
+  "Reverb_HQ_By_FoxJoy.onnx": {
+    "model_name": "MDX-Net Model: Reverb HQ By FoxJoy",
+    "track_scores": [],
+    "median_scores": {},
+    "stems": [
+      "reverb",
+      "no reverb"
+    ],
+    "target_stem": "reverb"
+  },
+  "UVR-MDX-NET_Crowd_HQ_1.onnx": {
+    "model_name": "MDX-Net Model: UVR-MDX-NET Crowd HQ 1 By Aufr33",
+    "track_scores": [],
+    "median_scores": {},
+    "stems": [
+      "no crowd",
+      "crowd"
+    ],
+    "target_stem": "no crowd"
   },
   "model_bs_roformer_ep_937_sdr_10.5309.ckpt": {
     "model_name": "Roformer Model: BS-Roformer-Viperx-1053",

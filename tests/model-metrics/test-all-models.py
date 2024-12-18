@@ -183,53 +183,79 @@ def main():
 
     # Iterate through models and load each one
     for model_type, models in models_by_type.items():
+        logger.info(f"\nProcessing model type: {model_type}")
         for model_name, model_info in models.items():
             test_model = model_info.get("filename")
             if not test_model:
                 logger.warning(f"No filename found for model {model_name}, skipping...")
                 continue
 
-            logger.info(f"Analyzing model data: {test_model}")
+            logger.info(f"\n=== Analyzing model: {model_name} (filename: {test_model}) ===")
             try:
                 separator.load_model(model_filename=test_model)
                 model_data = separator.model_instance.model_data
+                logger.info(f"Raw model_data: {json.dumps(model_data, indent=2)}")
 
                 # Initialize model entry if it doesn't exist
                 if test_model not in combined_results:
+                    logger.info(f"Initializing new entry for {test_model}")
                     combined_results[test_model] = {"model_name": model_name, "track_scores": [], "median_scores": {}, "stems": [], "target_stem": None}
 
                 # Handle demucs models specially
                 if test_model in DEMUCS_STEMS:
+                    logger.info(f"Processing as Demucs model: {test_model}")
+                    logger.info(f"Demucs config: {DEMUCS_STEMS[test_model]}")
                     combined_results[test_model]["stems"] = [s.lower() for s in DEMUCS_STEMS[test_model]["instruments"]]
                     combined_results[test_model]["target_stem"] = DEMUCS_STEMS[test_model]["target_instrument"].lower() if DEMUCS_STEMS[test_model]["target_instrument"] else None
+                    logger.info(f"Set stems to: {combined_results[test_model]['stems']}")
+                    logger.info(f"Set target_stem to: {combined_results[test_model]['target_stem']}")
 
                 # Extract stem information for other models
                 elif "training" in model_data:
+                    logger.info("Processing model with training data")
                     instruments = model_data["training"].get("instruments", [])
                     target = model_data["training"].get("target_instrument")
+                    logger.info(f"Found instruments: {instruments}")
+                    logger.info(f"Found target: {target}")
                     combined_results[test_model]["stems"] = [s.lower() for s in instruments] if instruments else []
                     combined_results[test_model]["target_stem"] = target.lower() if target else None
+                    logger.info(f"Set stems to: {combined_results[test_model]['stems']}")
+                    logger.info(f"Set target_stem to: {combined_results[test_model]['target_stem']}")
 
                 elif "primary_stem" in model_data:
+                    logger.info("Processing model with primary_stem")
                     primary_stem = model_data["primary_stem"].lower()
+                    logger.info(f"Found primary_stem: {primary_stem}")
+
                     if primary_stem == "vocals":
                         other_stem = "instrumental"
                     elif primary_stem == "instrumental":
                         other_stem = "vocals"
                     else:
-                        other_stem = "no " + primary_stem
+                        if primary_stem.startswith("no "):
+                            other_stem = primary_stem[3:]  # Remove "no " prefix
+                        else:
+                            other_stem = "no " + primary_stem
+                    logger.info(f"Determined other_stem: {other_stem}")
 
                     instruments = [primary_stem, other_stem]
                     combined_results[test_model]["stems"] = instruments
                     combined_results[test_model]["target_stem"] = primary_stem
+                    logger.info(f"Set stems to: {combined_results[test_model]['stems']}")
+                    logger.info(f"Set target_stem to: {combined_results[test_model]['target_stem']}")
 
                 else:
+                    logger.warning(f"No recognized stem information found in model data for {test_model}")
                     combined_results[test_model]["stems"] = []
                     combined_results[test_model]["target_stem"] = None
-                    logger.info("No stem information found in model data")
+
+                logger.info(f"Final model configuration for {test_model}:")
+                logger.info(f"Stems: {combined_results[test_model]['stems']}")
+                logger.info(f"Target stem: {combined_results[test_model]['target_stem']}")
 
             except Exception as e:
                 logger.error(f"Error loading model {test_model}: {str(e)}")
+                logger.exception("Full exception details:")
                 continue
 
     # Save the combined results after model inspection
