@@ -457,9 +457,12 @@ class Separator:
             # Find the YAML file in the model files
             yaml_file = next((filename for filename in files.keys() if filename.endswith(".yaml")), None)
             if yaml_file:
+                model_score_data = model_scores.get(yaml_file, {})
                 demucs_models[name] = {
                     "filename": yaml_file,
-                    "scores": model_scores.get(yaml_file, {}).get("median_scores", {}),
+                    "scores": model_score_data.get("median_scores", {}),
+                    "stems": model_score_data.get("stems", []),
+                    "target_stem": model_score_data.get("target_stem"),
                     "download_files": list(files.values()),  # List of all download URLs/filenames
                 }
 
@@ -471,11 +474,23 @@ class Separator:
         # Return object with list of model names
         model_files_grouped_by_type = {
             "VR": {
-                name: {"filename": filename, "scores": model_scores.get(filename, {}).get("median_scores", {}), "download_files": [filename]}  # Just the filename for VR models
+                name: {
+                    "filename": filename,
+                    "scores": model_scores.get(filename, {}).get("median_scores", {}),
+                    "stems": model_scores.get(filename, {}).get("stems", []),
+                    "target_stem": model_scores.get(filename, {}).get("target_stem"),
+                    "download_files": [filename],
+                }  # Just the filename for VR models
                 for name, filename in {**model_downloads_list["vr_download_list"], **audio_separator_models_list["vr_download_list"]}.items()
             },
             "MDX": {
-                name: {"filename": filename, "scores": model_scores.get(filename, {}).get("median_scores", {}), "download_files": [filename]}  # Just the filename for MDX models
+                name: {
+                    "filename": filename,
+                    "scores": model_scores.get(filename, {}).get("median_scores", {}),
+                    "stems": model_scores.get(filename, {}).get("stems", []),
+                    "target_stem": model_scores.get(filename, {}).get("target_stem"),
+                    "download_files": [filename],
+                }  # Just the filename for MDX models
                 for name, filename in {**model_downloads_list["mdx_download_list"], **model_downloads_list["mdx_download_vip_list"], **audio_separator_models_list["mdx_download_list"]}.items()
             },
             "Demucs": demucs_models,
@@ -483,6 +498,8 @@ class Separator:
                 name: {
                     "filename": next(iter(files.keys())),
                     "scores": model_scores.get(next(iter(files.keys())), {}).get("median_scores", {}),
+                    "stems": model_scores.get(next(iter(files.keys())), {}).get("stems", []),
+                    "target_stem": model_scores.get(next(iter(files.keys())), {}).get("target_stem"),
                     "download_files": list(files.keys()) + list(files.values()),  # List of both model filenames and config filenames
                 }
                 for name, files in {
@@ -777,12 +794,12 @@ class Separator:
 
         self.logger.info(f"Model downloaded, type: {model_type}, friendly name: {model_friendly_name}, model_path: {model_path}, model_data: {model_data_dict_size} items")
 
-    def get_simplified_model_list(self, sort_by: Optional[str] = None):
+    def get_simplified_model_list(self, filter_sort_by: Optional[str] = None):
         """
         Returns a simplified, user-friendly list of models with their key metrics.
         Optionally sorts the list based on the specified criteria.
 
-        :param sort_by: Criteria to sort by. Can be "name", "filename", "vocals", "instrumental", "bass", "drums", "other"
+        :param sort_by: Criteria to sort by. Can be "name", "filename", or any stem name
         """
         model_files = self.list_supported_model_files()
         simplified_list = {}
@@ -791,33 +808,52 @@ class Separator:
             for name, data in models.items():
                 filename = data["filename"]
                 scores = data.get("scores") or {}
+                stems = data.get("stems") or []
+                target_stem = data.get("target_stem")
 
-                # Format stems with their SDR scores
+                # Format stems with their SDR scores where available
                 stems_with_scores = []
                 stem_sdr_dict = {}
-                for stem, stem_scores in scores.items():
+
+                # Process each stem from the model's stem list
+                for stem in stems:
+                    stem_scores = scores.get(stem, {})
+                    # Add asterisk if this is the target stem
+                    stem_display = f"{stem}*" if stem == target_stem else stem
+
                     if isinstance(stem_scores, dict) and "SDR" in stem_scores:
                         sdr = round(stem_scores["SDR"], 1)
-                        stems_with_scores.append(f"{stem} (SDR: {sdr})")
+                        stems_with_scores.append(f"{stem_display} ({sdr})")
                         stem_sdr_dict[stem.lower()] = sdr
+                    else:
+                        # Include stem without SDR score
+                        stems_with_scores.append(stem_display)
+                        stem_sdr_dict[stem.lower()] = None
 
-                # If no scores available, just list the stem names
-                if not stems_with_scores and scores:
-                    stems_with_scores = list(scores.keys())
-                elif not stems_with_scores:
+                # If no stems listed, mark as Unknown
+                if not stems_with_scores:
                     stems_with_scores = ["Unknown"]
+                    stem_sdr_dict["unknown"] = None
 
                 simplified_list[filename] = {"Name": name, "Type": model_type, "Stems": stems_with_scores, "SDR": stem_sdr_dict}
 
         # Sort and filter the list if a sort_by parameter is provided
-        if sort_by:
-            if sort_by == "name":
+        if filter_sort_by:
+            if filter_sort_by == "name":
                 return dict(sorted(simplified_list.items(), key=lambda x: x[1]["Name"]))
-            elif sort_by == "filename":
+            elif filter_sort_by == "filename":
                 return dict(sorted(simplified_list.items()))
-            elif sort_by in ["vocals", "instrumental", "bass", "drums", "other"]:
+            else:
+                # Convert sort_by to lowercase for case-insensitive comparison
+                sort_by_lower = filter_sort_by.lower()
                 # Filter out models that don't have the specified stem
-                filtered_list = {k: v for k, v in simplified_list.items() if sort_by in v["SDR"]}
-                return dict(sorted(filtered_list.items(), key=lambda x: x[1]["SDR"][sort_by], reverse=True))
+                filtered_list = {k: v for k, v in simplified_list.items() if sort_by_lower in v["SDR"]}
+
+                # Sort by SDR score if available, putting None values last
+                def sort_key(item):
+                    sdr = item[1]["SDR"][sort_by_lower]
+                    return (0 if sdr is None else 1, sdr if sdr is not None else float("-inf"))
+
+                return dict(sorted(filtered_list.items(), key=sort_key, reverse=True))
 
         return simplified_list

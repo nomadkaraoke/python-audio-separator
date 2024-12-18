@@ -24,7 +24,7 @@ def main():
     version_help = "Show the program's version number and exit."
     debug_help = "Enable debug logging, equivalent to --log_level=debug."
     env_info_help = "Print environment information and exit."
-    list_models_help = "List all supported models and exit. Use --sort_by to sort the list and --limit to show only top N results."
+    list_models_help = "List all supported models and exit. Use --list_filter to filter/sort the list and --list_limit to show only top N results."
     log_level_help = "Log level, e.g. info, debug, warning (default: %(default)s)."
 
     info_params = parser.add_argument_group("Info and Debugging")
@@ -33,8 +33,8 @@ def main():
     info_params.add_argument("-e", "--env_info", action="store_true", help=env_info_help)
     info_params.add_argument("-l", "--list_models", action="store_true", help=list_models_help)
     info_params.add_argument("--log_level", default="info", help=log_level_help)
-    info_params.add_argument("--sort_by", choices=["name", "filename", "vocals", "instrumental", "bass", "drums", "other"], help="Sort the model list by this criteria")
-    info_params.add_argument("--limit", type=int, help="Limit the number of models shown")
+    info_params.add_argument("--list_filter", help="Filter and sort the model list by 'name', 'filename', or any stem e.g. vocals, instrumental, drums")
+    info_params.add_argument("--list_limit", type=int, help="Limit the number of models shown")
     info_params.add_argument("--list_format", choices=["pretty", "json"], default="pretty", help="Format for listing models: 'pretty' for formatted output, 'json' for raw JSON dump")
 
     model_filename_help = "Model to use for separation (default: %(default)s). Example: -m 2_HP-UVR.pth"
@@ -146,11 +146,11 @@ def main():
             model_list = separator.list_supported_model_files()
             print(json.dumps(model_list, indent=2))
         else:
-            models = separator.get_simplified_model_list(sort_by=args.sort_by)
+            models = separator.get_simplified_model_list(filter_sort_by=args.list_filter)
 
             # Apply limit if specified
-            if args.limit and args.limit > 0:
-                models = dict(list(models.items())[: args.limit])
+            if args.list_limit and args.list_limit > 0:
+                models = dict(list(models.items())[: args.list_limit])
 
             # Calculate maximum widths for each column
             filename_width = max(len("Model Filename"), max(len(filename) for filename in models.keys()))

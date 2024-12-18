@@ -170,57 +170,127 @@ To see a list of supported models, run `audio-separator --list_models`
 
 Any file listed in the list models output can be specified (with file extension) with the model_filename parameter (e.g. `--model_filename UVR_MDXNET_KARA_2.onnx`) and it will be automatically downloaded to the `--model_file_dir` (default: `/tmp/audio-separator-models/`) folder on first usage.
 
+### Listing and Filtering Available Models
+
+You can view all available models using the `--list_models` (or `-l`) flag:
+
+```sh
+audio-separator --list_models
+```
+
+The output shows a table with the following columns:
+- Model Filename: The filename to use with `--model_filename`
+- Arch: The model architecture (MDX, MDXC, Demucs, etc.)
+- Output Stems (SDR): The stems this model can separate, with Signal-to-Distortion Ratio scores where available
+- Friendly Name: A human-readable name describing the model
+
+#### Filtering Models
+
+You can filter and sort the model list by stem type using `--list_filter`. For example, to find models that can separate drums:
+
+```sh
+audio-separator -l --list_filter=drums
+```
+
+Example output:
+```
+-----------------------------------------------------------------------------------------------------------------------------------
+Model Filename        Arch    Output Stems (SDR)                                            Friendly Name
+-----------------------------------------------------------------------------------------------------------------------------------
+htdemucs_ft.yaml      Demucs  vocals (10.8), drums (10.1), bass (11.9), other               Demucs v4: htdemucs_ft
+hdemucs_mmi.yaml      Demucs  vocals (10.3), drums (9.7), bass (12.0), other                Demucs v4: hdemucs_mmi
+htdemucs.yaml         Demucs  vocals (10.0), drums (9.4), bass (11.3), other                Demucs v4: htdemucs
+htdemucs_6s.yaml      Demucs  vocals (9.7), drums (8.5), bass (10.0), guitar, piano, other  Demucs v4: htdemucs_6s
+```
+
+#### Limiting Results
+
+You can limit the number of results shown using `--list_limit`. This is useful for finding the best performing models for a particular stem. For example, to see the top 5 vocal separation models:
+
+```sh
+audio-separator -l --list_filter=vocals --list_limit=5
+```
+
+Example output:
+```
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+Model Filename                             Arch  Output Stems (SDR)                   Friendly Name
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+model_bs_roformer_ep_317_sdr_12.9755.ckpt  MDXC  vocals* (12.9), instrumental (17.0)  Roformer Model: BS-Roformer-Viperx-1297
+model_bs_roformer_ep_368_sdr_12.9628.ckpt  MDXC  vocals* (12.9), instrumental (17.0)  Roformer Model: BS-Roformer-Viperx-1296
+vocals_mel_band_roformer.ckpt              MDXC  vocals* (12.6), other                Roformer Model: MelBand Roformer | Vocals by Kimberley Jensen
+melband_roformer_big_beta4.ckpt            MDXC  vocals* (12.5), other                Roformer Model: MelBand Roformer Kim | Big Beta 4 FT by unwa
+mel_band_roformer_kim_ft_unwa.ckpt         MDXC  vocals* (12.4), other                Roformer Model: MelBand Roformer Kim | FT by unwa
+```
+
+#### JSON Output
+
+For programmatic use, you can output the model list in JSON format:
+
+```sh
+audio-separator -l --list_format=json
+```
+
 ### Full command-line interface options
 
 ```sh
-usage: audio-separator [-h] [-v] [-d] [-e] [-l] [--log_level LOG_LEVEL] [-m MODEL_FILENAME] [--output_format OUTPUT_FORMAT] [--output_dir OUTPUT_DIR] [--model_file_dir MODEL_FILE_DIR] [--invert_spect]
-                       [--normalization NORMALIZATION] [--single_stem SINGLE_STEM] [--sample_rate SAMPLE_RATE] [--use_autocast] [--mdx_segment_size MDX_SEGMENT_SIZE] [--mdx_overlap MDX_OVERLAP] [--mdx_batch_size MDX_BATCH_SIZE]
-                       [--mdx_hop_length MDX_HOP_LENGTH] [--mdx_enable_denoise] [--vr_batch_size VR_BATCH_SIZE] [--vr_window_size VR_WINDOW_SIZE] [--vr_aggression VR_AGGRESSION] [--vr_enable_tta]
-                       [--vr_high_end_process] [--vr_enable_post_process] [--vr_post_process_threshold VR_POST_PROCESS_THRESHOLD] [--demucs_segment_size DEMUCS_SEGMENT_SIZE] [--demucs_shifts DEMUCS_SHIFTS]
-                       [--demucs_overlap DEMUCS_OVERLAP] [--demucs_segments_enabled DEMUCS_SEGMENTS_ENABLED] [--mdxc_segment_size MDXC_SEGMENT_SIZE] [--mdxc_override_model_segment_size]
-                       [--mdxc_overlap MDXC_OVERLAP] [--mdxc_batch_size MDXC_BATCH_SIZE] [--mdxc_pitch_shift MDXC_PITCH_SHIFT]
-                       [audio_file]
+usage: audio-separator [-h] [-v] [-d] [-e] [-l] [--log_level LOG_LEVEL] [--list_filter LIST_FILTER] [--list_limit LIST_LIMIT] [--list_format {pretty,json}] [-m MODEL_FILENAME] [--output_format OUTPUT_FORMAT]
+                       [--output_bitrate OUTPUT_BITRATE] [--output_dir OUTPUT_DIR] [--model_file_dir MODEL_FILE_DIR] [--download_model_only] [--invert_spect] [--normalization NORMALIZATION]
+                       [--amplification AMPLIFICATION] [--single_stem SINGLE_STEM] [--sample_rate SAMPLE_RATE] [--use_soundfile] [--use_autocast] [--custom_output_names CUSTOM_OUTPUT_NAMES]
+                       [--mdx_segment_size MDX_SEGMENT_SIZE] [--mdx_overlap MDX_OVERLAP] [--mdx_batch_size MDX_BATCH_SIZE] [--mdx_hop_length MDX_HOP_LENGTH] [--mdx_enable_denoise] [--vr_batch_size VR_BATCH_SIZE]
+                       [--vr_window_size VR_WINDOW_SIZE] [--vr_aggression VR_AGGRESSION] [--vr_enable_tta] [--vr_high_end_process] [--vr_enable_post_process]
+                       [--vr_post_process_threshold VR_POST_PROCESS_THRESHOLD] [--demucs_segment_size DEMUCS_SEGMENT_SIZE] [--demucs_shifts DEMUCS_SHIFTS] [--demucs_overlap DEMUCS_OVERLAP]
+                       [--demucs_segments_enabled DEMUCS_SEGMENTS_ENABLED] [--mdxc_segment_size MDXC_SEGMENT_SIZE] [--mdxc_override_model_segment_size] [--mdxc_overlap MDXC_OVERLAP]
+                       [--mdxc_batch_size MDXC_BATCH_SIZE] [--mdxc_pitch_shift MDXC_PITCH_SHIFT]
+                       [audio_files ...]
 
 Separate audio file into different stems.
 
 positional arguments:
-  audio_file                                             The audio file path to separate, in any common format.
+  audio_files                                            The audio file paths to separate, in any common format.
 
 options:
-  -h, --help                                             Show this help message and exit.
+  -h, --help                                             show this help message and exit
 
 Info and Debugging:
-  -v, --version                                          Show the program version number and exit.
+  -v, --version                                          Show the program's version number and exit.
   -d, --debug                                            Enable debug logging, equivalent to --log_level=debug.
   -e, --env_info                                         Print environment information and exit.
-  -l, --list_models                                      List all supported models and exit.
-  --log_level LOG_LEVEL                                  Log level, e.g., info, debug, warning (default: info).
+  -l, --list_models                                      List all supported models and exit. Use --list_filter to filter/sort the list and --list_limit to show only top N results.
+  --log_level LOG_LEVEL                                  Log level, e.g. info, debug, warning (default: info).
+  --list_filter LIST_FILTER                              Filter and sort the model list by 'name', 'filename', or any stem e.g. vocals, instrumental, drums
+  --list_limit LIST_LIMIT                                Limit the number of models shown
+  --list_format {pretty,json}                            Format for listing models: 'pretty' for formatted output, 'json' for raw JSON dump
 
 Separation I/O Params:
-  -m MODEL_FILENAME, --model_filename MODEL_FILENAME     Model to use for separation (default: UVR-MDX-NET-Inst_HQ_3.onnx). Example: -m 2_HP-UVR.pth
+  -m MODEL_FILENAME, --model_filename MODEL_FILENAME     Model to use for separation (default: model_bs_roformer_ep_317_sdr_12.9755.yaml). Example: -m 2_HP-UVR.pth
   --output_format OUTPUT_FORMAT                          Output format for separated files, any common format (default: FLAC). Example: --output_format=MP3
+  --output_bitrate OUTPUT_BITRATE                        Output bitrate for separated files, any ffmpeg-compatible bitrate (default: None). Example: --output_bitrate=320k
   --output_dir OUTPUT_DIR                                Directory to write output files (default: <current dir>). Example: --output_dir=/app/separated
   --model_file_dir MODEL_FILE_DIR                        Model files directory (default: /tmp/audio-separator-models/). Example: --model_file_dir=/app/models
+  --download_model_only                                  Download a single model file only, without performing separation.
 
 Common Separation Parameters:
-  --invert_spect                                         Invert secondary stem using spectogram (default: False). Example: --invert_spect
-  --normalization NORMALIZATION                          Value by which to multiply the amplitude of the output files (default: 0.9). Example: --normalization=0.7
-  --single_stem SINGLE_STEM                              Output only single stem, e.g., Instrumental, Vocals, Drums, Bass, Guitar, Piano, Other. Example: --single_stem=Instrumental
-  --sample_rate SAMPLE_RATE                              Set the sample rate of the output audio (default: 44100). Example: --sample_rate=44100
+  --invert_spect                                         Invert secondary stem using spectrogram (default: False). Example: --invert_spect
+  --normalization NORMALIZATION                          Max peak amplitude to normalize input and output audio to (default: 0.9). Example: --normalization=0.7
+  --amplification AMPLIFICATION                          Min peak amplitude to amplify input and output audio to (default: 0.0). Example: --amplification=0.4
+  --single_stem SINGLE_STEM                              Output only single stem, e.g. Instrumental, Vocals, Drums, Bass, Guitar, Piano, Other. Example: --single_stem=Instrumental
+  --sample_rate SAMPLE_RATE                              Modify the sample rate of the output audio (default: 44100). Example: --sample_rate=44100
+  --use_soundfile                                        Use soundfile to write audio output (default: False). Example: --use_soundfile
   --use_autocast                                         Use PyTorch autocast for faster inference (default: False). Do not use for CPU inference. Example: --use_autocast
-  --custom_output_names                                  Custom names for all output files in JSON format (default: None). Example: --custom_output_names='{"Vocals": "vocals_output", "Drums": "drums_output"}'
+  --custom_output_names CUSTOM_OUTPUT_NAMES              Custom names for all output files in JSON format (default: None). Example: --custom_output_names='{"Vocals": "vocals_output", "Drums": "drums_output"}'
 
 MDX Architecture Parameters:
   --mdx_segment_size MDX_SEGMENT_SIZE                    Larger consumes more resources, but may give better results (default: 256). Example: --mdx_segment_size=256
   --mdx_overlap MDX_OVERLAP                              Amount of overlap between prediction windows, 0.001-0.999. Higher is better but slower (default: 0.25). Example: --mdx_overlap=0.25
   --mdx_batch_size MDX_BATCH_SIZE                        Larger consumes more RAM but may process slightly faster (default: 1). Example: --mdx_batch_size=4
-  --mdx_hop_length MDX_HOP_LENGTH                        Usually called stride in neural networks; only change if you know what you do (default: 1024). Example: --mdx_hop_length=1024
-  --mdx_enable_denoise                                   Enable denoising after separation (default: False). Example: --mdx_enable_denoise
+  --mdx_hop_length MDX_HOP_LENGTH                        Usually called stride in neural networks, only change if you know what you're doing (default: 1024). Example: --mdx_hop_length=1024
+  --mdx_enable_denoise                                   Enable denoising during separation (default: False). Example: --mdx_enable_denoise
 
 VR Architecture Parameters:
-  --vr_batch_size VR_BATCH_SIZE                          Number of "batches" to process at a time. Higher = more RAM, slightly faster processing (default: 1). Example: --vr_batch_size=16
-  --vr_window_size VR_WINDOW_SIZE                        Balance quality and speed. 1024 = fast but lower, 320 = slower but better quality (default: 512). Example: --vr_window_size=320
-  --vr_aggression VR_AGGRESSION                          Intensity of primary stem extraction, -100 - 100. Typically 5 for vocals & instrumentals (default: 5). Example: --vr_aggression=2
+  --vr_batch_size VR_BATCH_SIZE                          Number of batches to process at a time. Higher = more RAM, slightly faster processing (default: 1). Example: --vr_batch_size=16
+  --vr_window_size VR_WINDOW_SIZE                        Balance quality and speed. 1024 = fast but lower, 320 = slower but better quality. (default: 512). Example: --vr_window_size=320
+  --vr_aggression VR_AGGRESSION                          Intensity of primary stem extraction, -100 - 100. Typically, 5 for vocals & instrumentals (default: 5). Example: --vr_aggression=2
   --vr_enable_tta                                        Enable Test-Time-Augmentation; slow but improves quality (default: False). Example: --vr_enable_tta
   --vr_high_end_process                                  Mirror the missing frequency range of the output (default: False). Example: --vr_high_end_process
   --vr_enable_post_process                               Identify leftover artifacts within vocal output; may improve separation for some songs (default: False). Example: --vr_enable_post_process
@@ -237,7 +307,7 @@ MDXC Architecture Parameters:
   --mdxc_override_model_segment_size                     Override model default segment size instead of using the model default value. Example: --mdxc_override_model_segment_size
   --mdxc_overlap MDXC_OVERLAP                            Amount of overlap between prediction windows, 2-50. Higher is better but slower (default: 8). Example: --mdxc_overlap=8
   --mdxc_batch_size MDXC_BATCH_SIZE                      Larger consumes more RAM but may process slightly faster (default: 1). Example: --mdxc_batch_size=4
-  --mdxc_pitch_shift MDXC_PITCH_SHIFT                    Shift audio pitch by a number of semitones while processing. May improve output for deep/high vocals (default: 0). Example: --mdxc_pitch_shift=2
+  --mdxc_pitch_shift MDXC_PITCH_SHIFT                    Shift audio pitch by a number of semitones while processing. May improve output for deep/high vocals. (default: 0). Example: --mdxc_pitch_shift=2
 ```
 
 ### As a Dependency in a Python Project

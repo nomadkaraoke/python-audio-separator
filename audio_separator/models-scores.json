@@ -7696,20 +7696,37 @@
             "ISR": 19.5486
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 11.2439,
+            "SIR": 22.8843,
+            "SAR": 11.4796,
+            "ISR": 15.1462
+          },
+          "instrumental": {
+            "SDR": 15.402,
+            "SIR": 26.161,
+            "SAR": 17.3659,
+            "ISR": 18.5137
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.7462,
-        "SIR": 21.5699,
-        "SAR": 10.8113,
-        "ISR": 14.8815
+        "SDR": 11.2439,
+        "SIR": 22.6584,
+        "SAR": 10.8199,
+        "ISR": 15.0266
       },
       "instrumental": {
-        "SDR": 15.5099,
-        "SIR": 24.379,
-        "SAR": 17.3316,
-        "ISR": 18.4135
+        "SDR": 15.402,
+        "SIR": 24.7515,
+        "SAR": 17.3659,
+        "ISR": 18.5137
       }
     },
     "stems": [
@@ -7924,20 +7941,37 @@
             "ISR": 19.0697
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 11.4341,
+            "SIR": 21.4683,
+            "SAR": 11.6368,
+            "ISR": 15.2359
+          },
+          "instrumental": {
+            "SDR": 15.2523,
+            "SIR": 25.9826,
+            "SAR": 17.4633,
+            "ISR": 18.0557
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.752,
-        "SIR": 20.9149,
-        "SAR": 10.874,
-        "ISR": 15.032
+        "SDR": 11.2891,
+        "SIR": 21.3804,
+        "SAR": 10.9328,
+        "ISR": 15.1387
       },
       "instrumental": {
-        "SDR": 15.4433,
-        "SIR": 25.6353,
-        "SAR": 17.3453,
-        "ISR": 17.9153
+        "SDR": 15.3285,
+        "SIR": 25.9826,
+        "SAR": 17.4633,
+        "ISR": 18.0557
       }
     },
     "stems": [
@@ -8152,20 +8186,37 @@
             "ISR": 19.2246
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 11.4156,
+            "SIR": 20.7426,
+            "SAR": 11.7749,
+            "ISR": 15.7576
+          },
+          "instrumental": {
+            "SDR": 15.374,
+            "SIR": 27.5474,
+            "SAR": 17.5502,
+            "ISR": 17.8933
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.8106,
-        "SIR": 21.1604,
-        "SAR": 10.8621,
-        "ISR": 15.0507
+        "SDR": 11.3671,
+        "SIR": 20.7426,
+        "SAR": 10.9203,
+        "ISR": 15.1095
       },
       "instrumental": {
-        "SDR": 15.5325,
-        "SIR": 25.3363,
-        "SAR": 17.4272,
-        "ISR": 18.0842
+        "SDR": 15.421,
+        "SIR": 25.9891,
+        "SAR": 17.5145,
+        "ISR": 17.9321
       }
     },
     "stems": [
@@ -8380,20 +8431,37 @@
             "ISR": 19.2149
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 11.4675,
+            "SIR": 22.8829,
+            "SAR": 11.6808,
+            "ISR": 15.2476
+          },
+          "instrumental": {
+            "SDR": 15.2594,
+            "SIR": 25.7904,
+            "SAR": 17.577,
+            "ISR": 18.384
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.6788,
-        "SIR": 20.7566,
-        "SAR": 11.0312,
-        "ISR": 15.1022
+        "SDR": 11.0509,
+        "SIR": 20.923,
+        "SAR": 11.0992,
+        "ISR": 15.184
       },
       "instrumental": {
-        "SDR": 15.4252,
-        "SIR": 25.1375,
-        "SAR": 17.4935,
-        "ISR": 18.0627
+        "SDR": 15.299,
+        "SIR": 25.2529,
+        "SAR": 17.577,
+        "ISR": 18.2594
       }
     },
     "stems": [
@@ -8608,20 +8676,37 @@
             "ISR": 18.9745
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 11.5185,
+            "SIR": 21.8661,
+            "SAR": 11.8857,
+            "ISR": 15.3888
+          },
+          "instrumental": {
+            "SDR": 15.46,
+            "SIR": 26.1003,
+            "SAR": 17.7594,
+            "ISR": 18.21
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 11.2119,
-        "SIR": 21.2216,
-        "SAR": 11.1161,
-        "ISR": 15.298
+        "SDR": 11.5185,
+        "SIR": 21.3703,
+        "SAR": 11.1205,
+        "ISR": 15.3204
       },
       "instrumental": {
-        "SDR": 15.7983,
-        "SIR": 26.1394,
-        "SAR": 17.6708,
-        "ISR": 18.1432
+        "SDR": 15.7138,
+        "SIR": 26.1003,
+        "SAR": 17.7594,
+        "ISR": 18.21
       }
     },
     "stems": [
@@ -8836,20 +8921,37 @@
             "ISR": 18.957
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 10.9797,
+            "SIR": 21.5805,
+            "SAR": 11.0086,
+            "ISR": 14.4182
+          },
+          "instrumental": {
+            "SDR": 15.0596,
+            "SIR": 24.236,
+            "SAR": 17.2517,
+            "ISR": 18.1161
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.3706,
-        "SIR": 20.1876,
-        "SAR": 10.7013,
-        "ISR": 14.7323
+        "SDR": 10.8043,
+        "SIR": 20.338,
+        "SAR": 10.8321,
+        "ISR": 14.6172
       },
       "instrumental": {
-        "SDR": 15.1652,
-        "SIR": 25.2208,
-        "SAR": 17.0685,
-        "ISR": 17.8692
+        "SDR": 15.1549,
+        "SIR": 24.3046,
+        "SAR": 17.1829,
+        "ISR": 18.0963
       }
     },
     "stems": [
@@ -9064,20 +9166,37 @@
             "ISR": 18.9734
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 11.4058,
+            "SIR": 20.6741,
+            "SAR": 11.4405,
+            "ISR": 15.4073
+          },
+          "instrumental": {
+            "SDR": 15.1063,
+            "SIR": 26.2659,
+            "SAR": 17.4505,
+            "ISR": 17.9396
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.5657,
-        "SIR": 20.1545,
-        "SAR": 10.624,
-        "ISR": 14.9336
+        "SDR": 11.1776,
+        "SIR": 20.6741,
+        "SAR": 10.7696,
+        "ISR": 14.9469
       },
       "instrumental": {
-        "SDR": 15.122,
-        "SIR": 25.4277,
-        "SAR": 17.0236,
-        "ISR": 17.86
+        "SDR": 15.1063,
+        "SIR": 25.9509,
+        "SAR": 17.0764,
+        "ISR": 17.9396
       }
     },
     "stems": [
@@ -9292,20 +9411,37 @@
             "ISR": 19.2661
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 11.1442,
+            "SIR": 22.284,
+            "SAR": 11.57,
+            "ISR": 15.3503
+          },
+          "instrumental": {
+            "SDR": 15.196,
+            "SIR": 26.5929,
+            "SAR": 17.6819,
+            "ISR": 18.3769
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.4496,
-        "SIR": 20.3959,
-        "SAR": 10.4455,
-        "ISR": 14.4868
+        "SDR": 11.1442,
+        "SIR": 21.165,
+        "SAR": 10.6096,
+        "ISR": 14.5785
       },
       "instrumental": {
-        "SDR": 15.0592,
-        "SIR": 23.8914,
-        "SAR": 16.7941,
-        "ISR": 18.0069
+        "SDR": 15.089,
+        "SIR": 24.0614,
+        "SAR": 16.9656,
+        "ISR": 18.1594
       }
     },
     "stems": [
@@ -9520,20 +9656,37 @@
             "ISR": 19.2621
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 11.3782,
+            "SIR": 20.6799,
+            "SAR": 11.6328,
+            "ISR": 15.896
+          },
+          "instrumental": {
+            "SDR": 15.148,
+            "SIR": 26.753,
+            "SAR": 17.1879,
+            "ISR": 17.9421
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.6001,
-        "SIR": 20.425,
-        "SAR": 10.5416,
-        "ISR": 15.1694
+        "SDR": 11.3476,
+        "SIR": 20.6799,
+        "SAR": 10.7483,
+        "ISR": 15.2878
       },
       "instrumental": {
-        "SDR": 15.1366,
-        "SIR": 25.0598,
-        "SAR": 16.834,
-        "ISR": 17.9625
+        "SDR": 15.1399,
+        "SIR": 25.1965,
+        "SAR": 16.9471,
+        "ISR": 17.9421
       }
     },
     "stems": [
@@ -9748,20 +9901,37 @@
             "ISR": 19.1319
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 11.2629,
+            "SIR": 21.2314,
+            "SAR": 11.511,
+            "ISR": 14.6865
+          },
+          "instrumental": {
+            "SDR": 15.172,
+            "SIR": 24.4783,
+            "SAR": 17.5185,
+            "ISR": 18.0282
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.9777,
-        "SIR": 20.6802,
-        "SAR": 10.9613,
-        "ISR": 15.0442
+        "SDR": 11.2629,
+        "SIR": 20.8459,
+        "SAR": 10.9961,
+        "ISR": 14.9913
       },
       "instrumental": {
-        "SDR": 15.3947,
-        "SIR": 25.1889,
-        "SAR": 17.5812,
-        "ISR": 17.8291
+        "SDR": 15.2711,
+        "SIR": 24.78,
+        "SAR": 17.5185,
+        "ISR": 17.9021
       }
     },
     "stems": [
@@ -9976,20 +10146,37 @@
             "ISR": 19.3556
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 11.3223,
+            "SIR": 22.0072,
+            "SAR": 11.7495,
+            "ISR": 14.9387
+          },
+          "instrumental": {
+            "SDR": 15.3016,
+            "SIR": 25.4108,
+            "SAR": 17.6072,
+            "ISR": 18.3561
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.9027,
-        "SIR": 21.3897,
-        "SAR": 10.8875,
-        "ISR": 14.8844
+        "SDR": 11.3223,
+        "SIR": 21.8449,
+        "SAR": 10.9954,
+        "ISR": 14.9077
       },
       "instrumental": {
-        "SDR": 15.5553,
-        "SIR": 25.3554,
-        "SAR": 17.4893,
-        "ISR": 18.2736
+        "SDR": 15.3563,
+        "SIR": 25.3572,
+        "SAR": 17.6072,
+        "ISR": 18.3445
       }
     },
     "stems": [
@@ -10204,20 +10391,37 @@
             "ISR": 19.1107
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 11.382,
+            "SIR": 21.2525,
+            "SAR": 11.7638,
+            "ISR": 15.0526
+          },
+          "instrumental": {
+            "SDR": 15.3147,
+            "SIR": 25.443,
+            "SAR": 17.736,
+            "ISR": 18.0958
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.8725,
-        "SIR": 20.6758,
-        "SAR": 10.9216,
-        "ISR": 14.972
+        "SDR": 11.382,
+        "SIR": 21.0051,
+        "SAR": 11.0516,
+        "ISR": 15.0526
       },
       "instrumental": {
-        "SDR": 15.5511,
-        "SIR": 25.3859,
-        "SAR": 17.4958,
-        "ISR": 17.9546
+        "SDR": 15.443,
+        "SIR": 25.443,
+        "SAR": 17.6316,
+        "ISR": 18.066
       }
     },
     "stems": [
@@ -10432,20 +10636,37 @@
             "ISR": 19.2452
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 9.85284,
+            "SIR": 24.3374,
+            "SAR": 8.20191,
+            "ISR": 10.2457
+          },
+          "instrumental": {
+            "SDR": 13.7617,
+            "SIR": 16.2322,
+            "SAR": 15.6337,
+            "ISR": 18.9877
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 6.05672,
-        "SIR": 21.1433,
-        "SAR": 4.61041,
-        "ISR": 7.79421
+        "SDR": 7.05704,
+        "SIR": 21.4445,
+        "SAR": 5.89875,
+        "ISR": 8.22557
       },
       "instrumental": {
-        "SDR": 14.5761,
-        "SIR": 17.4177,
-        "SAR": 16.4792,
-        "ISR": 18.7987
+        "SDR": 14.2172,
+        "SIR": 17.0912,
+        "SAR": 15.8817,
+        "ISR": 18.8993
       }
     },
     "stems": [
@@ -10660,20 +10881,37 @@
             "ISR": 18.7522
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 9.32362,
+            "SIR": 21.663,
+            "SAR": 7.618,
+            "ISR": 10.1983
+          },
+          "instrumental": {
+            "SDR": 13.5594,
+            "SIR": 15.9231,
+            "SAR": 15.037,
+            "ISR": 18.656
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 6.68107,
-        "SIR": 18.7654,
-        "SAR": 4.97208,
-        "ISR": 8.35778
+        "SDR": 7.74512,
+        "SIR": 20.3629,
+        "SAR": 5.92398,
+        "ISR": 8.46033
       },
       "instrumental": {
-        "SDR": 14.7703,
-        "SIR": 17.9753,
-        "SAR": 16.3953,
-        "ISR": 18.4205
+        "SDR": 14.4604,
+        "SIR": 17.2931,
+        "SAR": 15.5827,
+        "ISR": 18.4917
       }
     },
     "stems": [
@@ -10888,20 +11126,37 @@
             "ISR": 19.094
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 11.075,
+            "SIR": 20.6309,
+            "SAR": 11.4508,
+            "ISR": 14.7976
+          },
+          "instrumental": {
+            "SDR": 15.1607,
+            "SIR": 25.3332,
+            "SAR": 17.4097,
+            "ISR": 18.0006
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.3309,
-        "SIR": 20.1305,
-        "SAR": 10.4051,
-        "ISR": 14.3002
+        "SDR": 11.0505,
+        "SIR": 20.6309,
+        "SAR": 10.6343,
+        "ISR": 14.4563
       },
       "instrumental": {
-        "SDR": 14.9451,
-        "SIR": 23.9476,
-        "SAR": 16.7433,
-        "ISR": 18.0709
+        "SDR": 14.9824,
+        "SIR": 24.1792,
+        "SAR": 16.8949,
+        "ISR": 18.0436
       }
     },
     "stems": [
@@ -11116,20 +11371,37 @@
             "ISR": 19.479
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 11.7748,
+            "SIR": 22.6663,
+            "SAR": 12.1794,
+            "ISR": 15.498
+          },
+          "instrumental": {
+            "SDR": 15.7036,
+            "SIR": 26.7618,
+            "SAR": 17.9489,
+            "ISR": 18.3876
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 11.2044,
-        "SIR": 22.5109,
-        "SAR": 11.139,
-        "ISR": 14.9228
+        "SDR": 11.7642,
+        "SIR": 22.6663,
+        "SAR": 11.2081,
+        "ISR": 15.0075
       },
       "instrumental": {
-        "SDR": 15.8981,
-        "SIR": 25.5596,
-        "SAR": 17.7214,
-        "ISR": 18.4656
+        "SDR": 15.7797,
+        "SIR": 26.3101,
+        "SAR": 17.9489,
+        "ISR": 18.3876
       }
     },
     "stems": [
@@ -11344,20 +11616,37 @@
             "ISR": 19.5142
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 11.6722,
+            "SIR": 23.7029,
+            "SAR": 12.1194,
+            "ISR": 15.2511
+          },
+          "instrumental": {
+            "SDR": 15.7233,
+            "SIR": 26.1193,
+            "SAR": 17.9673,
+            "ISR": 18.61
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 11.1583,
-        "SIR": 22.8158,
-        "SAR": 11.0473,
-        "ISR": 14.8828
+        "SDR": 11.6722,
+        "SIR": 23.7029,
+        "SAR": 11.0592,
+        "ISR": 14.8854
       },
       "instrumental": {
-        "SDR": 15.8753,
-        "SIR": 25.3361,
-        "SAR": 17.5722,
-        "ISR": 18.5784
+        "SDR": 15.7506,
+        "SIR": 26.1193,
+        "SAR": 17.9673,
+        "ISR": 18.61
       }
     },
     "stems": [
@@ -11572,20 +11861,37 @@
             "ISR": 19.4275
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 11.7835,
+            "SIR": 21.6868,
+            "SAR": 12.2327,
+            "ISR": 15.9921
+          },
+          "instrumental": {
+            "SDR": 15.5987,
+            "SIR": 28.1843,
+            "SAR": 17.7422,
+            "ISR": 18.1653
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 11.1761,
-        "SIR": 22.0985,
-        "SAR": 11.1424,
-        "ISR": 15.0734
+        "SDR": 11.7289,
+        "SIR": 21.6868,
+        "SAR": 11.1794,
+        "ISR": 15.2452
       },
       "instrumental": {
-        "SDR": 15.8019,
-        "SIR": 25.9235,
-        "SAR": 17.7394,
-        "ISR": 18.3083
+        "SDR": 15.6294,
+        "SIR": 26.6465,
+        "SAR": 17.7422,
+        "ISR": 18.1653
       }
     },
     "stems": [
@@ -11800,20 +12106,37 @@
             "ISR": 19.327
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 11.4857,
+            "SIR": 22.4695,
+            "SAR": 12.0572,
+            "ISR": 15.6258
+          },
+          "instrumental": {
+            "SDR": 15.3689,
+            "SIR": 27.2182,
+            "SAR": 17.8018,
+            "ISR": 18.3432
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.7991,
-        "SIR": 21.3695,
-        "SAR": 10.8053,
-        "ISR": 14.7643
+        "SDR": 11.4857,
+        "SIR": 22.0085,
+        "SAR": 10.8498,
+        "ISR": 14.8499
       },
       "instrumental": {
-        "SDR": 15.6101,
-        "SIR": 23.8257,
-        "SAR": 17.5014,
-        "ISR": 18.122
+        "SDR": 15.5184,
+        "SIR": 23.8644,
+        "SAR": 17.6463,
+        "ISR": 18.2541
       }
     },
     "stems": [
@@ -12028,20 +12351,37 @@
             "ISR": 19.3742
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 11.0085,
+            "SIR": 21.773,
+            "SAR": 11.7101,
+            "ISR": 14.7899
+          },
+          "instrumental": {
+            "SDR": 15.2654,
+            "SIR": 25.6076,
+            "SAR": 17.9433,
+            "ISR": 18.335
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.6909,
-        "SIR": 19.6322,
-        "SAR": 11.0274,
-        "ISR": 14.0056
+        "SDR": 11.0085,
+        "SIR": 19.7158,
+        "SAR": 11.2144,
+        "ISR": 14.0858
       },
       "instrumental": {
-        "SDR": 15.2712,
-        "SIR": 24.0196,
-        "SAR": 17.8282,
-        "ISR": 17.8582
+        "SDR": 15.2654,
+        "SIR": 24.1135,
+        "SAR": 17.9433,
+        "ISR": 18.0621
       }
     },
     "stems": [
@@ -12256,20 +12596,37 @@
             "ISR": 19.297
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 10.8648,
+            "SIR": 21.542,
+            "SAR": 11.5209,
+            "ISR": 14.9481
+          },
+          "instrumental": {
+            "SDR": 15.0247,
+            "SIR": 25.8077,
+            "SAR": 17.4885,
+            "ISR": 18.2814
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.2131,
-        "SIR": 19.9386,
-        "SAR": 10.1407,
-        "ISR": 13.3464
+        "SDR": 10.8537,
+        "SIR": 20.0866,
+        "SAR": 10.3754,
+        "ISR": 14.259
       },
       "instrumental": {
-        "SDR": 14.9287,
-        "SIR": 24.2212,
-        "SAR": 16.7041,
-        "ISR": 17.7508
+        "SDR": 15.0247,
+        "SIR": 25.0363,
+        "SAR": 16.7366,
+        "ISR": 17.8968
       }
     },
     "stems": [
@@ -12484,20 +12841,37 @@
             "ISR": 19.2673
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 11.8368,
+            "SIR": 23.9672,
+            "SAR": 11.9723,
+            "ISR": 15.4875
+          },
+          "instrumental": {
+            "SDR": 15.6607,
+            "SIR": 25.7476,
+            "SAR": 17.8226,
+            "ISR": 18.6773
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 11.1629,
-        "SIR": 22.1084,
-        "SAR": 10.9509,
-        "ISR": 15.5559
+        "SDR": 11.8368,
+        "SIR": 23.0031,
+        "SAR": 11.0204,
+        "ISR": 15.4875
       },
       "instrumental": {
-        "SDR": 15.7085,
-        "SIR": 26.4183,
-        "SAR": 17.3492,
-        "ISR": 18.321
+        "SDR": 15.6607,
+        "SIR": 25.7476,
+        "SAR": 17.6771,
+        "ISR": 18.4226
       }
     },
     "stems": [
@@ -12712,20 +13086,37 @@
             "ISR": 18.6868
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 4.8586,
+            "SIR": 22.3043,
+            "SAR": 12.0324,
+            "ISR": 7.05104
+          },
+          "instrumental": {
+            "SDR": 8.44329,
+            "SIR": 10.2969,
+            "SAR": 13.6717,
+            "ISR": 17.1684
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 4.79382,
-        "SIR": 21.5958,
-        "SAR": 11.0697,
-        "ISR": 7.36017
+        "SDR": 4.85057,
+        "SIR": 22.3043,
+        "SAR": 11.1041,
+        "ISR": 7.24166
       },
       "instrumental": {
-        "SDR": 7.38998,
-        "SIR": 9.5226,
-        "SAR": 13.8102,
-        "ISR": 16.8667
+        "SDR": 7.48743,
+        "SIR": 9.85028,
+        "SAR": 13.6717,
+        "ISR": 17.0003
       }
     },
     "stems": [
@@ -12940,20 +13331,37 @@
             "ISR": 19.1986
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 11.9561,
+            "SIR": 22.6627,
+            "SAR": 12.0422,
+            "ISR": 17.1639
+          },
+          "instrumental": {
+            "SDR": 15.4984,
+            "SIR": 27.7582,
+            "SAR": 17.5769,
+            "ISR": 18.3379
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 11.4362,
-        "SIR": 21.7621,
-        "SAR": 11.1182,
-        "ISR": 16.9382
+        "SDR": 11.9561,
+        "SIR": 22.4425,
+        "SAR": 11.1273,
+        "ISR": 16.944
       },
       "instrumental": {
-        "SDR": 15.6732,
-        "SIR": 28.1358,
-        "SAR": 17.2636,
-        "ISR": 18.1033
+        "SDR": 15.61,
+        "SIR": 27.7582,
+        "SAR": 17.5769,
+        "ISR": 18.2854
       }
     },
     "stems": [
@@ -13168,20 +13576,37 @@
             "ISR": 19.3017
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 11.7368,
+            "SIR": 21.6175,
+            "SAR": 11.922,
+            "ISR": 14.983
+          },
+          "instrumental": {
+            "SDR": 15.5755,
+            "SIR": 25.2078,
+            "SAR": 17.8753,
+            "ISR": 18.1936
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 11.1947,
-        "SIR": 21.7445,
-        "SAR": 11.1311,
-        "ISR": 15.1982
+        "SDR": 11.7368,
+        "SIR": 21.6175,
+        "SAR": 11.1831,
+        "ISR": 15.163
       },
       "instrumental": {
-        "SDR": 15.8529,
-        "SIR": 25.7033,
-        "SAR": 17.6692,
-        "ISR": 18.2553
+        "SDR": 15.7651,
+        "SIR": 25.2078,
+        "SAR": 17.8753,
+        "ISR": 18.1936
       }
     },
     "stems": [
@@ -13396,20 +13821,37 @@
             "ISR": 19.1658
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 11.5553,
+            "SIR": 20.4857,
+            "SAR": 11.9005,
+            "ISR": 15.2388
+          },
+          "instrumental": {
+            "SDR": 15.4347,
+            "SIR": 25.9966,
+            "SAR": 17.4954,
+            "ISR": 17.9408
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 11.1508,
-        "SIR": 21.6421,
-        "SAR": 11.1184,
-        "ISR": 14.9331
+        "SDR": 11.5553,
+        "SIR": 20.9027,
+        "SAR": 11.179,
+        "ISR": 15.069
       },
       "instrumental": {
-        "SDR": 15.7675,
-        "SIR": 25.7533,
-        "SAR": 17.7993,
-        "ISR": 18.2587
+        "SDR": 15.627,
+        "SIR": 25.9966,
+        "SAR": 17.515,
+        "ISR": 18.2179
       }
     },
     "stems": [
@@ -13624,20 +14066,37 @@
             "ISR": 18.1055
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 10.8654,
+            "SIR": 20.077,
+            "SAR": 11.1553,
+            "ISR": 14.0203
+          },
+          "instrumental": {
+            "SDR": 14.4459,
+            "SIR": 24.0598,
+            "SAR": 16.9315,
+            "ISR": 17.5409
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.0639,
-        "SIR": 19.0901,
-        "SAR": 10.3182,
-        "ISR": 13.9445
+        "SDR": 10.6629,
+        "SIR": 19.41,
+        "SAR": 10.5931,
+        "ISR": 13.9944
       },
       "instrumental": {
-        "SDR": 14.4048,
-        "SIR": 23.4988,
-        "SAR": 16.5377,
-        "ISR": 17.2844
+        "SDR": 14.4459,
+        "SIR": 24.0598,
+        "SAR": 16.65,
+        "ISR": 17.388
       }
     },
     "stems": [
@@ -13852,20 +14311,37 @@
             "ISR": 16.6277
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 10.6523,
+            "SIR": 17.3253,
+            "SAR": 11.5388,
+            "ISR": 14.6133
+          },
+          "instrumental": {
+            "SDR": 13.9999,
+            "SIR": 24.8454,
+            "SAR": 17.0806,
+            "ISR": 16.2674
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.0476,
-        "SIR": 16.345,
-        "SAR": 10.7686,
-        "ISR": 14.288
+        "SDR": 10.6352,
+        "SIR": 16.3522,
+        "SAR": 11.0231,
+        "ISR": 14.3746
       },
       "instrumental": {
-        "SDR": 13.8689,
-        "SIR": 24.0987,
-        "SAR": 16.6214,
-        "ISR": 15.9502
+        "SDR": 13.9999,
+        "SIR": 24.6142,
+        "SAR": 16.638,
+        "ISR": 16.1413
       }
     },
     "stems": [
@@ -14080,20 +14556,37 @@
             "ISR": 16.8214
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 10.9621,
+            "SIR": 17.2045,
+            "SAR": 12.1515,
+            "ISR": 15.504
+          },
+          "instrumental": {
+            "SDR": 14.2716,
+            "SIR": 26.8404,
+            "SAR": 17.397,
+            "ISR": 16.1551
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.399,
-        "SIR": 16.8145,
-        "SAR": 11.1034,
-        "ISR": 14.6972
+        "SDR": 10.9621,
+        "SIR": 17.2045,
+        "SAR": 11.2403,
+        "ISR": 14.7168
       },
       "instrumental": {
-        "SDR": 14.2207,
-        "SIR": 24.9297,
-        "SAR": 17.0709,
-        "ISR": 15.9968
+        "SDR": 14.2716,
+        "SIR": 26.0525,
+        "SAR": 17.1271,
+        "ISR": 16.0959
       }
     },
     "stems": [
@@ -14308,20 +14801,37 @@
             "ISR": 19.0291
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 11.2107,
+            "SIR": 20.4259,
+            "SAR": 11.5713,
+            "ISR": 15.6806
+          },
+          "instrumental": {
+            "SDR": 15.0826,
+            "SIR": 27.3436,
+            "SAR": 17.3563,
+            "ISR": 17.8239
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.6497,
-        "SIR": 20.3786,
-        "SAR": 10.692,
-        "ISR": 14.848
+        "SDR": 11.135,
+        "SIR": 20.4259,
+        "SAR": 10.742,
+        "ISR": 14.8939
       },
       "instrumental": {
-        "SDR": 15.2149,
-        "SIR": 25.6075,
-        "SAR": 17.1363,
-        "ISR": 17.7893
+        "SDR": 15.0826,
+        "SIR": 26.565,
+        "SAR": 17.1807,
+        "ISR": 17.8239
       }
     },
     "stems": [
@@ -18403,20 +18913,37 @@
             "ISR": 19.604
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "vocals": {
+            "SDR": 11.4409,
+            "SIR": 27.275,
+            "SAR": 12.3826,
+            "ISR": 14.361
+          },
+          "instrumental": {
+            "SDR": 15.7392,
+            "SIR": 24.1909,
+            "SAR": 18.3815,
+            "ISR": 19.128
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 11.2977,
-        "SIR": 25.6853,
-        "SAR": 11.6054,
-        "ISR": 13.6769
+        "SDR": 11.3751,
+        "SIR": 26.0093,
+        "SAR": 12.2334,
+        "ISR": 13.6806
       },
       "instrumental": {
-        "SDR": 15.6186,
-        "SIR": 24.0485,
-        "SAR": 17.4804,
-        "ISR": 18.9926
+        "SDR": 15.7392,
+        "SIR": 24.1797,
+        "SAR": 17.5123,
+        "ISR": 19.128
       }
     },
     "stems": [
@@ -20151,14 +20678,31 @@
             "ISR": 3.88359
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "other": {
+            "SDR": 5.65245,
+            "SIR": 13.2616,
+            "SAR": 5.88494,
+            "ISR": 9.37478
+          },
+          "instrumental": {
+            "SDR": 4.05419,
+            "SIR": 11.3487,
+            "SAR": 4.16195,
+            "ISR": 8.64173
+          }
+        }
       }
     ],
     "median_scores": {
       "instrumental": {
-        "SDR": 2.76622,
-        "SIR": 8.94635,
-        "SAR": 3.73319,
-        "ISR": 5.60027
+        "SDR": 2.78068,
+        "SIR": 9.55963,
+        "SAR": 3.80443,
+        "ISR": 5.97829
       }
     },
     "stems": [
@@ -20356,20 +20900,37 @@
             "ISR": 10.3974
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "bass": {
+            "SDR": 9.23296,
+            "SIR": 19.0919,
+            "SAR": 9.80712,
+            "ISR": 14.1654
+          },
+          "instrumental": {
+            "SDR": 3.55055,
+            "SIR": 7.82103,
+            "SAR": 4.57447,
+            "ISR": 9.43293
+          }
+        }
       }
     ],
     "median_scores": {
       "bass": {
-        "SDR": 10.4234,
-        "SIR": 21.1304,
-        "SAR": 11.0176,
-        "ISR": 13.555
+        "SDR": 10.3789,
+        "SIR": 21.0644,
+        "SAR": 10.7672,
+        "ISR": 13.7139
       },
       "instrumental": {
-        "SDR": 2.12083,
-        "SIR": 6.81879,
-        "SAR": 3.77969,
-        "ISR": 6.3789
+        "SDR": 2.14297,
+        "SIR": 6.97809,
+        "SAR": 3.86114,
+        "ISR": 7.07443
       }
     },
     "stems": [
@@ -20567,20 +21128,37 @@
             "ISR": 6.07613
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "drums": {
+            "SDR": 9.31067,
+            "SIR": 17.63,
+            "SAR": 10.2502,
+            "ISR": 13.9311
+          },
+          "instrumental": {
+            "SDR": 1.75991,
+            "SIR": 3.09722,
+            "SAR": 2.26884,
+            "ISR": 4.17393
+          }
+        }
       }
     ],
     "median_scores": {
       "drums": {
-        "SDR": 7.65583,
-        "SIR": 15.13,
-        "SAR": 8.00592,
-        "ISR": 13.0093
+        "SDR": 7.70017,
+        "SIR": 15.2337,
+        "SAR": 8.11353,
+        "ISR": 13.2095
       },
       "instrumental": {
-        "SDR": 3.21713,
-        "SIR": 7.20549,
-        "SAR": 5.52393,
-        "ISR": 7.20048
+        "SDR": 3.11637,
+        "SIR": 6.88887,
+        "SAR": 4.50075,
+        "ISR": 7.03897
       }
     },
     "stems": [
@@ -20778,14 +21356,31 @@
             "ISR": 4.33743
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "other": {
+            "SDR": 5.41656,
+            "SIR": 12.4231,
+            "SAR": 5.63976,
+            "ISR": 8.89898
+          },
+          "instrumental": {
+            "SDR": 4.07683,
+            "SIR": 11.7097,
+            "SAR": 4.2601,
+            "ISR": 8.76732
+          }
+        }
       }
     ],
     "median_scores": {
       "instrumental": {
-        "SDR": 3.03031,
-        "SIR": 10.5176,
-        "SAR": 4.0042,
-        "ISR": 5.96283
+        "SDR": 3.03069,
+        "SIR": 10.6977,
+        "SAR": 4.13215,
+        "ISR": 6.30537
       }
     },
     "stems": [
@@ -20983,20 +21578,37 @@
             "ISR": 10.403
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "bass": {
+            "SDR": 8.41547,
+            "SIR": 18.8555,
+            "SAR": 8.9441,
+            "ISR": 12.7429
+          },
+          "instrumental": {
+            "SDR": 3.71434,
+            "SIR": 8.18723,
+            "SAR": 4.59536,
+            "ISR": 9.64957
+          }
+        }
       }
     ],
     "median_scores": {
       "bass": {
-        "SDR": 9.8357,
-        "SIR": 21.1154,
-        "SAR": 10.1956,
-        "ISR": 12.7349
+        "SDR": 9.79219,
+        "SIR": 20.7246,
+        "SAR": 9.56985,
+        "ISR": 12.7389
       },
       "instrumental": {
-        "SDR": 2.2203,
-        "SIR": 7.40689,
-        "SAR": 3.87341,
-        "ISR": 7.82504
+        "SDR": 2.47945,
+        "SIR": 7.68088,
+        "SAR": 4.07925,
+        "ISR": 8.69128
       }
     },
     "stems": [
@@ -21194,20 +21806,37 @@
             "ISR": 6.3464
           }
         }
+      },
+      {
+        "track_name": "Atlantis Bound - It Was My Fault For Waiting",
+        "scores": {
+          "drums": {
+            "SDR": 9.68661,
+            "SIR": 19.8937,
+            "SAR": 10.6275,
+            "ISR": 13.8978
+          },
+          "instrumental": {
+            "SDR": 1.67553,
+            "SIR": 2.99451,
+            "SAR": 2.43189,
+            "ISR": 4.20413
+          }
+        }
       }
     ],
     "median_scores": {
       "drums": {
-        "SDR": 7.10067,
-        "SIR": 16.2967,
-        "SAR": 7.89512,
-        "ISR": 11.6189
+        "SDR": 7.64888,
+        "SIR": 16.5241,
+        "SAR": 8.28422,
+        "ISR": 11.8358
       },
       "instrumental": {
-        "SDR": 3.27906,
-        "SIR": 7.34443,
-        "SAR": 5.63948,
-        "ISR": 7.40509
+        "SDR": 3.18288,
+        "SIR": 7.28524,
+        "SAR": 4.55425,
+        "ISR": 7.35494
       }
     },
     "stems": [
