@@ -4,7 +4,8 @@
     },
     "mdx_download_list": {},
     "mdx23c_download_list": {
-        "MDX23C Model: MDX23C De-Reverb by aufr33-jarredou": {"MDX23C-De-Reverb-aufr33-jarredou.ckpt":"config_dereverb_mdx23c.yaml"}
+        "MDX23C Model: MDX23C De-Reverb by aufr33-jarredou": {"MDX23C-De-Reverb-aufr33-jarredou.ckpt":"config_dereverb_mdx23c.yaml"},
+        "MDX23C Model: MDX23C DrumSep by aufr33-jarredou": {"MDX23C-DrumSep-aufr33-jarredou.ckpt":"config_drumsep_mdx23c.yaml"}
     },
     "roformer_download_list": {
         "Roformer Model: Mel-Roformer-Karaoke-Aufr33-Viperx": {
