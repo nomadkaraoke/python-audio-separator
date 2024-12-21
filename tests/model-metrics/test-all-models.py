@@ -18,6 +18,7 @@ logger = logging.getLogger(__name__)
 
 MUSDB_PATH = "/Volumes/Nomad4TBOne/python-audio-separator/tests/model-metrics/datasets/musdb18hq"
 RESULTS_PATH = "/Volumes/Nomad4TBOne/python-audio-separator/tests/model-metrics/results"
+COMBINED_RESULTS_PATH = "/Users/andrew/Projects/python-audio-separator/audio_separator/models-scores.json"
 
 
 def evaluate_track(track_name, track_path, test_model, mus_db):
@@ -161,11 +162,10 @@ def main():
     os.makedirs(RESULTS_PATH, exist_ok=True)
 
     # Load existing results if available
-    combined_results_path = "audio_separator/models-scores.json"
     combined_results = {}
-    if os.path.exists(combined_results_path):
+    if os.path.exists(COMBINED_RESULTS_PATH):
         logger.info("Loading existing combined results...")
-        with open(combined_results_path) as f:
+        with open(COMBINED_RESULTS_PATH) as f:
             combined_results = json.load(f)
 
     # Define known demucs model stems
@@ -311,7 +311,7 @@ def main():
                 if combined_results[test_model]["track_scores"]:
                     median_scores = calculate_median_scores(combined_results[test_model]["track_scores"])
                     combined_results[test_model]["median_scores"] = median_scores
-                
+
                 # Save results after each model
                 os.makedirs(os.path.dirname(combined_results_path), exist_ok=True)
                 with open(combined_results_path, "w") as f:
