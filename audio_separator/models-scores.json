@@ -4314,10 +4314,10 @@
       }
     },
     "stems": [
-      "other",
+      "instrumental",
       "vocals"
     ],
-    "target_stem": "other"
+    "target_stem": "instrumental"
   },
   "dereverb_mel_band_roformer_anvuew_sdr_19.1729.ckpt": {
     "model_name": "Roformer Model: MelBand Roformer | De-Reverb by anvuew",
@@ -4643,5 +4643,179 @@
       "bleed"
     ],
     "target_stem": "instrumental"
+  },
+  "UVR-MDX-NET-Inst_HQ_5.onnx": {
+    "model_name": "MDX-Net Model: UVR-MDX-NET Inst HQ 5",
+    "track_scores": [
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 6.06866,
+            "SIR": 17.1293,
+            "SAR": 6.12897,
+            "ISR": 10.8085
+          },
+          "instrumental": {
+            "SDR": 16.5979,
+            "SIR": 25.449,
+            "SAR": 20.1238,
+            "ISR": 18.5852
+          }
+        }
+      }
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 6.06866,
+        "SIR": 17.1293,
+        "SAR": 6.12897,
+        "ISR": 10.8085
+      },
+      "instrumental": {
+        "SDR": 16.5979,
+        "SIR": 25.449,
+        "SAR": 20.1238,
+        "ISR": 18.5852
+      }
+    },
+    "stems": [
+      "instrumental",
+      "vocals"
+    ],
+    "target_stem": "instrumental"
+  },
+  "melband_roformer_inst_v1.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer Kim | Inst V1 by Unwa",
+    "track_scores": [
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 6.59313,
+            "SIR": 22.7019,
+            "SAR": 7.12521,
+            "ISR": 10.8986
+          },
+          "instrumental": {
+            "SDR": 16.7678,
+            "SIR": 25.4369,
+            "SAR": 20.2166,
+            "ISR": 19.245
+          }
+        }
+      }
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 6.59313,
+        "SIR": 22.7019,
+        "SAR": 7.12521,
+        "ISR": 10.8986
+      },
+      "instrumental": {
+        "SDR": 16.7678,
+        "SIR": 25.4369,
+        "SAR": 20.2166,
+        "ISR": 19.245
+      }
+    },
+    "stems": [
+      "instrumental",
+      "vocals"
+    ],
+    "target_stem": "instrumental"
+  },
+  "melband_roformer_inst_v2.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer Kim | Inst V2 by Unwa",
+    "track_scores": [
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 7.02113,
+            "SIR": 22.8732,
+            "SAR": 7.34674,
+            "ISR": 11.4878
+          },
+          "instrumental": {
+            "SDR": 16.8635,
+            "SIR": 26.2265,
+            "SAR": 20.4975,
+            "ISR": 19.2417
+          }
+        }
+      }
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 7.02113,
+        "SIR": 22.8732,
+        "SAR": 7.34674,
+        "ISR": 11.4878
+      },
+      "instrumental": {
+        "SDR": 16.8635,
+        "SIR": 26.2265,
+        "SAR": 20.4975,
+        "ISR": 19.2417
+      }
+    },
+    "stems": [
+      "instrumental",
+      "vocals"
+    ],
+    "target_stem": "instrumental"
+  },
+  "melband_roformer_instvoc_duality_v1.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer Kim | InstVoc Duality V1 by Unwa",
+    "track_scores": [
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 7.53732,
+            "SIR": 23.5485,
+            "SAR": 7.88449,
+            "ISR": 12.236
+          },
+          "instrumental": {
+            "SDR": 17.0929,
+            "SIR": 27.1492,
+            "SAR": 20.6733,
+            "ISR": 19.2657
+          }
+        }
+      }
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 7.53732,
+        "SIR": 23.5485,
+        "SAR": 7.88449,
+        "ISR": 12.236
+      },
+      "instrumental": {
+        "SDR": 17.0929,
+        "SIR": 27.1492,
+        "SAR": 20.6733,
+        "ISR": 19.2657
+      }
+    },
+    "stems": [
+      "vocals",
+      "instrumental"
+    ],
+    "target_stem": null
+  },
+  "melband_roformer_instvox_duality_v2.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer Kim | InstVoc Duality V2 by Unwa",
+    "track_scores": [],
+    "median_scores": {},
+    "stems": [
+      "vocals",
+      "instrumental"
+    ],
+    "target_stem": null
   }
 }

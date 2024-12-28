@@ -260,8 +260,8 @@ def main():
 
     # Save the combined results after model inspection
     logger.info("Saving model stem information...")
-    os.makedirs(os.path.dirname(combined_results_path), exist_ok=True)
-    with open(combined_results_path, "w") as f:
+    os.makedirs(os.path.dirname(COMBINED_RESULTS_PATH), exist_ok=True)
+    with open(COMBINED_RESULTS_PATH, "w", encoding="utf-8") as f:
         json.dump(combined_results, f, indent=2)
 
     logger.info("Model stem information saved")
@@ -313,8 +313,8 @@ def main():
                     combined_results[test_model]["median_scores"] = median_scores
 
                 # Save results after each model
-                os.makedirs(os.path.dirname(combined_results_path), exist_ok=True)
-                with open(combined_results_path, "w") as f:
+                os.makedirs(os.path.dirname(COMBINED_RESULTS_PATH), exist_ok=True)
+                with open(COMBINED_RESULTS_PATH, "w", encoding="utf-8") as f:
                     json.dump(combined_results, f, indent=2)
 
                 if not track_already_evaluated:
