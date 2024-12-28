@@ -2,10 +2,16 @@
     "vr_download_list": {
         "VR Arch Single Model v4: UVR-De-Reverb by aufr33-jarredou": "UVR-De-Reverb-aufr33-jarredou.pth"
     },
-    "mdx_download_list": {},
+    "mdx_download_list": {
+        "MDX-Net Model: UVR-MDX-NET Inst HQ 5": "UVR-MDX-NET-Inst_HQ_5.onnx"
+    },
     "mdx23c_download_list": {
-        "MDX23C Model: MDX23C De-Reverb by aufr33-jarredou": {"MDX23C-De-Reverb-aufr33-jarredou.ckpt":"config_dereverb_mdx23c.yaml"},
-        "MDX23C Model: MDX23C DrumSep by aufr33-jarredou": {"MDX23C-DrumSep-aufr33-jarredou.ckpt":"config_drumsep_mdx23c.yaml"}
+        "MDX23C Model: MDX23C De-Reverb by aufr33-jarredou": {
+            "MDX23C-De-Reverb-aufr33-jarredou.ckpt": "config_dereverb_mdx23c.yaml"
+        },
+        "MDX23C Model: MDX23C DrumSep by aufr33-jarredou": {
+            "MDX23C-DrumSep-aufr33-jarredou.ckpt": "config_drumsep_mdx23c.yaml"
+        }
     },
     "roformer_download_list": {
         "Roformer Model: Mel-Roformer-Karaoke-Aufr33-Viperx": {

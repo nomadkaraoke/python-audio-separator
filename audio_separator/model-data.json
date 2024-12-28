@@ -10,5 +10,13 @@
             "is_bv_model_rebalanced": 0.0
         }
     },
-    "mdx_model_data": {}
+    "mdx_model_data": {
+        "cb790d0c913647ced70fc6b38f5bea1a": {
+            "compensate": 1.010,
+            "mdx_dim_f_set": 2560,
+            "mdx_dim_t_set": 8,
+            "mdx_n_fft_scale_set": 5120,
+            "primary_stem": "Instrumental"
+        }
+    }
 }
