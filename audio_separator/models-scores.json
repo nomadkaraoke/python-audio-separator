@@ -341,20 +341,105 @@
             "ISR": 19.5069
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 8.99043,
+            "SIR": 18.7958,
+            "SAR": 9.75759,
+            "ISR": 14.2486
+          },
+          "instrumental": {
+            "SDR": 18.8229,
+            "SIR": 25.0371,
+            "SAR": 19.7476,
+            "ISR": 27.6669
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": 5.56311,
+            "SIR": 18.1942,
+            "SAR": 6.0561,
+            "ISR": 11.368
+          },
+          "instrumental": {
+            "SDR": 12.8085,
+            "SIR": 17.9619,
+            "SAR": 15.7333,
+            "ISR": 18.1057
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 3.47258,
+            "SIR": 13.2462,
+            "SAR": 3.17736,
+            "ISR": 5.63786
+          },
+          "instrumental": {
+            "SDR": 10.3255,
+            "SIR": 12.4029,
+            "SAR": 15.0933,
+            "ISR": 19.4058
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 5.18906,
+            "SIR": 22.5721,
+            "SAR": 5.73903,
+            "ISR": 9.24557
+          },
+          "instrumental": {
+            "SDR": 14.975,
+            "SIR": 19.4188,
+            "SAR": 17.948,
+            "ISR": 18.9743
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 6.18507,
+            "SIR": 16.4992,
+            "SAR": 6.30036,
+            "ISR": 10.0651
+          },
+          "instrumental": {
+            "SDR": 14.1405,
+            "SIR": 18.0741,
+            "SAR": 16.8313,
+            "ISR": 26.3192
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 7.76742,
-        "SIR": 18.569,
-        "SAR": 7.71117,
-        "ISR": 12.8686
+        "SDR": 6.89595,
+        "SIR": 18.5542,
+        "SAR": 6.98892,
+        "ISR": 12.7187
       },
       "instrumental": {
-        "SDR": 13.8598,
-        "SIR": 19.0897,
-        "SAR": 15.8319,
-        "ISR": 21.5232
+        "SDR": 13.9941,
+        "SIR": 18.9906,
+        "SAR": 15.8694,
+        "ISR": 21.1358
       }
     },
     "stems": [
@@ -705,20 +790,105 @@
             "ISR": 19.5378
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 10.466,
+            "SIR": 21.2373,
+            "SAR": 11.4843,
+            "ISR": 16.0906
+          },
+          "instrumental": {
+            "SDR": 16.693,
+            "SIR": 21.0931,
+            "SAR": 18.3088,
+            "ISR": 28.5648
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": 6.64894,
+            "SIR": 20.1887,
+            "SAR": 7.02405,
+            "ISR": 11.7596
+          },
+          "instrumental": {
+            "SDR": 13.4303,
+            "SIR": 17.418,
+            "SAR": 16.2131,
+            "ISR": 18.3726
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 3.54851,
+            "SIR": 13.8686,
+            "SAR": 3.21556,
+            "ISR": 5.48372
+          },
+          "instrumental": {
+            "SDR": 10.4532,
+            "SIR": 12.1858,
+            "SAR": 15.7379,
+            "ISR": 19.6449
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 6.98389,
+            "SIR": 20.7384,
+            "SAR": 7.43142,
+            "ISR": 11.3862
+          },
+          "instrumental": {
+            "SDR": 15.661,
+            "SIR": 19.5961,
+            "SAR": 17.9449,
+            "ISR": 24.9838
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 6.18863,
+            "SIR": 16.5062,
+            "SAR": 6.34427,
+            "ISR": 10.1041
+          },
+          "instrumental": {
+            "SDR": 14.146,
+            "SIR": 17.8738,
+            "SAR": 17.0247,
+            "ISR": 26.666
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.28475,
-        "SIR": 18.7837,
-        "SAR": 8.38136,
-        "ISR": 12.7895
+        "SDR": 7.45618,
+        "SIR": 18.7851,
+        "SAR": 7.63734,
+        "ISR": 12.6694
       },
       "instrumental": {
-        "SDR": 13.5194,
-        "SIR": 18.1754,
-        "SAR": 15.5472,
-        "ISR": 21.185
+        "SDR": 13.5519,
+        "SIR": 18.1446,
+        "SAR": 15.7379,
+        "ISR": 21.9574
       }
     },
     "stems": [
@@ -1069,20 +1239,105 @@
             "ISR": 19.5927
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 10.501,
+            "SIR": 21.295,
+            "SAR": 10.8468,
+            "ISR": 18.1803
+          },
+          "instrumental": {
+            "SDR": 18.3438,
+            "SIR": 26.0776,
+            "SAR": 18.9514,
+            "ISR": 29.0685
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": 5.0026,
+            "SIR": 19.2467,
+            "SAR": 5.54823,
+            "ISR": 10.5623
+          },
+          "instrumental": {
+            "SDR": 14.1638,
+            "SIR": 19.4386,
+            "SAR": 16.8441,
+            "ISR": 18.7556
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 3.43321,
+            "SIR": 15.4703,
+            "SAR": 2.65737,
+            "ISR": 5.55385
+          },
+          "instrumental": {
+            "SDR": 10.468,
+            "SIR": 12.3601,
+            "SAR": 15.0377,
+            "ISR": 19.4039
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 6.0421,
+            "SIR": 23.0577,
+            "SAR": 6.05479,
+            "ISR": 11.215
+          },
+          "instrumental": {
+            "SDR": 16.2768,
+            "SIR": 20.0932,
+            "SAR": 16.934,
+            "ISR": 21.3088
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 6.20149,
+            "SIR": 19.1073,
+            "SAR": 5.96094,
+            "ISR": 10.3622
+          },
+          "instrumental": {
+            "SDR": 14.1593,
+            "SIR": 18.4907,
+            "SAR": 16.4001,
+            "ISR": 28.6375
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 7.75474,
-        "SIR": 19.8382,
-        "SAR": 7.72856,
-        "ISR": 13.836
+        "SDR": 7.09266,
+        "SIR": 19.8254,
+        "SAR": 7.08537,
+        "ISR": 12.4561
       },
       "instrumental": {
-        "SDR": 14.1133,
-        "SIR": 20.5357,
-        "SAR": 15.5119,
-        "ISR": 20.5417
+        "SDR": 14.1638,
+        "SIR": 20.2019,
+        "SAR": 15.8114,
+        "ISR": 20.778
       }
     },
     "stems": [
@@ -1433,20 +1688,105 @@
             "ISR": 19.0953
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 10.1506,
+            "SIR": 19.4336,
+            "SAR": 10.5703,
+            "ISR": 18.1863
+          },
+          "instrumental": {
+            "SDR": 18.8857,
+            "SIR": 27.7745,
+            "SAR": 19.2882,
+            "ISR": 27.3143
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": 4.92969,
+            "SIR": 16.7152,
+            "SAR": 5.4446,
+            "ISR": 11.2325
+          },
+          "instrumental": {
+            "SDR": 13.4916,
+            "SIR": 20.5148,
+            "SAR": 16.1495,
+            "ISR": 17.8874
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 3.39677,
+            "SIR": 13.9635,
+            "SAR": 2.82003,
+            "ISR": 5.70048
+          },
+          "instrumental": {
+            "SDR": 10.3135,
+            "SIR": 12.4438,
+            "SAR": 14.9513,
+            "ISR": 18.6463
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 7.6162,
+            "SIR": 21.7675,
+            "SAR": 7.44895,
+            "ISR": 13.2748
+          },
+          "instrumental": {
+            "SDR": 15.4824,
+            "SIR": 20.7977,
+            "SAR": 16.5705,
+            "ISR": 21.3009
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 6.16051,
+            "SIR": 18.0268,
+            "SAR": 6.00783,
+            "ISR": 10.643
+          },
+          "instrumental": {
+            "SDR": 14.1873,
+            "SIR": 18.7806,
+            "SAR": 16.3202,
+            "ISR": 27.5497
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.03683,
-        "SIR": 17.2047,
-        "SAR": 7.73849,
-        "ISR": 15.5278
+        "SDR": 7.6162,
+        "SIR": 17.4523,
+        "SAR": 7.43998,
+        "ISR": 14.7645
       },
       "instrumental": {
-        "SDR": 13.9171,
-        "SIR": 20.7597,
-        "SAR": 14.93,
-        "ISR": 20.7231
+        "SDR": 14.1192,
+        "SIR": 20.6636,
+        "SAR": 15.6846,
+        "ISR": 21.3009
       }
     },
     "stems": [
@@ -1797,20 +2137,105 @@
             "ISR": 20.2129
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 7.83676,
+            "SIR": 24.0007,
+            "SAR": 9.26256,
+            "ISR": 10.9254
+          },
+          "instrumental": {
+            "SDR": 13.531,
+            "SIR": 15.8398,
+            "SAR": 17.2165,
+            "ISR": 31.7996
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": 6.12105,
+            "SIR": 21.447,
+            "SAR": 6.409,
+            "ISR": 9.03096
+          },
+          "instrumental": {
+            "SDR": 12.4939,
+            "SIR": 15.4179,
+            "SAR": 15.4303,
+            "ISR": 18.6236
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 2.33194,
+            "SIR": 16.961,
+            "SAR": -0.19185,
+            "ISR": 2.87461
+          },
+          "instrumental": {
+            "SDR": 9.6199,
+            "SIR": 9.84252,
+            "SAR": 16.2327,
+            "ISR": 20.7356
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 1.98419,
+            "SIR": 28.532,
+            "SAR": 0.58217,
+            "ISR": 3.9544
+          },
+          "instrumental": {
+            "SDR": 11.9419,
+            "SIR": 10.6751,
+            "SAR": 14.4384,
+            "ISR": 18.9691
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 5.20256,
+            "SIR": 20.3411,
+            "SAR": 3.31471,
+            "ISR": 6.02608
+          },
+          "instrumental": {
+            "SDR": 12.8473,
+            "SIR": 13.6137,
+            "SAR": 16.5213,
+            "ISR": 28.6294
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 4.88782,
-        "SIR": 22.9856,
-        "SAR": 4.01187,
-        "ISR": 7.1338
+        "SDR": 5.20256,
+        "SIR": 22.754,
+        "SAR": 3.90898,
+        "ISR": 7.10507
       },
       "instrumental": {
-        "SDR": 12.3399,
-        "SIR": 13.5437,
-        "SAR": 14.8921,
-        "ISR": 22.1884
+        "SDR": 12.455,
+        "SIR": 13.6137,
+        "SAR": 14.9453,
+        "ISR": 22.1027
       }
     },
     "stems": [
@@ -2161,20 +2586,105 @@
             "ISR": 21.0662
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 5.19442,
+            "SIR": 23.5415,
+            "SAR": 6.80425,
+            "ISR": 9.1183
+          },
+          "instrumental": {
+            "SDR": 15.5002,
+            "SIR": 16.4718,
+            "SAR": 18.3747,
+            "ISR": 33.361
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": 0.03535,
+            "SIR": 4.1695,
+            "SAR": 0.1037,
+            "ISR": 3.26091
+          },
+          "instrumental": {
+            "SDR": 15.9356,
+            "SIR": 22.3127,
+            "SAR": 21.6331,
+            "ISR": 18.4239
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 2.88156,
+            "SIR": 16.7721,
+            "SAR": 1.47556,
+            "ISR": 3.83899
+          },
+          "instrumental": {
+            "SDR": 10.1574,
+            "SIR": 10.7556,
+            "SAR": 16.1756,
+            "ISR": 20.2921
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 3e-05,
+            "SIR": 25.0255,
+            "SAR": 0.00053,
+            "ISR": 3.27158
+          },
+          "instrumental": {
+            "SDR": 14.0022,
+            "SIR": 13.6025,
+            "SAR": 17.5628,
+            "ISR": 19.5107
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 5.42512,
+            "SIR": 21.2921,
+            "SAR": 3.55915,
+            "ISR": 6.23482
+          },
+          "instrumental": {
+            "SDR": 13.0463,
+            "SIR": 13.8092,
+            "SAR": 16.4955,
+            "ISR": 34.3083
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 4.55306,
-        "SIR": 21.2595,
-        "SAR": 4.22689,
-        "ISR": 7.19365
+        "SDR": 4.49108,
+        "SIR": 21.2738,
+        "SAR": 3.55915,
+        "ISR": 6.23482
       },
       "instrumental": {
-        "SDR": 12.8349,
-        "SIR": 13.8908,
-        "SAR": 15.2498,
-        "ISR": 20.8011
+        "SDR": 13.0463,
+        "SIR": 13.8092,
+        "SAR": 15.8924,
+        "ISR": 20.5359
       }
     },
     "stems": [
@@ -2525,20 +3035,105 @@
             "ISR": 19.1654
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 11.4078,
+            "SIR": 22.8579,
+            "SAR": 12.4746,
+            "ISR": 17.4099
+          },
+          "instrumental": {
+            "SDR": 16.8064,
+            "SIR": 22.412,
+            "SAR": 18.605,
+            "ISR": 29.699
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": 7.09854,
+            "SIR": 22.8819,
+            "SAR": 7.51915,
+            "ISR": 11.6399
+          },
+          "instrumental": {
+            "SDR": 12.8702,
+            "SIR": 16.6661,
+            "SAR": 16.3938,
+            "ISR": 18.2569
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 3.63844,
+            "SIR": 14.6048,
+            "SAR": 3.2755,
+            "ISR": 5.58584
+          },
+          "instrumental": {
+            "SDR": 10.5784,
+            "SIR": 12.3036,
+            "SAR": 15.6486,
+            "ISR": 19.4757
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 7.14744,
+            "SIR": 22.3991,
+            "SAR": 7.63438,
+            "ISR": 11.5593
+          },
+          "instrumental": {
+            "SDR": 15.2128,
+            "SIR": 18.3167,
+            "SAR": 16.9511,
+            "ISR": 22.8588
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 6.44784,
+            "SIR": 17.4852,
+            "SAR": 6.56487,
+            "ISR": 10.3718
+          },
+          "instrumental": {
+            "SDR": 14.429,
+            "SIR": 18.2085,
+            "SAR": 17.1185,
+            "ISR": 28.0977
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.62572,
-        "SIR": 19.8423,
-        "SAR": 8.75528,
-        "ISR": 13.2178
+        "SDR": 8.24604,
+        "SIR": 19.9206,
+        "SAR": 8.2361,
+        "ISR": 12.9112
       },
       "instrumental": {
-        "SDR": 13.6646,
-        "SIR": 17.9464,
-        "SAR": 15.4404,
-        "ISR": 21.2337
+        "SDR": 13.7249,
+        "SIR": 18.1114,
+        "SAR": 16.2698,
+        "ISR": 21.3062
       }
     },
     "stems": [
@@ -2889,20 +3484,105 @@
             "ISR": 19.953
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 10.5114,
+            "SIR": 21.0131,
+            "SAR": 11.5402,
+            "ISR": 16.1858
+          },
+          "instrumental": {
+            "SDR": 16.6453,
+            "SIR": 21.3635,
+            "SAR": 18.5128,
+            "ISR": 28.6812
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": 5.52437,
+            "SIR": 18.6882,
+            "SAR": 6.44174,
+            "ISR": 10.934
+          },
+          "instrumental": {
+            "SDR": 14.0757,
+            "SIR": 17.6763,
+            "SAR": 17.08,
+            "ISR": 18.2607
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 3.38589,
+            "SIR": 13.6967,
+            "SAR": 2.98159,
+            "ISR": 5.12145
+          },
+          "instrumental": {
+            "SDR": 10.2681,
+            "SIR": 11.843,
+            "SAR": 15.5523,
+            "ISR": 19.5709
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 5.73026,
+            "SIR": 22.5991,
+            "SAR": 6.52306,
+            "ISR": 9.44696
+          },
+          "instrumental": {
+            "SDR": 14.9734,
+            "SIR": 18.1106,
+            "SAR": 17.3611,
+            "ISR": 21.8388
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 6.12047,
+            "SIR": 17.6122,
+            "SAR": 6.14048,
+            "ISR": 9.4555
+          },
+          "instrumental": {
+            "SDR": 14.0483,
+            "SIR": 17.3905,
+            "SAR": 17.0588,
+            "ISR": 27.6397
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.51388,
-        "SIR": 19.6265,
-        "SAR": 8.48388,
-        "ISR": 12.419
+        "SDR": 7.69217,
+        "SIR": 19.5639,
+        "SAR": 7.91343,
+        "ISR": 12.1802
       },
       "instrumental": {
-        "SDR": 13.4846,
-        "SIR": 17.9461,
-        "SAR": 15.6494,
-        "ISR": 21.0645
+        "SDR": 13.6215,
+        "SIR": 17.7732,
+        "SAR": 15.9908,
+        "ISR": 21.2391
       }
     },
     "stems": [
@@ -3253,20 +3933,105 @@
             "ISR": 19.6878
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 9.31669,
+            "SIR": 20.4576,
+            "SAR": 10.4625,
+            "ISR": 14.7162
+          },
+          "instrumental": {
+            "SDR": 17.9295,
+            "SIR": 22.342,
+            "SAR": 19.3893,
+            "ISR": 29.0074
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": 0.00221,
+            "SIR": 4.74317,
+            "SAR": 0.00125,
+            "ISR": 4.2203
+          },
+          "instrumental": {
+            "SDR": 16.6629,
+            "SIR": 24.4063,
+            "SAR": 21.6347,
+            "ISR": 18.6024
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 3.44665,
+            "SIR": 14.0945,
+            "SAR": 3.01467,
+            "ISR": 5.32001
+          },
+          "instrumental": {
+            "SDR": 10.3958,
+            "SIR": 12.0877,
+            "SAR": 15.5962,
+            "ISR": 20.362
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 6.067,
+            "SIR": 21.6977,
+            "SAR": 6.9542,
+            "ISR": 10.0683
+          },
+          "instrumental": {
+            "SDR": 15.4921,
+            "SIR": 19.7167,
+            "SAR": 18.0298,
+            "ISR": 22.376
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 6.20469,
+            "SIR": 17.5996,
+            "SAR": 6.2824,
+            "ISR": 9.6513
+          },
+          "instrumental": {
+            "SDR": 14.1098,
+            "SIR": 17.6084,
+            "SAR": 17.0794,
+            "ISR": 27.5637
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.0883,
-        "SIR": 19.4154,
-        "SAR": 8.15686,
-        "ISR": 12.0642
+        "SDR": 7.34105,
+        "SIR": 19.3628,
+        "SAR": 7.45141,
+        "ISR": 11.2882
       },
       "instrumental": {
-        "SDR": 13.6384,
-        "SIR": 18.2052,
-        "SAR": 15.9301,
-        "ISR": 21.5457
+        "SDR": 14.1098,
+        "SIR": 18.2553,
+        "SAR": 16.3065,
+        "ISR": 22.0512
       }
     },
     "stems": [
@@ -3617,20 +4382,105 @@
             "ISR": 19.4388
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 9.11344,
+            "SIR": 20.7022,
+            "SAR": 10.1758,
+            "ISR": 14.1646
+          },
+          "instrumental": {
+            "SDR": 15.3215,
+            "SIR": 20.0917,
+            "SAR": 17.5812,
+            "ISR": 28.1135
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": 6.06374,
+            "SIR": 20.5727,
+            "SAR": 6.73396,
+            "ISR": 10.0258
+          },
+          "instrumental": {
+            "SDR": 12.677,
+            "SIR": 15.9207,
+            "SAR": 15.8225,
+            "ISR": 19.4481
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 3.38899,
+            "SIR": 12.2626,
+            "SAR": 2.94463,
+            "ISR": 5.42674
+          },
+          "instrumental": {
+            "SDR": 10.1886,
+            "SIR": 12.2725,
+            "SAR": 15.0454,
+            "ISR": 18.137
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 1.74227,
+            "SIR": 19.9194,
+            "SAR": 2.18712,
+            "ISR": 7.65378
+          },
+          "instrumental": {
+            "SDR": 15.7806,
+            "SIR": 20.0186,
+            "SAR": 18.262,
+            "ISR": 22.63
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 5.93724,
+            "SIR": 15.3569,
+            "SAR": 6.10264,
+            "ISR": 9.87626
+          },
+          "instrumental": {
+            "SDR": 13.8299,
+            "SIR": 18.0726,
+            "SAR": 16.7343,
+            "ISR": 24.7768
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 7.61478,
-        "SIR": 18.3792,
-        "SAR": 7.7683,
-        "ISR": 12.1067
+        "SDR": 6.39555,
+        "SIR": 18.4375,
+        "SAR": 6.73396,
+        "ISR": 12.0086
       },
       "instrumental": {
-        "SDR": 13.4104,
-        "SIR": 18.4733,
-        "SAR": 15.5629,
-        "ISR": 20.5996
+        "SDR": 13.5042,
+        "SIR": 18.4196,
+        "SAR": 15.9151,
+        "ISR": 21.3663
       }
     },
     "stems": [
@@ -3981,20 +4831,105 @@
             "ISR": 19.7491
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 8.04521,
+            "SIR": 20.3281,
+            "SAR": 9.19245,
+            "ISR": 13.4945
+          },
+          "instrumental": {
+            "SDR": 16.5021,
+            "SIR": 20.5096,
+            "SAR": 18.2521,
+            "ISR": 28.5136
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": 0.734605,
+            "SIR": 11.7582,
+            "SAR": 0.28468,
+            "ISR": 5.58422
+          },
+          "instrumental": {
+            "SDR": 15.3042,
+            "SIR": 19.7121,
+            "SAR": 18.9849,
+            "ISR": 19.4355
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 3.37459,
+            "SIR": 12.9288,
+            "SAR": 2.93736,
+            "ISR": 5.22264
+          },
+          "instrumental": {
+            "SDR": 10.1648,
+            "SIR": 12.0941,
+            "SAR": 15.4173,
+            "ISR": 18.5163
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 1.15221,
+            "SIR": 20.5995,
+            "SAR": 1.55236,
+            "ISR": 7.32372
+          },
+          "instrumental": {
+            "SDR": 16.1042,
+            "SIR": 20.376,
+            "SAR": 18.058,
+            "ISR": 22.4219
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 5.89508,
+            "SIR": 16.155,
+            "SAR": 5.95612,
+            "ISR": 9.52464
+          },
+          "instrumental": {
+            "SDR": 13.8018,
+            "SIR": 17.6361,
+            "SAR": 16.8416,
+            "ISR": 25.6079
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 7.35278,
-        "SIR": 18.6573,
-        "SAR": 7.35405,
-        "ISR": 11.7551
+        "SDR": 6.24479,
+        "SIR": 18.6092,
+        "SAR": 6.35979,
+        "ISR": 11.4657
       },
       "instrumental": {
-        "SDR": 13.6314,
-        "SIR": 18.4149,
-        "SAR": 15.4815,
-        "ISR": 20.5488
+        "SDR": 13.8018,
+        "SIR": 18.6218,
+        "SAR": 15.9022,
+        "ISR": 21.1922
       }
     },
     "stems": [
@@ -4345,20 +5280,105 @@
             "ISR": 19.7919
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 9.81424,
+            "SIR": 20.4989,
+            "SAR": 10.4545,
+            "ISR": 15.2281
+          },
+          "instrumental": {
+            "SDR": 16.9992,
+            "SIR": 21.6924,
+            "SAR": 18.6378,
+            "ISR": 28.344
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": 0.58262,
+            "SIR": 7.17757,
+            "SAR": 0.19646,
+            "ISR": 5.06085
+          },
+          "instrumental": {
+            "SDR": 13.9715,
+            "SIR": 19.9999,
+            "SAR": 17.5695,
+            "ISR": 18.7622
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 3.42283,
+            "SIR": 13.5122,
+            "SAR": 3.05493,
+            "ISR": 5.45809
+          },
+          "instrumental": {
+            "SDR": 10.3022,
+            "SIR": 12.2305,
+            "SAR": 15.4814,
+            "ISR": 18.6963
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 5.81387,
+            "SIR": 21.0838,
+            "SAR": 6.18649,
+            "ISR": 9.49702
+          },
+          "instrumental": {
+            "SDR": 16.208,
+            "SIR": 20.1215,
+            "SAR": 18.13,
+            "ISR": 24.1106
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 5.91358,
+            "SIR": 17.3857,
+            "SAR": 5.88287,
+            "ISR": 9.31887
+          },
+          "instrumental": {
+            "SDR": 13.8848,
+            "SIR": 17.3547,
+            "SAR": 16.8783,
+            "ISR": 27.1805
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 7.80657,
-        "SIR": 18.8225,
-        "SAR": 7.66603,
-        "ISR": 11.9258
+        "SDR": 6.59732,
+        "SIR": 18.6469,
+        "SAR": 6.78796,
+        "ISR": 11.4714
       },
       "instrumental": {
-        "SDR": 13.234,
-        "SIR": 18.0678,
-        "SAR": 15.3018,
-        "ISR": 20.4617
+        "SDR": 13.7013,
+        "SIR": 18.1527,
+        "SAR": 15.6826,
+        "ISR": 21.1316
       }
     },
     "stems": [
@@ -4709,20 +5729,105 @@
             "ISR": 19.8525
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 8.2755,
+            "SIR": 19.3087,
+            "SAR": 8.95044,
+            "ISR": 12.7896
+          },
+          "instrumental": {
+            "SDR": 17.8133,
+            "SIR": 22.126,
+            "SAR": 19.4998,
+            "ISR": 28.5727
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": 3.07514,
+            "SIR": 16.1756,
+            "SAR": 2.04702,
+            "ISR": 7.39154
+          },
+          "instrumental": {
+            "SDR": 13.2322,
+            "SIR": 17.1006,
+            "SAR": 16.5759,
+            "ISR": 18.3298
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 3.32322,
+            "SIR": 12.0928,
+            "SAR": 3.08007,
+            "ISR": 5.47207
+          },
+          "instrumental": {
+            "SDR": 10.2374,
+            "SIR": 12.2337,
+            "SAR": 15.0952,
+            "ISR": 18.8107
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 4.61471,
+            "SIR": 16.8314,
+            "SAR": 5.69008,
+            "ISR": 9.00259
+          },
+          "instrumental": {
+            "SDR": 15.4581,
+            "SIR": 19.8594,
+            "SAR": 17.7709,
+            "ISR": 21.6855
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 6.09813,
+            "SIR": 15.6501,
+            "SAR": 6.25027,
+            "ISR": 9.83092
+          },
+          "instrumental": {
+            "SDR": 13.9968,
+            "SIR": 17.8731,
+            "SAR": 16.9864,
+            "ISR": 25.6636
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 7.70517,
-        "SIR": 18.4209,
-        "SAR": 7.64616,
-        "ISR": 11.8455
+        "SDR": 6.73358,
+        "SIR": 18.0848,
+        "SAR": 6.89336,
+        "ISR": 11.5825
       },
       "instrumental": {
-        "SDR": 13.4017,
-        "SIR": 17.8147,
-        "SAR": 15.5557,
-        "ISR": 20.5559
+        "SDR": 13.4792,
+        "SIR": 17.8731,
+        "SAR": 15.6506,
+        "ISR": 20.6173
       }
     },
     "stems": [
@@ -5073,20 +6178,105 @@
             "ISR": 19.6113
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 8.8139,
+            "SIR": 19.1961,
+            "SAR": 9.83911,
+            "ISR": 13.7534
+          },
+          "instrumental": {
+            "SDR": 17.1823,
+            "SIR": 21.7665,
+            "SAR": 18.9064,
+            "ISR": 28.0227
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": 4.72719,
+            "SIR": 18.3205,
+            "SAR": 5.55217,
+            "ISR": 8.45251
+          },
+          "instrumental": {
+            "SDR": 12.5494,
+            "SIR": 16.8988,
+            "SAR": 16.1755,
+            "ISR": 18.2756
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 3.38323,
+            "SIR": 12.5471,
+            "SAR": 3.03811,
+            "ISR": 5.56346
+          },
+          "instrumental": {
+            "SDR": 10.2942,
+            "SIR": 12.3265,
+            "SAR": 15.0819,
+            "ISR": 19.1564
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 6.34138,
+            "SIR": 20.1964,
+            "SAR": 6.7755,
+            "ISR": 9.95848
+          },
+          "instrumental": {
+            "SDR": 14.1747,
+            "SIR": 16.1604,
+            "SAR": 16.1362,
+            "ISR": 21.7528
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 6.11604,
+            "SIR": 16.1178,
+            "SAR": 6.24741,
+            "ISR": 10.0044
+          },
+          "instrumental": {
+            "SDR": 14.0279,
+            "SIR": 17.9615,
+            "SAR": 16.8884,
+            "ISR": 26.0156
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.0912,
-        "SIR": 18.7612,
-        "SAR": 7.98745,
-        "ISR": 12.487
+        "SDR": 7.25203,
+        "SIR": 18.7211,
+        "SAR": 7.45612,
+        "ISR": 12.3266
       },
       "instrumental": {
-        "SDR": 13.6269,
-        "SIR": 18.2337,
-        "SAR": 15.2427,
-        "ISR": 21.5746
+        "SDR": 13.6398,
+        "SIR": 18.0013,
+        "SAR": 15.9125,
+        "ISR": 21.715
       }
     },
     "stems": [
@@ -5437,20 +6627,105 @@
             "ISR": 19.7079
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 9.26583,
+            "SIR": 22.9489,
+            "SAR": 10.0914,
+            "ISR": 11.8722
+          },
+          "instrumental": {
+            "SDR": 14.8583,
+            "SIR": 17.847,
+            "SAR": 17.7752,
+            "ISR": 30.4277
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": 6.15381,
+            "SIR": 21.8247,
+            "SAR": 7.08072,
+            "ISR": 10.013
+          },
+          "instrumental": {
+            "SDR": 13.3933,
+            "SIR": 15.7059,
+            "SAR": 17.3492,
+            "ISR": 19.3205
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 3.32531,
+            "SIR": 14.1833,
+            "SAR": 2.64588,
+            "ISR": 4.92155
+          },
+          "instrumental": {
+            "SDR": 10.2704,
+            "SIR": 11.7177,
+            "SAR": 15.7355,
+            "ISR": 18.9879
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 4.94258,
+            "SIR": 22.4066,
+            "SAR": 5.70052,
+            "ISR": 8.67636
+          },
+          "instrumental": {
+            "SDR": 14.7886,
+            "SIR": 17.7085,
+            "SAR": 17.3128,
+            "ISR": 22.9239
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 6.10597,
+            "SIR": 17.9811,
+            "SAR": 6.14729,
+            "ISR": 9.48078
+          },
+          "instrumental": {
+            "SDR": 14.0803,
+            "SIR": 17.4199,
+            "SAR": 16.9376,
+            "ISR": 27.7988
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 7.97985,
-        "SIR": 19.8445,
-        "SAR": 8.06049,
-        "ISR": 11.7508
+        "SDR": 7.25525,
+        "SIR": 20.0302,
+        "SAR": 7.16343,
+        "ISR": 11.2194
       },
       "instrumental": {
-        "SDR": 13.1989,
-        "SIR": 17.5611,
-        "SAR": 15.461,
-        "ISR": 20.3394
+        "SDR": 13.296,
+        "SIR": 17.5142,
+        "SAR": 15.7355,
+        "ISR": 20.7225
       }
     },
     "stems": [
@@ -5801,20 +7076,105 @@
             "ISR": 19.6366
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 6.77863,
+            "SIR": 21.174,
+            "SAR": 7.43477,
+            "ISR": 10.8253
+          },
+          "instrumental": {
+            "SDR": 16.6009,
+            "SIR": 19.2379,
+            "SAR": 19.5835,
+            "ISR": 30.3146
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": 1.09053,
+            "SIR": 12.2171,
+            "SAR": 0.78871,
+            "ISR": 5.18396
+          },
+          "instrumental": {
+            "SDR": 15.8861,
+            "SIR": 20.4292,
+            "SAR": 20.5322,
+            "ISR": 19.2904
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 3.30994,
+            "SIR": 14.0454,
+            "SAR": 2.61719,
+            "ISR": 4.9673
+          },
+          "instrumental": {
+            "SDR": 10.3195,
+            "SIR": 11.7643,
+            "SAR": 15.6419,
+            "ISR": 18.9673
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 5.89648,
+            "SIR": 21.9296,
+            "SAR": 6.12896,
+            "ISR": 9.416
+          },
+          "instrumental": {
+            "SDR": 14.8766,
+            "SIR": 17.8881,
+            "SAR": 16.672,
+            "ISR": 22.8106
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 6.10146,
+            "SIR": 17.8299,
+            "SAR": 6.15102,
+            "ISR": 9.53275
+          },
+          "instrumental": {
+            "SDR": 14.1199,
+            "SIR": 17.4712,
+            "SAR": 16.9302,
+            "ISR": 27.6332
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 7.68706,
-        "SIR": 19.7094,
-        "SAR": 7.90121,
-        "ISR": 11.5194
+        "SDR": 6.77863,
+        "SIR": 19.6485,
+        "SAR": 6.84891,
+        "ISR": 11.0321
       },
       "instrumental": {
-        "SDR": 13.3097,
-        "SIR": 17.5802,
-        "SAR": 15.4684,
-        "ISR": 20.2455
+        "SDR": 13.3486,
+        "SIR": 17.6631,
+        "SAR": 16.3226,
+        "ISR": 20.5673
       }
     },
     "stems": [
@@ -6225,20 +7585,105 @@
             "ISR": 19.1418
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 0.20213,
+            "SIR": 12.4245,
+            "SAR": 0.00065,
+            "ISR": 1.27989
+          },
+          "instrumental": {
+            "SDR": 9.07785,
+            "SIR": 7.58439,
+            "SAR": 21.1446,
+            "ISR": 19.3072
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -7e-05,
+            "SIR": -2.77665,
+            "SAR": -1.71684,
+            "ISR": 0.793235
+          },
+          "instrumental": {
+            "SDR": 7.13026,
+            "SIR": 8.34966,
+            "SAR": 18.3008,
+            "ISR": 16.238
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 0.02167,
+            "SIR": 7.93674,
+            "SAR": 0.00422,
+            "ISR": 0.73612
+          },
+          "instrumental": {
+            "SDR": 7.74501,
+            "SIR": 7.7283,
+            "SAR": 25.8832,
+            "ISR": 19.0584
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": -0.0,
+            "SIR": -2.13244,
+            "SAR": 0.00751,
+            "ISR": 1.33782
+          },
+          "instrumental": {
+            "SDR": 10.485,
+            "SIR": 14.1155,
+            "SAR": 16.39,
+            "ISR": 17.4384
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 0.246915,
+            "SIR": 10.8693,
+            "SAR": -0.023265,
+            "ISR": 1.55227
+          },
+          "instrumental": {
+            "SDR": 8.94452,
+            "SIR": 9.13386,
+            "SAR": 21.2897,
+            "ISR": 25.0864
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 0.084555,
-        "SIR": 12.5003,
-        "SAR": 0.00218,
-        "ISR": 1.6316
+        "SDR": 0.04364,
+        "SIR": 10.8693,
+        "SAR": 0.00065,
+        "ISR": 1.55227
       },
       "instrumental": {
-        "SDR": 8.77315,
-        "SIR": 10.1059,
-        "SAR": 17.136,
-        "ISR": 19.6269
+        "SDR": 8.94452,
+        "SIR": 9.13386,
+        "SAR": 18.4705,
+        "ISR": 19.3072
       }
     },
     "stems": [
@@ -6589,20 +8034,105 @@
             "ISR": 18.984
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 8.24282,
+            "SIR": 20.9396,
+            "SAR": 9.75113,
+            "ISR": 12.7221
+          },
+          "instrumental": {
+            "SDR": 15.3228,
+            "SIR": 19.0966,
+            "SAR": 17.6149,
+            "ISR": 29.0029
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": 5.38435,
+            "SIR": 18.8745,
+            "SAR": 5.34815,
+            "ISR": 8.91087
+          },
+          "instrumental": {
+            "SDR": 11.5739,
+            "SIR": 14.452,
+            "SAR": 15.5478,
+            "ISR": 18.0254
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 3.154,
+            "SIR": 13.3721,
+            "SAR": 2.65443,
+            "ISR": 5.07322
+          },
+          "instrumental": {
+            "SDR": 10.0838,
+            "SIR": 11.8062,
+            "SAR": 15.5527,
+            "ISR": 19.3115
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 5.5587,
+            "SIR": 20.8421,
+            "SAR": 5.74645,
+            "ISR": 9.17571
+          },
+          "instrumental": {
+            "SDR": 14.6373,
+            "SIR": 17.6326,
+            "SAR": 16.5896,
+            "ISR": 22.2738
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 5.27313,
+            "SIR": 18.1922,
+            "SAR": 5.09384,
+            "ISR": 8.00382
+          },
+          "instrumental": {
+            "SDR": 13.2735,
+            "SIR": 15.8607,
+            "SAR": 16.7631,
+            "ISR": 29.685
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 7.05715,
-        "SIR": 18.0832,
-        "SAR": 6.41258,
-        "ISR": 10.9209
+        "SDR": 6.26177,
+        "SIR": 18.2223,
+        "SAR": 6.11505,
+        "ISR": 9.93124
       },
       "instrumental": {
-        "SDR": 12.4627,
-        "SIR": 16.7084,
-        "SAR": 15.0477,
-        "ISR": 20.2899
+        "SDR": 12.5991,
+        "SIR": 16.6244,
+        "SAR": 15.2945,
+        "ISR": 20.6921
       }
     },
     "stems": [
@@ -6953,20 +8483,105 @@
             "ISR": 19.6908
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 7.03903,
+            "SIR": 20.7411,
+            "SAR": 7.77303,
+            "ISR": 11.2687
+          },
+          "instrumental": {
+            "SDR": 16.9634,
+            "SIR": 20.7001,
+            "SAR": 19.1418,
+            "ISR": 29.3158
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -0.00017,
+            "SIR": -1.63019,
+            "SAR": 0.00015,
+            "ISR": 2.87582
+          },
+          "instrumental": {
+            "SDR": 18.7711,
+            "SIR": 36.8654,
+            "SAR": 25.0648,
+            "ISR": 18.2668
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 3.30796,
+            "SIR": 13.8603,
+            "SAR": 2.96534,
+            "ISR": 5.16448
+          },
+          "instrumental": {
+            "SDR": 10.3269,
+            "SIR": 11.9477,
+            "SAR": 15.8934,
+            "ISR": 19.8466
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 5.48658,
+            "SIR": 26.0277,
+            "SAR": 5.80744,
+            "ISR": 8.25719
+          },
+          "instrumental": {
+            "SDR": 13.5514,
+            "SIR": 15.6632,
+            "SAR": 16.4748,
+            "ISR": 17.6172
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 5.73863,
+            "SIR": 18.2641,
+            "SAR": 5.61624,
+            "ISR": 8.5719
+          },
+          "instrumental": {
+            "SDR": 13.6125,
+            "SIR": 16.3909,
+            "SAR": 17.0085,
+            "ISR": 28.3021
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 7.33606,
-        "SIR": 19.6494,
-        "SAR": 6.85809,
-        "ISR": 10.9888
+        "SDR": 6.6425,
+        "SIR": 19.6272,
+        "SAR": 6.58563,
+        "ISR": 10.455
       },
       "instrumental": {
-        "SDR": 13.1303,
-        "SIR": 17.5245,
-        "SAR": 15.6919,
-        "ISR": 20.8966
+        "SDR": 13.3299,
+        "SIR": 17.496,
+        "SAR": 16.0907,
+        "ISR": 20.4547
       }
     },
     "stems": [
@@ -7317,20 +8932,105 @@
             "ISR": 19.374
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 9.37826,
+            "SIR": 20.6571,
+            "SAR": 10.0759,
+            "ISR": 15.7293
+          },
+          "instrumental": {
+            "SDR": 16.3204,
+            "SIR": 22.4937,
+            "SAR": 17.4025,
+            "ISR": 27.7919
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": 0.057635,
+            "SIR": 6.61954,
+            "SAR": 0.013615,
+            "ISR": 5.32883
+          },
+          "instrumental": {
+            "SDR": 16.7593,
+            "SIR": 24.2327,
+            "SAR": 22.5662,
+            "ISR": 18.3651
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 3.41033,
+            "SIR": 14.2618,
+            "SAR": 2.79349,
+            "ISR": 5.5282
+          },
+          "instrumental": {
+            "SDR": 10.3692,
+            "SIR": 12.3214,
+            "SAR": 15.2233,
+            "ISR": 19.4368
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 0.40881,
+            "SIR": 22.0028,
+            "SAR": 0.55808,
+            "ISR": 7.29613
+          },
+          "instrumental": {
+            "SDR": 15.308,
+            "SIR": 19.6869,
+            "SAR": 17.0789,
+            "ISR": 22.01
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 5.71273,
+            "SIR": 17.7328,
+            "SAR": 5.24679,
+            "ISR": 9.34773
+          },
+          "instrumental": {
+            "SDR": 13.6351,
+            "SIR": 17.1453,
+            "SAR": 16.0849,
+            "ISR": 27.5017
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 7.58492,
-        "SIR": 18.0752,
-        "SAR": 7.05747,
-        "ISR": 13.3418
+        "SDR": 6.04977,
+        "SIR": 17.7328,
+        "SAR": 6.12781,
+        "ISR": 12.138
       },
       "instrumental": {
-        "SDR": 13.019,
-        "SIR": 19.605,
-        "SAR": 14.7043,
-        "ISR": 19.7827
+        "SDR": 13.6351,
+        "SIR": 19.6869,
+        "SAR": 15.2233,
+        "ISR": 19.8179
       }
     },
     "stems": [
@@ -7681,20 +9381,105 @@
             "ISR": 19.3588
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 6.46199,
+            "SIR": 18.9667,
+            "SAR": 7.11996,
+            "ISR": 10.8521
+          },
+          "instrumental": {
+            "SDR": 16.7341,
+            "SIR": 19.7769,
+            "SAR": 18.7759,
+            "ISR": 29.2885
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": 4.00896,
+            "SIR": 18.5584,
+            "SAR": 4.45391,
+            "ISR": 7.63199
+          },
+          "instrumental": {
+            "SDR": 12.2802,
+            "SIR": 14.6967,
+            "SAR": 16.2287,
+            "ISR": 18.3484
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 3.21881,
+            "SIR": 14.5053,
+            "SAR": 2.58359,
+            "ISR": 4.80248
+          },
+          "instrumental": {
+            "SDR": 10.286,
+            "SIR": 11.5562,
+            "SAR": 15.9917,
+            "ISR": 20.3889
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 1.49386,
+            "SIR": 24.383,
+            "SAR": 1.46818,
+            "ISR": 6.15781
+          },
+          "instrumental": {
+            "SDR": 13.3489,
+            "SIR": 15.2595,
+            "SAR": 15.8608,
+            "ISR": 20.1041
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 5.49918,
+            "SIR": 17.8586,
+            "SAR": 5.20316,
+            "ISR": 8.21143
+          },
+          "instrumental": {
+            "SDR": 13.3516,
+            "SIR": 15.9547,
+            "SAR": 16.8832,
+            "ISR": 29.2472
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 6.31746,
-        "SIR": 18.1931,
-        "SAR": 5.8712,
-        "ISR": 10.6284
+        "SDR": 5.84903,
+        "SIR": 18.3399,
+        "SAR": 5.66823,
+        "ISR": 9.53944
       },
       "instrumental": {
-        "SDR": 12.5051,
-        "SIR": 16.5085,
-        "SAR": 15.4698,
-        "ISR": 20.8606
+        "SDR": 12.6025,
+        "SIR": 16.2785,
+        "SAR": 15.9917,
+        "ISR": 20.5266
       }
     },
     "stems": [
@@ -8055,20 +9840,105 @@
             "ISR": 18.8504
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 10.1398,
+            "SIR": 22.6288,
+            "SAR": 10.7266,
+            "ISR": 15.6327
+          },
+          "instrumental": {
+            "SDR": 17.1908,
+            "SIR": 30.6531,
+            "SAR": 20.4712,
+            "ISR": 19.0078
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -10.6104,
+            "SIR": -7.99531,
+            "SAR": 0.11591,
+            "ISR": 8.1445
+          },
+          "instrumental": {
+            "SDR": 19.2292,
+            "SIR": 40.8291,
+            "SAR": 29.1592,
+            "ISR": 18.7721
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 4.02899,
+            "SIR": 15.6366,
+            "SAR": 3.74437,
+            "ISR": 6.1774
+          },
+          "instrumental": {
+            "SDR": 10.7603,
+            "SIR": 13.8704,
+            "SAR": 14.6637,
+            "ISR": 17.6305
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 5.50677,
+            "SIR": 17.7859,
+            "SAR": 5.96917,
+            "ISR": 12.0982
+          },
+          "instrumental": {
+            "SDR": 17.6279,
+            "SIR": 28.1053,
+            "SAR": 20.639,
+            "ISR": 19.0337
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 7.61954,
+            "SIR": 19.641,
+            "SAR": 7.83261,
+            "ISR": 11.2693
+          },
+          "instrumental": {
+            "SDR": 14.5554,
+            "SIR": 21.8735,
+            "SAR": 17.228,
+            "ISR": 18.5753
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.68849,
-        "SIR": 20.3648,
-        "SAR": 9.53486,
-        "ISR": 13.2053
+        "SDR": 8.48818,
+        "SIR": 20.0956,
+        "SAR": 8.75701,
+        "ISR": 12.6514
       },
       "instrumental": {
-        "SDR": 15.3508,
-        "SIR": 24.5113,
-        "SAR": 17.4153,
-        "ISR": 18.3895
+        "SDR": 15.402,
+        "SIR": 24.6355,
+        "SAR": 17.4646,
+        "ISR": 18.5137
       }
     },
     "stems": [
@@ -8419,20 +10289,105 @@
             "ISR": 18.6006
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 10.4457,
+            "SIR": 21.7137,
+            "SAR": 11.0581,
+            "ISR": 15.8732
+          },
+          "instrumental": {
+            "SDR": 17.0851,
+            "SIR": 30.946,
+            "SAR": 20.6105,
+            "ISR": 18.6987
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -8.89141,
+            "SIR": -6.61302,
+            "SAR": -0.53875,
+            "ISR": 6.34526
+          },
+          "instrumental": {
+            "SDR": 19.3864,
+            "SIR": 41.3587,
+            "SAR": 28.1256,
+            "ISR": 18.8042
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 4.13095,
+            "SIR": 14.4451,
+            "SAR": 3.91932,
+            "ISR": 6.58308
+          },
+          "instrumental": {
+            "SDR": 10.7107,
+            "SIR": 14.3284,
+            "SAR": 14.5143,
+            "ISR": 17.0436
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 6.35816,
+            "SIR": 16.4118,
+            "SAR": 6.44462,
+            "ISR": 12.7408
+          },
+          "instrumental": {
+            "SDR": 17.4328,
+            "SIR": 29.2,
+            "SAR": 20.3177,
+            "ISR": 18.6126
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 7.66077,
+            "SIR": 18.2472,
+            "SAR": 8.01908,
+            "ISR": 11.7037
+          },
+          "instrumental": {
+            "SDR": 14.4873,
+            "SIR": 22.4413,
+            "SAR": 17.3787,
+            "ISR": 18.0918
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.7024,
-        "SIR": 20.1206,
-        "SAR": 9.95852,
-        "ISR": 13.654
+        "SDR": 8.14174,
+        "SIR": 19.0141,
+        "SAR": 8.85857,
+        "ISR": 13.4755
       },
       "instrumental": {
-        "SDR": 15.2904,
-        "SIR": 25.0562,
-        "SAR": 17.4952,
-        "ISR": 17.8429
+        "SDR": 15.3285,
+        "SIR": 25.0631,
+        "SAR": 17.5272,
+        "ISR": 18.0557
       }
     },
     "stems": [
@@ -8783,20 +10738,105 @@
             "ISR": 18.6189
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 10.164,
+            "SIR": 22.422,
+            "SAR": 10.81,
+            "ISR": 15.2089
+          },
+          "instrumental": {
+            "SDR": 17.2398,
+            "SIR": 30.0995,
+            "SAR": 20.8514,
+            "ISR": 18.9213
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -8.70715,
+            "SIR": -5.95472,
+            "SAR": -0.59022,
+            "ISR": 5.95141
+          },
+          "instrumental": {
+            "SDR": 19.3823,
+            "SIR": 40.1941,
+            "SAR": 29.7609,
+            "ISR": 19.042
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 4.16956,
+            "SIR": 13.8463,
+            "SAR": 3.90974,
+            "ISR": 6.76324
+          },
+          "instrumental": {
+            "SDR": 10.6182,
+            "SIR": 14.5028,
+            "SAR": 14.1692,
+            "ISR": 16.7777
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 6.19084,
+            "SIR": 16.7965,
+            "SAR": 6.73845,
+            "ISR": 12.5383
+          },
+          "instrumental": {
+            "SDR": 17.522,
+            "SIR": 28.6215,
+            "SAR": 20.1242,
+            "ISR": 18.7572
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 7.79317,
+            "SIR": 18.5001,
+            "SAR": 8.07296,
+            "ISR": 11.7553
+          },
+          "instrumental": {
+            "SDR": 14.4986,
+            "SIR": 22.6228,
+            "SAR": 17.2989,
+            "ISR": 18.1715
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.65984,
-        "SIR": 19.2708,
-        "SAR": 9.63716,
-        "ISR": 13.5806
+        "SDR": 8.3718,
+        "SIR": 18.7143,
+        "SAR": 8.8896,
+        "ISR": 13.2784
       },
       "instrumental": {
-        "SDR": 15.3975,
-        "SIR": 25.1833,
-        "SAR": 17.525,
-        "ISR": 17.8584
+        "SDR": 15.421,
+        "SIR": 25.3411,
+        "SAR": 17.5354,
+        "ISR": 17.9321
       }
     },
     "stems": [
@@ -9147,20 +11187,105 @@
             "ISR": 18.794
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 10.5317,
+            "SIR": 22.2285,
+            "SAR": 10.785,
+            "ISR": 15.7561
+          },
+          "instrumental": {
+            "SDR": 17.2213,
+            "SIR": 31.8874,
+            "SAR": 20.5787,
+            "ISR": 18.9164
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -11.5216,
+            "SIR": -8.95723,
+            "SAR": 0.7458,
+            "ISR": 11.0521
+          },
+          "instrumental": {
+            "SDR": 18.8969,
+            "SIR": 41.4806,
+            "SAR": 29.4105,
+            "ISR": 18.7697
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 4.12438,
+            "SIR": 14.8239,
+            "SAR": 3.80795,
+            "ISR": 6.61489
+          },
+          "instrumental": {
+            "SDR": 10.7753,
+            "SIR": 14.3432,
+            "SAR": 14.2971,
+            "ISR": 17.1639
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 5.63987,
+            "SIR": 14.0156,
+            "SAR": 6.36177,
+            "ISR": 12.6105
+          },
+          "instrumental": {
+            "SDR": 16.9589,
+            "SIR": 28.1824,
+            "SAR": 19.4677,
+            "ISR": 18.3777
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 7.74941,
+            "SIR": 18.7546,
+            "SAR": 8.12369,
+            "ISR": 11.8337
+          },
+          "instrumental": {
+            "SDR": 14.5977,
+            "SIR": 22.7382,
+            "SAR": 17.3793,
+            "ISR": 18.3114
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.6699,
-        "SIR": 19.7205,
-        "SAR": 9.64405,
-        "ISR": 13.6426
+        "SDR": 7.74941,
+        "SIR": 19.2837,
+        "SAR": 8.35197,
+        "ISR": 12.7271
       },
       "instrumental": {
-        "SDR": 15.4566,
-        "SIR": 25.0058,
-        "SAR": 17.5001,
-        "ISR": 18.0118
+        "SDR": 15.5122,
+        "SIR": 25.0221,
+        "SAR": 17.577,
+        "ISR": 18.3114
       }
     },
     "stems": [
@@ -9511,20 +11636,105 @@
             "ISR": 18.606
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 10.4867,
+            "SIR": 21.5034,
+            "SAR": 11.5393,
+            "ISR": 15.8784
+          },
+          "instrumental": {
+            "SDR": 17.6973,
+            "SIR": 32.061,
+            "SAR": 21.0973,
+            "ISR": 18.8315
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -2.64666,
+            "SIR": 2.38322,
+            "SAR": -0.12859,
+            "ISR": 3.48881
+          },
+          "instrumental": {
+            "SDR": 19.799,
+            "SIR": 40.2857,
+            "SAR": 33.1708,
+            "ISR": 19.3255
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 4.10689,
+            "SIR": 13.9211,
+            "SAR": 4.0246,
+            "ISR": 6.82979
+          },
+          "instrumental": {
+            "SDR": 10.7049,
+            "SIR": 14.6111,
+            "SAR": 14.3182,
+            "ISR": 16.8809
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 6.44271,
+            "SIR": 16.4442,
+            "SAR": 6.53233,
+            "ISR": 12.9763
+          },
+          "instrumental": {
+            "SDR": 17.42,
+            "SIR": 29.5251,
+            "SAR": 20.5387,
+            "ISR": 18.6357
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 7.75382,
+            "SIR": 18.4517,
+            "SAR": 8.14677,
+            "ISR": 11.9735
+          },
+          "instrumental": {
+            "SDR": 14.5384,
+            "SIR": 22.877,
+            "SAR": 17.2659,
+            "ISR": 18.1892
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.60709,
-        "SIR": 20.2379,
-        "SAR": 10.1908,
-        "ISR": 14.0905
+        "SDR": 8.64116,
+        "SIR": 18.4517,
+        "SAR": 9.28946,
+        "ISR": 13.6946
       },
       "instrumental": {
-        "SDR": 15.4382,
-        "SIR": 25.6321,
-        "SAR": 17.7661,
-        "ISR": 17.8788
+        "SDR": 15.46,
+        "SIR": 25.8051,
+        "SAR": 17.7729,
+        "ISR": 18.1892
       }
     },
     "stems": [
@@ -9875,20 +12085,105 @@
             "ISR": 18.5844
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 9.82938,
+            "SIR": 20.7475,
+            "SAR": 10.0275,
+            "ISR": 15.4137
+          },
+          "instrumental": {
+            "SDR": 16.7736,
+            "SIR": 31.0207,
+            "SAR": 19.9806,
+            "ISR": 18.5768
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -12.0613,
+            "SIR": -10.0315,
+            "SAR": 0.54093,
+            "ISR": 12.6948
+          },
+          "instrumental": {
+            "SDR": 19.0215,
+            "SIR": 43.3561,
+            "SAR": 28.0075,
+            "ISR": 18.7734
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 3.96575,
+            "SIR": 14.002,
+            "SAR": 3.85457,
+            "ISR": 6.55322
+          },
+          "instrumental": {
+            "SDR": 10.622,
+            "SIR": 14.1964,
+            "SAR": 14.4012,
+            "ISR": 16.903
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 5.79443,
+            "SIR": 13.1626,
+            "SAR": 6.19672,
+            "ISR": 12.5102
+          },
+          "instrumental": {
+            "SDR": 15.9476,
+            "SIR": 27.5731,
+            "SAR": 18.1376,
+            "ISR": 17.9342
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 7.5173,
+            "SIR": 18.5142,
+            "SAR": 7.95809,
+            "ISR": 11.4949
+          },
+          "instrumental": {
+            "SDR": 14.4291,
+            "SIR": 22.0731,
+            "SAR": 17.249,
+            "ISR": 18.1816
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.36932,
-        "SIR": 18.574,
-        "SAR": 9.15806,
-        "ISR": 13.3837
+        "SDR": 7.60394,
+        "SIR": 18.4295,
+        "SAR": 7.95809,
+        "ISR": 13.2187
       },
       "instrumental": {
-        "SDR": 15.1248,
-        "SIR": 24.2703,
-        "SAR": 17.2173,
-        "ISR": 17.6369
+        "SDR": 15.1754,
+        "SIR": 24.3046,
+        "SAR": 17.2517,
+        "ISR": 17.9342
       }
     },
     "stems": [
@@ -10239,20 +12534,105 @@
             "ISR": 18.4966
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 10.4205,
+            "SIR": 22.0125,
+            "SAR": 11.1156,
+            "ISR": 16.0842
+          },
+          "instrumental": {
+            "SDR": 17.3912,
+            "SIR": 31.7735,
+            "SAR": 20.7251,
+            "ISR": 18.859
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -7.72346,
+            "SIR": -2.07454,
+            "SAR": -0.24123,
+            "ISR": 3.27877
+          },
+          "instrumental": {
+            "SDR": 19.6486,
+            "SIR": 40.0979,
+            "SAR": 28.9246,
+            "ISR": 18.7723
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 4.09011,
+            "SIR": 14.5775,
+            "SAR": 3.86788,
+            "ISR": 6.45496
+          },
+          "instrumental": {
+            "SDR": 10.6832,
+            "SIR": 14.1482,
+            "SAR": 14.3912,
+            "ISR": 17.1427
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 5.99333,
+            "SIR": 16.3305,
+            "SAR": 6.49331,
+            "ISR": 12.3837
+          },
+          "instrumental": {
+            "SDR": 17.2959,
+            "SIR": 28.9575,
+            "SAR": 20.1172,
+            "ISR": 18.6111
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 7.49893,
+            "SIR": 17.7827,
+            "SAR": 7.80719,
+            "ISR": 11.6089
+          },
+          "instrumental": {
+            "SDR": 14.3092,
+            "SIR": 22.2661,
+            "SAR": 16.9712,
+            "ISR": 18.0339
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.00557,
-        "SIR": 19.054,
-        "SAR": 9.34791,
-        "ISR": 13.3682
+        "SDR": 7.50133,
+        "SIR": 18.4425,
+        "SAR": 7.89525,
+        "ISR": 13.215
       },
       "instrumental": {
-        "SDR": 15.0091,
-        "SIR": 25.0712,
-        "SAR": 17.0957,
-        "ISR": 17.6732
+        "SDR": 15.0111,
+        "SIR": 25.2379,
+        "SAR": 17.115,
+        "ISR": 17.9396
       }
     },
     "stems": [
@@ -10603,20 +12983,105 @@
             "ISR": 18.6223
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 10.3432,
+            "SIR": 21.6254,
+            "SAR": 11.1767,
+            "ISR": 15.64
+          },
+          "instrumental": {
+            "SDR": 17.1878,
+            "SIR": 31.7235,
+            "SAR": 20.3718,
+            "ISR": 18.8224
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -10.6232,
+            "SIR": -2.82688,
+            "SAR": -0.54609,
+            "ISR": 3.24121
+          },
+          "instrumental": {
+            "SDR": 19.3804,
+            "SIR": 40.0579,
+            "SAR": 26.7598,
+            "ISR": 18.7482
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 4.00698,
+            "SIR": 14.508,
+            "SAR": 3.74174,
+            "ISR": 6.30936
+          },
+          "instrumental": {
+            "SDR": 10.6716,
+            "SIR": 13.9879,
+            "SAR": 14.4902,
+            "ISR": 17.1602
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 5.95819,
+            "SIR": 17.8621,
+            "SAR": 6.65397,
+            "ISR": 12.1497
+          },
+          "instrumental": {
+            "SDR": 17.3317,
+            "SIR": 28.1173,
+            "SAR": 20.52,
+            "ISR": 18.8462
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 7.32109,
+            "SIR": 18.7145,
+            "SAR": 7.37439,
+            "ISR": 10.5163
+          },
+          "instrumental": {
+            "SDR": 14.2612,
+            "SIR": 20.7908,
+            "SAR": 17.0235,
+            "ISR": 18.3184
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.96777,
-        "SIR": 19.0636,
-        "SAR": 9.13494,
-        "ISR": 12.7866
+        "SDR": 8.054,
+        "SIR": 18.5005,
+        "SAR": 8.54909,
+        "ISR": 12.1831
       },
       "instrumental": {
-        "SDR": 15.0459,
-        "SIR": 23.8914,
-        "SAR": 17.0931,
-        "ISR": 18.0907
+        "SDR": 15.0623,
+        "SIR": 24.0614,
+        "SAR": 17.2206,
+        "ISR": 18.1681
       }
     },
     "stems": [
@@ -10967,20 +13432,105 @@
             "ISR": 18.5261
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 10.6468,
+            "SIR": 21.6175,
+            "SAR": 11.4004,
+            "ISR": 16.8164
+          },
+          "instrumental": {
+            "SDR": 17.165,
+            "SIR": 32.3308,
+            "SAR": 20.4557,
+            "ISR": 18.7655
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -6.77998,
+            "SIR": -2.3792,
+            "SAR": -0.14437,
+            "ISR": 3.29199
+          },
+          "instrumental": {
+            "SDR": 19.5861,
+            "SIR": 40.1276,
+            "SAR": 28.5117,
+            "ISR": 18.7367
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 4.05636,
+            "SIR": 14.1204,
+            "SAR": 3.91988,
+            "ISR": 6.57386
+          },
+          "instrumental": {
+            "SDR": 10.6256,
+            "SIR": 14.2504,
+            "SAR": 14.2993,
+            "ISR": 16.9377
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 5.9036,
+            "SIR": 16.1735,
+            "SAR": 6.39386,
+            "ISR": 13.5548
+          },
+          "instrumental": {
+            "SDR": 17.2797,
+            "SIR": 29.6737,
+            "SAR": 20.1652,
+            "ISR": 18.5442
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 7.44527,
+            "SIR": 18.378,
+            "SAR": 7.67087,
+            "ISR": 11.4873
+          },
+          "instrumental": {
+            "SDR": 14.2948,
+            "SIR": 22.0472,
+            "SAR": 16.8807,
+            "ISR": 18.114
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.06739,
-        "SIR": 19.1547,
-        "SAR": 9.35792,
-        "ISR": 13.2501
+        "SDR": 7.44527,
+        "SIR": 18.4544,
+        "SAR": 7.67087,
+        "ISR": 13.1375
       },
       "instrumental": {
-        "SDR": 15.136,
-        "SIR": 25.1983,
-        "SAR": 17.118,
-        "ISR": 17.7248
+        "SDR": 15.1386,
+        "SIR": 25.2,
+        "SAR": 17.1879,
+        "ISR": 17.9421
       }
     },
     "stems": [
@@ -11331,20 +13881,105 @@
             "ISR": 18.5386
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 9.87595,
+            "SIR": 22.2421,
+            "SAR": 10.56,
+            "ISR": 15.4275
+          },
+          "instrumental": {
+            "SDR": 17.0812,
+            "SIR": 29.784,
+            "SAR": 20.5828,
+            "ISR": 18.7624
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -11.9397,
+            "SIR": -9.84927,
+            "SAR": -0.27485,
+            "ISR": 11.9883
+          },
+          "instrumental": {
+            "SDR": 19.3108,
+            "SIR": 42.4161,
+            "SAR": 30.6085,
+            "ISR": 19.3062
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 4.03531,
+            "SIR": 12.9645,
+            "SAR": 4.00333,
+            "ISR": 6.88912
+          },
+          "instrumental": {
+            "SDR": 10.565,
+            "SIR": 14.5892,
+            "SAR": 14.1943,
+            "ISR": 16.4317
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 6.1253,
+            "SIR": 14.9457,
+            "SAR": 7.07191,
+            "ISR": 13.9011
+          },
+          "instrumental": {
+            "SDR": 17.3149,
+            "SIR": 31.5911,
+            "SAR": 20.4903,
+            "ISR": 18.4403
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 7.67665,
+            "SIR": 18.1184,
+            "SAR": 8.08483,
+            "ISR": 11.709
+          },
+          "instrumental": {
+            "SDR": 14.5468,
+            "SIR": 22.421,
+            "SAR": 17.3646,
+            "ISR": 18.0213
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.07028,
-        "SIR": 19.1086,
-        "SAR": 10.4162,
-        "ISR": 13.5823
+        "SDR": 8.17133,
+        "SIR": 18.1184,
+        "SAR": 8.26317,
+        "ISR": 13.4168
       },
       "instrumental": {
-        "SDR": 15.2216,
-        "SIR": 24.6851,
-        "SAR": 17.5175,
-        "ISR": 17.7117
+        "SDR": 15.2711,
+        "SIR": 24.78,
+        "SAR": 17.5185,
+        "ISR": 17.7562
       }
     },
     "stems": [
@@ -11695,20 +14330,105 @@
             "ISR": 18.8528
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 10.3924,
+            "SIR": 20.9976,
+            "SAR": 10.6197,
+            "ISR": 15.6971
+          },
+          "instrumental": {
+            "SDR": 17.3955,
+            "SIR": 31.3053,
+            "SAR": 20.5625,
+            "ISR": 18.7567
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -11.8627,
+            "SIR": -9.78477,
+            "SAR": 1.06071,
+            "ISR": 12.2823
+          },
+          "instrumental": {
+            "SDR": 19.1344,
+            "SIR": 42.4571,
+            "SAR": 30.3242,
+            "ISR": 18.8636
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 4.10058,
+            "SIR": 15.0494,
+            "SAR": 3.81815,
+            "ISR": 6.38847
+          },
+          "instrumental": {
+            "SDR": 10.7286,
+            "SIR": 14.1052,
+            "SAR": 14.5272,
+            "ISR": 17.3538
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 6.08509,
+            "SIR": 15.5865,
+            "SAR": 6.63364,
+            "ISR": 12.6521
+          },
+          "instrumental": {
+            "SDR": 17.6379,
+            "SIR": 28.6127,
+            "SAR": 20.7278,
+            "ISR": 18.8141
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 7.66062,
+            "SIR": 19.107,
+            "SAR": 7.74373,
+            "ISR": 11.2347
+          },
+          "instrumental": {
+            "SDR": 14.5588,
+            "SIR": 21.7933,
+            "SAR": 17.3106,
+            "ISR": 18.4283
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.95731,
-        "SIR": 19.4326,
-        "SAR": 10.1789,
-        "ISR": 13.5099
+        "SDR": 8.2708,
+        "SIR": 19.107,
+        "SAR": 7.96466,
+        "ISR": 12.7712
       },
       "instrumental": {
-        "SDR": 15.3289,
-        "SIR": 25.1645,
-        "SAR": 17.4809,
-        "ISR": 17.9207
+        "SDR": 15.3563,
+        "SIR": 25.3537,
+        "SAR": 17.6072,
+        "ISR": 18.2028
       }
     },
     "stems": [
@@ -12059,20 +14779,105 @@
             "ISR": 18.6616
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 10.7621,
+            "SIR": 21.5123,
+            "SAR": 11.5013,
+            "ISR": 15.7124
+          },
+          "instrumental": {
+            "SDR": 17.2562,
+            "SIR": 30.9834,
+            "SAR": 20.9351,
+            "ISR": 18.767
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -11.9306,
+            "SIR": -9.79013,
+            "SAR": -0.79942,
+            "ISR": 11.6277
+          },
+          "instrumental": {
+            "SDR": 19.4271,
+            "SIR": 41.7745,
+            "SAR": 29.8428,
+            "ISR": 19.1896
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 4.00125,
+            "SIR": 13.5107,
+            "SAR": 3.90179,
+            "ISR": 6.47348
+          },
+          "instrumental": {
+            "SDR": 10.5122,
+            "SIR": 14.1438,
+            "SAR": 14.2941,
+            "ISR": 16.7864
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 6.38178,
+            "SIR": 15.6241,
+            "SAR": 6.94665,
+            "ISR": 12.8522
+          },
+          "instrumental": {
+            "SDR": 17.3635,
+            "SIR": 28.9353,
+            "SAR": 20.5629,
+            "ISR": 18.6211
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 7.70257,
+            "SIR": 18.1048,
+            "SAR": 8.07648,
+            "ISR": 11.6728
+          },
+          "instrumental": {
+            "SDR": 14.5529,
+            "SIR": 22.4592,
+            "SAR": 17.4272,
+            "ISR": 18.1521
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.23542,
-        "SIR": 18.8359,
-        "SAR": 10.4271,
-        "ISR": 13.4105
+        "SDR": 8.27787,
+        "SIR": 18.1048,
+        "SAR": 8.07648,
+        "ISR": 13.0928
       },
       "instrumental": {
-        "SDR": 15.3622,
-        "SIR": 25.1064,
-        "SAR": 17.5273,
-        "ISR": 17.776
+        "SDR": 15.4097,
+        "SIR": 25.2992,
+        "SAR": 17.6316,
+        "ISR": 17.8432
       }
     },
     "stems": [
@@ -12423,20 +15228,105 @@
             "ISR": 18.9361
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 6.5556,
+            "SIR": 23.7006,
+            "SAR": 7.94631,
+            "ISR": 10.6868
+          },
+          "instrumental": {
+            "SDR": 16.3188,
+            "SIR": 21.3961,
+            "SAR": 19.2505,
+            "ISR": 19.2721
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -7.62319,
+            "SIR": 1.91057,
+            "SAR": -0.56588,
+            "ISR": 3.09224
+          },
+          "instrumental": {
+            "SDR": 19.7168,
+            "SIR": 38.9092,
+            "SAR": 30.8064,
+            "ISR": 19.2763
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 3.54567,
+            "SIR": 15.3412,
+            "SAR": 2.60552,
+            "ISR": 5.09136
+          },
+          "instrumental": {
+            "SDR": 10.5507,
+            "SIR": 12.6737,
+            "SAR": 14.7341,
+            "ISR": 17.7351
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 0.002335,
+            "SIR": 19.0673,
+            "SAR": 0.491215,
+            "ISR": 3.59767
+          },
+          "instrumental": {
+            "SDR": 15.4957,
+            "SIR": 16.2419,
+            "SAR": 17.5179,
+            "ISR": 19.493
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 6.58333,
+            "SIR": 20.5853,
+            "SAR": 5.18569,
+            "ISR": 7.65773
+          },
+          "instrumental": {
+            "SDR": 13.8154,
+            "SIR": 16.7797,
+            "SAR": 16.1842,
+            "ISR": 18.8164
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 4.78212,
-        "SIR": 20.7807,
-        "SAR": 4.19781,
-        "ISR": 7.69467
+        "SDR": 4.50783,
+        "SIR": 20.5853,
+        "SAR": 3.32207,
+        "ISR": 7.36285
       },
       "instrumental": {
-        "SDR": 14.4854,
-        "SIR": 16.6715,
-        "SAR": 15.7577,
-        "ISR": 18.8971
+        "SDR": 14.7536,
+        "SIR": 16.7797,
+        "SAR": 16.1842,
+        "ISR": 18.8993
       }
     },
     "stems": [
@@ -12787,20 +15677,105 @@
             "ISR": 19.0169
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 6.55592,
+            "SIR": 20.5024,
+            "SAR": 7.03764,
+            "ISR": 11.308
+          },
+          "instrumental": {
+            "SDR": 16.0765,
+            "SIR": 22.1445,
+            "SAR": 18.6733,
+            "ISR": 19.0655
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -12.3401,
+            "SIR": -10.285,
+            "SAR": 2.02631,
+            "ISR": 13.1445
+          },
+          "instrumental": {
+            "SDR": 18.5384,
+            "SIR": 44.2884,
+            "SAR": 27.7559,
+            "ISR": 18.5052
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 3.60041,
+            "SIR": 13.9902,
+            "SAR": 2.79028,
+            "ISR": 5.53478
+          },
+          "instrumental": {
+            "SDR": 10.5275,
+            "SIR": 13.1438,
+            "SAR": 14.2331,
+            "ISR": 17.2593
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 0.06378,
+            "SIR": 14.0861,
+            "SAR": 2.22556,
+            "ISR": 3.74632
+          },
+          "instrumental": {
+            "SDR": 15.6304,
+            "SIR": 17.1904,
+            "SAR": 17.7502,
+            "ISR": 18.9147
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 6.90428,
+            "SIR": 18.6378,
+            "SAR": 5.25325,
+            "ISR": 7.95948
+          },
+          "instrumental": {
+            "SDR": 13.9243,
+            "SIR": 17.2284,
+            "SAR": 16.0703,
+            "ISR": 18.7996
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 4.36008,
-        "SIR": 17.5667,
-        "SAR": 3.99363,
-        "ISR": 8.18194
+        "SDR": 4.00209,
+        "SIR": 17.1679,
+        "SAR": 3.96709,
+        "ISR": 8.1133
       },
       "instrumental": {
-        "SDR": 14.7703,
-        "SIR": 17.3082,
-        "SAR": 15.6073,
-        "ISR": 18.606
+        "SDR": 15.0802,
+        "SIR": 17.2931,
+        "SAR": 16.0703,
+        "ISR": 18.6209
       }
     },
     "stems": [
@@ -13151,20 +16126,105 @@
             "ISR": 18.5958
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 10.2154,
+            "SIR": 21.7924,
+            "SAR": 10.8697,
+            "ISR": 15.1649
+          },
+          "instrumental": {
+            "SDR": 17.2812,
+            "SIR": 30.4496,
+            "SAR": 20.6088,
+            "ISR": 18.8924
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -6.82274,
+            "SIR": -0.63483,
+            "SAR": -0.25581,
+            "ISR": 3.20113
+          },
+          "instrumental": {
+            "SDR": 19.7076,
+            "SIR": 39.9579,
+            "SAR": 29.8587,
+            "ISR": 18.9095
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 3.90095,
+            "SIR": 14.4138,
+            "SAR": 3.6033,
+            "ISR": 6.06761
+          },
+          "instrumental": {
+            "SDR": 10.5705,
+            "SIR": 13.7069,
+            "SAR": 14.531,
+            "ISR": 17.2314
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 5.33652,
+            "SIR": 16.4959,
+            "SAR": 5.90402,
+            "ISR": 12.0358
+          },
+          "instrumental": {
+            "SDR": 17.0529,
+            "SIR": 28.1791,
+            "SAR": 19.4823,
+            "ISR": 18.6711
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 7.28505,
+            "SIR": 18.7056,
+            "SAR": 7.40894,
+            "ISR": 10.6887
+          },
+          "instrumental": {
+            "SDR": 14.2056,
+            "SIR": 20.9492,
+            "SAR": 17.0286,
+            "ISR": 18.3318
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.70629,
-        "SIR": 19.261,
-        "SAR": 8.7812,
-        "ISR": 12.3844
+        "SDR": 8.03683,
+        "SIR": 18.7056,
+        "SAR": 8.27512,
+        "ISR": 12.2443
       },
       "instrumental": {
-        "SDR": 14.9543,
-        "SIR": 23.88,
-        "SAR": 17.0445,
-        "ISR": 17.9312
+        "SDR": 14.9824,
+        "SIR": 24.0439,
+        "SAR": 17.0623,
+        "ISR": 18.0436
       }
     },
     "stems": [
@@ -13515,20 +16575,105 @@
             "ISR": 18.8346
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 11.1381,
+            "SIR": 24.3847,
+            "SAR": 12.0468,
+            "ISR": 15.701
+          },
+          "instrumental": {
+            "SDR": 17.7625,
+            "SIR": 32.2718,
+            "SAR": 22.2098,
+            "ISR": 19.159
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -2.33647,
+            "SIR": 1.85708,
+            "SAR": -0.10501,
+            "ISR": 3.53402
+          },
+          "instrumental": {
+            "SDR": 19.7916,
+            "SIR": 40.1614,
+            "SAR": 33.0704,
+            "ISR": 19.3178
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 4.17661,
+            "SIR": 14.7964,
+            "SAR": 4.01796,
+            "ISR": 6.64208
+          },
+          "instrumental": {
+            "SDR": 10.8177,
+            "SIR": 14.4024,
+            "SAR": 14.6059,
+            "ISR": 17.2214
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 6.78965,
+            "SIR": 17.8963,
+            "SAR": 7.29069,
+            "ISR": 12.9973
+          },
+          "instrumental": {
+            "SDR": 17.6829,
+            "SIR": 29.2335,
+            "SAR": 20.8738,
+            "ISR": 18.886
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 7.76178,
+            "SIR": 19.1443,
+            "SAR": 8.14042,
+            "ISR": 11.734
+          },
+          "instrumental": {
+            "SDR": 14.6389,
+            "SIR": 22.6177,
+            "SAR": 17.3795,
+            "ISR": 18.3685
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.60094,
-        "SIR": 20.7013,
-        "SAR": 10.312,
-        "ISR": 13.5678
+        "SDR": 9.02421,
+        "SIR": 19.3248,
+        "SAR": 9.517,
+        "ISR": 13.2326
       },
       "instrumental": {
-        "SDR": 15.56,
-        "SIR": 25.2169,
-        "SAR": 17.9058,
-        "ISR": 18.3614
+        "SDR": 15.6918,
+        "SIR": 25.2352,
+        "SAR": 17.9108,
+        "ISR": 18.3876
       }
     },
     "stems": [
@@ -13879,20 +17024,105 @@
             "ISR": 18.8768
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 10.8575,
+            "SIR": 24.4099,
+            "SAR": 11.7502,
+            "ISR": 15.632
+          },
+          "instrumental": {
+            "SDR": 17.6651,
+            "SIR": 32.0456,
+            "SAR": 21.6783,
+            "ISR": 19.1703
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -2.62992,
+            "SIR": 1.47867,
+            "SAR": -0.12885,
+            "ISR": 3.53572
+          },
+          "instrumental": {
+            "SDR": 19.7668,
+            "SIR": 40.5453,
+            "SAR": 32.6216,
+            "ISR": 19.293
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 4.12934,
+            "SIR": 14.6188,
+            "SAR": 3.96225,
+            "ISR": 6.55847
+          },
+          "instrumental": {
+            "SDR": 10.8107,
+            "SIR": 14.2916,
+            "SAR": 14.66,
+            "ISR": 17.1994
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 6.48564,
+            "SIR": 17.1307,
+            "SAR": 6.91522,
+            "ISR": 13.4063
+          },
+          "instrumental": {
+            "SDR": 17.6587,
+            "SIR": 29.5261,
+            "SAR": 20.6854,
+            "ISR": 18.7757
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 7.68942,
+            "SIR": 19.4542,
+            "SAR": 8.09418,
+            "ISR": 11.6124
+          },
+          "instrumental": {
+            "SDR": 14.6184,
+            "SIR": 22.4699,
+            "SAR": 17.2804,
+            "ISR": 18.4301
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.57662,
-        "SIR": 20.8621,
-        "SAR": 9.9693,
-        "ISR": 13.5142
+        "SDR": 8.8218,
+        "SIR": 19.7831,
+        "SAR": 9.46116,
+        "ISR": 13.3889
       },
       "instrumental": {
-        "SDR": 15.5339,
-        "SIR": 25.2307,
-        "SAR": 17.8675,
-        "ISR": 18.5053
+        "SDR": 15.5838,
+        "SIR": 25.3496,
+        "SAR": 17.9673,
+        "ISR": 18.5333
       }
     },
     "stems": [
@@ -14243,20 +17473,105 @@
             "ISR": 18.7605
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 11.0218,
+            "SIR": 21.9526,
+            "SAR": 12.0348,
+            "ISR": 16.3209
+          },
+          "instrumental": {
+            "SDR": 17.7501,
+            "SIR": 33.344,
+            "SAR": 21.7712,
+            "ISR": 18.8814
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -2.12617,
+            "SIR": 1.41337,
+            "SAR": -0.07959,
+            "ISR": 3.5151
+          },
+          "instrumental": {
+            "SDR": 19.7915,
+            "SIR": 40.0327,
+            "SAR": 32.9356,
+            "ISR": 19.3013
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 4.21663,
+            "SIR": 14.4897,
+            "SAR": 4.0762,
+            "ISR": 6.78415
+          },
+          "instrumental": {
+            "SDR": 10.7745,
+            "SIR": 14.5625,
+            "SAR": 14.415,
+            "ISR": 17.0671
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 6.43246,
+            "SIR": 19.2882,
+            "SAR": 7.11181,
+            "ISR": 12.7918
+          },
+          "instrumental": {
+            "SDR": 17.617,
+            "SIR": 28.6754,
+            "SAR": 20.4346,
+            "ISR": 18.9706
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 7.80663,
+            "SIR": 18.6989,
+            "SAR": 8.16437,
+            "ISR": 11.9199
+          },
+          "instrumental": {
+            "SDR": 14.6036,
+            "SIR": 22.8508,
+            "SAR": 17.3628,
+            "ISR": 18.2662
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.66183,
-        "SIR": 20.4748,
-        "SAR": 10.3141,
-        "ISR": 13.7429
+        "SDR": 9.03621,
+        "SIR": 19.2882,
+        "SAR": 9.53879,
+        "ISR": 13.3789
       },
       "instrumental": {
-        "SDR": 15.4533,
-        "SIR": 25.46,
-        "SAR": 17.7762,
-        "ISR": 18.1517
+        "SDR": 15.5987,
+        "SIR": 25.5247,
+        "SAR": 17.8101,
+        "ISR": 18.2209
       }
     },
     "stems": [
@@ -14607,20 +17922,105 @@
             "ISR": 18.7246
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 10.52,
+            "SIR": 22.1288,
+            "SAR": 11.0857,
+            "ISR": 15.8421
+          },
+          "instrumental": {
+            "SDR": 17.2587,
+            "SIR": 31.3245,
+            "SAR": 21.0856,
+            "ISR": 18.7977
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -11.496,
+            "SIR": -9.62789,
+            "SAR": 0.5246,
+            "ISR": 11.303
+          },
+          "instrumental": {
+            "SDR": 19.295,
+            "SIR": 40.9617,
+            "SAR": 29.5361,
+            "ISR": 19.0167
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 3.9009,
+            "SIR": 14.5612,
+            "SAR": 3.35668,
+            "ISR": 6.01042
+          },
+          "instrumental": {
+            "SDR": 10.6492,
+            "SIR": 13.5777,
+            "SAR": 14.525,
+            "ISR": 17.2589
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 4.3612,
+            "SIR": 17.7706,
+            "SAR": 5.36505,
+            "ISR": 10.1516
+          },
+          "instrumental": {
+            "SDR": 17.5383,
+            "SIR": 25.132,
+            "SAR": 20.5485,
+            "ISR": 19.1151
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 7.58855,
+            "SIR": 18.7821,
+            "SAR": 7.72783,
+            "ISR": 11.0853
+          },
+          "instrumental": {
+            "SDR": 14.5183,
+            "SIR": 21.6345,
+            "SAR": 17.271,
+            "ISR": 18.2507
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.10599,
-        "SIR": 19.6048,
-        "SAR": 10.2093,
-        "ISR": 13.5707
+        "SDR": 8.46004,
+        "SIR": 19.2903,
+        "SAR": 8.18075,
+        "ISR": 12.4095
       },
       "instrumental": {
-        "SDR": 15.4855,
-        "SIR": 24.5048,
-        "SAR": 17.5281,
-        "ISR": 17.8623
+        "SDR": 15.5184,
+        "SIR": 24.9309,
+        "SAR": 17.6463,
+        "ISR": 17.9899
       }
     },
     "stems": [
@@ -14991,20 +18391,105 @@
             "ISR": 18.4917
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 10.8027,
+            "SIR": 21.3173,
+            "SAR": 11.8299,
+            "ISR": 15.3935
+          },
+          "instrumental": {
+            "SDR": 17.2968,
+            "SIR": 30.851,
+            "SAR": 20.9412,
+            "ISR": 18.7896
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -1.46489,
+            "SIR": -0.29017,
+            "SAR": -0.01044,
+            "ISR": 3.3685
+          },
+          "instrumental": {
+            "SDR": 19.7483,
+            "SIR": 40.1666,
+            "SAR": 31.2469,
+            "ISR": 19.0765
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 4.43716,
+            "SIR": 14.2186,
+            "SAR": 4.24093,
+            "ISR": 7.61527
+          },
+          "instrumental": {
+            "SDR": 10.7555,
+            "SIR": 15.557,
+            "SAR": 14.2806,
+            "ISR": 16.6573
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 6.98534,
+            "SIR": 18.464,
+            "SAR": 6.95737,
+            "ISR": 13.5799
+          },
+          "instrumental": {
+            "SDR": 17.1728,
+            "SIR": 31.099,
+            "SAR": 20.9328,
+            "ISR": 18.796
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 7.45018,
+            "SIR": 16.9634,
+            "SAR": 7.89225,
+            "ISR": 11.6913
+          },
+          "instrumental": {
+            "SDR": 14.2052,
+            "SIR": 22.4137,
+            "SAR": 17.09,
+            "ISR": 17.8771
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.43812,
-        "SIR": 19.2886,
-        "SAR": 10.2545,
-        "ISR": 12.9139
+        "SDR": 8.75829,
+        "SIR": 19.0025,
+        "SAR": 9.23667,
+        "ISR": 12.8695
       },
       "instrumental": {
-        "SDR": 15.3273,
-        "SIR": 24.1551,
-        "SAR": 17.9456,
-        "ISR": 18.1986
+        "SDR": 15.3395,
+        "SIR": 24.1626,
+        "SAR": 17.9478,
+        "ISR": 18.335
       }
     },
     "stems": [
@@ -15355,14 +18840,99 @@
             "ISR": 7.64894
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "other": {
+            "SDR": 7.30968,
+            "SIR": 16.9177,
+            "SAR": 7.62686,
+            "ISR": 11.4196
+          },
+          "instrumental": {
+            "SDR": 5.60845,
+            "SIR": 14.7983,
+            "SAR": 6.53752,
+            "ISR": 10.2596
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "other": {
+            "SDR": 14.0685,
+            "SIR": 21.6993,
+            "SAR": 15.715,
+            "ISR": 18.4531
+          },
+          "instrumental": {
+            "SDR": 0.80932,
+            "SIR": 3.89792,
+            "SAR": 7.87141,
+            "ISR": 1.66903
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "other": {
+            "SDR": 5.86678,
+            "SIR": 11.5179,
+            "SAR": 6.38553,
+            "ISR": 10.4474
+          },
+          "instrumental": {
+            "SDR": 4.60198,
+            "SIR": 10.4515,
+            "SAR": 6.37081,
+            "ISR": 6.21048
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "other": {
+            "SDR": 6.84029,
+            "SIR": 13.6954,
+            "SAR": 7.5487,
+            "ISR": 11.2578
+          },
+          "instrumental": {
+            "SDR": 4.30509,
+            "SIR": 13.7435,
+            "SAR": 9.24794,
+            "ISR": 8.15643
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "other": {
+            "SDR": 4.59759,
+            "SIR": 9.55487,
+            "SAR": 5.2649,
+            "ISR": 9.49235
+          },
+          "instrumental": {
+            "SDR": 6.06816,
+            "SIR": 16.8876,
+            "SAR": 6.83275,
+            "ISR": 9.42662
+          }
+        }
       }
     ],
     "median_scores": {
       "instrumental": {
-        "SDR": 3.19448,
-        "SIR": 9.91923,
-        "SAR": 4.01882,
-        "ISR": 6.2082
+        "SDR": 3.74514,
+        "SIR": 10.4054,
+        "SAR": 5.51297,
+        "ISR": 6.35631
       }
     },
     "stems": [
@@ -15713,20 +19283,105 @@
             "ISR": 4.2682
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "bass": {
+            "SDR": 14.5687,
+            "SIR": 22.5036,
+            "SAR": 15.5006,
+            "ISR": 17.2629
+          },
+          "instrumental": {
+            "SDR": 0.46533,
+            "SIR": 1.29338,
+            "SAR": 0.56047,
+            "ISR": 1.74435
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "bass": {
+            "SDR": 11.0284,
+            "SIR": 24.4635,
+            "SAR": 11.94,
+            "ISR": 14.4842
+          },
+          "instrumental": {
+            "SDR": 6.59616,
+            "SIR": 9.50216,
+            "SAR": 15.2833,
+            "ISR": 9.3666
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "bass": {
+            "SDR": 4.41786,
+            "SIR": 12.8054,
+            "SAR": 4.12871,
+            "ISR": 7.29088
+          },
+          "instrumental": {
+            "SDR": 6.99912,
+            "SIR": 13.3873,
+            "SAR": 8.82188,
+            "ISR": 11.9956
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "bass": {
+            "SDR": 10.206,
+            "SIR": 13.0449,
+            "SAR": 10.1204,
+            "ISR": 12.5577
+          },
+          "instrumental": {
+            "SDR": 1.70888,
+            "SIR": 4.51149,
+            "SAR": 3.62472,
+            "ISR": 3.40736
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "bass": {
+            "SDR": 8.31776,
+            "SIR": 15.8755,
+            "SAR": 8.77232,
+            "ISR": 12.411
+          },
+          "instrumental": {
+            "SDR": 4.06327,
+            "SIR": 9.55606,
+            "SAR": 5.51186,
+            "ISR": 7.25932
+          }
+        }
       }
     ],
     "median_scores": {
       "bass": {
-        "SDR": 10.4481,
-        "SIR": 20.9862,
-        "SAR": 11.2897,
-        "ISR": 14.1395
+        "SDR": 10.4234,
+        "SIR": 20.9739,
+        "SAR": 11.0176,
+        "ISR": 14.1136
       },
       "instrumental": {
-        "SDR": 2.31856,
-        "SIR": 6.42725,
-        "SAR": 4.13488,
-        "ISR": 5.2343
+        "SDR": 2.47201,
+        "SIR": 6.81879,
+        "SAR": 4.32716,
+        "ISR": 5.66416
       }
     },
     "stems": [
@@ -16077,20 +19732,105 @@
             "ISR": 8.48702
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "drums": {
+            "SDR": 5.11632,
+            "SIR": 15.3467,
+            "SAR": 4.99825,
+            "ISR": 10.9375
+          },
+          "instrumental": {
+            "SDR": 6.29898,
+            "SIR": 12.667,
+            "SAR": 7.13854,
+            "ISR": 13.4354
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "drums": {
+            "SDR": 3.57077,
+            "SIR": 11.2833,
+            "SAR": 3.1214,
+            "ISR": 9.30502
+          },
+          "instrumental": {
+            "SDR": 10.1914,
+            "SIR": 15.2058,
+            "SAR": 16.1805,
+            "ISR": 14.0507
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "drums": {
+            "SDR": 6.93091,
+            "SIR": 11.5098,
+            "SAR": 8.36715,
+            "ISR": 12.9866
+          },
+          "instrumental": {
+            "SDR": 2.57479,
+            "SIR": 6.441,
+            "SAR": 5.0244,
+            "ISR": 3.94392
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "drums": {
+            "SDR": 4.96706,
+            "SIR": 10.6288,
+            "SAR": 4.86976,
+            "ISR": 11.0817
+          },
+          "instrumental": {
+            "SDR": 4.94332,
+            "SIR": 9.20077,
+            "SAR": 6.34731,
+            "ISR": 8.51785
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "drums": {
+            "SDR": 9.73033,
+            "SIR": 15.4582,
+            "SAR": 11.0858,
+            "ISR": 15.3206
+          },
+          "instrumental": {
+            "SDR": 1.63607,
+            "SIR": 5.84164,
+            "SAR": 3.04934,
+            "ISR": 3.18988
+          }
+        }
       }
     ],
     "median_scores": {
       "drums": {
-        "SDR": 6.99726,
-        "SIR": 14.5861,
-        "SAR": 6.9771,
-        "ISR": 12.3915
+        "SDR": 6.93091,
+        "SIR": 14.2432,
+        "SAR": 6.89015,
+        "ISR": 11.9181
       },
       "instrumental": {
-        "SDR": 3.29807,
-        "SIR": 7.84217,
-        "SAR": 4.78672,
-        "ISR": 8.28092
+        "SDR": 3.37901,
+        "SIR": 8.07551,
+        "SAR": 5.52393,
+        "ISR": 8.4532
       }
     },
     "stems": [
@@ -16441,20 +20181,105 @@
             "ISR": 18.4404
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 10.5309,
+            "SIR": 22.6299,
+            "SAR": 10.9705,
+            "ISR": 14.919
+          },
+          "instrumental": {
+            "SDR": 17.2178,
+            "SIR": 29.3981,
+            "SAR": 21.1577,
+            "ISR": 18.9597
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -2.32653,
+            "SIR": -0.30444,
+            "SAR": -0.08732,
+            "ISR": 3.13562
+          },
+          "instrumental": {
+            "SDR": 19.7604,
+            "SIR": 39.3107,
+            "SAR": 31.6501,
+            "ISR": 19.1183
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 4.18968,
+            "SIR": 15.2985,
+            "SAR": 3.81692,
+            "ISR": 6.51706
+          },
+          "instrumental": {
+            "SDR": 10.8661,
+            "SIR": 14.3243,
+            "SAR": 14.6505,
+            "ISR": 17.2804
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 6.04885,
+            "SIR": 17.7424,
+            "SAR": 6.3453,
+            "ISR": 13.2417
+          },
+          "instrumental": {
+            "SDR": 17.1538,
+            "SIR": 28.759,
+            "SAR": 20.3809,
+            "ISR": 18.7932
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 7.11171,
+            "SIR": 17.8422,
+            "SAR": 7.33663,
+            "ISR": 10.8895
+          },
+          "instrumental": {
+            "SDR": 14.0838,
+            "SIR": 21.0175,
+            "SAR": 16.9227,
+            "ISR": 18.1265
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.57975,
-        "SIR": 19.7378,
-        "SAR": 9.34484,
-        "ISR": 12.5399
+        "SDR": 8.13561,
+        "SIR": 19.2962,
+        "SAR": 8.79153,
+        "ISR": 12.4338
       },
       "instrumental": {
-        "SDR": 15.1377,
-        "SIR": 23.807,
-        "SAR": 17.3451,
-        "ISR": 18.0891
+        "SDR": 15.1849,
+        "SIR": 24.1918,
+        "SAR": 17.4885,
+        "ISR": 18.2814
       }
     },
     "stems": [
@@ -16805,14 +20630,99 @@
             "ISR": 7.93734
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "other": {
+            "SDR": 6.51418,
+            "SIR": 15.8501,
+            "SAR": 6.8566,
+            "ISR": 9.71067
+          },
+          "instrumental": {
+            "SDR": 5.60238,
+            "SIR": 15.7301,
+            "SAR": 6.51614,
+            "ISR": 10.6595
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "other": {
+            "SDR": 11.8816,
+            "SIR": 22.2792,
+            "SAR": 14.7422,
+            "ISR": 14.3541
+          },
+          "instrumental": {
+            "SDR": 1.25678,
+            "SIR": 5.84482,
+            "SAR": 7.69005,
+            "ISR": 2.15879
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "other": {
+            "SDR": 5.13684,
+            "SIR": 9.7413,
+            "SAR": 5.93986,
+            "ISR": 9.53541
+          },
+          "instrumental": {
+            "SDR": 4.71079,
+            "SIR": 11.1188,
+            "SAR": 6.19342,
+            "ISR": 6.3735
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "other": {
+            "SDR": 5.86376,
+            "SIR": 12.5694,
+            "SAR": 6.73528,
+            "ISR": 10.0457
+          },
+          "instrumental": {
+            "SDR": 4.55425,
+            "SIR": 14.1528,
+            "SAR": 9.23272,
+            "ISR": 8.42971
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "other": {
+            "SDR": 4.0522,
+            "SIR": 7.53218,
+            "SAR": 4.68118,
+            "ISR": 9.03075
+          },
+          "instrumental": {
+            "SDR": 5.9781,
+            "SIR": 17.3417,
+            "SAR": 6.62162,
+            "ISR": 9.33317
+          }
+        }
       }
     ],
     "median_scores": {
       "instrumental": {
-        "SDR": 3.41711,
-        "SIR": 10.6977,
-        "SAR": 4.28167,
-        "ISR": 6.4524
+        "SDR": 4.07683,
+        "SIR": 11.1188,
+        "SAR": 5.30094,
+        "ISR": 6.64791
       }
     },
     "stems": [
@@ -17163,20 +21073,105 @@
             "ISR": 4.37602
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "bass": {
+            "SDR": 14.2073,
+            "SIR": 21.8536,
+            "SAR": 15.4168,
+            "ISR": 17.2479
+          },
+          "instrumental": {
+            "SDR": 0.44343,
+            "SIR": 1.27262,
+            "SAR": 0.23863,
+            "ISR": 1.71844
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "bass": {
+            "SDR": 10.5464,
+            "SIR": 22.2233,
+            "SAR": 11.318,
+            "ISR": 13.8509
+          },
+          "instrumental": {
+            "SDR": 6.46552,
+            "SIR": 9.57089,
+            "SAR": 15.1044,
+            "ISR": 9.30445
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "bass": {
+            "SDR": 3.21515,
+            "SIR": 13.3912,
+            "SAR": 1.26532,
+            "ISR": 4.40634
+          },
+          "instrumental": {
+            "SDR": 7.77384,
+            "SIR": 16.7379,
+            "SAR": 8.42431,
+            "ISR": 13.9576
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "bass": {
+            "SDR": 9.98494,
+            "SIR": 14.1989,
+            "SAR": 9.7302,
+            "ISR": 11.6097
+          },
+          "instrumental": {
+            "SDR": 1.90551,
+            "SIR": 4.7302,
+            "SAR": 3.87369,
+            "ISR": 3.64729
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "bass": {
+            "SDR": 7.84134,
+            "SIR": 16.0192,
+            "SAR": 8.57408,
+            "ISR": 11.4806
+          },
+          "instrumental": {
+            "SDR": 4.29513,
+            "SIR": 9.94399,
+            "SAR": 5.52655,
+            "ISR": 7.5392
+          }
+        }
       }
     ],
     "median_scores": {
       "bass": {
-        "SDR": 10.0346,
-        "SIR": 20.6157,
-        "SAR": 10.2634,
-        "ISR": 13.42
+        "SDR": 9.98494,
+        "SIR": 20.3337,
+        "SAR": 10.1956,
+        "ISR": 13.3543
       },
       "instrumental": {
-        "SDR": 2.54364,
-        "SIR": 7.23423,
-        "SAR": 4.34438,
-        "ISR": 6.16578
+        "SDR": 2.73232,
+        "SIR": 7.26743,
+        "SAR": 4.40366,
+        "ISR": 6.54165
       }
     },
     "stems": [
@@ -17527,20 +21522,105 @@
             "ISR": 8.92341
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "drums": {
+            "SDR": 5.00642,
+            "SIR": 17.4592,
+            "SAR": 4.79745,
+            "ISR": 10.9245
+          },
+          "instrumental": {
+            "SDR": 6.15955,
+            "SIR": 12.7043,
+            "SAR": 7.43093,
+            "ISR": 13.594
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "drums": {
+            "SDR": 2.60555,
+            "SIR": 10.215,
+            "SAR": 2.16607,
+            "ISR": 8.54691
+          },
+          "instrumental": {
+            "SDR": 9.77316,
+            "SIR": 15.6496,
+            "SAR": 15.6572,
+            "ISR": 14.2025
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "drums": {
+            "SDR": 7.1572,
+            "SIR": 14.3231,
+            "SAR": 8.26936,
+            "ISR": 11.2281
+          },
+          "instrumental": {
+            "SDR": 3.04591,
+            "SIR": 6.86055,
+            "SAR": 5.6269,
+            "ISR": 4.71269
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "drums": {
+            "SDR": 5.2755,
+            "SIR": 11.665,
+            "SAR": 5.11633,
+            "ISR": 9.90275
+          },
+          "instrumental": {
+            "SDR": 5.41017,
+            "SIR": 9.84848,
+            "SAR": 6.9734,
+            "ISR": 9.11239
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "drums": {
+            "SDR": 10.2365,
+            "SIR": 17.8736,
+            "SAR": 11.6629,
+            "ISR": 14.0066
+          },
+          "instrumental": {
+            "SDR": 1.81437,
+            "SIR": 6.20197,
+            "SAR": 3.37121,
+            "ISR": 3.46865
+          }
+        }
       }
     ],
     "median_scores": {
       "drums": {
-        "SDR": 7.0103,
-        "SIR": 15.7607,
-        "SAR": 7.34835,
-        "ISR": 11.4519
+        "SDR": 6.95376,
+        "SIR": 15.6269,
+        "SAR": 7.27907,
+        "ISR": 11.2281
       },
       "instrumental": {
-        "SDR": 3.40986,
-        "SIR": 7.99463,
-        "SAR": 5.12956,
-        "ISR": 8.42863
+        "SDR": 3.54066,
+        "SIR": 8.20722,
+        "SAR": 5.63948,
+        "ISR": 8.50964
       }
     },
     "stems": [
@@ -17891,20 +21971,105 @@
             "ISR": 18.8203
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 10.9704,
+            "SIR": 24.0405,
+            "SAR": 11.6902,
+            "ISR": 16.1945
+          },
+          "instrumental": {
+            "SDR": 17.5229,
+            "SIR": 32.6163,
+            "SAR": 21.5149,
+            "ISR": 19.1371
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -2.86038,
+            "SIR": 2.39004,
+            "SAR": -0.09909,
+            "ISR": 3.6875
+          },
+          "instrumental": {
+            "SDR": 19.7922,
+            "SIR": 40.3354,
+            "SAR": 32.3835,
+            "ISR": 19.2675
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 4.20095,
+            "SIR": 14.6732,
+            "SAR": 4.03773,
+            "ISR": 6.83048
+          },
+          "instrumental": {
+            "SDR": 10.7884,
+            "SIR": 14.6335,
+            "SAR": 14.3113,
+            "ISR": 17.1369
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 5.91478,
+            "SIR": 17.751,
+            "SAR": 6.40324,
+            "ISR": 13.1966
+          },
+          "instrumental": {
+            "SDR": 17.5248,
+            "SIR": 29.5362,
+            "SAR": 20.2376,
+            "ISR": 18.8478
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 7.78787,
+            "SIR": 19.4971,
+            "SAR": 8.06298,
+            "ISR": 11.8468
+          },
+          "instrumental": {
+            "SDR": 14.5291,
+            "SIR": 22.5169,
+            "SAR": 17.1153,
+            "ISR": 18.4195
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.55011,
-        "SIR": 20.65,
-        "SAR": 9.83498,
-        "ISR": 13.9778
+        "SDR": 8.40925,
+        "SIR": 19.8362,
+        "SAR": 9.28753,
+        "ISR": 13.626
       },
       "instrumental": {
-        "SDR": 15.5409,
-        "SIR": 25.7631,
-        "SAR": 17.6765,
-        "ISR": 18.321
+        "SDR": 15.5718,
+        "SIR": 25.7787,
+        "SAR": 17.6771,
+        "ISR": 18.4226
       }
     },
     "stems": [
@@ -18255,20 +22420,105 @@
             "ISR": 17.9407
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 4.70898,
+            "SIR": 23.8028,
+            "SAR": 12.076,
+            "ISR": 6.15867
+          },
+          "instrumental": {
+            "SDR": 11.2055,
+            "SIR": 12.765,
+            "SAR": 18.0373,
+            "ISR": 18.3785
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -6.21867,
+            "SIR": 1.38433,
+            "SAR": -0.13684,
+            "ISR": 3.27683
+          },
+          "instrumental": {
+            "SDR": 19.7692,
+            "SIR": 36.7626,
+            "SAR": 27.6018,
+            "ISR": 18.8359
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 2.19115,
+            "SIR": 14.0899,
+            "SAR": 4.05779,
+            "ISR": 11.3656
+          },
+          "instrumental": {
+            "SDR": 8.43892,
+            "SIR": 16.6608,
+            "SAR": 9.45778,
+            "ISR": 15.0596
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 2.81349,
+            "SIR": 16.3556,
+            "SAR": 6.57123,
+            "ISR": 7.26133
+          },
+          "instrumental": {
+            "SDR": 12.6754,
+            "SIR": 17.0337,
+            "SAR": 16.2936,
+            "ISR": 17.6028
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 4.07193,
+            "SIR": 18.6844,
+            "SAR": 8.10956,
+            "ISR": 9.97511
+          },
+          "instrumental": {
+            "SDR": 10.0706,
+            "SIR": 14.2036,
+            "SAR": 12.6793,
+            "ISR": 16.9427
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 4.47624,
-        "SIR": 20.5712,
-        "SAR": 10.1538,
-        "ISR": 7.87369
+        "SDR": 4.38655,
+        "SIR": 18.6844,
+        "SAR": 9.52587,
+        "ISR": 7.47867
       },
       "instrumental": {
-        "SDR": 8.80815,
-        "SIR": 11.2271,
-        "SAR": 13.8819,
-        "ISR": 16.7793
+        "SDR": 9.32083,
+        "SIR": 12.2565,
+        "SAR": 14.092,
+        "ISR": 16.9427
       }
     },
     "stems": [
@@ -18619,20 +22869,105 @@
             "ISR": 18.7886
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 11.4287,
+            "SIR": 23.7075,
+            "SAR": 12.0748,
+            "ISR": 18.0169
+          },
+          "instrumental": {
+            "SDR": 17.5176,
+            "SIR": 33.1457,
+            "SAR": 21.1284,
+            "ISR": 19.0461
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -6.02913,
+            "SIR": 1.16806,
+            "SAR": -0.31571,
+            "ISR": 3.63733
+          },
+          "instrumental": {
+            "SDR": 19.5723,
+            "SIR": 39.946,
+            "SAR": 30.3347,
+            "ISR": 19.2551
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 4.03064,
+            "SIR": 13.7042,
+            "SAR": 4.00465,
+            "ISR": 7.20661
+          },
+          "instrumental": {
+            "SDR": 10.65,
+            "SIR": 15.0243,
+            "SAR": 13.8727,
+            "ISR": 16.6632
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 6.66973,
+            "SIR": 16.1513,
+            "SAR": 6.45549,
+            "ISR": 14.9347
+          },
+          "instrumental": {
+            "SDR": 17.3235,
+            "SIR": 32.4516,
+            "SAR": 20.2595,
+            "ISR": 18.5398
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 7.91968,
+            "SIR": 19.0506,
+            "SAR": 8.03322,
+            "ISR": 12.8172
+          },
+          "instrumental": {
+            "SDR": 14.581,
+            "SIR": 24.0471,
+            "SAR": 16.9676,
+            "ISR": 18.2565
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.81663,
-        "SIR": 20.4335,
-        "SAR": 10.1299,
-        "ISR": 15.2525
+        "SDR": 9.14378,
+        "SIR": 19.0506,
+        "SAR": 9.37852,
+        "ISR": 14.9347
       },
       "instrumental": {
-        "SDR": 15.452,
-        "SIR": 27.6563,
-        "SAR": 17.295,
-        "ISR": 18.0622
+        "SDR": 15.4984,
+        "SIR": 27.7582,
+        "SAR": 17.4343,
+        "ISR": 18.2565
       }
     },
     "stems": [
@@ -18983,20 +23318,105 @@
             "ISR": 18.8246
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 11.1382,
+            "SIR": 23.9968,
+            "SAR": 11.9879,
+            "ISR": 15.8671
+          },
+          "instrumental": {
+            "SDR": 17.6451,
+            "SIR": 31.9426,
+            "SAR": 22.0543,
+            "ISR": 19.1177
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -2.49158,
+            "SIR": 2.15807,
+            "SAR": -0.12965,
+            "ISR": 3.57837
+          },
+          "instrumental": {
+            "SDR": 19.8011,
+            "SIR": 40.3989,
+            "SAR": 32.996,
+            "ISR": 19.3244
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 4.19905,
+            "SIR": 14.5709,
+            "SAR": 3.97645,
+            "ISR": 6.73817
+          },
+          "instrumental": {
+            "SDR": 10.8736,
+            "SIR": 14.5301,
+            "SAR": 14.3756,
+            "ISR": 17.1284
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 6.22215,
+            "SIR": 17.7075,
+            "SAR": 6.92583,
+            "ISR": 12.9828
+          },
+          "instrumental": {
+            "SDR": 17.4981,
+            "SIR": 28.5646,
+            "SAR": 20.676,
+            "ISR": 18.837
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 7.73954,
+            "SIR": 18.77,
+            "SAR": 8.08825,
+            "ISR": 11.792
+          },
+          "instrumental": {
+            "SDR": 14.5828,
+            "SIR": 22.6464,
+            "SAR": 17.3255,
+            "ISR": 18.2484
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.61323,
-        "SIR": 20.6136,
-        "SAR": 10.3241,
-        "ISR": 13.5133
+        "SDR": 9.00868,
+        "SIR": 19.9605,
+        "SAR": 9.29668,
+        "ISR": 13.1461
       },
       "instrumental": {
-        "SDR": 15.5912,
-        "SIR": 25.0725,
-        "SAR": 17.6893,
-        "ISR": 18.1301
+        "SDR": 15.6069,
+        "SIR": 25.1407,
+        "SAR": 17.6984,
+        "ISR": 18.2484
       }
     },
     "stems": [
@@ -19347,20 +23767,105 @@
             "ISR": 18.743
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 10.9964,
+            "SIR": 23.7389,
+            "SAR": 12.0271,
+            "ISR": 15.8025
+          },
+          "instrumental": {
+            "SDR": 17.7773,
+            "SIR": 31.8743,
+            "SAR": 22.2261,
+            "ISR": 19.0802
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -4.21508,
+            "SIR": 0.4978,
+            "SAR": -0.15217,
+            "ISR": 3.50991
+          },
+          "instrumental": {
+            "SDR": 19.7313,
+            "SIR": 39.967,
+            "SAR": 31.1834,
+            "ISR": 19.1955
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 4.16299,
+            "SIR": 14.0534,
+            "SAR": 4.11577,
+            "ISR": 6.92901
+          },
+          "instrumental": {
+            "SDR": 10.7203,
+            "SIR": 14.7547,
+            "SAR": 14.3836,
+            "ISR": 16.9152
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 6.46138,
+            "SIR": 17.4229,
+            "SAR": 6.89396,
+            "ISR": 13.328
+          },
+          "instrumental": {
+            "SDR": 17.6482,
+            "SIR": 29.2913,
+            "SAR": 20.7738,
+            "ISR": 18.7852
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 7.77107,
+            "SIR": 18.6343,
+            "SAR": 8.18181,
+            "ISR": 11.6926
+          },
+          "instrumental": {
+            "SDR": 14.5319,
+            "SIR": 22.3178,
+            "SAR": 17.3748,
+            "ISR": 18.2355
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.63989,
-        "SIR": 20.295,
-        "SAR": 10.3779,
-        "ISR": 13.4938
+        "SDR": 9.03938,
+        "SIR": 19.7088,
+        "SAR": 9.31471,
+        "ISR": 13.328
       },
       "instrumental": {
-        "SDR": 15.5309,
-        "SIR": 25.1613,
-        "SAR": 17.8905,
-        "ISR": 18.0793
+        "SDR": 15.627,
+        "SIR": 25.361,
+        "SAR": 17.9873,
+        "ISR": 18.2355
       }
     },
     "stems": [
@@ -19711,20 +24216,105 @@
             "ISR": 17.8177
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 8.80995,
+            "SIR": 17.973,
+            "SAR": 9.84104,
+            "ISR": 14.1602
+          },
+          "instrumental": {
+            "SDR": 16.3427,
+            "SIR": 28.1697,
+            "SAR": 19.6022,
+            "ISR": 17.7344
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -14.2101,
+            "SIR": -10.2625,
+            "SAR": 2.13489,
+            "ISR": 12.8683
+          },
+          "instrumental": {
+            "SDR": 18.6652,
+            "SIR": 44.0013,
+            "SAR": 26.785,
+            "ISR": 18.3033
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 3.80457,
+            "SIR": 12.6507,
+            "SAR": 3.66269,
+            "ISR": 6.03163
+          },
+          "instrumental": {
+            "SDR": 10.3415,
+            "SIR": 13.5011,
+            "SAR": 14.4417,
+            "ISR": 16.3849
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 2.9181,
+            "SIR": 15.5006,
+            "SAR": 4.01626,
+            "ISR": 8.32992
+          },
+          "instrumental": {
+            "SDR": 16.5603,
+            "SIR": 23.4027,
+            "SAR": 19.8952,
+            "ISR": 18.1015
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 7.07668,
+            "SIR": 16.6664,
+            "SAR": 7.43408,
+            "ISR": 10.731
+          },
+          "instrumental": {
+            "SDR": 13.866,
+            "SIR": 20.8703,
+            "SAR": 16.8175,
+            "ISR": 17.435
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.33715,
-        "SIR": 17.8397,
-        "SAR": 8.98095,
-        "ISR": 12.1554
+        "SDR": 7.07668,
+        "SIR": 16.7948,
+        "SAR": 7.50222,
+        "ISR": 12.0359
       },
       "instrumental": {
-        "SDR": 14.3575,
-        "SIR": 22.4154,
-        "SAR": 16.7583,
-        "ISR": 17.2281
+        "SDR": 14.4459,
+        "SIR": 22.5876,
+        "SAR": 16.8666,
+        "ISR": 17.3638
       }
     },
     "stems": [
@@ -20075,20 +24665,105 @@
             "ISR": 16.5743
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 8.53017,
+            "SIR": 14.9536,
+            "SAR": 10.1498,
+            "ISR": 14.872
+          },
+          "instrumental": {
+            "SDR": 15.484,
+            "SIR": 29.1,
+            "SAR": 19.5157,
+            "ISR": 16.5301
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -13.0368,
+            "SIR": -10.6564,
+            "SAR": 7.59445,
+            "ISR": 13.2938
+          },
+          "instrumental": {
+            "SDR": 17.3802,
+            "SIR": 44.1642,
+            "SAR": 27.1096,
+            "ISR": 17.0368
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 3.87647,
+            "SIR": 10.8503,
+            "SAR": 4.26633,
+            "ISR": 6.29382
+          },
+          "instrumental": {
+            "SDR": 10.1952,
+            "SIR": 13.6309,
+            "SAR": 14.5818,
+            "ISR": 15.3893
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 5.5467,
+            "SIR": 11.5149,
+            "SAR": 6.95337,
+            "ISR": 11.755
+          },
+          "instrumental": {
+            "SDR": 15.7581,
+            "SIR": 27.6261,
+            "SAR": 20.5288,
+            "ISR": 16.6283
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 6.99209,
+            "SIR": 14.0758,
+            "SAR": 7.92927,
+            "ISR": 10.9793
+          },
+          "instrumental": {
+            "SDR": 13.387,
+            "SIR": 21.145,
+            "SAR": 17.0217,
+            "ISR": 16.2149
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.36503,
-        "SIR": 15.3656,
-        "SAR": 9.90526,
-        "ISR": 12.6266
+        "SDR": 7.57967,
+        "SIR": 14.5728,
+        "SAR": 7.92927,
+        "ISR": 12.4142
       },
       "instrumental": {
-        "SDR": 13.9804,
-        "SIR": 23.1029,
-        "SAR": 16.8062,
-        "ISR": 15.8403
+        "SDR": 13.9999,
+        "SIR": 23.5832,
+        "SAR": 17.0217,
+        "ISR": 15.9312
       }
     },
     "stems": [
@@ -20439,20 +25114,105 @@
             "ISR": 16.5928
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 8.99252,
+            "SIR": 15.1268,
+            "SAR": 10.439,
+            "ISR": 15.2382
+          },
+          "instrumental": {
+            "SDR": 15.6408,
+            "SIR": 29.1007,
+            "SAR": 20.2419,
+            "ISR": 16.5109
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -12.3581,
+            "SIR": -10.5771,
+            "SAR": 9.06836,
+            "ISR": 12.773
+          },
+          "instrumental": {
+            "SDR": 17.2892,
+            "SIR": 43.0899,
+            "SAR": 28.9179,
+            "ISR": 16.9788
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 4.04467,
+            "SIR": 11.1306,
+            "SAR": 4.42455,
+            "ISR": 6.55434
+          },
+          "instrumental": {
+            "SDR": 10.3007,
+            "SIR": 13.933,
+            "SAR": 14.5828,
+            "ISR": 15.4258
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 5.84179,
+            "SIR": 12.1022,
+            "SAR": 7.61948,
+            "ISR": 12.0636
+          },
+          "instrumental": {
+            "SDR": 15.8385,
+            "SIR": 27.6706,
+            "SAR": 20.4044,
+            "ISR": 16.6957
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 7.20076,
+            "SIR": 14.6473,
+            "SAR": 8.17887,
+            "ISR": 11.1653
+          },
+          "instrumental": {
+            "SDR": 13.6283,
+            "SIR": 21.4367,
+            "SAR": 17.19,
+            "ISR": 16.3149
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.72195,
-        "SIR": 15.8859,
-        "SAR": 10.339,
-        "ISR": 13.304
+        "SDR": 7.88963,
+        "SIR": 15.1268,
+        "SAR": 9.06836,
+        "ISR": 13.1047
       },
       "instrumental": {
-        "SDR": 14.2743,
-        "SIR": 23.852,
-        "SAR": 17.1984,
-        "ISR": 15.9649
+        "SDR": 14.277,
+        "SIR": 23.8972,
+        "SAR": 17.2697,
+        "ISR": 16.0708
       }
     },
     "stems": [
@@ -20803,20 +25563,105 @@
             "ISR": 18.2836
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 10.0469,
+            "SIR": 20.9816,
+            "SAR": 10.4421,
+            "ISR": 15.483
+          },
+          "instrumental": {
+            "SDR": 16.9409,
+            "SIR": 31.2262,
+            "SAR": 20.2999,
+            "ISR": 18.5831
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -11.9116,
+            "SIR": -8.97781,
+            "SAR": -0.96472,
+            "ISR": 10.0981
+          },
+          "instrumental": {
+            "SDR": 19.4743,
+            "SIR": 40.7421,
+            "SAR": 29.1881,
+            "ISR": 18.9728
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 4.10791,
+            "SIR": 14.5987,
+            "SAR": 3.90009,
+            "ISR": 6.39505
+          },
+          "instrumental": {
+            "SDR": 10.7603,
+            "SIR": 14.0662,
+            "SAR": 14.5859,
+            "ISR": 17.1264
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 6.0496,
+            "SIR": 16.0767,
+            "SAR": 6.23946,
+            "ISR": 12.7454
+          },
+          "instrumental": {
+            "SDR": 17.2552,
+            "SIR": 28.4409,
+            "SAR": 19.7706,
+            "ISR": 18.5276
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 7.537,
+            "SIR": 18.3375,
+            "SAR": 7.87007,
+            "ISR": 11.4149
+          },
+          "instrumental": {
+            "SDR": 14.3855,
+            "SIR": 22.0259,
+            "SAR": 17.2115,
+            "ISR": 18.1118
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.45429,
-        "SIR": 19.6192,
-        "SAR": 9.80222,
-        "ISR": 13.6422
+        "SDR": 8.02842,
+        "SIR": 18.3375,
+        "SAR": 8.52881,
+        "ISR": 13.2198
       },
       "instrumental": {
-        "SDR": 15.0579,
-        "SIR": 24.5755,
-        "SAR": 17.2685,
-        "ISR": 17.6979
+        "SDR": 15.0826,
+        "SIR": 24.6499,
+        "SAR": 17.3563,
+        "ISR": 17.8239
       }
     },
     "stems": [
@@ -22759,20 +27604,122 @@
             "ISR": 18.2253
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Air Traffic",
+        "scores": {
+          "vocals": {
+            "SDR": 12.0926,
+            "SIR": 25.8245,
+            "SAR": 12.7132,
+            "ISR": 16.077
+          },
+          "instrumental": {
+            "SDR": 16.5513,
+            "SIR": 28.9507,
+            "SAR": 19.4746,
+            "ISR": 18.9786
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 11.9115,
+            "SIR": 25.6961,
+            "SAR": 13.2219,
+            "ISR": 16.6918
+          },
+          "instrumental": {
+            "SDR": 18.1611,
+            "SIR": 33.2309,
+            "SAR": 23.0705,
+            "ISR": 19.3022
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -0.16416,
+            "SIR": 4.4042,
+            "SAR": 0.05471,
+            "ISR": 4.38211
+          },
+          "instrumental": {
+            "SDR": 19.8397,
+            "SIR": 41.5509,
+            "SAR": 35.7546,
+            "ISR": 19.4909
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 4.28362,
+            "SIR": 15.3849,
+            "SAR": 4.09141,
+            "ISR": 6.73268
+          },
+          "instrumental": {
+            "SDR": 10.9246,
+            "SIR": 14.539,
+            "SAR": 14.6647,
+            "ISR": 17.3386
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 7.54968,
+            "SIR": 18.2247,
+            "SAR": 8.70481,
+            "ISR": 14.1121
+          },
+          "instrumental": {
+            "SDR": 17.6522,
+            "SIR": 31.2048,
+            "SAR": 21.3056,
+            "ISR": 18.8564
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 8.01052,
+            "SIR": 19.3712,
+            "SAR": 8.33947,
+            "ISR": 11.8011
+          },
+          "instrumental": {
+            "SDR": 14.824,
+            "SIR": 22.7367,
+            "SAR": 17.6442,
+            "ISR": 18.402
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.74997,
-        "SIR": 22.1606,
-        "SAR": 9.94502,
+        "SDR": 9.46556,
+        "SIR": 22.0348,
+        "SAR": 9.86238,
         "ISR": 13.8809
       },
       "instrumental": {
-        "SDR": 15.8448,
-        "SIR": 26.1264,
-        "SAR": 18.4636,
-        "ISR": 18.2059
+        "SDR": 16.0736,
+        "SIR": 26.6208,
+        "SAR": 18.726,
+        "ISR": 18.402
       }
     },
     "stems": [
@@ -23106,20 +28053,122 @@
             "ISR": 17.6714
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Air Traffic",
+        "scores": {
+          "vocals": {
+            "SDR": 11.828,
+            "SIR": 25.2884,
+            "SAR": 12.3884,
+            "ISR": 15.7958
+          },
+          "instrumental": {
+            "SDR": 16.4307,
+            "SIR": 28.6347,
+            "SAR": 19.2186,
+            "ISR": 18.8714
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 11.4599,
+            "SIR": 25.4414,
+            "SAR": 12.4564,
+            "ISR": 16.0694
+          },
+          "instrumental": {
+            "SDR": 18.0562,
+            "SIR": 31.6105,
+            "SAR": 22.5894,
+            "ISR": 19.2663
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -0.32329,
+            "SIR": -0.933135,
+            "SAR": 0.30699,
+            "ISR": 3.58862
+          },
+          "instrumental": {
+            "SDR": 19.8396,
+            "SIR": 44.9643,
+            "SAR": 36.1532,
+            "ISR": 19.4394
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 4.1447,
+            "SIR": 14.8254,
+            "SAR": 4.01271,
+            "ISR": 6.4612
+          },
+          "instrumental": {
+            "SDR": 10.7491,
+            "SIR": 14.1851,
+            "SAR": 14.741,
+            "ISR": 17.2247
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 7.22039,
+            "SIR": 18.572,
+            "SAR": 8.36052,
+            "ISR": 14.0024
+          },
+          "instrumental": {
+            "SDR": 17.7028,
+            "SIR": 30.4091,
+            "SAR": 21.4053,
+            "ISR": 18.8582
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 7.63389,
+            "SIR": 18.5149,
+            "SAR": 8.08097,
+            "ISR": 11.3776
+          },
+          "instrumental": {
+            "SDR": 14.6081,
+            "SIR": 22.1313,
+            "SAR": 17.6455,
+            "ISR": 18.2681
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.99275,
-        "SIR": 20.3714,
-        "SAR": 9.06669,
+        "SDR": 8.76723,
+        "SIR": 20.2625,
+        "SAR": 8.99798,
         "ISR": 13.594
       },
       "instrumental": {
-        "SDR": 15.4926,
-        "SIR": 25.2511,
-        "SAR": 17.9684,
-        "ISR": 17.9557
+        "SDR": 15.495,
+        "SIR": 25.3018,
+        "SAR": 18.1927,
+        "ISR": 17.9964
       }
     },
     "stems": [
@@ -23453,20 +28502,122 @@
             "ISR": 18.3737
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Air Traffic",
+        "scores": {
+          "vocals": {
+            "SDR": 12.0482,
+            "SIR": 26.1427,
+            "SAR": 12.5525,
+            "ISR": 16.0693
+          },
+          "instrumental": {
+            "SDR": 16.4737,
+            "SIR": 28.9109,
+            "SAR": 19.4375,
+            "ISR": 18.9123
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 11.7839,
+            "SIR": 26.0298,
+            "SAR": 13.0914,
+            "ISR": 16.7017
+          },
+          "instrumental": {
+            "SDR": 18.3767,
+            "SIR": 33.2707,
+            "SAR": 22.8728,
+            "ISR": 19.6077
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -0.21578,
+            "SIR": 5.00571,
+            "SAR": -0.03989,
+            "ISR": 4.55859
+          },
+          "instrumental": {
+            "SDR": 19.8563,
+            "SIR": 41.7901,
+            "SAR": 35.1394,
+            "ISR": 19.4303
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 4.31119,
+            "SIR": 15.7484,
+            "SAR": 4.03378,
+            "ISR": 6.76134
+          },
+          "instrumental": {
+            "SDR": 10.9604,
+            "SIR": 14.6113,
+            "SAR": 14.6321,
+            "ISR": 17.55
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 7.42907,
+            "SIR": 18.0411,
+            "SAR": 8.35173,
+            "ISR": 14.2391
+          },
+          "instrumental": {
+            "SDR": 17.7597,
+            "SIR": 31.1492,
+            "SAR": 21.0164,
+            "ISR": 19.0249
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 8.04496,
+            "SIR": 19.5588,
+            "SAR": 8.33975,
+            "ISR": 11.8428
+          },
+          "instrumental": {
+            "SDR": 14.8643,
+            "SIR": 22.8496,
+            "SAR": 17.5905,
+            "ISR": 18.6339
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.69804,
-        "SIR": 22.2632,
-        "SAR": 9.84564,
+        "SDR": 9.42633,
+        "SIR": 22.1722,
+        "SAR": 9.44229,
         "ISR": 13.8196
       },
       "instrumental": {
-        "SDR": 15.9222,
-        "SIR": 26.414,
-        "SAR": 18.4247,
-        "ISR": 18.3737
+        "SDR": 16.1898,
+        "SIR": 26.6246,
+        "SAR": 18.721,
+        "ISR": 18.6339
       }
     },
     "stems": [
@@ -23800,20 +28951,122 @@
             "ISR": 18.5049
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Air Traffic",
+        "scores": {
+          "vocals": {
+            "SDR": 13.3468,
+            "SIR": 29.6378,
+            "SAR": 14.1276,
+            "ISR": 17.1629
+          },
+          "instrumental": {
+            "SDR": 16.7654,
+            "SIR": 30.8915,
+            "SAR": 19.4882,
+            "ISR": 19.1681
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 14.4197,
+            "SIR": 30.0747,
+            "SAR": 15.6699,
+            "ISR": 18.0037
+          },
+          "instrumental": {
+            "SDR": 18.0662,
+            "SIR": 34.185,
+            "SAR": 22.4746,
+            "ISR": 19.5247
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": 13.4383,
+            "SIR": 33.4779,
+            "SAR": 13.0333,
+            "ISR": 18.0859
+          },
+          "instrumental": {
+            "SDR": 18.1892,
+            "SIR": 36.9145,
+            "SAR": 22.8796,
+            "ISR": 19.6952
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 4.66077,
+            "SIR": 17.1318,
+            "SAR": 4.2188,
+            "ISR": 7.61178
+          },
+          "instrumental": {
+            "SDR": 11.1464,
+            "SIR": 15.5843,
+            "SAR": 14.2608,
+            "ISR": 17.6277
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 10.4039,
+            "SIR": 27.3548,
+            "SAR": 11.0587,
+            "ISR": 15.5801
+          },
+          "instrumental": {
+            "SDR": 16.734,
+            "SIR": 28.6685,
+            "SAR": 19.52,
+            "ISR": 19.3359
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 8.66407,
+            "SIR": 20.5804,
+            "SAR": 8.87455,
+            "ISR": 13.1115
+          },
+          "instrumental": {
+            "SDR": 15.113,
+            "SIR": 24.7395,
+            "SAR": 17.643,
+            "ISR": 18.5929
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
         "SDR": 11.1078,
-        "SIR": 25.2781,
+        "SIR": 25.7471,
         "SAR": 11.8021,
-        "ISR": 15.4463
+        "ISR": 15.4531
       },
       "instrumental": {
-        "SDR": 16.4724,
-        "SIR": 28.1696,
-        "SAR": 19.0388,
-        "ISR": 18.9816
+        "SDR": 16.734,
+        "SIR": 28.2786,
+        "SAR": 19.2084,
+        "ISR": 19.0333
       }
     },
     "stems": [
@@ -24147,20 +29400,122 @@
             "ISR": 18.5145
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Air Traffic",
+        "scores": {
+          "vocals": {
+            "SDR": 13.4686,
+            "SIR": 29.576,
+            "SAR": 14.3035,
+            "ISR": 17.2137
+          },
+          "instrumental": {
+            "SDR": 16.6969,
+            "SIR": 30.7686,
+            "SAR": 19.2,
+            "ISR": 19.0507
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 14.427,
+            "SIR": 30.229,
+            "SAR": 15.7906,
+            "ISR": 18.0289
+          },
+          "instrumental": {
+            "SDR": 17.9999,
+            "SIR": 34.4109,
+            "SAR": 22.5003,
+            "ISR": 19.5244
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": 13.808,
+            "SIR": 34.9357,
+            "SAR": 14.9737,
+            "ISR": 18.3659
+          },
+          "instrumental": {
+            "SDR": 18.1845,
+            "SIR": 36.5155,
+            "SAR": 22.8768,
+            "ISR": 19.6935
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 4.63448,
+            "SIR": 17.3934,
+            "SAR": 4.1798,
+            "ISR": 7.48037
+          },
+          "instrumental": {
+            "SDR": 11.165,
+            "SIR": 15.4057,
+            "SAR": 14.3041,
+            "ISR": 17.727
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 10.9725,
+            "SIR": 28.1688,
+            "SAR": 11.5272,
+            "ISR": 15.511
+          },
+          "instrumental": {
+            "SDR": 16.5247,
+            "SIR": 27.933,
+            "SAR": 19.1213,
+            "ISR": 19.3798
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 8.66971,
+            "SIR": 20.9616,
+            "SAR": 8.84133,
+            "ISR": 13.0692
+          },
+          "instrumental": {
+            "SDR": 15.1038,
+            "SIR": 24.6768,
+            "SAR": 17.6344,
+            "ISR": 18.6515
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
         "SDR": 11.1291,
-        "SIR": 25.3319,
+        "SIR": 26.6103,
         "SAR": 11.826,
         "ISR": 15.8762
       },
       "instrumental": {
-        "SDR": 16.3166,
+        "SDR": 16.436,
         "SIR": 28.0932,
-        "SAR": 18.8132,
-        "ISR": 18.9975
+        "SAR": 19.0669,
+        "ISR": 19.0507
       }
     },
     "stems": [
@@ -24504,20 +29859,122 @@
             "ISR": 18.182
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Air Traffic",
+        "scores": {
+          "vocals": {
+            "SDR": 11.7138,
+            "SIR": 26.2193,
+            "SAR": 12.2143,
+            "ISR": 15.3867
+          },
+          "instrumental": {
+            "SDR": 15.2847,
+            "SIR": 25.9592,
+            "SAR": 17.1909,
+            "ISR": 18.9188
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 12.862,
+            "SIR": 24.9785,
+            "SAR": 13.6176,
+            "ISR": 16.9629
+          },
+          "instrumental": {
+            "SDR": 17.2697,
+            "SIR": 30.9239,
+            "SAR": 20.7161,
+            "ISR": 19.1325
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": 11.0228,
+            "SIR": 29.7847,
+            "SAR": 11.6063,
+            "ISR": 16.2
+          },
+          "instrumental": {
+            "SDR": 17.3957,
+            "SIR": 30.5321,
+            "SAR": 20.7349,
+            "ISR": 19.4281
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 4.23988,
+            "SIR": 16.4631,
+            "SAR": 3.66268,
+            "ISR": 6.83089
+          },
+          "instrumental": {
+            "SDR": 10.8817,
+            "SIR": 14.5998,
+            "SAR": 14.1,
+            "ISR": 17.684
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 9.16346,
+            "SIR": 22.447,
+            "SAR": 9.78872,
+            "ISR": 14.6676
+          },
+          "instrumental": {
+            "SDR": 16.2642,
+            "SIR": 28.4148,
+            "SAR": 18.94,
+            "ISR": 19.0972
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 7.95002,
+            "SIR": 19.5031,
+            "SAR": 8.03194,
+            "ISR": 12.0693
+          },
+          "instrumental": {
+            "SDR": 14.5739,
+            "SIR": 23.0761,
+            "SAR": 16.9534,
+            "ISR": 18.4001
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
         "SDR": 10.0847,
-        "SIR": 22.0296,
+        "SIR": 22.447,
         "SAR": 10.8027,
-        "ISR": 14.4262
+        "ISR": 14.6676
       },
       "instrumental": {
         "SDR": 15.5175,
-        "SIR": 25.4717,
-        "SAR": 16.8541,
-        "ISR": 18.182
+        "SIR": 25.5833,
+        "SAR": 17.1909,
+        "ISR": 18.6425
       }
     },
     "stems": [
@@ -24858,20 +30315,105 @@
             "ISR": 19.8881
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Air Traffic",
+        "scores": {
+          "vocals": {
+            "SDR": 11.1731,
+            "SIR": 29.3368,
+            "SAR": 11.6156,
+            "ISR": 12.3624
+          },
+          "instrumental": {
+            "SDR": 15.5899,
+            "SIR": 19.4455,
+            "SAR": 17.5667,
+            "ISR": 19.304
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 11.3855,
+            "SIR": 30.0185,
+            "SAR": 12.4226,
+            "ISR": 13.656
+          },
+          "instrumental": {
+            "SDR": 17.0729,
+            "SIR": 22.4126,
+            "SAR": 19.764,
+            "ISR": 19.5254
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": 13.9903,
+            "SIR": 35.8745,
+            "SAR": 15.2679,
+            "ISR": 17.7962
+          },
+          "instrumental": {
+            "SDR": 17.5269,
+            "SIR": 31.9855,
+            "SAR": 21.3407,
+            "ISR": 19.6462
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 4.26104,
+            "SIR": 17.8598,
+            "SAR": 3.2037,
+            "ISR": 5.9366
+          },
+          "instrumental": {
+            "SDR": 11.168,
+            "SIR": 13.7282,
+            "SAR": 14.6733,
+            "ISR": 18.2361
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 6.42602,
+            "SIR": 37.9798,
+            "SAR": 3.38901,
+            "ISR": 5.25114
+          },
+          "instrumental": {
+            "SDR": 14.5619,
+            "SIR": 12.0054,
+            "SAR": 12.8753,
+            "ISR": 19.7806
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.14428,
-        "SIR": 28.7108,
-        "SAR": 6.61471,
-        "ISR": 8.71898
+        "SDR": 8.44766,
+        "SIR": 29.3368,
+        "SAR": 6.86828,
+        "ISR": 8.72186
       },
       "instrumental": {
-        "SDR": 14.0154,
-        "SIR": 17.3689,
-        "SAR": 15.2507,
-        "ISR": 19.4413
+        "SDR": 14.5619,
+        "SIR": 17.4352,
+        "SAR": 15.706,
+        "ISR": 19.4711
       }
     },
     "stems": [
@@ -25672,20 +31214,105 @@
             "ISR": 18.8447
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Air Traffic",
+        "scores": {
+          "vocals": {
+            "SDR": 10.932,
+            "SIR": 27.1973,
+            "SAR": 11.6509,
+            "ISR": 14.7433
+          },
+          "instrumental": {
+            "SDR": 15.9003,
+            "SIR": 25.6688,
+            "SAR": 18.429,
+            "ISR": 19.1145
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 11.7983,
+            "SIR": 26.6479,
+            "SAR": 13.2131,
+            "ISR": 15.659
+          },
+          "instrumental": {
+            "SDR": 17.8933,
+            "SIR": 29.1824,
+            "SAR": 22.1669,
+            "ISR": 19.3666
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -0.00039,
+            "SIR": 5.46794,
+            "SAR": 0.09246,
+            "ISR": 4.05517
+          },
+          "instrumental": {
+            "SDR": 19.7012,
+            "SIR": 40.9593,
+            "SAR": 36.0428,
+            "ISR": 19.3948
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 4.13607,
+            "SIR": 18.5241,
+            "SAR": 3.75436,
+            "ISR": 5.8868
+          },
+          "instrumental": {
+            "SDR": 11.1222,
+            "SIR": 13.649,
+            "SAR": 15.3634,
+            "ISR": 18.345
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 6.97052,
+            "SIR": 22.6016,
+            "SAR": 7.85408,
+            "ISR": 12.0882
+          },
+          "instrumental": {
+            "SDR": 17.5073,
+            "SIR": 27.7181,
+            "SAR": 21.5109,
+            "ISR": 19.3784
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.41606,
-        "SIR": 25.13,
-        "SAR": 10.33,
-        "ISR": 12.6727
+        "SDR": 9.32511,
+        "SIR": 24.7162,
+        "SAR": 10.1338,
+        "ISR": 12.3941
       },
       "instrumental": {
-        "SDR": 15.8272,
-        "SIR": 23.5123,
-        "SAR": 18.3815,
-        "ISR": 18.8447
+        "SDR": 15.943,
+        "SIR": 24.0485,
+        "SAR": 18.556,
+        "ISR": 19.1212
       }
     },
     "stems": [
@@ -27653,20 +33280,105 @@
             "ISR": 18.6813
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 10.3153,
+            "SIR": 21.3488,
+            "SAR": 10.8498,
+            "ISR": 15.769
+          },
+          "instrumental": {
+            "SDR": 16.9638,
+            "SIR": 31.8237,
+            "SAR": 20.6841,
+            "ISR": 18.6502
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -10.6981,
+            "SIR": -7.97205,
+            "SAR": 0.03792,
+            "ISR": 8.22472
+          },
+          "instrumental": {
+            "SDR": 18.9689,
+            "SIR": 41.8995,
+            "SAR": 29.3966,
+            "ISR": 18.9556
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 4.12687,
+            "SIR": 13.7553,
+            "SAR": 3.92363,
+            "ISR": 6.64446
+          },
+          "instrumental": {
+            "SDR": 10.697,
+            "SIR": 14.3269,
+            "SAR": 14.3933,
+            "ISR": 16.762
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 4.20284,
+            "SIR": 13.8034,
+            "SAR": 4.5976,
+            "ISR": 11.1915
+          },
+          "instrumental": {
+            "SDR": 17.0168,
+            "SIR": 25.8867,
+            "SAR": 19.3072,
+            "ISR": 18.2612
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 7.75697,
+            "SIR": 18.2142,
+            "SAR": 8.13771,
+            "ISR": 11.8747
+          },
+          "instrumental": {
+            "SDR": 14.5873,
+            "SIR": 22.8122,
+            "SAR": 17.38,
+            "ISR": 18.1119
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.56527,
-        "SIR": 19.4126,
-        "SAR": 9.67524,
-        "ISR": 13.8066
+        "SDR": 7.75697,
+        "SIR": 18.3055,
+        "SAR": 8.31376,
+        "ISR": 13.6714
       },
       "instrumental": {
-        "SDR": 15.3064,
-        "SIR": 24.7892,
-        "SAR": 17.4914,
-        "ISR": 17.8465
+        "SDR": 15.3167,
+        "SIR": 25.1364,
+        "SAR": 17.5078,
+        "ISR": 18.0099
       }
     },
     "stems": [
@@ -28000,20 +33712,122 @@
             "ISR": 18.7023
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Air Traffic",
+        "scores": {
+          "vocals": {
+            "SDR": 11.1078,
+            "SIR": 25.8818,
+            "SAR": 11.7517,
+            "ISR": 15.2895
+          },
+          "instrumental": {
+            "SDR": 15.934,
+            "SIR": 26.7618,
+            "SAR": 18.4859,
+            "ISR": 18.9409
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 11.8934,
+            "SIR": 25.3438,
+            "SAR": 13.0781,
+            "ISR": 16.1428
+          },
+          "instrumental": {
+            "SDR": 17.8815,
+            "SIR": 31.2395,
+            "SAR": 22.5189,
+            "ISR": 19.2768
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -0.03079,
+            "SIR": -3.69748,
+            "SAR": 0.06847,
+            "ISR": 4.19538
+          },
+          "instrumental": {
+            "SDR": 19.8932,
+            "SIR": 46.6319,
+            "SAR": 36.9793,
+            "ISR": 19.446
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 4.34614,
+            "SIR": 17.3005,
+            "SAR": 3.96471,
+            "ISR": 6.51947
+          },
+          "instrumental": {
+            "SDR": 11.1493,
+            "SIR": 14.3171,
+            "SAR": 14.9482,
+            "ISR": 17.9872
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 6.9198,
+            "SIR": 20.3273,
+            "SAR": 7.99178,
+            "ISR": 13.092
+          },
+          "instrumental": {
+            "SDR": 17.6608,
+            "SIR": 29.5082,
+            "SAR": 21.4378,
+            "ISR": 19.2191
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 7.78141,
+            "SIR": 20.5788,
+            "SAR": 8.06921,
+            "ISR": 11.4673
+          },
+          "instrumental": {
+            "SDR": 14.7541,
+            "SIR": 22.2265,
+            "SAR": 17.5065,
+            "ISR": 18.6101
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.78726,
-        "SIR": 23.0893,
-        "SAR": 10.5429,
+        "SDR": 9.51279,
+        "SIR": 23.0023,
+        "SAR": 10.126,
         "ISR": 13.0027
       },
       "instrumental": {
-        "SDR": 15.9132,
-        "SIR": 25.0051,
-        "SAR": 18.3155,
-        "ISR": 18.7023
+        "SDR": 15.934,
+        "SIR": 25.2386,
+        "SAR": 18.4859,
+        "ISR": 18.9409
       }
     },
     "stems": [
@@ -28347,20 +34161,122 @@
             "ISR": 18.5654
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Air Traffic",
+        "scores": {
+          "vocals": {
+            "SDR": 11.829,
+            "SIR": 26.6002,
+            "SAR": 12.386,
+            "ISR": 16.0067
+          },
+          "instrumental": {
+            "SDR": 16.2763,
+            "SIR": 28.398,
+            "SAR": 19.021,
+            "ISR": 18.9973
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 12.4479,
+            "SIR": 26.0774,
+            "SAR": 13.7517,
+            "ISR": 16.6435
+          },
+          "instrumental": {
+            "SDR": 17.8987,
+            "SIR": 32.1639,
+            "SAR": 22.4922,
+            "ISR": 19.2739
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": -0.00067,
+            "SIR": -3.67736,
+            "SAR": 0.19529,
+            "ISR": 4.24983
+          },
+          "instrumental": {
+            "SDR": 19.9326,
+            "SIR": 47.1931,
+            "SAR": 37.5267,
+            "ISR": 19.5308
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 4.44956,
+            "SIR": 16.8059,
+            "SAR": 4.11688,
+            "ISR": 6.90925
+          },
+          "instrumental": {
+            "SDR": 11.1846,
+            "SIR": 14.7724,
+            "SAR": 14.6363,
+            "ISR": 17.7607
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 7.47103,
+            "SIR": 20.1499,
+            "SAR": 8.15602,
+            "ISR": 13.9796
+          },
+          "instrumental": {
+            "SDR": 17.762,
+            "SIR": 30.146,
+            "SAR": 21.6146,
+            "ISR": 19.174
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 8.00871,
+            "SIR": 20.3855,
+            "SAR": 8.35842,
+            "ISR": 11.968
+          },
+          "instrumental": {
+            "SDR": 14.8171,
+            "SIR": 22.9609,
+            "SAR": 17.5545,
+            "ISR": 18.5724
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.1088,
-        "SIR": 22.8732,
-        "SAR": 10.926,
+        "SDR": 9.80505,
+        "SIR": 22.6007,
+        "SAR": 10.395,
         "ISR": 13.3517
       },
       "instrumental": {
-        "SDR": 16.0064,
-        "SIR": 25.7423,
-        "SAR": 18.3979,
-        "ISR": 18.5654
+        "SDR": 16.1516,
+        "SIR": 26.0934,
+        "SAR": 18.8756,
+        "ISR": 18.9207
       }
     },
     "stems": [
@@ -28694,20 +34610,122 @@
             "ISR": 18.564
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Air Traffic",
+        "scores": {
+          "vocals": {
+            "SDR": 12.6484,
+            "SIR": 27.7845,
+            "SAR": 13.6929,
+            "ISR": 16.594
+          },
+          "instrumental": {
+            "SDR": 16.444,
+            "SIR": 29.4823,
+            "SAR": 19.019,
+            "ISR": 19.081
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 13.7193,
+            "SIR": 28.2691,
+            "SAR": 15.2732,
+            "ISR": 17.337
+          },
+          "instrumental": {
+            "SDR": 17.881,
+            "SIR": 32.0659,
+            "SAR": 22.0586,
+            "ISR": 19.4043
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": 5.09568,
+            "SIR": 24.5833,
+            "SAR": 5.12182,
+            "ISR": 12.2483
+          },
+          "instrumental": {
+            "SDR": 19.2241,
+            "SIR": 37.6732,
+            "SAR": 28.282,
+            "ISR": 19.6981
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 4.54699,
+            "SIR": 17.2812,
+            "SAR": 4.28651,
+            "ISR": 7.05889
+          },
+          "instrumental": {
+            "SDR": 11.2575,
+            "SIR": 14.9722,
+            "SAR": 14.6705,
+            "ISR": 17.85
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 9.38185,
+            "SIR": 21.7325,
+            "SAR": 10.0402,
+            "ISR": 14.8602
+          },
+          "instrumental": {
+            "SDR": 17.3412,
+            "SIR": 29.6069,
+            "SAR": 20.5866,
+            "ISR": 19.108
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 8.45359,
+            "SIR": 20.7774,
+            "SAR": 8.7449,
+            "ISR": 12.3763
+          },
+          "instrumental": {
+            "SDR": 15.0671,
+            "SIR": 23.6141,
+            "SAR": 17.6703,
+            "ISR": 18.6145
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.7754,
+        "SDR": 10.316,
         "SIR": 23.5485,
-        "SAR": 11.4937,
+        "SAR": 10.8124,
         "ISR": 14.7429
       },
       "instrumental": {
-        "SDR": 16.3174,
-        "SIR": 26.8933,
-        "SAR": 18.6728,
-        "ISR": 18.564
+        "SDR": 16.4206,
+        "SIR": 26.9032,
+        "SAR": 19.019,
+        "ISR": 18.9389
       }
     },
     "stems": [
@@ -29041,20 +35059,122 @@
             "ISR": 18.584
           }
         }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Air Traffic",
+        "scores": {
+          "vocals": {
+            "SDR": 12.6805,
+            "SIR": 27.6377,
+            "SAR": 13.7269,
+            "ISR": 16.6359
+          },
+          "instrumental": {
+            "SDR": 16.373,
+            "SIR": 29.4872,
+            "SAR": 18.9453,
+            "ISR": 19.0654
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Stella",
+        "scores": {
+          "vocals": {
+            "SDR": 13.7774,
+            "SIR": 28.3098,
+            "SAR": 15.2925,
+            "ISR": 17.4487
+          },
+          "instrumental": {
+            "SDR": 17.845,
+            "SIR": 32.1952,
+            "SAR": 22.0013,
+            "ISR": 19.3851
+          }
+        }
+      },
+      {
+        "track_name": "Clara Berry And Wooldog - Waltz For My Victims",
+        "scores": {
+          "vocals": {
+            "SDR": 3.35433,
+            "SIR": 18.5918,
+            "SAR": 3.67859,
+            "ISR": 10.5347
+          },
+          "instrumental": {
+            "SDR": 19.4528,
+            "SIR": 40.166,
+            "SAR": 29.4948,
+            "ISR": 19.6741
+          }
+        }
+      },
+      {
+        "track_name": "Cnoc An Tursa - Bannockburn",
+        "scores": {
+          "vocals": {
+            "SDR": 4.53327,
+            "SIR": 17.229,
+            "SAR": 4.24291,
+            "ISR": 7.07261
+          },
+          "instrumental": {
+            "SDR": 11.2504,
+            "SIR": 15.0017,
+            "SAR": 14.6025,
+            "ISR": 17.8569
+          }
+        }
+      },
+      {
+        "track_name": "Creepoid - OldTree",
+        "scores": {
+          "vocals": {
+            "SDR": 9.85855,
+            "SIR": 23.0928,
+            "SAR": 10.6531,
+            "ISR": 14.9853
+          },
+          "instrumental": {
+            "SDR": 16.9119,
+            "SIR": 28.2879,
+            "SAR": 19.8147,
+            "ISR": 19.1488
+          }
+        }
+      },
+      {
+        "track_name": "Dark Ride - Burning Bridges",
+        "scores": {
+          "vocals": {
+            "SDR": 8.48367,
+            "SIR": 20.6599,
+            "SAR": 8.7805,
+            "ISR": 12.4913
+          },
+          "instrumental": {
+            "SDR": 15.0735,
+            "SIR": 23.8228,
+            "SAR": 17.6036,
+            "ISR": 18.6037
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.811,
-        "SIR": 23.5803,
-        "SAR": 11.532,
+        "SDR": 10.3263,
+        "SIR": 23.2952,
+        "SAR": 10.8044,
         "ISR": 14.8284
       },
       "instrumental": {
-        "SDR": 16.3251,
-        "SIR": 26.9479,
-        "SAR": 18.6324,
-        "ISR": 18.584
+        "SDR": 16.373,
+        "SIR": 27.1383,
+        "SAR": 18.9453,
+        "ISR": 18.9417
       }
     },
     "stems": [
