@@ -613,20 +613,105 @@
             "ISR": 24.0501
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 5.15022,
+            "SIR": 12.9594,
+            "SAR": 5.2702,
+            "ISR": 12.1
+          },
+          "instrumental": {
+            "SDR": 14.2903,
+            "SIR": 22.4148,
+            "SAR": 17.1974,
+            "ISR": 18.2176
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 8.1041,
+            "SIR": 22.9987,
+            "SAR": 8.3819,
+            "ISR": 13.277
+          },
+          "instrumental": {
+            "SDR": 15.2919,
+            "SIR": 20.1393,
+            "SAR": 17.1399,
+            "ISR": 29.5608
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 9.70997,
+            "SIR": 25.086,
+            "SAR": 9.61721,
+            "ISR": 13.4541
+          },
+          "instrumental": {
+            "SDR": 16.8108,
+            "SIR": 21.3215,
+            "SAR": 18.4017,
+            "ISR": 24.6592
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 8.37693,
+            "SIR": 21.8776,
+            "SAR": 8.69275,
+            "ISR": 13.1925
+          },
+          "instrumental": {
+            "SDR": 12.2943,
+            "SIR": 16.7404,
+            "SAR": 13.7403,
+            "ISR": 21.0744
+          }
+        }
+      },
+      {
+        "track_name": "James May - Dont Let Go",
+        "scores": {
+          "vocals": {
+            "SDR": 7.90122,
+            "SIR": 20.671,
+            "SAR": 8.24112,
+            "ISR": 12.8178
+          },
+          "instrumental": {
+            "SDR": 14.483,
+            "SIR": 19.329,
+            "SAR": 16.6609,
+            "ISR": 27.6775
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 7.6721,
-        "SIR": 18.6671,
-        "SAR": 7.71117,
-        "ISR": 12.8686
+        "SDR": 7.90122,
+        "SIR": 18.7958,
+        "SAR": 8.23403,
+        "ISR": 12.9868
       },
       "instrumental": {
-        "SDR": 13.3306,
-        "SIR": 18.0843,
-        "SAR": 15.3621,
-        "ISR": 21.2775
+        "SDR": 13.7255,
+        "SIR": 18.3,
+        "SAR": 15.7333,
+        "ISR": 21.4193
       }
     },
     "stems": [
@@ -1249,20 +1334,105 @@
             "ISR": 23.3422
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 5.67221,
+            "SIR": 15.8116,
+            "SAR": 6.46644,
+            "ISR": 11.5847
+          },
+          "instrumental": {
+            "SDR": 13.714,
+            "SIR": 19.362,
+            "SAR": 16.8602,
+            "ISR": 18.5052
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 8.28571,
+            "SIR": 22.7856,
+            "SAR": 8.59891,
+            "ISR": 12.9408
+          },
+          "instrumental": {
+            "SDR": 14.7266,
+            "SIR": 19.0016,
+            "SAR": 17.0098,
+            "ISR": 30.5897
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 9.74135,
+            "SIR": 24.7042,
+            "SAR": 10.1537,
+            "ISR": 13.61
+          },
+          "instrumental": {
+            "SDR": 16.5424,
+            "SIR": 21.2135,
+            "SAR": 18.6524,
+            "ISR": 24.0354
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 8.22333,
+            "SIR": 22.2872,
+            "SAR": 8.58902,
+            "ISR": 12.3432
+          },
+          "instrumental": {
+            "SDR": 11.966,
+            "SIR": 15.8178,
+            "SAR": 13.9315,
+            "ISR": 21.7672
+          }
+        }
+      },
+      {
+        "track_name": "James May - Dont Let Go",
+        "scores": {
+          "vocals": {
+            "SDR": 7.56321,
+            "SIR": 19.3301,
+            "SAR": 8.16277,
+            "ISR": 13.0004
+          },
+          "instrumental": {
+            "SDR": 14.1486,
+            "SIR": 19.1956,
+            "SAR": 16.5119,
+            "ISR": 26.3537
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.10224,
-        "SIR": 18.9502,
-        "SAR": 8.62311,
-        "ISR": 12.6951
+        "SDR": 8.22333,
+        "SIR": 19.1347,
+        "SAR": 8.58902,
+        "ISR": 12.6987
       },
       "instrumental": {
-        "SDR": 13.4269,
-        "SIR": 17.5857,
-        "SAR": 15.6484,
-        "ISR": 20.9997
+        "SDR": 13.487,
+        "SIR": 17.8738,
+        "SAR": 15.7184,
+        "ISR": 21.2252
       }
     },
     "stems": [
@@ -1885,20 +2055,105 @@
             "ISR": 24.9136
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 5.68265,
+            "SIR": 17.4903,
+            "SAR": 5.99527,
+            "ISR": 12.1328
+          },
+          "instrumental": {
+            "SDR": 13.8438,
+            "SIR": 20.3494,
+            "SAR": 15.9869,
+            "ISR": 18.8644
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 8.64884,
+            "SIR": 25.7387,
+            "SAR": 8.71953,
+            "ISR": 14.5045
+          },
+          "instrumental": {
+            "SDR": 15.7677,
+            "SIR": 21.1307,
+            "SAR": 17.1144,
+            "ISR": 31.3504
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 9.66948,
+            "SIR": 25.4119,
+            "SAR": 9.57384,
+            "ISR": 14.9568
+          },
+          "instrumental": {
+            "SDR": 17.821,
+            "SIR": 23.8168,
+            "SAR": 18.7191,
+            "ISR": 24.7344
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 8.92995,
+            "SIR": 22.3634,
+            "SAR": 9.40023,
+            "ISR": 14.7581
+          },
+          "instrumental": {
+            "SDR": 13.3516,
+            "SIR": 19.0998,
+            "SAR": 14.5473,
+            "ISR": 21.3029
+          }
+        }
+      },
+      {
+        "track_name": "James May - Dont Let Go",
+        "scores": {
+          "vocals": {
+            "SDR": 8.21814,
+            "SIR": 21.5639,
+            "SAR": 8.34549,
+            "ISR": 14.0699
+          },
+          "instrumental": {
+            "SDR": 14.6893,
+            "SIR": 20.8312,
+            "SAR": 16.6097,
+            "ISR": 28.4509
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 7.5915,
-        "SIR": 19.9588,
-        "SAR": 7.72856,
-        "ISR": 13.4975
+        "SDR": 8.21814,
+        "SIR": 20.3525,
+        "SAR": 8.34549,
+        "ISR": 14.0572
       },
       "instrumental": {
-        "SDR": 14.0127,
-        "SIR": 19.6763,
-        "SAR": 15.1021,
-        "ISR": 20.8126
+        "SDR": 14.0458,
+        "SIR": 20.0763,
+        "SAR": 15.4328,
+        "ISR": 20.8662
       }
     },
     "stems": [
@@ -2521,20 +2776,105 @@
             "ISR": 21.6239
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 6.04269,
+            "SIR": 17.7199,
+            "SAR": 6.36607,
+            "ISR": 12.8428
+          },
+          "instrumental": {
+            "SDR": 12.9125,
+            "SIR": 20.4129,
+            "SAR": 15.4367,
+            "ISR": 18.6254
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 8.78669,
+            "SIR": 23.9042,
+            "SAR": 8.79118,
+            "ISR": 15.3333
+          },
+          "instrumental": {
+            "SDR": 15.5209,
+            "SIR": 21.7498,
+            "SAR": 16.7422,
+            "ISR": 29.4908
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 9.97353,
+            "SIR": 24.067,
+            "SAR": 9.98042,
+            "ISR": 15.3978
+          },
+          "instrumental": {
+            "SDR": 17.2547,
+            "SIR": 23.3484,
+            "SAR": 18.2358,
+            "ISR": 24.1993
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 8.92523,
+            "SIR": 21.1312,
+            "SAR": 9.516,
+            "ISR": 15.3797
+          },
+          "instrumental": {
+            "SDR": 12.8788,
+            "SIR": 19.4166,
+            "SAR": 14.0514,
+            "ISR": 20.5532
+          }
+        }
+      },
+      {
+        "track_name": "James May - Dont Let Go",
+        "scores": {
+          "vocals": {
+            "SDR": 8.03945,
+            "SIR": 19.9597,
+            "SAR": 8.36785,
+            "ISR": 14.808
+          },
+          "instrumental": {
+            "SDR": 14.5298,
+            "SIR": 21.413,
+            "SAR": 16.0827,
+            "ISR": 26.727
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.03683,
-        "SIR": 17.9486,
-        "SAR": 7.74298,
-        "ISR": 15.0863
+        "SDR": 8.34587,
+        "SIR": 18.1643,
+        "SAR": 8.36785,
+        "ISR": 15.2048
       },
       "instrumental": {
-        "SDR": 13.5271,
-        "SIR": 20.4983,
-        "SAR": 14.9052,
-        "ISR": 19.8137
+        "SDR": 13.5627,
+        "SIR": 20.5148,
+        "SAR": 15.001,
+        "ISR": 20.5532
       }
     },
     "stems": [
@@ -3157,20 +3497,105 @@
             "ISR": 30.2452
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 6.58559,
+            "SIR": 19.4079,
+            "SAR": 6.9424,
+            "ISR": 11.2179
+          },
+          "instrumental": {
+            "SDR": 12.7295,
+            "SIR": 17.6338,
+            "SAR": 15.811,
+            "ISR": 19.1735
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 7.78755,
+            "SIR": 24.0087,
+            "SAR": 7.47872,
+            "ISR": 11.2765
+          },
+          "instrumental": {
+            "SDR": 14.543,
+            "SIR": 17.0304,
+            "SAR": 16.3599,
+            "ISR": 28.2525
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 6.81987,
+            "SIR": 26.6712,
+            "SAR": 6.12698,
+            "ISR": 9.03664
+          },
+          "instrumental": {
+            "SDR": 16.1393,
+            "SIR": 15.7737,
+            "SAR": 16.1919,
+            "ISR": 24.8093
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 8.2805,
+            "SIR": 25.3755,
+            "SAR": 8.52245,
+            "ISR": 11.7108
+          },
+          "instrumental": {
+            "SDR": 11.4196,
+            "SIR": 13.5415,
+            "SAR": 13.3605,
+            "ISR": 22.6007
+          }
+        }
+      },
+      {
+        "track_name": "James May - Dont Let Go",
+        "scores": {
+          "vocals": {
+            "SDR": 7.77034,
+            "SIR": 20.2996,
+            "SAR": 8.54363,
+            "ISR": 12.7826
+          },
+          "instrumental": {
+            "SDR": 14.3102,
+            "SIR": 18.9809,
+            "SAR": 16.7468,
+            "ISR": 27.2321
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 4.64166,
-        "SIR": 22.3751,
-        "SAR": 3.5961,
-        "ISR": 6.02063
+        "SDR": 5.20256,
+        "SIR": 22.754,
+        "SAR": 4.10065,
+        "ISR": 7.16253
       },
       "instrumental": {
-        "SDR": 11.9564,
-        "SIR": 10.8694,
-        "SAR": 14.8394,
-        "ISR": 22.1884
+        "SDR": 12.2249,
+        "SIR": 13.2666,
+        "SAR": 14.9156,
+        "ISR": 22.5482
       }
     },
     "stems": [
@@ -3793,20 +4218,105 @@
             "ISR": 31.9148
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 6.34193,
+            "SIR": 18.6291,
+            "SAR": 6.91061,
+            "ISR": 11.1377
+          },
+          "instrumental": {
+            "SDR": 13.1981,
+            "SIR": 18.1297,
+            "SAR": 16.5326,
+            "ISR": 19.5379
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 8.46422,
+            "SIR": 25.181,
+            "SAR": 8.59972,
+            "ISR": 12.585
+          },
+          "instrumental": {
+            "SDR": 15.2965,
+            "SIR": 18.6346,
+            "SAR": 17.4095,
+            "ISR": 23.6427
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 5.62149,
+            "SIR": 25.5108,
+            "SAR": 5.43217,
+            "ISR": 9.20098
+          },
+          "instrumental": {
+            "SDR": 16.4761,
+            "SIR": 16.7174,
+            "SAR": 16.7227,
+            "ISR": 24.5484
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 8.52432,
+            "SIR": 25.6619,
+            "SAR": 8.61282,
+            "ISR": 12.2143
+          },
+          "instrumental": {
+            "SDR": 11.7204,
+            "SIR": 14.2243,
+            "SAR": 13.4859,
+            "ISR": 22.2115
+          }
+        }
+      },
+      {
+        "track_name": "James May - Dont Let Go",
+        "scores": {
+          "vocals": {
+            "SDR": 7.55174,
+            "SIR": 19.6464,
+            "SAR": 8.34298,
+            "ISR": 13.0978
+          },
+          "instrumental": {
+            "SDR": 14.3714,
+            "SIR": 19.1923,
+            "SAR": 16.5584,
+            "ISR": 27.3065
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 4.39637,
-        "SIR": 21.2829,
-        "SAR": 3.60074,
-        "ISR": 6.71066
+        "SDR": 4.64021,
+        "SIR": 21.2921,
+        "SAR": 4.25342,
+        "ISR": 7.24707
       },
       "instrumental": {
-        "SDR": 12.6361,
-        "SIR": 12.5536,
-        "SAR": 15.2296,
-        "ISR": 21.4425
+        "SDR": 12.9745,
+        "SIR": 13.7369,
+        "SAR": 15.2978,
+        "ISR": 21.991
       }
     },
     "stems": [
@@ -4429,20 +4939,105 @@
             "ISR": 21.8897
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 5.89447,
+            "SIR": 16.8714,
+            "SAR": 6.65307,
+            "ISR": 11.5714
+          },
+          "instrumental": {
+            "SDR": 13.5069,
+            "SIR": 18.8977,
+            "SAR": 16.5729,
+            "ISR": 18.9864
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 8.77945,
+            "SIR": 24.268,
+            "SAR": 9.28198,
+            "ISR": 13.7379
+          },
+          "instrumental": {
+            "SDR": 15.7713,
+            "SIR": 20.2268,
+            "SAR": 17.9744,
+            "ISR": 32.1029
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 9.80116,
+            "SIR": 26.0144,
+            "SAR": 10.0654,
+            "ISR": 13.3923
+          },
+          "instrumental": {
+            "SDR": 16.7233,
+            "SIR": 20.8795,
+            "SAR": 18.5056,
+            "ISR": 24.2901
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 8.27226,
+            "SIR": 21.8389,
+            "SAR": 8.96911,
+            "ISR": 13.0366
+          },
+          "instrumental": {
+            "SDR": 12.1889,
+            "SIR": 16.3723,
+            "SAR": 13.755,
+            "ISR": 21.1589
+          }
+        }
+      },
+      {
+        "track_name": "James May - Dont Let Go",
+        "scores": {
+          "vocals": {
+            "SDR": 7.95115,
+            "SIR": 20.8892,
+            "SAR": 8.6603,
+            "ISR": 12.6023
+          },
+          "instrumental": {
+            "SDR": 14.436,
+            "SIR": 18.7546,
+            "SAR": 16.8965,
+            "ISR": 28.7178
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.32223,
-        "SIR": 19.8423,
-        "SAR": 9.06888,
-        "ISR": 13.1676
+        "SDR": 8.30713,
+        "SIR": 20.3737,
+        "SAR": 9.04699,
+        "ISR": 13.0366
       },
       "instrumental": {
-        "SDR": 13.2477,
-        "SIR": 17.7711,
-        "SAR": 15.5539,
-        "ISR": 21.2337
+        "SDR": 13.5069,
+        "SIR": 17.8098,
+        "SAR": 16.0153,
+        "ISR": 21.3062
       }
     },
     "stems": [
@@ -5065,20 +5660,105 @@
             "ISR": 22.8434
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 5.50834,
+            "SIR": 15.3045,
+            "SAR": 6.04962,
+            "ISR": 11.4284
+          },
+          "instrumental": {
+            "SDR": 13.6646,
+            "SIR": 20.2119,
+            "SAR": 16.6316,
+            "ISR": 18.326
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 8.22251,
+            "SIR": 23.4458,
+            "SAR": 8.59403,
+            "ISR": 12.6463
+          },
+          "instrumental": {
+            "SDR": 14.9076,
+            "SIR": 19.1517,
+            "SAR": 17.0845,
+            "ISR": 29.8717
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 9.65171,
+            "SIR": 25.0941,
+            "SAR": 9.78456,
+            "ISR": 12.5468
+          },
+          "instrumental": {
+            "SDR": 16.5769,
+            "SIR": 20.5809,
+            "SAR": 18.5276,
+            "ISR": 24.697
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 8.30663,
+            "SIR": 21.702,
+            "SAR": 8.76429,
+            "ISR": 12.5591
+          },
+          "instrumental": {
+            "SDR": 12.1806,
+            "SIR": 16.273,
+            "SAR": 13.9889,
+            "ISR": 21.2666
+          }
+        }
+      },
+      {
+        "track_name": "James May - Dont Let Go",
+        "scores": {
+          "vocals": {
+            "SDR": 7.82587,
+            "SIR": 20.0076,
+            "SAR": 8.39395,
+            "ISR": 12.7493
+          },
+          "instrumental": {
+            "SDR": 14.2692,
+            "SIR": 19.0398,
+            "SAR": 16.5854,
+            "ISR": 27.17
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.14732,
-        "SIR": 19.6265,
-        "SAR": 8.34341,
-        "ISR": 12.3546
+        "SDR": 8.22251,
+        "SIR": 19.9612,
+        "SAR": 8.59403,
+        "ISR": 12.4659
       },
       "instrumental": {
-        "SDR": 13.3811,
-        "SIR": 17.5334,
-        "SAR": 15.5862,
-        "ISR": 21.0645
+        "SDR": 13.4967,
+        "SIR": 17.7386,
+        "SAR": 15.6787,
+        "ISR": 21.2666
       }
     },
     "stems": [
@@ -5701,20 +6381,105 @@
             "ISR": 23.4678
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 5.33799,
+            "SIR": 14.4166,
+            "SAR": 5.4313,
+            "ISR": 10.8145
+          },
+          "instrumental": {
+            "SDR": 14.8741,
+            "SIR": 21.0435,
+            "SAR": 17.9999,
+            "ISR": 18.6252
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 7.99198,
+            "SIR": 23.5181,
+            "SAR": 8.34209,
+            "ISR": 12.5971
+          },
+          "instrumental": {
+            "SDR": 15.2871,
+            "SIR": 19.385,
+            "SAR": 17.2405,
+            "ISR": 29.9486
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 9.57819,
+            "SIR": 25.6947,
+            "SAR": 9.74428,
+            "ISR": 12.9988
+          },
+          "instrumental": {
+            "SDR": 16.9069,
+            "SIR": 20.8965,
+            "SAR": 18.9081,
+            "ISR": 24.8489
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 8.26817,
+            "SIR": 22.9365,
+            "SAR": 8.88114,
+            "ISR": 12.2538
+          },
+          "instrumental": {
+            "SDR": 12.3143,
+            "SIR": 16.0665,
+            "SAR": 14.2893,
+            "ISR": 21.7174
+          }
+        }
+      },
+      {
+        "track_name": "James May - Dont Let Go",
+        "scores": {
+          "vocals": {
+            "SDR": 7.91646,
+            "SIR": 20.7634,
+            "SAR": 8.41774,
+            "ISR": 12.6083
+          },
+          "instrumental": {
+            "SDR": 14.3384,
+            "SIR": 18.8894,
+            "SAR": 16.899,
+            "ISR": 27.8449
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 7.90542,
-        "SIR": 19.4154,
-        "SAR": 8.15686,
-        "ISR": 11.8338
+        "SDR": 7.98183,
+        "SIR": 19.6575,
+        "SAR": 8.34209,
+        "ISR": 12.1257
       },
       "instrumental": {
-        "SDR": 13.4887,
-        "SIR": 17.7875,
-        "SAR": 15.7465,
-        "ISR": 21.5444
+        "SDR": 13.6583,
+        "SIR": 18.1526,
+        "SAR": 16.0058,
+        "ISR": 22.0488
       }
     },
     "stems": [
@@ -6337,20 +7102,105 @@
             "ISR": 22.4215
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 2.9839,
+            "SIR": 4.65898,
+            "SAR": 1.55571,
+            "ISR": 10.5974
+          },
+          "instrumental": {
+            "SDR": 18.178,
+            "SIR": 26.5809,
+            "SAR": 20.3547,
+            "ISR": 17.9172
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 7.38466,
+            "SIR": 21.0508,
+            "SAR": 7.79172,
+            "ISR": 12.3868
+          },
+          "instrumental": {
+            "SDR": 15.7027,
+            "SIR": 20.1125,
+            "SAR": 17.4991,
+            "ISR": 28.0891
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 8.35869,
+            "SIR": 24.3349,
+            "SAR": 8.66062,
+            "ISR": 12.0172
+          },
+          "instrumental": {
+            "SDR": 16.9297,
+            "SIR": 21.0908,
+            "SAR": 18.7642,
+            "ISR": 24.095
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 7.75028,
+            "SIR": 21.6046,
+            "SAR": 8.55142,
+            "ISR": 11.6882
+          },
+          "instrumental": {
+            "SDR": 12.0793,
+            "SIR": 15.4816,
+            "SAR": 14.0158,
+            "ISR": 21.6839
+          }
+        }
+      },
+      {
+        "track_name": "James May - Dont Let Go",
+        "scores": {
+          "vocals": {
+            "SDR": 7.46119,
+            "SIR": 19.7891,
+            "SAR": 7.97103,
+            "ISR": 12.4279
+          },
+          "instrumental": {
+            "SDR": 14.2304,
+            "SIR": 18.8039,
+            "SAR": 16.389,
+            "ISR": 25.723
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 7.54324,
-        "SIR": 18.4785,
-        "SAR": 7.7683,
-        "ISR": 12.0434
+        "SDR": 7.46119,
+        "SIR": 18.5401,
+        "SAR": 7.97103,
+        "ISR": 12.0172
       },
       "instrumental": {
-        "SDR": 13.0596,
-        "SIR": 18.0646,
-        "SAR": 15.128,
-        "ISR": 20.0387
+        "SDR": 13.3166,
+        "SIR": 18.2858,
+        "SAR": 15.4571,
+        "ISR": 20.6292
       }
     },
     "stems": [
@@ -6973,20 +7823,105 @@
             "ISR": 23.4322
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 1.60752,
+            "SIR": 5.48203,
+            "SAR": 1.35698,
+            "ISR": 10.3112
+          },
+          "instrumental": {
+            "SDR": 15.4661,
+            "SIR": 26.3381,
+            "SAR": 18.7769,
+            "ISR": 17.9984
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 7.30248,
+            "SIR": 20.9118,
+            "SAR": 7.61325,
+            "ISR": 12.2099
+          },
+          "instrumental": {
+            "SDR": 15.962,
+            "SIR": 20.1418,
+            "SAR": 17.6917,
+            "ISR": 28.3288
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 8.14863,
+            "SIR": 24.9556,
+            "SAR": 8.30588,
+            "ISR": 11.7522
+          },
+          "instrumental": {
+            "SDR": 16.9524,
+            "SIR": 20.7986,
+            "SAR": 18.7984,
+            "ISR": 24.2858
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 7.79451,
+            "SIR": 22.4829,
+            "SAR": 8.58089,
+            "ISR": 11.7168
+          },
+          "instrumental": {
+            "SDR": 12.0624,
+            "SIR": 15.373,
+            "SAR": 13.8614,
+            "ISR": 22.0634
+          }
+        }
+      },
+      {
+        "track_name": "James May - Dont Let Go",
+        "scores": {
+          "vocals": {
+            "SDR": 7.22383,
+            "SIR": 20.1185,
+            "SAR": 7.87232,
+            "ISR": 12.1618
+          },
+          "instrumental": {
+            "SDR": 14.085,
+            "SIR": 18.6513,
+            "SAR": 16.4229,
+            "ISR": 25.9444
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 7.23196,
-        "SIR": 18.6573,
-        "SAR": 7.35405,
-        "ISR": 11.7187
+        "SDR": 7.30248,
+        "SIR": 18.7681,
+        "SAR": 7.61325,
+        "ISR": 11.7522
       },
       "instrumental": {
-        "SDR": 13.3077,
-        "SIR": 17.9212,
-        "SAR": 15.2654,
-        "ISR": 19.9325
+        "SDR": 13.7908,
+        "SIR": 18.2079,
+        "SAR": 15.54,
+        "ISR": 20.986
       }
     },
     "stems": [
@@ -7609,20 +8544,105 @@
             "ISR": 23.7143
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 5.30538,
+            "SIR": 14.9096,
+            "SAR": 5.67958,
+            "ISR": 11.3022
+          },
+          "instrumental": {
+            "SDR": 13.0586,
+            "SIR": 19.4625,
+            "SAR": 16.1133,
+            "ISR": 18.481
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 8.23986,
+            "SIR": 23.4319,
+            "SAR": 8.4494,
+            "ISR": 12.8163
+          },
+          "instrumental": {
+            "SDR": 14.714,
+            "SIR": 19.1031,
+            "SAR": 16.8113,
+            "ISR": 29.9726
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 8.36405,
+            "SIR": 24.4449,
+            "SAR": 8.86552,
+            "ISR": 11.9543
+          },
+          "instrumental": {
+            "SDR": 16.5202,
+            "SIR": 20.6881,
+            "SAR": 18.1013,
+            "ISR": 24.1135
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 7.93737,
+            "SIR": 22.5637,
+            "SAR": 8.46623,
+            "ISR": 11.6299
+          },
+          "instrumental": {
+            "SDR": 11.6523,
+            "SIR": 15.1138,
+            "SAR": 13.979,
+            "ISR": 21.6857
+          }
+        }
+      },
+      {
+        "track_name": "James May - Dont Let Go",
+        "scores": {
+          "vocals": {
+            "SDR": 7.12085,
+            "SIR": 19.1023,
+            "SAR": 7.62759,
+            "ISR": 12.3058
+          },
+          "instrumental": {
+            "SDR": 14.0382,
+            "SIR": 18.5704,
+            "SAR": 16.3556,
+            "ISR": 26.0105
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 7.48297,
-        "SIR": 18.8225,
-        "SAR": 7.66603,
-        "ISR": 11.9258
+        "SDR": 7.49493,
+        "SIR": 19.0845,
+        "SAR": 7.94933,
+        "ISR": 11.9543
       },
       "instrumental": {
-        "SDR": 12.8912,
-        "SIR": 17.5251,
-        "SAR": 15.3018,
-        "ISR": 19.7777
+        "SDR": 13.0586,
+        "SIR": 17.983,
+        "SAR": 15.4814,
+        "ISR": 21.1316
       }
     },
     "stems": [
@@ -8245,20 +9265,105 @@
             "ISR": 24.1121
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 4.51984,
+            "SIR": 11.638,
+            "SAR": 4.68858,
+            "ISR": 11.2223
+          },
+          "instrumental": {
+            "SDR": 13.7783,
+            "SIR": 21.6232,
+            "SAR": 16.6126,
+            "ISR": 17.9909
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 7.84301,
+            "SIR": 23.6197,
+            "SAR": 8.17242,
+            "ISR": 12.3188
+          },
+          "instrumental": {
+            "SDR": 14.9459,
+            "SIR": 19.1077,
+            "SAR": 17.2316,
+            "ISR": 30.1052
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 9.15174,
+            "SIR": 25.4632,
+            "SAR": 8.93095,
+            "ISR": 12.3378
+          },
+          "instrumental": {
+            "SDR": 17.1115,
+            "SIR": 20.6906,
+            "SAR": 18.7004,
+            "ISR": 24.8482
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 8.02677,
+            "SIR": 23.2843,
+            "SAR": 8.57835,
+            "ISR": 11.4552
+          },
+          "instrumental": {
+            "SDR": 11.8811,
+            "SIR": 15.1211,
+            "SAR": 14.086,
+            "ISR": 21.8536
+          }
+        }
+      },
+      {
+        "track_name": "James May - Dont Let Go",
+        "scores": {
+          "vocals": {
+            "SDR": 7.6846,
+            "SIR": 20.7786,
+            "SAR": 8.4539,
+            "ISR": 12.2047
+          },
+          "instrumental": {
+            "SDR": 14.2158,
+            "SIR": 18.655,
+            "SAR": 16.7755,
+            "ISR": 28.0416
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 7.70002,
-        "SIR": 18.4209,
-        "SAR": 7.64616,
-        "ISR": 11.8481
+        "SDR": 7.84301,
+        "SIR": 18.9585,
+        "SAR": 8.17242,
+        "ISR": 12.0276
       },
       "instrumental": {
-        "SDR": 13.1736,
-        "SIR": 17.4019,
-        "SAR": 15.4169,
-        "ISR": 20.5559
+        "SDR": 13.3243,
+        "SIR": 17.5715,
+        "SAR": 15.6149,
+        "ISR": 20.6964
       }
     },
     "stems": [
@@ -8881,20 +9986,105 @@
             "ISR": 23.47
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 4.77356,
+            "SIR": 12.6533,
+            "SAR": 5.00826,
+            "ISR": 11.6876
+          },
+          "instrumental": {
+            "SDR": 13.8303,
+            "SIR": 20.5646,
+            "SAR": 16.2602,
+            "ISR": 17.8629
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 8.01294,
+            "SIR": 22.6827,
+            "SAR": 8.21141,
+            "ISR": 12.8724
+          },
+          "instrumental": {
+            "SDR": 15.1509,
+            "SIR": 19.7286,
+            "SAR": 17.1011,
+            "ISR": 29.1674
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 9.19851,
+            "SIR": 24.9079,
+            "SAR": 9.1992,
+            "ISR": 12.7973
+          },
+          "instrumental": {
+            "SDR": 16.8754,
+            "SIR": 20.7992,
+            "SAR": 18.5041,
+            "ISR": 24.6454
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 8.05843,
+            "SIR": 23.7943,
+            "SAR": 8.59817,
+            "ISR": 11.5114
+          },
+          "instrumental": {
+            "SDR": 11.7621,
+            "SIR": 15.0864,
+            "SAR": 14.1552,
+            "ISR": 22.0227
+          }
+        }
+      },
+      {
+        "track_name": "James May - Dont Let Go",
+        "scores": {
+          "vocals": {
+            "SDR": 7.59345,
+            "SIR": 20.7982,
+            "SAR": 8.29149,
+            "ISR": 12.0623
+          },
+          "instrumental": {
+            "SDR": 14.2786,
+            "SIR": 18.6844,
+            "SAR": 16.8824,
+            "ISR": 28.1603
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 7.98468,
-        "SIR": 18.7674,
-        "SAR": 8.02593,
-        "ISR": 12.487
+        "SDR": 8.01294,
+        "SIR": 19.0885,
+        "SAR": 8.29149,
+        "ISR": 12.4327
       },
       "instrumental": {
-        "SDR": 13.1418,
-        "SIR": 17.7097,
-        "SAR": 15.1916,
-        "ISR": 21.3684
+        "SDR": 13.5482,
+        "SIR": 17.7544,
+        "SAR": 15.2542,
+        "ISR": 21.5514
       }
     },
     "stems": [
@@ -9517,20 +10707,105 @@
             "ISR": 24.4958
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 5.24717,
+            "SIR": 15.2307,
+            "SAR": 5.72997,
+            "ISR": 10.2738
+          },
+          "instrumental": {
+            "SDR": 14.5056,
+            "SIR": 19.3122,
+            "SAR": 17.8237,
+            "ISR": 18.9927
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 9.35463,
+            "SIR": 24.6351,
+            "SAR": 9.71368,
+            "ISR": 14.2319
+          },
+          "instrumental": {
+            "SDR": 15.5978,
+            "SIR": 20.2629,
+            "SAR": 17.6386,
+            "ISR": 30.9372
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 8.85196,
+            "SIR": 25.0897,
+            "SAR": 9.19933,
+            "ISR": 11.9327
+          },
+          "instrumental": {
+            "SDR": 16.2559,
+            "SIR": 20.3272,
+            "SAR": 18.3855,
+            "ISR": 24.2826
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 8.24832,
+            "SIR": 24.3849,
+            "SAR": 8.88159,
+            "ISR": 11.5826
+          },
+          "instrumental": {
+            "SDR": 11.9588,
+            "SIR": 15.1944,
+            "SAR": 14.4311,
+            "ISR": 22.3589
+          }
+        }
+      },
+      {
+        "track_name": "James May - Dont Let Go",
+        "scores": {
+          "vocals": {
+            "SDR": 7.09862,
+            "SIR": 20.0806,
+            "SAR": 8.14292,
+            "ISR": 11.3661
+          },
+          "instrumental": {
+            "SDR": 14.0197,
+            "SIR": 17.7861,
+            "SAR": 16.5663,
+            "ISR": 26.9919
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 7.48447,
-        "SIR": 20.0466,
-        "SAR": 8.06049,
-        "ISR": 11.6608
+        "SDR": 7.53246,
+        "SIR": 20.0806,
+        "SAR": 8.19655,
+        "ISR": 11.5826
       },
       "instrumental": {
-        "SDR": 13.0622,
-        "SIR": 16.6684,
-        "SAR": 15.461,
-        "ISR": 20.5237
+        "SDR": 13.1225,
+        "SIR": 16.8575,
+        "SAR": 15.73,
+        "ISR": 21.1574
       }
     },
     "stems": [
@@ -10153,20 +11428,105 @@
             "ISR": 23.6688
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 5.38992,
+            "SIR": 15.7863,
+            "SAR": 6.01618,
+            "ISR": 10.4057
+          },
+          "instrumental": {
+            "SDR": 13.4765,
+            "SIR": 18.9054,
+            "SAR": 16.4919,
+            "ISR": 18.8983
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 9.07499,
+            "SIR": 24.3168,
+            "SAR": 9.47002,
+            "ISR": 14.0612
+          },
+          "instrumental": {
+            "SDR": 15.7923,
+            "SIR": 20.4386,
+            "SAR": 17.7775,
+            "ISR": 30.9416
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 8.55129,
+            "SIR": 24.6962,
+            "SAR": 8.80227,
+            "ISR": 11.7298
+          },
+          "instrumental": {
+            "SDR": 16.3715,
+            "SIR": 20.5855,
+            "SAR": 18.6586,
+            "ISR": 24.1959
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 8.26149,
+            "SIR": 24.3251,
+            "SAR": 8.9076,
+            "ISR": 11.7729
+          },
+          "instrumental": {
+            "SDR": 12.1055,
+            "SIR": 15.514,
+            "SAR": 14.5863,
+            "ISR": 22.3034
+          }
+        }
+      },
+      {
+        "track_name": "James May - Dont Let Go",
+        "scores": {
+          "vocals": {
+            "SDR": 7.11251,
+            "SIR": 19.8879,
+            "SAR": 8.10484,
+            "ISR": 11.545
+          },
+          "instrumental": {
+            "SDR": 13.9713,
+            "SIR": 17.9623,
+            "SAR": 16.5374,
+            "ISR": 26.8822
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 7.12815,
-        "SIR": 19.7094,
-        "SAR": 7.61339,
-        "ISR": 11.3905
+        "SDR": 7.42881,
+        "SIR": 19.7876,
+        "SAR": 8.01042,
+        "ISR": 11.5308
       },
       "instrumental": {
-        "SDR": 13.2896,
-        "SIR": 17.2503,
-        "SAR": 15.4684,
-        "ISR": 20.4411
+        "SDR": 13.3184,
+        "SIR": 17.4712,
+        "SAR": 15.6419,
+        "ISR": 21.4503
       }
     },
     "stems": [
@@ -10849,20 +12209,105 @@
             "ISR": 14.7971
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": -0.32474,
+            "SIR": -14.1332,
+            "SAR": -2.14238,
+            "ISR": 0.25697
+          },
+          "instrumental": {
+            "SDR": 12.0616,
+            "SIR": 15.8927,
+            "SAR": 24.8659,
+            "ISR": 18.0995
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": -0.02668,
+            "SIR": -1.82824,
+            "SAR": -0.13726,
+            "ISR": 0.86444
+          },
+          "instrumental": {
+            "SDR": 7.65412,
+            "SIR": 7.41909,
+            "SAR": 22.2664,
+            "ISR": 19.358
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 0.00083,
+            "SIR": 14.3415,
+            "SAR": -0.2663,
+            "ISR": 1.00558
+          },
+          "instrumental": {
+            "SDR": 7.58665,
+            "SIR": 8.01065,
+            "SAR": 23.6744,
+            "ISR": 25.0603
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 0.007785,
+            "SIR": 4.49145,
+            "SAR": -0.53294,
+            "ISR": 0.54762
+          },
+          "instrumental": {
+            "SDR": 8.96662,
+            "SIR": 8.24758,
+            "SAR": 20.1794,
+            "ISR": 18.2859
+          }
+        }
+      },
+      {
+        "track_name": "James May - Dont Let Go",
+        "scores": {
+          "vocals": {
+            "SDR": 0.0,
+            "SIR": -31.3216,
+            "SAR": -4e-05,
+            "ISR": 0.02305
+          },
+          "instrumental": {
+            "SDR": 6.71564,
+            "SIR": 6.73194,
+            "SAR": 22.1283,
+            "ISR": 17.061
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 0.113132,
-        "SIR": 9.69729,
-        "SAR": 0.00056,
-        "ISR": 1.57697
+        "SDR": 0.0369,
+        "SIR": 8.50288,
+        "SAR": 3e-05,
+        "ISR": 1.5489
       },
       "instrumental": {
-        "SDR": 7.72889,
-        "SIR": 8.18215,
-        "SAR": 15.6567,
-        "ISR": 19.029
+        "SDR": 7.71278,
+        "SIR": 8.17666,
+        "SAR": 16.39,
+        "ISR": 18.9997
       }
     },
     "stems": [
@@ -11485,20 +12930,105 @@
             "ISR": 21.4655
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 5.24156,
+            "SIR": 15.9899,
+            "SAR": 5.29469,
+            "ISR": 11.2274
+          },
+          "instrumental": {
+            "SDR": 12.2661,
+            "SIR": 18.222,
+            "SAR": 14.9786,
+            "ISR": 18.2719
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 7.33451,
+            "SIR": 23.5481,
+            "SAR": 7.67851,
+            "ISR": 11.4429
+          },
+          "instrumental": {
+            "SDR": 13.7794,
+            "SIR": 17.3813,
+            "SAR": 16.1219,
+            "ISR": 31.4248
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 8.30791,
+            "SIR": 24.0661,
+            "SAR": 8.46494,
+            "ISR": 10.6745
+          },
+          "instrumental": {
+            "SDR": 15.2415,
+            "SIR": 17.9436,
+            "SAR": 17.2388,
+            "ISR": 23.9917
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 6.8583,
+            "SIR": 20.7505,
+            "SAR": 7.33039,
+            "ISR": 11.1598
+          },
+          "instrumental": {
+            "SDR": 10.9788,
+            "SIR": 14.4968,
+            "SAR": 13.0092,
+            "ISR": 20.7857
+          }
+        }
+      },
+      {
+        "track_name": "James May - Dont Let Go",
+        "scores": {
+          "vocals": {
+            "SDR": 6.38656,
+            "SIR": 18.1913,
+            "SAR": 7.05589,
+            "ISR": 11.4799
+          },
+          "instrumental": {
+            "SDR": 12.9472,
+            "SIR": 17.5936,
+            "SAR": 15.3739,
+            "ISR": 26.3415
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 6.61683,
-        "SIR": 18.2073,
-        "SAR": 6.55551,
-        "ISR": 10.5284
+        "SDR": 6.8583,
+        "SIR": 18.2223,
+        "SAR": 7.05589,
+        "ISR": 10.7319
       },
       "instrumental": {
-        "SDR": 11.9486,
-        "SIR": 15.3601,
-        "SAR": 14.7989,
-        "ISR": 20.2247
+        "SDR": 12.2661,
+        "SIR": 15.8607,
+        "SAR": 14.9786,
+        "ISR": 20.6921
       }
     },
     "stems": [
@@ -12121,20 +13651,105 @@
             "ISR": 25.2204
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 5.55968,
+            "SIR": 17.0061,
+            "SAR": 6.07319,
+            "ISR": 11.2038
+          },
+          "instrumental": {
+            "SDR": 12.3794,
+            "SIR": 18.0994,
+            "SAR": 15.3898,
+            "ISR": 18.3958
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 7.78558,
+            "SIR": 24.8375,
+            "SAR": 8.25331,
+            "ISR": 12.0214
+          },
+          "instrumental": {
+            "SDR": 14.4666,
+            "SIR": 18.1075,
+            "SAR": 16.8944,
+            "ISR": 32.6386
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 8.36498,
+            "SIR": 24.764,
+            "SAR": 8.80443,
+            "ISR": 11.1303
+          },
+          "instrumental": {
+            "SDR": 16.1173,
+            "SIR": 19.6311,
+            "SAR": 18.1249,
+            "ISR": 24.2693
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 7.51972,
+            "SIR": 23.2259,
+            "SAR": 8.06198,
+            "ISR": 11.1239
+          },
+          "instrumental": {
+            "SDR": 11.3152,
+            "SIR": 14.5681,
+            "SAR": 13.4831,
+            "ISR": 22.397
+          }
+        }
+      },
+      {
+        "track_name": "James May - Dont Let Go",
+        "scores": {
+          "vocals": {
+            "SDR": 6.98197,
+            "SIR": 19.5055,
+            "SAR": 7.73423,
+            "ISR": 11.6913
+          },
+          "instrumental": {
+            "SDR": 13.8241,
+            "SIR": 18.0304,
+            "SAR": 16.1106,
+            "ISR": 25.7671
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 6.555,
-        "SIR": 18.8381,
-        "SAR": 7.24571,
-        "ISR": 11.0323
+        "SDR": 6.98197,
+        "SIR": 19.5055,
+        "SAR": 7.73423,
+        "ISR": 11.1484
       },
       "instrumental": {
-        "SDR": 12.9054,
-        "SIR": 16.086,
-        "SAR": 15.2021,
-        "ISR": 20.6848
+        "SDR": 13.0481,
+        "SIR": 16.3978,
+        "SAR": 15.3898,
+        "ISR": 21.3385
       }
     },
     "stems": [
@@ -12757,20 +14372,105 @@
             "ISR": 22.7387
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 4.63972,
+            "SIR": 12.162,
+            "SAR": 4.69649,
+            "ISR": 13.5619
+          },
+          "instrumental": {
+            "SDR": 14.8,
+            "SIR": 24.2831,
+            "SAR": 17.1415,
+            "ISR": 17.787
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 7.64777,
+            "SIR": 22.8761,
+            "SAR": 7.6792,
+            "ISR": 14.3182
+          },
+          "instrumental": {
+            "SDR": 15.5046,
+            "SIR": 21.6225,
+            "SAR": 16.5703,
+            "ISR": 30.4884
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 7.92042,
+            "SIR": 22.5185,
+            "SAR": 8.14133,
+            "ISR": 11.7341
+          },
+          "instrumental": {
+            "SDR": 16.9359,
+            "SIR": 21.5351,
+            "SAR": 17.9104,
+            "ISR": 23.6473
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 7.65147,
+            "SIR": 17.7581,
+            "SAR": 8.14693,
+            "ISR": 14.4044
+          },
+          "instrumental": {
+            "SDR": 11.5437,
+            "SIR": 18.1257,
+            "SAR": 12.7496,
+            "ISR": 18.9138
+          }
+        }
+      },
+      {
+        "track_name": "James May - Dont Let Go",
+        "scores": {
+          "vocals": {
+            "SDR": 7.05077,
+            "SIR": 17.7585,
+            "SAR": 7.3985,
+            "ISR": 14.2439
+          },
+          "instrumental": {
+            "SDR": 13.7162,
+            "SIR": 20.4682,
+            "SAR": 15.4043,
+            "ISR": 24.2121
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 6.90123,
-        "SIR": 17.5846,
-        "SAR": 7.06671,
-        "ISR": 12.5873
+        "SDR": 7.53377,
+        "SIR": 17.7581,
+        "SAR": 7.62096,
+        "ISR": 13.0825
       },
       "instrumental": {
-        "SDR": 12.8293,
-        "SIR": 18.6322,
-        "SAR": 14.5633,
-        "ISR": 19.8413
+        "SDR": 13.1067,
+        "SIR": 19.4874,
+        "SAR": 15.0126,
+        "ISR": 19.8647
       }
     },
     "stems": [
@@ -13393,20 +15093,105 @@
             "ISR": 17.5689
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 5.02464,
+            "SIR": 15.6789,
+            "SAR": 5.49276,
+            "ISR": 10.7681
+          },
+          "instrumental": {
+            "SDR": 13.0376,
+            "SIR": 18.2861,
+            "SAR": 15.9109,
+            "ISR": 18.6434
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 7.05676,
+            "SIR": 23.5922,
+            "SAR": 7.31123,
+            "ISR": 10.7171
+          },
+          "instrumental": {
+            "SDR": 14.2453,
+            "SIR": 17.3097,
+            "SAR": 16.8613,
+            "ISR": 31.4261
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 7.55171,
+            "SIR": 24.4466,
+            "SAR": 8.02854,
+            "ISR": 10.3788
+          },
+          "instrumental": {
+            "SDR": 15.6177,
+            "SIR": 18.6118,
+            "SAR": 17.9461,
+            "ISR": 24.1905
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 6.68651,
+            "SIR": 21.0149,
+            "SAR": 7.10741,
+            "ISR": 10.286
+          },
+          "instrumental": {
+            "SDR": 11.0247,
+            "SIR": 13.8353,
+            "SAR": 13.196,
+            "ISR": 21.0399
+          }
+        }
+      },
+      {
+        "track_name": "James May - Dont Let Go",
+        "scores": {
+          "vocals": {
+            "SDR": 6.41377,
+            "SIR": 19.0187,
+            "SAR": 7.49891,
+            "ISR": 10.5788
+          },
+          "instrumental": {
+            "SDR": 13.4717,
+            "SIR": 16.9355,
+            "SAR": 16.4662,
+            "ISR": 27.2967
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 6.15824,
-        "SIR": 18.1931,
-        "SAR": 6.11136,
-        "ISR": 9.99897
+        "SDR": 6.22036,
+        "SIR": 18.5584,
+        "SAR": 6.45505,
+        "ISR": 10.2352
       },
       "instrumental": {
-        "SDR": 12.3685,
-        "SIR": 15.0585,
-        "SAR": 15.3418,
-        "ISR": 20.2465
+        "SDR": 12.407,
+        "SIR": 15.824,
+        "SAR": 15.5266,
+        "ISR": 20.5266
       }
     },
     "stems": [
@@ -14039,20 +15824,105 @@
             "ISR": 18.5297
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 3.94406,
+            "SIR": 7.7746,
+            "SAR": 1.98949,
+            "ISR": 9.89117
+          },
+          "instrumental": {
+            "SDR": 17.9691,
+            "SIR": 30.6376,
+            "SAR": 22.0327,
+            "ISR": 18.2674
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 10.1519,
+            "SIR": 27.509,
+            "SAR": 10.5958,
+            "ISR": 15.5151
+          },
+          "instrumental": {
+            "SDR": 17.126,
+            "SIR": 30.0009,
+            "SAR": 20.3964,
+            "ISR": 19.2701
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 11.1509,
+            "SIR": 30.7697,
+            "SAR": 11.6768,
+            "ISR": 15.3188
+          },
+          "instrumental": {
+            "SDR": 17.924,
+            "SIR": 29.885,
+            "SAR": 21.8401,
+            "ISR": 19.5461
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 13.217,
+            "SIR": 30.7074,
+            "SAR": 13.6792,
+            "ISR": 16.5262
+          },
+          "instrumental": {
+            "SDR": 15.629,
+            "SIR": 25.9143,
+            "SAR": 17.2054,
+            "ISR": 18.9425
+          }
+        }
+      },
+      {
+        "track_name": "James May - Dont Let Go",
+        "scores": {
+          "vocals": {
+            "SDR": 10.7964,
+            "SIR": 23.8375,
+            "SAR": 11.249,
+            "ISR": 16.2143
+          },
+          "instrumental": {
+            "SDR": 16.1787,
+            "SIR": 29.1949,
+            "SAR": 18.98,
+            "ISR": 18.8066
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.53949,
-        "SIR": 20.3648,
-        "SAR": 9.10558,
-        "ISR": 13.7585
+        "SDR": 8.78618,
+        "SIR": 21.0465,
+        "SAR": 9.72104,
+        "ISR": 14.5452
       },
       "instrumental": {
-        "SDR": 15.1585,
-        "SIR": 23.8522,
-        "SAR": 17.2133,
-        "ISR": 18.3895
+        "SDR": 15.402,
+        "SIR": 24.6355,
+        "SAR": 17.2345,
+        "ISR": 18.5137
       }
     },
     "stems": [
@@ -14675,20 +16545,105 @@
             "ISR": 18.1758
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 4.52491,
+            "SIR": 6.42375,
+            "SAR": 2.18858,
+            "ISR": 10.7866
+          },
+          "instrumental": {
+            "SDR": 17.7642,
+            "SIR": 30.9915,
+            "SAR": 22.0214,
+            "ISR": 17.8616
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 10.0833,
+            "SIR": 25.1693,
+            "SAR": 10.6642,
+            "ISR": 15.6484
+          },
+          "instrumental": {
+            "SDR": 16.8894,
+            "SIR": 30.752,
+            "SAR": 20.563,
+            "ISR": 18.811
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 11.4449,
+            "SIR": 29.5342,
+            "SAR": 11.8947,
+            "ISR": 15.7077
+          },
+          "instrumental": {
+            "SDR": 17.8416,
+            "SIR": 31.0958,
+            "SAR": 21.9747,
+            "ISR": 19.3451
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 13.2274,
+            "SIR": 29.3935,
+            "SAR": 13.8195,
+            "ISR": 16.6271
+          },
+          "instrumental": {
+            "SDR": 15.5728,
+            "SIR": 26.1098,
+            "SAR": 17.4237,
+            "ISR": 18.6752
+          }
+        }
+      },
+      {
+        "track_name": "James May - Dont Let Go",
+        "scores": {
+          "vocals": {
+            "SDR": 11.0053,
+            "SIR": 23.8065,
+            "SAR": 11.5084,
+            "ISR": 15.8519
+          },
+          "instrumental": {
+            "SDR": 16.1076,
+            "SIR": 28.411,
+            "SAR": 19.1462,
+            "ISR": 18.6863
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.65111,
-        "SIR": 19.9656,
-        "SAR": 9.22907,
-        "ISR": 14.0012
+        "SDR": 8.7616,
+        "SIR": 20.4494,
+        "SAR": 10.5037,
+        "ISR": 14.8873
       },
       "instrumental": {
-        "SDR": 14.9779,
-        "SIR": 24.9528,
-        "SAR": 17.1131,
-        "ISR": 17.8429
+        "SDR": 15.2523,
+        "SIR": 25.0631,
+        "SAR": 17.4237,
+        "ISR": 18.0557
       }
     },
     "stems": [
@@ -15311,20 +17266,105 @@
             "ISR": 18.0473
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 3.87444,
+            "SIR": 6.34672,
+            "SAR": 2.03677,
+            "ISR": 11.0709
+          },
+          "instrumental": {
+            "SDR": 17.8324,
+            "SIR": 31.4563,
+            "SAR": 21.8144,
+            "ISR": 17.8679
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 10.1128,
+            "SIR": 25.0662,
+            "SAR": 10.7028,
+            "ISR": 15.7958
+          },
+          "instrumental": {
+            "SDR": 16.9072,
+            "SIR": 30.993,
+            "SAR": 20.512,
+            "ISR": 18.8226
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 11.4564,
+            "SIR": 29.7134,
+            "SAR": 11.8202,
+            "ISR": 15.539
+          },
+          "instrumental": {
+            "SDR": 17.9628,
+            "SIR": 30.8865,
+            "SAR": 22.0774,
+            "ISR": 19.4061
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 13.4108,
+            "SIR": 28.9683,
+            "SAR": 13.9727,
+            "ISR": 16.737
+          },
+          "instrumental": {
+            "SDR": 15.5141,
+            "SIR": 26.9344,
+            "SAR": 17.3492,
+            "ISR": 18.5732
+          }
+        }
+      },
+      {
+        "track_name": "James May - Dont Let Go",
+        "scores": {
+          "vocals": {
+            "SDR": 10.9662,
+            "SIR": 24.1744,
+            "SAR": 11.5705,
+            "ISR": 15.9568
+          },
+          "instrumental": {
+            "SDR": 16.1899,
+            "SIR": 28.5621,
+            "SAR": 19.2757,
+            "ISR": 18.7745
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.65984,
-        "SIR": 19.2708,
-        "SAR": 9.19148,
-        "ISR": 14.0855
+        "SDR": 8.80873,
+        "SIR": 20.364,
+        "SAR": 10.0193,
+        "ISR": 14.8444
       },
       "instrumental": {
-        "SDR": 15.0463,
-        "SIR": 24.4971,
-        "SAR": 17.2618,
-        "ISR": 17.8584
+        "SDR": 15.421,
+        "SIR": 25.3411,
+        "SAR": 17.3492,
+        "ISR": 17.9321
       }
     },
     "stems": [
@@ -15947,20 +17987,105 @@
             "ISR": 18.3182
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 2.92139,
+            "SIR": 5.81725,
+            "SAR": 2.06675,
+            "ISR": 10.8761
+          },
+          "instrumental": {
+            "SDR": 16.808,
+            "SIR": 31.3864,
+            "SAR": 20.9209,
+            "ISR": 17.8701
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 10.2232,
+            "SIR": 24.5532,
+            "SAR": 10.8848,
+            "ISR": 15.8251
+          },
+          "instrumental": {
+            "SDR": 17.0122,
+            "SIR": 30.9548,
+            "SAR": 20.7214,
+            "ISR": 18.7644
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 11.9001,
+            "SIR": 30.4242,
+            "SAR": 12.2469,
+            "ISR": 15.7596
+          },
+          "instrumental": {
+            "SDR": 18.1434,
+            "SIR": 31.4276,
+            "SAR": 22.3572,
+            "ISR": 19.5462
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 13.9875,
+            "SIR": 29.7121,
+            "SAR": 14.0536,
+            "ISR": 16.4766
+          },
+          "instrumental": {
+            "SDR": 15.728,
+            "SIR": 25.7527,
+            "SAR": 17.5914,
+            "ISR": 18.9239
+          }
+        }
+      },
+      {
+        "track_name": "James May - Dont Let Go",
+        "scores": {
+          "vocals": {
+            "SDR": 11.2761,
+            "SIR": 22.9858,
+            "SAR": 11.991,
+            "ISR": 16.9225
+          },
+          "instrumental": {
+            "SDR": 16.2658,
+            "SIR": 30.6573,
+            "SAR": 19.3022,
+            "ISR": 18.6899
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.6699,
-        "SIR": 19.7205,
-        "SAR": 8.9661,
-        "ISR": 13.8702
+        "SDR": 8.83195,
+        "SIR": 20.3999,
+        "SAR": 10.1353,
+        "ISR": 13.9686
       },
       "instrumental": {
-        "SDR": 15.2324,
-        "SIR": 24.6525,
-        "SAR": 17.3296,
-        "ISR": 18.0401
+        "SDR": 15.5122,
+        "SIR": 24.9895,
+        "SAR": 17.4231,
+        "ISR": 18.2209
       }
     },
     "stems": [
@@ -16583,20 +18708,105 @@
             "ISR": 16.5784
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 2.65212,
+            "SIR": 5.92334,
+            "SAR": 2.19368,
+            "ISR": 11.6722
+          },
+          "instrumental": {
+            "SDR": 17.2181,
+            "SIR": 31.5719,
+            "SAR": 20.9956,
+            "ISR": 17.8368
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 10.1737,
+            "SIR": 24.64,
+            "SAR": 10.9486,
+            "ISR": 15.794
+          },
+          "instrumental": {
+            "SDR": 16.9259,
+            "SIR": 31.0506,
+            "SAR": 20.5252,
+            "ISR": 18.8426
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 11.7848,
+            "SIR": 29.6406,
+            "SAR": 12.5111,
+            "ISR": 15.8471
+          },
+          "instrumental": {
+            "SDR": 17.989,
+            "SIR": 32.2081,
+            "SAR": 22.5874,
+            "ISR": 19.3716
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 11.6205,
+            "SIR": 27.9609,
+            "SAR": 13.8643,
+            "ISR": 14.975
+          },
+          "instrumental": {
+            "SDR": 15.1636,
+            "SIR": 22.729,
+            "SAR": 17.4276,
+            "ISR": 18.4887
+          }
+        }
+      },
+      {
+        "track_name": "James May - Dont Let Go",
+        "scores": {
+          "vocals": {
+            "SDR": 11.191,
+            "SIR": 28.8054,
+            "SAR": 12.1663,
+            "ISR": 14.8448
+          },
+          "instrumental": {
+            "SDR": 16.5545,
+            "SIR": 25.6316,
+            "SAR": 20.3024,
+            "ISR": 19.1274
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.60709,
-        "SIR": 19.6607,
-        "SAR": 10.1908,
-        "ISR": 14.2733
+        "SDR": 10.1737,
+        "SIR": 21.0729,
+        "SAR": 10.9486,
+        "ISR": 14.8448
       },
       "instrumental": {
-        "SDR": 15.2843,
-        "SIR": 25.3609,
-        "SAR": 17.2694,
-        "ISR": 17.8285
+        "SDR": 15.4098,
+        "SIR": 25.4591,
+        "SAR": 17.4276,
+        "ISR": 17.9222
       }
     },
     "stems": [
@@ -17219,20 +19429,88 @@
             "ISR": 17.6368
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 3.36317,
+            "SIR": 1.63646,
+            "SAR": 1.95397,
+            "ISR": 10.4013
+          },
+          "instrumental": {
+            "SDR": 17.5638,
+            "SIR": 30.6576,
+            "SAR": 21.5886,
+            "ISR": 17.902
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 10.0111,
+            "SIR": 25.8673,
+            "SAR": 10.5544,
+            "ISR": 15.3824
+          },
+          "instrumental": {
+            "SDR": 16.9712,
+            "SIR": 29.9745,
+            "SAR": 20.4231,
+            "ISR": 18.9464
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 11.1207,
+            "SIR": 28.6679,
+            "SAR": 11.38,
+            "ISR": 15.5418
+          },
+          "instrumental": {
+            "SDR": 17.7887,
+            "SIR": 30.805,
+            "SAR": 21.7902,
+            "ISR": 19.2728
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 12.9362,
+            "SIR": 27.6798,
+            "SAR": 13.2721,
+            "ISR": 16.2644
+          },
+          "instrumental": {
+            "SDR": 15.4658,
+            "SIR": 25.3853,
+            "SAR": 17.2575,
+            "ISR": 18.4928
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.25058,
-        "SIR": 18.6163,
-        "SAR": 8.60117,
-        "ISR": 13.4367
+        "SDR": 8.50306,
+        "SIR": 19.1955,
+        "SAR": 9.40437,
+        "ISR": 13.7732
       },
       "instrumental": {
-        "SDR": 14.954,
-        "SIR": 24.0245,
-        "SAR": 16.7799,
-        "ISR": 17.6343
+        "SDR": 15.1248,
+        "SIR": 24.2116,
+        "SAR": 17.2159,
+        "ISR": 17.7721
       }
     },
     "stems": [
@@ -17855,20 +20133,88 @@
             "ISR": 17.1903
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 2.93495,
+            "SIR": 7.37853,
+            "SAR": 1.60049,
+            "ISR": 9.89124
+          },
+          "instrumental": {
+            "SDR": 17.4946,
+            "SIR": 31.2868,
+            "SAR": 21.2932,
+            "ISR": 17.637
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 9.88147,
+            "SIR": 24.5079,
+            "SAR": 10.3901,
+            "ISR": 15.9481
+          },
+          "instrumental": {
+            "SDR": 16.8393,
+            "SIR": 31.5393,
+            "SAR": 20.1513,
+            "ISR": 18.8433
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 11.0664,
+            "SIR": 27.3351,
+            "SAR": 11.0669,
+            "ISR": 15.6981
+          },
+          "instrumental": {
+            "SDR": 17.5943,
+            "SIR": 31.4723,
+            "SAR": 21.3877,
+            "ISR": 19.1606
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 11.087,
+            "SIR": 28.4364,
+            "SAR": 12.4375,
+            "ISR": 13.7448
+          },
+          "instrumental": {
+            "SDR": 14.1102,
+            "SIR": 20.1301,
+            "SAR": 16.0361,
+            "ISR": 18.5372
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.00557,
-        "SIR": 19.4495,
-        "SAR": 9.34791,
-        "ISR": 13.8373
+        "SDR": 9.56837,
+        "SIR": 19.7424,
+        "SAR": 10.0563,
+        "ISR": 13.8797
       },
       "instrumental": {
-        "SDR": 14.8399,
-        "SIR": 24.5413,
-        "SAR": 16.971,
-        "ISR": 17.6169
+        "SDR": 14.9594,
+        "SIR": 24.7963,
+        "SAR": 17.0091,
+        "ISR": 17.6732
       }
     },
     "stems": [
@@ -18491,20 +20837,88 @@
             "ISR": 17.5262
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 3.14999,
+            "SIR": 7.29956,
+            "SAR": 1.73523,
+            "ISR": 9.65562
+          },
+          "instrumental": {
+            "SDR": 17.5368,
+            "SIR": 30.3149,
+            "SAR": 21.456,
+            "ISR": 17.6565
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 9.71596,
+            "SIR": 24.9536,
+            "SAR": 10.2683,
+            "ISR": 15.4547
+          },
+          "instrumental": {
+            "SDR": 16.762,
+            "SIR": 30.2496,
+            "SAR": 19.9945,
+            "ISR": 18.9098
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 10.7554,
+            "SIR": 27.5346,
+            "SAR": 10.7463,
+            "ISR": 15.0081
+          },
+          "instrumental": {
+            "SDR": 17.6448,
+            "SIR": 29.5343,
+            "SAR": 21.0699,
+            "ISR": 19.1887
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 10.7841,
+            "SIR": 29.4205,
+            "SAR": 11.9041,
+            "ISR": 13.1682
+          },
+          "instrumental": {
+            "SDR": 13.9315,
+            "SIR": 19.1659,
+            "SAR": 15.4771,
+            "ISR": 18.6308
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.88104,
-        "SIR": 19.3537,
-        "SAR": 9.41873,
-        "ISR": 13.0303
+        "SDR": 9.37589,
+        "SIR": 20.114,
+        "SAR": 9.70211,
+        "ISR": 13.1167
       },
       "instrumental": {
-        "SDR": 14.9505,
-        "SIR": 23.6288,
-        "SAR": 16.771,
-        "ISR": 17.9381
+        "SDR": 14.9895,
+        "SIR": 23.7599,
+        "SAR": 16.9425,
+        "ISR": 18.0907
       }
     },
     "stems": [
@@ -19127,20 +21541,88 @@
             "ISR": 17.2664
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 3.17187,
+            "SIR": 7.66708,
+            "SAR": 2.08921,
+            "ISR": 9.77958
+          },
+          "instrumental": {
+            "SDR": 17.2533,
+            "SIR": 30.5264,
+            "SAR": 20.9702,
+            "ISR": 17.7179
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 9.83565,
+            "SIR": 25.0138,
+            "SAR": 10.3837,
+            "ISR": 16.1516
+          },
+          "instrumental": {
+            "SDR": 16.7805,
+            "SIR": 31.9866,
+            "SAR": 20.0389,
+            "ISR": 18.893
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 11.1021,
+            "SIR": 27.9211,
+            "SAR": 11.0349,
+            "ISR": 16.0174
+          },
+          "instrumental": {
+            "SDR": 17.7,
+            "SIR": 31.7467,
+            "SAR": 21.3614,
+            "ISR": 19.2058
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 11.2404,
+            "SIR": 28.6754,
+            "SAR": 12.3794,
+            "ISR": 14.2521
+          },
+          "instrumental": {
+            "SDR": 14.1266,
+            "SIR": 21.0291,
+            "SAR": 15.9185,
+            "ISR": 18.5261
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.06739,
-        "SIR": 19.1914,
-        "SAR": 9.35792,
-        "ISR": 13.8167
+        "SDR": 9.70367,
+        "SIR": 19.976,
+        "SAR": 10.0846,
+        "ISR": 14.1654
       },
       "instrumental": {
-        "SDR": 14.9443,
-        "SIR": 25.0321,
-        "SAR": 16.8009,
-        "ISR": 17.6994
+        "SDR": 15.002,
+        "SIR": 25.1688,
+        "SAR": 16.9139,
+        "ISR": 17.7281
       }
     },
     "stems": [
@@ -19763,20 +22245,88 @@
             "ISR": 17.5195
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 2.21839,
+            "SIR": 0.91338,
+            "SAR": 2.08767,
+            "ISR": 11.102
+          },
+          "instrumental": {
+            "SDR": 17.7142,
+            "SIR": 31.576,
+            "SAR": 21.3691,
+            "ISR": 17.4536
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 10.0856,
+            "SIR": 25.0043,
+            "SAR": 10.6565,
+            "ISR": 15.5804
+          },
+          "instrumental": {
+            "SDR": 16.9831,
+            "SIR": 30.4962,
+            "SAR": 20.5973,
+            "ISR": 18.9054
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 11.3863,
+            "SIR": 27.4513,
+            "SAR": 11.884,
+            "ISR": 15.9665
+          },
+          "instrumental": {
+            "SDR": 17.6539,
+            "SIR": 31.9858,
+            "SAR": 22.2182,
+            "ISR": 19.0893
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 12.873,
+            "SIR": 28.4651,
+            "SAR": 13.5462,
+            "ISR": 15.7344
+          },
+          "instrumental": {
+            "SDR": 15.303,
+            "SIR": 23.6916,
+            "SAR": 17.2506,
+            "ISR": 18.5393
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.63395,
-        "SIR": 19.1086,
-        "SAR": 9.81566,
-        "ISR": 13.855
+        "SDR": 9.22039,
+        "SIR": 19.6074,
+        "SAR": 10.4162,
+        "ISR": 14.1711
       },
       "instrumental": {
-        "SDR": 15.0514,
-        "SIR": 24.5342,
-        "SAR": 17.3804,
-        "ISR": 17.6039
+        "SDR": 15.2216,
+        "SIR": 24.6851,
+        "SAR": 17.4261,
+        "ISR": 17.7117
       }
     },
     "stems": [
@@ -20399,20 +22949,88 @@
             "ISR": 17.992
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 2.89108,
+            "SIR": 1.22211,
+            "SAR": 2.09401,
+            "ISR": 10.5277
+          },
+          "instrumental": {
+            "SDR": 17.9056,
+            "SIR": 31.19,
+            "SAR": 21.7378,
+            "ISR": 17.8806
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 9.88317,
+            "SIR": 25.9374,
+            "SAR": 10.5835,
+            "ISR": 15.707
+          },
+          "instrumental": {
+            "SDR": 17.0924,
+            "SIR": 30.6882,
+            "SAR": 20.5221,
+            "ISR": 19.1085
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 11.397,
+            "SIR": 29.8071,
+            "SAR": 11.8379,
+            "ISR": 15.666
+          },
+          "instrumental": {
+            "SDR": 17.9739,
+            "SIR": 31.2668,
+            "SAR": 22.1716,
+            "ISR": 19.4989
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 13.0323,
+            "SIR": 26.8458,
+            "SAR": 13.6038,
+            "ISR": 16.1593
+          },
+          "instrumental": {
+            "SDR": 15.3098,
+            "SIR": 24.8406,
+            "SAR": 16.8251,
+            "ISR": 18.4072
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.49619,
-        "SIR": 19.4326,
-        "SAR": 9.47806,
-        "ISR": 13.9399
+        "SDR": 9.17704,
+        "SIR": 20.0442,
+        "SAR": 10.1789,
+        "ISR": 14.3341
       },
       "instrumental": {
-        "SDR": 15.0748,
-        "SIR": 24.5902,
-        "SAR": 17.1945,
-        "ISR": 17.9207
+        "SDR": 15.3057,
+        "SIR": 24.9653,
+        "SAR": 17.3077,
+        "ISR": 17.9731
       }
     },
     "stems": [
@@ -21035,20 +23653,88 @@
             "ISR": 17.7277
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 2.27717,
+            "SIR": 1.10583,
+            "SAR": 1.99922,
+            "ISR": 10.8617
+          },
+          "instrumental": {
+            "SDR": 17.8766,
+            "SIR": 31.135,
+            "SAR": 21.5214,
+            "ISR": 17.7908
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 10.1355,
+            "SIR": 24.331,
+            "SAR": 10.7942,
+            "ISR": 15.6704
+          },
+          "instrumental": {
+            "SDR": 16.8695,
+            "SIR": 30.7303,
+            "SAR": 20.4932,
+            "ISR": 18.7683
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 11.4206,
+            "SIR": 28.1421,
+            "SAR": 12.0984,
+            "ISR": 15.8227
+          },
+          "instrumental": {
+            "SDR": 17.9059,
+            "SIR": 31.6985,
+            "SAR": 22.2949,
+            "ISR": 19.344
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 12.8826,
+            "SIR": 28.5669,
+            "SAR": 13.7229,
+            "ISR": 15.697
+          },
+          "instrumental": {
+            "SDR": 15.32,
+            "SIR": 23.6641,
+            "SAR": 17.2697,
+            "ISR": 18.6702
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.56912,
-        "SIR": 18.8359,
-        "SAR": 9.54974,
-        "ISR": 13.8949
+        "SDR": 9.23542,
+        "SIR": 19.8462,
+        "SAR": 10.4271,
+        "ISR": 14.2256
       },
       "instrumental": {
-        "SDR": 15.1399,
-        "SIR": 24.5587,
-        "SAR": 17.2734,
-        "ISR": 17.7383
+        "SDR": 15.3174,
+        "SIR": 24.8193,
+        "SAR": 17.3916,
+        "ISR": 17.797
       }
     },
     "stems": [
@@ -21671,20 +24357,88 @@
             "ISR": 18.5124
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 3.47455,
+            "SIR": 7.92686,
+            "SAR": 2.24785,
+            "ISR": 9.32628
+          },
+          "instrumental": {
+            "SDR": 17.4367,
+            "SIR": 29.5998,
+            "SAR": 21.6625,
+            "ISR": 17.9467
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 8.55973,
+            "SIR": 24.4062,
+            "SAR": 9.26289,
+            "ISR": 13.9007
+          },
+          "instrumental": {
+            "SDR": 16.7302,
+            "SIR": 26.6979,
+            "SAR": 20.0271,
+            "ISR": 19.0294
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 5.51993,
+            "SIR": 28.8807,
+            "SAR": 5.99657,
+            "ISR": 9.43659
+          },
+          "instrumental": {
+            "SDR": 17.3484,
+            "SIR": 19.858,
+            "SAR": 18.2318,
+            "ISR": 19.3998
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 10.1749,
+            "SIR": 31.3892,
+            "SAR": 11.1233,
+            "ISR": 11.9124
+          },
+          "instrumental": {
+            "SDR": 13.652,
+            "SIR": 17.0774,
+            "SAR": 15.6846,
+            "ISR": 19.0312
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 5.35372,
-        "SIR": 20.8081,
-        "SAR": 5.01969,
-        "ISR": 7.62261
+        "SDR": 5.58549,
+        "SIR": 20.8336,
+        "SAR": 5.06062,
+        "ISR": 8.12603
       },
       "instrumental": {
-        "SDR": 13.9026,
-        "SIR": 16.237,
-        "SAR": 15.5983,
-        "ISR": 18.8011
+        "SDR": 14.0784,
+        "SIR": 16.62,
+        "SAR": 15.6881,
+        "ISR": 18.8105
       }
     },
     "stems": [
@@ -22307,19 +25061,87 @@
             "ISR": 18.5943
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 3.28806,
+            "SIR": 1.58512,
+            "SAR": 2.15331,
+            "ISR": 10.1362
+          },
+          "instrumental": {
+            "SDR": 17.2467,
+            "SIR": 30.7199,
+            "SAR": 21.4521,
+            "ISR": 17.9494
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 9.06921,
+            "SIR": 21.0888,
+            "SAR": 9.64567,
+            "ISR": 14.8451
+          },
+          "instrumental": {
+            "SDR": 16.4757,
+            "SIR": 28.7963,
+            "SAR": 20.1996,
+            "ISR": 18.3311
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 6.71127,
+            "SIR": 28.61,
+            "SAR": 7.06729,
+            "ISR": 10.4639
+          },
+          "instrumental": {
+            "SDR": 17.9043,
+            "SIR": 21.4157,
+            "SAR": 19.0342,
+            "ISR": 19.7535
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 12.6962,
+            "SIR": 26.9905,
+            "SAR": 12.4498,
+            "ISR": 14.6145
+          },
+          "instrumental": {
+            "SDR": 15.0861,
+            "SIR": 20.8174,
+            "SAR": 16.1717,
+            "ISR": 19.0106
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 5.17046,
-        "SIR": 18.4631,
-        "SAR": 4.12444,
-        "ISR": 8.1924
+        "SDR": 5.43274,
+        "SIR": 19.1086,
+        "SAR": 4.72303,
+        "ISR": 8.35778
       },
       "instrumental": {
-        "SDR": 14.1082,
-        "SIR": 17.2608,
-        "SAR": 15.3099,
+        "SDR": 14.7703,
+        "SIR": 17.3486,
+        "SAR": 15.6943,
         "ISR": 18.5482
       }
     },
@@ -22943,20 +25765,88 @@
             "ISR": 17.8358
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 2.79162,
+            "SIR": 7.26558,
+            "SAR": 1.97903,
+            "ISR": 9.30672
+          },
+          "instrumental": {
+            "SDR": 17.4457,
+            "SIR": 29.8962,
+            "SAR": 21.4895,
+            "ISR": 17.7156
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 9.64099,
+            "SIR": 24.9404,
+            "SAR": 10.27,
+            "ISR": 15.2421
+          },
+          "instrumental": {
+            "SDR": 16.7311,
+            "SIR": 29.6512,
+            "SAR": 20.1109,
+            "ISR": 18.9025
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 10.5596,
+            "SIR": 27.3402,
+            "SAR": 10.8957,
+            "ISR": 14.6915
+          },
+          "instrumental": {
+            "SDR": 17.6392,
+            "SIR": 29.0337,
+            "SAR": 21.2428,
+            "ISR": 19.1831
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 10.8846,
+            "SIR": 28.7445,
+            "SAR": 11.8919,
+            "ISR": 13.1481
+          },
+          "instrumental": {
+            "SDR": 13.93,
+            "SIR": 19.2918,
+            "SAR": 15.7187,
+            "ISR": 18.5865
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.64868,
-        "SIR": 19.3286,
-        "SAR": 8.7812,
-        "ISR": 12.4487
+        "SDR": 9.28314,
+        "SIR": 19.9505,
+        "SAR": 9.51553,
+        "ISR": 12.8071
       },
       "instrumental": {
-        "SDR": 14.7245,
-        "SIR": 23.1275,
-        "SAR": 16.7433,
-        "ISR": 17.8488
+        "SDR": 14.9171,
+        "SIR": 23.2859,
+        "SAR": 16.9608,
+        "ISR": 17.9312
       }
     },
     "stems": [
@@ -23579,20 +26469,88 @@
             "ISR": 17.6536
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 3.58659,
+            "SIR": 5.70285,
+            "SAR": 2.34938,
+            "ISR": 11.1776
+          },
+          "instrumental": {
+            "SDR": 17.2975,
+            "SIR": 31.1511,
+            "SAR": 21.33,
+            "ISR": 17.9352
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 10.2741,
+            "SIR": 25.9903,
+            "SAR": 10.9464,
+            "ISR": 15.5489
+          },
+          "instrumental": {
+            "SDR": 17.1617,
+            "SIR": 30.4592,
+            "SAR": 20.6779,
+            "ISR": 19.0455
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 11.9382,
+            "SIR": 30.5499,
+            "SAR": 12.7034,
+            "ISR": 15.9186
+          },
+          "instrumental": {
+            "SDR": 18.1179,
+            "SIR": 32.4492,
+            "SAR": 22.9616,
+            "ISR": 19.4414
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 12.1645,
+            "SIR": 30.7798,
+            "SAR": 14.2288,
+            "ISR": 14.6103
+          },
+          "instrumental": {
+            "SDR": 15.2234,
+            "SIR": 21.7717,
+            "SAR": 17.5695,
+            "ISR": 18.9104
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.60094,
-        "SIR": 21.3567,
-        "SAR": 10.312,
-        "ISR": 13.9166
+        "SDR": 10.1549,
+        "SIR": 21.519,
+        "SAR": 10.826,
+        "ISR": 14.1742
       },
       "instrumental": {
-        "SDR": 15.3927,
-        "SIR": 25.093,
-        "SAR": 17.4478,
-        "ISR": 18.1979
+        "SDR": 15.4338,
+        "SIR": 25.2169,
+        "SAR": 17.5684,
+        "ISR": 18.3519
       }
     },
     "stems": [
@@ -24215,20 +27173,88 @@
             "ISR": 17.7323
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 3.63183,
+            "SIR": 5.93662,
+            "SAR": 2.39649,
+            "ISR": 11.1103
+          },
+          "instrumental": {
+            "SDR": 17.329,
+            "SIR": 30.7894,
+            "SAR": 21.3316,
+            "ISR": 17.9891
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 10.2666,
+            "SIR": 26.4786,
+            "SAR": 10.8872,
+            "ISR": 15.5374
+          },
+          "instrumental": {
+            "SDR": 17.1934,
+            "SIR": 30.4887,
+            "SAR": 20.5983,
+            "ISR": 19.0959
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 11.9033,
+            "SIR": 30.7985,
+            "SAR": 12.6202,
+            "ISR": 16.0502
+          },
+          "instrumental": {
+            "SDR": 18.1294,
+            "SIR": 32.5599,
+            "SAR": 22.7484,
+            "ISR": 19.452
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 12.0683,
+            "SIR": 30.8377,
+            "SAR": 14.0395,
+            "ISR": 14.3655
+          },
+          "instrumental": {
+            "SDR": 14.9496,
+            "SIR": 21.0722,
+            "SAR": 17.4033,
+            "ISR": 18.921
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.57662,
-        "SIR": 21.5215,
-        "SAR": 9.9693,
-        "ISR": 13.9249
+        "SDR": 10.1067,
+        "SIR": 21.87,
+        "SAR": 10.5929,
+        "ISR": 14.2105
       },
       "instrumental": {
-        "SDR": 15.4335,
-        "SIR": 24.9813,
-        "SAR": 17.2761,
-        "ISR": 18.268
+        "SDR": 15.4793,
+        "SIR": 25.2307,
+        "SAR": 17.5688,
+        "ISR": 18.4536
       }
     },
     "stems": [
@@ -24851,20 +27877,88 @@
             "ISR": 17.4838
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 3.21154,
+            "SIR": 5.45196,
+            "SAR": 2.2815,
+            "ISR": 11.2524
+          },
+          "instrumental": {
+            "SDR": 16.8901,
+            "SIR": 31.5901,
+            "SAR": 20.9381,
+            "ISR": 17.8407
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 10.2706,
+            "SIR": 25.4344,
+            "SAR": 10.9862,
+            "ISR": 15.8282
+          },
+          "instrumental": {
+            "SDR": 17.0911,
+            "SIR": 31.0946,
+            "SAR": 20.6592,
+            "ISR": 18.9748
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 11.9377,
+            "SIR": 30.1603,
+            "SAR": 12.7632,
+            "ISR": 15.9392
+          },
+          "instrumental": {
+            "SDR": 18.037,
+            "SIR": 32.3938,
+            "SAR": 22.8888,
+            "ISR": 19.4167
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 12.2278,
+            "SIR": 30.3828,
+            "SAR": 14.2931,
+            "ISR": 14.9457
+          },
+          "instrumental": {
+            "SDR": 15.2429,
+            "SIR": 22.5973,
+            "SAR": 17.6381,
+            "ISR": 18.7928
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.66183,
-        "SIR": 20.6332,
-        "SAR": 10.3141,
-        "ISR": 13.9706
+        "SDR": 10.1794,
+        "SIR": 21.0294,
+        "SAR": 10.8745,
+        "ISR": 14.3166
       },
       "instrumental": {
-        "SDR": 15.2718,
-        "SIR": 25.314,
-        "SAR": 17.2965,
-        "ISR": 18.0558
+        "SDR": 15.3598,
+        "SIR": 25.46,
+        "SAR": 17.5005,
+        "ISR": 18.1517
       }
     },
     "stems": [
@@ -25487,20 +28581,88 @@
             "ISR": 17.9973
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 2.70047,
+            "SIR": 1.66527,
+            "SAR": 2.16292,
+            "ISR": 10.2113
+          },
+          "instrumental": {
+            "SDR": 17.8065,
+            "SIR": 30.336,
+            "SAR": 21.7829,
+            "ISR": 17.9469
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 10.1107,
+            "SIR": 25.7741,
+            "SAR": 10.7008,
+            "ISR": 15.7567
+          },
+          "instrumental": {
+            "SDR": 16.9696,
+            "SIR": 30.6441,
+            "SAR": 20.4904,
+            "ISR": 18.8756
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 11.619,
+            "SIR": 29.2429,
+            "SAR": 11.9158,
+            "ISR": 15.8813
+          },
+          "instrumental": {
+            "SDR": 17.896,
+            "SIR": 31.7735,
+            "SAR": 22.3261,
+            "ISR": 19.3388
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 13.2398,
+            "SIR": 29.0538,
+            "SAR": 13.7428,
+            "ISR": 15.9896
+          },
+          "instrumental": {
+            "SDR": 15.4585,
+            "SIR": 24.0575,
+            "SAR": 17.4053,
+            "ISR": 18.7139
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.61757,
-        "SIR": 19.6048,
-        "SAR": 9.37745,
-        "ISR": 13.6669
+        "SDR": 9.14306,
+        "SIR": 20.0946,
+        "SAR": 10.2093,
+        "ISR": 14.0559
       },
       "instrumental": {
-        "SDR": 15.3984,
-        "SIR": 24.0751,
-        "SAR": 17.1606,
-        "ISR": 17.8623
+        "SDR": 15.4556,
+        "SIR": 24.5048,
+        "SAR": 17.3809,
+        "ISR": 17.9684
       }
     },
     "stems": [
@@ -26143,20 +29305,88 @@
             "ISR": 17.6572
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 4.37702,
+            "SIR": 7.8154,
+            "SAR": 2.33474,
+            "ISR": 9.81231
+          },
+          "instrumental": {
+            "SDR": 17.71,
+            "SIR": 30.6302,
+            "SAR": 22.2112,
+            "ISR": 18.0183
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 9.56022,
+            "SIR": 24.2622,
+            "SAR": 10.3906,
+            "ISR": 14.4689
+          },
+          "instrumental": {
+            "SDR": 16.8912,
+            "SIR": 27.8564,
+            "SAR": 20.677,
+            "ISR": 18.8667
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 11.1507,
+            "SIR": 27.8262,
+            "SAR": 11.9373,
+            "ISR": 14.8946
+          },
+          "instrumental": {
+            "SDR": 17.7739,
+            "SIR": 29.4481,
+            "SAR": 22.1916,
+            "ISR": 19.2363
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 11.5462,
+            "SIR": 27.662,
+            "SAR": 13.3142,
+            "ISR": 14.3879
+          },
+          "instrumental": {
+            "SDR": 14.9565,
+            "SIR": 22.388,
+            "SAR": 17.7091,
+            "ISR": 18.4978
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.43812,
-        "SIR": 19.5269,
-        "SAR": 10.2545,
-        "ISR": 13.5967
+        "SDR": 9.5717,
+        "SIR": 19.6322,
+        "SAR": 10.3407,
+        "ISR": 13.6876
       },
       "instrumental": {
-        "SDR": 15.2341,
-        "SIR": 24.1306,
-        "SAR": 17.6334,
-        "ISR": 17.9692
+        "SDR": 15.2903,
+        "SIR": 24.1551,
+        "SAR": 17.7925,
+        "ISR": 18.0617
       }
     },
     "stems": [
@@ -26779,14 +30009,82 @@
             "ISR": 2.71706
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "other": {
+            "SDR": 5.25805,
+            "SIR": 9.44667,
+            "SAR": 6.65279,
+            "ISR": 10.3286
+          },
+          "instrumental": {
+            "SDR": 3.86658,
+            "SIR": 10.9645,
+            "SAR": 6.21744,
+            "ISR": 6.06446
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "other": {
+            "SDR": 9.36939,
+            "SIR": 14.2856,
+            "SAR": 11.1927,
+            "ISR": 14.0695
+          },
+          "instrumental": {
+            "SDR": 2.18852,
+            "SIR": 10.0559,
+            "SAR": 3.11571,
+            "ISR": 3.73256
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "other": {
+            "SDR": 8.63463,
+            "SIR": 17.4556,
+            "SAR": 7.86379,
+            "ISR": 13.5296
+          },
+          "instrumental": {
+            "SDR": 5.39697,
+            "SIR": 14.6953,
+            "SAR": 6.30495,
+            "ISR": 11.3929
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "other": {
+            "SDR": 7.81779,
+            "SIR": 18.4801,
+            "SAR": 7.6782,
+            "ISR": 11.9292
+          },
+          "instrumental": {
+            "SDR": 1.70499,
+            "SIR": 8.65265,
+            "SAR": 2.78163,
+            "ISR": 6.66371
+          }
+        }
       }
     ],
     "median_scores": {
       "instrumental": {
         "SDR": 2.92805,
-        "SIR": 9.91923,
+        "SIR": 10.1144,
         "SAR": 4.01882,
-        "ISR": 6.13529
+        "ISR": 6.13747
       }
     },
     "stems": [
@@ -27409,20 +30707,88 @@
             "ISR": 10.0631
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "bass": {
+            "SDR": 8.93678,
+            "SIR": 11.8764,
+            "SAR": 0.5732,
+            "ISR": -4.58055
+          },
+          "instrumental": {
+            "SDR": 3.03604,
+            "SIR": -3.3435,
+            "SAR": 1.05938,
+            "ISR": 5.61012
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "bass": {
+            "SDR": 12.2636,
+            "SIR": 20.7013,
+            "SAR": 6.50702,
+            "ISR": 6.90626
+          },
+          "instrumental": {
+            "SDR": 2.49143,
+            "SIR": 3.84323,
+            "SAR": 2.59421,
+            "ISR": 4.77818
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "bass": {
+            "SDR": 11.3077,
+            "SIR": 15.372,
+            "SAR": 13.4569,
+            "ISR": 17.2716
+          },
+          "instrumental": {
+            "SDR": 0.45525,
+            "SIR": 1.8495,
+            "SAR": -0.921975,
+            "ISR": 1.78777
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "bass": {
+            "SDR": 8.99375,
+            "SIR": 20.7437,
+            "SAR": 2.10514,
+            "ISR": 0.89566
+          },
+          "instrumental": {
+            "SDR": 2.68674,
+            "SIR": -0.00767,
+            "SAR": 0.97192,
+            "ISR": 7.95314
+          }
+        }
       }
     ],
     "median_scores": {
       "bass": {
         "SDR": 10.4481,
-        "SIR": 21.1217,
-        "SAR": 10.8219,
-        "ISR": 14.0335
+        "SIR": 20.9862,
+        "SAR": 10.5715,
+        "ISR": 13.9131
       },
       "instrumental": {
-        "SDR": 2.68521,
-        "SIR": 7.07101,
-        "SAR": 3.9178,
-        "ISR": 7.09959
+        "SDR": 2.67399,
+        "SIR": 6.42725,
+        "SAR": 3.8121,
+        "ISR": 6.65939
       }
     },
     "stems": [
@@ -28045,19 +31411,87 @@
             "ISR": 9.25875
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "drums": {
+            "SDR": 5.57404,
+            "SIR": 11.7291,
+            "SAR": 5.93683,
+            "ISR": 10.71
+          },
+          "instrumental": {
+            "SDR": 4.46425,
+            "SIR": 9.35077,
+            "SAR": 7.31786,
+            "ISR": 7.47718
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "drums": {
+            "SDR": 3.47832,
+            "SIR": 9.67822,
+            "SAR": 2.87043,
+            "ISR": 7.64742
+          },
+          "instrumental": {
+            "SDR": 6.24888,
+            "SIR": 14.4736,
+            "SAR": 5.97047,
+            "ISR": 13.5767
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "drums": {
+            "SDR": 5.91571,
+            "SIR": 16.725,
+            "SAR": 5.15543,
+            "ISR": 10.7169
+          },
+          "instrumental": {
+            "SDR": 5.68382,
+            "SIR": 10.4048,
+            "SAR": 6.52787,
+            "ISR": 11.3673
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "drums": {
+            "SDR": 10.6703,
+            "SIR": 20.4944,
+            "SAR": 10.7375,
+            "ISR": 15.5134
+          },
+          "instrumental": {
+            "SDR": 1.96625,
+            "SIR": 5.47078,
+            "SAR": 3.88715,
+            "ISR": 6.46382
+          }
+        }
       }
     ],
     "median_scores": {
       "drums": {
-        "SDR": 7.00582,
+        "SDR": 6.99726,
         "SIR": 15.342,
-        "SAR": 7.46493,
-        "ISR": 11.9347
+        "SAR": 7.15693,
+        "ISR": 11.7812
       },
       "instrumental": {
-        "SDR": 2.89852,
-        "SIR": 8.74851,
-        "SAR": 4.01986,
+        "SDR": 3.11637,
+        "SIR": 8.84112,
+        "SAR": 4.47515,
         "ISR": 8.39873
       }
     },
@@ -28664,20 +32098,105 @@
             "ISR": 14.5321
           }
         }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 7.89718,
+            "SIR": 22.9178,
+            "SAR": 8.12822,
+            "ISR": 12.7305
+          },
+          "instrumental": {
+            "SDR": 13.3542,
+            "SIR": 21.5011,
+            "SAR": 14.9012,
+            "ISR": 17.8808
+          }
+        }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 3.49519,
+            "SIR": 7.84096,
+            "SAR": 2.31508,
+            "ISR": 9.60146
+          },
+          "instrumental": {
+            "SDR": 17.4841,
+            "SIR": 30.6488,
+            "SAR": 21.8172,
+            "ISR": 17.9845
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 9.46895,
+            "SIR": 24.8831,
+            "SAR": 10.2708,
+            "ISR": 14.8141
+          },
+          "instrumental": {
+            "SDR": 16.7038,
+            "SIR": 28.8329,
+            "SAR": 19.9919,
+            "ISR": 18.9152
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 10.7288,
+            "SIR": 26.9895,
+            "SAR": 10.9454,
+            "ISR": 15.3945
+          },
+          "instrumental": {
+            "SDR": 17.5598,
+            "SIR": 30.5208,
+            "SAR": 21.2514,
+            "ISR": 19.1324
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 10.8685,
+            "SIR": 27.7549,
+            "SAR": 12.5085,
+            "ISR": 13.9922
+          },
+          "instrumental": {
+            "SDR": 14.2331,
+            "SIR": 21.0278,
+            "SAR": 16.4572,
+            "ISR": 18.4063
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.72609,
-        "SIR": 19.685,
-        "SAR": 9.516,
-        "ISR": 13.2417
+        "SDR": 8.96846,
+        "SIR": 19.8856,
+        "SAR": 9.67877,
+        "ISR": 13.4149
       },
       "instrumental": {
-        "SDR": 15.0247,
-        "SIR": 23.8385,
-        "SAR": 16.987,
-        "ISR": 17.9132
+        "SDR": 15.0575,
+        "SIR": 24.0151,
+        "SAR": 17.063,
+        "ISR": 18.0555
       }
     },
     "stems": [
@@ -29283,14 +32802,99 @@
             "ISR": 11.5589
           }
         }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "other": {
+            "SDR": 9.11662,
+            "SIR": 17.3152,
+            "SAR": 9.60333,
+            "ISR": 13.0907
+          },
+          "instrumental": {
+            "SDR": 1.21533,
+            "SIR": 7.37947,
+            "SAR": -0.01784,
+            "ISR": 3.12771
+          }
+        }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "other": {
+            "SDR": 4.65643,
+            "SIR": 8.08793,
+            "SAR": 6.06734,
+            "ISR": 9.4626
+          },
+          "instrumental": {
+            "SDR": 4.0963,
+            "SIR": 11.9099,
+            "SAR": 6.42775,
+            "ISR": 6.33339
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "other": {
+            "SDR": 8.7823,
+            "SIR": 13.5396,
+            "SAR": 10.9588,
+            "ISR": 12.4886
+          },
+          "instrumental": {
+            "SDR": 2.48424,
+            "SIR": 10.9439,
+            "SAR": 3.17304,
+            "ISR": 4.04116
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "other": {
+            "SDR": 7.74916,
+            "SIR": 15.7468,
+            "SAR": 6.68936,
+            "ISR": 11.8915
+          },
+          "instrumental": {
+            "SDR": 5.65419,
+            "SIR": 15.2447,
+            "SAR": 6.35984,
+            "ISR": 11.7118
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "other": {
+            "SDR": 7.09594,
+            "SIR": 16.9553,
+            "SAR": 7.40809,
+            "ISR": 10.836
+          },
+          "instrumental": {
+            "SDR": 1.8609,
+            "SIR": 9.34897,
+            "SAR": 2.79366,
+            "ISR": 6.88979
+          }
+        }
       }
     ],
     "median_scores": {
       "instrumental": {
-        "SDR": 3.34213,
-        "SIR": 10.8778,
-        "SAR": 4.2601,
-        "ISR": 6.3735
+        "SDR": 3.1866,
+        "SIR": 10.9108,
+        "SAR": 4.13215,
+        "ISR": 6.35344
       }
     },
     "stems": [
@@ -29896,20 +33500,105 @@
             "ISR": 3.03968
           }
         }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "bass": {
+            "SDR": 8.90883,
+            "SIR": 16.9371,
+            "SAR": 9.06707,
+            "ISR": 13.4879
+          },
+          "instrumental": {
+            "SDR": 3.68763,
+            "SIR": 10.6277,
+            "SAR": 3.85806,
+            "ISR": 10.0287
+          }
+        }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "bass": {
+            "SDR": 8.44492,
+            "SIR": 12.3766,
+            "SAR": 0.42707,
+            "ISR": -5.51573
+          },
+          "instrumental": {
+            "SDR": 3.2009,
+            "SIR": -4.69864,
+            "SAR": 0.80892,
+            "ISR": 5.93919
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "bass": {
+            "SDR": 11.8977,
+            "SIR": 21.4119,
+            "SAR": 4.74189,
+            "ISR": 4.5358
+          },
+          "instrumental": {
+            "SDR": 2.56857,
+            "SIR": 2.73476,
+            "SAR": 2.2893,
+            "ISR": 4.96208
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "bass": {
+            "SDR": 11.7981,
+            "SIR": 17.4025,
+            "SAR": 13.7179,
+            "ISR": 16.5175
+          },
+          "instrumental": {
+            "SDR": 0.6164,
+            "SIR": 2.0046,
+            "SAR": -0.39888,
+            "ISR": 1.97171
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "bass": {
+            "SDR": 8.63686,
+            "SIR": 18.5065,
+            "SAR": 3.06041,
+            "ISR": 3.07377
+          },
+          "instrumental": {
+            "SDR": 2.57565,
+            "SIR": 0.80275,
+            "SAR": 1.14688,
+            "ISR": 7.67727
+          }
+        }
       }
     ],
     "median_scores": {
       "bass": {
-        "SDR": 9.98494,
-        "SIR": 20.8977,
-        "SAR": 10.1956,
-        "ISR": 13.3543
+        "SDR": 9.91032,
+        "SIR": 20.3015,
+        "SAR": 9.7907,
+        "ISR": 13.3093
       },
       "instrumental": {
-        "SDR": 2.7386,
-        "SIR": 7.40689,
-        "SAR": 3.90687,
-        "ISR": 7.5392
+        "SDR": 2.73546,
+        "SIR": 7.23423,
+        "SAR": 3.86573,
+        "ISR": 7.29981
       }
     },
     "stems": [
@@ -30515,20 +34204,105 @@
             "ISR": 10.232
           }
         }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "drums": {
+            "SDR": 7.61546,
+            "SIR": 20.9245,
+            "SAR": 8.2853,
+            "ISR": 11.09
+          },
+          "instrumental": {
+            "SDR": 3.77759,
+            "SIR": 10.3551,
+            "SAR": 3.92625,
+            "ISR": 9.61456
+          }
+        }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "drums": {
+            "SDR": 5.90095,
+            "SIR": 14.3915,
+            "SAR": 6.44924,
+            "ISR": 9.37
+          },
+          "instrumental": {
+            "SDR": 4.79998,
+            "SIR": 9.9591,
+            "SAR": 7.99268,
+            "ISR": 8.1511
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "drums": {
+            "SDR": 3.68085,
+            "SIR": 11.6621,
+            "SAR": 3.02148,
+            "ISR": 7.01052
+          },
+          "instrumental": {
+            "SDR": 6.35439,
+            "SIR": 14.9113,
+            "SAR": 6.02898,
+            "ISR": 14.1714
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "drums": {
+            "SDR": 6.29074,
+            "SIR": 17.3678,
+            "SAR": 5.75812,
+            "ISR": 11.1898
+          },
+          "instrumental": {
+            "SDR": 5.41089,
+            "SIR": 10.0938,
+            "SAR": 6.39544,
+            "ISR": 11.4617
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "drums": {
+            "SDR": 10.6079,
+            "SIR": 21.1037,
+            "SAR": 11.1041,
+            "ISR": 14.5222
+          },
+          "instrumental": {
+            "SDR": 2.03495,
+            "SIR": 5.70979,
+            "SAR": 3.96897,
+            "ISR": 6.62577
+          }
+        }
       }
     ],
     "median_scores": {
       "drums": {
-        "SDR": 7.10067,
-        "SIR": 16.2967,
-        "SAR": 7.41762,
-        "ISR": 11.2848
+        "SDR": 7.08376,
+        "SIR": 16.5241,
+        "SAR": 7.38794,
+        "ISR": 11.2089
       },
       "instrumental": {
-        "SDR": 3.04591,
-        "SIR": 8.64191,
-        "SAR": 4.61964,
-        "ISR": 8.50964
+        "SDR": 3.18288,
+        "SIR": 8.95872,
+        "SAR": 4.77046,
+        "ISR": 8.51475
       }
     },
     "stems": [
@@ -31134,20 +34908,105 @@
             "ISR": 15.1966
           }
         }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 8.54308,
+            "SIR": 22.4156,
+            "SAR": 8.61041,
+            "ISR": 14.1128
+          },
+          "instrumental": {
+            "SDR": 13.7766,
+            "SIR": 23.6513,
+            "SAR": 15.1867,
+            "ISR": 17.8067
+          }
+        }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 2.8775,
+            "SIR": 6.24075,
+            "SAR": 2.0346,
+            "ISR": 11.7342
+          },
+          "instrumental": {
+            "SDR": 17.7803,
+            "SIR": 32.2031,
+            "SAR": 21.6552,
+            "ISR": 17.7895
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 10.3215,
+            "SIR": 26.0265,
+            "SAR": 10.7873,
+            "ISR": 16.5515
+          },
+          "instrumental": {
+            "SDR": 17.0727,
+            "SIR": 33.0414,
+            "SAR": 20.3793,
+            "ISR": 19.0383
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 11.8412,
+            "SIR": 30.2713,
+            "SAR": 12.2894,
+            "ISR": 16.7455
+          },
+          "instrumental": {
+            "SDR": 17.9839,
+            "SIR": 33.6239,
+            "SAR": 22.1693,
+            "ISR": 19.4058
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 11.7992,
+            "SIR": 31.4797,
+            "SAR": 13.4691,
+            "ISR": 14.8236
+          },
+          "instrumental": {
+            "SDR": 14.7789,
+            "SIR": 22.2598,
+            "SAR": 17.0289,
+            "ISR": 18.8969
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.0275,
-        "SIR": 20.6429,
-        "SAR": 9.29978,
-        "ISR": 14.2574
+        "SDR": 10.1745,
+        "SIR": 21.5048,
+        "SAR": 9.83894,
+        "ISR": 14.4258
       },
       "instrumental": {
-        "SDR": 15.3648,
-        "SIR": 25.5315,
-        "SAR": 17.1153,
-        "ISR": 18.2195
+        "SDR": 15.4028,
+        "SIR": 25.6395,
+        "SAR": 17.3,
+        "ISR": 18.3195
       }
     },
     "stems": [
@@ -31753,20 +35612,105 @@
             "ISR": 13.9203
           }
         }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 3.93671,
+            "SIR": 20.2014,
+            "SAR": 8.68515,
+            "ISR": 7.75969
+          },
+          "instrumental": {
+            "SDR": 7.34594,
+            "SIR": 9.64287,
+            "SAR": 10.9994,
+            "ISR": 15.6019
+          }
+        }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 0.48102,
+            "SIR": 5.92901,
+            "SAR": 2.24504,
+            "ISR": 8.85133
+          },
+          "instrumental": {
+            "SDR": 14.3262,
+            "SIR": 21.5113,
+            "SAR": 16.6025,
+            "ISR": 16.3706
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 6.38844,
+            "SIR": 25.9631,
+            "SAR": 10.9852,
+            "ISR": 9.69793
+          },
+          "instrumental": {
+            "SDR": 11.5178,
+            "SIR": 13.6892,
+            "SAR": 17.0456,
+            "ISR": 18.5194
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 4.77645,
+            "SIR": 29.6897,
+            "SAR": 12.5191,
+            "ISR": 6.72845
+          },
+          "instrumental": {
+            "SDR": 10.6968,
+            "SIR": 12.1384,
+            "SAR": 18.1899,
+            "ISR": 18.9801
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 4.56993,
+            "SIR": 30.0454,
+            "SAR": 13.3417,
+            "ISR": 6.34176
+          },
+          "instrumental": {
+            "SDR": 6.42373,
+            "SIR": 6.57884,
+            "SAR": 13.6072,
+            "ISR": 17.8828
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 4.52258,
-        "SIR": 20.3444,
-        "SAR": 10.7605,
-        "ISR": 8.2687
+        "SDR": 4.54626,
+        "SIR": 20.5896,
+        "SAR": 10.8479,
+        "ISR": 8.07398
       },
       "instrumental": {
-        "SDR": 8.44329,
-        "SIR": 11.6303,
-        "SAR": 13.4337,
-        "ISR": 16.7441
+        "SDR": 8.80815,
+        "SIR": 11.8844,
+        "SAR": 13.6395,
+        "ISR": 16.7793
       }
     },
     "stems": [
@@ -32372,20 +36316,105 @@
             "ISR": 15.1975
           }
         }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 8.63999,
+            "SIR": 21.077,
+            "SAR": 8.69383,
+            "ISR": 15.396
+          },
+          "instrumental": {
+            "SDR": 13.7364,
+            "SIR": 26.0014,
+            "SAR": 14.8899,
+            "ISR": 17.3915
+          }
+        }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 2.94074,
+            "SIR": 5.62562,
+            "SAR": 2.23153,
+            "ISR": 12.3325
+          },
+          "instrumental": {
+            "SDR": 17.199,
+            "SIR": 33.4162,
+            "SAR": 20.702,
+            "ISR": 17.7513
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 10.5791,
+            "SIR": 25.3579,
+            "SAR": 10.9447,
+            "ISR": 17.8893
+          },
+          "instrumental": {
+            "SDR": 16.9572,
+            "SIR": 35.2834,
+            "SAR": 20.2154,
+            "ISR": 18.9272
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 12.2134,
+            "SIR": 29.4645,
+            "SAR": 12.5179,
+            "ISR": 18.5048
+          },
+          "instrumental": {
+            "SDR": 17.7932,
+            "SIR": 36.5564,
+            "SAR": 22.0422,
+            "ISR": 19.3503
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 12.1006,
+            "SIR": 30.2437,
+            "SAR": 14.1278,
+            "ISR": 15.6777
+          },
+          "instrumental": {
+            "SDR": 14.791,
+            "SIR": 22.7587,
+            "SAR": 16.8571,
+            "ISR": 18.7422
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.3386,
-        "SIR": 20.7762,
-        "SAR": 10.8039,
-        "ISR": 15.9544
+        "SDR": 10.4412,
+        "SIR": 21.0793,
+        "SAR": 10.8743,
+        "ISR": 15.8161
       },
       "instrumental": {
-        "SDR": 15.2638,
-        "SIR": 27.3928,
-        "SAR": 16.9676,
-        "ISR": 17.9213
+        "SDR": 15.2775,
+        "SIR": 27.4736,
+        "SAR": 16.9945,
+        "ISR": 18.0622
       }
     },
     "stems": [
@@ -32991,20 +37020,105 @@
             "ISR": 15.3927
           }
         }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 8.61115,
+            "SIR": 20.2167,
+            "SAR": 8.79476,
+            "ISR": 14.1855
+          },
+          "instrumental": {
+            "SDR": 13.9395,
+            "SIR": 23.8276,
+            "SAR": 15.2305,
+            "ISR": 17.2746
+          }
+        }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 3.34018,
+            "SIR": 5.69531,
+            "SAR": 2.21021,
+            "ISR": 11.6237
+          },
+          "instrumental": {
+            "SDR": 15.8566,
+            "SIR": 31.7886,
+            "SAR": 18.5851,
+            "ISR": 17.7667
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 10.3832,
+            "SIR": 26.045,
+            "SAR": 10.9394,
+            "ISR": 15.9365
+          },
+          "instrumental": {
+            "SDR": 17.13,
+            "SIR": 31.0683,
+            "SAR": 20.6198,
+            "ISR": 19.0695
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 11.9351,
+            "SIR": 29.8557,
+            "SAR": 12.5938,
+            "ISR": 16.4933
+          },
+          "instrumental": {
+            "SDR": 18.0269,
+            "SIR": 33.1436,
+            "SAR": 22.7178,
+            "ISR": 19.3754
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 11.7682,
+            "SIR": 31.7154,
+            "SAR": 13.3831,
+            "ISR": 14.4392
+          },
+          "instrumental": {
+            "SDR": 14.8062,
+            "SIR": 21.1557,
+            "SAR": 17.1792,
+            "ISR": 18.9236
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.1157,
-        "SIR": 20.7557,
-        "SAR": 10.8579,
-        "ISR": 13.6508
+        "SDR": 10.1894,
+        "SIR": 20.7689,
+        "SAR": 10.8986,
+        "ISR": 14.24
       },
       "instrumental": {
-        "SDR": 15.3403,
-        "SIR": 24.9091,
-        "SAR": 17.4702,
-        "ISR": 18.0665
+        "SDR": 15.4579,
+        "SIR": 24.9567,
+        "SAR": 17.5097,
+        "ISR": 18.1301
       }
     },
     "stems": [
@@ -33610,20 +37724,105 @@
             "ISR": 15.3119
           }
         }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 8.51859,
+            "SIR": 19.8307,
+            "SAR": 8.75184,
+            "ISR": 13.6763
+          },
+          "instrumental": {
+            "SDR": 13.776,
+            "SIR": 22.8631,
+            "SAR": 15.2102,
+            "ISR": 17.2252
+          }
+        }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 3.04433,
+            "SIR": 4.95162,
+            "SAR": 2.05809,
+            "ISR": 11.4678
+          },
+          "instrumental": {
+            "SDR": 15.2729,
+            "SIR": 31.2839,
+            "SAR": 18.0395,
+            "ISR": 17.6568
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 10.2762,
+            "SIR": 25.668,
+            "SAR": 11.0193,
+            "ISR": 15.543
+          },
+          "instrumental": {
+            "SDR": 17.1582,
+            "SIR": 30.2847,
+            "SAR": 20.7154,
+            "ISR": 19.0361
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 11.8025,
+            "SIR": 29.3939,
+            "SAR": 12.6197,
+            "ISR": 15.8903
+          },
+          "instrumental": {
+            "SDR": 18.0312,
+            "SIR": 31.8475,
+            "SAR": 22.7848,
+            "ISR": 19.3608
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 11.8863,
+            "SIR": 30.6522,
+            "SAR": 13.9807,
+            "ISR": 14.6258
+          },
+          "instrumental": {
+            "SDR": 15.214,
+            "SIR": 21.9328,
+            "SAR": 17.5349,
+            "ISR": 18.838
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.0448,
-        "SIR": 20.4857,
-        "SAR": 10.8293,
-        "ISR": 14.015
+        "SDR": 10.1118,
+        "SIR": 20.6291,
+        "SAR": 10.8316,
+        "ISR": 14.2351
       },
       "instrumental": {
-        "SDR": 15.3736,
-        "SIR": 24.9615,
-        "SAR": 17.4954,
-        "ISR": 17.9408
+        "SDR": 15.3232,
+        "SIR": 25.1613,
+        "SAR": 17.525,
+        "ISR": 18.0793
       }
     },
     "stems": [
@@ -34229,20 +38428,105 @@
             "ISR": 14.1197
           }
         }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 7.09959,
+            "SIR": 19.2745,
+            "SAR": 7.55956,
+            "ISR": 11.8409
+          },
+          "instrumental": {
+            "SDR": 12.6853,
+            "SIR": 20.0304,
+            "SAR": 14.3729,
+            "ISR": 16.9422
+          }
+        }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 0.72921,
+            "SIR": 0.83863,
+            "SAR": 1.55131,
+            "ISR": 9.45459
+          },
+          "instrumental": {
+            "SDR": 16.7747,
+            "SIR": 30.0314,
+            "SAR": 21.0191,
+            "ISR": 16.8437
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 9.3368,
+            "SIR": 21.9294,
+            "SAR": 10.1128,
+            "ISR": 14.9206
+          },
+          "instrumental": {
+            "SDR": 16.1781,
+            "SIR": 28.9311,
+            "SAR": 19.9618,
+            "ISR": 18.0022
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 10.3285,
+            "SIR": 23.1891,
+            "SAR": 10.7884,
+            "ISR": 14.3528
+          },
+          "instrumental": {
+            "SDR": 16.9151,
+            "SIR": 28.4261,
+            "SAR": 21.1221,
+            "ISR": 18.2953
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 11.6637,
+            "SIR": 24.5604,
+            "SAR": 12.3422,
+            "ISR": 14.9468
+          },
+          "instrumental": {
+            "SDR": 14.3565,
+            "SIR": 22.0978,
+            "SAR": 16.0513,
+            "ISR": 17.5292
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 7.63307,
-        "SIR": 17.5502,
-        "SAR": 8.6833,
-        "ISR": 12.2868
+        "SDR": 8.22151,
+        "SIR": 18.0511,
+        "SAR": 8.98095,
+        "ISR": 12.5775
       },
       "instrumental": {
-        "SDR": 14.2598,
-        "SIR": 22.2432,
-        "SAR": 16.4255,
-        "ISR": 17.1808
+        "SDR": 14.3129,
+        "SIR": 22.3067,
+        "SAR": 16.5377,
+        "ISR": 17.2281
       }
     },
     "stems": [
@@ -34848,20 +39132,105 @@
             "ISR": 13.4713
           }
         }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 7.38409,
+            "SIR": 13.9087,
+            "SAR": 8.13109,
+            "ISR": 12.8174
+          },
+          "instrumental": {
+            "SDR": 12.2273,
+            "SIR": 20.9835,
+            "SAR": 13.9579,
+            "ISR": 14.7378
+          }
+        }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 1.39374,
+            "SIR": 0.70406,
+            "SAR": 3.9578,
+            "ISR": 9.18104
+          },
+          "instrumental": {
+            "SDR": 14.674,
+            "SIR": 30.4623,
+            "SAR": 18.3033,
+            "ISR": 15.6645
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 9.20524,
+            "SIR": 17.4444,
+            "SAR": 10.5626,
+            "ISR": 15.0667
+          },
+          "instrumental": {
+            "SDR": 15.332,
+            "SIR": 29.0095,
+            "SAR": 19.9754,
+            "ISR": 16.6886
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 10.0138,
+            "SIR": 17.9647,
+            "SAR": 11.1812,
+            "ISR": 14.7069
+          },
+          "instrumental": {
+            "SDR": 15.9754,
+            "SIR": 28.285,
+            "SAR": 21.0298,
+            "ISR": 16.9922
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 11.6604,
+            "SIR": 18.9153,
+            "SAR": 12.9875,
+            "ISR": 15.9069
+          },
+          "instrumental": {
+            "SDR": 13.8227,
+            "SIR": 25.1864,
+            "SAR": 16.1632,
+            "ISR": 15.4374
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 7.74832,
-        "SIR": 14.9536,
-        "SAR": 9.74293,
-        "ISR": 13.2938
+        "SDR": 8.13924,
+        "SIR": 15.0102,
+        "SAR": 9.90526,
+        "ISR": 13.3091
       },
       "instrumental": {
-        "SDR": 13.7105,
-        "SIR": 22.6092,
-        "SAR": 16.6048,
-        "ISR": 15.7992
+        "SDR": 13.8918,
+        "SIR": 23.1029,
+        "SAR": 16.6214,
+        "ISR": 15.7792
       }
     },
     "stems": [
@@ -35467,20 +39836,105 @@
             "ISR": 13.6263
           }
         }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 8.101,
+            "SIR": 16.0713,
+            "SAR": 8.70599,
+            "ISR": 13.1482
+          },
+          "instrumental": {
+            "SDR": 12.8315,
+            "SIR": 21.4532,
+            "SAR": 14.8154,
+            "ISR": 15.5388
+          }
+        }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 2.50855,
+            "SIR": 0.67222,
+            "SAR": 4.61358,
+            "ISR": 10.3423
+          },
+          "instrumental": {
+            "SDR": 16.0653,
+            "SIR": 30.3329,
+            "SAR": 21.1636,
+            "ISR": 15.8941
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 9.60538,
+            "SIR": 17.9619,
+            "SAR": 10.8293,
+            "ISR": 15.4658
+          },
+          "instrumental": {
+            "SDR": 15.4963,
+            "SIR": 29.9486,
+            "SAR": 20.3135,
+            "ISR": 16.7951
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 10.2757,
+            "SIR": 18.1564,
+            "SAR": 11.5929,
+            "ISR": 15.1745
+          },
+          "instrumental": {
+            "SDR": 15.9764,
+            "SIR": 29.5843,
+            "SAR": 21.4453,
+            "ISR": 16.9758
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 12.4525,
+            "SIR": 21.1111,
+            "SAR": 13.6101,
+            "ISR": 15.9529
+          },
+          "instrumental": {
+            "SDR": 14.2756,
+            "SIR": 24.5536,
+            "SAR": 17.1151,
+            "ISR": 16.3198
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.10643,
-        "SIR": 15.6196,
-        "SAR": 10.1873,
-        "ISR": 13.9862
+        "SDR": 8.54948,
+        "SIR": 15.8859,
+        "SAR": 10.3132,
+        "ISR": 14.0249
       },
       "instrumental": {
-        "SDR": 14.078,
-        "SIR": 23.7378,
-        "SAR": 17.0147,
-        "ISR": 15.8977
+        "SDR": 14.2736,
+        "SIR": 23.852,
+        "SAR": 17.1211,
+        "ISR": 15.9649
       }
     },
     "stems": [
@@ -36086,20 +40540,105 @@
             "ISR": 14.6652
           }
         }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 8.34852,
+            "SIR": 22.1235,
+            "SAR": 8.43358,
+            "ISR": 13.3752
+          },
+          "instrumental": {
+            "SDR": 13.5486,
+            "SIR": 22.2081,
+            "SAR": 15.0949,
+            "ISR": 17.6535
+          }
+        }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 3.65055,
+            "SIR": 6.04193,
+            "SAR": 2.11584,
+            "ISR": 10.596
+          },
+          "instrumental": {
+            "SDR": 16.4938,
+            "SIR": 30.5691,
+            "SAR": 20.1651,
+            "ISR": 17.8085
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 9.87268,
+            "SIR": 24.9939,
+            "SAR": 10.489,
+            "ISR": 15.3587
+          },
+          "instrumental": {
+            "SDR": 16.8517,
+            "SIR": 30.1136,
+            "SAR": 20.3862,
+            "ISR": 18.8673
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 11.1302,
+            "SIR": 27.8748,
+            "SAR": 11.5186,
+            "ISR": 15.5401
+          },
+          "instrumental": {
+            "SDR": 17.7366,
+            "SIR": 30.7493,
+            "SAR": 21.875,
+            "ISR": 19.1881
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 12.9939,
+            "SIR": 26.5542,
+            "SAR": 13.726,
+            "ISR": 16.7207
+          },
+          "instrumental": {
+            "SDR": 15.4001,
+            "SIR": 26.7834,
+            "SAR": 17.2413,
+            "ISR": 18.1632
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.4672,
-        "SIR": 19.2459,
-        "SAR": 9.31084,
-        "ISR": 13.7659
+        "SDR": 8.54049,
+        "SIR": 19.7121,
+        "SAR": 9.76062,
+        "ISR": 14.0305
       },
       "instrumental": {
-        "SDR": 14.9567,
-        "SIR": 24.3051,
-        "SAR": 17.1067,
-        "ISR": 17.6483
+        "SDR": 15.0579,
+        "SIR": 24.4972,
+        "SAR": 17.1961,
+        "ISR": 17.778
       }
     },
     "stems": [
@@ -38314,20 +42853,105 @@
             "ISR": 15.024
           }
         }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 9.11092,
+            "SIR": 24.5388,
+            "SAR": 9.48577,
+            "ISR": 14.2664
+          },
+          "instrumental": {
+            "SDR": 14.749,
+            "SIR": 24.6584,
+            "SAR": 16.3334,
+            "ISR": 18.2321
+          }
+        }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 4.59973,
+            "SIR": 6.31592,
+            "SAR": 2.70559,
+            "ISR": 10.9212
+          },
+          "instrumental": {
+            "SDR": 18.4726,
+            "SIR": 32.1754,
+            "SAR": 22.7474,
+            "ISR": 18.0809
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 10.6567,
+            "SIR": 26.1735,
+            "SAR": 11.4635,
+            "ISR": 15.9297
+          },
+          "instrumental": {
+            "SDR": 17.3897,
+            "SIR": 31.1462,
+            "SAR": 21.1957,
+            "ISR": 19.0793
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 12.5711,
+            "SIR": 30.6399,
+            "SAR": 13.223,
+            "ISR": 16.8552
+          },
+          "instrumental": {
+            "SDR": 18.3343,
+            "SIR": 34.1548,
+            "SAR": 23.5703,
+            "ISR": 19.4742
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 15.0289,
+            "SIR": 31.4403,
+            "SAR": 16.3209,
+            "ISR": 17.6846
+          },
+          "instrumental": {
+            "SDR": 16.9739,
+            "SIR": 30.3621,
+            "SAR": 20.016,
+            "ISR": 18.994
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.4556,
-        "SIR": 22.1606,
-        "SAR": 11.386,
-        "ISR": 14.1121
+        "SDR": 10.5562,
+        "SIR": 23.0075,
+        "SAR": 11.4247,
+        "ISR": 14.5703
       },
       "instrumental": {
-        "SDR": 15.8138,
-        "SIR": 25.9275,
-        "SAR": 18.1094,
-        "ISR": 18.2253
+        "SDR": 15.8348,
+        "SIR": 26.3736,
+        "SAR": 18.319,
+        "ISR": 18.2385
       }
     },
     "stems": [
@@ -38933,20 +43557,105 @@
             "ISR": 14.7855
           }
         }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 9.01237,
+            "SIR": 22.0877,
+            "SAR": 9.3567,
+            "ISR": 13.9478
+          },
+          "instrumental": {
+            "SDR": 14.3069,
+            "SIR": 23.9475,
+            "SAR": 15.9733,
+            "ISR": 17.7868
+          }
+        }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 3.74404,
+            "SIR": 8.63995,
+            "SAR": 2.82224,
+            "ISR": 9.08972
+          },
+          "instrumental": {
+            "SDR": 16.4195,
+            "SIR": 30.6863,
+            "SAR": 21.0732,
+            "ISR": 18.0281
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 10.3567,
+            "SIR": 25.2379,
+            "SAR": 10.996,
+            "ISR": 15.2968
+          },
+          "instrumental": {
+            "SDR": 17.123,
+            "SIR": 29.7162,
+            "SAR": 20.7122,
+            "ISR": 18.9704
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 11.8574,
+            "SIR": 28.0471,
+            "SAR": 12.6925,
+            "ISR": 16.1998
+          },
+          "instrumental": {
+            "SDR": 18.159,
+            "SIR": 31.9184,
+            "SAR": 23.0412,
+            "ISR": 19.3049
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 13.5525,
+            "SIR": 29.6751,
+            "SAR": 15.4178,
+            "ISR": 15.9442
+          },
+          "instrumental": {
+            "SDR": 16.1069,
+            "SIR": 25.0944,
+            "SAR": 18.9055,
+            "ISR": 18.7154
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.025,
-        "SIR": 20.3714,
-        "SAR": 10.8718,
-        "ISR": 14.4542
+        "SDR": 10.0375,
+        "SIR": 20.9898,
+        "SAR": 10.9339,
+        "ISR": 14.4587
       },
       "instrumental": {
-        "SDR": 15.4311,
-        "SIR": 25.2511,
-        "SAR": 17.7655,
-        "ISR": 17.9925
+        "SDR": 15.4657,
+        "SIR": 25.2765,
+        "SAR": 17.9232,
+        "ISR": 18.0123
       }
     },
     "stems": [
@@ -39552,20 +44261,105 @@
             "ISR": 15.0756
           }
         }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 9.08337,
+            "SIR": 24.7954,
+            "SAR": 9.38067,
+            "ISR": 14.3144
+          },
+          "instrumental": {
+            "SDR": 14.7452,
+            "SIR": 24.6377,
+            "SAR": 16.2441,
+            "ISR": 18.3736
+          }
+        }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 4.58177,
+            "SIR": 6.47052,
+            "SAR": 2.59301,
+            "ISR": 10.9061
+          },
+          "instrumental": {
+            "SDR": 18.6437,
+            "SIR": 32.1906,
+            "SAR": 22.6347,
+            "ISR": 18.314
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 10.6238,
+            "SIR": 26.6215,
+            "SAR": 11.417,
+            "ISR": 15.9769
+          },
+          "instrumental": {
+            "SDR": 17.5271,
+            "SIR": 31.3342,
+            "SAR": 21.0824,
+            "ISR": 19.3129
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 12.5055,
+            "SIR": 31.4731,
+            "SAR": 13.1795,
+            "ISR": 16.6647
+          },
+          "instrumental": {
+            "SDR": 18.4959,
+            "SIR": 33.6911,
+            "SAR": 23.4512,
+            "ISR": 19.7558
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 14.3247,
+            "SIR": 31.9899,
+            "SAR": 15.8975,
+            "ISR": 17.1669
+          },
+          "instrumental": {
+            "SDR": 16.8544,
+            "SIR": 28.4349,
+            "SAR": 19.8302,
+            "ISR": 19.2184
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.4036,
-        "SIR": 22.2632,
-        "SAR": 11.3155,
-        "ISR": 14.3029
+        "SDR": 10.5137,
+        "SIR": 23.0198,
+        "SAR": 11.3663,
+        "ISR": 14.6435
       },
       "instrumental": {
-        "SDR": 15.8701,
-        "SIR": 26.414,
-        "SAR": 18.0355,
-        "ISR": 18.3737
+        "SDR": 15.9189,
+        "SIR": 26.5922,
+        "SAR": 18.2325,
+        "ISR": 18.3768
       }
     },
     "stems": [
@@ -40171,20 +44965,105 @@
             "ISR": 16.5581
           }
         }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 9.95385,
+            "SIR": 27.4435,
+            "SAR": 10.3124,
+            "ISR": 15.5437
+          },
+          "instrumental": {
+            "SDR": 15.3988,
+            "SIR": 26.792,
+            "SAR": 16.9621,
+            "ISR": 18.695
+          }
+        }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 8.2256,
+            "SIR": 21.3097,
+            "SAR": 8.55264,
+            "ISR": 13.475
+          },
+          "instrumental": {
+            "SDR": 13.6543,
+            "SIR": 23.7424,
+            "SAR": 15.7181,
+            "ISR": 18.4904
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 11.5335,
+            "SIR": 29.5621,
+            "SAR": 12.3213,
+            "ISR": 16.6072
+          },
+          "instrumental": {
+            "SDR": 16.9441,
+            "SIR": 31.1553,
+            "SAR": 20.1699,
+            "ISR": 19.259
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 14.4035,
+            "SIR": 35.4832,
+            "SAR": 15.5806,
+            "ISR": 17.8685
+          },
+          "instrumental": {
+            "SDR": 18.6056,
+            "SIR": 36.0998,
+            "SAR": 24.11,
+            "ISR": 19.6745
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 16.0906,
+            "SIR": 35.8248,
+            "SAR": 17.8613,
+            "ISR": 19.2221
+          },
+          "instrumental": {
+            "SDR": 17.953,
+            "SIR": 38.7085,
+            "SAR": 22.0366,
+            "ISR": 19.4598
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 12.0149,
-        "SIR": 26.4655,
-        "SAR": 13.0333,
-        "ISR": 15.8931
+        "SDR": 11.7742,
+        "SIR": 27.3991,
+        "SAR": 12.6773,
+        "ISR": 16.0782
       },
       "instrumental": {
-        "SDR": 16.4299,
-        "SIR": 28.1696,
-        "SAR": 18.7001,
-        "ISR": 18.9816
+        "SDR": 16.4511,
+        "SIR": 28.2241,
+        "SAR": 18.8695,
+        "ISR": 19.0074
       }
     },
     "stems": [
@@ -40790,20 +45669,105 @@
             "ISR": 16.8282
           }
         }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 10.3782,
+            "SIR": 28.2182,
+            "SAR": 10.6105,
+            "ISR": 15.525
+          },
+          "instrumental": {
+            "SDR": 15.1444,
+            "SIR": 26.4238,
+            "SAR": 16.8456,
+            "ISR": 18.7488
+          }
+        }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 8.33927,
+            "SIR": 21.5469,
+            "SAR": 8.66699,
+            "ISR": 13.4977
+          },
+          "instrumental": {
+            "SDR": 13.6162,
+            "SIR": 23.4244,
+            "SAR": 15.4223,
+            "ISR": 18.5112
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 11.7457,
+            "SIR": 29.9814,
+            "SAR": 12.3968,
+            "ISR": 16.6172
+          },
+          "instrumental": {
+            "SDR": 16.8959,
+            "SIR": 30.9538,
+            "SAR": 20.0131,
+            "ISR": 19.297
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 14.5522,
+            "SIR": 35.9402,
+            "SAR": 15.6485,
+            "ISR": 17.6323
+          },
+          "instrumental": {
+            "SDR": 18.5864,
+            "SIR": 34.6089,
+            "SAR": 23.9372,
+            "ISR": 19.6892
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 16.1661,
+            "SIR": 35.7526,
+            "SAR": 17.8551,
+            "ISR": 19.235
+          },
+          "instrumental": {
+            "SDR": 17.9249,
+            "SIR": 38.6427,
+            "SAR": 22.0729,
+            "ISR": 19.4537
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 12.4581,
-        "SIR": 28.1322,
-        "SAR": 13.5625,
-        "ISR": 16.0717
+        "SDR": 12.1019,
+        "SIR": 28.1579,
+        "SAR": 12.9796,
+        "ISR": 16.1913
       },
       "instrumental": {
-        "SDR": 16.2972,
-        "SIR": 27.933,
-        "SAR": 18.3876,
-        "ISR": 18.9975
+        "SDR": 16.3069,
+        "SIR": 28.0131,
+        "SAR": 18.6004,
+        "ISR": 19.0241
       }
     },
     "stems": [
@@ -41419,20 +46383,105 @@
             "ISR": 15.754
           }
         }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 8.62748,
+            "SIR": 22.9827,
+            "SAR": 8.79313,
+            "ISR": 14.2059
+          },
+          "instrumental": {
+            "SDR": 14.0571,
+            "SIR": 24.118,
+            "SAR": 15.4935,
+            "ISR": 17.8618
+          }
+        }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 7.43734,
+            "SIR": 19.9247,
+            "SAR": 7.577,
+            "ISR": 12.41
+          },
+          "instrumental": {
+            "SDR": 13.0319,
+            "SIR": 22.1165,
+            "SAR": 15.0098,
+            "ISR": 18.1953
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 10.2658,
+            "SIR": 26.1365,
+            "SAR": 10.9079,
+            "ISR": 15.5378
+          },
+          "instrumental": {
+            "SDR": 16.0503,
+            "SIR": 28.9192,
+            "SAR": 18.7169,
+            "ISR": 18.8009
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 12.7917,
+            "SIR": 31.6955,
+            "SAR": 13.4608,
+            "ISR": 16.1853
+          },
+          "instrumental": {
+            "SDR": 17.7895,
+            "SIR": 30.4762,
+            "SAR": 21.8329,
+            "ISR": 19.4939
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 12.7457,
+            "SIR": 27.5503,
+            "SAR": 13.64,
+            "ISR": 16.7788
+          },
+          "instrumental": {
+            "SDR": 15.8242,
+            "SIR": 28.0431,
+            "SAR": 17.887,
+            "ISR": 18.6347
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.82,
-        "SIR": 23.4189,
-        "SAR": 10.9716,
-        "ISR": 14.8978
+        "SDR": 10.5429,
+        "SIR": 23.6624,
+        "SAR": 10.9398,
+        "ISR": 14.9177
       },
       "instrumental": {
-        "SDR": 15.0478,
-        "SIR": 25.4717,
-        "SAR": 16.8541,
-        "ISR": 18.182
+        "SDR": 15.1295,
+        "SIR": 25.5275,
+        "SAR": 16.8799,
+        "ISR": 18.2715
       }
     },
     "stems": [
@@ -42045,20 +47094,105 @@
             "ISR": 17.3935
           }
         }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 6.26089,
+            "SIR": 32.1735,
+            "SAR": 5.54724,
+            "ISR": 8.81442
+          },
+          "instrumental": {
+            "SDR": 13.1194,
+            "SIR": 14.4778,
+            "SAR": 12.8589,
+            "ISR": 19.2837
+          }
+        }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 8.42876,
+            "SIR": 21.8126,
+            "SAR": 8.91982,
+            "ISR": 13.0204
+          },
+          "instrumental": {
+            "SDR": 13.7408,
+            "SIR": 22.7536,
+            "SAR": 15.8154,
+            "ISR": 18.5818
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 11.8328,
+            "SIR": 30.3219,
+            "SAR": 12.118,
+            "ISR": 14.1414
+          },
+          "instrumental": {
+            "SDR": 16.5724,
+            "SIR": 24.3882,
+            "SAR": 19.2364,
+            "ISR": 19.4295
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 11.9194,
+            "SIR": 36.6129,
+            "SAR": 8.11822,
+            "ISR": 9.68744
+          },
+          "instrumental": {
+            "SDR": 17.9919,
+            "SIR": 18.507,
+            "SAR": 17.6981,
+            "ISR": 19.7258
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 14.8794,
+            "SIR": 39.619,
+            "SAR": 15.3755,
+            "ISR": 14.6759
+          },
+          "instrumental": {
+            "SDR": 16.7705,
+            "SIR": 21.039,
+            "SAR": 18.288,
+            "ISR": 19.5735
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.2587,
-        "SIR": 29.5231,
-        "SAR": 6.61471,
-        "ISR": 8.71898
+        "SDR": 8.44766,
+        "SIR": 29.7966,
+        "SAR": 7.22407,
+        "ISR": 9.68744
       },
       "instrumental": {
-        "SDR": 14.6082,
-        "SIR": 15.3443,
-        "SAR": 15.0148,
-        "ISR": 19.2948
+        "SDR": 14.6545,
+        "SIR": 16.6469,
+        "SAR": 15.3224,
+        "ISR": 19.3
       }
     },
     "stems": [
@@ -43131,20 +48265,105 @@
             "ISR": 16.2091
           }
         }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 8.07108,
+            "SIR": 27.1141,
+            "SAR": 8.8797,
+            "ISR": 12.4004
+          },
+          "instrumental": {
+            "SDR": 13.9102,
+            "SIR": 20.8479,
+            "SAR": 15.6257,
+            "ISR": 18.6648
+          }
+        }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 5.52123,
+            "SIR": 8.20646,
+            "SAR": 4.32156,
+            "ISR": 9.69582
+          },
+          "instrumental": {
+            "SDR": 18.9687,
+            "SIR": 30.395,
+            "SAR": 24.9345,
+            "ISR": 18.8545
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 9.65971,
+            "SIR": 29.4232,
+            "SAR": 10.5955,
+            "ISR": 14.2022
+          },
+          "instrumental": {
+            "SDR": 16.9149,
+            "SIR": 27.2811,
+            "SAR": 20.2152,
+            "ISR": 19.3523
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 11.1236,
+            "SIR": 31.1417,
+            "SAR": 12.0417,
+            "ISR": 14.3407
+          },
+          "instrumental": {
+            "SDR": 17.7892,
+            "SIR": 28.4426,
+            "SAR": 22.1601,
+            "ISR": 19.5277
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 12.7602,
+            "SIR": 25.9511,
+            "SAR": 14.0482,
+            "ISR": 16.3066
+          },
+          "instrumental": {
+            "SDR": 15.5757,
+            "SIR": 27.4733,
+            "SAR": 17.3299,
+            "ISR": 17.9038
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.45288,
-        "SIR": 25.13,
-        "SAR": 10.701,
-        "ISR": 13.0445
+        "SDR": 9.5563,
+        "SIR": 25.2802,
+        "SAR": 10.6483,
+        "ISR": 13.2414
       },
       "instrumental": {
-        "SDR": 15.8092,
-        "SIR": 23.387,
-        "SAR": 17.9914,
-        "ISR": 18.8447
+        "SDR": 15.8182,
+        "SIR": 23.7148,
+        "SAR": 17.9947,
+        "ISR": 18.8471
       }
     },
     "stems": [
@@ -45384,20 +50603,105 @@
             "ISR": 17.6894
           }
         }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 3.79925,
+            "SIR": 5.80021,
+            "SAR": 2.36476,
+            "ISR": 10.5422
+          },
+          "instrumental": {
+            "SDR": 16.5183,
+            "SIR": 30.6284,
+            "SAR": 20.9877,
+            "ISR": 17.7329
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 9.92083,
+            "SIR": 22.3311,
+            "SAR": 10.7783,
+            "ISR": 15.5166
+          },
+          "instrumental": {
+            "SDR": 16.681,
+            "SIR": 30.32,
+            "SAR": 20.3632,
+            "ISR": 18.3138
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 11.9632,
+            "SIR": 29.3989,
+            "SAR": 12.5099,
+            "ISR": 15.8255
+          },
+          "instrumental": {
+            "SDR": 18.0429,
+            "SIR": 31.8279,
+            "SAR": 22.4314,
+            "ISR": 19.3364
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 13.8147,
+            "SIR": 27.7858,
+            "SAR": 14.5578,
+            "ISR": 17.1887
+          },
+          "instrumental": {
+            "SDR": 16.0434,
+            "SIR": 28.4183,
+            "SAR": 18.3994,
+            "ISR": 18.4986
+          }
+        }
+      },
+      {
+        "track_name": "James May - Dont Let Go",
+        "scores": {
+          "vocals": {
+            "SDR": 11.513,
+            "SIR": 22.9547,
+            "SAR": 12.2014,
+            "ISR": 16.5532
+          },
+          "instrumental": {
+            "SDR": 16.3309,
+            "SIR": 29.577,
+            "SAR": 19.5424,
+            "ISR": 18.6134
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.55823,
-        "SIR": 19.4126,
-        "SAR": 9.0149,
-        "ISR": 13.9244
+        "SDR": 8.69496,
+        "SIR": 20.2516,
+        "SAR": 10.3204,
+        "ISR": 14.0933
       },
       "instrumental": {
-        "SDR": 14.9334,
-        "SIR": 24.2316,
-        "SAR": 17.0409,
-        "ISR": 17.6934
+        "SDR": 15.2961,
+        "SIR": 25.1364,
+        "SAR": 17.475,
+        "ISR": 17.9954
       }
     },
     "stems": [
@@ -46003,20 +51307,105 @@
             "ISR": 15.8561
           }
         }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 8.37636,
+            "SIR": 25.5439,
+            "SAR": 8.8963,
+            "ISR": 13.0278
+          },
+          "instrumental": {
+            "SDR": 13.8614,
+            "SIR": 21.5895,
+            "SAR": 15.507,
+            "ISR": 18.3778
+          }
+        }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 5.73788,
+            "SIR": 7.26737,
+            "SAR": 4.12875,
+            "ISR": 10.7461
+          },
+          "instrumental": {
+            "SDR": 19.0454,
+            "SIR": 31.8882,
+            "SAR": 24.2473,
+            "ISR": 18.6447
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 9.82229,
+            "SIR": 27.5433,
+            "SAR": 10.5432,
+            "ISR": 14.6576
+          },
+          "instrumental": {
+            "SDR": 16.9939,
+            "SIR": 28.3647,
+            "SAR": 20.3799,
+            "ISR": 19.1742
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 11.496,
+            "SIR": 29.6762,
+            "SAR": 12.2974,
+            "ISR": 14.8449
+          },
+          "instrumental": {
+            "SDR": 17.7971,
+            "SIR": 29.862,
+            "SAR": 22.1579,
+            "ISR": 19.4217
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 13.0959,
+            "SIR": 25.1333,
+            "SAR": 14.1252,
+            "ISR": 16.8017
+          },
+          "instrumental": {
+            "SDR": 15.5816,
+            "SIR": 28.5947,
+            "SAR": 17.2643,
+            "ISR": 17.6931
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.78846,
-        "SIR": 23.0893,
-        "SAR": 10.8375,
-        "ISR": 13.9277
+        "SDR": 9.80538,
+        "SIR": 23.7065,
+        "SAR": 10.6904,
+        "ISR": 13.9878
       },
       "instrumental": {
-        "SDR": 15.8132,
-        "SIR": 24.8546,
-        "SAR": 17.9832,
-        "ISR": 18.6101
+        "SDR": 15.8573,
+        "SIR": 25.1009,
+        "SAR": 18.0788,
+        "ISR": 18.6274
       }
     },
     "stems": [
@@ -46605,19 +51994,121 @@
             "ISR": 19.6217
           }
         }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 11.349,
+            "SIR": 21.7457,
+            "SAR": 12.7289,
+            "ISR": 16.7757
+          },
+          "instrumental": {
+            "SDR": 12.0854,
+            "SIR": 23.1845,
+            "SAR": 13.0484,
+            "ISR": 15.657
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 8.72349,
+            "SIR": 25.2805,
+            "SAR": 9.13203,
+            "ISR": 13.6972
+          },
+          "instrumental": {
+            "SDR": 14.3485,
+            "SIR": 22.6056,
+            "SAR": 16.2959,
+            "ISR": 18.2944
+          }
+        }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 5.91693,
+            "SIR": 7.30367,
+            "SAR": 4.20726,
+            "ISR": 11.1963
+          },
+          "instrumental": {
+            "SDR": 19.0816,
+            "SIR": 32.2645,
+            "SAR": 24.1358,
+            "ISR": 18.6023
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 10.2827,
+            "SIR": 27.4632,
+            "SAR": 10.8963,
+            "ISR": 15.4544
+          },
+          "instrumental": {
+            "SDR": 17.1289,
+            "SIR": 29.9609,
+            "SAR": 20.6392,
+            "ISR": 19.1566
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 12.6367,
+            "SIR": 31.1013,
+            "SAR": 13.0895,
+            "ISR": 16.8252
+          },
+          "instrumental": {
+            "SDR": 18.2822,
+            "SIR": 33.3222,
+            "SAR": 23.2674,
+            "ISR": 19.4432
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 13.9713,
+            "SIR": 25.7951,
+            "SAR": 15.2871,
+            "ISR": 17.5479
+          },
+          "instrumental": {
+            "SDR": 16.141,
+            "SIR": 30.4691,
+            "SAR": 18.4409,
+            "ISR": 17.8294
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.1677,
-        "SIR": 22.9206,
+        "SDR": 10.2547,
+        "SIR": 23.3663,
         "SAR": 11.0051,
-        "ISR": 14.1575
+        "ISR": 14.3714
       },
       "instrumental": {
-        "SDR": 15.9497,
-        "SIR": 25.7172,
-        "SAR": 18.3169,
+        "SDR": 16.0572,
+        "SIR": 25.9179,
+        "SAR": 18.3869,
         "ISR": 18.5689
       }
     },
@@ -47224,20 +52715,105 @@
             "ISR": 15.7187
           }
         }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 9.28262,
+            "SIR": 26.7611,
+            "SAR": 9.69987,
+            "ISR": 14.4338
+          },
+          "instrumental": {
+            "SDR": 14.8417,
+            "SIR": 23.9982,
+            "SAR": 16.5929,
+            "ISR": 18.5479
+          }
+        }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 7.68977,
+            "SIR": 21.2588,
+            "SAR": 8.33894,
+            "ISR": 12.9313
+          },
+          "instrumental": {
+            "SDR": 14.259,
+            "SIR": 23.7148,
+            "SAR": 16.6304,
+            "ISR": 18.6012
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 10.9469,
+            "SIR": 28.4195,
+            "SAR": 11.6161,
+            "ISR": 15.8446
+          },
+          "instrumental": {
+            "SDR": 17.2245,
+            "SIR": 30.3024,
+            "SAR": 20.8416,
+            "ISR": 19.2408
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 13.4731,
+            "SIR": 32.7145,
+            "SAR": 14.209,
+            "ISR": 17.1316
+          },
+          "instrumental": {
+            "SDR": 18.4981,
+            "SIR": 34.2829,
+            "SAR": 23.7271,
+            "ISR": 19.534
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 15.2016,
+            "SIR": 26.1342,
+            "SAR": 16.3848,
+            "ISR": 18.1669
+          },
+          "instrumental": {
+            "SDR": 16.8135,
+            "SIR": 32.159,
+            "SAR": 19.2943,
+            "ISR": 17.9213
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.9739,
-        "SIR": 24.2992,
-        "SAR": 11.8031,
-        "ISR": 15.209
+        "SDR": 10.9604,
+        "SIR": 25.2947,
+        "SAR": 11.7096,
+        "ISR": 15.3252
       },
       "instrumental": {
-        "SDR": 16.0388,
-        "SIR": 26.8933,
-        "SAR": 18.4798,
-        "ISR": 18.564
+        "SDR": 16.1121,
+        "SIR": 26.8982,
+        "SAR": 18.5608,
+        "ISR": 18.5826
       }
     },
     "stems": [
@@ -47843,20 +53419,105 @@
             "ISR": 15.7647
           }
         }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 9.37351,
+            "SIR": 26.6779,
+            "SAR": 9.80521,
+            "ISR": 14.4952
+          },
+          "instrumental": {
+            "SDR": 14.8059,
+            "SIR": 24.1667,
+            "SAR": 16.5469,
+            "ISR": 18.5168
+          }
+        }
+      },
+      {
+        "track_name": "Hollow Ground - Left Blind",
+        "scores": {
+          "vocals": {
+            "SDR": 7.94777,
+            "SIR": 21.2505,
+            "SAR": 8.51137,
+            "ISR": 13.1184
+          },
+          "instrumental": {
+            "SDR": 14.1797,
+            "SIR": 24.0022,
+            "SAR": 16.4555,
+            "ISR": 18.5701
+          }
+        }
+      },
+      {
+        "track_name": "Hop Along - Sister Cities",
+        "scores": {
+          "vocals": {
+            "SDR": 11.0289,
+            "SIR": 28.4668,
+            "SAR": 11.7626,
+            "ISR": 16.0497
+          },
+          "instrumental": {
+            "SDR": 17.2159,
+            "SIR": 30.666,
+            "SAR": 20.7845,
+            "ISR": 19.2309
+          }
+        }
+      },
+      {
+        "track_name": "Invisible Familiars - Disturbing Wildlife",
+        "scores": {
+          "vocals": {
+            "SDR": 13.5372,
+            "SIR": 32.6778,
+            "SAR": 14.2421,
+            "ISR": 17.3472
+          },
+          "instrumental": {
+            "SDR": 18.4862,
+            "SIR": 34.8379,
+            "SAR": 23.6458,
+            "ISR": 19.5244
+          }
+        }
+      },
+      {
+        "track_name": "James May - All Souls Moon",
+        "scores": {
+          "vocals": {
+            "SDR": 15.2624,
+            "SIR": 26.2994,
+            "SAR": 16.4019,
+            "ISR": 18.2776
+          },
+          "instrumental": {
+            "SDR": 16.7773,
+            "SIR": 32.3473,
+            "SAR": 19.3981,
+            "ISR": 17.9431
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.9888,
-        "SIR": 23.5803,
-        "SAR": 11.7907,
-        "ISR": 15.2616
+        "SDR": 11.0088,
+        "SIR": 25.1522,
+        "SAR": 11.7767,
+        "ISR": 15.399
       },
       "instrumental": {
-        "SDR": 16.0211,
-        "SIR": 26.9479,
-        "SAR": 18.4517,
-        "ISR": 18.584
+        "SDR": 16.0796,
+        "SIR": 27.0431,
+        "SAR": 18.542,
+        "ISR": 18.577
       }
     },
     "stems": [
