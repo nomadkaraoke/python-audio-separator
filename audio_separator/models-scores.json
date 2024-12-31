@@ -545,6 +545,74 @@
             "ISR": 19.6091
           }
         }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 1.88926,
+            "SIR": 8.76664,
+            "SAR": 4.81204,
+            "ISR": 8.86849
+          },
+          "instrumental": {
+            "SDR": 9.9125,
+            "SIR": 14.02,
+            "SAR": 12.4588,
+            "ISR": 16.7232
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 12.4278,
+            "SIR": 24.0343,
+            "SAR": 12.6541,
+            "ISR": 21.4862
+          },
+          "instrumental": {
+            "SDR": 20.8791,
+            "SIR": 29.5482,
+            "SAR": 21.5446,
+            "ISR": 27.4235
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 10.1582,
+            "SIR": 19.0278,
+            "SAR": 11.3987,
+            "ISR": 18.4367
+          },
+          "instrumental": {
+            "SDR": 10.827,
+            "SIR": 17.4836,
+            "SAR": 11.1509,
+            "ISR": 18.6054
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 6.23827,
+            "SIR": 17.2753,
+            "SAR": 6.55888,
+            "ISR": 10.6605
+          },
+          "instrumental": {
+            "SDR": 11.4443,
+            "SIR": 15.754,
+            "SAR": 13.6843,
+            "ISR": 24.0501
+          }
+        }
       }
     ],
     "median_scores": {
@@ -555,9 +623,9 @@
         "ISR": 12.8686
       },
       "instrumental": {
-        "SDR": 13.5405,
-        "SIR": 18.1972,
-        "SAR": 15.6395,
+        "SDR": 13.3306,
+        "SIR": 18.0843,
+        "SAR": 15.3621,
         "ISR": 21.2775
       }
     },
@@ -1113,18 +1181,86 @@
             "ISR": 19.3445
           }
         }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 5.48667,
+            "SIR": 12.2044,
+            "SAR": 8.7007,
+            "ISR": 9.78261
+          },
+          "instrumental": {
+            "SDR": 12.1585,
+            "SIR": 15.7049,
+            "SAR": 16.2092,
+            "ISR": 18.1336
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 14.4054,
+            "SIR": 29.0948,
+            "SAR": 14.8905,
+            "ISR": 21.3908
+          },
+          "instrumental": {
+            "SDR": 19.3764,
+            "SIR": 27.1385,
+            "SAR": 20.5411,
+            "ISR": 28.9143
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 11.2836,
+            "SIR": 20.2702,
+            "SAR": 12.5767,
+            "ISR": 18.5102
+          },
+          "instrumental": {
+            "SDR": 9.73039,
+            "SIR": 15.0866,
+            "SAR": 11.1375,
+            "ISR": 19.1111
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 6.3909,
+            "SIR": 15.7194,
+            "SAR": 6.61467,
+            "ISR": 11.0887
+          },
+          "instrumental": {
+            "SDR": 11.3889,
+            "SIR": 15.7268,
+            "SAR": 13.6124,
+            "ISR": 23.3422
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
         "SDR": 8.10224,
         "SIR": 18.9502,
-        "SAR": 8.32198,
+        "SAR": 8.62311,
         "ISR": 12.6951
       },
       "instrumental": {
-        "SDR": 13.4587,
-        "SIR": 17.8136,
+        "SDR": 13.4269,
+        "SIR": 17.5857,
         "SAR": 15.6484,
         "ISR": 20.9997
       }
@@ -1681,6 +1817,74 @@
             "ISR": 19.6017
           }
         }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 2.86481,
+            "SIR": 8.85314,
+            "SAR": 5.45329,
+            "ISR": 10.1158
+          },
+          "instrumental": {
+            "SDR": 10.6862,
+            "SIR": 15.5776,
+            "SAR": 13.5164,
+            "ISR": 15.7832
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 14.1155,
+            "SIR": 28.5913,
+            "SAR": 14.2347,
+            "ISR": 22.5612
+          },
+          "instrumental": {
+            "SDR": 20.2309,
+            "SIR": 29.5669,
+            "SAR": 20.6627,
+            "ISR": 32.7618
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 11.3247,
+            "SIR": 20.9764,
+            "SAR": 12.2169,
+            "ISR": 21.2506
+          },
+          "instrumental": {
+            "SDR": 10.3742,
+            "SIR": 18.7744,
+            "SAR": 10.7533,
+            "ISR": 19.3459
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 6.31983,
+            "SIR": 18.6562,
+            "SAR": 6.15057,
+            "ISR": 12.1549
+          },
+          "instrumental": {
+            "SDR": 12.0936,
+            "SIR": 17.3127,
+            "SAR": 13.3578,
+            "ISR": 24.9136
+          }
+        }
       }
     ],
     "median_scores": {
@@ -1691,9 +1895,9 @@
         "ISR": 13.4975
       },
       "instrumental": {
-        "SDR": 14.1026,
-        "SIR": 19.9203,
-        "SAR": 15.271,
+        "SDR": 14.0127,
+        "SIR": 19.6763,
+        "SAR": 15.1021,
         "ISR": 20.8126
       }
     },
@@ -2249,19 +2453,87 @@
             "ISR": 19.5462
           }
         }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 2.59637,
+            "SIR": 9.13157,
+            "SAR": 6.39332,
+            "ISR": 9.71978
+          },
+          "instrumental": {
+            "SDR": 10.194,
+            "SIR": 15.0814,
+            "SAR": 12.5173,
+            "ISR": 15.308
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 14.3684,
+            "SIR": 28.6667,
+            "SAR": 14.4789,
+            "ISR": 22.8522
+          },
+          "instrumental": {
+            "SDR": 19.3386,
+            "SIR": 29.4806,
+            "SAR": 19.9103,
+            "ISR": 32.3307
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 10.0873,
+            "SIR": 17.8703,
+            "SAR": 10.8269,
+            "ISR": 20.4341
+          },
+          "instrumental": {
+            "SDR": 11.0302,
+            "SIR": 19.7611,
+            "SAR": 11.225,
+            "ISR": 17.6389
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 6.11536,
+            "SIR": 15.587,
+            "SAR": 6.2916,
+            "ISR": 13.1744
+          },
+          "instrumental": {
+            "SDR": 11.569,
+            "SIR": 17.7935,
+            "SAR": 12.7457,
+            "ISR": 21.6239
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
         "SDR": 8.03683,
-        "SIR": 18.0956,
+        "SIR": 17.9486,
         "SAR": 7.74298,
         "ISR": 15.0863
       },
       "instrumental": {
-        "SDR": 13.6389,
-        "SIR": 20.5607,
-        "SAR": 14.9762,
+        "SDR": 13.5271,
+        "SIR": 20.4983,
+        "SAR": 14.9052,
         "ISR": 19.8137
       }
     },
@@ -2817,20 +3089,88 @@
             "ISR": 19.6462
           }
         }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 0.60822,
+            "SIR": 17.869,
+            "SAR": 0.38194,
+            "ISR": 4.6327
+          },
+          "instrumental": {
+            "SDR": 8.18715,
+            "SIR": 9.50725,
+            "SAR": 13.0135,
+            "ISR": 18.7294
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 5.38711,
+            "SIR": 26.3399,
+            "SAR": 4.74832,
+            "ISR": 8.57357
+          },
+          "instrumental": {
+            "SDR": 12.6023,
+            "SIR": 14.1386,
+            "SAR": 14.9156,
+            "ISR": 28.9532
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 4.09805,
+            "SIR": 20.559,
+            "SAR": 3.8303,
+            "ISR": 6.01517
+          },
+          "instrumental": {
+            "SDR": 2.49153,
+            "SIR": 3.15333,
+            "SAR": 9.33386,
+            "ISR": 24.2134
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 4.255,
+            "SIR": 21.3071,
+            "SAR": 4.10065,
+            "ISR": 7.21003
+          },
+          "instrumental": {
+            "SDR": 10.3007,
+            "SIR": 11.0636,
+            "SAR": 13.2231,
+            "ISR": 30.2452
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 4.92847,
-        "SIR": 22.9856,
-        "SAR": 3.33831,
-        "ISR": 5.89769
+        "SDR": 4.64166,
+        "SIR": 22.3751,
+        "SAR": 3.5961,
+        "ISR": 6.02063
       },
       "instrumental": {
-        "SDR": 12.0979,
-        "SIR": 11.5602,
-        "SAR": 14.8921,
-        "ISR": 21.6831
+        "SDR": 11.9564,
+        "SIR": 10.8694,
+        "SAR": 14.8394,
+        "ISR": 22.1884
       }
     },
     "stems": [
@@ -3385,20 +3725,88 @@
             "ISR": 19.7549
           }
         }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": -0.0,
+            "SIR": 1.65806,
+            "SAR": -2e-05,
+            "ISR": 0.01738
+          },
+          "instrumental": {
+            "SDR": 6.78315,
+            "SIR": 6.05593,
+            "SAR": 32.2085,
+            "ISR": 19.1614
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 5.74493,
+            "SIR": 20.266,
+            "SAR": 5.54303,
+            "ISR": 10.3481
+          },
+          "instrumental": {
+            "SDR": 14.6914,
+            "SIR": 17.2938,
+            "SAR": 15.8017,
+            "ISR": 27.5643
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 3.81733,
+            "SIR": 19.0782,
+            "SAR": 4.25342,
+            "ISR": 7.31583
+          },
+          "instrumental": {
+            "SDR": 5.96654,
+            "SIR": 6.49313,
+            "SAR": 9.05095,
+            "ISR": 22.7231
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 4.10796,
+            "SIR": 22.7148,
+            "SAR": 3.64233,
+            "ISR": 7.24707
+          },
+          "instrumental": {
+            "SDR": 10.6031,
+            "SIR": 11.3933,
+            "SAR": 12.9657,
+            "ISR": 31.9148
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 4.55306,
-        "SIR": 21.4527,
-        "SAR": 3.29232,
-        "ISR": 6.18415
+        "SDR": 4.39637,
+        "SIR": 21.2829,
+        "SAR": 3.60074,
+        "ISR": 6.71066
       },
       "instrumental": {
-        "SDR": 12.8349,
-        "SIR": 13.5646,
+        "SDR": 12.6361,
+        "SIR": 12.5536,
         "SAR": 15.2296,
-        "ISR": 20.8011
+        "ISR": 21.4425
       }
     },
     "stems": [
@@ -3953,18 +4361,86 @@
             "ISR": 19.4437
           }
         }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 5.99552,
+            "SIR": 11.9636,
+            "SAR": 9.74422,
+            "ISR": 10.283
+          },
+          "instrumental": {
+            "SDR": 12.817,
+            "SIR": 15.7251,
+            "SAR": 17.3806,
+            "ISR": 18.6098
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 14.3667,
+            "SIR": 28.5043,
+            "SAR": 14.6887,
+            "ISR": 21.6084
+          },
+          "instrumental": {
+            "SDR": 18.6669,
+            "SIR": 26.6962,
+            "SAR": 19.7765,
+            "ISR": 31.3672
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 11.45,
+            "SIR": 20.6107,
+            "SAR": 12.6396,
+            "ISR": 18.915
+          },
+          "instrumental": {
+            "SDR": 9.79974,
+            "SIR": 15.8961,
+            "SAR": 11.2031,
+            "ISR": 19.5192
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 6.71609,
+            "SIR": 14.1348,
+            "SAR": 7.11794,
+            "ISR": 11.2593
+          },
+          "instrumental": {
+            "SDR": 11.5634,
+            "SIR": 15.9534,
+            "SAR": 13.5375,
+            "ISR": 21.8897
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
         "SDR": 8.32223,
         "SIR": 19.8423,
-        "SAR": 8.75528,
+        "SAR": 9.06888,
         "ISR": 13.1676
       },
       "instrumental": {
-        "SDR": 13.4594,
-        "SIR": 17.7955,
+        "SDR": 13.2477,
+        "SIR": 17.7711,
         "SAR": 15.5539,
         "ISR": 21.2337
       }
@@ -4521,6 +4997,74 @@
             "ISR": 19.7074
           }
         }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 3.32301,
+            "SIR": 9.21441,
+            "SAR": 6.13258,
+            "ISR": 10.45
+          },
+          "instrumental": {
+            "SDR": 10.0885,
+            "SIR": 15.2584,
+            "SAR": 13.273,
+            "ISR": 15.3141
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 13.8531,
+            "SIR": 28.1247,
+            "SAR": 14.4393,
+            "ISR": 20.6479
+          },
+          "instrumental": {
+            "SDR": 19.439,
+            "SIR": 27.2839,
+            "SAR": 20.652,
+            "ISR": 27.5765
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 10.9901,
+            "SIR": 20.7114,
+            "SAR": 12.2736,
+            "ISR": 17.7449
+          },
+          "instrumental": {
+            "SDR": 9.81901,
+            "SIR": 14.9903,
+            "SAR": 11.2065,
+            "ISR": 19.5773
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 6.45781,
+            "SIR": 16.1148,
+            "SAR": 6.90846,
+            "ISR": 10.8658
+          },
+          "instrumental": {
+            "SDR": 11.5644,
+            "SIR": 15.6986,
+            "SAR": 13.8691,
+            "ISR": 22.8434
+          }
+        }
       }
     ],
     "median_scores": {
@@ -4531,9 +5075,9 @@
         "ISR": 12.3546
       },
       "instrumental": {
-        "SDR": 13.4846,
-        "SIR": 17.7075,
-        "SAR": 15.6494,
+        "SDR": 13.3811,
+        "SIR": 17.5334,
+        "SAR": 15.5862,
         "ISR": 21.0645
       }
     },
@@ -5089,6 +5633,74 @@
             "ISR": 19.688
           }
         }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 3.7769,
+            "SIR": 10.7739,
+            "SAR": 6.76779,
+            "ISR": 8.6522
+          },
+          "instrumental": {
+            "SDR": 11.0431,
+            "SIR": 14.4797,
+            "SAR": 14.4037,
+            "ISR": 17.2019
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 13.7959,
+            "SIR": 28.6967,
+            "SAR": 13.964,
+            "ISR": 20.2307
+          },
+          "instrumental": {
+            "SDR": 19.7435,
+            "SIR": 26.9783,
+            "SAR": 20.9271,
+            "ISR": 29.2887
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 10.6518,
+            "SIR": 21.2137,
+            "SAR": 11.8402,
+            "ISR": 16.9075
+          },
+          "instrumental": {
+            "SDR": 10.3149,
+            "SIR": 14.7172,
+            "SAR": 11.4537,
+            "ISR": 20.5416
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 6.49728,
+            "SIR": 16.6313,
+            "SAR": 6.91648,
+            "ISR": 11.128
+          },
+          "instrumental": {
+            "SDR": 11.7356,
+            "SIR": 15.9875,
+            "SAR": 13.9733,
+            "ISR": 23.4678
+          }
+        }
       }
     ],
     "median_scores": {
@@ -5099,9 +5711,9 @@
         "ISR": 11.8338
       },
       "instrumental": {
-        "SDR": 13.6384,
-        "SIR": 18.0151,
-        "SAR": 15.9301,
+        "SDR": 13.4887,
+        "SIR": 17.7875,
+        "SAR": 15.7465,
         "ISR": 21.5444
       }
     },
@@ -5657,6 +6269,74 @@
             "ISR": 19.322
           }
         }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 3.30439,
+            "SIR": 8.44296,
+            "SAR": 6.62538,
+            "ISR": 9.58403
+          },
+          "instrumental": {
+            "SDR": 9.91908,
+            "SIR": 15.382,
+            "SAR": 13.1648,
+            "ISR": 15.4699
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 12.8223,
+            "SIR": 26.1613,
+            "SAR": 13.3089,
+            "ISR": 19.6004
+          },
+          "instrumental": {
+            "SDR": 20.2388,
+            "SIR": 27.2012,
+            "SAR": 21.2514,
+            "ISR": 28.438
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 10.4937,
+            "SIR": 19.4429,
+            "SAR": 11.7425,
+            "ISR": 17.5716
+          },
+          "instrumental": {
+            "SDR": 9.72552,
+            "SIR": 15.1745,
+            "SAR": 10.9276,
+            "ISR": 18.6733
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 6.13402,
+            "SIR": 16.0478,
+            "SAR": 6.28158,
+            "ISR": 10.9519
+          },
+          "instrumental": {
+            "SDR": 11.3114,
+            "SIR": 15.9395,
+            "SAR": 13.4249,
+            "ISR": 22.4215
+          }
+        }
       }
     ],
     "median_scores": {
@@ -5667,9 +6347,9 @@
         "ISR": 12.0434
       },
       "instrumental": {
-        "SDR": 13.2367,
-        "SIR": 18.1792,
-        "SAR": 15.3338,
+        "SDR": 13.0596,
+        "SIR": 18.0646,
+        "SAR": 15.128,
         "ISR": 20.0387
       }
     },
@@ -6225,6 +6905,74 @@
             "ISR": 19.3543
           }
         }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 3.07049,
+            "SIR": 8.86747,
+            "SAR": 5.96601,
+            "ISR": 9.11737
+          },
+          "instrumental": {
+            "SDR": 10.1071,
+            "SIR": 15.2494,
+            "SAR": 13.069,
+            "ISR": 15.7414
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 13.1122,
+            "SIR": 27.1205,
+            "SAR": 13.5418,
+            "ISR": 19.7598
+          },
+          "instrumental": {
+            "SDR": 19.4212,
+            "SIR": 26.8558,
+            "SAR": 20.5656,
+            "ISR": 27.3669
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 9.97273,
+            "SIR": 19.2215,
+            "SAR": 11.1354,
+            "ISR": 17.7203
+          },
+          "instrumental": {
+            "SDR": 10.0736,
+            "SIR": 15.59,
+            "SAR": 11.0266,
+            "ISR": 18.8722
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 6.03998,
+            "SIR": 16.9494,
+            "SAR": 6.1379,
+            "ISR": 10.7825
+          },
+          "instrumental": {
+            "SDR": 11.2962,
+            "SIR": 15.852,
+            "SAR": 13.5976,
+            "ISR": 23.4322
+          }
+        }
       }
     ],
     "median_scores": {
@@ -6235,9 +6983,9 @@
         "ISR": 11.7187
       },
       "instrumental": {
-        "SDR": 13.6314,
-        "SIR": 18.1636,
-        "SAR": 15.4786,
+        "SDR": 13.3077,
+        "SIR": 17.9212,
+        "SAR": 15.2654,
         "ISR": 19.9325
       }
     },
@@ -6793,6 +7541,74 @@
             "ISR": 19.5192
           }
         }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 2.99776,
+            "SIR": 8.94443,
+            "SAR": 7.34837,
+            "ISR": 9.13308
+          },
+          "instrumental": {
+            "SDR": 10.2386,
+            "SIR": 14.8091,
+            "SAR": 12.9585,
+            "ISR": 15.8542
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 12.8707,
+            "SIR": 25.4991,
+            "SAR": 13.2785,
+            "ISR": 20.3103
+          },
+          "instrumental": {
+            "SDR": 20.1243,
+            "SIR": 27.6273,
+            "SAR": 20.9628,
+            "ISR": 28.1562
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 9.6324,
+            "SIR": 19.4792,
+            "SAR": 10.4926,
+            "ISR": 16.2551
+          },
+          "instrumental": {
+            "SDR": 9.94676,
+            "SIR": 14.6482,
+            "SAR": 11.0144,
+            "ISR": 19.2249
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 6.22008,
+            "SIR": 16.8543,
+            "SAR": 6.47889,
+            "ISR": 10.8592
+          },
+          "instrumental": {
+            "SDR": 11.1009,
+            "SIR": 15.3297,
+            "SAR": 13.3787,
+            "ISR": 23.7143
+          }
+        }
       }
     ],
     "median_scores": {
@@ -6803,9 +7619,9 @@
         "ISR": 11.9258
       },
       "instrumental": {
-        "SDR": 13.234,
-        "SIR": 17.8162,
-        "SAR": 15.459,
+        "SDR": 12.8912,
+        "SIR": 17.5251,
+        "SAR": 15.3018,
         "ISR": 19.7777
       }
     },
@@ -7361,6 +8177,74 @@
             "ISR": 19.6068
           }
         }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 2.30705,
+            "SIR": 8.59699,
+            "SAR": 6.80478,
+            "ISR": 9.91799
+          },
+          "instrumental": {
+            "SDR": 9.25459,
+            "SIR": 15.055,
+            "SAR": 12.046,
+            "ISR": 14.839
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 12.5074,
+            "SIR": 26.3587,
+            "SAR": 13.049,
+            "ISR": 19.1806
+          },
+          "instrumental": {
+            "SDR": 20.8636,
+            "SIR": 26.645,
+            "SAR": 21.9877,
+            "ISR": 29.1322
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 10.2598,
+            "SIR": 19.377,
+            "SAR": 11.357,
+            "ISR": 17.4191
+          },
+          "instrumental": {
+            "SDR": 10.1679,
+            "SIR": 15.5676,
+            "SAR": 11.0068,
+            "ISR": 18.8198
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 6.19851,
+            "SIR": 17.4315,
+            "SAR": 6.44975,
+            "ISR": 10.4084
+          },
+          "instrumental": {
+            "SDR": 11.2299,
+            "SIR": 15.1968,
+            "SAR": 13.8059,
+            "ISR": 24.1121
+          }
+        }
       }
     ],
     "median_scores": {
@@ -7371,9 +8255,9 @@
         "ISR": 11.8481
       },
       "instrumental": {
-        "SDR": 13.2782,
-        "SIR": 17.5687,
-        "SAR": 15.5557,
+        "SDR": 13.1736,
+        "SIR": 17.4019,
+        "SAR": 15.4169,
         "ISR": 20.5559
       }
     },
@@ -7929,6 +8813,74 @@
             "ISR": 19.6412
           }
         }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 0.75369,
+            "SIR": 9.89789,
+            "SAR": 4.42746,
+            "ISR": 7.657
+          },
+          "instrumental": {
+            "SDR": 8.85454,
+            "SIR": 12.4224,
+            "SAR": 10.9395,
+            "ISR": 15.9617
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 13.7338,
+            "SIR": 27.9152,
+            "SAR": 14.0307,
+            "ISR": 20.0397
+          },
+          "instrumental": {
+            "SDR": 19.7726,
+            "SIR": 26.7053,
+            "SAR": 20.5342,
+            "ISR": 30.8862
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 10.4956,
+            "SIR": 19.617,
+            "SAR": 11.3343,
+            "ISR": 17.2533
+          },
+          "instrumental": {
+            "SDR": 10.1916,
+            "SIR": 15.2461,
+            "SAR": 11.236,
+            "ISR": 19.2265
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 6.31051,
+            "SIR": 17.0441,
+            "SAR": 6.48147,
+            "ISR": 11.0137
+          },
+          "instrumental": {
+            "SDR": 11.2954,
+            "SIR": 15.588,
+            "SAR": 13.6196,
+            "ISR": 23.47
+          }
+        }
       }
     ],
     "median_scores": {
@@ -7939,9 +8891,9 @@
         "ISR": 12.487
       },
       "instrumental": {
-        "SDR": 13.3777,
-        "SIR": 17.745,
-        "SAR": 15.2427,
+        "SDR": 13.1418,
+        "SIR": 17.7097,
+        "SAR": 15.1916,
         "ISR": 21.3684
       }
     },
@@ -8480,20 +9432,105 @@
             "ISR": 17.9366
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 9.85662,
+            "SIR": 28.7719,
+            "SAR": 10.523,
+            "ISR": 14.501
+          },
+          "instrumental": {
+            "SDR": 15.3752,
+            "SIR": 22.2987,
+            "SAR": 19.0341,
+            "ISR": 19.4875
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 3.9205,
+            "SIR": 11.3297,
+            "SAR": 7.30537,
+            "ISR": 9.20943
+          },
+          "instrumental": {
+            "SDR": 10.6013,
+            "SIR": 14.4046,
+            "SAR": 13.5113,
+            "ISR": 17.0101
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 13.7573,
+            "SIR": 28.7101,
+            "SAR": 14.3598,
+            "ISR": 19.8549
+          },
+          "instrumental": {
+            "SDR": 18.2899,
+            "SIR": 26.176,
+            "SAR": 19.9787,
+            "ISR": 24.6239
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 10.0834,
+            "SIR": 21.0256,
+            "SAR": 11.167,
+            "ISR": 15.8358
+          },
+          "instrumental": {
+            "SDR": 9.31446,
+            "SIR": 13.3623,
+            "SAR": 10.8209,
+            "ISR": 20.325
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 5.9831,
+            "SIR": 17.0047,
+            "SAR": 6.36112,
+            "ISR": 9.70996
+          },
+          "instrumental": {
+            "SDR": 11.1064,
+            "SIR": 14.7686,
+            "SAR": 13.8125,
+            "ISR": 24.4958
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 7.43649,
-        "SIR": 20.0302,
-        "SAR": 7.92444,
-        "ISR": 11.5635
+        "SDR": 7.48447,
+        "SIR": 20.0466,
+        "SAR": 8.06049,
+        "ISR": 11.6608
       },
       "instrumental": {
-        "SDR": 13.0956,
-        "SIR": 16.846,
-        "SAR": 15.5397,
-        "ISR": 20.7225
+        "SDR": 13.0622,
+        "SIR": 16.6684,
+        "SAR": 15.461,
+        "ISR": 20.5237
       }
     },
     "stems": [
@@ -9031,20 +10068,105 @@
             "ISR": 18.0481
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 10.1396,
+            "SIR": 29.0142,
+            "SAR": 10.6652,
+            "ISR": 14.592
+          },
+          "instrumental": {
+            "SDR": 15.3857,
+            "SIR": 22.1542,
+            "SAR": 19.1591,
+            "ISR": 19.5059
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 3.31727,
+            "SIR": 9.67953,
+            "SAR": 7.05032,
+            "ISR": 8.98947
+          },
+          "instrumental": {
+            "SDR": 10.4692,
+            "SIR": 14.6488,
+            "SAR": 13.5279,
+            "ISR": 15.6278
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 12.3509,
+            "SIR": 26.1803,
+            "SAR": 12.6763,
+            "ISR": 19.2711
+          },
+          "instrumental": {
+            "SDR": 19.8545,
+            "SIR": 27.0207,
+            "SAR": 21.5404,
+            "ISR": 24.1672
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 9.61872,
+            "SIR": 20.2478,
+            "SAR": 10.6861,
+            "ISR": 15.6562
+          },
+          "instrumental": {
+            "SDR": 9.60951,
+            "SIR": 13.866,
+            "SAR": 10.9383,
+            "ISR": 20.3149
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 5.97313,
+            "SIR": 16.1558,
+            "SAR": 6.32932,
+            "ISR": 9.75732
+          },
+          "instrumental": {
+            "SDR": 11.0828,
+            "SIR": 14.8188,
+            "SAR": 13.7095,
+            "ISR": 23.6688
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 6.82749,
-        "SIR": 19.6485,
-        "SAR": 7.43477,
-        "ISR": 11.273
+        "SDR": 7.12815,
+        "SIR": 19.7094,
+        "SAR": 7.61339,
+        "ISR": 11.3905
       },
       "instrumental": {
-        "SDR": 13.3009,
-        "SIR": 17.4073,
-        "SAR": 15.547,
-        "ISR": 20.5673
+        "SDR": 13.2896,
+        "SIR": 17.2503,
+        "SAR": 15.4684,
+        "ISR": 20.4411
       }
     },
     "stems": [
@@ -9642,20 +10764,105 @@
             "ISR": 15.8905
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 1.88393,
+            "SIR": 27.3909,
+            "SAR": 0.10713,
+            "ISR": 4.38105
+          },
+          "instrumental": {
+            "SDR": 11.0878,
+            "SIR": 11.938,
+            "SAR": 15.5121,
+            "ISR": 19.5204
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 0.100795,
+            "SIR": 0.387355,
+            "SAR": 0.027535,
+            "ISR": 1.75572
+          },
+          "instrumental": {
+            "SDR": 7.23206,
+            "SIR": 8.84448,
+            "SAR": 14.5591,
+            "ISR": 15.2786
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 1.38667,
+            "SIR": 18.2052,
+            "SAR": -0.26025,
+            "ISR": 3.36353
+          },
+          "instrumental": {
+            "SDR": 7.91075,
+            "SIR": 8.17666,
+            "SAR": 13.3232,
+            "ISR": 20.0839
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 0.46791,
+            "SIR": 17.882,
+            "SAR": 0.00119,
+            "ISR": 1.5489
+          },
+          "instrumental": {
+            "SDR": 0.16428,
+            "SIR": 0.32093,
+            "SAR": 15.8749,
+            "ISR": 29.4909
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 0.00815,
+            "SIR": -0.44809,
+            "SAR": -0.213905,
+            "ISR": 1.19004
+          },
+          "instrumental": {
+            "SDR": 6.70995,
+            "SIR": 6.15572,
+            "SAR": 14.9742,
+            "ISR": 14.7971
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 0.04364,
-        "SIR": 8.52527,
-        "SAR": 0.00047,
-        "ISR": 1.55275
+        "SDR": 0.113132,
+        "SIR": 9.69729,
+        "SAR": 0.00056,
+        "ISR": 1.57697
       },
       "instrumental": {
-        "SDR": 7.74501,
-        "SIR": 8.18763,
-        "SAR": 16.39,
-        "ISR": 18.9997
+        "SDR": 7.72889,
+        "SIR": 8.18215,
+        "SAR": 15.6567,
+        "ISR": 19.029
       }
     },
     "stems": [
@@ -10193,20 +11400,105 @@
             "ISR": 18.3349
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 9.23432,
+            "SIR": 28.5103,
+            "SAR": 9.78841,
+            "ISR": 14.6058
+          },
+          "instrumental": {
+            "SDR": 15.2896,
+            "SIR": 21.6052,
+            "SAR": 18.9097,
+            "ISR": 19.4016
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 2.94688,
+            "SIR": 10.3811,
+            "SAR": 4.72496,
+            "ISR": 7.40895
+          },
+          "instrumental": {
+            "SDR": 10.096,
+            "SIR": 13.317,
+            "SAR": 12.7108,
+            "ISR": 16.6326
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 11.2862,
+            "SIR": 20.929,
+            "SAR": 11.9025,
+            "ISR": 19.6779
+          },
+          "instrumental": {
+            "SDR": 18.0346,
+            "SIR": 26.1253,
+            "SAR": 18.7194,
+            "ISR": 27.3093
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 7.83779,
+            "SIR": 14.4903,
+            "SAR": 9.05255,
+            "ISR": 14.8196
+          },
+          "instrumental": {
+            "SDR": 7.71921,
+            "SIR": 12.9827,
+            "SAR": 9.56297,
+            "ISR": 15.0955
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 4.76004,
+            "SIR": 15.1232,
+            "SAR": 5.01898,
+            "ISR": 8.43216
+          },
+          "instrumental": {
+            "SDR": 10.1513,
+            "SIR": 13.3561,
+            "SAR": 13.0138,
+            "ISR": 21.4655
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 6.26177,
-        "SIR": 18.2223,
-        "SAR": 6.41316,
-        "ISR": 10.4564
+        "SDR": 6.61683,
+        "SIR": 18.2073,
+        "SAR": 6.55551,
+        "ISR": 10.5284
       },
       "instrumental": {
-        "SDR": 12.0515,
-        "SIR": 15.4023,
-        "SAR": 14.934,
-        "ISR": 20.5617
+        "SDR": 11.9486,
+        "SIR": 15.3601,
+        "SAR": 14.7989,
+        "ISR": 20.2247
       }
     },
     "stems": [
@@ -10744,20 +12036,105 @@
             "ISR": 18.6089
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 9.96153,
+            "SIR": 30.4023,
+            "SAR": 10.5443,
+            "ISR": 14.4086
+          },
+          "instrumental": {
+            "SDR": 15.1541,
+            "SIR": 21.7402,
+            "SAR": 19.0166,
+            "ISR": 19.286
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 3.07542,
+            "SIR": 7.56306,
+            "SAR": 7.57733,
+            "ISR": 9.30151
+          },
+          "instrumental": {
+            "SDR": 10.0495,
+            "SIR": 15.1149,
+            "SAR": 13.4573,
+            "ISR": 14.5596
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 11.4041,
+            "SIR": 21.3838,
+            "SAR": 11.4042,
+            "ISR": 20.0992
+          },
+          "instrumental": {
+            "SDR": 19.3969,
+            "SIR": 26.9726,
+            "SAR": 19.9276,
+            "ISR": 27.2555
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 6.46751,
+            "SIR": 14.82,
+            "SAR": 7.83257,
+            "ISR": 14.2496
+          },
+          "instrumental": {
+            "SDR": 8.51406,
+            "SIR": 13.584,
+            "SAR": 9.24146,
+            "ISR": 15.7104
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 5.53377,
+            "SIR": 17.2831,
+            "SAR": 5.35722,
+            "ISR": 9.61377
+          },
+          "instrumental": {
+            "SDR": 10.7176,
+            "SIR": 14.3966,
+            "SAR": 13.4694,
+            "ISR": 25.2204
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 6.6425,
-        "SIR": 19.0854,
-        "SAR": 6.80209,
-        "ISR": 10.9161
+        "SDR": 6.555,
+        "SIR": 18.8381,
+        "SAR": 7.24571,
+        "ISR": 11.0323
       },
       "instrumental": {
-        "SDR": 13.0481,
-        "SIR": 16.3909,
-        "SAR": 15.3852,
-        "ISR": 20.9149
+        "SDR": 12.9054,
+        "SIR": 16.086,
+        "SAR": 15.2021,
+        "ISR": 20.6848
       }
     },
     "stems": [
@@ -11295,20 +12672,105 @@
             "ISR": 17.7302
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 9.40316,
+            "SIR": 27.7491,
+            "SAR": 9.81864,
+            "ISR": 15.1854
+          },
+          "instrumental": {
+            "SDR": 15.0068,
+            "SIR": 23.1889,
+            "SAR": 18.3981,
+            "ISR": 19.178
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 1.68018,
+            "SIR": 6.6671,
+            "SAR": 6.51245,
+            "ISR": 9.19247
+          },
+          "instrumental": {
+            "SDR": 9.51619,
+            "SIR": 15.1478,
+            "SAR": 11.8799,
+            "ISR": 14.3974
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 11.6671,
+            "SIR": 20.7408,
+            "SAR": 11.6936,
+            "ISR": 21.6505
+          },
+          "instrumental": {
+            "SDR": 19.9837,
+            "SIR": 29.7667,
+            "SAR": 20.4837,
+            "ISR": 26.127
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 8.45481,
+            "SIR": 13.4013,
+            "SAR": 9.46919,
+            "ISR": 18.6245
+          },
+          "instrumental": {
+            "SDR": 7.83593,
+            "SIR": 16.5367,
+            "SAR": 8.7138,
+            "ISR": 13.1285
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 5.11995,
+            "SIR": 15.5337,
+            "SAR": 4.99059,
+            "ISR": 11.1439
+          },
+          "instrumental": {
+            "SDR": 10.7257,
+            "SIR": 15.8819,
+            "SAR": 12.3394,
+            "ISR": 22.7387
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 6.2687,
-        "SIR": 17.7328,
-        "SAR": 6.49397,
-        "ISR": 12.3294
+        "SDR": 6.90123,
+        "SIR": 17.5846,
+        "SAR": 7.06671,
+        "ISR": 12.5873
       },
       "instrumental": {
-        "SDR": 12.9312,
-        "SIR": 19.3671,
-        "SAR": 14.7308,
-        "ISR": 19.8647
+        "SDR": 12.8293,
+        "SIR": 18.6322,
+        "SAR": 14.5633,
+        "ISR": 19.8413
       }
     },
     "stems": [
@@ -11846,20 +13308,105 @@
             "ISR": 18.1826
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 8.97752,
+            "SIR": 28.5569,
+            "SAR": 9.53626,
+            "ISR": 13.7075
+          },
+          "instrumental": {
+            "SDR": 15.598,
+            "SIR": 21.3313,
+            "SAR": 19.5473,
+            "ISR": 19.4505
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 1.49437,
+            "SIR": 7.96427,
+            "SAR": 4.70645,
+            "ISR": 7.82138
+          },
+          "instrumental": {
+            "SDR": 9.70192,
+            "SIR": 13.8198,
+            "SAR": 12.1401,
+            "ISR": 15.7106
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 12.6451,
+            "SIR": 22.6737,
+            "SAR": 12.9176,
+            "ISR": 20.3813
+          },
+          "instrumental": {
+            "SDR": 17.5965,
+            "SIR": 26.5817,
+            "SAR": 19.2761,
+            "ISR": 22.1355
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 5.91792,
+            "SIR": 14.6471,
+            "SAR": 6.29621,
+            "ISR": 11.9181
+          },
+          "instrumental": {
+            "SDR": 8.26272,
+            "SIR": 11.2704,
+            "SAR": 9.3395,
+            "ISR": 16.2706
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 5.0247,
+            "SIR": 16.1999,
+            "SAR": 5.22332,
+            "ISR": 8.58522
+          },
+          "instrumental": {
+            "SDR": 10.0845,
+            "SIR": 13.1151,
+            "SAR": 13.2975,
+            "ISR": 17.5689
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 6.21079,
-        "SIR": 18.3399,
-        "SAR": 5.92651,
-        "ISR": 9.94314
+        "SDR": 6.15824,
+        "SIR": 18.1931,
+        "SAR": 6.11136,
+        "ISR": 9.99897
       },
       "instrumental": {
-        "SDR": 12.3915,
-        "SIR": 15.2595,
-        "SAR": 15.413,
-        "ISR": 20.5266
+        "SDR": 12.3685,
+        "SIR": 15.0585,
+        "SAR": 15.3418,
+        "ISR": 20.2465
       }
     },
     "stems": [
@@ -12407,20 +13954,105 @@
             "ISR": 17.9126
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 11.5012,
+            "SIR": 26.6218,
+            "SAR": 12.1428,
+            "ISR": 14.8729
+          },
+          "instrumental": {
+            "SDR": 17.2478,
+            "SIR": 27.3377,
+            "SAR": 21.4549,
+            "ISR": 18.9566
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 0.46905,
+            "SIR": 11.5357,
+            "SAR": 0.40599,
+            "ISR": 7.44792
+          },
+          "instrumental": {
+            "SDR": 10.4402,
+            "SIR": 14.5972,
+            "SAR": 11.2779,
+            "ISR": 16.9035
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 12.7932,
+            "SIR": 29.1664,
+            "SAR": 13.8629,
+            "ISR": 17.3101
+          },
+          "instrumental": {
+            "SDR": 18.8257,
+            "SIR": 34.4168,
+            "SAR": 24.75,
+            "ISR": 19.711
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 10.976,
+            "SIR": 21.0465,
+            "SAR": 12.048,
+            "ISR": 16.0109
+          },
+          "instrumental": {
+            "SDR": 11.5617,
+            "SIR": 22.1389,
+            "SAR": 12.4756,
+            "ISR": 15.6336
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 8.17875,
+            "SIR": 25.829,
+            "SAR": 8.23288,
+            "ISR": 12.9425
+          },
+          "instrumental": {
+            "SDR": 13.9527,
+            "SIR": 21.8677,
+            "SAR": 15.3017,
+            "ISR": 18.5297
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.48818,
-        "SIR": 20.0956,
-        "SAR": 8.86247,
-        "ISR": 13.5122
+        "SDR": 8.53949,
+        "SIR": 20.3648,
+        "SAR": 9.10558,
+        "ISR": 13.7585
       },
       "instrumental": {
-        "SDR": 15.2362,
-        "SIR": 24.0066,
-        "SAR": 17.228,
-        "ISR": 18.2727
+        "SDR": 15.1585,
+        "SIR": 23.8522,
+        "SAR": 17.2133,
+        "ISR": 18.3895
       }
     },
     "stems": [
@@ -12958,20 +14590,105 @@
             "ISR": 17.5278
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 11.8745,
+            "SIR": 25.3945,
+            "SAR": 12.4421,
+            "ISR": 15.6904
+          },
+          "instrumental": {
+            "SDR": 17.3909,
+            "SIR": 28.9113,
+            "SAR": 21.647,
+            "ISR": 18.9789
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 1.70417,
+            "SIR": 10.4575,
+            "SAR": 1.68583,
+            "ISR": 8.37743
+          },
+          "instrumental": {
+            "SDR": 11.8265,
+            "SIR": 15.3969,
+            "SAR": 12.5611,
+            "ISR": 16.6539
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 13.1129,
+            "SIR": 27.289,
+            "SAR": 14.0116,
+            "ISR": 17.5973
+          },
+          "instrumental": {
+            "SDR": 18.6953,
+            "SIR": 35.3744,
+            "SAR": 24.7443,
+            "ISR": 19.3882
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 10.8359,
+            "SIR": 20.1393,
+            "SAR": 12.178,
+            "ISR": 16.4394
+          },
+          "instrumental": {
+            "SDR": 11.7308,
+            "SIR": 22.9517,
+            "SAR": 12.4309,
+            "ISR": 15.1176
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 8.25759,
+            "SIR": 24.3971,
+            "SAR": 8.56934,
+            "ISR": 13.2231
+          },
+          "instrumental": {
+            "SDR": 14.0296,
+            "SIR": 22.3451,
+            "SAR": 15.3987,
+            "ISR": 18.1758
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.64321,
-        "SIR": 19.0141,
-        "SAR": 9.0448,
-        "ISR": 13.7613
+        "SDR": 8.65111,
+        "SIR": 19.9656,
+        "SAR": 9.22907,
+        "ISR": 14.0012
       },
       "instrumental": {
-        "SDR": 15.0605,
-        "SIR": 25.0438,
-        "SAR": 17.1633,
-        "ISR": 17.8069
+        "SDR": 14.9779,
+        "SIR": 24.9528,
+        "SAR": 17.1131,
+        "ISR": 17.8429
       }
     },
     "stems": [
@@ -13509,20 +15226,105 @@
             "ISR": 17.6323
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 11.509,
+            "SIR": 27.5619,
+            "SAR": 12.1901,
+            "ISR": 14.8521
+          },
+          "instrumental": {
+            "SDR": 17.3269,
+            "SIR": 27.0156,
+            "SAR": 21.4601,
+            "ISR": 19.1336
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 3.67762,
+            "SIR": 10.2249,
+            "SAR": 4.86761,
+            "ISR": 10.3537
+          },
+          "instrumental": {
+            "SDR": 11.8714,
+            "SIR": 19.4776,
+            "SAR": 12.4648,
+            "ISR": 15.9558
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 13.1793,
+            "SIR": 27.2447,
+            "SAR": 14.1908,
+            "ISR": 17.7531
+          },
+          "instrumental": {
+            "SDR": 18.7921,
+            "SIR": 35.9954,
+            "SAR": 24.9087,
+            "ISR": 19.4532
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 10.9152,
+            "SIR": 20.5906,
+            "SAR": 12.3009,
+            "ISR": 16.1932
+          },
+          "instrumental": {
+            "SDR": 11.493,
+            "SIR": 22.5364,
+            "SAR": 12.4442,
+            "ISR": 15.316
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 8.42637,
+            "SIR": 23.7342,
+            "SAR": 8.6461,
+            "ISR": 13.6363
+          },
+          "instrumental": {
+            "SDR": 13.9191,
+            "SIR": 22.7885,
+            "SAR": 15.5622,
+            "ISR": 18.0473
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.56603,
-        "SIR": 18.7143,
-        "SAR": 9.12794,
-        "ISR": 13.7838
+        "SDR": 8.65984,
+        "SIR": 19.2708,
+        "SAR": 9.19148,
+        "ISR": 14.0855
       },
       "instrumental": {
-        "SDR": 15.1102,
-        "SIR": 24.6836,
-        "SAR": 17.2989,
-        "ISR": 17.8234
+        "SDR": 15.0463,
+        "SIR": 24.4971,
+        "SAR": 17.2618,
+        "ISR": 17.8584
       }
     },
     "stems": [
@@ -14060,20 +15862,105 @@
             "ISR": 17.889
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 11.5539,
+            "SIR": 26.8458,
+            "SAR": 10.1353,
+            "ISR": 11.8043
+          },
+          "instrumental": {
+            "SDR": 17.4648,
+            "SIR": 22.5868,
+            "SAR": 20.3121,
+            "ISR": 19.2231
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 5.42588,
+            "SIR": 9.06719,
+            "SAR": 7.24233,
+            "ISR": 13.5398
+          },
+          "instrumental": {
+            "SDR": 12.4037,
+            "SIR": 23.0744,
+            "SAR": 14.3059,
+            "ISR": 14.8809
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 13.3501,
+            "SIR": 26.547,
+            "SAR": 14.239,
+            "ISR": 17.9401
+          },
+          "instrumental": {
+            "SDR": 18.8806,
+            "SIR": 36.7738,
+            "SAR": 25.0537,
+            "ISR": 19.539
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 11.1366,
+            "SIR": 20.3999,
+            "SAR": 12.428,
+            "ISR": 16.8285
+          },
+          "instrumental": {
+            "SDR": 11.9251,
+            "SIR": 23.7458,
+            "SAR": 12.6606,
+            "ISR": 15.2826
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 8.57828,
+            "SIR": 24.6253,
+            "SAR": 8.77917,
+            "ISR": 13.9686
+          },
+          "instrumental": {
+            "SDR": 14.2182,
+            "SIR": 23.2434,
+            "SAR": 15.632,
+            "ISR": 18.3182
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.61938,
-        "SIR": 19.2837,
-        "SAR": 8.84061,
-        "ISR": 13.8312
+        "SDR": 8.6699,
+        "SIR": 19.7205,
+        "SAR": 8.9661,
+        "ISR": 13.8702
       },
       "instrumental": {
-        "SDR": 15.2594,
-        "SIR": 24.9417,
-        "SAR": 17.3793,
-        "ISR": 17.9224
+        "SDR": 15.2324,
+        "SIR": 24.6525,
+        "SAR": 17.3296,
+        "ISR": 18.0401
       }
     },
     "stems": [
@@ -14611,20 +16498,105 @@
             "ISR": 17.6982
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 10.989,
+            "SIR": 27.7185,
+            "SAR": 12.1442,
+            "ISR": 14.3559
+          },
+          "instrumental": {
+            "SDR": 17.5362,
+            "SIR": 25.9949,
+            "SAR": 21.6727,
+            "ISR": 19.4336
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 3.50263,
+            "SIR": 11.4276,
+            "SAR": 6.23284,
+            "ISR": 8.55276
+          },
+          "instrumental": {
+            "SDR": 11.593,
+            "SIR": 16.1367,
+            "SAR": 14.2317,
+            "ISR": 16.4947
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 13.2171,
+            "SIR": 27.224,
+            "SAR": 14.2712,
+            "ISR": 18.0377
+          },
+          "instrumental": {
+            "SDR": 18.694,
+            "SIR": 36.9321,
+            "SAR": 24.915,
+            "ISR": 19.367
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 11.0518,
+            "SIR": 19.9184,
+            "SAR": 12.486,
+            "ISR": 17.0362
+          },
+          "instrumental": {
+            "SDR": 11.9608,
+            "SIR": 23.5955,
+            "SAR": 12.6314,
+            "ISR": 14.8994
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 8.43834,
+            "SIR": 17.9349,
+            "SAR": 8.69114,
+            "ISR": 13.8892
+          },
+          "instrumental": {
+            "SDR": 13.3286,
+            "SIR": 22.8714,
+            "SAR": 14.7663,
+            "ISR": 16.5784
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.19827,
-        "SIR": 19.403,
-        "SAR": 9.59577,
-        "ISR": 14.1907
+        "SDR": 9.60709,
+        "SIR": 19.6607,
+        "SAR": 10.1908,
+        "ISR": 14.2733
       },
       "instrumental": {
-        "SDR": 15.3277,
-        "SIR": 25.3611,
-        "SAR": 17.273,
-        "ISR": 17.8355
+        "SDR": 15.2843,
+        "SIR": 25.3609,
+        "SAR": 17.2694,
+        "ISR": 17.8285
       }
     },
     "stems": [
@@ -15162,20 +17134,105 @@
             "ISR": 17.3748
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 10.8236,
+            "SIR": 22.4511,
+            "SAR": 10.372,
+            "ISR": 13.1647
+          },
+          "instrumental": {
+            "SDR": 16.5036,
+            "SIR": 24.1054,
+            "SAR": 19.9808,
+            "ISR": 18.825
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 3.55278,
+            "SIR": 8.52573,
+            "SAR": 4.5857,
+            "ISR": 11.3608
+          },
+          "instrumental": {
+            "SDR": 11.4593,
+            "SIR": 18.7148,
+            "SAR": 11.9618,
+            "ISR": 15.1649
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 12.7013,
+            "SIR": 26.9096,
+            "SAR": 13.8912,
+            "ISR": 17.6875
+          },
+          "instrumental": {
+            "SDR": 18.6811,
+            "SIR": 35.6342,
+            "SAR": 24.4198,
+            "ISR": 19.3739
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 10.8194,
+            "SIR": 19.6726,
+            "SAR": 12.0739,
+            "ISR": 16.3173
+          },
+          "instrumental": {
+            "SDR": 11.4961,
+            "SIR": 22.7819,
+            "SAR": 12.195,
+            "ISR": 14.8435
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 8.04211,
+            "SIR": 21.9067,
+            "SAR": 8.29973,
+            "ISR": 13.4076
+          },
+          "instrumental": {
+            "SDR": 13.7242,
+            "SIR": 22.2973,
+            "SAR": 14.9778,
+            "ISR": 17.6368
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.11683,
-        "SIR": 18.4295,
-        "SAR": 8.35486,
-        "ISR": 13.4657
+        "SDR": 8.25058,
+        "SIR": 18.6163,
+        "SAR": 8.60117,
+        "ISR": 13.4367
       },
       "instrumental": {
-        "SDR": 15.0596,
-        "SIR": 24.1872,
-        "SAR": 16.9541,
-        "ISR": 17.6318
+        "SDR": 14.954,
+        "SIR": 24.0245,
+        "SAR": 16.7799,
+        "ISR": 17.6343
       }
     },
     "stems": [
@@ -15713,20 +17770,105 @@
             "ISR": 17.2512
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 10.5453,
+            "SIR": 30.8469,
+            "SAR": 11.9946,
+            "ISR": 14.0146
+          },
+          "instrumental": {
+            "SDR": 17.0591,
+            "SIR": 25.028,
+            "SAR": 21.0303,
+            "ISR": 19.5824
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 4.73583,
+            "SIR": 9.23844,
+            "SAR": 8.12944,
+            "ISR": 9.82866
+          },
+          "instrumental": {
+            "SDR": 11.9026,
+            "SIR": 17.1661,
+            "SAR": 15.3949,
+            "ISR": 15.1906
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 12.4777,
+            "SIR": 25.5473,
+            "SAR": 13.1611,
+            "ISR": 18.1669
+          },
+          "instrumental": {
+            "SDR": 18.4218,
+            "SIR": 36.6375,
+            "SAR": 23.7677,
+            "ISR": 19.2077
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 10.7988,
+            "SIR": 19.27,
+            "SAR": 12.0695,
+            "ISR": 17.2874
+          },
+          "instrumental": {
+            "SDR": 11.4229,
+            "SIR": 24.3946,
+            "SAR": 12.033,
+            "ISR": 14.5602
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 8.11099,
+            "SIR": 20.0078,
+            "SAR": 8.18194,
+            "ISR": 13.66
+          },
+          "instrumental": {
+            "SDR": 13.1556,
+            "SIR": 22.6396,
+            "SAR": 14.4493,
+            "ISR": 17.1903
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.44802,
-        "SIR": 18.4789,
-        "SAR": 8.76505,
-        "ISR": 13.5155
+        "SDR": 9.00557,
+        "SIR": 19.4495,
+        "SAR": 9.34791,
+        "ISR": 13.8373
       },
       "instrumental": {
-        "SDR": 14.9115,
-        "SIR": 24.688,
-        "SAR": 16.9712,
-        "ISR": 17.6373
+        "SDR": 14.8399,
+        "SIR": 24.5413,
+        "SAR": 16.971,
+        "ISR": 17.6169
       }
     },
     "stems": [
@@ -16264,20 +18406,105 @@
             "ISR": 17.3568
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 10.4453,
+            "SIR": 31.9477,
+            "SAR": 10.9486,
+            "ISR": 13.1744
+          },
+          "instrumental": {
+            "SDR": 17.0355,
+            "SIR": 24.1731,
+            "SAR": 20.5753,
+            "ISR": 19.6338
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 5.08407,
+            "SIR": 8.46666,
+            "SAR": 9.3276,
+            "ISR": 11.4642
+          },
+          "instrumental": {
+            "SDR": 11.6975,
+            "SIR": 18.1439,
+            "SAR": 15.5879,
+            "ISR": 14.6746
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 12.3457,
+            "SIR": 26.4682,
+            "SAR": 13.1293,
+            "ISR": 17.8
+          },
+          "instrumental": {
+            "SDR": 18.3587,
+            "SIR": 35.6293,
+            "SAR": 23.4796,
+            "ISR": 19.2539
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 10.7189,
+            "SIR": 19.0807,
+            "SAR": 11.997,
+            "ISR": 17.0414
+          },
+          "instrumental": {
+            "SDR": 11.3517,
+            "SIR": 23.7983,
+            "SAR": 11.89,
+            "ISR": 14.4862
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 7.89625,
+            "SIR": 21.1288,
+            "SAR": 7.86716,
+            "ISR": 12.9952
+          },
+          "instrumental": {
+            "SDR": 13.0086,
+            "SIR": 21.553,
+            "SAR": 14.396,
+            "ISR": 17.5262
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.47292,
-        "SIR": 18.7145,
-        "SAR": 8.76002,
-        "ISR": 12.8723
+        "SDR": 8.88104,
+        "SIR": 19.3537,
+        "SAR": 9.41873,
+        "ISR": 13.0303
       },
       "instrumental": {
-        "SDR": 14.967,
-        "SIR": 23.536,
-        "SAR": 16.9194,
-        "ISR": 18.0219
+        "SDR": 14.9505,
+        "SIR": 23.6288,
+        "SAR": 16.771,
+        "ISR": 17.9381
       }
     },
     "stems": [
@@ -16815,20 +19042,105 @@
             "ISR": 17.3448
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 10.4552,
+            "SIR": 30.8639,
+            "SAR": 11.3646,
+            "ISR": 14.0787
+          },
+          "instrumental": {
+            "SDR": 17.0503,
+            "SIR": 25.1412,
+            "SAR": 20.8957,
+            "ISR": 19.5683
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 3.26357,
+            "SIR": 11.3464,
+            "SAR": 4.50709,
+            "ISR": 7.68187
+          },
+          "instrumental": {
+            "SDR": 11.3854,
+            "SIR": 15.1802,
+            "SAR": 13.3382,
+            "ISR": 17.083
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 12.6545,
+            "SIR": 27.2025,
+            "SAR": 13.3271,
+            "ISR": 18.3637
+          },
+          "instrumental": {
+            "SDR": 18.4151,
+            "SIR": 37.13,
+            "SAR": 23.6582,
+            "ISR": 19.3399
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 10.6609,
+            "SIR": 18.8866,
+            "SAR": 11.9621,
+            "ISR": 17.7706
+          },
+          "instrumental": {
+            "SDR": 11.3611,
+            "SIR": 26.058,
+            "SAR": 11.6222,
+            "ISR": 14.3553
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 8.0171,
+            "SIR": 20.6619,
+            "SAR": 7.98461,
+            "ISR": 13.5249
+          },
+          "instrumental": {
+            "SDR": 13.0022,
+            "SIR": 22.9276,
+            "SAR": 14.4146,
+            "ISR": 17.2664
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.5201,
-        "SIR": 18.8131,
-        "SAR": 8.75421,
-        "ISR": 13.5548
+        "SDR": 9.06739,
+        "SIR": 19.1914,
+        "SAR": 9.35792,
+        "ISR": 13.8167
       },
       "instrumental": {
-        "SDR": 14.958,
-        "SIR": 24.923,
-        "SAR": 16.8807,
-        "ISR": 17.7113
+        "SDR": 14.9443,
+        "SIR": 25.0321,
+        "SAR": 16.8009,
+        "ISR": 17.6994
       }
     },
     "stems": [
@@ -17366,20 +19678,105 @@
             "ISR": 17.2722
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 11.1201,
+            "SIR": 23.5612,
+            "SAR": 11.8078,
+            "ISR": 15.1698
+          },
+          "instrumental": {
+            "SDR": 16.7692,
+            "SIR": 28.1321,
+            "SAR": 21.0145,
+            "ISR": 18.986
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 4.08622,
+            "SIR": 8.53725,
+            "SAR": 6.44304,
+            "ISR": 11.1278
+          },
+          "instrumental": {
+            "SDR": 11.6671,
+            "SIR": 18.6134,
+            "SAR": 13.3115,
+            "ISR": 14.8267
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 12.6786,
+            "SIR": 26.7599,
+            "SAR": 13.251,
+            "ISR": 17.786
+          },
+          "instrumental": {
+            "SDR": 18.5981,
+            "SIR": 36.1545,
+            "SAR": 24.5599,
+            "ISR": 19.2087
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 11.0023,
+            "SIR": 19.8247,
+            "SAR": 12.3262,
+            "ISR": 16.8419
+          },
+          "instrumental": {
+            "SDR": 11.725,
+            "SIR": 23.7767,
+            "SAR": 12.5155,
+            "ISR": 14.8395
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 8.50035,
+            "SIR": 21.2886,
+            "SAR": 8.54565,
+            "ISR": 13.6276
+          },
+          "instrumental": {
+            "SDR": 13.6602,
+            "SIR": 22.6474,
+            "SAR": 15.2035,
+            "ISR": 17.5195
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.46733,
-        "SIR": 18.1184,
-        "SAR": 9.24872,
-        "ISR": 13.8089
+        "SDR": 8.63395,
+        "SIR": 19.1086,
+        "SAR": 9.81566,
+        "ISR": 13.855
       },
       "instrumental": {
-        "SDR": 15.0818,
-        "SIR": 24.5901,
-        "SAR": 17.3962,
-        "ISR": 17.6882
+        "SDR": 15.0514,
+        "SIR": 24.5342,
+        "SAR": 17.3804,
+        "ISR": 17.6039
       }
     },
     "stems": [
@@ -17917,20 +20314,105 @@
             "ISR": 17.7275
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 11.0342,
+            "SIR": 23.6754,
+            "SAR": 12.0753,
+            "ISR": 15.1376
+          },
+          "instrumental": {
+            "SDR": 16.7604,
+            "SIR": 27.8391,
+            "SAR": 21.0371,
+            "ISR": 18.9115
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 4.28036,
+            "SIR": 8.85196,
+            "SAR": 6.18763,
+            "ISR": 10.6371
+          },
+          "instrumental": {
+            "SDR": 11.626,
+            "SIR": 18.5579,
+            "SAR": 12.7936,
+            "ISR": 15.3765
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 12.7333,
+            "SIR": 27.92,
+            "SAR": 13.3968,
+            "ISR": 17.6507
+          },
+          "instrumental": {
+            "SDR": 18.8562,
+            "SIR": 35.5962,
+            "SAR": 24.6942,
+            "ISR": 19.5919
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 10.9815,
+            "SIR": 20.5084,
+            "SAR": 12.2548,
+            "ISR": 16.6395
+          },
+          "instrumental": {
+            "SDR": 11.8528,
+            "SIR": 23.1744,
+            "SAR": 12.4432,
+            "ISR": 15.2815
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 8.27707,
+            "SIR": 22.7964,
+            "SAR": 8.51968,
+            "ISR": 13.3434
+          },
+          "instrumental": {
+            "SDR": 13.8097,
+            "SIR": 22.3462,
+            "SAR": 15.1678,
+            "ISR": 17.992
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.27584,
-        "SIR": 19.107,
-        "SAR": 8.96247,
-        "ISR": 13.7637
+        "SDR": 8.49619,
+        "SIR": 19.4326,
+        "SAR": 9.47806,
+        "ISR": 13.9399
       },
       "instrumental": {
-        "SDR": 15.0979,
-        "SIR": 24.9552,
-        "SAR": 17.3049,
-        "ISR": 17.8872
+        "SDR": 15.0748,
+        "SIR": 24.5902,
+        "SAR": 17.1945,
+        "ISR": 17.9207
       }
     },
     "stems": [
@@ -18468,20 +20950,105 @@
             "ISR": 17.369
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 11.2579,
+            "SIR": 23.7354,
+            "SAR": 12.0039,
+            "ISR": 15.6007
+          },
+          "instrumental": {
+            "SDR": 16.936,
+            "SIR": 28.954,
+            "SAR": 21.1182,
+            "ISR": 19.1507
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 4.33279,
+            "SIR": 9.47367,
+            "SAR": 6.30509,
+            "ISR": 10.6033
+          },
+          "instrumental": {
+            "SDR": 11.9254,
+            "SIR": 18.8455,
+            "SAR": 13.2567,
+            "ISR": 15.6338
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 12.5684,
+            "SIR": 27.0175,
+            "SAR": 13.4392,
+            "ISR": 17.6309
+          },
+          "instrumental": {
+            "SDR": 18.7265,
+            "SIR": 35.5074,
+            "SAR": 24.6931,
+            "ISR": 19.4144
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 10.879,
+            "SIR": 20.8992,
+            "SAR": 12.2585,
+            "ISR": 16.2141
+          },
+          "instrumental": {
+            "SDR": 11.6991,
+            "SIR": 21.9277,
+            "SAR": 12.6751,
+            "ISR": 15.4842
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 8.21066,
+            "SIR": 21.9736,
+            "SAR": 8.32494,
+            "ISR": 13.4856
+          },
+          "instrumental": {
+            "SDR": 13.8897,
+            "SIR": 22.3811,
+            "SAR": 15.2035,
+            "ISR": 17.7277
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.40232,
-        "SIR": 18.1048,
-        "SAR": 8.71018,
-        "ISR": 13.6838
+        "SDR": 8.56912,
+        "SIR": 18.8359,
+        "SAR": 9.54974,
+        "ISR": 13.8949
       },
       "instrumental": {
-        "SDR": 15.2586,
-        "SIR": 24.725,
-        "SAR": 17.3601,
-        "ISR": 17.749
+        "SDR": 15.1399,
+        "SIR": 24.5587,
+        "SAR": 17.2734,
+        "ISR": 17.7383
       }
     },
     "stems": [
@@ -19019,20 +21586,105 @@
             "ISR": 18.3553
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 7.0198,
+            "SIR": 32.5431,
+            "SAR": 0.6603,
+            "ISR": 3.93775
+          },
+          "instrumental": {
+            "SDR": 15.6696,
+            "SIR": 13.3786,
+            "SAR": 15.1539,
+            "ISR": 19.7558
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 0.00014,
+            "SIR": -20.6212,
+            "SAR": -0.45702,
+            "ISR": 0.01726
+          },
+          "instrumental": {
+            "SDR": 6.57204,
+            "SIR": 5.8997,
+            "SAR": 35.7573,
+            "ISR": 19.3374
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 8.41611,
+            "SIR": 20.7799,
+            "SAR": 9.15099,
+            "ISR": 13.4741
+          },
+          "instrumental": {
+            "SDR": 17.591,
+            "SIR": 25.573,
+            "SAR": 20.5776,
+            "ISR": 18.8046
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 7.85247,
+            "SIR": 20.7196,
+            "SAR": 8.5456,
+            "ISR": 11.3854
+          },
+          "instrumental": {
+            "SDR": 9.95266,
+            "SIR": 14.2309,
+            "SAR": 10.9413,
+            "ISR": 15.8568
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 4.64485,
+            "SIR": 25.3723,
+            "SAR": 4.9917,
+            "ISR": 9.26667
+          },
+          "instrumental": {
+            "SDR": 12.7043,
+            "SIR": 16.7264,
+            "SAR": 13.8338,
+            "ISR": 18.5124
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 5.0564,
-        "SIR": 20.8251,
-        "SAR": 5.04768,
-        "ISR": 7.58749
+        "SDR": 5.35372,
+        "SIR": 20.8081,
+        "SAR": 5.01969,
+        "ISR": 7.62261
       },
       "instrumental": {
-        "SDR": 13.9395,
-        "SIR": 16.2419,
-        "SAR": 15.6337,
-        "ISR": 18.7976
+        "SDR": 13.9026,
+        "SIR": 16.237,
+        "SAR": 15.5983,
+        "ISR": 18.8011
       }
     },
     "stems": [
@@ -19570,20 +22222,105 @@
             "ISR": 18.0781
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 7.24876,
+            "SIR": 15.1884,
+            "SAR": -0.06719,
+            "ISR": 3.41222
+          },
+          "instrumental": {
+            "SDR": 15.939,
+            "SIR": 12.4749,
+            "SAR": 14.844,
+            "ISR": 19.4028
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 0.4164,
+            "SIR": 2.98322,
+            "SAR": 2.62964,
+            "ISR": 0.79752
+          },
+          "instrumental": {
+            "SDR": 7.02398,
+            "SIR": 6.94421,
+            "SAR": 21.624,
+            "ISR": 16.9634
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 9.0089,
+            "SIR": 19.5793,
+            "SAR": 9.74325,
+            "ISR": 15.2366
+          },
+          "instrumental": {
+            "SDR": 18.0604,
+            "SIR": 28.919,
+            "SAR": 21.2845,
+            "ISR": 18.9835
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 8.71089,
+            "SIR": 19.7459,
+            "SAR": 9.98765,
+            "ISR": 13.4251
+          },
+          "instrumental": {
+            "SDR": 10.6064,
+            "SIR": 17.4769,
+            "SAR": 11.4112,
+            "ISR": 15.0596
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 5.44735,
+            "SIR": 23.9016,
+            "SAR": 6.00637,
+            "ISR": 10.073
+          },
+          "instrumental": {
+            "SDR": 13.0476,
+            "SIR": 18.3528,
+            "SAR": 14.0672,
+            "ISR": 18.5943
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 4.71807,
-        "SIR": 18.2885,
-        "SAR": 4.02018,
-        "ISR": 8.13422
+        "SDR": 5.17046,
+        "SIR": 18.4631,
+        "SAR": 4.12444,
+        "ISR": 8.1924
       },
       "instrumental": {
-        "SDR": 14.292,
-        "SIR": 17.2284,
-        "SAR": 15.5827,
-        "ISR": 18.5052
+        "SDR": 14.1082,
+        "SIR": 17.2608,
+        "SAR": 15.3099,
+        "ISR": 18.5482
       }
     },
     "stems": [
@@ -20121,20 +22858,105 @@
             "ISR": 17.4377
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 9.80325,
+            "SIR": 30.5478,
+            "SAR": 10.7027,
+            "ISR": 12.4313
+          },
+          "instrumental": {
+            "SDR": 16.9112,
+            "SIR": 23.2796,
+            "SAR": 20.2875,
+            "ISR": 19.5943
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 3.50833,
+            "SIR": 9.98863,
+            "SAR": 6.62481,
+            "ISR": 9.32092
+          },
+          "instrumental": {
+            "SDR": 11.1524,
+            "SIR": 16.4919,
+            "SAR": 13.8134,
+            "ISR": 16.0344
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 11.8572,
+            "SIR": 25.6005,
+            "SAR": 12.9112,
+            "ISR": 17.098
+          },
+          "instrumental": {
+            "SDR": 18.313,
+            "SIR": 33.4432,
+            "SAR": 23.3386,
+            "ISR": 19.2252
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 10.6872,
+            "SIR": 19.2425,
+            "SAR": 11.8296,
+            "ISR": 16.353
+          },
+          "instrumental": {
+            "SDR": 11.2338,
+            "SIR": 22.4637,
+            "SAR": 11.8464,
+            "ISR": 14.5815
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 7.66394,
+            "SIR": 22.5477,
+            "SAR": 7.65051,
+            "ISR": 12.2621
+          },
+          "instrumental": {
+            "SDR": 13.1064,
+            "SIR": 20.8688,
+            "SAR": 14.572,
+            "ISR": 17.8358
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.07183,
-        "SIR": 19.1073,
-        "SAR": 8.38538,
-        "ISR": 12.466
+        "SDR": 8.64868,
+        "SIR": 19.3286,
+        "SAR": 8.7812,
+        "ISR": 12.4487
       },
       "instrumental": {
-        "SDR": 14.9079,
-        "SIR": 23.2923,
-        "SAR": 16.8949,
-        "ISR": 17.8618
+        "SDR": 14.7245,
+        "SIR": 23.1275,
+        "SAR": 16.7433,
+        "ISR": 17.8488
       }
     },
     "stems": [
@@ -20672,20 +23494,105 @@
             "ISR": 17.9571
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 11.0623,
+            "SIR": 29.4646,
+            "SAR": 12.3561,
+            "ISR": 14.13
+          },
+          "instrumental": {
+            "SDR": 17.6522,
+            "SIR": 25.6851,
+            "SAR": 21.8034,
+            "ISR": 19.5396
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 3.12546,
+            "SIR": 10.2078,
+            "SAR": 5.63472,
+            "ISR": 8.10285
+          },
+          "instrumental": {
+            "SDR": 11.0255,
+            "SIR": 15.7903,
+            "SAR": 13.9319,
+            "ISR": 16.1243
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 13.2019,
+            "SIR": 26.8411,
+            "SAR": 14.4558,
+            "ISR": 17.7664
+          },
+          "instrumental": {
+            "SDR": 18.7103,
+            "SIR": 36.0611,
+            "SAR": 24.9146,
+            "ISR": 19.3984
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 10.6305,
+            "SIR": 21.4772,
+            "SAR": 11.8067,
+            "ISR": 15.6618
+          },
+          "instrumental": {
+            "SDR": 11.8029,
+            "SIR": 21.4342,
+            "SAR": 12.4832,
+            "ISR": 15.7957
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 8.59622,
+            "SIR": 21.5607,
+            "SAR": 8.76544,
+            "ISR": 13.634
+          },
+          "instrumental": {
+            "SDR": 14.0218,
+            "SIR": 22.9615,
+            "SAR": 15.4146,
+            "ISR": 17.6536
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.16098,
-        "SIR": 20.1665,
-        "SAR": 9.81481,
-        "ISR": 13.7031
+        "SDR": 9.60094,
+        "SIR": 21.3567,
+        "SAR": 10.312,
+        "ISR": 13.9166
       },
       "instrumental": {
-        "SDR": 15.4281,
-        "SIR": 25.1985,
-        "SAR": 17.5161,
-        "ISR": 18.3353
+        "SDR": 15.3927,
+        "SIR": 25.093,
+        "SAR": 17.4478,
+        "ISR": 18.1979
       }
     },
     "stems": [
@@ -21223,20 +24130,105 @@
             "ISR": 17.9791
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 10.8562,
+            "SIR": 29.5296,
+            "SAR": 12.0968,
+            "ISR": 14.2107
+          },
+          "instrumental": {
+            "SDR": 17.5601,
+            "SIR": 25.6694,
+            "SAR": 21.7747,
+            "ISR": 19.5271
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 3.12053,
+            "SIR": 9.82821,
+            "SAR": 6.35754,
+            "ISR": 9.48596
+          },
+          "instrumental": {
+            "SDR": 10.9955,
+            "SIR": 16.6271,
+            "SAR": 13.7444,
+            "ISR": 15.8035
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 13.1288,
+            "SIR": 26.5795,
+            "SAR": 14.2956,
+            "ISR": 17.8476
+          },
+          "instrumental": {
+            "SDR": 18.7061,
+            "SIR": 36.3053,
+            "SAR": 24.6828,
+            "ISR": 19.3872
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 10.1856,
+            "SIR": 22.2052,
+            "SAR": 11.3637,
+            "ISR": 14.8685
+          },
+          "instrumental": {
+            "SDR": 11.4526,
+            "SIR": 19.9352,
+            "SAR": 12.3851,
+            "ISR": 16.0649
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 8.3438,
+            "SIR": 21.7652,
+            "SAR": 8.52415,
+            "ISR": 13.4414
+          },
+          "instrumental": {
+            "SDR": 13.8409,
+            "SIR": 22.5935,
+            "SAR": 15.243,
+            "ISR": 17.7323
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.12554,
-        "SIR": 20.4466,
-        "SAR": 9.515,
-        "ISR": 13.6395
+        "SDR": 9.57662,
+        "SIR": 21.5215,
+        "SAR": 9.9693,
+        "ISR": 13.9249
       },
       "instrumental": {
-        "SDR": 15.4745,
-        "SIR": 25.1118,
-        "SAR": 17.2804,
-        "ISR": 18.4301
+        "SDR": 15.4335,
+        "SIR": 24.9813,
+        "SAR": 17.2761,
+        "ISR": 18.268
       }
     },
     "stems": [
@@ -21774,20 +24766,105 @@
             "ISR": 17.8576
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 11.1373,
+            "SIR": 29.079,
+            "SAR": 12.2703,
+            "ISR": 14.0694
+          },
+          "instrumental": {
+            "SDR": 17.5817,
+            "SIR": 25.559,
+            "SAR": 21.7436,
+            "ISR": 19.4994
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 2.68875,
+            "SIR": 9.88833,
+            "SAR": 3.91378,
+            "ISR": 6.62887
+          },
+          "instrumental": {
+            "SDR": 10.5589,
+            "SIR": 14.5512,
+            "SAR": 14.0416,
+            "ISR": 16.4449
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 13.1823,
+            "SIR": 26.6126,
+            "SAR": 14.2855,
+            "ISR": 17.9611
+          },
+          "instrumental": {
+            "SDR": 18.6893,
+            "SIR": 36.7055,
+            "SAR": 24.7931,
+            "ISR": 19.3679
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 11.027,
+            "SIR": 20.2644,
+            "SAR": 12.4025,
+            "ISR": 16.5225
+          },
+          "instrumental": {
+            "SDR": 11.7852,
+            "SIR": 22.7434,
+            "SAR": 12.4544,
+            "ISR": 15.2133
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 8.58457,
+            "SIR": 21.0019,
+            "SAR": 8.81202,
+            "ISR": 13.8718
+          },
+          "instrumental": {
+            "SDR": 13.9735,
+            "SIR": 23.3021,
+            "SAR": 15.4052,
+            "ISR": 17.4838
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.22076,
-        "SIR": 19.8927,
-        "SAR": 9.78009,
-        "ISR": 13.8432
+        "SDR": 9.66183,
+        "SIR": 20.6332,
+        "SAR": 10.3141,
+        "ISR": 13.9706
       },
       "instrumental": {
-        "SDR": 15.3079,
-        "SIR": 25.3953,
-        "SAR": 17.3425,
-        "ISR": 18.138
+        "SDR": 15.2718,
+        "SIR": 25.314,
+        "SAR": 17.2965,
+        "ISR": 18.0558
       }
     },
     "stems": [
@@ -22325,20 +25402,105 @@
             "ISR": 17.5826
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 11.224,
+            "SIR": 23.6275,
+            "SAR": 12.1848,
+            "ISR": 15.7146
+          },
+          "instrumental": {
+            "SDR": 16.7548,
+            "SIR": 29.1013,
+            "SAR": 21.0587,
+            "ISR": 18.9483
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 5.11952,
+            "SIR": 7.85644,
+            "SAR": 8.428,
+            "ISR": 13.1743
+          },
+          "instrumental": {
+            "SDR": 11.9198,
+            "SIR": 21.2196,
+            "SAR": 14.4782,
+            "ISR": 14.4159
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 12.7367,
+            "SIR": 27.1822,
+            "SAR": 13.4723,
+            "ISR": 17.6164
+          },
+          "instrumental": {
+            "SDR": 18.6489,
+            "SIR": 35.3411,
+            "SAR": 24.4767,
+            "ISR": 19.3661
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 10.3861,
+            "SIR": 21.3924,
+            "SAR": 11.227,
+            "ISR": 13.6416
+          },
+          "instrumental": {
+            "SDR": 11.4481,
+            "SIR": 18.0478,
+            "SAR": 12.2151,
+            "ISR": 15.8016
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 8.06744,
+            "SIR": 23.3958,
+            "SAR": 8.29173,
+            "ISR": 13.4451
+          },
+          "instrumental": {
+            "SDR": 13.9644,
+            "SIR": 22.9701,
+            "SAR": 15.397,
+            "ISR": 17.9973
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.5805,
-        "SIR": 19.2903,
-        "SAR": 8.70431,
-        "ISR": 13.6921
+        "SDR": 8.61757,
+        "SIR": 19.6048,
+        "SAR": 9.37745,
+        "ISR": 13.6669
       },
       "instrumental": {
-        "SDR": 15.4279,
-        "SIR": 24.0787,
-        "SAR": 17.271,
-        "ISR": 17.8586
+        "SDR": 15.3984,
+        "SIR": 24.0751,
+        "SAR": 17.1606,
+        "ISR": 17.8623
       }
     },
     "stems": [
@@ -22896,20 +26058,105 @@
             "ISR": 17.5089
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 10.4038,
+            "SIR": 31.8697,
+            "SAR": 12.1474,
+            "ISR": 13.7618
+          },
+          "instrumental": {
+            "SDR": 17.1564,
+            "SIR": 25.0477,
+            "SAR": 21.3983,
+            "ISR": 19.6156
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 5.37318,
+            "SIR": 11.789,
+            "SAR": 8.43184,
+            "ISR": 11.1446
+          },
+          "instrumental": {
+            "SDR": 12.8799,
+            "SIR": 18.1667,
+            "SAR": 15.418,
+            "ISR": 16.803
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 12.4004,
+            "SIR": 26.2568,
+            "SAR": 13.908,
+            "ISR": 16.2541
+          },
+          "instrumental": {
+            "SDR": 18.3974,
+            "SIR": 31.3873,
+            "SAR": 24.1561,
+            "ISR": 19.2368
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 11.0247,
+            "SIR": 19.5053,
+            "SAR": 12.531,
+            "ISR": 16.2811
+          },
+          "instrumental": {
+            "SDR": 11.5551,
+            "SIR": 22.5694,
+            "SAR": 12.6582,
+            "ISR": 14.8534
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 8.33481,
+            "SIR": 22.1772,
+            "SAR": 8.55771,
+            "ISR": 13.4603
+          },
+          "instrumental": {
+            "SDR": 13.551,
+            "SIR": 22.5918,
+            "SAR": 15.4703,
+            "ISR": 17.6572
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.29306,
-        "SIR": 19.0287,
-        "SAR": 10.2181,
-        "ISR": 13.5799
+        "SDR": 9.43812,
+        "SIR": 19.5269,
+        "SAR": 10.2545,
+        "ISR": 13.5967
       },
       "instrumental": {
-        "SDR": 15.2654,
-        "SIR": 24.1477,
-        "SAR": 17.7085,
-        "ISR": 18.0614
+        "SDR": 15.2341,
+        "SIR": 24.1306,
+        "SAR": 17.6334,
+        "ISR": 17.9692
       }
     },
     "stems": [
@@ -23447,14 +26694,99 @@
             "ISR": 3.07836
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "other": {
+            "SDR": 3.2767,
+            "SIR": 12.641,
+            "SAR": 2.06731,
+            "ISR": 5.88696
+          },
+          "instrumental": {
+            "SDR": 10.5314,
+            "SIR": 19.9448,
+            "SAR": 14.8501,
+            "ISR": 16.4615
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "other": {
+            "SDR": 7.19205,
+            "SIR": 21.3224,
+            "SAR": 7.25572,
+            "ISR": 10.7759
+          },
+          "instrumental": {
+            "SDR": 1.34502,
+            "SIR": 7.19421,
+            "SAR": 0.986595,
+            "ISR": 5.66761
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "other": {
+            "SDR": 5.29795,
+            "SIR": 19.7123,
+            "SAR": 4.92955,
+            "ISR": 13.8048
+          },
+          "instrumental": {
+            "SDR": 5.94046,
+            "SIR": 12.3227,
+            "SAR": 5.77602,
+            "ISR": 10.8548
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "other": {
+            "SDR": 4.89376,
+            "SIR": 18.0495,
+            "SAR": 4.30901,
+            "ISR": 9.86718
+          },
+          "instrumental": {
+            "SDR": -0.04307,
+            "SIR": 14.8438,
+            "SAR": -1.44964,
+            "ISR": 11.0345
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "other": {
+            "SDR": 10.3818,
+            "SIR": 19.5252,
+            "SAR": 10.8809,
+            "ISR": 15.5455
+          },
+          "instrumental": {
+            "SDR": 0.87812,
+            "SIR": 6.53023,
+            "SAR": 0.28347,
+            "ISR": 2.71706
+          }
+        }
       }
     ],
     "median_scores": {
       "instrumental": {
-        "SDR": 3.06098,
-        "SIR": 9.66555,
-        "SAR": 4.16195,
-        "ISR": 6.0601
+        "SDR": 2.92805,
+        "SIR": 9.91923,
+        "SAR": 4.01882,
+        "ISR": 6.13529
       }
     },
     "stems": [
@@ -23992,20 +27324,105 @@
             "ISR": 12.6147
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "bass": {
+            "SDR": 10.036,
+            "SIR": 25.3242,
+            "SAR": 1.71184,
+            "ISR": -0.28736
+          },
+          "instrumental": {
+            "SDR": 5.7284,
+            "SIR": 4.49601,
+            "SAR": 4.01895,
+            "ISR": 12.3067
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "bass": {
+            "SDR": 14.3982,
+            "SIR": 29.8156,
+            "SAR": 11.7944,
+            "ISR": 14.1614
+          },
+          "instrumental": {
+            "SDR": 3.00312,
+            "SIR": 7.01646,
+            "SAR": 5.97162,
+            "ISR": 7.55067
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "bass": {
+            "SDR": 15.1121,
+            "SIR": 29.4922,
+            "SAR": 17.2961,
+            "ISR": 18.2611
+          },
+          "instrumental": {
+            "SDR": 0.4544,
+            "SIR": 2.09194,
+            "SAR": 0.969195,
+            "ISR": 3.11978
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "bass": {
+            "SDR": 10.9887,
+            "SIR": 22.3777,
+            "SAR": 11.9519,
+            "ISR": 15.9469
+          },
+          "instrumental": {
+            "SDR": -1.89782,
+            "SIR": 1.2986,
+            "SAR": -6.09063,
+            "ISR": 2.9936
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "bass": {
+            "SDR": 9.05815,
+            "SIR": 18.1841,
+            "SAR": 9.15806,
+            "ISR": 13.3938
+          },
+          "instrumental": {
+            "SDR": 3.70975,
+            "SIR": 10.6943,
+            "SAR": 3.84451,
+            "ISR": 10.0631
+          }
+        }
       }
     ],
     "median_scores": {
       "bass": {
-        "SDR": 10.4234,
-        "SIR": 20.9984,
-        "SAR": 10.6262,
-        "ISR": 13.9534
+        "SDR": 10.4481,
+        "SIR": 21.1217,
+        "SAR": 10.8219,
+        "ISR": 14.0335
       },
       "instrumental": {
-        "SDR": 2.66124,
-        "SIR": 7.13739,
-        "SAR": 3.94259,
-        "ISR": 6.93987
+        "SDR": 2.68521,
+        "SIR": 7.07101,
+        "SAR": 3.9178,
+        "ISR": 7.09959
       }
     },
     "stems": [
@@ -24543,20 +27960,105 @@
             "ISR": 8.34425
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "drums": {
+            "SDR": 14.2848,
+            "SIR": 21.1582,
+            "SAR": 15.7269,
+            "ISR": 20.1131
+          },
+          "instrumental": {
+            "SDR": -0.08024,
+            "SIR": -0.94982,
+            "SAR": -0.27963,
+            "ISR": 0.84907
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "drums": {
+            "SDR": 10.3476,
+            "SIR": 22.8908,
+            "SAR": 10.7892,
+            "ISR": 15.3912
+          },
+          "instrumental": {
+            "SDR": 2.17779,
+            "SIR": 5.26827,
+            "SAR": 3.96689,
+            "ISR": 6.6059
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "drums": {
+            "SDR": 11.1725,
+            "SIR": 25.784,
+            "SAR": 11.1362,
+            "ISR": 16.7703
+          },
+          "instrumental": {
+            "SDR": 3.75723,
+            "SIR": 8.86305,
+            "SAR": 4.90081,
+            "ISR": 9.77396
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "drums": {
+            "SDR": 4.34164,
+            "SIR": 12.5832,
+            "SAR": 4.34374,
+            "ISR": 9.81655
+          },
+          "instrumental": {
+            "SDR": -0.04514,
+            "SIR": 10.6225,
+            "SAR": -1.59781,
+            "ISR": 10.5392
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "drums": {
+            "SDR": 7.46053,
+            "SIR": 18.3525,
+            "SAR": 7.97954,
+            "ISR": 11.9513
+          },
+          "instrumental": {
+            "SDR": 3.82152,
+            "SIR": 10.0609,
+            "SAR": 3.93938,
+            "ISR": 9.25875
+          }
+        }
       }
     ],
     "median_scores": {
       "drums": {
-        "SDR": 6.99062,
-        "SIR": 15.13,
-        "SAR": 7.06405,
-        "ISR": 11.6443
+        "SDR": 7.00582,
+        "SIR": 15.342,
+        "SAR": 7.46493,
+        "ISR": 11.9347
       },
       "instrumental": {
-        "SDR": 3.0156,
-        "SIR": 8.67782,
-        "SAR": 5.0244,
-        "ISR": 8.34425
+        "SDR": 2.89852,
+        "SIR": 8.74851,
+        "SAR": 4.01986,
+        "ISR": 8.39873
       }
     },
     "stems": [
@@ -25094,18 +28596,86 @@
             "ISR": 17.4525
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 10.4632,
+            "SIR": 32.1246,
+            "SAR": 11.758,
+            "ISR": 13.806
+          },
+          "instrumental": {
+            "SDR": 16.9755,
+            "SIR": 24.8777,
+            "SAR": 21.054,
+            "ISR": 19.6166
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 4.81324,
+            "SIR": 12.9986,
+            "SAR": 6.44942,
+            "ISR": 9.75713
+          },
+          "instrumental": {
+            "SDR": 12.0588,
+            "SIR": 17.2469,
+            "SAR": 14.0433,
+            "ISR": 17.3272
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 12.0319,
+            "SIR": 25.9071,
+            "SAR": 13.1343,
+            "ISR": 16.9845
+          },
+          "instrumental": {
+            "SDR": 18.2416,
+            "SIR": 33.2648,
+            "SAR": 23.3783,
+            "ISR": 19.1745
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 10.9654,
+            "SIR": 19.0299,
+            "SAR": 12.2731,
+            "ISR": 17.1389
+          },
+          "instrumental": {
+            "SDR": 11.4665,
+            "SIR": 23.8385,
+            "SAR": 12.02,
+            "ISR": 14.5321
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.43341,
+        "SDR": 8.72609,
         "SIR": 19.685,
-        "SAR": 9.17369,
-        "ISR": 12.8412
+        "SAR": 9.516,
+        "ISR": 13.2417
       },
       "instrumental": {
         "SDR": 15.0247,
-        "SIR": 23.4221,
+        "SIR": 23.8385,
         "SAR": 16.987,
         "ISR": 17.9132
       }
@@ -25645,14 +29215,82 @@
             "ISR": 3.25316
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "other": {
+            "SDR": 2.40989,
+            "SIR": 11.5116,
+            "SAR": 1.3879,
+            "ISR": 4.99395
+          },
+          "instrumental": {
+            "SDR": 11.1713,
+            "SIR": 20.8102,
+            "SAR": 14.7704,
+            "ISR": 16.5908
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "other": {
+            "SDR": 6.41997,
+            "SIR": 18.8085,
+            "SAR": 6.83169,
+            "ISR": 10.6595
+          },
+          "instrumental": {
+            "SDR": 1.63646,
+            "SIR": 7.35046,
+            "SAR": 1.3573,
+            "ISR": 5.55991
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "other": {
+            "SDR": 4.53491,
+            "SIR": 19.7521,
+            "SAR": 3.94093,
+            "ISR": 12.4326
+          },
+          "instrumental": {
+            "SDR": 5.95565,
+            "SIR": 12.5336,
+            "SAR": 5.7771,
+            "ISR": 10.9417
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "other": {
+            "SDR": 5.07085,
+            "SIR": 18.6145,
+            "SAR": 4.35329,
+            "ISR": 8.53857
+          },
+          "instrumental": {
+            "SDR": 0.21596,
+            "SIR": 15.6609,
+            "SAR": -1.28946,
+            "ISR": 11.5589
+          }
+        }
       }
     ],
     "median_scores": {
       "instrumental": {
         "SDR": 3.34213,
-        "SIR": 10.5176,
+        "SIR": 10.8778,
         "SAR": 4.2601,
-        "ISR": 6.25688
+        "ISR": 6.3735
       }
     },
     "stems": [
@@ -26190,19 +29828,87 @@
             "ISR": 12.772
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "bass": {
+            "SDR": 9.31692,
+            "SIR": 27.2579,
+            "SAR": 0.75021,
+            "ISR": -4.33117
+          },
+          "instrumental": {
+            "SDR": 5.62643,
+            "SIR": 2.76063,
+            "SAR": 3.00181,
+            "ISR": 12.2923
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "bass": {
+            "SDR": 13.0351,
+            "SIR": 26.1968,
+            "SAR": 10.7765,
+            "ISR": 13.2642
+          },
+          "instrumental": {
+            "SDR": 3.22029,
+            "SIR": 7.44384,
+            "SAR": 5.7559,
+            "ISR": 7.75851
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "bass": {
+            "SDR": 14.7969,
+            "SIR": 26.6912,
+            "SAR": 16.9395,
+            "ISR": 17.9366
+          },
+          "instrumental": {
+            "SDR": 0.484755,
+            "SIR": 2.37826,
+            "SAR": 0.83404,
+            "ISR": 3.05398
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "bass": {
+            "SDR": 10.7409,
+            "SIR": 22.12,
+            "SAR": 11.5083,
+            "ISR": 15.4611
+          },
+          "instrumental": {
+            "SDR": -1.86122,
+            "SIR": 1.53389,
+            "SAR": -6.10625,
+            "ISR": 3.03968
+          }
+        }
       }
     ],
     "median_scores": {
       "bass": {
-        "SDR": 9.8357,
-        "SIR": 20.2693,
-        "SAR": 9.8512,
+        "SDR": 9.98494,
+        "SIR": 20.8977,
+        "SAR": 10.1956,
         "ISR": 13.3543
       },
       "instrumental": {
         "SDR": 2.7386,
-        "SIR": 7.47173,
-        "SAR": 4.2851,
+        "SIR": 7.40689,
+        "SAR": 3.90687,
         "ISR": 7.5392
       }
     },
@@ -26741,19 +30447,87 @@
             "ISR": 8.51987
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "drums": {
+            "SDR": 14.4814,
+            "SIR": 22.7441,
+            "SAR": 16.0829,
+            "ISR": 19.0982
+          },
+          "instrumental": {
+            "SDR": 0.02236,
+            "SIR": -0.68008,
+            "SAR": -0.05878,
+            "ISR": 0.97669
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "drums": {
+            "SDR": 10.7839,
+            "SIR": 24.1476,
+            "SAR": 11.7829,
+            "ISR": 14.7781
+          },
+          "instrumental": {
+            "SDR": 2.26446,
+            "SIR": 5.40597,
+            "SAR": 4.09761,
+            "ISR": 6.73183
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "drums": {
+            "SDR": 11.3648,
+            "SIR": 26.6375,
+            "SAR": 11.5932,
+            "ISR": 15.7057
+          },
+          "instrumental": {
+            "SDR": 3.93787,
+            "SIR": 9.09541,
+            "SAR": 4.92127,
+            "ISR": 9.93224
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "drums": {
+            "SDR": 4.07266,
+            "SIR": 10.9354,
+            "SAR": 4.32409,
+            "ISR": 9.951
+          },
+          "instrumental": {
+            "SDR": -0.09054,
+            "SIR": 10.5061,
+            "SAR": -1.76441,
+            "ISR": 10.232
+          }
+        }
       }
     ],
     "median_scores": {
       "drums": {
-        "SDR": 7.06685,
-        "SIR": 16.1349,
-        "SAR": 7.35825,
-        "ISR": 11.2281
+        "SDR": 7.10067,
+        "SIR": 16.2967,
+        "SAR": 7.41762,
+        "ISR": 11.2848
       },
       "instrumental": {
-        "SDR": 3.0867,
+        "SDR": 3.04591,
         "SIR": 8.64191,
-        "SAR": 5.01904,
+        "SAR": 4.61964,
         "ISR": 8.50964
       }
     },
@@ -27292,18 +31066,86 @@
             "ISR": 17.7846
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 10.6508,
+            "SIR": 33.3165,
+            "SAR": 9.21143,
+            "ISR": 10.2997
+          },
+          "instrumental": {
+            "SDR": 17.5079,
+            "SIR": 21.4968,
+            "SAR": 19.6272,
+            "ISR": 19.6975
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 4.22097,
+            "SIR": 11.5764,
+            "SAR": 6.82513,
+            "ISR": 10.3243
+          },
+          "instrumental": {
+            "SDR": 11.7208,
+            "SIR": 17.2716,
+            "SAR": 14.1359,
+            "ISR": 16.408
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 13.2105,
+            "SIR": 28.0098,
+            "SAR": 13.9937,
+            "ISR": 18.9055
+          },
+          "instrumental": {
+            "SDR": 18.6625,
+            "SIR": 38.7813,
+            "SAR": 24.4699,
+            "ISR": 19.3791
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 11.327,
+            "SIR": 20.6429,
+            "SAR": 12.526,
+            "ISR": 17.7893
+          },
+          "instrumental": {
+            "SDR": 11.7535,
+            "SIR": 25.5315,
+            "SAR": 12.476,
+            "ISR": 15.1966
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.07272,
-        "SIR": 20.0864,
+        "SDR": 10.0275,
+        "SIR": 20.6429,
         "SAR": 9.29978,
         "ISR": 14.2574
       },
       "instrumental": {
         "SDR": 15.3648,
-        "SIR": 25.7476,
+        "SIR": 25.5315,
         "SAR": 17.1153,
         "ISR": 18.2195
       }
@@ -27843,18 +31685,86 @@
             "ISR": 16.552
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 4.80022,
+            "SIR": 27.8756,
+            "SAR": 11.031,
+            "ISR": 7.66426
+          },
+          "instrumental": {
+            "SDR": 10.9353,
+            "SIR": 13.2876,
+            "SAR": 16.7817,
+            "ISR": 19.0614
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 0.90267,
+            "SIR": 11.1777,
+            "SAR": 1.57497,
+            "ISR": 7.87925
+          },
+          "instrumental": {
+            "SDR": 7.81953,
+            "SIR": 12.8057,
+            "SAR": 8.54483,
+            "ISR": 14.8816
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 8.29717,
+            "SIR": 27.7512,
+            "SAR": 14.1791,
+            "ISR": 10.4651
+          },
+          "instrumental": {
+            "SDR": 13.1779,
+            "SIR": 14.5176,
+            "SAR": 21.6159,
+            "ISR": 19.0704
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 9.94701,
+            "SIR": 20.3444,
+            "SAR": 12.4755,
+            "ISR": 16.7659
+          },
+          "instrumental": {
+            "SDR": 7.55356,
+            "SIR": 9.95375,
+            "SAR": 10.5917,
+            "ISR": 13.9203
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 4.50584,
-        "SIR": 20.3077,
-        "SAR": 9.54704,
+        "SDR": 4.52258,
+        "SIR": 20.3444,
+        "SAR": 10.7605,
         "ISR": 8.2687
       },
       "instrumental": {
         "SDR": 8.44329,
-        "SIR": 11.6277,
+        "SIR": 11.6303,
         "SAR": 13.4337,
         "ISR": 16.7441
       }
@@ -28394,18 +32304,86 @@
             "ISR": 17.6477
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 11.2276,
+            "SIR": 27.5034,
+            "SAR": 12.0039,
+            "ISR": 16.1987
+          },
+          "instrumental": {
+            "SDR": 17.3479,
+            "SIR": 27.3928,
+            "SAR": 21.2889,
+            "ISR": 19.3708
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 2.17105,
+            "SIR": 12.5917,
+            "SAR": 2.85984,
+            "ISR": 7.54104
+          },
+          "instrumental": {
+            "SDR": 10.7638,
+            "SIR": 14.8659,
+            "SAR": 12.0567,
+            "ISR": 17.5165
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 13.7243,
+            "SIR": 27.3897,
+            "SAR": 14.1531,
+            "ISR": 20.945
+          },
+          "instrumental": {
+            "SDR": 18.5717,
+            "SIR": 37.0665,
+            "SAR": 24.5974,
+            "ISR": 19.3182
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 11.3548,
+            "SIR": 20.7762,
+            "SAR": 12.3786,
+            "ISR": 18.9285
+          },
+          "instrumental": {
+            "SDR": 11.5262,
+            "SIR": 26.2417,
+            "SAR": 12.1687,
+            "ISR": 15.1975
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.29467,
-        "SIR": 19.7854,
-        "SAR": 9.4558,
-        "ISR": 15.4085
+        "SDR": 10.3386,
+        "SIR": 20.7762,
+        "SAR": 10.8039,
+        "ISR": 15.9544
       },
       "instrumental": {
         "SDR": 15.2638,
-        "SIR": 27.5545,
+        "SIR": 27.3928,
         "SAR": 16.9676,
         "ISR": 17.9213
       }
@@ -28945,18 +32923,86 @@
             "ISR": 17.736
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 10.8173,
+            "SIR": 29.9201,
+            "SAR": 11.588,
+            "ISR": 13.3619
+          },
+          "instrumental": {
+            "SDR": 17.4738,
+            "SIR": 24.6547,
+            "SAR": 21.5141,
+            "ISR": 19.5573
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 3.19626,
+            "SIR": 11.4512,
+            "SAR": 4.88464,
+            "ISR": 7.36752
+          },
+          "instrumental": {
+            "SDR": 11.2192,
+            "SIR": 14.7938,
+            "SAR": 13.9812,
+            "ISR": 16.77
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 13.1682,
+            "SIR": 28.0545,
+            "SAR": 14.3753,
+            "ISR": 17.8069
+          },
+          "instrumental": {
+            "SDR": 18.7426,
+            "SIR": 36.419,
+            "SAR": 24.9575,
+            "ISR": 19.404
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 10.9274,
+            "SIR": 20.7557,
+            "SAR": 12.1661,
+            "ISR": 16.3913
+          },
+          "instrumental": {
+            "SDR": 12.0172,
+            "SIR": 23.0026,
+            "SAR": 12.671,
+            "ISR": 15.3927
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.11076,
-        "SIR": 20.4452,
-        "SAR": 9.79032,
+        "SDR": 10.1157,
+        "SIR": 20.7557,
+        "SAR": 10.8579,
         "ISR": 13.6508
       },
       "instrumental": {
         "SDR": 15.3403,
-        "SIR": 25.0044,
+        "SIR": 24.9091,
         "SAR": 17.4702,
         "ISR": 18.0665
       }
@@ -29496,14 +33542,82 @@
             "ISR": 17.6701
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 11.0658,
+            "SIR": 29.4224,
+            "SAR": 12.1483,
+            "ISR": 14.5367
+          },
+          "instrumental": {
+            "SDR": 17.5967,
+            "SIR": 26.2081,
+            "SAR": 21.8042,
+            "ISR": 19.5187
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 4.19327,
+            "SIR": 12.3334,
+            "SAR": 5.97236,
+            "ISR": 8.99335
+          },
+          "instrumental": {
+            "SDR": 11.7635,
+            "SIR": 15.8535,
+            "SAR": 14.1537,
+            "ISR": 16.9865
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 12.9861,
+            "SIR": 27.2632,
+            "SAR": 14.1549,
+            "ISR": 17.4853
+          },
+          "instrumental": {
+            "SDR": 18.664,
+            "SIR": 35.1575,
+            "SAR": 24.8635,
+            "ISR": 19.3491
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 11.2005,
+            "SIR": 20.7725,
+            "SAR": 12.6536,
+            "ISR": 16.538
+          },
+          "instrumental": {
+            "SDR": 11.9446,
+            "SIR": 23.3534,
+            "SAR": 12.7453,
+            "ISR": 15.3119
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.23499,
-        "SIR": 20.1042,
-        "SAR": 9.92657,
-        "ISR": 13.6026
+        "SDR": 10.0448,
+        "SIR": 20.4857,
+        "SAR": 10.8293,
+        "ISR": 14.015
       },
       "instrumental": {
         "SDR": 15.3736,
@@ -30047,18 +34161,86 @@
             "ISR": 16.8931
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 10.1928,
+            "SIR": 21.6071,
+            "SAR": 9.88645,
+            "ISR": 11.775
+          },
+          "instrumental": {
+            "SDR": 16.0795,
+            "SIR": 22.3702,
+            "SAR": 19.4496,
+            "ISR": 18.6247
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 1.21492,
+            "SIR": 9.27714,
+            "SAR": 2.07043,
+            "ISR": 7.40248
+          },
+          "instrumental": {
+            "SDR": 10.5473,
+            "SIR": 14.3239,
+            "SAR": 11.8278,
+            "ISR": 15.839
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 11.5194,
+            "SIR": 21.2608,
+            "SAR": 12.1847,
+            "ISR": 17.3034
+          },
+          "instrumental": {
+            "SDR": 17.5868,
+            "SIR": 34.249,
+            "SAR": 23.1577,
+            "ISR": 18.1323
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 10.6511,
+            "SIR": 18.5914,
+            "SAR": 11.9932,
+            "ISR": 16.5261
+          },
+          "instrumental": {
+            "SDR": 11.0901,
+            "SIR": 22.6392,
+            "SAR": 11.6467,
+            "ISR": 14.1197
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 7.62121,
-        "SIR": 16.7948,
-        "SAR": 8.26119,
+        "SDR": 7.63307,
+        "SIR": 17.5502,
+        "SAR": 8.6833,
         "ISR": 12.2868
       },
       "instrumental": {
         "SDR": 14.2598,
-        "SIR": 21.9019,
+        "SIR": 22.2432,
         "SAR": 16.4255,
         "ISR": 17.1808
       }
@@ -30598,14 +34780,82 @@
             "ISR": 15.6151
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 9.93231,
+            "SIR": 17.0268,
+            "SAR": 11.1058,
+            "ISR": 13.3245
+          },
+          "instrumental": {
+            "SDR": 15.3262,
+            "SIR": 24.0168,
+            "SAR": 19.8755,
+            "ISR": 17.1591
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 3.97279,
+            "SIR": 7.16759,
+            "SAR": 6.58768,
+            "ISR": 10.5582
+          },
+          "instrumental": {
+            "SDR": 10.8523,
+            "SIR": 18.3732,
+            "SAR": 13.0302,
+            "ISR": 13.4754
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 11.4563,
+            "SIR": 18.5555,
+            "SAR": 12.8828,
+            "ISR": 17.2104
+          },
+          "instrumental": {
+            "SDR": 16.6174,
+            "SIR": 33.7264,
+            "SAR": 23.5436,
+            "ISR": 17.0111
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 10.1738,
+            "SIR": 17.3697,
+            "SAR": 11.9402,
+            "ISR": 15.8828
+          },
+          "instrumental": {
+            "SDR": 10.6332,
+            "SIR": 21.7943,
+            "SAR": 11.6937,
+            "ISR": 13.4713
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 7.59957,
-        "SIR": 14.5728,
-        "SAR": 8.52245,
-        "ISR": 13.0126
+        "SDR": 7.74832,
+        "SIR": 14.9536,
+        "SAR": 9.74293,
+        "ISR": 13.2938
       },
       "instrumental": {
         "SDR": 13.7105,
@@ -31149,14 +35399,82 @@
             "ISR": 15.7118
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 10.4199,
+            "SIR": 17.0238,
+            "SAR": 11.9322,
+            "ISR": 14.4594
+          },
+          "instrumental": {
+            "SDR": 15.3481,
+            "SIR": 26.2851,
+            "SAR": 20.2876,
+            "ISR": 17.0469
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 1.56634,
+            "SIR": 8.85607,
+            "SAR": 2.53657,
+            "ISR": 7.47159
+          },
+          "instrumental": {
+            "SDR": 10.4968,
+            "SIR": 13.9847,
+            "SAR": 12.7539,
+            "ISR": 14.9708
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 11.3323,
+            "SIR": 18.5174,
+            "SAR": 13.25,
+            "ISR": 17.7224
+          },
+          "instrumental": {
+            "SDR": 16.6316,
+            "SIR": 35.4979,
+            "SAR": 23.8839,
+            "ISR": 16.9231
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 10.8046,
+            "SIR": 17.8196,
+            "SAR": 12.5165,
+            "ISR": 16.572
+          },
+          "instrumental": {
+            "SDR": 11.1833,
+            "SIR": 22.7637,
+            "SAR": 12.2072,
+            "ISR": 13.6263
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.0528,
-        "SIR": 15.1268,
-        "SAR": 9.06836,
-        "ISR": 13.4352
+        "SDR": 8.10643,
+        "SIR": 15.6196,
+        "SAR": 10.1873,
+        "ISR": 13.9862
       },
       "instrumental": {
         "SDR": 14.078,
@@ -31700,18 +36018,86 @@
             "ISR": 17.3565
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 11.3092,
+            "SIR": 24.8561,
+            "SAR": 10.2104,
+            "ISR": 12.0652
+          },
+          "instrumental": {
+            "SDR": 17.1074,
+            "SIR": 23.3349,
+            "SAR": 20.2268,
+            "ISR": 18.8935
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 3.46394,
+            "SIR": 8.40823,
+            "SAR": 5.5441,
+            "ISR": 11.4008
+          },
+          "instrumental": {
+            "SDR": 10.8089,
+            "SIR": 19.5895,
+            "SAR": 11.8569,
+            "ISR": 14.7945
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 12.7168,
+            "SIR": 25.8381,
+            "SAR": 13.5305,
+            "ISR": 17.6718
+          },
+          "instrumental": {
+            "SDR": 18.5516,
+            "SIR": 35.4711,
+            "SAR": 24.2257,
+            "ISR": 19.1836
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 10.6445,
+            "SIR": 19.4317,
+            "SAR": 12.2014,
+            "ISR": 16.6169
+          },
+          "instrumental": {
+            "SDR": 11.2919,
+            "SIR": 23.2338,
+            "SAR": 12.1039,
+            "ISR": 14.6652
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.29479,
-        "SIR": 18.3375,
-        "SAR": 8.71142,
+        "SDR": 8.4672,
+        "SIR": 19.2459,
+        "SAR": 9.31084,
         "ISR": 13.7659
       },
       "instrumental": {
         "SDR": 14.9567,
-        "SIR": 24.4933,
+        "SIR": 24.3051,
         "SAR": 17.1067,
         "ISR": 17.6483
       }
@@ -33860,18 +38246,86 @@
             "ISR": 18.1214
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 11.7046,
+            "SIR": 33.2659,
+            "SAR": 12.3268,
+            "ISR": 13.4
+          },
+          "instrumental": {
+            "SDR": 17.9052,
+            "SIR": 24.7932,
+            "SAR": 22.0302,
+            "ISR": 19.7173
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 5.42777,
+            "SIR": 11.5231,
+            "SAR": 8.26833,
+            "ISR": 9.98201
+          },
+          "instrumental": {
+            "SDR": 12.6014,
+            "SIR": 16.8602,
+            "SAR": 15.9387,
+            "ISR": 16.5381
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 13.5795,
+            "SIR": 27.7323,
+            "SAR": 14.8579,
+            "ISR": 17.9123
+          },
+          "instrumental": {
+            "SDR": 18.8312,
+            "SIR": 36.546,
+            "SAR": 25.3191,
+            "ISR": 19.4355
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 11.0573,
+            "SIR": 20.2084,
+            "SAR": 12.477,
+            "ISR": 16.8164
+          },
+          "instrumental": {
+            "SDR": 11.984,
+            "SIR": 23.4887,
+            "SAR": 12.7893,
+            "ISR": 15.024
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.74997,
+        "SDR": 10.4556,
         "SIR": 22.1606,
-        "SAR": 9.94502,
+        "SAR": 11.386,
         "ISR": 14.1121
       },
       "instrumental": {
         "SDR": 15.8138,
-        "SIR": 26.1264,
+        "SIR": 25.9275,
         "SAR": 18.1094,
         "ISR": 18.2253
       }
@@ -34411,14 +38865,82 @@
             "ISR": 17.8876
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 11.4219,
+            "SIR": 27.4415,
+            "SAR": 12.8031,
+            "ISR": 14.4542
+          },
+          "instrumental": {
+            "SDR": 17.505,
+            "SIR": 26.7677,
+            "SAR": 22.1047,
+            "ISR": 19.3817
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 4.5368,
+            "SIR": 10.2714,
+            "SAR": 7.90839,
+            "ISR": 9.12476
+          },
+          "instrumental": {
+            "SDR": 11.8417,
+            "SIR": 16.49,
+            "SAR": 15.5923,
+            "ISR": 16.1206
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 12.4838,
+            "SIR": 25.397,
+            "SAR": 13.3905,
+            "ISR": 17.4396
+          },
+          "instrumental": {
+            "SDR": 18.4647,
+            "SIR": 34.5499,
+            "SAR": 24.0095,
+            "ISR": 19.1439
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 10.9583,
+            "SIR": 19.614,
+            "SAR": 12.5138,
+            "ISR": 16.6528
+          },
+          "instrumental": {
+            "SDR": 11.9676,
+            "SIR": 23.0671,
+            "SAR": 12.5528,
+            "ISR": 14.7855
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.99275,
+        "SDR": 10.025,
         "SIR": 20.3714,
-        "SAR": 9.47226,
-        "ISR": 14.0024
+        "SAR": 10.8718,
+        "ISR": 14.4542
       },
       "instrumental": {
         "SDR": 15.4311,
@@ -34962,14 +39484,82 @@
             "ISR": 18.2967
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 11.6719,
+            "SIR": 33.0287,
+            "SAR": 12.6361,
+            "ISR": 14.3029
+          },
+          "instrumental": {
+            "SDR": 17.9172,
+            "SIR": 26.5597,
+            "SAR": 22.3544,
+            "ISR": 19.6802
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 5.54675,
+            "SIR": 10.8237,
+            "SAR": 8.67814,
+            "ISR": 10.5822
+          },
+          "instrumental": {
+            "SDR": 12.4174,
+            "SIR": 17.4604,
+            "SAR": 16.1392,
+            "ISR": 16.072
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 13.5144,
+            "SIR": 27.8448,
+            "SAR": 14.7456,
+            "ISR": 17.9309
+          },
+          "instrumental": {
+            "SDR": 19.0967,
+            "SIR": 36.667,
+            "SAR": 25.1275,
+            "ISR": 19.7392
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 11.1499,
+            "SIR": 20.2272,
+            "SAR": 12.3885,
+            "ISR": 17.0839
+          },
+          "instrumental": {
+            "SDR": 12.0272,
+            "SIR": 24.4044,
+            "SAR": 12.7057,
+            "ISR": 15.0756
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.69804,
+        "SDR": 10.4036,
         "SIR": 22.2632,
-        "SAR": 9.84564,
-        "ISR": 14.2391
+        "SAR": 11.3155,
+        "ISR": 14.3029
       },
       "instrumental": {
         "SDR": 15.8701,
@@ -35513,14 +40103,82 @@
             "ISR": 18.519
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 14.1345,
+            "SIR": 37.4204,
+            "SAR": 15.2435,
+            "ISR": 17.4216
+          },
+          "instrumental": {
+            "SDR": 18.531,
+            "SIR": 33.2044,
+            "SAR": 23.9269,
+            "ISR": 19.7974
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 7.6385,
+            "SIR": 9.06066,
+            "SAR": 10.0479,
+            "ISR": 15.3108
+          },
+          "instrumental": {
+            "SDR": 13.4934,
+            "SIR": 25.452,
+            "SAR": 15.6533,
+            "ISR": 14.9693
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 15.8821,
+            "SIR": 31.434,
+            "SAR": 17.7598,
+            "ISR": 18.9229
+          },
+          "instrumental": {
+            "SDR": 19.1253,
+            "SIR": 40.6957,
+            "SAR": 26.508,
+            "ISR": 19.6281
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 12.3402,
+            "SIR": 24.5707,
+            "SAR": 13.4427,
+            "ISR": 17.7563
+          },
+          "instrumental": {
+            "SDR": 12.4393,
+            "SIR": 25.6194,
+            "SAR": 13.1366,
+            "ISR": 16.5581
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 11.2783,
+        "SDR": 12.0149,
         "SIR": 26.4655,
-        "SAR": 11.8311,
-        "ISR": 15.8837
+        "SAR": 13.0333,
+        "ISR": 15.8931
       },
       "instrumental": {
         "SDR": 16.4299,
@@ -36064,14 +40722,82 @@
             "ISR": 18.5351
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 14.1955,
+            "SIR": 37.4715,
+            "SAR": 15.0205,
+            "ISR": 16.6058
+          },
+          "instrumental": {
+            "SDR": 18.5468,
+            "SIR": 31.6753,
+            "SAR": 23.8806,
+            "ISR": 19.7926
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 7.65754,
+            "SIR": 9.5571,
+            "SAR": 10.0174,
+            "ISR": 14.9344
+          },
+          "instrumental": {
+            "SDR": 13.4272,
+            "SIR": 24.2699,
+            "SAR": 15.9498,
+            "ISR": 15.2298
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 16.5351,
+            "SIR": 33.1355,
+            "SAR": 18.9963,
+            "ISR": 18.9178
+          },
+          "instrumental": {
+            "SDR": 19.0794,
+            "SIR": 40.0272,
+            "SAR": 26.3595,
+            "ISR": 19.6428
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 12.6328,
+            "SIR": 25.2811,
+            "SAR": 13.8165,
+            "ISR": 17.5757
+          },
+          "instrumental": {
+            "SDR": 12.3381,
+            "SIR": 24.3844,
+            "SAR": 12.8706,
+            "ISR": 16.8282
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 11.306,
+        "SDR": 12.4581,
         "SIR": 28.1322,
-        "SAR": 11.8386,
-        "ISR": 15.8872
+        "SAR": 13.5625,
+        "ISR": 16.0717
       },
       "instrumental": {
         "SDR": 16.2972,
@@ -36625,14 +41351,82 @@
             "ISR": 17.9173
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 12.7301,
+            "SIR": 34.1645,
+            "SAR": 13.5797,
+            "ISR": 16.7386
+          },
+          "instrumental": {
+            "SDR": 17.9351,
+            "SIR": 31.0197,
+            "SAR": 22.1091,
+            "ISR": 19.7026
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 5.17442,
+            "SIR": 10.972,
+            "SAR": 6.79369,
+            "ISR": 8.42129
+          },
+          "instrumental": {
+            "SDR": 11.5621,
+            "SIR": 14.6105,
+            "SAR": 14.0976,
+            "ISR": 15.8593
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 16.1324,
+            "SIR": 33.7296,
+            "SAR": 18.3241,
+            "ISR": 18.5191
+          },
+          "instrumental": {
+            "SDR": 18.3647,
+            "SIR": 36.8409,
+            "SAR": 23.587,
+            "ISR": 19.5641
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 11.9136,
+            "SIR": 22.688,
+            "SAR": 13.0509,
+            "ISR": 17.4081
+          },
+          "instrumental": {
+            "SDR": 11.2257,
+            "SIR": 23.4872,
+            "SAR": 11.8632,
+            "ISR": 15.754
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.2028,
+        "SDR": 10.82,
         "SIR": 23.4189,
-        "SAR": 10.8419,
-        "ISR": 14.7674
+        "SAR": 10.9716,
+        "ISR": 14.8978
       },
       "instrumental": {
         "SDR": 15.0478,
@@ -37183,6 +41977,74 @@
             "ISR": 19.0269
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 10.1641,
+            "SIR": 39.1433,
+            "SAR": 4.4328,
+            "ISR": 6.58832
+          },
+          "instrumental": {
+            "SDR": 17.7084,
+            "SIR": 15.1447,
+            "SAR": 15.6636,
+            "ISR": 19.8685
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 0.46461,
+            "SIR": 14.9759,
+            "SAR": -0.0,
+            "ISR": 1.32129
+          },
+          "instrumental": {
+            "SDR": 8.70372,
+            "SIR": 8.50921,
+            "SAR": 19.6935,
+            "ISR": 19.0185
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 7.84148,
+            "SIR": 37.673,
+            "SAR": 7.22407,
+            "ISR": 10.1225
+          },
+          "instrumental": {
+            "SDR": 16.0958,
+            "SIR": 16.6524,
+            "SAR": 15.3224,
+            "ISR": 19.7899
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 9.43367,
+            "SIR": 26.7779,
+            "SAR": 9.68603,
+            "ISR": 11.9258
+          },
+          "instrumental": {
+            "SDR": 10.0505,
+            "SIR": 12.5026,
+            "SAR": 9.51029,
+            "ISR": 17.3935
+          }
+        }
       }
     ],
     "median_scores": {
@@ -37194,8 +42056,8 @@
       },
       "instrumental": {
         "SDR": 14.6082,
-        "SIR": 16.0954,
-        "SAR": 14.7343,
+        "SIR": 15.3443,
+        "SAR": 15.0148,
         "ISR": 19.2948
       }
     },
@@ -38201,19 +43063,87 @@
             "ISR": 18.3796
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 11.5523,
+            "SIR": 36.357,
+            "SAR": 12.8237,
+            "ISR": 15.084
+          },
+          "instrumental": {
+            "SDR": 17.7576,
+            "SIR": 27.5903,
+            "SAR": 22.0431,
+            "ISR": 19.7703
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 6.0657,
+            "SIR": 17.181,
+            "SAR": 9.31288,
+            "ISR": 9.66949
+          },
+          "instrumental": {
+            "SDR": 13.3134,
+            "SIR": 16.5477,
+            "SAR": 17.9914,
+            "ISR": 18.3898
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 13.884,
+            "SIR": 32.6888,
+            "SAR": 15.6606,
+            "ISR": 17.2881
+          },
+          "instrumental": {
+            "SDR": 19.046,
+            "SIR": 34.3802,
+            "SAR": 26.0809,
+            "ISR": 19.7068
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 10.8376,
+            "SIR": 22.833,
+            "SAR": 12.1502,
+            "ISR": 15.6833
+          },
+          "instrumental": {
+            "SDR": 11.758,
+            "SIR": 20.7597,
+            "SAR": 12.4489,
+            "ISR": 16.2091
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.41606,
+        "SDR": 9.45288,
         "SIR": 25.13,
-        "SAR": 10.33,
-        "ISR": 12.8462
+        "SAR": 10.701,
+        "ISR": 13.0445
       },
       "instrumental": {
         "SDR": 15.8092,
         "SIR": 23.387,
-        "SAR": 17.9409,
+        "SAR": 17.9914,
         "ISR": 18.8447
       }
     },
@@ -40369,20 +45299,105 @@
             "ISR": 17.6675
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 11.868,
+            "SIR": 28.1803,
+            "SAR": 12.5461,
+            "ISR": 15.479
+          },
+          "instrumental": {
+            "SDR": 17.546,
+            "SIR": 28.2661,
+            "SAR": 21.7024,
+            "ISR": 19.408
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 4.2702,
+            "SIR": 9.19773,
+            "SAR": 4.75764,
+            "ISR": 10.4024
+          },
+          "instrumental": {
+            "SDR": 11.3742,
+            "SIR": 18.0427,
+            "SAR": 11.9068,
+            "ISR": 15.2756
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 12.949,
+            "SIR": 21.946,
+            "SAR": 13.6592,
+            "ISR": 18.0142
+          },
+          "instrumental": {
+            "SDR": 18.6185,
+            "SIR": 36.8288,
+            "SAR": 23.8534,
+            "ISR": 18.9695
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 10.9692,
+            "SIR": 20.2516,
+            "SAR": 12.3834,
+            "ISR": 16.6795
+          },
+          "instrumental": {
+            "SDR": 11.8514,
+            "SIR": 23.0838,
+            "SAR": 12.4722,
+            "ISR": 15.1694
+          }
+        }
+      },
+      {
+        "track_name": "Hezekiah Jones - Borrowed Heart",
+        "scores": {
+          "vocals": {
+            "SDR": 8.59135,
+            "SIR": 21.6023,
+            "SAR": 8.9602,
+            "ISR": 13.8188
+          },
+          "instrumental": {
+            "SDR": 14.058,
+            "SIR": 22.8337,
+            "SAR": 15.5571,
+            "ISR": 17.6894
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 8.43558,
-        "SIR": 18.3055,
-        "SAR": 8.99974,
-        "ISR": 13.8318
+        "SDR": 8.55823,
+        "SIR": 19.4126,
+        "SAR": 9.0149,
+        "ISR": 13.9244
       },
       "instrumental": {
-        "SDR": 15.0573,
-        "SIR": 24.2926,
-        "SAR": 17.0469,
-        "ISR": 17.6975
+        "SDR": 14.9334,
+        "SIR": 24.2316,
+        "SAR": 17.0409,
+        "ISR": 17.6934
       }
     },
     "stems": [
@@ -40920,19 +45935,87 @@
             "ISR": 18.1016
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 11.8392,
+            "SIR": 35.0962,
+            "SAR": 13.0003,
+            "ISR": 15.6768
+          },
+          "instrumental": {
+            "SDR": 17.737,
+            "SIR": 28.5758,
+            "SAR": 22.0999,
+            "ISR": 19.7177
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 6.45893,
+            "SIR": 15.8722,
+            "SAR": 9.81507,
+            "ISR": 10.2869
+          },
+          "instrumental": {
+            "SDR": 13.5702,
+            "SIR": 17.1708,
+            "SAR": 18.1745,
+            "ISR": 17.9683
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 14.151,
+            "SIR": 31.9359,
+            "SAR": 15.6072,
+            "ISR": 17.7287
+          },
+          "instrumental": {
+            "SDR": 19.0501,
+            "SIR": 35.9791,
+            "SAR": 26.2297,
+            "ISR": 19.6703
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 10.9019,
+            "SIR": 21.4803,
+            "SAR": 12.2739,
+            "ISR": 16.27
+          },
+          "instrumental": {
+            "SDR": 12.2484,
+            "SIR": 22.3732,
+            "SAR": 12.603,
+            "ISR": 15.8561
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 9.78726,
+        "SDR": 9.78846,
         "SIR": 23.0893,
-        "SAR": 10.5429,
-        "ISR": 13.6077
+        "SAR": 10.8375,
+        "ISR": 13.9277
       },
       "instrumental": {
         "SDR": 15.8132,
         "SIR": 24.8546,
-        "SAR": 17.9272,
+        "SAR": 17.9832,
         "ISR": 18.6101
       }
     },
@@ -41471,20 +46554,71 @@
             "ISR": 17.903
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 12.7004,
+            "SIR": 35.4648,
+            "SAR": 13.8985,
+            "ISR": 16.33
+          },
+          "instrumental": {
+            "SDR": 18.059,
+            "SIR": 30.9682,
+            "SAR": 22.7971,
+            "ISR": 19.7761
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 6.4941,
+            "SIR": 16.2176,
+            "SAR": 10.0121,
+            "ISR": 10.5968
+          },
+          "instrumental": {
+            "SDR": 13.5837,
+            "SIR": 17.4015,
+            "SAR": 17.9409,
+            "ISR": 18.1126
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 14.5832,
+            "SIR": 31.2557,
+            "SAR": 16.3811,
+            "ISR": 18.1319
+          },
+          "instrumental": {
+            "SDR": 19.1675,
+            "SIR": 37.5946,
+            "SAR": 26.8855,
+            "ISR": 19.6217
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.1088,
-        "SIR": 22.8732,
-        "SAR": 10.926,
-        "ISR": 14.0552
+        "SDR": 10.1677,
+        "SIR": 22.9206,
+        "SAR": 11.0051,
+        "ISR": 14.1575
       },
       "instrumental": {
-        "SDR": 15.8931,
-        "SIR": 25.692,
-        "SAR": 18.2581,
-        "ISR": 18.5654
+        "SDR": 15.9497,
+        "SIR": 25.7172,
+        "SAR": 18.3169,
+        "ISR": 18.5689
       }
     },
     "stems": [
@@ -42022,19 +47156,87 @@
             "ISR": 18.2052
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 13.4389,
+            "SIR": 36.2467,
+            "SAR": 14.6843,
+            "ISR": 16.9709
+          },
+          "instrumental": {
+            "SDR": 18.2103,
+            "SIR": 31.5702,
+            "SAR": 22.9304,
+            "ISR": 19.7679
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 7.00356,
+            "SIR": 16.1957,
+            "SAR": 10.7257,
+            "ISR": 10.8562
+          },
+          "instrumental": {
+            "SDR": 13.6959,
+            "SIR": 17.682,
+            "SAR": 18.6418,
+            "ISR": 17.9722
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 17.0876,
+            "SIR": 36.3891,
+            "SAR": 20.2477,
+            "ISR": 18.662
+          },
+          "instrumental": {
+            "SDR": 18.9359,
+            "SIR": 37.944,
+            "SAR": 25.8288,
+            "ISR": 19.7083
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 12.212,
+            "SIR": 22.6858,
+            "SAR": 13.8374,
+            "ISR": 17.5489
+          },
+          "instrumental": {
+            "SDR": 11.6508,
+            "SIR": 24.2611,
+            "SAR": 12.6734,
+            "ISR": 15.7187
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.7754,
+        "SDR": 10.9739,
         "SIR": 24.2992,
-        "SAR": 11.4937,
-        "ISR": 14.8602
+        "SAR": 11.8031,
+        "ISR": 15.209
       },
       "instrumental": {
         "SDR": 16.0388,
         "SIR": 26.8933,
-        "SAR": 18.2517,
+        "SAR": 18.4798,
         "ISR": 18.564
       }
     },
@@ -42573,19 +47775,87 @@
             "ISR": 18.1811
           }
         }
+      },
+      {
+        "track_name": "Flags - 54",
+        "scores": {
+          "vocals": {
+            "SDR": 13.5298,
+            "SIR": 36.2277,
+            "SAR": 14.7146,
+            "ISR": 17.0672
+          },
+          "instrumental": {
+            "SDR": 18.2133,
+            "SIR": 31.9328,
+            "SAR": 22.9548,
+            "ISR": 19.7633
+          }
+        }
+      },
+      {
+        "track_name": "Giselle - Moss",
+        "scores": {
+          "vocals": {
+            "SDR": 7.02334,
+            "SIR": 16.1852,
+            "SAR": 10.7386,
+            "ISR": 10.903
+          },
+          "instrumental": {
+            "SDR": 13.7227,
+            "SIR": 17.7357,
+            "SAR": 18.69,
+            "ISR": 17.951
+          }
+        }
+      },
+      {
+        "track_name": "Grants - PunchDrunk",
+        "scores": {
+          "vocals": {
+            "SDR": 17.1541,
+            "SIR": 36.1393,
+            "SAR": 20.2997,
+            "ISR": 18.7722
+          },
+          "instrumental": {
+            "SDR": 18.9338,
+            "SIR": 38.4876,
+            "SAR": 25.9108,
+            "ISR": 19.695
+          }
+        }
+      },
+      {
+        "track_name": "Helado Negro - Mitad Del Mundo",
+        "scores": {
+          "vocals": {
+            "SDR": 12.2775,
+            "SIR": 22.7516,
+            "SAR": 13.8514,
+            "ISR": 17.5384
+          },
+          "instrumental": {
+            "SDR": 11.6894,
+            "SIR": 24.096,
+            "SAR": 12.6792,
+            "ISR": 15.7647
+          }
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 10.811,
+        "SDR": 10.9888,
         "SIR": 23.5803,
-        "SAR": 11.532,
-        "ISR": 14.9853
+        "SAR": 11.7907,
+        "ISR": 15.2616
       },
       "instrumental": {
         "SDR": 16.0211,
         "SIR": 26.9479,
-        "SAR": 18.1965,
+        "SAR": 18.4517,
         "ISR": 18.584
       }
     },
