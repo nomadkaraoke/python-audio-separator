@@ -491,7 +491,11 @@ class Separator:
                     "target_stem": model_scores.get(filename, {}).get("target_stem"),
                     "download_files": [filename],
                 }  # Just the filename for MDX models
-                for name, filename in {**model_downloads_list["mdx_download_list"], **model_downloads_list["mdx_download_vip_list"], **audio_separator_models_list["mdx_download_list"]}.items()
+                for name, filename in {
+                    **model_downloads_list["mdx_download_list"],
+                    **model_downloads_list["mdx_download_vip_list"],
+                    **audio_separator_models_list["mdx_download_list"],
+                }.items()
             },
             "Demucs": demucs_models,
             "MDXC": {

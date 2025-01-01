@@ -4,7 +4,6 @@ import museval
 import numpy as np
 import soundfile as sf
 from audio_separator.separator import Separator
-from pathlib import Path
 import json
 import logging
 import musdb
