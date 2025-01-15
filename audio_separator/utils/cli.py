@@ -192,7 +192,7 @@ def main():
             for root, dirs, files in os.walk(path):
                 for file in files:
                     # Check the file extension to ensure it's an audio file
-                    if file.endswith(('.wav', '.mp3', '.flac', '.ogg', '.m4a')):  # Add other formats if needed
+                    if file.endswith((".wav", ".flac", ".mp3", ".ogg", ".opus", ".m4a", ".aiff", ".ac3")):  # Add other formats if needed
                         audio_files.append(os.path.join(root, file))
         else:
             # If the path is a file, add it to the list

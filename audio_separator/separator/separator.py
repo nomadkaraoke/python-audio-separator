@@ -757,7 +757,7 @@ class Separator:
                 for root, dirs, files in os.walk(path):
                     for file in files:
                         # Check the file extension to ensure it's an audio file
-                        if file.endswith(('.wav', '.mp3', '.flac', '.ogg', '.m4a')):  # Add other formats if needed
+                        if file.endswith((".wav", ".flac", ".mp3", ".ogg", ".opus", ".m4a", ".aiff", ".ac3")):  # Add other formats if needed
                             full_path = os.path.join(root, file)
                             self.logger.info(f"Processing file: {full_path}")
                             try:
