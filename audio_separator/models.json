@@ -26,7 +26,7 @@
         "Roformer Model: Mel-Roformer-Denoise-Aufr33-Aggr": {
             "denoise_mel_band_roformer_aufr33_aggr_sdr_27.9768.ckpt": "denoise_mel_band_roformer_aufr33_aggr_sdr_27.9768_config.yaml"
         },
-        "MelBand Roformer | Denoise-Debleed by Gabox": {
+        "Roformer Model: MelBand Roformer | Denoise-Debleed by Gabox": {
             "mel_band_roformer_denoise_debleed_gabox.ckpt": "config_mel_band_roformer_instrumental_gabox.yaml"
         },
         "Roformer Model: Mel-Roformer-Crowd-Aufr33-Viperx": {
