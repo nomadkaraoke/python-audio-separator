@@ -123,14 +123,23 @@ class Separator:
             package_version = self.get_package_distribution("audio-separator").version
             self.logger.info(f"Separator version {package_version} instantiating with output_dir: {output_dir}, output_format: {output_format}")
 
-        self.model_file_dir = model_file_dir
-
         if output_dir is None:
             output_dir = os.getcwd()
             if not info_only:
                 self.logger.info("Output directory not specified. Using current working directory.")
 
         self.output_dir = output_dir
+
+        # Check for environment variable to override model_file_dir
+        env_model_dir = os.environ.get("AUDIO_SEPARATOR_MODEL_DIR")
+        if env_model_dir:
+            self.model_file_dir = env_model_dir
+            self.logger.info(f"Using model directory from AUDIO_SEPARATOR_MODEL_DIR env var: {self.model_file_dir}")
+            if not os.path.exists(self.model_file_dir):
+                raise FileNotFoundError(f"The specified model directory does not exist: {self.model_file_dir}")
+        else:
+            self.logger.info(f"Using model directory from model_file_dir parameter: {model_file_dir}")
+            self.model_file_dir = model_file_dir
 
         # Create the model directory if it does not exist
         os.makedirs(self.model_file_dir, exist_ok=True)

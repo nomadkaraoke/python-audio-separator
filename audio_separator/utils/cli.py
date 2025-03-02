@@ -41,7 +41,7 @@ def main():
     output_format_help = "Output format for separated files, any common format (default: %(default)s). Example: --output_format=MP3"
     output_bitrate_help = "Output bitrate for separated files, any ffmpeg-compatible bitrate (default: %(default)s). Example: --output_bitrate=320k"
     output_dir_help = "Directory to write output files (default: <current dir>). Example: --output_dir=/app/separated"
-    model_file_dir_help = "Model files directory (default: %(default)s). Example: --model_file_dir=/app/models"
+    model_file_dir_help = "Model files directory (default: %(default)s or AUDIO_SEPARATOR_MODEL_DIR env var if set). Example: --model_file_dir=/app/models"
     download_model_only_help = "Download a single model file only, without performing separation."
 
     io_params = parser.add_argument_group("Separation I/O Params")
