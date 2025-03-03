@@ -86,33 +86,54 @@ def get_track_results(model_name, track_name):
     return None
 
 
+def get_track_duration(track_path):
+    """Get the duration of a track in minutes"""
+    try:
+        mixture_path = os.path.join(track_path, "mixture.wav")
+        info = sf.info(mixture_path)
+        return info.duration / 60.0  # Convert seconds to minutes
+    except Exception as e:
+        logger.error(f"Error getting track duration: {str(e)}")
+        return 0.0
+
+
 def evaluate_track(track_name, track_path, test_model, mus_db):
     """Evaluate a single track using a specific model"""
     logger.info(f"Evaluating track: {track_name} with model: {test_model}")
 
-    # Set output directory for this separation
-    output_dir = os.path.join(RESULTS_PATH, test_model, track_name)
-    os.makedirs(output_dir, exist_ok=True)
+    # Get track duration in minutes
+    track_duration_minutes = get_track_duration(track_path)
+    logger.info(f"Track duration: {track_duration_minutes:.2f} minutes")
 
-    # Check if evaluation results already exist
-    results_file = os.path.join(output_dir, "museval-results.json")
-    if os.path.exists(results_file):
-        logger.info("Found existing evaluation results, loading from file...")
-        with open(results_file) as f:
-            json_data = json.load(f)
+    # Check if evaluation results already exist in combined file
+    museval_results = load_combined_results()
+    if test_model in museval_results and track_name in museval_results[test_model]:
+        logger.info("Found existing evaluation results in combined file...")
+        track_data = museval_results[test_model][track_name]
         scores = museval.TrackStore(track_name)
-        scores.scores = json_data
+        scores.scores = track_data
     else:
         # Expanded stem mapping to include "no-stem" outputs
         stem_mapping = {"Vocals": "vocals", "Instrumental": "instrumental", "Drums": "drums", "Bass": "bass", "Other": "other", "No Drums": "nodrums", "No Bass": "nobass", "No Other": "noother"}
 
         # Create a temporary directory for separation files
         with tempfile.TemporaryDirectory() as temp_dir:
-            # Perform separation if needed
+            logger.info(f"Using temporary directory: {temp_dir}")
+
+            # Measure separation time
+            start_time = time.time()
+
+            # Perform separation
             logger.info("Performing separation...")
             separator = Separator(output_dir=temp_dir)
             separator.load_model(model_filename=test_model)
             separator.separate(os.path.join(track_path, "mixture.wav"), custom_output_names=stem_mapping)
+
+            # Calculate processing time
+            processing_time = time.time() - start_time
+            seconds_per_minute = processing_time / track_duration_minutes if track_duration_minutes > 0 else 0
+            logger.info(f"Separation completed in {processing_time:.2f} seconds")
+            logger.info(f"Processing speed: {seconds_per_minute:.2f} seconds per minute of audio")
 
             # Check which stems were actually created and pair them appropriately
             available_stems = {}
@@ -150,25 +171,13 @@ def evaluate_track(track_name, track_path, test_model, mus_db):
 
             # Evaluate using museval
             logger.info(f"Evaluating stems: {list(estimates.keys())}")
-            # Use the temp directory for intermediate results
             scores = museval.eval_mus_track(track, estimates, output_dir=temp_dir, mode="v4")
 
-            # Move only the final results file to the permanent location
-            os.makedirs(output_dir, exist_ok=True)
-            test_results = os.path.join(temp_dir, "test", f"{track_name}.json")
-            train_results = os.path.join(temp_dir, "train", f"{track_name}.json")
-
-            if os.path.exists(test_results):
-                with open(test_results, "r") as f:
-                    results_data = json.load(f)
-                with open(results_file, "w") as f:
-                    json.dump(results_data, f)
-            elif os.path.exists(train_results):
-                with open(train_results, "r") as f:
-                    results_data = json.load(f)
-                with open(results_file, "w") as f:
-                    json.dump(results_data, f)
-            # No need to remove directories as the temp directory will be automatically cleaned up
+            # Update the combined results file with the new evaluation
+            if test_model not in museval_results:
+                museval_results[test_model] = {}
+            museval_results[test_model][track_name] = scores.scores
+            save_combined_results(museval_results)
 
     # Calculate aggregate scores for available stems
     results_store = museval.EvalStore()
@@ -188,6 +197,11 @@ def evaluate_track(track_name, track_path, test_model, mus_db):
             model_results["scores"][output_stem] = stem_scores
         except KeyError:
             continue
+
+    # Add the seconds_per_minute_m3 metric if it was calculated
+    if "processing_time" in locals() and track_duration_minutes > 0:
+        seconds_per_minute = processing_time / track_duration_minutes
+        model_results["scores"]["seconds_per_minute_m3"] = round(seconds_per_minute, 1)
 
     return scores, model_results if model_results["scores"] else None
 
@@ -211,21 +225,31 @@ def calculate_median_scores(track_scores):
         "drums": {"SDR": [], "SIR": [], "SAR": [], "ISR": []},
         "bass": {"SDR": [], "SIR": [], "SAR": [], "ISR": []},
         "instrumental": {"SDR": [], "SIR": [], "SAR": [], "ISR": []},
+        "seconds_per_minute_m3": [],
     }
 
     # Collect all scores for each stem and metric
     for track_score in track_scores:
         if track_score is not None and "scores" in track_score:
+            # Process audio quality metrics
             for stem, metrics in track_score["scores"].items():
-                if stem in stem_metrics:
+                if stem in stem_metrics and stem != "seconds_per_minute_m3":
                     for metric, value in metrics.items():
                         stem_metrics[stem][metric].append(value)
+
+            # Process speed metric separately
+            if "seconds_per_minute_m3" in track_score["scores"]:
+                stem_metrics["seconds_per_minute_m3"].append(track_score["scores"]["seconds_per_minute_m3"])
 
     # Calculate medians for each stem and metric
     median_scores = {}
     for stem, metrics in stem_metrics.items():
-        if any(metrics.values()):  # Only include stems that have scores
+        if stem != "seconds_per_minute_m3" and any(metrics.values()):  # Only include stems that have scores
             median_scores[stem] = {metric: float(f"{np.median(values):.6g}") for metric, values in metrics.items() if values}  # Only include metrics that have values
+
+    # Add median speed metric if available
+    if stem_metrics["seconds_per_minute_m3"]:
+        median_scores["seconds_per_minute_m3"] = round(np.median(stem_metrics["seconds_per_minute_m3"]), 1)
 
     return median_scores
 
@@ -328,6 +352,58 @@ def get_most_evaluated_tracks(museval_results, min_count=10):
     return [track for track, count in sorted_tracks if count >= min_count]
 
 
+def generate_summary_statistics(
+    start_time, models_processed, tracks_processed, models_with_new_data, tracks_evaluated, total_processing_time, fastest_model=None, slowest_model=None, combined_results_path=None, is_dry_run=False
+):
+    """Generate a summary of the script's execution"""
+    end_time = time.time()
+    total_runtime = end_time - start_time
+
+    # Format the runtime
+    hours, remainder = divmod(total_runtime, 3600)
+    minutes, seconds = divmod(remainder, 60)
+    runtime_str = f"{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}"
+
+    # Build the summary
+    summary = [
+        "=" * 80,
+        "DRY RUN SUMMARY - PREVIEW ONLY" if is_dry_run else "EXECUTION SUMMARY",
+        "=" * 80,
+        f"Total runtime: {runtime_str}",
+        f"Models {'that would be' if is_dry_run else ''} processed: {models_processed}",
+        f"Models {'that would receive' if is_dry_run else 'with'} new data: {len(models_with_new_data)}",
+        f"Total tracks {'that would be' if is_dry_run else ''} evaluated: {tracks_evaluated}",
+        f"Average tracks per model: {tracks_evaluated / len(models_with_new_data) if models_with_new_data else 0:.2f}",
+    ]
+
+    if fastest_model:
+        summary.append(f"Fastest model: {fastest_model['name']} ({fastest_model['speed']:.2f} seconds per minute)")
+
+    if slowest_model:
+        summary.append(f"Slowest model: {slowest_model['name']} ({slowest_model['speed']:.2f} seconds per minute)")
+
+    if total_processing_time > 0:
+        summary.append(f"Total audio processing time: {total_processing_time:.2f} seconds")
+
+    if combined_results_path and os.path.exists(combined_results_path):
+        file_size = os.path.getsize(combined_results_path) / (1024 * 1024)  # Size in MB
+        summary.append(f"Results file size: {file_size:.2f} MB")
+
+    # Add models with new data
+    if models_with_new_data:
+        summary.append(f"\nModels {'that would receive' if is_dry_run else 'with'} new evaluation data:")
+        for model_name in models_with_new_data:
+            summary.append(f"- {model_name}")
+
+    # Add dry run disclaimer if needed
+    if is_dry_run:
+        summary.append("\nNOTE: This is a dry run summary. No actual changes were made.")
+        summary.append("Run without --dry-run to perform actual evaluations.")
+
+    summary.append("=" * 80)
+    return "\n".join(summary)
+
+
 def main():
     # Add command line argument parsing for dry run mode
     parser = argparse.ArgumentParser(description="Run model evaluation on MUSDB18 dataset")
@@ -338,6 +414,14 @@ def main():
 
     # Track start time for progress reporting
     start_time = time.time()
+
+    # Statistics tracking
+    models_processed = 0
+    tracks_processed = 0
+    models_with_new_data = set()
+    total_processing_time = 0
+    fastest_model = {"name": "", "speed": float("inf")}  # Initialize with infinity for comparison
+    slowest_model = {"name": "", "speed": 0}  # Initialize with zero for comparison
 
     # Create a results cache manager
     class ResultsCache:
@@ -511,15 +595,56 @@ def main():
             if args.dry_run:
                 log_with_time(f"[DRY RUN] Would evaluate track {track_name} with model {model_filename}")
                 tracks_processed += 1
+                models_with_new_data.add(model_filename)
+
+                # Estimate processing time based on model type for dry run
+                # This is a rough estimate - roformer models are typically slower
+                estimated_speed = 30.0  # Default estimate: 30 seconds per minute
+                if "roformer" in model_name.lower():
+                    estimated_speed = 45.0  # Roformer models are typically slower
+                elif "umx" in model_name.lower():
+                    estimated_speed = 20.0  # UMX models are typically faster
+
+                # Update statistics with estimated values
+                total_processing_time += estimated_speed
+
+                # Track fastest and slowest models based on estimates
+                if estimated_speed < fastest_model["speed"]:
+                    fastest_model = {"name": model_name, "speed": estimated_speed}
+                if estimated_speed > slowest_model["speed"]:
+                    slowest_model = {"name": model_name, "speed": estimated_speed}
+
                 continue
 
             try:
-                _, model_results = evaluate_track(track_name, track_path, model_filename, mus)
-                if model_results:
+                result = evaluate_track(track_name, track_path, model_filename, mus)
+
+                # Unpack the result safely
+                if result and isinstance(result, tuple) and len(result) == 2:
+                    _, model_results = result
+                else:
+                    model_results = None
+
+                # Process the results if they exist and are valid
+                if model_results is not None and isinstance(model_results, dict):
                     combined_results[model_filename]["track_scores"].append(model_results)
                     tracks_processed += 1
+                    models_with_new_data.add(model_filename)
+
+                    # Track processing time statistics - safely access nested dictionaries
+                    scores = model_results.get("scores", {})
+                    if isinstance(scores, dict):
+                        speed = scores.get("seconds_per_minute_m3")
+                        if speed is not None:
+                            total_processing_time += speed  # Accumulate total processing time
+
+                            # Track fastest and slowest models
+                            if speed < fastest_model["speed"]:
+                                fastest_model = {"name": model_name, "speed": speed}
+                            if speed > slowest_model["speed"]:
+                                slowest_model = {"name": model_name, "speed": speed}
                 else:
-                    log_with_time(f"Skipping model {model_filename} for track {track_name} due to no evaluatable stems")
+                    log_with_time(f"Skipping model {model_filename} for track {track_name} due to no evaluatable stems or invalid results")
             except Exception as e:
                 log_with_time(f"Error evaluating model {model_filename} with track {track_name}: {str(e)}", logging.ERROR)
                 logger.exception(f"Exception details: ", exc_info=e)
@@ -572,10 +697,43 @@ def main():
 
         # Move to the next model
         model_idx += 1
+        models_processed += 1
 
     log_with_time("Evaluation complete")
     # Final disk space check
     check_disk_usage(RESULTS_PATH)
+
+    # Generate and display summary statistics
+    # Reset fastest/slowest models if they weren't updated
+    if fastest_model["speed"] == float("inf"):
+        fastest_model = None
+    if slowest_model["speed"] == 0:
+        slowest_model = None
+
+    summary = generate_summary_statistics(
+        start_time=start_time,
+        models_processed=models_processed,
+        tracks_processed=tracks_processed,
+        models_with_new_data=models_with_new_data,
+        tracks_evaluated=tracks_processed,
+        total_processing_time=total_processing_time,
+        fastest_model=fastest_model,
+        slowest_model=slowest_model,
+        combined_results_path=COMBINED_RESULTS_PATH,
+        is_dry_run=args.dry_run,
+    )
+
+    log_with_time("\n" + summary)
+
+    # Also write summary to a log file
+    summary_filename = "dry_run_summary.log" if args.dry_run else "evaluation_summary.log"
+    summary_log_path = os.path.join(os.path.dirname(COMBINED_RESULTS_PATH), summary_filename)
+    with open(summary_log_path, "w") as f:
+        f.write(f"{'Dry run' if args.dry_run else 'Evaluation'} completed at: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
+        f.write(summary)
+
+    log_with_time(f"Summary written to {summary_log_path}")
+
     return 0
 
 
