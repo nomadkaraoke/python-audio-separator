@@ -105,6 +105,13 @@ def evaluate_track(track_name, track_path, test_model, mus_db):
     track_duration_minutes = get_track_duration(track_path)
     logger.info(f"Track duration: {track_duration_minutes:.2f} minutes")
 
+    # Initialize variables to track processing time
+    processing_time = 0
+    seconds_per_minute = 0
+
+    # Create a basic result structure that will be returned even if evaluation fails
+    basic_model_results = {"track_name": track_name, "scores": {}}
+
     # Check if evaluation results already exist in combined file
     museval_results = load_combined_results()
     if test_model in museval_results and track_name in museval_results[test_model]:
@@ -112,9 +119,35 @@ def evaluate_track(track_name, track_path, test_model, mus_db):
         track_data = museval_results[test_model][track_name]
         scores = museval.TrackStore(track_name)
         scores.scores = track_data
+
+        # Try to extract existing speed metrics if available
+        try:
+            if isinstance(track_data, dict) and "targets" in track_data:
+                for target in track_data["targets"]:
+                    if "metrics" in target and "seconds_per_minute_m3" in target["metrics"]:
+                        basic_model_results["scores"]["seconds_per_minute_m3"] = target["metrics"]["seconds_per_minute_m3"]
+                        break
+        except Exception:
+            pass  # Ignore errors in extracting existing speed metrics
     else:
-        # Expanded stem mapping to include "no-stem" outputs
-        stem_mapping = {"Vocals": "vocals", "Instrumental": "instrumental", "Drums": "drums", "Bass": "bass", "Other": "other", "No Drums": "nodrums", "No Bass": "nobass", "No Other": "noother"}
+        # Expanded stem mapping to include "no-stem" outputs and custom stem formats
+        stem_mapping = {
+            # Standard stems
+            "Vocals": "vocals",
+            "Instrumental": "instrumental",
+            "Drums": "drums",
+            "Bass": "bass",
+            "Other": "other",
+            # No-stem variants
+            "No Drums": "nodrums",
+            "No Bass": "nobass",
+            "No Other": "noother",
+            # Custom stem formats (with hyphens)
+            "Drum-Bass": "drumbass",
+            "No Drum-Bass": "nodrumbass",
+            "Vocals-Other": "vocalsother",
+            "No Vocals-Other": "novocalsother",
+        }
 
         # Create a temporary directory for separation files
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -135,26 +168,41 @@ def evaluate_track(track_name, track_path, test_model, mus_db):
             logger.info(f"Separation completed in {processing_time:.2f} seconds")
             logger.info(f"Processing speed: {seconds_per_minute:.2f} seconds per minute of audio")
 
-            # Check which stems were actually created and pair them appropriately
+            # Always add the speed metric to our basic results
+            basic_model_results["scores"]["seconds_per_minute_m3"] = round(seconds_per_minute, 1)
+
+            # Check which stems were actually created
+            wav_files = [f for f in os.listdir(temp_dir) if f.endswith(".wav")]
+            logger.info(f"Found WAV files: {wav_files}")
+
+            # Determine if this is a standard vocal/instrumental model that can be evaluated with museval
+            standard_model = False
+            if len(wav_files) == 2:
+                # Check if one of the files is named vocals.wav or instrumental.wav
+                if "vocals.wav" in wav_files and "instrumental.wav" in wav_files:
+                    standard_model = True
+                    logger.info("Detected standard vocals/instrumental model, will run museval evaluation")
+
+            # If not a standard model, skip museval evaluation and just return speed metrics
+            if not standard_model:
+                logger.info(f"Non-standard stem configuration detected for model {test_model}, skipping museval evaluation")
+
+                # Store the speed metric in the combined results
+                if test_model not in museval_results:
+                    museval_results[test_model] = {}
+
+                # Create a minimal structure for the speed metric
+                minimal_results = {"targets": [{"name": "speed_metrics_only", "metrics": {"seconds_per_minute_m3": round(seconds_per_minute, 1)}}]}
+
+                museval_results[test_model][track_name] = minimal_results
+                save_combined_results(museval_results)
+
+                return None, basic_model_results
+
+            # For standard models, proceed with museval evaluation
             available_stems = {}
-            stem_pairs = {"drums": "nodrums", "bass": "nobass", "other": "noother", "vocals": "instrumental"}
-
-            for main_stem, no_stem in stem_pairs.items():
-                # Construct full file paths for both the isolated stem and its complement
-                main_path = os.path.join(temp_dir, f"{main_stem}.wav")
-                no_stem_path = os.path.join(temp_dir, f"{no_stem}.wav")
-
-                # Only process this pair if both files exist
-                if os.path.exists(main_path) and os.path.exists(no_stem_path):
-                    # Add the main stem with its path to available_stems
-                    available_stems[main_stem] = main_path  # This is already using the correct musdb name
-
-                    # For the complement stem, always use "accompaniment" as that's what museval expects
-                    available_stems["accompaniment"] = no_stem_path
-
-            if not available_stems:
-                logger.info(f"No evaluatable stems found for model {test_model}, skipping evaluation")
-                return None, None
+            available_stems["vocals"] = os.path.join(temp_dir, "vocals.wav")
+            available_stems["accompaniment"] = os.path.join(temp_dir, "instrumental.wav")
 
             # Get track from MUSDB
             track = next((t for t in mus_db if t.name == track_name), None)
@@ -171,39 +219,64 @@ def evaluate_track(track_name, track_path, test_model, mus_db):
 
             # Evaluate using museval
             logger.info(f"Evaluating stems: {list(estimates.keys())}")
-            scores = museval.eval_mus_track(track, estimates, output_dir=temp_dir, mode="v4")
+            try:
+                scores = museval.eval_mus_track(track, estimates, output_dir=temp_dir, mode="v4")
 
-            # Update the combined results file with the new evaluation
-            if test_model not in museval_results:
-                museval_results[test_model] = {}
-            museval_results[test_model][track_name] = scores.scores
-            save_combined_results(museval_results)
+                # Add the speed metric to the scores
+                if not hasattr(scores, "speed_metric_added"):
+                    for target in scores.scores["targets"]:
+                        if "metrics" not in target:
+                            target["metrics"] = {}
+                        target["metrics"]["seconds_per_minute_m3"] = round(seconds_per_minute, 1)
+                    scores.speed_metric_added = True
 
-    # Calculate aggregate scores for available stems
-    results_store = museval.EvalStore()
-    results_store.add_track(scores.df)
-    methods = museval.MethodStore()
-    methods.add_evalstore(results_store, name=test_model)
-    agg_scores = methods.agg_frames_tracks_scores()
+                # Update the combined results file with the new evaluation
+                if test_model not in museval_results:
+                    museval_results[test_model] = {}
+                museval_results[test_model][track_name] = scores.scores
+                save_combined_results(museval_results)
+            except Exception as e:
+                logger.error(f"Error during museval evaluation: {str(e)}")
+                logger.exception("Evaluation exception details:")
+                # Return basic results with just the speed metric
+                return None, basic_model_results
 
-    # Return the aggregate scores in a structured format with 6 significant figures
-    model_results = {"track_name": track_name, "scores": {}}
+    try:
+        # Only process museval results if we have them
+        if "scores" in locals() and scores is not None:
+            # Calculate aggregate scores for available stems
+            results_store = museval.EvalStore()
+            results_store.add_track(scores.df)
+            methods = museval.MethodStore()
+            methods.add_evalstore(results_store, name=test_model)
+            agg_scores = methods.agg_frames_tracks_scores()
 
-    for stem in ["vocals", "drums", "bass", "other", "accompaniment"]:
-        try:
-            stem_scores = {metric: float(f"{agg_scores.loc[(test_model, stem, metric)]:.6g}") for metric in ["SDR", "SIR", "SAR", "ISR"]}
-            # Rename 'accompaniment' to 'instrumental' in the output
-            output_stem = "instrumental" if stem == "accompaniment" else stem
-            model_results["scores"][output_stem] = stem_scores
-        except KeyError:
-            continue
+            # Return the aggregate scores in a structured format with 6 significant figures
+            model_results = {"track_name": track_name, "scores": {}}
 
-    # Add the seconds_per_minute_m3 metric if it was calculated
-    if "processing_time" in locals() and track_duration_minutes > 0:
-        seconds_per_minute = processing_time / track_duration_minutes
-        model_results["scores"]["seconds_per_minute_m3"] = round(seconds_per_minute, 1)
+            for stem in ["vocals", "drums", "bass", "other", "accompaniment"]:
+                try:
+                    stem_scores = {metric: float(f"{agg_scores.loc[(test_model, stem, metric)]:.6g}") for metric in ["SDR", "SIR", "SAR", "ISR"]}
+                    # Rename 'accompaniment' to 'instrumental' in the output
+                    output_stem = "instrumental" if stem == "accompaniment" else stem
+                    model_results["scores"][output_stem] = stem_scores
+                except KeyError:
+                    continue
 
-    return scores, model_results if model_results["scores"] else None
+            # Add the seconds_per_minute_m3 metric if it was calculated
+            if processing_time > 0 and track_duration_minutes > 0:
+                model_results["scores"]["seconds_per_minute_m3"] = round(seconds_per_minute, 1)
+
+            return scores, model_results if model_results["scores"] else basic_model_results
+        else:
+            # If we don't have scores, just return the basic results with speed metrics
+            return None, basic_model_results
+
+    except Exception as e:
+        logger.error(f"Error processing evaluation results: {str(e)}")
+        logger.exception("Results processing exception details:")
+        # Return basic results with just the speed metric
+        return None, basic_model_results
 
 
 def convert_decimal_to_float(obj):

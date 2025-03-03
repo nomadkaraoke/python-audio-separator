@@ -45778,8 +45778,23 @@
   },
   "model_bs_roformer_ep_937_sdr_10.5309.ckpt": {
     "model_name": "Roformer Model: BS-Roformer-Viperx-1053",
-    "track_scores": [],
-    "median_scores": {},
+    "track_scores": [
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "seconds_per_minute_m3": 13.3
+        }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "seconds_per_minute_m3": 13.3
+        }
+      }
+    ],
+    "median_scores": {
+      "seconds_per_minute_m3": 13.3
+    },
     "stems": [
       "no drum-bass",
       "drum-bass"
@@ -53524,6 +53539,46 @@
       "vocals",
       "instrumental"
     ],
+    "target_stem": null
+  },
+  "mel_band_roformer_karaoke_gabox.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer | Karaoke by Gabox",
+    "track_scores": [
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 6.88608,
+            "SIR": 27.7786,
+            "SAR": 6.37612,
+            "ISR": 9.25014
+          },
+          "instrumental": {
+            "SDR": 16.4048,
+            "SIR": 21.2481,
+            "SAR": 19.3112,
+            "ISR": 19.5408
+          },
+          "seconds_per_minute_m3": 17.5
+        }
+      }
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 6.88608,
+        "SIR": 27.7786,
+        "SAR": 6.37612,
+        "ISR": 9.25014
+      },
+      "instrumental": {
+        "SDR": 16.4048,
+        "SIR": 21.2481,
+        "SAR": 19.3112,
+        "ISR": 19.5408
+      },
+      "seconds_per_minute_m3": 17.5
+    },
+    "stems": [],
     "target_stem": null
   }
 }
