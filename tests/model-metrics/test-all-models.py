@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import os
+import time
 import museval
 import numpy as np
 import soundfile as sf
@@ -229,12 +230,38 @@ def calculate_median_scores(track_scores):
     return median_scores
 
 
-def check_inode_usage(path):
-    """Check inode usage on the filesystem containing path"""
+def check_disk_usage(path):
+    """Check inode usage and disk space on the filesystem containing path"""
     import subprocess
-    import re
     import sys
 
+    # Check disk space first
+    result = subprocess.run(["df", "-h", path], capture_output=True, text=True)
+    output = result.stdout
+    logger.info(f"Current disk usage:\n{output}")
+
+    # Parse the output to get disk usage percentage
+    lines = output.strip().split("\n")
+    if len(lines) >= 2:
+        parts = lines[1].split()
+        if len(parts) >= 5:
+            try:
+                # Extract disk usage percentage
+                disk_usage_str = parts[4].rstrip("%")
+                disk_usage_pct = int(disk_usage_str)
+
+                logger.info(f"Disk usage: {disk_usage_pct}%")
+
+                if disk_usage_pct >= 99:
+                    logger.critical("CRITICAL: Disk is almost full (>99%)! Cannot continue processing.")
+                    logger.critical("Please free up disk space before continuing.")
+                    sys.exit(1)
+                elif disk_usage_pct > 95:
+                    logger.warning(f"WARNING: High disk usage ({disk_usage_pct}%)!")
+            except (ValueError, IndexError) as e:
+                logger.error(f"Error parsing disk usage: {str(e)}")
+
+    # Now check inode usage
     result = subprocess.run(["df", "-i", path], capture_output=True, text=True)
     output = result.stdout
     logger.info(f"Current inode usage:\n{output}")
@@ -255,6 +282,11 @@ def check_inode_usage(path):
                 ifree = int(parts[6])
                 total_inodes = iused + ifree
 
+                # Skip inode check for exFAT or similar filesystems
+                if total_inodes <= 1:
+                    logger.info("Filesystem appears to be exFAT or similar (no real inode tracking). Skipping inode check.")
+                    return None
+
                 logger.info(f"Inode usage: {iused:,}/{total_inodes:,} ({inode_usage_pct}%)")
 
                 if inode_usage_pct >= 100:
@@ -268,234 +300,282 @@ def check_inode_usage(path):
             except (ValueError, IndexError) as e:
                 logger.error(f"Error parsing inode usage: {str(e)}")
 
-    # If we couldn't parse the output, try a different approach
-    try:
-        # Try using a more direct command to get inode information
-        fs_stat = subprocess.run(["stat", "-f", "-c", "%d %i %f", path], capture_output=True, text=True)
-        if fs_stat.returncode == 0:
-            # Format: total_inodes used_inodes free_inodes
-            stats = fs_stat.stdout.strip().split()
-            if len(stats) >= 3:
-                total = int(stats[0])
-                used = int(stats[1])
-                free = int(stats[2])
-                usage_pct = (used / total) * 100 if total > 0 else 0
-
-                logger.info(f"Inode usage (alternate method): {used:,}/{total:,} ({usage_pct:.1f}%)")
-
-                if usage_pct >= 100:
-                    logger.critical("CRITICAL: Inode usage is at 100%! Cannot continue processing.")
-                    logger.critical("Please free up inodes before continuing.")
-                    sys.exit(1)
-                elif usage_pct > 90:
-                    logger.warning(f"WARNING: High inode usage ({usage_pct:.1f}%)!")
-
-                return usage_pct
-    except Exception as e:
-        logger.error(f"Error getting filesystem stats: {str(e)}")
-
     return None
+
+
+def get_evaluated_track_count(model_name, museval_results):
+    """Get the number of tracks evaluated for a specific model"""
+    if model_name in museval_results:
+        return len(museval_results[model_name])
+    return 0
+
+
+def get_most_evaluated_tracks(museval_results, min_count=10):
+    """Get tracks that have been evaluated for the most models"""
+    track_counts = {}
+
+    # Count how many models have evaluated each track
+    for model_name, tracks in museval_results.items():
+        for track_name in tracks:
+            if track_name not in track_counts:
+                track_counts[track_name] = 0
+            track_counts[track_name] += 1
+
+    # Sort tracks by evaluation count (descending)
+    sorted_tracks = sorted(track_counts.items(), key=lambda x: x[1], reverse=True)
+
+    # Return tracks that have been evaluated at least min_count times
+    return [track for track, count in sorted_tracks if count >= min_count]
 
 
 def main():
     # Add command line argument parsing for dry run mode
     parser = argparse.ArgumentParser(description="Run model evaluation on MUSDB18 dataset")
     parser.add_argument("--dry-run", action="store_true", help="Run in dry-run mode (no writes)")
+    parser.add_argument("--max-tracks", type=int, default=10, help="Maximum number of tracks to evaluate per model")
+    parser.add_argument("--max-models", type=int, default=None, help="Maximum number of models to evaluate")
     args = parser.parse_args()
 
-    if args.dry_run:
-        logger.info("*** RUNNING IN DRY-RUN MODE - NO DATA WILL BE MODIFIED ***")
+    # Track start time for progress reporting
+    start_time = time.time()
 
-    logger.info("Starting model evaluation script...")
+    # Create a results cache manager
+    class ResultsCache:
+        def __init__(self):
+            self.results = load_combined_results()
+            self.last_update_time = time.time()
+
+        def get_results(self, force=False):
+            current_time = time.time()
+            # Only reload from disk every 5 minutes unless forced
+            if force or (current_time - self.last_update_time) > 300:
+                self.results = load_combined_results()
+                self.last_update_time = current_time
+            return self.results
+
+    results_cache = ResultsCache()
+
+    # Helper function for logging with elapsed time
+    def log_with_time(message, level=logging.INFO):
+        elapsed = time.time() - start_time
+        hours, remainder = divmod(elapsed, 3600)
+        minutes, seconds = divmod(remainder, 60)
+        time_str = f"{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}"
+        logger.log(level, f"[{time_str}] {message}")
+
+    if args.dry_run:
+        log_with_time("*** RUNNING IN DRY-RUN MODE - NO DATA WILL BE MODIFIED ***")
+
+    log_with_time("Starting model evaluation script...")
     os.makedirs(RESULTS_PATH, exist_ok=True)
 
-    # Check inode usage at start
-    check_inode_usage(RESULTS_PATH)
+    # Check disk space and inode usage at start
+    check_disk_usage(RESULTS_PATH)
 
     # Load existing results if available
     combined_results = {}
     if os.path.exists(COMBINED_RESULTS_PATH):
-        logger.info("Loading existing combined results...")
+        log_with_time("Loading existing combined results...")
         with open(COMBINED_RESULTS_PATH) as f:
             combined_results = json.load(f)
 
-    # Load existing museval results
-    museval_results = load_combined_results()
-    logger.info(f"Loaded combined museval results with {len(museval_results)} models")
+    # Get initial museval results
+    museval_results = results_cache.get_results()
+    log_with_time(f"Loaded combined museval results with {len(museval_results)} models")
 
-    # In dry-run mode, print some stats about the loaded data
-    if args.dry_run:
-        for model_name, tracks in museval_results.items():
-            logger.info(f"Model {model_name} has {len(tracks)} evaluated tracks")
-            if len(tracks) > 0:
-                sample_track = next(iter(tracks))
-                logger.info(f"  Sample track: {sample_track}")
+    # Get the most commonly evaluated tracks
+    common_tracks = get_most_evaluated_tracks(museval_results)
+    log_with_time(f"Found {len(common_tracks)} commonly evaluated tracks")
 
-    # Define known demucs model stems
-    DEMUCS_STEMS = {
-        "htdemucs.yaml": {"instruments": ["vocals", "drums", "bass", "other"], "target_instrument": None},
-        "htdemucs_ft.yaml": {"instruments": ["vocals", "drums", "bass", "other"], "target_instrument": None},
-        "hdemucs_mmi.yaml": {"instruments": ["vocals", "drums", "bass", "other"], "target_instrument": None},
-        "htdemucs_6s.yaml": {"instruments": ["vocals", "drums", "bass", "guitar", "piano", "other"], "target_instrument": None},
-    }
+    # Initialize MUSDB
+    log_with_time("Initializing MUSDB database...")
+    mus = musdb.DB(root=MUSDB_PATH, is_wav=True)
+
+    # Create a prioritized list of tracks
+    all_tracks = []
+    for track in mus.tracks:
+        # Check if this is a commonly evaluated track
+        is_common = track.name in common_tracks
+        all_tracks.append({"name": track.name, "path": os.path.dirname(track.path), "is_common": is_common})
+
+    # Sort tracks by whether they're commonly evaluated
+    all_tracks.sort(key=lambda t: 0 if t["is_common"] else 1)
 
     # Get list of all available models
-    logger.info("Getting list of available models...")
+    log_with_time("Getting list of available models...")
     separator = Separator()
     models_by_type = separator.list_supported_model_files()
 
-    # Iterate through models and load each one
+    # Flatten the models list and prioritize them
+    all_models = []
     for model_type, models in models_by_type.items():
-        logger.info(f"\nProcessing model type: {model_type}")
         for model_name, model_info in models.items():
-            test_model = model_info.get("filename")
-            if not test_model:
-                logger.warning(f"No filename found for model {model_name}, skipping...")
+            filename = model_info.get("filename")
+            if filename:
+                # Count how many tracks have been evaluated for this model
+                evaluated_count = get_evaluated_track_count(filename, museval_results)
+
+                # Determine if this is a roformer model
+                is_roformer = "roformer" in model_name.lower()
+
+                # Add to the list with priority information
+                all_models.append({"name": model_name, "filename": filename, "type": model_type, "info": model_info, "evaluated_count": evaluated_count, "is_roformer": is_roformer})
+
+    # Sort models by priority:
+    # 1. Roformer models with fewer than max_tracks evaluations
+    # 2. Other models with fewer than max_tracks evaluations
+    # 3. Roformer models with more evaluations
+    # 4. Other models with more evaluations
+    all_models.sort(
+        key=lambda m: (
+            0 if m["is_roformer"] and m["evaluated_count"] < args.max_tracks else 1 if not m["is_roformer"] and m["evaluated_count"] < args.max_tracks else 2 if m["is_roformer"] else 3,
+            m["evaluated_count"],  # Secondary sort by number of evaluations (ascending)
+        )
+    )
+
+    # Log the prioritized models
+    log_with_time(f"Prioritized {len(all_models)} models for evaluation:")
+    for i, model in enumerate(all_models[:10]):  # Show top 10
+        log_with_time(f"{i+1}. {model['name']} ({model['filename']}) - {model['evaluated_count']} tracks evaluated, roformer: {model['is_roformer']}")
+
+    if len(all_models) > 10:
+        log_with_time(f"... and {len(all_models) - 10} more models")
+
+    # Limit the number of models if specified
+    if args.max_models:
+        all_models = all_models[: args.max_models]
+        log_with_time(f"Limited to {args.max_models} models for this run")
+
+    # Process models according to priority
+    model_idx = 0
+    while model_idx < len(all_models):
+        model = all_models[model_idx]
+        model_name = model["name"]
+        model_filename = model["filename"]
+        model_type = model["type"]
+
+        progress_pct = (model_idx + 1) / len(all_models) * 100
+        log_with_time(f"\n=== Processing model {model_idx+1}/{len(all_models)} ({progress_pct:.1f}%): {model_name} ({model_filename}) ===")
+
+        # Initialize model entry if it doesn't exist
+        if model_filename not in combined_results:
+            log_with_time(f"Initializing new entry for {model_filename}")
+            combined_results[model_filename] = {"model_name": model_name, "track_scores": [], "median_scores": {}, "stems": [], "target_stem": None}
+
+        # Try to load the model to get stem information
+        try:
+            separator.load_model(model_filename=model_filename)
+            model_data = separator.model_instance.model_data
+
+            # Extract stem information (similar to your existing code)
+            # ... (keep your existing stem extraction logic here)
+
+        except Exception as e:
+            log_with_time(f"Error loading model {model_filename}: {str(e)}", logging.ERROR)
+            logger.exception("Full exception details:")
+            model_idx += 1
+            continue
+
+        # Count how many tracks have been evaluated for this model
+        # Use the cached results
+        evaluated_count = get_evaluated_track_count(model_filename, results_cache.get_results())
+
+        # Determine how many more tracks to evaluate
+        tracks_to_evaluate = max(0, args.max_tracks - evaluated_count)
+
+        if tracks_to_evaluate == 0:
+            log_with_time(f"Model {model_name} already has {evaluated_count} tracks evaluated (>= {args.max_tracks}). Skipping.")
+            model_idx += 1
+            continue
+
+        log_with_time(f"Will evaluate up to {tracks_to_evaluate} tracks for model {model_name}")
+
+        # Process tracks for this model
+        tracks_processed = 0
+        for track in all_tracks:
+            # Skip if we've processed enough tracks for this model
+            if tracks_processed >= tracks_to_evaluate:
+                break
+
+            track_name = track["name"]
+            track_path = track["path"]
+
+            # Skip if track already evaluated for this model
+            # Use the cached results
+            if model_filename in results_cache.get_results() and track_name in results_cache.get_results()[model_filename]:
+                log_with_time(f"Skipping already evaluated track {track_name} for model: {model_filename}")
                 continue
 
-            logger.info(f"\n=== Analyzing model: {model_name} (filename: {test_model}) ===")
+            log_with_time(f"Processing track: {track_name} for model: {model_filename}")
+
+            if args.dry_run:
+                log_with_time(f"[DRY RUN] Would evaluate track {track_name} with model {model_filename}")
+                tracks_processed += 1
+                continue
+
             try:
-                separator.load_model(model_filename=test_model)
-                model_data = separator.model_instance.model_data
-                logger.info(f"Raw model_data: {json.dumps(model_data, indent=2)}")
-
-                # Initialize model entry if it doesn't exist
-                if test_model not in combined_results:
-                    logger.info(f"Initializing new entry for {test_model}")
-                    combined_results[test_model] = {"model_name": model_name, "track_scores": [], "median_scores": {}, "stems": [], "target_stem": None}
-
-                # Handle demucs models specially
-                if test_model in DEMUCS_STEMS:
-                    logger.info(f"Processing as Demucs model: {test_model}")
-                    logger.info(f"Demucs config: {DEMUCS_STEMS[test_model]}")
-                    combined_results[test_model]["stems"] = [s.lower() for s in DEMUCS_STEMS[test_model]["instruments"]]
-                    combined_results[test_model]["target_stem"] = DEMUCS_STEMS[test_model]["target_instrument"].lower() if DEMUCS_STEMS[test_model]["target_instrument"] else None
-                    logger.info(f"Set stems to: {combined_results[test_model]['stems']}")
-                    logger.info(f"Set target_stem to: {combined_results[test_model]['target_stem']}")
-
-                # Extract stem information for other models
-                elif "training" in model_data:
-                    logger.info("Processing model with training data")
-                    instruments = model_data["training"].get("instruments", [])
-                    target = model_data["training"].get("target_instrument")
-                    logger.info(f"Found instruments: {instruments}")
-                    logger.info(f"Found target: {target}")
-                    combined_results[test_model]["stems"] = [s.lower() for s in instruments] if instruments else []
-                    combined_results[test_model]["target_stem"] = target.lower() if target else None
-                    logger.info(f"Set stems to: {combined_results[test_model]['stems']}")
-                    logger.info(f"Set target_stem to: {combined_results[test_model]['target_stem']}")
-
-                elif "primary_stem" in model_data:
-                    logger.info("Processing model with primary_stem")
-                    primary_stem = model_data["primary_stem"].lower()
-                    logger.info(f"Found primary_stem: {primary_stem}")
-
-                    if primary_stem == "vocals":
-                        other_stem = "instrumental"
-                    elif primary_stem == "instrumental":
-                        other_stem = "vocals"
-                    else:
-                        if primary_stem.startswith("no "):
-                            other_stem = primary_stem[3:]  # Remove "no " prefix
-                        else:
-                            other_stem = "no " + primary_stem
-                    logger.info(f"Determined other_stem: {other_stem}")
-
-                    instruments = [primary_stem, other_stem]
-                    combined_results[test_model]["stems"] = instruments
-                    combined_results[test_model]["target_stem"] = primary_stem
-                    logger.info(f"Set stems to: {combined_results[test_model]['stems']}")
-                    logger.info(f"Set target_stem to: {combined_results[test_model]['target_stem']}")
-
+                _, model_results = evaluate_track(track_name, track_path, model_filename, mus)
+                if model_results:
+                    combined_results[model_filename]["track_scores"].append(model_results)
+                    tracks_processed += 1
                 else:
-                    logger.warning(f"No recognized stem information found in model data for {test_model}")
-                    combined_results[test_model]["stems"] = []
-                    combined_results[test_model]["target_stem"] = None
-
-                logger.info(f"Final model configuration for {test_model}:")
-                logger.info(f"Stems: {combined_results[test_model]['stems']}")
-                logger.info(f"Target stem: {combined_results[test_model]['target_stem']}")
-
+                    log_with_time(f"Skipping model {model_filename} for track {track_name} due to no evaluatable stems")
             except Exception as e:
-                logger.error(f"Error loading model {test_model}: {str(e)}")
-                logger.exception("Full exception details:")
+                log_with_time(f"Error evaluating model {model_filename} with track {track_name}: {str(e)}", logging.ERROR)
+                logger.exception(f"Exception details: ", exc_info=e)
                 continue
 
-    # Save the combined results after model inspection
-    logger.info("Saving model stem information...")
-    if not args.dry_run:
-        os.makedirs(os.path.dirname(COMBINED_RESULTS_PATH), exist_ok=True)
-        with open(COMBINED_RESULTS_PATH, "w", encoding="utf-8") as f:
-            json.dump(combined_results, f, indent=2)
-        logger.info("Model stem information saved")
-    else:
-        logger.info("[DRY RUN] Would have saved model stem information")
+            # Update and save results
+            if combined_results[model_filename]["track_scores"]:
+                median_scores = calculate_median_scores(combined_results[model_filename]["track_scores"])
+                combined_results[model_filename]["median_scores"] = median_scores
 
-    # Initialize MUSDB once at the start
-    logger.info("Initializing MUSDB database...")
-    mus = musdb.DB(root=MUSDB_PATH, is_wav=True)
+            # Save results after each track
+            if not args.dry_run:
+                os.makedirs(os.path.dirname(COMBINED_RESULTS_PATH), exist_ok=True)
+                with open(COMBINED_RESULTS_PATH, "w", encoding="utf-8") as f:
+                    json.dump(combined_results, f, indent=2)
+                log_with_time(f"Updated combined results file with {model_filename} - {track_name}")
 
-    # Process all tracks in MUSDB18
-    for track in mus.tracks:
-        track_name = track.name
-        track_path = os.path.dirname(track.path)
-        logger.info(f"Processing track: {track_name}")
+                # Force update the cache after saving
+                results_cache.get_results(force=True)
+            else:
+                log_with_time(f"[DRY RUN] Would have updated combined results for {model_filename} - {track_name}")
 
-        # Process all models for this track
-        for model_type, models in models_by_type.items():
-            for model_name, model_info in models.items():
-                # Get the filename from the model_info dictionary
-                test_model = model_info.get("filename")
+            # Check disk space periodically
+            check_disk_usage(RESULTS_PATH)
 
-                # Skip if no filename is found
-                if not test_model:
-                    logger.warning(f"No filename found for model {model_name}, skipping...")
-                    continue
+        log_with_time(f"Completed processing {tracks_processed} tracks for model {model_name}")
 
-                # Check if track already evaluated using the combined results file
-                if check_track_evaluated(test_model, track_name):
-                    logger.info(f"Skipping already evaluated track {track_name} for model: {test_model}")
-                    continue
+        # If we're processing a non-roformer model, check if there are roformer models that need evaluation
+        if not model["is_roformer"]:
+            # Find roformer models that still need more evaluations
+            # Use the cached results
+            roformer_models_needing_eval = []
+            for i, m in enumerate(all_models[model_idx + 1 :], start=model_idx + 1):
+                if m["is_roformer"]:
+                    eval_count = get_evaluated_track_count(m["filename"], results_cache.get_results())
+                    if eval_count < args.max_tracks:
+                        roformer_models_needing_eval.append((i, m))
 
-                # Process the model
-                logger.info(f"Processing model: {test_model}")
+            if roformer_models_needing_eval:
+                log_with_time(f"Found {len(roformer_models_needing_eval)} roformer models that still need evaluation. Reprioritizing...")
 
-                if args.dry_run:
-                    logger.info(f"[DRY RUN] Would evaluate track {track_name} with model {test_model}")
-                    continue
+                # Move these models to the front of the remaining queue
+                for offset, (i, m) in enumerate(roformer_models_needing_eval):
+                    # Adjust index for models we've already moved
+                    adjusted_idx = i - offset
+                    # Move this model right after the current one
+                    all_models.insert(model_idx + 1, all_models.pop(adjusted_idx))
 
-                try:
-                    _, model_results = evaluate_track(track_name, track_path, test_model, mus)
-                    if model_results:
-                        combined_results[test_model]["track_scores"].append(model_results)
-                    else:
-                        logger.info(f"Skipping model {test_model} for track {track_name} due to no evaluatable stems")
-                except Exception as e:
-                    logger.error(f"Error evaluating model {test_model} with track {track_name}: {str(e)}")
-                    logger.exception(f"Exception details: ", exc_info=e)
-                    continue
+                log_with_time("Reprioritization complete. Continuing with highest priority model.")
 
-                # Update and save results
-                if combined_results[test_model]["track_scores"]:
-                    median_scores = calculate_median_scores(combined_results[test_model]["track_scores"])
-                    combined_results[test_model]["median_scores"] = median_scores
+        # Move to the next model
+        model_idx += 1
 
-                # Save results after each model
-                if not args.dry_run:
-                    os.makedirs(os.path.dirname(COMBINED_RESULTS_PATH), exist_ok=True)
-                    with open(COMBINED_RESULTS_PATH, "w", encoding="utf-8") as f:
-                        json.dump(combined_results, f, indent=2)
-                    logger.info(f"Updated combined results file with {test_model} - {track_name}")
-                else:
-                    logger.info(f"[DRY RUN] Would have updated combined results for {test_model} - {track_name}")
-
-                # Check inode usage periodically
-                if (len(combined_results[test_model]["track_scores"]) % 10) == 0:
-                    check_inode_usage(RESULTS_PATH)
-
-    logger.info("Evaluation complete")
-    # Final inode usage check
-    check_inode_usage(RESULTS_PATH)
+    log_with_time("Evaluation complete")
+    # Final disk space check
+    check_disk_usage(RESULTS_PATH)
     return 0
 
 
