@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
 
 RUN python3 -m pip install --upgrade pip
 
-# Install the GPU version of audio-separator, which installs the CUDA 11 compatible version of ONNXRuntime 
+# Install the GPU version of audio-separator, which installs the CUDA 11 compatible version of ONNXRuntime
 # (the default CUDA version for ORT is 11.8, see https://onnxruntime.ai/docs/install/ for more info)
 RUN --mount=type=cache,target=/root/.cache \
     pip3 install "audio-separator[gpu]"
