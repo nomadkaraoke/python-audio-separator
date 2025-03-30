@@ -23,7 +23,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-          cache: "poetry" # caching dependencies from poetry.lock
+          cache: poetry # caching dependencies from poetry.lock
 
       - name: Install Poetry dependencies (CPU)
         run: poetry install -E cpu
@@ -54,7 +54,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-          cache: "poetry" # caching dependencies from poetry.lock
+          cache: poetry # caching dependencies from poetry.lock
 
       - name: Install Poetry dependencies (CPU)
         run: poetry install -E cpu
@@ -86,7 +86,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-          cache: "poetry" # caching dependencies from poetry.lock
+          cache: poetry # caching dependencies from poetry.lock
 
       - name: Install Poetry dependencies (CPU)
         run: poetry install -E cpu
