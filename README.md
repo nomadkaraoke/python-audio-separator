@@ -540,3 +540,9 @@ For questions or feedback, please raise an issue or reach out to @beveradb ([And
 ## Sponsors
 
 <!-- sponsors --><!-- sponsors -->
+
+## Thanks to all contributors for their efforts
+
+<a href="https://github.com/nomadkaraoke/python-audio-separator/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=nomadkaraoke/python-audio-separator" />
+</a>
