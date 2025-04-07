@@ -9,6 +9,7 @@ import time
 import logging
 import warnings
 import importlib
+import io
 from typing import Optional
 
 import hashlib
@@ -316,18 +317,30 @@ class Separator:
         This method returns the MD5 hash of a given model file.
         """
         self.logger.debug(f"Calculating hash of model file {model_path}")
+        MB_10 = 10 * 1024 * 1024
         try:
-            # Open the model file in binary read mode
             with open(model_path, "rb") as f:
-                # Move the file pointer 10MB before the end of the file
-                f.seek(-10000 * 1024, 2)
-                # Read the file from the current pointer to the end and calculate its MD5 hash
-                return hashlib.md5(f.read()).hexdigest()
+                # Get file size
+                f.seek(0, io.SEEK_END)
+                file_size = f.tell()
+
+                if file_size < MB_10:
+                    # If file is smaller than 10MB, hash the whole file
+                    f.seek(0, io.SEEK_SET)
+                    return hashlib.md5(f.read()).hexdigest()
+                else:
+                    # Otherwise, hash the last 10MB
+                    f.seek(file_size - MB_10, io.SEEK_SET)
+                    return hashlib.md5(f.read()).hexdigest()
         except IOError as e:
-            # If an IOError occurs (e.g., if the file is less than 10MB large), log the error
-            self.logger.error(f"IOError seeking -10MB or reading model file for hash calculation: {e}")
-            # Attempt to open the file again, read its entire content, and calculate the MD5 hash
-            return hashlib.md5(open(model_path, "rb").read()).hexdigest()
+            # Log the error but attempt to hash the entire file as a fallback
+            # This might still lead to lookup errors if the hash differs from UVR's expectation
+            self.logger.error(f"IOError calculating hash for {model_path}: {e}. Falling back to hashing entire file.")
+            try:
+                return hashlib.md5(open(model_path, "rb").read()).hexdigest()
+            except Exception as inner_e:
+                self.logger.error(f"Failed to hash entire file after initial IOError: {inner_e}")
+                raise inner_e # Re-raise the exception if the fallback also fails
 
     def download_file_if_not_exists(self, url, output_path):
         """
