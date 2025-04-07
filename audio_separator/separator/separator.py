@@ -317,30 +317,35 @@ class Separator:
         This method returns the MD5 hash of a given model file.
         """
         self.logger.debug(f"Calculating hash of model file {model_path}")
-        MB_10 = 10 * 1024 * 1024
-        try:
-            with open(model_path, "rb") as f:
-                # Get file size
-                f.seek(0, io.SEEK_END)
-                file_size = f.tell()
+        # Use the specific byte count from the original logic
+        BYTES_TO_HASH = 10000 * 1024  # 10,240,000 bytes
 
-                if file_size < MB_10:
-                    # If file is smaller than 10MB, hash the whole file
-                    f.seek(0, io.SEEK_SET)
-                    return hashlib.md5(f.read()).hexdigest()
+        try:
+            file_size = os.path.getsize(model_path)
+
+            with open(model_path, "rb") as f:
+                if file_size < BYTES_TO_HASH:
+                    # Hash the entire file if smaller than the target byte count
+                    self.logger.debug(f"File size {file_size} < {BYTES_TO_HASH}, hashing entire file.")
+                    hash_value = hashlib.md5(f.read()).hexdigest()
                 else:
-                    # Otherwise, hash the last 10MB
-                    f.seek(file_size - MB_10, io.SEEK_SET)
-                    return hashlib.md5(f.read()).hexdigest()
-        except IOError as e:
-            # Log the error but attempt to hash the entire file as a fallback
-            # This might still lead to lookup errors if the hash differs from UVR's expectation
-            self.logger.error(f"IOError calculating hash for {model_path}: {e}. Falling back to hashing entire file.")
-            try:
-                return hashlib.md5(open(model_path, "rb").read()).hexdigest()
-            except Exception as inner_e:
-                self.logger.error(f"Failed to hash entire file after initial IOError: {inner_e}")
-                raise inner_e # Re-raise the exception if the fallback also fails
+                    # Seek to the specific position before the end (from the beginning) and hash
+                    seek_pos = file_size - BYTES_TO_HASH
+                    self.logger.debug(f"File size {file_size} >= {BYTES_TO_HASH}, seeking to {seek_pos} and hashing remaining bytes.")
+                    f.seek(seek_pos, io.SEEK_SET)
+                    hash_value = hashlib.md5(f.read()).hexdigest()
+
+            # Log the calculated hash
+            self.logger.info(f"Hash of model file {model_path} is {hash_value}")
+            return hash_value
+
+        except FileNotFoundError:
+            self.logger.error(f"Model file not found at {model_path}")
+            raise # Re-raise the specific error
+        except Exception as e:
+            # Catch other potential errors (e.g., permissions, other IOErrors)
+            self.logger.error(f"Error calculating hash for {model_path}: {e}")
+            raise # Re-raise other errors
 
     def download_file_if_not_exists(self, url, output_path):
         """
