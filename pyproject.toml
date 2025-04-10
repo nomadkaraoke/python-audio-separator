@@ -25,6 +25,8 @@ classifiers = [
     "Topic :: Multimedia :: Sound/Audio :: Mixers",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+#    "Programming Language :: Python :: 3.13",
 ]
 
 [tool.poetry.dependencies]
@@ -66,4 +68,3 @@ pytest-cov = "^4.1.0"
 
 [tool.black]
 line-length = 140
-
