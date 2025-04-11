@@ -1398,56 +1398,12 @@ files = [
 ]
 
 [[package]]
-name = "onnx"
-version = "1.17.0"
-description = "Open Neural Network Exchange"
-optional = false
-python-versions = ">=3.8"
-groups = ["main"]
-files = [
-    {file = "onnx-1.17.0-cp310-cp310-macosx_12_0_universal2.whl", hash = "sha256:38b5df0eb22012198cdcee527cc5f917f09cce1f88a69248aaca22bd78a7f023"},
-    {file = "onnx-1.17.0-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:d545335cb49d4d8c47cc803d3a805deb7ad5d9094dc67657d66e568610a36d7d"},
-    {file = "onnx-1.17.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:3193a3672fc60f1a18c0f4c93ac81b761bc72fd8a6c2035fa79ff5969f07713e"},
-    {file = "onnx-1.17.0-cp310-cp310-win32.whl", hash = "sha256:0141c2ce806c474b667b7e4499164227ef594584da432fd5613ec17c1855e311"},
-    {file = "onnx-1.17.0-cp310-cp310-win_amd64.whl", hash = "sha256:dfd777d95c158437fda6b34758f0877d15b89cbe9ff45affbedc519b35345cf9"},
-    {file = "onnx-1.17.0-cp311-cp311-macosx_12_0_universal2.whl", hash = "sha256:d6fc3a03fc0129b8b6ac03f03bc894431ffd77c7d79ec023d0afd667b4d35869"},
-    {file = "onnx-1.17.0-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:f01a4b63d4e1d8ec3e2f069e7b798b2955810aa434f7361f01bc8ca08d69cce4"},
-    {file = "onnx-1.17.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:4a183c6178be001bf398260e5ac2c927dc43e7746e8638d6c05c20e321f8c949"},
-    {file = "onnx-1.17.0-cp311-cp311-win32.whl", hash = "sha256:081ec43a8b950171767d99075b6b92553901fa429d4bc5eb3ad66b36ef5dbe3a"},
-    {file = "onnx-1.17.0-cp311-cp311-win_amd64.whl", hash = "sha256:95c03e38671785036bb704c30cd2e150825f6ab4763df3a4f1d249da48525957"},
-    {file = "onnx-1.17.0-cp312-cp312-macosx_12_0_universal2.whl", hash = "sha256:0e906e6a83437de05f8139ea7eaf366bf287f44ae5cc44b2850a30e296421f2f"},
-    {file = "onnx-1.17.0-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:3d955ba2939878a520a97614bcf2e79c1df71b29203e8ced478fa78c9a9c63c2"},
-    {file = "onnx-1.17.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:4f3fb5cc4e2898ac5312a7dc03a65133dd2abf9a5e520e69afb880a7251ec97a"},
-    {file = "onnx-1.17.0-cp312-cp312-win32.whl", hash = "sha256:317870fca3349d19325a4b7d1b5628f6de3811e9710b1e3665c68b073d0e68d7"},
-    {file = "onnx-1.17.0-cp312-cp312-win_amd64.whl", hash = "sha256:659b8232d627a5460d74fd3c96947ae83db6d03f035ac633e20cd69cfa029227"},
-    {file = "onnx-1.17.0-cp38-cp38-macosx_12_0_universal2.whl", hash = "sha256:23b8d56a9df492cdba0eb07b60beea027d32ff5e4e5fe271804eda635bed384f"},
-    {file = "onnx-1.17.0-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:ecf2b617fd9a39b831abea2df795e17bac705992a35a98e1f0363f005c4a5247"},
-    {file = "onnx-1.17.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:ea5023a8dcdadbb23fd0ed0179ce64c1f6b05f5b5c34f2909b4e927589ebd0e4"},
-    {file = "onnx-1.17.0-cp38-cp38-win32.whl", hash = "sha256:f0e437f8f2f0c36f629e9743d28cf266312baa90be6a899f405f78f2d4cb2e1d"},
-    {file = "onnx-1.17.0-cp38-cp38-win_amd64.whl", hash = "sha256:e4673276b558b5b572b960b7f9ef9214dce9305673683eb289bb97a7df379a4b"},
-    {file = "onnx-1.17.0-cp39-cp39-macosx_12_0_universal2.whl", hash = "sha256:67e1c59034d89fff43b5301b6178222e54156eadd6ab4cd78ddc34b2f6274a66"},
-    {file = "onnx-1.17.0-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:3e19fd064b297f7773b4c1150f9ce6213e6d7d041d7a9201c0d348041009cdcd"},
-    {file = "onnx-1.17.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:8167295f576055158a966161f8ef327cb491c06ede96cc23392be6022071b6ed"},
-    {file = "onnx-1.17.0-cp39-cp39-win32.whl", hash = "sha256:76884fe3e0258c911c749d7d09667fb173365fd27ee66fcedaf9fa039210fd13"},
-    {file = "onnx-1.17.0-cp39-cp39-win_amd64.whl", hash = "sha256:5ca7a0894a86d028d509cdcf99ed1864e19bfe5727b44322c11691d834a1c546"},
-    {file = "onnx-1.17.0.tar.gz", hash = "sha256:48ca1a91ff73c1d5e3ea2eef20ae5d0e709bb8a2355ed798ffc2169753013fd3"},
-]
-
-[package.dependencies]
-numpy = ">=1.20"
-protobuf = ">=3.20.2"
-
-[package.extras]
-reference = ["Pillow", "google-re2"]
-
-[[package]]
 name = "onnx-weekly"
 version = "1.18.0.dev20250407"
 description = "Open Neural Network Exchange"
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
-markers = "python_version >= \"3.13\""
 files = [
     {file = "onnx_weekly-1.18.0.dev20250407-cp310-cp310-macosx_12_0_universal2.whl", hash = "sha256:3db16f8756fcd4b58380c2bb2de5d237400328c3e9cef3ab63017e641aa6218b"},
     {file = "onnx_weekly-1.18.0.dev20250407-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:277d9cdac7a55430fc8220bdce2ea7a1514a87398755f6b6e93c259a26c933e4"},
@@ -1488,20 +1444,20 @@ typing_extensions = ">=4.7.1"
 reference = ["Pillow", "google-re2 ; python_version < \"3.13\""]
 
 [[package]]
-name = "onnx2torch"
-version = "1.5.15"
+name = "onnx2torch-py313"
+version = "1.6.0"
 description = "ONNX to PyTorch converter"
 optional = false
 python-versions = ">=3.6"
 groups = ["main"]
 files = [
-    {file = "onnx2torch-1.5.15-py3-none-any.whl", hash = "sha256:123258e0f147e07b259cf845c8113c5634b8260e52c5fb26b7d507226732d9e5"},
-    {file = "onnx2torch-1.5.15.tar.gz", hash = "sha256:d2a239cf0871cbbeec13d43e2a72ac2f8b3c8dcf80695e4d1040c3deed2b14a2"},
+    {file = "onnx2torch_py313-1.6.0-py3-none-any.whl", hash = "sha256:03b1cc771f93941cc221635547e97dd7823dffc05f052057e51c6a45fbacba70"},
+    {file = "onnx2torch_py313-1.6.0.tar.gz", hash = "sha256:d27b54c7e170f12ad252fe186e6cab8f3cade8ee4e596682acc5a3afddadb753"},
 ]
 
 [package.dependencies]
 numpy = ">=1.16.4"
-onnx = ">=1.9.0"
+onnx-weekly = "*"
 torch = ">=1.8.0"
 torchvision = ">=0.9.0"
 
@@ -2493,4 +2449,4 @@ gpu = ["onnxruntime-gpu"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10"
-content-hash = "40ae9c52b665e8e3848fd0eae0d25146ca64b7d451ce820c4de1f289524ae9de"
+content-hash = "98ea64d4b984c29b2daa8638662f185b3d8c6978ba206e1a873d7b2e5ed99686"

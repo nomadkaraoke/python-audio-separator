@@ -40,9 +40,8 @@ torch = ">=2.3"
 tqdm = "*"
 pydub = ">=0.25"
 audioop-lts = { version = ">=0.2.1", python = "^3.13" }
-onnx = { version = "*", python = "<3.13" }
-onnx-weekly = { version = "*", python = ">=3.13" }
-onnx2torch = ">=1.5"
+onnx-weekly = { version = "*" }
+onnx2torch-py313 = ">=1.6"
 onnxruntime = { version = ">=1.17", optional = true }
 onnxruntime-gpu = { version = ">=1.17", optional = true }
 julius = ">=0.2"
