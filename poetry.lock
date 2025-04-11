@@ -1404,7 +1404,6 @@ description = "Open Neural Network Exchange"
 optional = false
 python-versions = ">=3.8"
 groups = ["main"]
-markers = "python_version < \"3.13\""
 files = [
     {file = "onnx-1.17.0-cp310-cp310-macosx_12_0_universal2.whl", hash = "sha256:38b5df0eb22012198cdcee527cc5f917f09cce1f88a69248aaca22bd78a7f023"},
     {file = "onnx-1.17.0-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:d545335cb49d4d8c47cc803d3a805deb7ad5d9094dc67657d66e568610a36d7d"},
@@ -1495,7 +1494,6 @@ description = "ONNX to PyTorch converter"
 optional = false
 python-versions = ">=3.6"
 groups = ["main"]
-markers = "python_version < \"3.13\""
 files = [
     {file = "onnx2torch-1.5.15-py3-none-any.whl", hash = "sha256:123258e0f147e07b259cf845c8113c5634b8260e52c5fb26b7d507226732d9e5"},
     {file = "onnx2torch-1.5.15.tar.gz", hash = "sha256:d2a239cf0871cbbeec13d43e2a72ac2f8b3c8dcf80695e4d1040c3deed2b14a2"},
@@ -1610,7 +1608,6 @@ description = "Python Imaging Library (Fork)"
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
-markers = "python_version < \"3.13\""
 files = [
     {file = "pillow-11.1.0-cp310-cp310-macosx_10_10_x86_64.whl", hash = "sha256:e1abe69aca89514737465752b4bcaf8016de61b3be1397a8fc260ba33321b3a8"},
     {file = "pillow-11.1.0-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:c640e5a06869c75994624551f45e5506e4256562ead981cce820d5ab39ae2192"},
@@ -2383,7 +2380,6 @@ description = "image and video datasets and models for torch deep learning"
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
-markers = "python_version < \"3.13\""
 files = [
     {file = "torchvision-0.21.0-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:044ea420b8c6c3162a234cada8e2025b9076fa82504758cd11ec5d0f8cd9fa37"},
     {file = "torchvision-0.21.0-cp310-cp310-manylinux1_x86_64.whl", hash = "sha256:b0c0b264b89ab572888244f2e0bad5b7eaf5b696068fc0b93e96f7c3c198953f"},
@@ -2497,4 +2493,4 @@ gpu = ["onnxruntime-gpu"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10"
-content-hash = "78807428ed62e8880b02c2631954daa318e974142cc8e585288ac8129d75f295"
+content-hash = "40ae9c52b665e8e3848fd0eae0d25146ca64b7d451ce820c4de1f289524ae9de"
