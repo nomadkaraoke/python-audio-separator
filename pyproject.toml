@@ -25,6 +25,8 @@ classifiers = [
     "Topic :: Multimedia :: Sound/Audio :: Mixers",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
 ]
 
 [tool.poetry.dependencies]
@@ -37,7 +39,8 @@ six = ">=1.16"
 torch = ">=2.3"
 tqdm = "*"
 pydub = ">=0.25"
-onnx = ">=1.14"
+audioop-lts = { python = ">=3.13" } # https://github.com/jiaaro/pydub/issues/815
+onnx = { version = ">=1.18.0rc1", allow-prereleases = true, source = "test" }
 onnx2torch = ">=1.5"
 onnxruntime = { version = ">=1.17", optional = true }
 onnxruntime-gpu = { version = ">=1.17", optional = true }
@@ -59,6 +62,11 @@ gpu = ["onnxruntime-gpu"]
 [tool.poetry.scripts]
 audio-separator = 'audio_separator.utils.cli:main'
 
+[[tool.poetry.source]]
+name = "test"
+url = "https://test.pypi.org/simple/"
+priority = "explicit"
+
 [tool.poetry.group.dev.dependencies]
 black = ">=23"
 pytest = "*"
@@ -66,4 +74,3 @@ pytest-cov = "^4.1.0"
 
 [tool.black]
 line-length = 140
-
