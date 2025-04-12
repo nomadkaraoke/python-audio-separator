@@ -62,11 +62,6 @@ gpu = ["onnxruntime-gpu"]
 [tool.poetry.scripts]
 audio-separator = 'audio_separator.utils.cli:main'
 
-[[tool.poetry.source]]
-name = "test"
-url = "https://test.pypi.org/simple/"
-priority = "explicit"
-
 [tool.poetry.group.dev.dependencies]
 black = ">=23"
 pytest = "*"
