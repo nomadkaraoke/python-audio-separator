@@ -373,6 +373,15 @@ class CommonSeparator:
         self.primary_stem_output_path = None
         self.secondary_stem_output_path = None
 
+    def sanitize_filename(self, filename):
+        """
+        Cleans the filename by replacing invalid characters with underscores.
+        """
+        sanitized = re.sub(r'[<>:"/\\|?*]', '_', filename)
+        sanitized = re.sub(r'_+', '_', sanitized)
+        sanitized = sanitized.strip('_. ')
+        return sanitized
+
     def get_stem_output_path(self, stem_name, custom_output_names):
         """
         Gets the output path for a stem based on the stem name and custom output names.
@@ -380,7 +389,14 @@ class CommonSeparator:
         # Convert custom_output_names keys to lowercase for case-insensitive comparison
         if custom_output_names:
             custom_output_names_lower = {k.lower(): v for k, v in custom_output_names.items()}
-            if stem_name.lower() in custom_output_names_lower:
-                return os.path.join(f"{custom_output_names_lower[stem_name.lower()]}.{self.output_format.lower()}")
+            stem_name_lower = stem_name.lower()
+            if stem_name_lower in custom_output_names_lower:
+                sanitized_custom_name = self.sanitize_filename(custom_output_names_lower[stem_name_lower])
+                return os.path.join(f"{sanitized_custom_name}.{self.output_format.lower()}")
 
-        return os.path.join(f"{self.audio_file_base}_({stem_name})_{self.model_name}.{self.output_format.lower()}")
+        sanitized_audio_base = self.sanitize_filename(self.audio_file_base)
+        sanitized_stem_name = self.sanitize_filename(stem_name)
+        sanitized_model_name = self.sanitize_filename(self.model_name) 
+
+        filename = f"{sanitized_audio_base}_({sanitized_stem_name})_{sanitized_model_name}.{self.output_format.lower()}"
+        return os.path.join(filename)
