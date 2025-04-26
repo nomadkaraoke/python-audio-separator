@@ -6,6 +6,7 @@ import numpy as np
 import soundfile as sf
 from audio_separator.separator import Separator
 import json
+from json import JSONEncoder
 import logging
 import musdb
 from decimal import Decimal
@@ -17,10 +18,20 @@ import argparse
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
+
+# Custom JSON Encoder to handle Decimal types
+class DecimalEncoder(JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Decimal):
+            return float(obj)
+        return super().default(obj)
+
+
 MUSDB_PATH = "/Volumes/Nomad4TBOne/python-audio-separator/tests/model-metrics/datasets/musdb18hq"
 RESULTS_PATH = "/Volumes/Nomad4TBOne/python-audio-separator/tests/model-metrics/results"
 COMBINED_RESULTS_PATH = "/Users/andrew/Projects/python-audio-separator/audio_separator/models-scores.json"
 COMBINED_MUSEVAL_RESULTS_PATH = "/Volumes/Nomad4TBOne/python-audio-separator/tests/model-metrics/results/combined-museval-results.json"
+STOP_SIGNAL_PATH = "/Volumes/Nomad4TBOne/python-audio-separator/tests/model-metrics/stop-signal"
 
 
 def load_combined_results():
@@ -29,9 +40,28 @@ def load_combined_results():
         logger.info("Loading combined museval results...")
         try:
             with open(COMBINED_MUSEVAL_RESULTS_PATH, "r") as f:
-                return json.load(f)
+                # Use a custom parser to handle Decimal values
+                def decimal_parser(dct):
+                    for k, v in dct.items():
+                        if isinstance(v, str) and v.replace(".", "").isdigit():
+                            try:
+                                dct[k] = float(v)
+                            except (ValueError, TypeError):
+                                pass
+                    return dct
+
+                return json.load(f, object_hook=decimal_parser)
         except Exception as e:
             logger.error(f"Error loading combined results: {str(e)}")
+            # Try to load a backup file if it exists
+            backup_path = COMBINED_MUSEVAL_RESULTS_PATH + ".backup"
+            if os.path.exists(backup_path):
+                logger.info("Attempting to load backup file...")
+                try:
+                    with open(backup_path, "r") as f:
+                        return json.load(f, object_hook=decimal_parser)
+                except Exception as backup_e:
+                    logger.error(f"Error loading backup file: {str(backup_e)}")
             return {}
     else:
         logger.info("No combined results file found, creating new one")
@@ -42,8 +72,18 @@ def save_combined_results(combined_results):
     """Save the combined museval results file"""
     logger.info("Saving combined museval results...")
     try:
+        # Create a backup of the existing file if it exists
+        if os.path.exists(COMBINED_MUSEVAL_RESULTS_PATH):
+            backup_path = COMBINED_MUSEVAL_RESULTS_PATH + ".backup"
+            try:
+                with open(COMBINED_MUSEVAL_RESULTS_PATH, "r") as src, open(backup_path, "w") as dst:
+                    dst.write(src.read())
+            except Exception as e:
+                logger.error(f"Error creating backup file: {str(e)}")
+
+        # Save the new results using the custom encoder
         with open(COMBINED_MUSEVAL_RESULTS_PATH, "w") as f:
-            json.dump(combined_results, f)
+            json.dump(combined_results, f, cls=DecimalEncoder, indent=2)
         logger.info("Combined results saved successfully")
         return True
     except Exception as e:
@@ -477,6 +517,14 @@ def generate_summary_statistics(
     return "\n".join(summary)
 
 
+def check_stop_signal():
+    """Check if the stop signal file exists"""
+    if os.path.exists(STOP_SIGNAL_PATH):
+        logger.info("Stop signal detected at: " + STOP_SIGNAL_PATH)
+        return True
+    return False
+
+
 def main():
     # Add command line argument parsing for dry run mode
     parser = argparse.ArgumentParser(description="Run model evaluation on MUSDB18 dataset")
@@ -484,6 +532,11 @@ def main():
     parser.add_argument("--max-tracks", type=int, default=10, help="Maximum number of tracks to evaluate per model")
     parser.add_argument("--max-models", type=int, default=None, help="Maximum number of models to evaluate")
     args = parser.parse_args()
+
+    # Remove any existing stop signal file at start
+    if os.path.exists(STOP_SIGNAL_PATH):
+        os.remove(STOP_SIGNAL_PATH)
+        logger.info("Removed existing stop signal file")
 
     # Track start time for progress reporting
     start_time = time.time()
@@ -605,7 +658,13 @@ def main():
 
     # Process models according to priority
     model_idx = 0
+    stop_requested = False
     while model_idx < len(all_models):
+        # Check for stop signal before processing each model
+        if check_stop_signal():
+            log_with_time("Stop signal detected. Will finish current model's tracks and then exit.")
+            stop_requested = True
+
         model = all_models[model_idx]
         model_name = model["name"]
         model_filename = model["filename"]
@@ -650,6 +709,11 @@ def main():
         # Process tracks for this model
         tracks_processed = 0
         for track in all_tracks:
+            # Check for stop signal before each track if we haven't already detected it
+            if not stop_requested and check_stop_signal():
+                log_with_time("Stop signal detected. Will finish current track and then exit.")
+                stop_requested = True
+
             # Skip if we've processed enough tracks for this model
             if tracks_processed >= tracks_to_evaluate:
                 break
@@ -745,6 +809,11 @@ def main():
 
         log_with_time(f"Completed processing {tracks_processed} tracks for model {model_name}")
 
+        # If stop was requested, exit after completing the current model
+        if stop_requested:
+            log_with_time("Stop signal processed. Generating final summary before exit.")
+            break
+
         # If we're processing a non-roformer model, check if there are roformer models that need evaluation
         if not model["is_roformer"]:
             # Find roformer models that still need more evaluations
@@ -800,14 +869,21 @@ def main():
 
     # Also write summary to a log file
     summary_filename = "dry_run_summary.log" if args.dry_run else "evaluation_summary.log"
+    if stop_requested:
+        summary_filename = "stopped_" + summary_filename
     summary_log_path = os.path.join(os.path.dirname(COMBINED_RESULTS_PATH), summary_filename)
     with open(summary_log_path, "w") as f:
-        f.write(f"{'Dry run' if args.dry_run else 'Evaluation'} completed at: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
+        f.write(f"{'Dry run' if args.dry_run else 'Evaluation'} {'(stopped early)' if stop_requested else ''} completed at: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
         f.write(summary)
 
     log_with_time(f"Summary written to {summary_log_path}")
 
-    return 0
+    # Clean up stop signal file if it exists
+    if os.path.exists(STOP_SIGNAL_PATH):
+        os.remove(STOP_SIGNAL_PATH)
+        log_with_time("Removed stop signal file")
+
+    return 0 if not stop_requested else 2  # Return different exit code if stopped early
 
 
 if __name__ == "__main__":

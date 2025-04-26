@@ -45790,10 +45790,124 @@
         "scores": {
           "seconds_per_minute_m3": 13.3
         }
+      },
+      {
+        "track_name": "ANiMAL - Clinic A",
+        "scores": {
+          "seconds_per_minute_m3": 8.4
+        }
+      },
+      {
+        "track_name": "ANiMAL - Easy Tiger",
+        "scores": {
+          "seconds_per_minute_m3": 8.5
+        }
+      },
+      {
+        "track_name": "ANiMAL - Rockshow",
+        "scores": {
+          "seconds_per_minute_m3": 8.6
+        }
+      },
+      {
+        "track_name": "Actions - Devil's Words",
+        "scores": {
+          "seconds_per_minute_m3": 8.5
+        }
+      },
+      {
+        "track_name": "Actions - One Minute Smile",
+        "scores": {
+          "seconds_per_minute_m3": 10.2
+        }
+      },
+      {
+        "track_name": "Actions - South Of The Water",
+        "scores": {
+          "seconds_per_minute_m3": 10.5
+        }
+      },
+      {
+        "track_name": "Aimee Norwich - Child",
+        "scores": {
+          "seconds_per_minute_m3": 9.9
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Goodbye Bolero",
+        "scores": {
+          "seconds_per_minute_m3": 9.2
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "seconds_per_minute_m3": 8.8
+        }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "seconds_per_minute_m3": 8.5
+        }
+      },
+      {
+        "track_name": "ANiMAL - Clinic A",
+        "scores": {
+          "seconds_per_minute_m3": 8.3
+        }
+      },
+      {
+        "track_name": "ANiMAL - Easy Tiger",
+        "scores": {
+          "seconds_per_minute_m3": 8.3
+        }
+      },
+      {
+        "track_name": "ANiMAL - Rockshow",
+        "scores": {
+          "seconds_per_minute_m3": 8.4
+        }
+      },
+      {
+        "track_name": "Actions - Devil's Words",
+        "scores": {
+          "seconds_per_minute_m3": 8.5
+        }
+      },
+      {
+        "track_name": "Actions - One Minute Smile",
+        "scores": {
+          "seconds_per_minute_m3": 8.5
+        }
+      },
+      {
+        "track_name": "Actions - South Of The Water",
+        "scores": {
+          "seconds_per_minute_m3": 8.7
+        }
+      },
+      {
+        "track_name": "Aimee Norwich - Child",
+        "scores": {
+          "seconds_per_minute_m3": 8.4
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Goodbye Bolero",
+        "scores": {
+          "seconds_per_minute_m3": 9.0
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "seconds_per_minute_m3": 9.3
+        }
       }
     ],
     "median_scores": {
-      "seconds_per_minute_m3": 13.3
+      "seconds_per_minute_m3": 8.6
     },
     "stems": [
       "no drum-bass",
@@ -47218,8 +47332,131 @@
   },
   "denoise_mel_band_roformer_aufr33_sdr_27.9959.ckpt": {
     "model_name": "Roformer Model: Mel-Roformer-Denoise-Aufr33",
-    "track_scores": [],
-    "median_scores": {},
+    "track_scores": [
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "seconds_per_minute_m3": 9.0
+        }
+      },
+      {
+        "track_name": "ANiMAL - Clinic A",
+        "scores": {
+          "seconds_per_minute_m3": 8.7
+        }
+      },
+      {
+        "track_name": "ANiMAL - Easy Tiger",
+        "scores": {
+          "seconds_per_minute_m3": 8.7
+        }
+      },
+      {
+        "track_name": "ANiMAL - Rockshow",
+        "scores": {
+          "seconds_per_minute_m3": 8.9
+        }
+      },
+      {
+        "track_name": "Actions - Devil's Words",
+        "scores": {
+          "seconds_per_minute_m3": 8.9
+        }
+      },
+      {
+        "track_name": "Actions - One Minute Smile",
+        "scores": {
+          "seconds_per_minute_m3": 9.3
+        }
+      },
+      {
+        "track_name": "Actions - South Of The Water",
+        "scores": {
+          "seconds_per_minute_m3": 9.6
+        }
+      },
+      {
+        "track_name": "Aimee Norwich - Child",
+        "scores": {
+          "seconds_per_minute_m3": 9.8
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Goodbye Bolero",
+        "scores": {
+          "seconds_per_minute_m3": 10.0
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "seconds_per_minute_m3": 10.0
+        }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "seconds_per_minute_m3": 8.8
+        }
+      },
+      {
+        "track_name": "ANiMAL - Clinic A",
+        "scores": {
+          "seconds_per_minute_m3": 8.5
+        }
+      },
+      {
+        "track_name": "ANiMAL - Easy Tiger",
+        "scores": {
+          "seconds_per_minute_m3": 8.6
+        }
+      },
+      {
+        "track_name": "ANiMAL - Rockshow",
+        "scores": {
+          "seconds_per_minute_m3": 8.8
+        }
+      },
+      {
+        "track_name": "Actions - Devil's Words",
+        "scores": {
+          "seconds_per_minute_m3": 8.8
+        }
+      },
+      {
+        "track_name": "Actions - One Minute Smile",
+        "scores": {
+          "seconds_per_minute_m3": 9.2
+        }
+      },
+      {
+        "track_name": "Actions - South Of The Water",
+        "scores": {
+          "seconds_per_minute_m3": 9.5
+        }
+      },
+      {
+        "track_name": "Aimee Norwich - Child",
+        "scores": {
+          "seconds_per_minute_m3": 9.3
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Goodbye Bolero",
+        "scores": {
+          "seconds_per_minute_m3": 8.9
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "seconds_per_minute_m3": 9.2
+        }
+      }
+    ],
+    "median_scores": {
+      "seconds_per_minute_m3": 9.0
+    },
     "stems": [
       "dry",
       "other"
@@ -47228,8 +47465,131 @@
   },
   "denoise_mel_band_roformer_aufr33_aggr_sdr_27.9768.ckpt": {
     "model_name": "Roformer Model: Mel-Roformer-Denoise-Aufr33-Aggr",
-    "track_scores": [],
-    "median_scores": {},
+    "track_scores": [
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "seconds_per_minute_m3": 10.2
+        }
+      },
+      {
+        "track_name": "ANiMAL - Clinic A",
+        "scores": {
+          "seconds_per_minute_m3": 9.6
+        }
+      },
+      {
+        "track_name": "ANiMAL - Easy Tiger",
+        "scores": {
+          "seconds_per_minute_m3": 9.6
+        }
+      },
+      {
+        "track_name": "ANiMAL - Rockshow",
+        "scores": {
+          "seconds_per_minute_m3": 9.6
+        }
+      },
+      {
+        "track_name": "Actions - Devil's Words",
+        "scores": {
+          "seconds_per_minute_m3": 9.5
+        }
+      },
+      {
+        "track_name": "Actions - One Minute Smile",
+        "scores": {
+          "seconds_per_minute_m3": 9.7
+        }
+      },
+      {
+        "track_name": "Actions - South Of The Water",
+        "scores": {
+          "seconds_per_minute_m3": 9.8
+        }
+      },
+      {
+        "track_name": "Aimee Norwich - Child",
+        "scores": {
+          "seconds_per_minute_m3": 9.4
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Goodbye Bolero",
+        "scores": {
+          "seconds_per_minute_m3": 9.1
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "seconds_per_minute_m3": 9.0
+        }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "seconds_per_minute_m3": 10.4
+        }
+      },
+      {
+        "track_name": "ANiMAL - Clinic A",
+        "scores": {
+          "seconds_per_minute_m3": 10.1
+        }
+      },
+      {
+        "track_name": "ANiMAL - Easy Tiger",
+        "scores": {
+          "seconds_per_minute_m3": 9.9
+        }
+      },
+      {
+        "track_name": "ANiMAL - Rockshow",
+        "scores": {
+          "seconds_per_minute_m3": 9.8
+        }
+      },
+      {
+        "track_name": "Actions - Devil's Words",
+        "scores": {
+          "seconds_per_minute_m3": 9.6
+        }
+      },
+      {
+        "track_name": "Actions - One Minute Smile",
+        "scores": {
+          "seconds_per_minute_m3": 9.6
+        }
+      },
+      {
+        "track_name": "Actions - South Of The Water",
+        "scores": {
+          "seconds_per_minute_m3": 9.5
+        }
+      },
+      {
+        "track_name": "Aimee Norwich - Child",
+        "scores": {
+          "seconds_per_minute_m3": 9.2
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Goodbye Bolero",
+        "scores": {
+          "seconds_per_minute_m3": 8.7
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "seconds_per_minute_m3": 8.6
+        }
+      }
+    ],
+    "median_scores": {
+      "seconds_per_minute_m3": 9.6
+    },
     "stems": [
       "dry",
       "other"
@@ -47238,8 +47598,131 @@
   },
   "mel_band_roformer_crowd_aufr33_viperx_sdr_8.7144.ckpt": {
     "model_name": "Roformer Model: Mel-Roformer-Crowd-Aufr33-Viperx",
-    "track_scores": [],
-    "median_scores": {},
+    "track_scores": [
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "seconds_per_minute_m3": 9.4
+        }
+      },
+      {
+        "track_name": "ANiMAL - Clinic A",
+        "scores": {
+          "seconds_per_minute_m3": 8.5
+        }
+      },
+      {
+        "track_name": "ANiMAL - Easy Tiger",
+        "scores": {
+          "seconds_per_minute_m3": 8.7
+        }
+      },
+      {
+        "track_name": "ANiMAL - Rockshow",
+        "scores": {
+          "seconds_per_minute_m3": 8.8
+        }
+      },
+      {
+        "track_name": "Actions - Devil's Words",
+        "scores": {
+          "seconds_per_minute_m3": 8.7
+        }
+      },
+      {
+        "track_name": "Actions - One Minute Smile",
+        "scores": {
+          "seconds_per_minute_m3": 8.9
+        }
+      },
+      {
+        "track_name": "Actions - South Of The Water",
+        "scores": {
+          "seconds_per_minute_m3": 9.0
+        }
+      },
+      {
+        "track_name": "Aimee Norwich - Child",
+        "scores": {
+          "seconds_per_minute_m3": 9.0
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Goodbye Bolero",
+        "scores": {
+          "seconds_per_minute_m3": 9.4
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "seconds_per_minute_m3": 10.1
+        }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "seconds_per_minute_m3": 13.4
+        }
+      },
+      {
+        "track_name": "ANiMAL - Clinic A",
+        "scores": {
+          "seconds_per_minute_m3": 12.4
+        }
+      },
+      {
+        "track_name": "ANiMAL - Easy Tiger",
+        "scores": {
+          "seconds_per_minute_m3": 12.6
+        }
+      },
+      {
+        "track_name": "ANiMAL - Rockshow",
+        "scores": {
+          "seconds_per_minute_m3": 12.9
+        }
+      },
+      {
+        "track_name": "Actions - Devil's Words",
+        "scores": {
+          "seconds_per_minute_m3": 12.7
+        }
+      },
+      {
+        "track_name": "Actions - One Minute Smile",
+        "scores": {
+          "seconds_per_minute_m3": 13.1
+        }
+      },
+      {
+        "track_name": "Actions - South Of The Water",
+        "scores": {
+          "seconds_per_minute_m3": 13.2
+        }
+      },
+      {
+        "track_name": "Aimee Norwich - Child",
+        "scores": {
+          "seconds_per_minute_m3": 12.9
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Goodbye Bolero",
+        "scores": {
+          "seconds_per_minute_m3": 12.4
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "seconds_per_minute_m3": 12.6
+        }
+      }
+    ],
+    "median_scores": {
+      "seconds_per_minute_m3": 11.2
+    },
     "stems": [
       "crowd",
       "other"
@@ -47248,8 +47731,71 @@
   },
   "deverb_bs_roformer_8_384dim_10depth.ckpt": {
     "model_name": "Roformer Model: BS-Roformer-De-Reverb",
-    "track_scores": [],
-    "median_scores": {},
+    "track_scores": [
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "seconds_per_minute_m3": 98.1
+        }
+      },
+      {
+        "track_name": "ANiMAL - Clinic A",
+        "scores": {
+          "seconds_per_minute_m3": 37.3
+        }
+      },
+      {
+        "track_name": "ANiMAL - Easy Tiger",
+        "scores": {
+          "seconds_per_minute_m3": 15.0
+        }
+      },
+      {
+        "track_name": "ANiMAL - Rockshow",
+        "scores": {
+          "seconds_per_minute_m3": 59.5
+        }
+      },
+      {
+        "track_name": "Actions - Devil's Words",
+        "scores": {
+          "seconds_per_minute_m3": 13.3
+        }
+      },
+      {
+        "track_name": "Actions - One Minute Smile",
+        "scores": {
+          "seconds_per_minute_m3": 85.2
+        }
+      },
+      {
+        "track_name": "Actions - South Of The Water",
+        "scores": {
+          "seconds_per_minute_m3": 85.4
+        }
+      },
+      {
+        "track_name": "Aimee Norwich - Child",
+        "scores": {
+          "seconds_per_minute_m3": 31.7
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Goodbye Bolero",
+        "scores": {
+          "seconds_per_minute_m3": 13.9
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "seconds_per_minute_m3": 41.6
+        }
+      }
+    ],
+    "median_scores": {
+      "seconds_per_minute_m3": 39.4
+    },
     "stems": [
       "noreverb",
       "reverb"
@@ -53561,22 +54107,1322 @@
           },
           "seconds_per_minute_m3": 17.5
         }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 6.88608,
+            "SIR": 27.7786,
+            "SAR": 6.37612,
+            "ISR": 9.25014
+          },
+          "instrumental": {
+            "SDR": 16.4048,
+            "SIR": 21.2481,
+            "SAR": 19.3112,
+            "ISR": 19.5408
+          },
+          "seconds_per_minute_m3": 9.5
+        }
+      },
+      {
+        "track_name": "ANiMAL - Clinic A",
+        "scores": {
+          "vocals": {
+            "SDR": 8.68991,
+            "SIR": 28.3824,
+            "SAR": 5.72926,
+            "ISR": 8.15281
+          },
+          "instrumental": {
+            "SDR": 13.618,
+            "SIR": 14.1145,
+            "SAR": 14.2226,
+            "ISR": 19.3663
+          },
+          "seconds_per_minute_m3": 8.8
+        }
+      },
+      {
+        "track_name": "ANiMAL - Easy Tiger",
+        "scores": {
+          "vocals": {
+            "SDR": 11.3862,
+            "SIR": 30.3756,
+            "SAR": 10.6916,
+            "ISR": 12.2328
+          },
+          "instrumental": {
+            "SDR": 16.3727,
+            "SIR": 20.9004,
+            "SAR": 17.9822,
+            "ISR": 19.3596
+          },
+          "seconds_per_minute_m3": 8.8
+        }
+      },
+      {
+        "track_name": "ANiMAL - Rockshow",
+        "scores": {
+          "vocals": {
+            "SDR": 0.77195,
+            "SIR": 8.6655,
+            "SAR": 0.31449,
+            "ISR": 7.357
+          },
+          "instrumental": {
+            "SDR": 11.3035,
+            "SIR": 17.2281,
+            "SAR": 13.1654,
+            "ISR": 16.1609
+          },
+          "seconds_per_minute_m3": 8.8
+        }
+      },
+      {
+        "track_name": "Actions - Devil's Words",
+        "scores": {
+          "vocals": {
+            "SDR": 8.92063,
+            "SIR": 29.0326,
+            "SAR": 6.73376,
+            "ISR": 9.13132
+          },
+          "instrumental": {
+            "SDR": 13.588,
+            "SIR": 12.6607,
+            "SAR": 11.4185,
+            "ISR": 19.0098
+          },
+          "seconds_per_minute_m3": 8.7
+        }
+      },
+      {
+        "track_name": "Actions - One Minute Smile",
+        "scores": {
+          "vocals": {
+            "SDR": 3.63006,
+            "SIR": 22.2393,
+            "SAR": 3.69297,
+            "ISR": 5.86008
+          },
+          "instrumental": {
+            "SDR": 6.39273,
+            "SIR": 8.46748,
+            "SAR": 10.1885,
+            "ISR": 18.0867
+          },
+          "seconds_per_minute_m3": 8.9
+        }
+      },
+      {
+        "track_name": "Actions - South Of The Water",
+        "scores": {
+          "vocals": {
+            "SDR": 0.470655,
+            "SIR": 29.0074,
+            "SAR": -6.29013,
+            "ISR": 0.447975
+          },
+          "instrumental": {
+            "SDR": 6.65515,
+            "SIR": 5.20545,
+            "SAR": 19.3375,
+            "ISR": 19.8512
+          },
+          "seconds_per_minute_m3": 8.9
+        }
+      },
+      {
+        "track_name": "Aimee Norwich - Child",
+        "scores": {
+          "vocals": {
+            "SDR": 8.92486,
+            "SIR": 28.1179,
+            "SAR": 10.2117,
+            "ISR": 11.9891
+          },
+          "instrumental": {
+            "SDR": 17.4948,
+            "SIR": 26.61,
+            "SAR": 22.2038,
+            "ISR": 19.6608
+          },
+          "seconds_per_minute_m3": 8.6
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Goodbye Bolero",
+        "scores": {
+          "vocals": {
+            "SDR": 14.0375,
+            "SIR": 37.1893,
+            "SAR": 15.4431,
+            "ISR": 17.6437
+          },
+          "instrumental": {
+            "SDR": 16.4592,
+            "SIR": 31.2339,
+            "SAR": 19.4534,
+            "ISR": 19.4882
+          },
+          "seconds_per_minute_m3": 8.4
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "vocals": {
+            "SDR": 14.9097,
+            "SIR": 33.7731,
+            "SAR": 7.02799,
+            "ISR": 8.7271
+          },
+          "instrumental": {
+            "SDR": 17.4964,
+            "SIR": 12.616,
+            "SAR": 13.1806,
+            "ISR": 19.475
+          },
+          "seconds_per_minute_m3": 8.5
+        }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 6.88608,
+            "SIR": 27.7786,
+            "SAR": 6.37612,
+            "ISR": 9.25014
+          },
+          "instrumental": {
+            "SDR": 16.4048,
+            "SIR": 21.2481,
+            "SAR": 19.3112,
+            "ISR": 19.5408
+          },
+          "seconds_per_minute_m3": 9.9
+        }
+      },
+      {
+        "track_name": "ANiMAL - Clinic A",
+        "scores": {
+          "vocals": {
+            "SDR": 8.68991,
+            "SIR": 28.3824,
+            "SAR": 5.72926,
+            "ISR": 8.15281
+          },
+          "instrumental": {
+            "SDR": 13.618,
+            "SIR": 14.1145,
+            "SAR": 14.2226,
+            "ISR": 19.3663
+          },
+          "seconds_per_minute_m3": 9.2
+        }
+      },
+      {
+        "track_name": "ANiMAL - Easy Tiger",
+        "scores": {
+          "vocals": {
+            "SDR": 11.3862,
+            "SIR": 30.3756,
+            "SAR": 10.6916,
+            "ISR": 12.2328
+          },
+          "instrumental": {
+            "SDR": 16.3727,
+            "SIR": 20.9004,
+            "SAR": 17.9822,
+            "ISR": 19.3596
+          },
+          "seconds_per_minute_m3": 9.0
+        }
+      },
+      {
+        "track_name": "ANiMAL - Rockshow",
+        "scores": {
+          "vocals": {
+            "SDR": 0.77195,
+            "SIR": 8.6655,
+            "SAR": 0.31449,
+            "ISR": 7.357
+          },
+          "instrumental": {
+            "SDR": 11.3035,
+            "SIR": 17.2281,
+            "SAR": 13.1654,
+            "ISR": 16.1609
+          },
+          "seconds_per_minute_m3": 8.9
+        }
+      },
+      {
+        "track_name": "Actions - Devil's Words",
+        "scores": {
+          "vocals": {
+            "SDR": 8.92063,
+            "SIR": 29.0326,
+            "SAR": 6.73376,
+            "ISR": 9.13132
+          },
+          "instrumental": {
+            "SDR": 13.588,
+            "SIR": 12.6607,
+            "SAR": 11.4185,
+            "ISR": 19.0098
+          },
+          "seconds_per_minute_m3": 8.7
+        }
+      },
+      {
+        "track_name": "Actions - One Minute Smile",
+        "scores": {
+          "vocals": {
+            "SDR": 3.63006,
+            "SIR": 22.2393,
+            "SAR": 3.69297,
+            "ISR": 5.86008
+          },
+          "instrumental": {
+            "SDR": 6.39273,
+            "SIR": 8.46748,
+            "SAR": 10.1885,
+            "ISR": 18.0867
+          },
+          "seconds_per_minute_m3": 8.8
+        }
+      },
+      {
+        "track_name": "Actions - South Of The Water",
+        "scores": {
+          "vocals": {
+            "SDR": 0.470655,
+            "SIR": 29.0074,
+            "SAR": -6.29013,
+            "ISR": 0.447975
+          },
+          "instrumental": {
+            "SDR": 6.65515,
+            "SIR": 5.20545,
+            "SAR": 19.3375,
+            "ISR": 19.8512
+          },
+          "seconds_per_minute_m3": 8.9
+        }
+      },
+      {
+        "track_name": "Aimee Norwich - Child",
+        "scores": {
+          "vocals": {
+            "SDR": 8.92486,
+            "SIR": 28.1179,
+            "SAR": 10.2117,
+            "ISR": 11.9891
+          },
+          "instrumental": {
+            "SDR": 17.4948,
+            "SIR": 26.61,
+            "SAR": 22.2038,
+            "ISR": 19.6608
+          },
+          "seconds_per_minute_m3": 8.6
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Goodbye Bolero",
+        "scores": {
+          "vocals": {
+            "SDR": 14.0375,
+            "SIR": 37.1893,
+            "SAR": 15.4431,
+            "ISR": 17.6437
+          },
+          "instrumental": {
+            "SDR": 16.4592,
+            "SIR": 31.2339,
+            "SAR": 19.4534,
+            "ISR": 19.4882
+          },
+          "seconds_per_minute_m3": 8.3
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "vocals": {
+            "SDR": 14.9097,
+            "SIR": 33.7731,
+            "SAR": 7.02799,
+            "ISR": 8.7271
+          },
+          "instrumental": {
+            "SDR": 17.4964,
+            "SIR": 12.616,
+            "SAR": 13.1806,
+            "ISR": 19.475
+          },
+          "seconds_per_minute_m3": 8.2
+        }
       }
     ],
     "median_scores": {
       "vocals": {
-        "SDR": 6.88608,
-        "SIR": 27.7786,
+        "SDR": 8.68991,
+        "SIR": 28.3824,
         "SAR": 6.37612,
-        "ISR": 9.25014
+        "ISR": 9.13132
       },
       "instrumental": {
-        "SDR": 16.4048,
-        "SIR": 21.2481,
-        "SAR": 19.3112,
-        "ISR": 19.5408
+        "SDR": 16.3727,
+        "SIR": 17.2281,
+        "SAR": 17.9822,
+        "ISR": 19.475
       },
-      "seconds_per_minute_m3": 17.5
+      "seconds_per_minute_m3": 8.8
+    },
+    "stems": [],
+    "target_stem": null
+  },
+  "mel_band_roformer_denoise_debleed_gabox.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer | Denoise-Debleed by Gabox",
+    "track_scores": [
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 0.0014,
+            "SIR": -7.03493,
+            "SAR": -0.78799,
+            "ISR": 0.00577
+          },
+          "instrumental": {
+            "SDR": 11.2134,
+            "SIR": 10.8891,
+            "SAR": 54.0149,
+            "ISR": 20.0249
+          },
+          "seconds_per_minute_m3": 187.2
+        }
+      },
+      {
+        "track_name": "ANiMAL - Clinic A",
+        "scores": {
+          "vocals": {
+            "SDR": -0.00383,
+            "SIR": -18.3608,
+            "SAR": -2.43427,
+            "ISR": 0.00322
+          },
+          "instrumental": {
+            "SDR": 6.52325,
+            "SIR": 5.77486,
+            "SAR": 39.9222,
+            "ISR": 19.7504
+          },
+          "seconds_per_minute_m3": 189.3
+        }
+      },
+      {
+        "track_name": "ANiMAL - Easy Tiger",
+        "scores": {
+          "vocals": {
+            "SDR": -0.00109,
+            "SIR": -5.29795,
+            "SAR": -4.38224,
+            "ISR": 0.00076
+          },
+          "instrumental": {
+            "SDR": 7.01523,
+            "SIR": 6.31504,
+            "SAR": 50.0547,
+            "ISR": 19.8552
+          },
+          "seconds_per_minute_m3": 184.7
+        }
+      },
+      {
+        "track_name": "ANiMAL - Rockshow",
+        "scores": {
+          "vocals": {
+            "SDR": -0.00112,
+            "SIR": -3.4899,
+            "SAR": -3.95266,
+            "ISR": 0.00793
+          },
+          "instrumental": {
+            "SDR": 9.87913,
+            "SIR": 9.54545,
+            "SAR": 45.0831,
+            "ISR": 19.8955
+          },
+          "seconds_per_minute_m3": 190.3
+        }
+      },
+      {
+        "track_name": "Actions - Devil's Words",
+        "scores": {
+          "vocals": {
+            "SDR": -0.00467,
+            "SIR": -4.53636,
+            "SAR": -4.6382,
+            "ISR": 0.003105
+          },
+          "instrumental": {
+            "SDR": 2.92688,
+            "SIR": 2.09233,
+            "SAR": 33.2344,
+            "ISR": 19.6816
+          },
+          "seconds_per_minute_m3": 189.7
+        }
+      },
+      {
+        "track_name": "Actions - One Minute Smile",
+        "scores": {
+          "vocals": {
+            "SDR": -8e-05,
+            "SIR": -10.0035,
+            "SAR": -0.11587,
+            "ISR": 0.00328
+          },
+          "instrumental": {
+            "SDR": 2.77824,
+            "SIR": 1.9335,
+            "SAR": 47.0445,
+            "ISR": 19.7313
+          },
+          "seconds_per_minute_m3": 187.6
+        }
+      },
+      {
+        "track_name": "Actions - South Of The Water",
+        "scores": {
+          "vocals": {
+            "SDR": -0.00069,
+            "SIR": -5.94093,
+            "SAR": 2.48549,
+            "ISR": -0.0003
+          },
+          "instrumental": {
+            "SDR": 4.99121,
+            "SIR": 4.21889,
+            "SAR": 54.2827,
+            "ISR": 19.9887
+          },
+          "seconds_per_minute_m3": 191.9
+        }
+      },
+      {
+        "track_name": "Aimee Norwich - Child",
+        "scores": {
+          "vocals": {
+            "SDR": -0.00822,
+            "SIR": -14.4576,
+            "SAR": 0.99151,
+            "ISR": 0.003885
+          },
+          "instrumental": {
+            "SDR": 13.342,
+            "SIR": 13.6352,
+            "SAR": 55.1339,
+            "ISR": 19.9534
+          },
+          "seconds_per_minute_m3": 189.0
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Goodbye Bolero",
+        "scores": {
+          "vocals": {
+            "SDR": -0.00366,
+            "SIR": -3.65317,
+            "SAR": -2.79238,
+            "ISR": 0.00026
+          },
+          "instrumental": {
+            "SDR": 4.04863,
+            "SIR": 3.25497,
+            "SAR": 43.0345,
+            "ISR": 19.7609
+          },
+          "seconds_per_minute_m3": 189.9
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "vocals": {
+            "SDR": -0.0027,
+            "SIR": -3.70894,
+            "SAR": -1.77426,
+            "ISR": -0.00154
+          },
+          "instrumental": {
+            "SDR": 4.7393,
+            "SIR": 3.93978,
+            "SAR": 49.3048,
+            "ISR": 19.8585
+          },
+          "seconds_per_minute_m3": 188.6
+        }
+      },
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 0.0014,
+            "SIR": -7.03493,
+            "SAR": -0.78799,
+            "ISR": 0.00577
+          },
+          "instrumental": {
+            "SDR": 11.2134,
+            "SIR": 10.8891,
+            "SAR": 54.0149,
+            "ISR": 20.0249
+          },
+          "seconds_per_minute_m3": 184.8
+        }
+      },
+      {
+        "track_name": "ANiMAL - Clinic A",
+        "scores": {
+          "vocals": {
+            "SDR": -0.00383,
+            "SIR": -18.3608,
+            "SAR": -2.43427,
+            "ISR": 0.00322
+          },
+          "instrumental": {
+            "SDR": 6.52325,
+            "SIR": 5.77486,
+            "SAR": 39.9222,
+            "ISR": 19.7504
+          },
+          "seconds_per_minute_m3": 186.6
+        }
+      },
+      {
+        "track_name": "ANiMAL - Easy Tiger",
+        "scores": {
+          "vocals": {
+            "SDR": -0.00109,
+            "SIR": -5.29795,
+            "SAR": -4.38224,
+            "ISR": 0.00076
+          },
+          "instrumental": {
+            "SDR": 7.01523,
+            "SIR": 6.31504,
+            "SAR": 50.0547,
+            "ISR": 19.8552
+          },
+          "seconds_per_minute_m3": 187.6
+        }
+      },
+      {
+        "track_name": "ANiMAL - Rockshow",
+        "scores": {
+          "vocals": {
+            "SDR": -0.00112,
+            "SIR": -3.4899,
+            "SAR": -3.95266,
+            "ISR": 0.00793
+          },
+          "instrumental": {
+            "SDR": 9.87913,
+            "SIR": 9.54545,
+            "SAR": 45.0831,
+            "ISR": 19.8955
+          },
+          "seconds_per_minute_m3": 189.5
+        }
+      },
+      {
+        "track_name": "Actions - Devil's Words",
+        "scores": {
+          "vocals": {
+            "SDR": -0.00467,
+            "SIR": -4.53636,
+            "SAR": -4.6382,
+            "ISR": 0.003105
+          },
+          "instrumental": {
+            "SDR": 2.92688,
+            "SIR": 2.09233,
+            "SAR": 33.2344,
+            "ISR": 19.6816
+          },
+          "seconds_per_minute_m3": 189.5
+        }
+      },
+      {
+        "track_name": "Actions - One Minute Smile",
+        "scores": {
+          "vocals": {
+            "SDR": -8e-05,
+            "SIR": -10.0035,
+            "SAR": -0.11587,
+            "ISR": 0.00328
+          },
+          "instrumental": {
+            "SDR": 2.77824,
+            "SIR": 1.9335,
+            "SAR": 47.0445,
+            "ISR": 19.7313
+          },
+          "seconds_per_minute_m3": 186.9
+        }
+      },
+      {
+        "track_name": "Actions - South Of The Water",
+        "scores": {
+          "vocals": {
+            "SDR": -0.00069,
+            "SIR": -5.94093,
+            "SAR": 2.48549,
+            "ISR": -0.0003
+          },
+          "instrumental": {
+            "SDR": 4.99121,
+            "SIR": 4.21889,
+            "SAR": 54.2827,
+            "ISR": 19.9887
+          },
+          "seconds_per_minute_m3": 194.3
+        }
+      },
+      {
+        "track_name": "Aimee Norwich - Child",
+        "scores": {
+          "vocals": {
+            "SDR": -0.00822,
+            "SIR": -14.4576,
+            "SAR": 0.99151,
+            "ISR": 0.003885
+          },
+          "instrumental": {
+            "SDR": 13.342,
+            "SIR": 13.6352,
+            "SAR": 55.1339,
+            "ISR": 19.9534
+          },
+          "seconds_per_minute_m3": 188.7
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Goodbye Bolero",
+        "scores": {
+          "vocals": {
+            "SDR": -0.00366,
+            "SIR": -3.65317,
+            "SAR": -2.79238,
+            "ISR": 0.00026
+          },
+          "instrumental": {
+            "SDR": 4.04863,
+            "SIR": 3.25497,
+            "SAR": 43.0345,
+            "ISR": 19.7609
+          },
+          "seconds_per_minute_m3": 187.7
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "vocals": {
+            "SDR": -0.0027,
+            "SIR": -3.70894,
+            "SAR": -1.77426,
+            "ISR": -0.00154
+          },
+          "instrumental": {
+            "SDR": 4.7393,
+            "SIR": 3.93978,
+            "SAR": 49.3048,
+            "ISR": 19.8585
+          },
+          "seconds_per_minute_m3": 196.9
+        }
+      }
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": -0.00191,
+        "SIR": -5.61944,
+        "SAR": -2.10426,
+        "ISR": 0.0031625
+      },
+      "instrumental": {
+        "SDR": 5.75723,
+        "SIR": 4.99688,
+        "SAR": 48.1746,
+        "ISR": 19.8569
+      },
+      "seconds_per_minute_m3": 188.8
+    },
+    "stems": [],
+    "target_stem": null
+  },
+  "mel_band_roformer_kim_ft2_unwa.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer Kim | FT 2 by unwa",
+    "track_scores": [
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "seconds_per_minute_m3": 8.9
+        }
+      },
+      {
+        "track_name": "ANiMAL - Clinic A",
+        "scores": {
+          "seconds_per_minute_m3": 8.6
+        }
+      },
+      {
+        "track_name": "ANiMAL - Easy Tiger",
+        "scores": {
+          "seconds_per_minute_m3": 8.6
+        }
+      },
+      {
+        "track_name": "ANiMAL - Rockshow",
+        "scores": {
+          "seconds_per_minute_m3": 8.7
+        }
+      },
+      {
+        "track_name": "Actions - Devil's Words",
+        "scores": {
+          "seconds_per_minute_m3": 8.7
+        }
+      },
+      {
+        "track_name": "Actions - One Minute Smile",
+        "scores": {
+          "seconds_per_minute_m3": 8.9
+        }
+      },
+      {
+        "track_name": "Actions - South Of The Water",
+        "scores": {
+          "seconds_per_minute_m3": 9.0
+        }
+      },
+      {
+        "track_name": "Aimee Norwich - Child",
+        "scores": {
+          "seconds_per_minute_m3": 8.8
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Goodbye Bolero",
+        "scores": {
+          "seconds_per_minute_m3": 8.8
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "seconds_per_minute_m3": 9.9
+        }
+      }
+    ],
+    "median_scores": {
+      "seconds_per_minute_m3": 8.8
+    },
+    "stems": [],
+    "target_stem": null
+  },
+  "mel_band_roformer_kim_ft2_bleedless_unwa.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer Kim | FT 2 Bleedless by unwa",
+    "track_scores": [
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "seconds_per_minute_m3": 11.3
+        }
+      },
+      {
+        "track_name": "ANiMAL - Clinic A",
+        "scores": {
+          "seconds_per_minute_m3": 10.3
+        }
+      },
+      {
+        "track_name": "ANiMAL - Easy Tiger",
+        "scores": {
+          "seconds_per_minute_m3": 9.9
+        }
+      },
+      {
+        "track_name": "ANiMAL - Rockshow",
+        "scores": {
+          "seconds_per_minute_m3": 9.8
+        }
+      },
+      {
+        "track_name": "Actions - Devil's Words",
+        "scores": {
+          "seconds_per_minute_m3": 9.5
+        }
+      },
+      {
+        "track_name": "Actions - One Minute Smile",
+        "scores": {
+          "seconds_per_minute_m3": 9.5
+        }
+      },
+      {
+        "track_name": "Actions - South Of The Water",
+        "scores": {
+          "seconds_per_minute_m3": 9.6
+        }
+      },
+      {
+        "track_name": "Aimee Norwich - Child",
+        "scores": {
+          "seconds_per_minute_m3": 9.2
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Goodbye Bolero",
+        "scores": {
+          "seconds_per_minute_m3": 8.9
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "seconds_per_minute_m3": 8.8
+        }
+      }
+    ],
+    "median_scores": {
+      "seconds_per_minute_m3": 9.6
+    },
+    "stems": [],
+    "target_stem": null
+  },
+  "mel_band_roformer_vocals_becruily.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer | Vocals by becruily",
+    "track_scores": [
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "seconds_per_minute_m3": 193.7
+        }
+      },
+      {
+        "track_name": "ANiMAL - Clinic A",
+        "scores": {
+          "seconds_per_minute_m3": 192.2
+        }
+      },
+      {
+        "track_name": "ANiMAL - Easy Tiger",
+        "scores": {
+          "seconds_per_minute_m3": 185.1
+        }
+      },
+      {
+        "track_name": "ANiMAL - Rockshow",
+        "scores": {
+          "seconds_per_minute_m3": 186.2
+        }
+      },
+      {
+        "track_name": "Actions - Devil's Words",
+        "scores": {
+          "seconds_per_minute_m3": 190.2
+        }
+      },
+      {
+        "track_name": "Actions - One Minute Smile",
+        "scores": {
+          "seconds_per_minute_m3": 197.5
+        }
+      },
+      {
+        "track_name": "Actions - South Of The Water",
+        "scores": {
+          "seconds_per_minute_m3": 193.7
+        }
+      },
+      {
+        "track_name": "Aimee Norwich - Child",
+        "scores": {
+          "seconds_per_minute_m3": 189.6
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Goodbye Bolero",
+        "scores": {
+          "seconds_per_minute_m3": 191.4
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "seconds_per_minute_m3": 187.5
+        }
+      }
+    ],
+    "median_scores": {
+      "seconds_per_minute_m3": 190.8
+    },
+    "stems": [],
+    "target_stem": null
+  },
+  "mel_band_roformer_instrumental_becruily.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer | Instrumental by becruily",
+    "track_scores": [
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 6.54838,
+            "SIR": 23.3712,
+            "SAR": 7.08102,
+            "ISR": 10.7044
+          },
+          "instrumental": {
+            "SDR": 16.8472,
+            "SIR": 24.8601,
+            "SAR": 20.4971,
+            "ISR": 19.3149
+          },
+          "seconds_per_minute_m3": 196.2
+        }
+      },
+      {
+        "track_name": "ANiMAL - Clinic A",
+        "scores": {
+          "vocals": {
+            "SDR": 8.73301,
+            "SIR": 25.8327,
+            "SAR": 8.89428,
+            "ISR": 12.1507
+          },
+          "instrumental": {
+            "SDR": 14.5559,
+            "SIR": 21.2613,
+            "SAR": 16.3529,
+            "ISR": 18.8549
+          },
+          "seconds_per_minute_m3": 188.9
+        }
+      },
+      {
+        "track_name": "ANiMAL - Easy Tiger",
+        "scores": {
+          "vocals": {
+            "SDR": 11.6503,
+            "SIR": 28.9944,
+            "SAR": 12.5913,
+            "ISR": 15.3496
+          },
+          "instrumental": {
+            "SDR": 16.7889,
+            "SIR": 27.3235,
+            "SAR": 19.7342,
+            "ISR": 19.237
+          },
+          "seconds_per_minute_m3": 189.8
+        }
+      },
+      {
+        "track_name": "ANiMAL - Rockshow",
+        "scores": {
+          "vocals": {
+            "SDR": 3.39664,
+            "SIR": 7.7368,
+            "SAR": 3.69738,
+            "ISR": 11.5511
+          },
+          "instrumental": {
+            "SDR": 12.0128,
+            "SIR": 23.3865,
+            "SAR": 13.95,
+            "ISR": 15.072
+          },
+          "seconds_per_minute_m3": 193.7
+        }
+      },
+      {
+        "track_name": "Actions - Devil's Words",
+        "scores": {
+          "vocals": {
+            "SDR": 12.9068,
+            "SIR": 27.0069,
+            "SAR": 13.8643,
+            "ISR": 15.6858
+          },
+          "instrumental": {
+            "SDR": 15.171,
+            "SIR": 23.7782,
+            "SAR": 16.3809,
+            "ISR": 18.2652
+          },
+          "seconds_per_minute_m3": 191.0
+        }
+      },
+      {
+        "track_name": "Actions - One Minute Smile",
+        "scores": {
+          "vocals": {
+            "SDR": 10.124,
+            "SIR": 21.3743,
+            "SAR": 11.1673,
+            "ISR": 13.8313
+          },
+          "instrumental": {
+            "SDR": 12.4319,
+            "SIR": 20.1249,
+            "SAR": 13.9947,
+            "ISR": 17.0897
+          },
+          "seconds_per_minute_m3": 197.3
+        }
+      },
+      {
+        "track_name": "Actions - South Of The Water",
+        "scores": {
+          "vocals": {
+            "SDR": 11.3785,
+            "SIR": 23.5187,
+            "SAR": 12.508,
+            "ISR": 13.8912
+          },
+          "instrumental": {
+            "SDR": 15.2864,
+            "SIR": 22.2421,
+            "SAR": 17.5517,
+            "ISR": 18.4807
+          },
+          "seconds_per_minute_m3": 201.1
+        }
+      },
+      {
+        "track_name": "Aimee Norwich - Child",
+        "scores": {
+          "vocals": {
+            "SDR": 7.41175,
+            "SIR": 24.9306,
+            "SAR": 7.57044,
+            "ISR": 11.0494
+          },
+          "instrumental": {
+            "SDR": 18.6341,
+            "SIR": 29.5544,
+            "SAR": 25.1912,
+            "ISR": 19.6354
+          },
+          "seconds_per_minute_m3": 188.6
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Goodbye Bolero",
+        "scores": {
+          "vocals": {
+            "SDR": 12.4047,
+            "SIR": 35.1477,
+            "SAR": 13.5941,
+            "ISR": 15.8628
+          },
+          "instrumental": {
+            "SDR": 15.4372,
+            "SIR": 25.9366,
+            "SAR": 17.7951,
+            "ISR": 19.3184
+          },
+          "seconds_per_minute_m3": 191.0
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "vocals": {
+            "SDR": 12.2305,
+            "SIR": 23.9563,
+            "SAR": 11.279,
+            "ISR": 12.4526
+          },
+          "instrumental": {
+            "SDR": 16.2548,
+            "SIR": 19.7432,
+            "SAR": 16.6159,
+            "ISR": 18.3415
+          },
+          "seconds_per_minute_m3": 194.4
+        }
+      }
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 10.7513,
+        "SIR": 24.4434,
+        "SAR": 11.2232,
+        "ISR": 13.142
+      },
+      "instrumental": {
+        "SDR": 15.3618,
+        "SIR": 23.5823,
+        "SAR": 17.0838,
+        "ISR": 18.6678
+      },
+      "seconds_per_minute_m3": 192.4
+    },
+    "stems": [],
+    "target_stem": null
+  },
+  "mel_band_roformer_vocal_fullness_aname.ckpt": {
+    "model_name": "Roformer Model: MelBand Roformer | Vocals Fullness by Aname",
+    "track_scores": [
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "seconds_per_minute_m3": 188.4
+        }
+      },
+      {
+        "track_name": "ANiMAL - Clinic A",
+        "scores": {
+          "seconds_per_minute_m3": 193.8
+        }
+      },
+      {
+        "track_name": "ANiMAL - Easy Tiger",
+        "scores": {
+          "seconds_per_minute_m3": 188.1
+        }
+      },
+      {
+        "track_name": "ANiMAL - Rockshow",
+        "scores": {
+          "seconds_per_minute_m3": 189.3
+        }
+      },
+      {
+        "track_name": "Actions - Devil's Words",
+        "scores": {
+          "seconds_per_minute_m3": 187.8
+        }
+      },
+      {
+        "track_name": "Actions - One Minute Smile",
+        "scores": {
+          "seconds_per_minute_m3": 193.0
+        }
+      },
+      {
+        "track_name": "Actions - South Of The Water",
+        "scores": {
+          "seconds_per_minute_m3": 199.2
+        }
+      },
+      {
+        "track_name": "Aimee Norwich - Child",
+        "scores": {
+          "seconds_per_minute_m3": 187.0
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Goodbye Bolero",
+        "scores": {
+          "seconds_per_minute_m3": 192.9
+        }
+      },
+      {
+        "track_name": "Alexander Ross - Velvet Curtain",
+        "scores": {
+          "seconds_per_minute_m3": 191.3
+        }
+      }
+    ],
+    "median_scores": {
+      "seconds_per_minute_m3": 190.3
+    },
+    "stems": [],
+    "target_stem": null
+  },
+  "bs_roformer_vocals_gabox.ckpt": {
+    "model_name": "Roformer Model: BS Roformer | Vocals by Gabox",
+    "track_scores": [
+      {
+        "track_name": "A Classic Education - NightOwl",
+        "scores": {
+          "vocals": {
+            "SDR": 7.30156,
+            "SIR": 21.5334,
+            "SAR": 6.88792,
+            "ISR": 12.6678
+          },
+          "instrumental": {
+            "SDR": 17.2849,
+            "SIR": 28.2602,
+            "SAR": 20.7549,
+            "ISR": 19.1586
+          },
+          "seconds_per_minute_m3": 141.0
+        }
+      },
+      {
+        "track_name": "ANiMAL - Clinic A",
+        "scores": {
+          "vocals": {
+            "SDR": 9.38357,
+            "SIR": 25.3187,
+            "SAR": 9.32861,
+            "ISR": 13.8029
+          },
+          "instrumental": {
+            "SDR": 14.7397,
+            "SIR": 24.1059,
+            "SAR": 16.5124,
+            "ISR": 18.6934
+          },
+          "seconds_per_minute_m3": 154.8
+        }
+      },
+      {
+        "track_name": "ANiMAL - Easy Tiger",
+        "scores": {
+          "vocals": {
+            "SDR": 13.0706,
+            "SIR": 29.6609,
+            "SAR": 13.9141,
+            "ISR": 17.2466
+          },
+          "instrumental": {
+            "SDR": 17.2147,
+            "SIR": 31.544,
+            "SAR": 20.5026,
+            "ISR": 19.2753
+          },
+          "seconds_per_minute_m3": 170.7
+        }
+      }
+    ],
+    "median_scores": {
+      "vocals": {
+        "SDR": 9.38357,
+        "SIR": 25.3187,
+        "SAR": 9.32861,
+        "ISR": 13.8029
+      },
+      "instrumental": {
+        "SDR": 17.2147,
+        "SIR": 28.2602,
+        "SAR": 20.5026,
+        "ISR": 19.1586
+      },
+      "seconds_per_minute_m3": 154.8
     },
     "stems": [],
     "target_stem": null
