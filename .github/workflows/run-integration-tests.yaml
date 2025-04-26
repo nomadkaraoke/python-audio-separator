@@ -32,6 +32,12 @@ jobs:
           apt-get update
           apt-get install -y ffmpeg libsamplerate0 libsamplerate-dev
   
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: poetry
+
       - name: Create models directory
         run: mkdir -p $AUDIO_SEPARATOR_MODEL_DIR
 
