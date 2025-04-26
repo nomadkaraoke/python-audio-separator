@@ -240,23 +240,7 @@ def test_cli_use_autocast_argument(common_expected_args):
             expected_args["use_autocast"] = True
 
             # Assertions
-            mock_separator.assert_called_once_with(**common_expected_args)
-
-
-# Test using use_autocast argument
-def test_cli_use_autocast_argument(common_expected_args):
-    test_args = ["cli.py", "test_audio.mp3", "--use_autocast"]
-    with patch("sys.argv", test_args):
-        with patch("audio_separator.separator.Separator") as mock_separator:
-            mock_separator_instance = mock_separator.return_value
-            mock_separator_instance.separate.return_value = ["output_file.mp3"]
-            main()
-
-            # Update expected args for this specific test
-            common_expected_args["use_autocast"] = True
-
-            # Assertions
-            mock_separator.assert_called_once_with(**common_expected_args)
+            mock_separator.assert_called_once_with(**expected_args)
 
 
 # Test using custom_output_names argument
