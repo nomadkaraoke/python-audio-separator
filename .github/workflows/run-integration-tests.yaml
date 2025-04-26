@@ -5,10 +5,9 @@ on:
 
 jobs:
   integration-test:
-    runs-on: macos-latest-xlarge
+    runs-on: ubuntu-latest
     env:
       AUDIO_SEPARATOR_MODEL_DIR: ${{ github.workspace }}/models
-      PYTORCH_MPS_HIGH_WATERMARK_RATIO: 0.0
 
     steps:
       - name: Checkout project
@@ -34,7 +33,7 @@ jobs:
           key: model-cache-${{ hashFiles('tests/integration/test_cli_integration.py') }}
           restore-keys: model-cache-
 
-      - name: Install Poetry dependencies (CPU covers M1)
+      - name: Install Poetry dependencies
         run: poetry install -E cpu
 
       - name: Display model cache status
