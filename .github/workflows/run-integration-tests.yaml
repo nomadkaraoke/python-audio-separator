@@ -18,6 +18,9 @@ jobs:
         with:
           python-version: '3.13'
 
+      - name: Install pipx
+        run: python -m pip install --user pipx && python -m pipx ensurepath
+
       - name: Install poetry
         run: pipx install poetry
   
