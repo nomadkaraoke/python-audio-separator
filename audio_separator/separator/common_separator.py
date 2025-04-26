@@ -2,6 +2,7 @@
 
 from logging import Logger
 import os
+import re
 import gc
 import numpy as np
 import librosa
