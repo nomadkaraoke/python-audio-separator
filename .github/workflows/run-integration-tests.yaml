@@ -1,7 +1,6 @@
 name: run-integration-tests
 
 on:
-  push:
   pull_request:
 
 jobs:
@@ -9,6 +8,7 @@ jobs:
     runs-on: macos-latest-xlarge
     env:
       AUDIO_SEPARATOR_MODEL_DIR: ${{ github.workspace }}/models
+      PYTORCH_MPS_HIGH_WATERMARK_RATIO: 0.0
 
     steps:
       - name: Checkout project
