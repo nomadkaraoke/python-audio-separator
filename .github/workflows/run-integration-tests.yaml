@@ -27,6 +27,11 @@ jobs:
       - name: Setup PATH
         run: echo "/root/.local/bin" >> $GITHUB_PATH
   
+      - name: Install system dependencies
+        run: |
+          apt-get update
+          apt-get install -y ffmpeg libsamplerate0 libsamplerate-dev
+  
       - name: Create models directory
         run: mkdir -p $AUDIO_SEPARATOR_MODEL_DIR
 

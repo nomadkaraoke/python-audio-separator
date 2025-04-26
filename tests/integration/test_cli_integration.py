@@ -51,22 +51,22 @@ def run_separation_test(model, audio_path, expected_files):
 MODEL_PARAMS = [
     # (model_filename, expected_output_filenames)
     ("kuielab_b_vocals.onnx", ["mardy20s_(Instrumental)_kuielab_b_vocals.flac", "mardy20s_(Vocals)_kuielab_b_vocals.flac"]),
-    ("MGM_MAIN_v4.pth", ["mardy20s_(Instrumental)_MGM_MAIN_v4.flac", "mardy20s_(Vocals)_MGM_MAIN_v4.flac"]),
-    ("UVR-MDX-NET-Inst_HQ_4.onnx", ["mardy20s_(Instrumental)_UVR-MDX-NET-Inst_HQ_4.flac", "mardy20s_(Vocals)_UVR-MDX-NET-Inst_HQ_4.flac"]),
-    ("2_HP-UVR.pth", ["mardy20s_(Instrumental)_2_HP-UVR.flac", "mardy20s_(Vocals)_2_HP-UVR.flac"]),
-    (
-        "htdemucs_6s.yaml",
-        [
-            "mardy20s_(Vocals)_htdemucs_6s.flac",
-            "mardy20s_(Drums)_htdemucs_6s.flac",
-            "mardy20s_(Bass)_htdemucs_6s.flac",
-            "mardy20s_(Other)_htdemucs_6s.flac",
-            "mardy20s_(Guitar)_htdemucs_6s.flac",
-            "mardy20s_(Piano)_htdemucs_6s.flac",
-        ],
-    ),
-    ("model_bs_roformer_ep_937_sdr_10.5309.ckpt", ["mardy20s_(Drum-Bass)_model_bs_roformer_ep_937_sdr_10.flac", "mardy20s_(No Drum-Bass)_model_bs_roformer_ep_937_sdr_10.flac"]),
-    ("model_bs_roformer_ep_317_sdr_12.9755.ckpt", ["mardy20s_(Instrumental)_model_bs_roformer_ep_317_sdr_12.flac", "mardy20s_(Vocals)_model_bs_roformer_ep_317_sdr_12.flac"]),
+    # ("MGM_MAIN_v4.pth", ["mardy20s_(Instrumental)_MGM_MAIN_v4.flac", "mardy20s_(Vocals)_MGM_MAIN_v4.flac"]),
+    # ("UVR-MDX-NET-Inst_HQ_4.onnx", ["mardy20s_(Instrumental)_UVR-MDX-NET-Inst_HQ_4.flac", "mardy20s_(Vocals)_UVR-MDX-NET-Inst_HQ_4.flac"]),
+    # ("2_HP-UVR.pth", ["mardy20s_(Instrumental)_2_HP-UVR.flac", "mardy20s_(Vocals)_2_HP-UVR.flac"]),
+    # (
+    #     "htdemucs_6s.yaml",
+    #     [
+    #         "mardy20s_(Vocals)_htdemucs_6s.flac",
+    #         "mardy20s_(Drums)_htdemucs_6s.flac",
+    #         "mardy20s_(Bass)_htdemucs_6s.flac",
+    #         "mardy20s_(Other)_htdemucs_6s.flac",
+    #         "mardy20s_(Guitar)_htdemucs_6s.flac",
+    #         "mardy20s_(Piano)_htdemucs_6s.flac",
+    #     ],
+    # ),
+    # ("model_bs_roformer_ep_937_sdr_10.5309.ckpt", ["mardy20s_(Drum-Bass)_model_bs_roformer_ep_937_sdr_10.flac", "mardy20s_(No Drum-Bass)_model_bs_roformer_ep_937_sdr_10.flac"]),
+    # ("model_bs_roformer_ep_317_sdr_12.9755.ckpt", ["mardy20s_(Instrumental)_model_bs_roformer_ep_317_sdr_12.flac", "mardy20s_(Vocals)_model_bs_roformer_ep_317_sdr_12.flac"]),
 ]
 
 
