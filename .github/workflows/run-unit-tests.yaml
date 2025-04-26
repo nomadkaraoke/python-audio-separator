@@ -1,4 +1,4 @@
-name: run-tests
+name: run-unit-tests
 
 on:
   push:
@@ -29,12 +29,7 @@ jobs:
         run: poetry install -E cpu
 
       - name: Run unit tests with coverage
-        run: poetry run pytest tests/unit --cov=./ --cov-report=xml
-
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        run: poetry run pytest tests/unit
 
   test-macos:
     runs-on: macos-latest
@@ -61,12 +56,7 @@ jobs:
 
       - name: Run unit tests with coverage
         run: |
-          poetry run pytest tests/unit --cov=./ --cov-report=xml
-
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+          poetry run pytest tests/unit
 
   test-windows:
     runs-on: windows-latest
@@ -92,9 +82,4 @@ jobs:
         run: poetry install -E cpu
 
       - name: Run unit tests with coverage
-        run: poetry run pytest tests/unit --cov=./ --cov-report=xml
-
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        run: poetry run pytest tests/unit
