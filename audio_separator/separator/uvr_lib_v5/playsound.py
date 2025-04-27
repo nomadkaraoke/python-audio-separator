@@ -31,7 +31,6 @@ def _playsoundWin(sound, block = True):
     sound = '"' + _canonicalizePath(sound) + '"'
 
     from ctypes import create_unicode_buffer, windll, wintypes
-    from time   import sleep
     windll.winmm.mciSendStringW.argtypes = [wintypes.LPCWSTR, wintypes.LPWSTR, wintypes.UINT, wintypes.HANDLE]
     windll.winmm.mciGetErrorStringW.argtypes = [wintypes.DWORD, wintypes.LPWSTR, wintypes.UINT]
 
