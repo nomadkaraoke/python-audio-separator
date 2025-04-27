@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 import torch
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
 from audio_separator.separator.uvr_lib_v5.stft import STFT
 
 # Short-Time Fourier Transform (STFT) Process Overview:
@@ -121,28 +121,15 @@ class TestSTFT(unittest.TestCase):
         # Assertions
         self.assertEqual(complex_tensor.shape, expected_shape)
 
-    def test_inverse_device_handling(self):
+    def test_inverse_stft(self):
         # Create a mock tensor with the correct input shape
         input_tensor = torch.rand(1, 2, 1025, 32)  # shape matching output of STFT
 
-        # Initialize STFT
-        stft = STFT(logger=MockLogger(), n_fft=2048, hop_length=512, dim_f=1025, device="cpu")
-
         # Apply inverse STFT
-        output_tensor = stft.inverse(input_tensor)
+        output_tensor = self.stft.inverse(input_tensor)
 
         # Check if the output tensor is on the CPU
         self.assertEqual(output_tensor.device.type, "cpu")
-
-    def test_inverse_output_shape(self):
-        # Create a mock tensor
-        input_tensor = torch.rand(1, 2, 1025, 32)  # shape matching output of STFT
-
-        # Initialize STFT
-        stft = STFT(logger=MockLogger(), n_fft=2048, hop_length=512, dim_f=1025, device="cpu")
-
-        # Apply inverse STFT
-        output_tensor = stft.inverse(input_tensor)
 
         # Expected output shape: (Batch size, Channel dimension, Time dimension)
         expected_shape = (1, 2, 7936)  # Calculated based on STFT parameters
