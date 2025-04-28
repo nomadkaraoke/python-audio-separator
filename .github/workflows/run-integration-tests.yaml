@@ -59,7 +59,7 @@ jobs:
           ls -la $AUDIO_SEPARATOR_MODEL_DIR || echo "Directory empty or doesn't exist"
 
       - name: Run integration tests
-        run: poetry run pytest tests -v --cov=audio_separator --cov-report=xml
+        run: poetry run pytest -sv --cov=audio_separator --cov-report=xml tests/integration
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
@@ -74,3 +74,5 @@ jobs:
           path: |
             *.flac
             tests/*.flac
+            **/temp_images/**/*.png
+            tests/**/temp_images/**/*.png
