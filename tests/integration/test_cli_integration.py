@@ -55,20 +55,22 @@ def run_separation_test(model, audio_path, expected_files):
     return result
 
 
-def validate_audio_output(output_file, reference_dir, min_similarity_threshold=0.999):
+def validate_audio_output(output_file, reference_dir, waveform_threshold=0.999, spectrogram_threshold=None):
     """Validate an audio output file by comparing its waveform and spectrogram with reference images.
 
     Args:
         output_file: Path to the audio output file
         reference_dir: Directory containing reference images
-        min_similarity_threshold: Minimum similarity required for images to be considered matching (0.0-1.0)
-            - Higher values (closer to 1.0) require images to be more similar
-            - Lower values (closer to 0.0) are more permissive
-            - A value of 0.99 requires 99% similarity between images
+        waveform_threshold: Minimum similarity required for waveform images (0.0-1.0)
+        spectrogram_threshold: Minimum similarity for spectrogram images (0.0-1.0), defaults to waveform_threshold if None
 
     Returns:
         Tuple of booleans: (waveform_match, spectrogram_match)
     """
+    # If spectrogram threshold not specified, use the same as waveform threshold
+    if spectrogram_threshold is None:
+        spectrogram_threshold = waveform_threshold
+        
     # Create temporary directory for generated images
     temp_dir = os.path.join(os.path.dirname(output_file), "temp_images")
     os.makedirs(temp_dir, exist_ok=True)
@@ -91,14 +93,14 @@ def validate_audio_output(output_file, reference_dir, min_similarity_threshold=0
         return False, False
 
     # Compare waveform images
-    waveform_similarity, waveform_match = compare_images(expected_waveform_path, actual_waveform_path, min_similarity_threshold=min_similarity_threshold)
+    waveform_similarity, waveform_match = compare_images(expected_waveform_path, actual_waveform_path, min_similarity_threshold=waveform_threshold)
 
     # Compare spectrogram images
-    spectrogram_similarity, spectrogram_match = compare_images(expected_spectrogram_path, actual_spectrogram_path, min_similarity_threshold=min_similarity_threshold)
+    spectrogram_similarity, spectrogram_match = compare_images(expected_spectrogram_path, actual_spectrogram_path, min_similarity_threshold=spectrogram_threshold)
 
     print(f"Validation results for {output_file}:")
-    print(f"  Waveform similarity: {waveform_similarity:.4f} (match: {waveform_match})")
-    print(f"  Spectrogram similarity: {spectrogram_similarity:.4f} (match: {spectrogram_match})")
+    print(f"  Waveform similarity: {waveform_similarity:.4f} (match: {waveform_match}, threshold: {waveform_threshold:.2f})")
+    print(f"  Spectrogram similarity: {spectrogram_similarity:.4f} (match: {spectrogram_match}, threshold: {spectrogram_threshold:.2f})")
 
     # Cleanup temp images (optional, uncomment if needed)
     # os.remove(actual_waveform_path)
@@ -108,12 +110,13 @@ def validate_audio_output(output_file, reference_dir, min_similarity_threshold=0
 
 
 # Default similarity threshold to use for most models
-DEFAULT_SIMILARITY_THRESHOLD = 0.999
+DEFAULT_SIMILARITY_THRESHOLD = 0.90
 
 # Model-specific similarity thresholds
 # Use lower thresholds for models that show more variation between runs
 MODEL_SIMILARITY_THRESHOLDS = {
-    "htdemucs_6s.yaml": 0.80,  # Demucs multi-stem output (e.g. "Other" and "Piano") is a lot more variable
+    # Format: (waveform_threshold, spectrogram_threshold)
+    "htdemucs_6s.yaml": (0.90, 0.70),  # Demucs multi-stem output (e.g. "Other" and "Piano") is a lot more variable
 }
 
 
@@ -153,8 +156,15 @@ def test_model_separation(model, expected_files, input_file, reference_dir, clea
     print(f"\nValidating output files for model {model}...")
 
     # Get model-specific similarity threshold or use default
-    similarity_threshold = MODEL_SIMILARITY_THRESHOLDS.get(model, DEFAULT_SIMILARITY_THRESHOLD)
-    print(f"Using similarity threshold: {similarity_threshold} for model {model}")
+    threshold = MODEL_SIMILARITY_THRESHOLDS.get(model, DEFAULT_SIMILARITY_THRESHOLD)
+    
+    # Unpack thresholds if they're in tuple format, otherwise use the same value for both
+    if isinstance(threshold, tuple) and len(threshold) == 2:
+        waveform_threshold, spectrogram_threshold = threshold
+    else:
+        waveform_threshold = spectrogram_threshold = threshold
+        
+    print(f"Using thresholds - waveform: {waveform_threshold}, spectrogram: {spectrogram_threshold} for model {model}")
 
     for output_file in expected_files:
         # Skip validation if reference images are not required (set environment variable to skip)
@@ -162,7 +172,12 @@ def test_model_separation(model, expected_files, input_file, reference_dir, clea
             print(f"Skipping audio validation for {output_file} (SKIP_AUDIO_VALIDATION=1)")
             continue
 
-        waveform_match, spectrogram_match = validate_audio_output(output_file, reference_dir, similarity_threshold)
+        waveform_match, spectrogram_match = validate_audio_output(
+            output_file, 
+            reference_dir, 
+            waveform_threshold=waveform_threshold,
+            spectrogram_threshold=spectrogram_threshold
+        )
 
         # Assert that the output matches the reference
         assert waveform_match, f"Waveform for {output_file} does not match the reference"

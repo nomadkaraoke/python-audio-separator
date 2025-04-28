@@ -74,3 +74,5 @@ jobs:
           path: |
             *.flac
             tests/*.flac
+            **/temp_images/**/*.png
+            tests/**/temp_images/**/*.png
