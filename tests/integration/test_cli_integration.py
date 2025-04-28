@@ -1,12 +1,20 @@
 import os
 import subprocess
 import pytest
+from pathlib import Path
+from tests.utils import generate_reference_images, compare_images
 
 
 @pytest.fixture(name="input_file")
 def fixture_input_file():
     """Fixture providing the test input audio file path."""
     return "tests/inputs/mardy20s.flac"
+
+
+@pytest.fixture(name="reference_dir")
+def fixture_reference_dir():
+    """Fixture providing the reference images directory path."""
+    return "tests/inputs/reference"
 
 
 @pytest.fixture(name="cleanup_output_files")
@@ -47,6 +55,67 @@ def run_separation_test(model, audio_path, expected_files):
     return result
 
 
+def validate_audio_output(output_file, reference_dir, similarity_threshold=0.9):
+    """Validate an audio output file by comparing its waveform and spectrogram with reference images.
+    
+    Args:
+        output_file: Path to the audio output file
+        reference_dir: Directory containing reference images
+        similarity_threshold: Threshold for image similarity (0.0-1.0)
+        
+    Returns:
+        Tuple of booleans: (waveform_match, spectrogram_match)
+    """
+    # Create temporary directory for generated images
+    temp_dir = os.path.join(os.path.dirname(output_file), "temp_images")
+    os.makedirs(temp_dir, exist_ok=True)
+    
+    # Generate waveform and spectrogram images for the output file
+    output_filename = os.path.basename(output_file)
+    name_without_ext = os.path.splitext(output_filename)[0]
+    
+    # Generate actual images
+    actual_waveform_path, actual_spectrogram_path = generate_reference_images(
+        output_file, 
+        temp_dir, 
+        prefix="actual_"
+    )
+    
+    # Path to expected reference images
+    expected_waveform_path = os.path.join(reference_dir, f"expected_{name_without_ext}_waveform.png")
+    expected_spectrogram_path = os.path.join(reference_dir, f"expected_{name_without_ext}_spectrogram.png")
+    
+    # Check if reference images exist
+    if not os.path.exists(expected_waveform_path) or not os.path.exists(expected_spectrogram_path):
+        print(f"Warning: Reference images not found for {output_file}")
+        print(f"Expected: {expected_waveform_path} and {expected_spectrogram_path}")
+        return False, False
+    
+    # Compare waveform images
+    waveform_similarity, waveform_match = compare_images(
+        expected_waveform_path, 
+        actual_waveform_path, 
+        threshold=similarity_threshold
+    )
+    
+    # Compare spectrogram images
+    spectrogram_similarity, spectrogram_match = compare_images(
+        expected_spectrogram_path, 
+        actual_spectrogram_path, 
+        threshold=similarity_threshold
+    )
+    
+    print(f"Validation results for {output_file}:")
+    print(f"  Waveform similarity: {waveform_similarity:.4f} (match: {waveform_match})")
+    print(f"  Spectrogram similarity: {spectrogram_similarity:.4f} (match: {spectrogram_match})")
+    
+    # Cleanup temp images (optional, uncomment if needed)
+    # os.remove(actual_waveform_path)
+    # os.remove(actual_spectrogram_path)
+    
+    return waveform_match, spectrogram_match
+
+
 # Parameterized test for multiple models
 MODEL_PARAMS = [
     # (model_filename, expected_output_filenames)
@@ -71,10 +140,24 @@ MODEL_PARAMS = [
 
 
 @pytest.mark.parametrize("model,expected_files", MODEL_PARAMS)
-def test_model_separation(model, expected_files, input_file, cleanup_output_files):
+def test_model_separation(model, expected_files, input_file, reference_dir, cleanup_output_files):
     """Parameterized test for multiple model files."""
     # Add files to the cleanup list
     cleanup_output_files.extend(expected_files)
 
     # Run the test
     run_separation_test(model, input_file, expected_files)
+    
+    # Validate the output audio files
+    print(f"\nValidating output files for model {model}...")
+    for output_file in expected_files:
+        # Skip validation if reference images are not required (set environment variable to skip)
+        if os.environ.get("SKIP_AUDIO_VALIDATION") == "1":
+            print(f"Skipping audio validation for {output_file} (SKIP_AUDIO_VALIDATION=1)")
+            continue
+            
+        waveform_match, spectrogram_match = validate_audio_output(output_file, reference_dir)
+        
+        # Assert that the output matches the reference
+        assert waveform_match, f"Waveform for {output_file} does not match the reference"
+        assert spectrogram_match, f"Spectrogram for {output_file} does not match the reference"
