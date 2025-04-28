@@ -159,6 +159,10 @@ class MDXSeparator(CommonSeparator):
         source = self.demix(mix) * peak
         self.logger.debug("Demixing completed.")
 
+
+        if not isinstance(self.primary_source, np.ndarray):
+            self.primary_source = source.T
+
         # In UVR, the source is cached here if it's a vocal split model, but we're not supporting that yet
 
         # Initialize the list for output files
@@ -188,10 +192,6 @@ class MDXSeparator(CommonSeparator):
         # Save and process the primary stem if needed
         if not self.output_single_stem or self.output_single_stem.lower() == self.primary_stem_name.lower():
             self.primary_stem_output_path = self.get_stem_output_path(self.primary_stem_name, custom_output_names)
-
-            if not isinstance(self.primary_source, np.ndarray):
-                self.primary_source = source.T
-
             self.logger.info(f"Saving {self.primary_stem_name} stem to {self.primary_stem_output_path}...")
             self.final_process(self.primary_stem_output_path, self.primary_source, self.primary_stem_name)
             output_files.append(self.primary_stem_output_path)
