@@ -95,16 +95,22 @@ def generate_spectrogram_image(audio_path, output_path=None, fig_size=(10, 8)):
         return buf
 
 
-def compare_images(image1_path, image2_path, threshold=0.1):
-    """Compare two images and return the difference percentage.
+def compare_images(image1_path, image2_path, min_similarity_threshold=0.999):
+    """Compare two images and return the similarity percentage and match result.
     
     Args:
         image1_path: Path to the first image
         image2_path: Path to the second image
-        threshold: Threshold for considering images as different (0.0-1.0)
+        min_similarity_threshold: Minimum similarity required for images to be considered matching (0.0-1.0)
+            - Higher values (closer to 1.0) require images to be more similar
+            - Lower values (closer to 0.0) are more permissive
+            - A value of 0.99 requires 99% similarity between images
+            - A value of 0.0 would consider any images to match
         
     Returns:
-        Tuple of (match_percentage, is_similar)
+        Tuple of (similarity_score, is_match)
+        - similarity_score: Value between 0.0 and 1.0, where 1.0 means identical images
+        - is_match: Boolean indicating if similarity_score >= min_similarity_threshold
     """
     # Open images
     img1 = Image.open(image1_path).convert('RGB')
@@ -125,10 +131,13 @@ def compare_images(image1_path, image2_path, threshold=0.1):
     max_diff = 255.0 * 3  # Maximum possible difference per pixel (RGB)
     diff_percentage = np.sum(diff) / (arr1.size * max_diff)
     
-    # Determine if images are similar
-    is_similar = diff_percentage <= threshold
+    # Calculate similarity score (inverse of difference)
+    similarity_score = 1.0 - diff_percentage
     
-    return (1.0 - diff_percentage, is_similar)
+    # Determine if images match by comparing similarity to threshold
+    is_match = similarity_score >= min_similarity_threshold
+    
+    return (similarity_score, is_match)
 
 
 def generate_reference_images(input_path, output_dir=None, prefix=""):
