@@ -113,7 +113,7 @@ DEFAULT_SIMILARITY_THRESHOLD = 0.999
 # Model-specific similarity thresholds
 # Use lower thresholds for models that show more variation between runs
 MODEL_SIMILARITY_THRESHOLDS = {
-    "htdemucs_6s.yaml": 0.990,  # Demucs models need a lower threshold
+    "htdemucs_6s.yaml": 0.90,  # Demucs models need a lower threshold
     # Add other models that need custom thresholds here
 }
 

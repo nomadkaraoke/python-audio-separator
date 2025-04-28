@@ -65,9 +65,10 @@ audio-separator = 'audio_separator.utils.cli:main'
 [tool.poetry.group.dev.dependencies]
 black = ">=23"
 pytest = "*"
-pytest-cov = "^4.1.0"
-matplotlib = "^3.8.0"
-pillow = "^10.1.0"
+pytest-cov = ">=4.1.0"
+matplotlib = ">=3.8.0"
+pillow = ">=10.1.0"
+scikit-image = ">=0.22.0"
 
 [tool.black]
 line-length = 140

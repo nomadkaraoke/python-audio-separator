@@ -7,6 +7,7 @@ from PIL import Image
 from io import BytesIO
 import soundfile as sf
 from pathlib import Path
+from skimage.metrics import structural_similarity as ssim
 
 
 def generate_waveform_image(audio_path, output_path=None, fig_size=(10, 4)):
@@ -96,7 +97,7 @@ def generate_spectrogram_image(audio_path, output_path=None, fig_size=(10, 8)):
 
 
 def compare_images(image1_path, image2_path, min_similarity_threshold=0.999):
-    """Compare two images and return the similarity percentage and match result.
+    """Compare two images using Structural Similarity Index (SSIM) which is robust to small shifts.
     
     Args:
         image1_path: Path to the first image
@@ -124,15 +125,14 @@ def compare_images(image1_path, image2_path, min_similarity_threshold=0.999):
     arr1 = np.array(img1)
     arr2 = np.array(img2)
     
-    # Calculate difference
-    diff = np.abs(arr1.astype(float) - arr2.astype(float))
+    # Calculate SSIM for each color channel
+    similarity_scores = []
+    for channel in range(3):  # RGB channels
+        score = ssim(arr1[:,:,channel], arr2[:,:,channel], data_range=255)
+        similarity_scores.append(score)
     
-    # Normalize difference
-    max_diff = 255.0 * 3  # Maximum possible difference per pixel (RGB)
-    diff_percentage = np.sum(diff) / (arr1.size * max_diff)
-    
-    # Calculate similarity score (inverse of difference)
-    similarity_score = 1.0 - diff_percentage
+    # Calculate average SSIM across channels
+    similarity_score = np.mean(similarity_scores)
     
     # Determine if images match by comparing similarity to threshold
     is_match = similarity_score >= min_similarity_threshold

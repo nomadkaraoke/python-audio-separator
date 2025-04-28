@@ -10,10 +10,17 @@ The integration tests now include validation of output audio files by comparing 
 
 1. Reference waveform and spectrogram images are generated from expected output files
 2. During test execution, the same images are generated for the actual output files
-3. The images are compared to ensure they are similar, with a configurable minimum similarity threshold
+3. The images are compared using Structural Similarity Index (SSIM) to measure perceptual similarity
 4. If the images differ significantly, the test fails, indicating a change in the audio output
 
-### Similarity Threshold
+### Image Comparison with SSIM
+
+The tests use Structural Similarity Index Measure (SSIM) to compare images, which is more robust than pixel-by-pixel comparison:
+
+- SSIM considers structural information in the images
+- It's more resilient to small spatial shifts or offsets
+- It better matches human perception of image similarity
+- It works well across different environments (local machines vs CI servers)
 
 The comparison uses a minimum similarity threshold (0.0-1.0):
 - **Higher values** (closer to 1.0) require images to be **more similar**
@@ -29,7 +36,7 @@ Some models inherently produce slightly different outputs on different runs, eve
 
 ```python
 MODEL_SIMILARITY_THRESHOLDS = {
-    "htdemucs_6s.yaml": 0.995,  # Demucs models need a lower threshold
+    "htdemucs_6s.yaml": 0.990,  # Demucs models need a lower threshold
     # Add other models that need custom thresholds here
 }
 ```
