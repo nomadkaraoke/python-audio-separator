@@ -113,8 +113,7 @@ DEFAULT_SIMILARITY_THRESHOLD = 0.999
 # Model-specific similarity thresholds
 # Use lower thresholds for models that show more variation between runs
 MODEL_SIMILARITY_THRESHOLDS = {
-    "htdemucs_6s.yaml": 0.90,  # Demucs models need a lower threshold
-    # Add other models that need custom thresholds here
+    "htdemucs_6s.yaml": 0.80,  # Demucs multi-stem output (e.g. "Other" and "Piano") is a lot more variable
 }
 
 

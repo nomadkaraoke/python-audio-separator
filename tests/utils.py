@@ -30,13 +30,16 @@ def generate_waveform_image(audio_path, output_path=None, fig_size=(10, 4)):
     
     plt.figure(figsize=fig_size)
     
-    # Plot waveform for each channel
+    # Plot waveform for each channel with fixed Y-axis scale
     plt.subplot(2, 1, 1)
     plt.plot(y[0])
     plt.title('Channel 1')
+    plt.ylim([-1.0, 1.0])  # Fixed Y-axis scale for all waveforms
+    
     plt.subplot(2, 1, 2)
     plt.plot(y[1])
     plt.title('Channel 2')
+    plt.ylim([-1.0, 1.0])  # Fixed Y-axis scale for all waveforms
     
     plt.tight_layout()
     
@@ -72,15 +75,30 @@ def generate_spectrogram_image(audio_path, output_path=None, fig_size=(10, 8)):
     
     plt.figure(figsize=fig_size)
     
+    # Set fixed min and max values for spectrogram color scale
+    vmin = -80  # dB
+    vmax = 0    # dB
+    
     # Generate spectrograms for each channel
     for i in range(2):
         # Compute spectrogram
         S = librosa.amplitude_to_db(np.abs(librosa.stft(y[i])), ref=np.max)
         
         plt.subplot(2, 1, i+1)
-        librosa.display.specshow(S, sr=sr, x_axis='time', y_axis='log')
+        # Use fixed frequency range and consistent color scaling
+        librosa.display.specshow(
+            S, 
+            sr=sr, 
+            x_axis='time', 
+            y_axis='log',
+            vmin=vmin,
+            vmax=vmax
+        )
         plt.colorbar(format='%+2.0f dB')
         plt.title(f'Channel {i+1} Spectrogram')
+        
+        # Set frequency range (y-axis) - typically up to Nyquist frequency (sr/2)
+        plt.ylim([20, sr/2])  # From 20Hz to Nyquist frequency
     
     plt.tight_layout()
     
