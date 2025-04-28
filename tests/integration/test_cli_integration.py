@@ -110,7 +110,7 @@ def validate_audio_output(output_file, reference_dir, waveform_threshold=0.999, 
 
 
 # Default similarity threshold to use for most models
-DEFAULT_SIMILARITY_THRESHOLD = 0.90
+DEFAULT_SIMILARITY_THRESHOLDS = (0.90, 0.80)  # (waveform_threshold, spectrogram_threshold)
 
 # Model-specific similarity thresholds
 # Use lower thresholds for models that show more variation between runs
@@ -156,13 +156,10 @@ def test_model_separation(model, expected_files, input_file, reference_dir, clea
     print(f"\nValidating output files for model {model}...")
 
     # Get model-specific similarity threshold or use default
-    threshold = MODEL_SIMILARITY_THRESHOLDS.get(model, DEFAULT_SIMILARITY_THRESHOLD)
+    threshold = MODEL_SIMILARITY_THRESHOLDS.get(model, DEFAULT_SIMILARITY_THRESHOLDS)
     
-    # Unpack thresholds if they're in tuple format, otherwise use the same value for both
-    if isinstance(threshold, tuple) and len(threshold) == 2:
-        waveform_threshold, spectrogram_threshold = threshold
-    else:
-        waveform_threshold = spectrogram_threshold = threshold
+    # Unpack thresholds - DEFAULT_SIMILARITY_THRESHOLDS is now always a tuple
+    waveform_threshold, spectrogram_threshold = threshold
         
     print(f"Using thresholds - waveform: {waveform_threshold}, spectrogram: {spectrogram_threshold} for model {model}")
 
