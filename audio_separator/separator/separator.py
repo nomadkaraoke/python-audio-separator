@@ -93,6 +93,7 @@ class Separator:
         sample_rate=44100,
         use_soundfile=False,
         use_autocast=False,
+        use_directml=False,
         mdx_params={"hop_length": 1024, "segment_size": 256, "overlap": 0.25, "batch_size": 1, "enable_denoise": False},
         vr_params={"batch_size": 1, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False},
         demucs_params={"segment_size": "Default", "shifts": 2, "overlap": 0.25, "segments_enabled": True},
@@ -179,6 +180,7 @@ class Separator:
 
         self.use_soundfile = use_soundfile
         self.use_autocast = use_autocast
+        self.use_directml = use_directml
 
         # These are parameters which users may want to configure so we expose them to the top-level Separator class,
         # even though they are specific to a single model architecture
@@ -273,7 +275,7 @@ class Separator:
         elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available() and system_info.processor == "arm":
             self.configure_mps(ort_providers)
             hardware_acceleration_enabled = True
-        elif has_torch_dml_installed:
+        elif self.use_directml and has_torch_dml_installed:
             import torch_directml
             if torch_directml.is_available():
                 self.configure_dml(ort_providers)
@@ -315,6 +317,7 @@ class Separator:
         """
         This method configures the DirectML device for PyTorch and ONNX Runtime, if available.
         """
+        import torch_directml
         self.logger.info("DirectML is available in Torch, setting Torch device to DirectML")
         self.torch_device_dml = torch_directml.device() 
         self.torch_device = self.torch_device_dml
