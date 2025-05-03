@@ -50,8 +50,11 @@ class MDXCSeparator(CommonSeparator):
         # • Dropping the pitch may take more processing time but works well for tracks with high-pitched vocals.
         self.pitch_shift = arch_config.get("pitch_shift", 0)
 
+        self.process_all_stems = arch_config.get("process_all_stems", True)
+
         self.logger.debug(f"MDXC arch params: batch_size={self.batch_size}, segment_size={self.segment_size}, overlap={self.overlap}")
         self.logger.debug(f"MDXC arch params: override_model_segment_size={self.override_model_segment_size}, pitch_shift={self.pitch_shift}")
+        self.logger.debug(f"MDXC multi-stem params: process_all_stems={self.process_all_stems}")
 
         self.is_roformer = "is_roformer" in self.model_data
 
@@ -143,31 +146,74 @@ class MDXCSeparator(CommonSeparator):
 
         if isinstance(source, dict):
             self.logger.debug("Source is a dict, processing each stem...")
+            
+            stem_list = []
+            if self.model_data_cfgdict.training.target_instrument:
+                stem_list = [self.model_data_cfgdict.training.target_instrument]
+            else:
+                stem_list = self.model_data_cfgdict.training.instruments
+            
+            self.logger.debug(f"Available stems: {stem_list}")
 
-            if not isinstance(self.primary_source, np.ndarray):
-                self.logger.debug(f"Normalizing primary source for primary stem {self.primary_stem_name}...")
-                self.primary_source = spec_utils.normalize(wave=source[self.primary_stem_name], max_peak=self.normalization_threshold, min_peak=self.amplification_threshold).T
+            is_multi_stem_model = len(stem_list) > 2
+            should_process_all_stems = self.process_all_stems and is_multi_stem_model
+            
+            if should_process_all_stems:
+                self.logger.debug("Processing all stems from multi-stem model...")
+                for stem_name in stem_list:
+                    stem_output_path = self.get_stem_output_path(stem_name, custom_output_names)
+                    stem_source = spec_utils.normalize(
+                        wave=source[stem_name], 
+                        max_peak=self.normalization_threshold, 
+                        min_peak=self.amplification_threshold
+                    ).T
+                    
+                    self.logger.info(f"Saving {stem_name} stem to {stem_output_path}...")
+                    self.final_process(stem_output_path, stem_source, stem_name)
+                    output_files.append(stem_output_path)
+            else:
+                # Standard processing for primary and secondary stems
+                if not isinstance(self.primary_source, np.ndarray):
+                    self.logger.debug(f"Normalizing primary source for primary stem {self.primary_stem_name}...")
+                    self.primary_source = spec_utils.normalize(
+                        wave=source[self.primary_stem_name], 
+                        max_peak=self.normalization_threshold, 
+                        min_peak=self.amplification_threshold
+                    ).T
 
-            if not isinstance(self.secondary_source, np.ndarray):
-                self.logger.debug(f"Normalizing secondary source for secondary stem {self.secondary_stem_name}...")
-                self.secondary_source = spec_utils.normalize(wave=source[self.secondary_stem_name], max_peak=self.normalization_threshold, min_peak=self.amplification_threshold).T
+                if not isinstance(self.secondary_source, np.ndarray):
+                    self.logger.debug(f"Normalizing secondary source for secondary stem {self.secondary_stem_name}...")
+                    self.secondary_source = spec_utils.normalize(
+                        wave=source[self.secondary_stem_name], 
+                        max_peak=self.normalization_threshold, 
+                        min_peak=self.amplification_threshold
+                    ).T
 
-            if not self.output_single_stem or self.output_single_stem.lower() == self.secondary_stem_name.lower():
-                self.secondary_stem_output_path = self.get_stem_output_path(self.secondary_stem_name, custom_output_names)
+                if not self.output_single_stem or self.output_single_stem.lower() == self.secondary_stem_name.lower():
+                    self.secondary_stem_output_path = self.get_stem_output_path(self.secondary_stem_name, custom_output_names)
 
-                self.logger.info(f"Saving {self.secondary_stem_name} stem to {self.secondary_stem_output_path}...")
-                self.final_process(self.secondary_stem_output_path, self.secondary_source, self.secondary_stem_name)
-                output_files.append(self.secondary_stem_output_path)
+                    self.logger.info(f"Saving {self.secondary_stem_name} stem to {self.secondary_stem_output_path}...")
+                    self.final_process(self.secondary_stem_output_path, self.secondary_source, self.secondary_stem_name)
+                    output_files.append(self.secondary_stem_output_path)
+                
+                if not self.output_single_stem or self.output_single_stem.lower() == self.primary_stem_name.lower():
+                    self.primary_stem_output_path = self.get_stem_output_path(self.primary_stem_name, custom_output_names)
+                    
+                    self.logger.info(f"Saving {self.primary_stem_name} stem to {self.primary_stem_output_path}...")
+                    self.final_process(self.primary_stem_output_path, self.primary_source, self.primary_stem_name)
+                    output_files.append(self.primary_stem_output_path)
 
-        if not isinstance(source, dict) or not self.output_single_stem or self.output_single_stem.lower() == self.primary_stem_name.lower():
-            self.primary_stem_output_path = self.get_stem_output_path(self.primary_stem_name, custom_output_names)
+        else:
+            # Handle case when source is not a dictionary (single source model)
+            if not self.output_single_stem or self.output_single_stem.lower() == self.primary_stem_name.lower():
+                self.primary_stem_output_path = self.get_stem_output_path(self.primary_stem_name, custom_output_names)
 
-            if not isinstance(self.primary_source, np.ndarray):
-                self.primary_source = source.T
+                if not isinstance(self.primary_source, np.ndarray):
+                    self.primary_source = source.T
 
-            self.logger.info(f"Saving {self.primary_stem_name} stem to {self.primary_stem_output_path}...")
-            self.final_process(self.primary_stem_output_path, self.primary_source, self.primary_stem_name)
-            output_files.append(self.primary_stem_output_path)
+                self.logger.info(f"Saving {self.primary_stem_name} stem to {self.primary_stem_output_path}...")
+                self.final_process(self.primary_stem_output_path, self.primary_source, self.primary_stem_name)
+                output_files.append(self.primary_stem_output_path)
 
         return output_files
 
