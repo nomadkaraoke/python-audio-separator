@@ -102,7 +102,10 @@ class MDXCSeparator(CommonSeparator):
             else:
                 self.logger.debug("Loading TFC_TDF_net model...")
                 self.model_run = TFC_TDF_net(self.model_data_cfgdict, device=self.torch_device)
-                self.model_run.load_state_dict(torch.load(self.model_path, map_location=self.torch_device))
+                self.logger.debug("Loading model onto cpu")
+                # For some reason loading the state onto a hardware accelerated devices causes issues, 
+                # so we load it onto CPU first then move it to the device
+                self.model_run.load_state_dict(torch.load(self.model_path, map_location="cpu"))
                 self.model_run.to(self.torch_device).eval()
 
         except RuntimeError as e:
