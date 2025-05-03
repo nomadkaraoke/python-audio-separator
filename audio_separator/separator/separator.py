@@ -246,6 +246,7 @@ class Separator:
         onnxruntime_gpu_package = self.get_package_distribution("onnxruntime-gpu")
         onnxruntime_silicon_package = self.get_package_distribution("onnxruntime-silicon")
         onnxruntime_cpu_package = self.get_package_distribution("onnxruntime")
+        onnxruntime_dml_package = self.get_package_distribution("onnxruntime-directml")
 
         if onnxruntime_gpu_package is not None:
             self.logger.info(f"ONNX Runtime GPU package installed with version: {onnxruntime_gpu_package.version}")
@@ -253,6 +254,8 @@ class Separator:
             self.logger.info(f"ONNX Runtime Silicon package installed with version: {onnxruntime_silicon_package.version}")
         if onnxruntime_cpu_package is not None:
             self.logger.info(f"ONNX Runtime CPU package installed with version: {onnxruntime_cpu_package.version}")
+        if onnxruntime_dml_package is not None:
+            self.logger.info(f"ONNX Runtime DirectML package installed with version: {onnxruntime_dml_package.version}")
 
     def setup_torch_device(self, system_info):
         """
@@ -260,6 +263,7 @@ class Separator:
         """
         hardware_acceleration_enabled = False
         ort_providers = ort.get_available_providers()
+        has_torch_dml_installed = self.get_package_distribution("torch_directml")
 
         self.torch_device_cpu = torch.device("cpu")
 
@@ -269,6 +273,11 @@ class Separator:
         elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available() and system_info.processor == "arm":
             self.configure_mps(ort_providers)
             hardware_acceleration_enabled = True
+        elif has_torch_dml_installed:
+            import torch_directml
+            if torch_directml.is_available():
+                self.configure_dml(ort_providers)
+                hardware_acceleration_enabled = True
 
         if not hardware_acceleration_enabled:
             self.logger.info("No hardware acceleration could be configured, running in CPU mode")
@@ -301,6 +310,20 @@ class Separator:
             self.onnx_execution_provider = ["CoreMLExecutionProvider"]
         else:
             self.logger.warning("CoreMLExecutionProvider not available in ONNXruntime, so acceleration will NOT be enabled")
+
+    def configure_dml(self, ort_providers):
+        """
+        This method configures the DirectML device for PyTorch and ONNX Runtime, if available.
+        """
+        self.logger.info("DirectML is available in Torch, setting Torch device to DirectML")
+        self.torch_device_dml = torch_directml.device() 
+        self.torch_device = self.torch_device_dml
+
+        if "DmlExecutionProvider" in ort_providers:
+            self.logger.info("ONNXruntime has DmlExecutionProvider available, enabling acceleration")
+            self.onnx_execution_provider = ["DmlExecutionProvider"]
+        else:
+            self.logger.warning("DmlExecutionProvider not available in ONNXruntime, so acceleration will NOT be enabled")
 
     def get_package_distribution(self, package_name):
         """

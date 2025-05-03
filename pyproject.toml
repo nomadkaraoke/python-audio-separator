@@ -37,6 +37,7 @@ librosa = ">=0.10"
 samplerate = "0.1.0"
 six = ">=1.16"
 torch = ">=2.3"
+torch_directml = {version = "*", optional = true}
 tqdm = "*"
 pydub = ">=0.25"
 audioop-lts = { version = ">=0.2.1", python = "^3.13" }
@@ -44,6 +45,7 @@ onnx-weekly = { version = "*" }
 onnx2torch-py313 = ">=1.6"
 onnxruntime = { version = ">=1.17", optional = true }
 onnxruntime-gpu = { version = ">=1.17", optional = true }
+onnxruntime-directml = { version = ">=1.17", optional = true } # haven't tested different versions, but gonna assume 1.17, the same as others
 julius = ">=0.2"
 diffq-fixed = { version = ">=0.2", platform = "win32" }
 diffq = { version = ">=0.2", platform = "!=win32" }
@@ -58,6 +60,7 @@ scipy = "^1.13.0"
 [tool.poetry.extras]
 cpu = ["onnxruntime"]
 gpu = ["onnxruntime-gpu"]
+dml = ["onnxruntime-directml", "torch_directml"]
 
 [tool.poetry.scripts]
 audio-separator = 'audio_separator.utils.cli:main'
