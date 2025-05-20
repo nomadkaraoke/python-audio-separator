@@ -490,6 +490,10 @@ or
 ```sh
 poetry install --extras "gpu"
 ```
+or
+```sh
+poetry install --extras "dml"
+```
 
 ### Running the Command-Line Interface Locally
 

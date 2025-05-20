@@ -144,7 +144,7 @@ class VRSeparator(CommonSeparator):
             self.logger.debug("Determining model capacity...")
             self.model_run = nets.determine_model_capacity(self.model_params.param["bins"] * 2, nn_arch_size)
 
-        self.model_run.load_state_dict(torch.load(self.model_path, map_location=self.torch_device_cpu))
+        self.model_run.load_state_dict(torch.load(self.model_path, map_location="cpu"))
         self.model_run.to(self.torch_device)
         self.logger.debug("Model loaded and moved to device.")
 

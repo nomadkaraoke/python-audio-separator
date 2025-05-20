@@ -366,7 +366,7 @@ description = "Colored terminal output for Python's logging module"
 optional = true
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 groups = ["main"]
-markers = "extra == \"cpu\" or extra == \"gpu\""
+markers = "extra == \"cpu\" or extra == \"gpu\" or extra == \"dml\""
 files = [
     {file = "coloredlogs-15.0.1-py2.py3-none-any.whl", hash = "sha256:612ee75c546f53e92e70049c9dbfcc18c935a2b9a53b66085ce9ef6a6e5c0934"},
     {file = "coloredlogs-15.0.1.tar.gz", hash = "sha256:7c991aa71a4577af2f82600d8f8f3a89f936baeaf9b50a9c197da014e5bf16b0"},
@@ -761,7 +761,7 @@ description = "The FlatBuffers serialization format for Python"
 optional = true
 python-versions = "*"
 groups = ["main"]
-markers = "extra == \"cpu\" or extra == \"gpu\""
+markers = "extra == \"cpu\" or extra == \"gpu\" or extra == \"dml\""
 files = [
     {file = "flatbuffers-25.2.10-py2.py3-none-any.whl", hash = "sha256:ebba5f4d5ea615af3f7fd70fc310636fbb2bbd1f566ac0a23d98dd412de50051"},
     {file = "flatbuffers-25.2.10.tar.gz", hash = "sha256:97e451377a41262f8d9bd4295cc836133415cc03d8cb966410a4af92eb00d26e"},
@@ -888,7 +888,7 @@ description = "Human friendly output for text interfaces using Python"
 optional = true
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 groups = ["main"]
-markers = "extra == \"cpu\" or extra == \"gpu\""
+markers = "extra == \"cpu\" or extra == \"gpu\" or extra == \"dml\""
 files = [
     {file = "humanfriendly-10.0-py2.py3-none-any.whl", hash = "sha256:1697e1a8a8f550fd43c2865cd84542fc175a61dcb779b6fee18cf6b6ccba1477"},
     {file = "humanfriendly-10.0.tar.gz", hash = "sha256:6b0b831ce8f15f7300721aa49829fc4e83921a9a301cc7f606be6686a2288ddc"},
@@ -1884,6 +1884,29 @@ protobuf = "*"
 sympy = "*"
 
 [[package]]
+name = "onnxruntime-directml"
+version = "1.21.1"
+description = "ONNX Runtime is a runtime accelerator for Machine Learning models"
+optional = true
+python-versions = ">=3.10"
+groups = ["main"]
+markers = "extra == \"dml\""
+files = [
+    {file = "onnxruntime_directml-1.21.1-cp310-cp310-win_amd64.whl", hash = "sha256:c18bc21d8c2d9f4e0780198fe5609948390a585d6fe920149b3f31d2243ee5fb"},
+    {file = "onnxruntime_directml-1.21.1-cp311-cp311-win_amd64.whl", hash = "sha256:9479cc556dcd5f5c61e57ee9cbf9dbe33488af6bc7d13a3e6601ff0972fb56fd"},
+    {file = "onnxruntime_directml-1.21.1-cp312-cp312-win_amd64.whl", hash = "sha256:ebef3f6ec3bf02bf7758401020f9a20b767acbb47fbb4c9fbf461fe94b13ab70"},
+    {file = "onnxruntime_directml-1.21.1-cp313-cp313-win_amd64.whl", hash = "sha256:9e75454533fadf70930dfe07af2132653d9416bf3f3b10b4422fd80089669e69"},
+]
+
+[package.dependencies]
+coloredlogs = "*"
+flatbuffers = "*"
+numpy = ">=1.21.6"
+packaging = "*"
+protobuf = "*"
+sympy = "*"
+
+[[package]]
 name = "onnxruntime-gpu"
 version = "1.21.1"
 description = "ONNX Runtime is a runtime accelerator for Machine Learning models"
@@ -2159,7 +2182,7 @@ description = "A python implementation of GNU readline."
 optional = true
 python-versions = ">=3.8"
 groups = ["main"]
-markers = "sys_platform == \"win32\" and (extra == \"cpu\" or extra == \"gpu\")"
+markers = "sys_platform == \"win32\" and (extra == \"cpu\" or extra == \"gpu\" or extra == \"dml\")"
 files = [
     {file = "pyreadline3-3.5.4-py3-none-any.whl", hash = "sha256:eaf8e6cc3c49bcccf145fc6067ba8643d1df34d604a1ec0eccbf7a18e6d3fae6"},
     {file = "pyreadline3-3.5.4.tar.gz", hash = "sha256:8d57d53039a1c75adba8e50dd3d992b28143480816187ea5efbd5c78e6c885b7"},
@@ -2831,6 +2854,24 @@ opt-einsum = ["opt-einsum (>=3.3)"]
 optree = ["optree (>=0.13.0)"]
 
 [[package]]
+name = "torch-directml"
+version = "0.1.13.dev221216"
+description = "A DirectML backend for hardware acceleration in PyTorch."
+optional = true
+python-versions = ">=3.7"
+groups = ["main"]
+markers = "extra == \"dml\""
+files = [
+    {file = "torch_directml-0.1.13.dev221216-cp310-cp310-manylinux2014_x86_64.whl", hash = "sha256:ba0d4c9ee66bc8aee4d7e0adc8908b273cfc0c28d2302be31f7178c7e29c50b1"},
+    {file = "torch_directml-0.1.13.dev221216-cp310-cp310-win_amd64.whl", hash = "sha256:10068d661a0217abf358f7012eb4e7926fc5d858d0c40b42cc0ed91cda0bdd46"},
+    {file = "torch_directml-0.1.13.dev221216-cp37-cp37m-win_amd64.whl", hash = "sha256:1bdb1015a1205e8f9e56889c5df7d5dcc7686346588f16b936b6a9418e05f67d"},
+    {file = "torch_directml-0.1.13.dev221216-cp38-cp38-manylinux2014_x86_64.whl", hash = "sha256:fc63b154e5199d13f34bc4e4de80ab5952794d464ae906ecee8f8445a794d006"},
+    {file = "torch_directml-0.1.13.dev221216-cp38-cp38-win_amd64.whl", hash = "sha256:bbc21ddc43182ce7839dd77eb15303b69e597656fcd6a5456542ad5751bf08e0"},
+    {file = "torch_directml-0.1.13.dev221216-cp39-cp39-manylinux2014_x86_64.whl", hash = "sha256:ce6fa42ca1ee1e7124ca7d0bc08d3afbd20b91369734c7d38ba4fbe7a8edccf4"},
+    {file = "torch_directml-0.1.13.dev221216-cp39-cp39-win_amd64.whl", hash = "sha256:c140f0170a864d53f6a7bbbc7ef6e831ba9c05bef42ec31e5f69f056e96ba0f1"},
+]
+
+[[package]]
 name = "torchvision"
 version = "0.22.0"
 description = "image and video datasets and models for torch deep learning"
@@ -2953,9 +2994,10 @@ zstd = ["zstandard (>=0.18.0)"]
 
 [extras]
 cpu = ["onnxruntime"]
+dml = ["onnxruntime-directml", "torch_directml"]
 gpu = ["onnxruntime-gpu"]
 
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10"
-content-hash = "9a0c6252b739b53032890c8ecbe8f93e1f777ed1f0eaae4cf5748166c3b8c01f"
+content-hash = "a413533db656a5d72053a436837c4f32d461b716b8dc82a29b277d4103e9d020"
