@@ -152,22 +152,22 @@ class MDXSeparator(CommonSeparator):
         mix = self.prepare_mix(self.audio_file_path)
 
         self.logger.debug("Normalizing mix before demixing...")
+        peak = np.abs(mix).max()
         mix = spec_utils.normalize(wave=mix, max_peak=self.normalization_threshold, min_peak=self.amplification_threshold)
 
         # Start the demixing process
-        source = self.demix(mix)
+        source = self.demix(mix) * peak
         self.logger.debug("Demixing completed.")
+
+
+        if not isinstance(self.primary_source, np.ndarray):
+            self.primary_source = source.T
 
         # In UVR, the source is cached here if it's a vocal split model, but we're not supporting that yet
 
         # Initialize the list for output files
         output_files = []
         self.logger.debug("Processing output files...")
-
-        # Normalize and transpose the primary source if it's not already an array
-        if not isinstance(self.primary_source, np.ndarray):
-            self.logger.debug("Normalizing primary source...")
-            self.primary_source = spec_utils.normalize(wave=source, max_peak=self.normalization_threshold, min_peak=self.amplification_threshold).T
 
         # Process the secondary source if not already an array
         if not isinstance(self.secondary_source, np.ndarray):
@@ -176,10 +176,10 @@ class MDXSeparator(CommonSeparator):
 
             if self.invert_using_spec:
                 self.logger.debug("Inverting secondary stem using spectogram as invert_using_spec is set to True")
-                self.secondary_source = spec_utils.invert_stem(raw_mix, source)
+                self.secondary_source = spec_utils.invert_stem(raw_mix, self.primary_source * self.compensate)
             else:
                 self.logger.debug("Inverting secondary stem by subtracting of transposed demixed stem from transposed original mix")
-                self.secondary_source = mix.T - source.T
+                self.secondary_source = (-self.primary_source * self.compensate) + mix.T
 
         # Save and process the secondary stem if needed
         if not self.output_single_stem or self.output_single_stem.lower() == self.secondary_stem_name.lower():
@@ -192,10 +192,6 @@ class MDXSeparator(CommonSeparator):
         # Save and process the primary stem if needed
         if not self.output_single_stem or self.output_single_stem.lower() == self.primary_stem_name.lower():
             self.primary_stem_output_path = self.get_stem_output_path(self.primary_stem_name, custom_output_names)
-
-            if not isinstance(self.primary_source, np.ndarray):
-                self.primary_source = source.T
-
             self.logger.info(f"Saving {self.primary_stem_name} stem to {self.primary_stem_output_path}...")
             self.final_process(self.primary_stem_output_path, self.primary_source, self.primary_stem_name)
             output_files.append(self.primary_stem_output_path)
@@ -254,7 +250,15 @@ class MDXSeparator(CommonSeparator):
             pad = self.gen_size + self.trim - (mix.shape[-1] % self.gen_size)
             self.logger.debug(f"Padding calculated: {pad}")
             # Add padding at the beginning and the end of the mix
-            mixture = np.concatenate((np.zeros((2, self.trim), dtype="float32"), mix, np.zeros((2, pad), dtype="float32")), 1)
+            mixture = np.concatenate(
+                (
+                    np.zeros((2, self.trim), dtype="float32"),  # Pad at the start
+                    mix,
+                    np.zeros((2, pad), dtype="float32"),        # Pad in the middle (to match chunk size)
+                    np.zeros((2, self.trim), dtype="float32"),  # Pad at the end
+                ),
+                1
+            )
             # Determine the number of chunks based on the mixture's length
             num_chunks = mixture.shape[-1] // self.gen_size
             self.logger.debug(f"Mixture shape after padding: {mixture.shape}, Number of chunks: {num_chunks}")
@@ -401,11 +405,6 @@ class MDXSeparator(CommonSeparator):
         self.logger.debug(f"Concatenated tar_waves. Shape: {tar_waves.shape}")
 
         # TODO: In UVR, pitch changing happens here. Consider implementing this as a feature.
-
-        # Compensates the source if not matching the mix.
-        if not is_match_mix:
-            source *= self.compensate
-            self.logger.debug("Match mix mode; compensate multiplier applied.")
 
         # TODO: In UVR, VR denoise model gets applied here. Consider implementing this as a feature.
 
