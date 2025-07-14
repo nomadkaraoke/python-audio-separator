@@ -29,9 +29,60 @@ def main():
     # Separate command
     separate_parser = subparsers.add_parser("separate", help="Separate audio files")
     separate_parser.add_argument("audio_files", nargs="+", help="Audio file paths to separate")
-    separate_parser.add_argument("-m", "--model", help="Model to use for separation")
+
+    # Model selection
+    model_group = separate_parser.add_mutually_exclusive_group()
+    model_group.add_argument("-m", "--model", help="Single model to use for separation")
+    model_group.add_argument("--models", nargs="+", help="Multiple models to use for separation")
+
     separate_parser.add_argument("--timeout", type=int, default=600, help="Timeout in seconds for polling (default: 600)")
     separate_parser.add_argument("--poll_interval", type=int, default=10, help="Polling interval in seconds (default: 10)")
+
+    # Output parameters
+    output_group = separate_parser.add_argument_group("Output Parameters")
+    output_group.add_argument("--output_format", default="flac", help="Output format for separated files (default: %(default)s)")
+    output_group.add_argument("--output_bitrate", help="Output bitrate for separated files")
+    output_group.add_argument("--normalization", type=float, default=0.9, help="Max peak amplitude to normalize audio to (default: %(default)s)")
+    output_group.add_argument("--amplification", type=float, default=0.0, help="Min peak amplitude to amplify audio to (default: %(default)s)")
+    output_group.add_argument("--single_stem", help="Output only single stem (e.g. Vocals, Instrumental)")
+    output_group.add_argument("--invert_spect", action="store_true", help="Invert secondary stem using spectrogram")
+    output_group.add_argument("--sample_rate", type=int, default=44100, help="Sample rate of output audio (default: %(default)s)")
+    output_group.add_argument("--use_soundfile", action="store_true", help="Use soundfile for output writing")
+    output_group.add_argument("--use_autocast", action="store_true", help="Use PyTorch autocast for faster inference")
+    output_group.add_argument("--custom_output_names", type=json.loads, help="Custom output names in JSON format")
+
+    # MDX parameters
+    mdx_group = separate_parser.add_argument_group("MDX Architecture Parameters")
+    mdx_group.add_argument("--mdx_segment_size", type=int, default=256, help="MDX segment size (default: %(default)s)")
+    mdx_group.add_argument("--mdx_overlap", type=float, default=0.25, help="MDX overlap (default: %(default)s)")
+    mdx_group.add_argument("--mdx_batch_size", type=int, default=1, help="MDX batch size (default: %(default)s)")
+    mdx_group.add_argument("--mdx_hop_length", type=int, default=1024, help="MDX hop length (default: %(default)s)")
+    mdx_group.add_argument("--mdx_enable_denoise", action="store_true", help="Enable MDX denoising")
+
+    # VR parameters
+    vr_group = separate_parser.add_argument_group("VR Architecture Parameters")
+    vr_group.add_argument("--vr_batch_size", type=int, default=1, help="VR batch size (default: %(default)s)")
+    vr_group.add_argument("--vr_window_size", type=int, default=512, help="VR window size (default: %(default)s)")
+    vr_group.add_argument("--vr_aggression", type=int, default=5, help="VR aggression (default: %(default)s)")
+    vr_group.add_argument("--vr_enable_tta", action="store_true", help="Enable VR Test-Time-Augmentation")
+    vr_group.add_argument("--vr_high_end_process", action="store_true", help="Enable VR high end processing")
+    vr_group.add_argument("--vr_enable_post_process", action="store_true", help="Enable VR post processing")
+    vr_group.add_argument("--vr_post_process_threshold", type=float, default=0.2, help="VR post process threshold (default: %(default)s)")
+
+    # Demucs parameters
+    demucs_group = separate_parser.add_argument_group("Demucs Architecture Parameters")
+    demucs_group.add_argument("--demucs_segment_size", default="Default", help="Demucs segment size (default: %(default)s)")
+    demucs_group.add_argument("--demucs_shifts", type=int, default=2, help="Demucs shifts (default: %(default)s)")
+    demucs_group.add_argument("--demucs_overlap", type=float, default=0.25, help="Demucs overlap (default: %(default)s)")
+    demucs_group.add_argument("--demucs_segments_enabled", type=bool, default=True, help="Enable Demucs segments (default: %(default)s)")
+
+    # MDXC parameters
+    mdxc_group = separate_parser.add_argument_group("MDXC Architecture Parameters")
+    mdxc_group.add_argument("--mdxc_segment_size", type=int, default=256, help="MDXC segment size (default: %(default)s)")
+    mdxc_group.add_argument("--mdxc_override_model_segment_size", action="store_true", help="Override MDXC model segment size")
+    mdxc_group.add_argument("--mdxc_overlap", type=int, default=8, help="MDXC overlap (default: %(default)s)")
+    mdxc_group.add_argument("--mdxc_batch_size", type=int, default=1, help="MDXC batch size (default: %(default)s)")
+    mdxc_group.add_argument("--mdxc_pitch_shift", type=int, default=0, help="MDXC pitch shift (default: %(default)s)")
 
     # Status command
     status_parser = subparsers.add_parser("status", help="Check job status")
@@ -113,20 +164,64 @@ def handle_separate_command(args, api_client: AudioSeparatorAPIClient, logger: l
         logger.info(f"Uploading '{audio_file}' to audio separator...")
 
         try:
-            result = api_client.separate_audio(audio_file, args.model)
+            # Prepare parameters for separation
+            kwargs = {
+                "model": args.model,
+                "models": args.models,
+                "timeout": args.timeout,
+                "poll_interval": args.poll_interval,
+                "download": True,  # Always download in CLI
+                "output_dir": None,  # Use current directory
+                # Output parameters
+                "output_format": args.output_format,
+                "output_bitrate": args.output_bitrate,
+                "normalization_threshold": args.normalization,
+                "amplification_threshold": args.amplification,
+                "output_single_stem": args.single_stem,
+                "invert_using_spec": args.invert_spect,
+                "sample_rate": args.sample_rate,
+                "use_soundfile": args.use_soundfile,
+                "use_autocast": args.use_autocast,
+                "custom_output_names": args.custom_output_names,
+                # MDX parameters
+                "mdx_segment_size": args.mdx_segment_size,
+                "mdx_overlap": args.mdx_overlap,
+                "mdx_batch_size": args.mdx_batch_size,
+                "mdx_hop_length": args.mdx_hop_length,
+                "mdx_enable_denoise": args.mdx_enable_denoise,
+                # VR parameters
+                "vr_batch_size": args.vr_batch_size,
+                "vr_window_size": args.vr_window_size,
+                "vr_aggression": args.vr_aggression,
+                "vr_enable_tta": args.vr_enable_tta,
+                "vr_high_end_process": args.vr_high_end_process,
+                "vr_enable_post_process": args.vr_enable_post_process,
+                "vr_post_process_threshold": args.vr_post_process_threshold,
+                # Demucs parameters
+                "demucs_segment_size": args.demucs_segment_size,
+                "demucs_shifts": args.demucs_shifts,
+                "demucs_overlap": args.demucs_overlap,
+                "demucs_segments_enabled": args.demucs_segments_enabled,
+                # MDXC parameters
+                "mdxc_segment_size": args.mdxc_segment_size,
+                "mdxc_override_model_segment_size": args.mdxc_override_model_segment_size,
+                "mdxc_overlap": args.mdxc_overlap,
+                "mdxc_batch_size": args.mdxc_batch_size,
+                "mdxc_pitch_shift": args.mdxc_pitch_shift,
+            }
 
-            # Poll for completion
-            task_id = result["task_id"]
-            logger.info(f"✅ Job submitted! Task ID: {task_id}")
-            logger.info("🔄 Polling for completion...")
+            # Use the convenience method that handles everything
+            result = api_client.separate_audio_and_wait(audio_file, **kwargs)
 
-            if poll_for_completion(task_id, api_client, logger, args.timeout, args.poll_interval):
-                # Get final status to get file list
-                final_status = api_client.get_job_status(task_id)
-                if final_status["status"] == "completed":
-                    download_files(task_id, final_status["files"], api_client, logger)
+            if result["status"] == "completed":
+                if "downloaded_files" in result:
+                    logger.info(f"✅ Separation completed! Downloaded {len(result['downloaded_files'])} files:")
+                    for file_path in result["downloaded_files"]:
+                        logger.info(f"  - {file_path}")
                 else:
-                    logger.error(f"❌ Job failed: {final_status.get('error', 'Unknown error')}")
+                    logger.info(f"✅ Separation completed! Files available for download: {result['files']}")
+            else:
+                logger.error(f"❌ Separation failed: {result.get('error', 'Unknown error')}")
 
         except Exception as e:
             logger.error(f"❌ Error processing '{audio_file}': {e}")
@@ -139,11 +234,15 @@ def handle_status_command(args, api_client: AudioSeparatorAPIClient, logger: log
 
         logger.info(f"Job Status: {status['status']}")
         if "progress" in status:
-            logger.info(f"Progress: {status['progress']}%")
+            progress_info = f"Progress: {status['progress']}%"
+            if "current_model_index" in status and "total_models" in status:
+                model_info = f" (Model {status['current_model_index'] + 1}/{status['total_models']})"
+                progress_info += model_info
+            logger.info(progress_info)
         if "original_filename" in status:
             logger.info(f"Original File: {status['original_filename']}")
-        if "model_used" in status:
-            logger.info(f"Model Used: {status['model_used']}")
+        if "models_used" in status:
+            logger.info(f"Models Used: {', '.join(status['models_used'])}")
         if status["status"] == "error" and "error" in status:
             logger.error(f"Error: {status['error']}")
         elif status["status"] == "completed" and "files" in status:
@@ -193,7 +292,11 @@ def poll_for_completion(task_id: str, api_client: AudioSeparatorAPIClient, logge
 
             # Show progress if it changed
             if "progress" in status and status["progress"] != last_progress:
-                logger.info(f"📊 Progress: {status['progress']}%")
+                progress_info = f"📊 Progress: {status['progress']}%"
+                if "current_model_index" in status and "total_models" in status:
+                    model_info = f" (Model {status['current_model_index'] + 1}/{status['total_models']})"
+                    progress_info += model_info
+                logger.info(progress_info)
                 last_progress = status["progress"]
 
             # Check if completed

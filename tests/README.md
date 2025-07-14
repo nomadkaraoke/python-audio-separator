@@ -2,6 +2,35 @@
 
 This directory contains tests for the audio-separator project.
 
+## Test Structure
+
+### Unit Tests (`tests/unit/`)
+- **Core functionality tests**: `test_cli.py`, `test_stft.py`
+- **Remote API tests**: `test_remote_api_client.py`, `test_remote_cli.py`
+
+### Integration Tests (`tests/integration/`)
+- **CLI integration tests**: `test_cli_integration.py`
+- **Audio output validation**: `test_separator_output_integration.py`
+- **Remote API integration tests**: `test_remote_api_integration.py`
+
+## Remote API Tests
+
+The project includes comprehensive tests for the remote API functionality:
+
+- **61 tests** covering all remote API components
+- **Unit tests** with mocked HTTP responses
+- **Integration tests** with a mock HTTP server
+- **End-to-end workflow tests**
+
+Key features tested:
+- Multiple model support (upload once, process with multiple models)
+- Full parameter compatibility with local CLI
+- Asynchronous processing with job polling
+- Error handling and edge cases
+- File upload/download workflows
+
+See `tests/remote/README.md` for detailed documentation on remote API tests.
+
 ## Audio Validation
 
 The integration tests now include validation of output audio files by comparing waveform and spectrogram images with reference images. This helps ensure that the audio separation results remain consistent across different runs and code changes.
@@ -96,8 +125,24 @@ pytest tests/unit/
 pytest tests/integration/
 ```
 
+To run remote API tests:
+
+```bash
+# All remote API tests (unit + integration)
+pytest tests/unit/test_remote*.py tests/integration/test_remote*.py -v
+
+# Only unit tests (fast, no HTTP server)
+pytest tests/unit/test_remote*.py -v
+
+# Only integration tests (with mock HTTP server)
+pytest tests/integration/test_remote*.py -v
+```
+
 To run with coverage:
 
 ```bash
 pytest --cov=audio_separator
+
+# Coverage for remote API specifically
+pytest tests/unit/test_remote*.py tests/integration/test_remote*.py --cov=audio_separator.remote --cov-report=html
 ``` 
