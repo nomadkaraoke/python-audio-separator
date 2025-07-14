@@ -2,6 +2,10 @@
 
 Audio Separator includes a remote API client that allows you to connect to a deployed Audio Separator API service, enabling you to perform audio separation without running the models locally. The API uses asynchronous processing with job polling for efficient handling of separation tasks.
 
+To make this easy to set up and use cheaply, we've created a deployment script for [modal.com](https://modal.com) who currently (July 2025) offer $30/mo free in GPU credits.
+Considering [their pricing](https://modal.com/pricing) for execution with an Nvidia T4 is $0.000164 / sec and most audio-separation jobs take less than 2 minutes, that's around $0.019 per separation job.
+With $30/month in free credits, that's over **1,500 GPU-accelerated audio separation jobs per month, for free!**
+
 **✨ Key Features:**
 - **Multiple Model Support**: Upload once, separate with multiple models in a single job
 - **Full Parameter Compatibility**: All local CLI parameters and architecture settings supported
