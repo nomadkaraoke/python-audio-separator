@@ -159,7 +159,7 @@ python -m pip install ort-nightly-gpu --index-url=https://aiinfra.pkgs.visualstu
 You can use Audio Separator via the command line, for example:
 
 ```sh
-audio-separator /path/to/your/input/audio.wav --model_filename UVR-MDX-NET-Inst_HQ_3.onnx
+audio-separator /path/to/your/input/audio.wav --model_filename model_bs_roformer_ep_317_sdr_12.9755.ckpt
 ```
 
 This command will download the specified model file, process the `audio.wav` input audio and generate two new files in the current directory, one containing vocals and one containing instrumental.
@@ -342,7 +342,7 @@ from audio_separator.separator import Separator
 separator = Separator()
 
 # Load a model
-separator.load_model(model_filename='UVR-MDX-NET-Inst_HQ_3.onnx')
+separator.load_model(model_filename='model_bs_roformer_ep_317_sdr_12.9755.ckpt')
 
 # Separate multiple audio files without reloading the model
 output_files = separator.separate(['audio1.wav', 'audio2.wav', 'audio3.wav'])
@@ -362,7 +362,7 @@ from audio_separator.separator import Separator
 separator = Separator()
 
 # Load a model
-separator.load_model(model_filename='UVR-MDX-NET-Inst_HQ_3.onnx')
+separator.load_model(model_filename='model_bs_roformer_ep_317_sdr_12.9755.ckpt')
 
 # Separate all audio files located in a folder
 output_files = separator.separate('path/to/audio_directory')
@@ -438,6 +438,179 @@ You can also rename specific stems:
 - **`vr_params`:** (Optional) VR Architecture Specific Attributes & Defaults. `Default: {"batch_size": 1, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False}`
 - **`demucs_params`:** (Optional) Demucs Architecture Specific Attributes & Defaults. `Default: {"segment_size": "Default", "shifts": 2, "overlap": 0.25, "segments_enabled": True}`
 - **`mdxc_params`:** (Optional) MDXC Architecture Specific Attributes & Defaults. `Default: {"segment_size": 256, "override_model_segment_size": False, "batch_size": 1, "overlap": 8, "pitch_shift": 0}`
+
+
+## Remote API Usage 🌐
+
+Audio Separator includes a remote API client that allows you to connect to a deployed Audio Separator API service, enabling you to perform audio separation without running the models locally. The API uses asynchronous processing with job polling for efficient handling of separation tasks.
+
+### Deploying the API Server
+
+To use the remote API functionality, you'll need to deploy the Audio Separator API server. The easiest way is using Modal.com:
+
+1. **Sign up for Modal.com** at [modal.com](https://modal.com)
+2. **Install the Modal CLI** and authenticate:
+   ```bash
+   pip install modal
+   modal setup
+   ```
+3. **Deploy the Audio Separator API**:
+   ```bash
+   modal deploy audio_separator/remote/deploy_modal.py
+   ```
+4. **Get your API URL** from the deployment output. It will look like:
+   ```
+   https://USERNAME--audio-separator-api.modal.run
+   ```
+
+Set this API URL as an environment variable:
+```bash
+export AUDIO_SEPARATOR_API_URL="https://USERNAME--audio-separator-api.modal.run"
+```
+
+Or pass it directly with the `--api_url` parameter.
+
+### Remote API Client (Python)
+
+You can use the `AudioSeparatorAPIClient` class to interact with a remote Audio Separator API:
+
+```python
+import logging
+from audio_separator.remote import AudioSeparatorAPIClient
+
+# Set up logging
+logger = logging.getLogger(__name__)
+
+# Initialize the API client
+api_client = AudioSeparatorAPIClient("https://USERNAME--audio-separator-api.modal.run", logger)
+
+# Simple example: separate audio and get results
+result = api_client.separate_audio_and_wait("audio.mp3")
+if result["status"] == "completed":
+    print(f"✅ Separation completed! Downloaded files:")
+    for file_path in result["downloaded_files"]:
+        print(f"  - {file_path}")
+else:
+    print(f"❌ Separation failed: {result.get('error', 'Unknown error')}")
+
+# Complex example with custom options
+result = api_client.separate_audio_and_wait(
+    "path/to/audio.wav",
+    model="model_bs_roformer_ep_317_sdr_12.9755.ckpt",
+    timeout=300,           # Wait up to 5 minutes
+    poll_interval=10,      # Check status every 10 seconds
+    download=True,         # Automatically download files
+    output_dir="./output"  # Save files to specific directory
+)
+
+# Advanced approach: manual job management (for custom polling logic)
+result = api_client.separate_audio("path/to/audio.wav", model="model_bs_roformer_ep_317_sdr_12.9755.ckpt")
+task_id = result["task_id"]
+print(f"Job submitted! Task ID: {task_id}")
+
+# Custom polling logic
+import time
+while True:
+    status = api_client.get_job_status(task_id)
+    print(f"Job status: {status['status']}")
+    
+    if status["status"] == "completed":
+        # Download files manually
+        for filename in status["files"]:
+            output_path = api_client.download_file(task_id, filename)
+            print(f"Downloaded: {output_path}")
+        break
+    elif status["status"] == "error":
+        print(f"Job failed: {status.get('error', 'Unknown error')}")
+        break
+    else:
+        if "progress" in status:
+            print(f"Progress: {status['progress']}%")
+        time.sleep(10)  # Wait 10 seconds
+
+# List available models
+models = api_client.list_models()
+print(models["text"])
+
+# Get server version
+version = api_client.get_server_version()
+print(f"Server version: {version}")
+```
+
+### Remote API CLI
+
+Audio Separator also provides a command-line interface for interacting with remote APIs:
+
+#### Commands
+
+**Separate audio files:**
+```bash
+# Separate audio file (asynchronous processing)
+audio-separator-remote separate audio.wav --model model_bs_roformer_ep_317_sdr_12.9755.ckpt
+
+# Multiple files
+audio-separator-remote separate audio1.wav audio2.wav audio3.wav
+
+# Use default model (if not specified)
+audio-separator-remote separate audio.wav
+```
+
+**Check job status:**
+```bash
+audio-separator-remote status <task_id>
+```
+
+**List available models:**
+```bash
+# Pretty formatted list
+audio-separator-remote models
+
+# JSON output
+audio-separator-remote models --format json
+
+# Filter by stem type
+audio-separator-remote models --filter vocals
+```
+
+**Download specific files:**
+```bash
+audio-separator-remote download <task_id> filename1.wav filename2.wav
+```
+
+**Get version information:**
+```bash
+audio-separator-remote --version
+```
+
+#### CLI Options
+
+- `--api_url`: Override the API URL
+- `--timeout`: Set timeout for polling (default: 600 seconds)
+- `--poll_interval`: Set polling interval (default: 10 seconds)
+- `--debug`: Enable debug logging
+- `--log_level`: Set log level (info, debug, warning, etc.)
+
+#### Examples
+
+```bash
+# Separate with custom settings
+audio-separator-remote separate song.mp3 \
+  --model model_bs_roformer_ep_317_sdr_12.9755.ckpt \
+  --api_url https://my-api.com \
+  --timeout 300
+
+# Check status with debug logging
+audio-separator-remote status abc123 --debug
+
+# List vocal separation models in JSON format
+audio-separator-remote models --filter vocals --format json
+```
+
+The remote API client automatically handles:
+- File uploading and downloading
+- Job polling and status updates
+- Error handling and retries
+- Progress reporting
 
 ## Requirements 📋
 
