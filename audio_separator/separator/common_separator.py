@@ -317,6 +317,18 @@ class CommonSeparator:
         """
         self.logger.debug(f"Entering write_audio_soundfile with stem_path: {stem_path}")
 
+        stem_source = spec_utils.normalize(wave=stem_source, max_peak=self.normalization_threshold, min_peak=self.amplification_threshold)
+
+        # Check if the numpy array is empty or contains very low values
+        if np.max(np.abs(stem_source)) < 1e-6:
+            self.logger.warning("Warning: stem_source array is near-silent or empty.")
+            return
+
+        # If output_dir is specified, create it and join it with stem_path
+        if self.output_dir:
+            os.makedirs(self.output_dir, exist_ok=True)
+            stem_path = os.path.join(self.output_dir, stem_path)
+
         # Correctly interleave stereo channels if needed
         if stem_source.shape[1] == 2:
             # If the audio is already interleaved, ensure it's in the correct order
