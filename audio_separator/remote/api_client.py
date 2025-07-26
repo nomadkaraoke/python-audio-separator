@@ -274,43 +274,69 @@ class AudioSeparatorAPIClient:
                 if current_status == "completed":
                     self.logger.info("✅ Separation completed!")
                     
-                    files_list = status.get("files", [])
-                    self.logger.info(f"🔍 Job status returned {len(files_list)} files")
-                    for i, file in enumerate(files_list):
-                        self.logger.info(f"  [{i}] '{file}' (len={len(file)}, repr={repr(file)})")
-
-                    result = {"task_id": task_id, "status": "completed", "files": files_list}
+                    files_data = status.get("files", {})
+                    
+                    # Handle both old (list) and new (dict) format for backward compatibility
+                    if isinstance(files_data, list):
+                        # Legacy format: list of filenames
+                        self.logger.info(f"🔍 Job status returned {len(files_data)} files (legacy format)")
+                        for i, filename in enumerate(files_data):
+                            self.logger.info(f"  [{i}] '{filename}' (len={len(filename)})")
+                        result = {"task_id": task_id, "status": "completed", "files": files_data}
+                    else:
+                        # New format: dictionary of hash -> filename
+                        self.logger.info(f"🔍 Job status returned {len(files_data)} files (hash format)")
+                        for i, (file_hash, filename) in enumerate(files_data.items()):
+                            self.logger.info(f"  [{i}] hash={file_hash} -> '{filename}' (len={len(filename)})")
+                        result = {"task_id": task_id, "status": "completed", "files": files_data}
 
                     # Download files if requested
                     if download:
                         downloaded_files = []
-                        files_list = status.get("files", [])
-                        self.logger.info(f"📥 Downloading {len(files_list)} output files...")
+                        files_data = status.get("files", {})
                         
-                        # Log the filenames we're trying to download for debugging
-                        self.logger.info(f"🔍 Files to download: {files_list}")
+                        # Handle both old (list) and new (dict) format
+                        if isinstance(files_data, list):
+                            # Legacy format: list of filenames
+                            self.logger.info(f"📥 Downloading {len(files_data)} output files (legacy format)...")
+                            self.logger.info(f"🔍 Files to download: {files_data}")
 
-                        for i, filename in enumerate(files_list):
-                            try:
-                                self.logger.info(f"🔍 [{i+1}/{len(files_list)}] Attempting to download: '{filename}' (len={len(filename)})")
-                                
-                                if output_dir:
-                                    output_path = f"{output_dir.rstrip('/')}/{filename}"
-                                else:
-                                    output_path = filename
-
-                                downloaded_path = self.download_file(task_id, filename, output_path)
-                                downloaded_files.append(downloaded_path)
-                                self.logger.info(f"  ✅ Downloaded: {downloaded_path}")
-                            except Exception as e:
-                                self.logger.error(f"  ❌ Failed to download {filename}: {e}")
-                                
-                                # Try to get server version on download failure for debugging
+                            for i, filename in enumerate(files_data):
                                 try:
-                                    server_version = self.get_server_version()
-                                    self.logger.error(f"🔍 Server version when download failed: {server_version}")
-                                except Exception as version_error:
-                                    self.logger.error(f"🔍 Could not get server version: {version_error}")
+                                    self.logger.info(f"🔍 [{i+1}/{len(files_data)}] Attempting to download: '{filename}' (len={len(filename)})")
+                                    
+                                    if output_dir:
+                                        output_path = f"{output_dir.rstrip('/')}/{filename}"
+                                    else:
+                                        output_path = filename
+
+                                    downloaded_path = self.download_file(task_id, filename, output_path)
+                                    downloaded_files.append(downloaded_path)
+                                    self.logger.info(f"  ✅ Downloaded: {downloaded_path}")
+                                except Exception as e:
+                                    self.logger.error(f"  ❌ Failed to download {filename}: {e}")
+                                    self._log_server_version_on_error()
+                        else:
+                            # New format: dictionary of hash -> filename
+                            self.logger.info(f"📥 Downloading {len(files_data)} output files (hash format)...")
+                            filenames_list = list(files_data.values())
+                            self.logger.info(f"🔍 Files to download: {filenames_list}")
+
+                            for i, (file_hash, filename) in enumerate(files_data.items()):
+                                try:
+                                    self.logger.info(f"🔍 [{i+1}/{len(files_data)}] Attempting to download: '{filename}' (hash={file_hash}, len={len(filename)})")
+                                    
+                                    if output_dir:
+                                        output_path = f"{output_dir.rstrip('/')}/{filename}"
+                                    else:
+                                        output_path = filename
+
+                                    downloaded_path = self.download_file_by_hash(task_id, file_hash, filename, output_path)
+                                    downloaded_files.append(downloaded_path)
+                                    self.logger.info(f"  ✅ Downloaded: {downloaded_path}")
+                                except Exception as e:
+                                    self.logger.error(f"  ❌ Failed to download {filename}: {e}")
+                                    self._log_server_version_on_error()
 
                         result["downloaded_files"] = downloaded_files
                         self.logger.info(f"🎉 Successfully downloaded {len(downloaded_files)} files!")
@@ -344,7 +370,7 @@ class AudioSeparatorAPIClient:
             raise
 
     def download_file(self, task_id: str, filename: str, output_path: Optional[str] = None) -> str:
-        """Download a file from a completed job."""
+        """Download a file from a completed job (legacy method for backward compatibility)."""
         if output_path is None:
             output_path = filename
 
@@ -354,7 +380,7 @@ class AudioSeparatorAPIClient:
             download_url = f"{self.api_url}/download/{task_id}/{encoded_filename}"
             
             # Debug logging to understand what's happening
-            self.logger.info(f"🔍 Download details:")
+            self.logger.info(f"🔍 Download details (legacy filename method):")
             self.logger.info(f"  Original filename: '{filename}'")
             self.logger.info(f"  Encoded filename: '{encoded_filename}'")
             self.logger.info(f"  Download URL: {download_url}")
@@ -383,6 +409,54 @@ class AudioSeparatorAPIClient:
         except requests.RequestException as e:
             self.logger.error(f"Download failed: {e}")
             raise
+
+    def download_file_by_hash(self, task_id: str, file_hash: str, filename: str, output_path: Optional[str] = None) -> str:
+        """Download a file from a completed job using its hash identifier."""
+        if output_path is None:
+            output_path = filename
+
+        try:
+            # Use the file hash in the URL instead of the filename
+            download_url = f"{self.api_url}/download/{task_id}/{file_hash}"
+            
+            # Debug logging to understand what's happening
+            self.logger.info(f"🔍 Download details (hash method):")
+            self.logger.info(f"  Original filename: '{filename}'")
+            self.logger.info(f"  File hash: '{file_hash}'")
+            self.logger.info(f"  Download URL: {download_url}")
+            self.logger.info(f"  Task ID: {task_id}")
+            
+            response = self.session.get(download_url, timeout=60)
+            
+            # Log response details for debugging
+            self.logger.info(f"🔍 Response status: {response.status_code}")
+            if response.status_code != 200:
+                try:
+                    self.logger.error(f"🔍 Response headers: {dict(response.headers)}")
+                except Exception:
+                    self.logger.error(f"🔍 Response headers: {response.headers}")
+                try:
+                    self.logger.error(f"🔍 Response text (first 500 chars): {response.text[:500]}")
+                except Exception:
+                    self.logger.error(f"🔍 Response text: <unavailable>")
+            
+            response.raise_for_status()
+
+            with open(output_path, "wb") as f:
+                f.write(response.content)
+
+            return output_path
+        except requests.RequestException as e:
+            self.logger.error(f"Download failed: {e}")
+            raise
+
+    def _log_server_version_on_error(self):
+        """Helper method to log server version when download fails."""
+        try:
+            server_version = self.get_server_version()
+            self.logger.error(f"🔍 Server version when download failed: {server_version}")
+        except Exception as version_error:
+            self.logger.error(f"🔍 Could not get server version: {version_error}")
 
     def list_models(self, format_type: str = "pretty", filter_by: Optional[str] = None) -> dict:
         """List available models."""

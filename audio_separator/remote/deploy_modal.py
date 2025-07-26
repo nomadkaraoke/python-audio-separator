@@ -27,10 +27,10 @@ import shutil
 import traceback
 import uuid
 import json
+import hashlib
 from importlib.metadata import version
 import typing
 from typing import Optional
-from urllib.parse import unquote
 
 # Third-party imports
 from fastapi import FastAPI, File, Form, HTTPException, Response, UploadFile
@@ -44,6 +44,12 @@ from audio_separator.separator import Separator
 
 # Constants
 DEFAULT_MODEL_NAME = "default"  # Used when no model is specified
+
+def generate_file_hash(filename: str) -> str:
+    """Generate a short, stable hash for a filename to use in download URLs."""
+    # Use SHA-256 hash of the filename, take first 16 characters for brevity
+    # This gives us a stable, URL-safe identifier that's much shorter than the filename
+    return hashlib.sha256(filename.encode('utf-8')).hexdigest()[:16]
 
 # Get the version of the installed audio-separator package
 try:
@@ -103,7 +109,7 @@ image = (
     .pip_install(
         [
             # Core audio-separator with GPU support (this pulls in most dependencies from pyproject.toml)
-            "audio-separator[gpu]>=0.35.1",
+            "audio-separator[gpu]>=0.35.2",
             # FastAPI and web server dependencies for Modal API deployment
             "fastapi>=0.104.0",
             "uvicorn[standard]>=0.24.0",
@@ -194,7 +200,7 @@ def separate_audio_function(
     if models is None or len(models) == 0:
         models = [None]  # None will use separator's default
 
-    all_output_files = []
+    all_output_files = {}  # Dictionary mapping file hashes to filenames
     models_used = []
     current_model_index = 0
     total_models = len(models)
@@ -313,9 +319,11 @@ def separate_audio_function(
                 update_job_status("error", 0, error=error_msg)
                 return {"task_id": task_id, "status": "error", "error": error_msg, "models_used": models_used, "original_filename": filename}
 
-            # Convert full paths to filenames and add to collection
+            # Convert full paths to filenames and add to collection with hashes
             model_result_files = [os.path.basename(f) for f in output_files]
-            all_output_files.extend(model_result_files)
+            for filename in model_result_files:
+                file_hash = generate_file_hash(filename)
+                all_output_files[file_hash] = filename
             print(f"Model {models_used[-1]} produced {len(model_result_files)} files: {model_result_files}")
 
         # Update final status
@@ -397,6 +405,46 @@ def get_file_function(task_id: str, filename: str) -> bytes:
 
     with open(file_path, "rb") as f:
         return f.read()
+
+
+@app.function(image=image, timeout=300, volumes={"/storage": volume})
+def get_file_by_hash_function(task_id: str, file_hash: str) -> tuple[bytes, str]:
+    """
+    Retrieve a separated audio file by its hash identifier.
+    Returns tuple of (file_data, actual_filename)
+    """
+    # Access Modal Dict to get the job status with file hash mappings
+    job_status = modal.Dict.from_name("audio-separator-job-status", create_if_missing=True)
+    
+    if task_id not in job_status:
+        raise FileNotFoundError(f"Task not found: {task_id}")
+    
+    status_data = job_status[task_id]
+    files_dict = status_data.get("files", {})
+    
+    # Check if files is still a list (backward compatibility)
+    if isinstance(files_dict, list):
+        # For backward compatibility, try to find file by regenerating hash
+        for filename in files_dict:
+            if generate_file_hash(filename) == file_hash:
+                file_path = f"/storage/outputs/{task_id}/{filename}"
+                if os.path.exists(file_path):
+                    with open(file_path, "rb") as f:
+                        return f.read(), filename
+        raise FileNotFoundError(f"File with hash {file_hash} not found in legacy format")
+    
+    # Normal case: files is a dictionary mapping hashes to filenames
+    if file_hash not in files_dict:
+        raise FileNotFoundError(f"File with hash {file_hash} not found")
+    
+    actual_filename = files_dict[file_hash]
+    file_path = f"/storage/outputs/{task_id}/{actual_filename}"
+
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"File not found: {actual_filename}")
+
+    with open(file_path, "rb") as f:
+        return f.read(), actual_filename
 
 
 @app.function(image=image, timeout=60, volumes={"/models": models_volume})
@@ -611,18 +659,13 @@ async def get_job_status(task_id: str) -> dict:
         raise HTTPException(status_code=500, detail=f"Failed to get job status: {str(e)}") from e
 
 
-@web_app.get("/download/{task_id}/{filename}")
-async def download_file(task_id: str, filename: str) -> Response:
+@web_app.get("/download/{task_id}/{file_hash}")
+async def download_file(task_id: str, file_hash: str) -> Response:
     """
-    Download a separated audio file
+    Download a separated audio file using its hash identifier
     """
     try:
-        # Explicitly URL-decode the filename to handle edge cases with special characters
-        # FastAPI normally handles this, but complex filenames with multiple special chars
-        # may not be decoded properly in all cases
-        decoded_filename = unquote(filename)
-        
-        file_data = get_file_function.remote(task_id, decoded_filename)
+        file_data, actual_filename = get_file_by_hash_function.remote(task_id, file_hash)
 
         # Detect file type from content
         detected_type = filetype.guess(file_data)
@@ -631,10 +674,10 @@ async def download_file(task_id: str, filename: str) -> Response:
             content_type = detected_type.mime
         else:
             # Log when we can't detect the file type
-            print(f"WARNING: Could not detect MIME type for {decoded_filename}, using generic type")
+            print(f"WARNING: Could not detect MIME type for {actual_filename}, using generic type")
             content_type = "application/octet-stream"
 
-        return Response(content=file_data, media_type=content_type, headers={"Content-Disposition": f"attachment; filename={decoded_filename}"})
+        return Response(content=file_data, media_type=content_type, headers={"Content-Disposition": f"attachment; filename={actual_filename}"})
 
     except FileNotFoundError as exc:
         raise HTTPException(status_code=404, detail="File not found") from exc
@@ -711,8 +754,8 @@ async def root() -> dict:
         ],
         "endpoints": {
             "POST /separate": "Upload and separate audio file (supports multiple models and all separator parameters)",
-            "GET /status/{task_id}": "Get job status and progress (includes model-specific progress)",
-            "GET /download/{task_id}/{filename}": "Download separated file",
+            "GET /status/{task_id}": "Get job status and progress (includes model-specific progress and file hashes)",
+            "GET /download/{task_id}/{file_hash}": "Download separated file using hash identifier (avoids URL length limits)",
             "GET /models-json": "List available models (JSON format)",
             "GET /models": "List available models (plain text format like CLI --list_models)",
             "GET /health": "Health check",

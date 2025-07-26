@@ -463,3 +463,57 @@ class TestAudioSeparatorAPIClient:
         mock_get.assert_called_once_with(expected_url, timeout=60)
         assert result == problematic_filename
         mock_file.assert_called_once_with(problematic_filename, "wb")
+
+    @patch("requests.Session.get")
+    @patch("builtins.open", new_callable=mock_open)
+    def test_download_file_by_hash(self, mock_file, mock_get, api_client):
+        """Test downloading a file using hash identifier."""
+        mock_response = Mock()
+        mock_response.content = b"fake audio file content"
+        mock_response.status_code = 200
+        mock_response.raise_for_status.return_value = None
+        mock_get.return_value = mock_response
+
+        # Test the new hash-based download method
+        filename = "Long Filename With Spaces (Vocals).flac"
+        file_hash = "abc123def456"
+        result = api_client.download_file_by_hash("test-task-hash", file_hash, filename)
+
+        # Verify hash was used in URL instead of filename
+        expected_url = "https://test-api.example.com/download/test-task-hash/abc123def456"
+        mock_get.assert_called_once_with(expected_url, timeout=60)
+        assert result == filename
+        mock_file.assert_called_once_with(filename, "wb")
+
+    @patch.object(AudioSeparatorAPIClient, "separate_audio")
+    @patch.object(AudioSeparatorAPIClient, "get_job_status")
+    @patch.object(AudioSeparatorAPIClient, "download_file_by_hash")
+    @patch("time.sleep")
+    def test_separate_audio_and_wait_with_hash_format(self, mock_sleep, mock_download_hash, mock_status, mock_separate, api_client, mock_audio_file):
+        """Test the convenience method with hash-based file format."""
+        mock_separate.return_value = {"task_id": "test-task-hash"}
+        
+        # Simulate new hash-based format
+        files_with_hashes = {
+            "abc123def456": "Song (Vocals model_bs_roformer_ep_317_sdr_12.9755.ckpt)_(Instrumental)_mel_band_roformer.flac",
+            "def456ghi789": "Song (Vocals model_bs_roformer_ep_317_sdr_12.9755.ckpt)_(Vocals)_mel_band_roformer.flac"
+        }
+        mock_status.side_effect = [{"status": "completed", "files": files_with_hashes}]
+        
+        # Mock successful downloads
+        mock_download_hash.side_effect = list(files_with_hashes.values())
+
+        result = api_client.separate_audio_and_wait(mock_audio_file, download=True)
+
+        # Verify both files were downloaded using hash method
+        assert result["status"] == "completed"
+        assert result["downloaded_files"] == list(files_with_hashes.values())
+        assert mock_download_hash.call_count == 2
+        
+        # Verify download was called with the correct hashes and filenames
+        expected_calls = [
+            ("test-task-hash", "abc123def456", list(files_with_hashes.values())[0], list(files_with_hashes.values())[0]),
+            ("test-task-hash", "def456ghi789", list(files_with_hashes.values())[1], list(files_with_hashes.values())[1])
+        ]
+        actual_calls = [call.args for call in mock_download_hash.call_args_list]
+        assert actual_calls == expected_calls
