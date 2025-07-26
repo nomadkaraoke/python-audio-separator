@@ -7,6 +7,17 @@ from urllib.parse import quote
 
 import requests
 
+# Get package version for debugging
+try:
+    from importlib.metadata import version
+    AUDIO_SEPARATOR_VERSION = version("audio-separator")
+except ImportError:
+    try:
+        import pkg_resources
+        AUDIO_SEPARATOR_VERSION = pkg_resources.get_distribution("audio-separator").version
+    except Exception:
+        AUDIO_SEPARATOR_VERSION = "unknown"
+
 
 class AudioSeparatorAPIClient:
     """Client for interacting with a remotely deployed Audio Separator API."""
@@ -198,7 +209,7 @@ class AudioSeparatorAPIClient:
 
         # Submit the separation job with all parameters
         models_desc = models or ([model] if model else ["default"])
-        self.logger.info(f"Submitting separation job for '{file_path}' with models: {models_desc}")
+        self.logger.info(f"Submitting separation job for '{file_path}' with models: {models_desc} (audio-separator v{AUDIO_SEPARATOR_VERSION})")
 
         result = self.separate_audio(
             file_path,
@@ -262,16 +273,27 @@ class AudioSeparatorAPIClient:
                 # Check if completed
                 if current_status == "completed":
                     self.logger.info("✅ Separation completed!")
+                    
+                    files_list = status.get("files", [])
+                    self.logger.info(f"🔍 Job status returned {len(files_list)} files")
+                    for i, file in enumerate(files_list):
+                        self.logger.info(f"  [{i}] '{file}' (len={len(file)}, repr={repr(file)})")
 
-                    result = {"task_id": task_id, "status": "completed", "files": status.get("files", [])}
+                    result = {"task_id": task_id, "status": "completed", "files": files_list}
 
                     # Download files if requested
                     if download:
                         downloaded_files = []
-                        self.logger.info(f"📥 Downloading {len(status.get('files', []))} output files...")
+                        files_list = status.get("files", [])
+                        self.logger.info(f"📥 Downloading {len(files_list)} output files...")
+                        
+                        # Log the filenames we're trying to download for debugging
+                        self.logger.info(f"🔍 Files to download: {files_list}")
 
-                        for filename in status.get("files", []):
+                        for i, filename in enumerate(files_list):
                             try:
+                                self.logger.info(f"🔍 [{i+1}/{len(files_list)}] Attempting to download: '{filename}' (len={len(filename)})")
+                                
                                 if output_dir:
                                     output_path = f"{output_dir.rstrip('/')}/{filename}"
                                 else:
@@ -282,6 +304,13 @@ class AudioSeparatorAPIClient:
                                 self.logger.info(f"  ✅ Downloaded: {downloaded_path}")
                             except Exception as e:
                                 self.logger.error(f"  ❌ Failed to download {filename}: {e}")
+                                
+                                # Try to get server version on download failure for debugging
+                                try:
+                                    server_version = self.get_server_version()
+                                    self.logger.error(f"🔍 Server version when download failed: {server_version}")
+                                except Exception as version_error:
+                                    self.logger.error(f"🔍 Could not get server version: {version_error}")
 
                         result["downloaded_files"] = downloaded_files
                         self.logger.info(f"🎉 Successfully downloaded {len(downloaded_files)} files!")
@@ -322,7 +351,29 @@ class AudioSeparatorAPIClient:
         try:
             # URL encode the filename to handle spaces and special characters
             encoded_filename = quote(filename, safe='')
-            response = self.session.get(f"{self.api_url}/download/{task_id}/{encoded_filename}", timeout=60)
+            download_url = f"{self.api_url}/download/{task_id}/{encoded_filename}"
+            
+            # Debug logging to understand what's happening
+            self.logger.info(f"🔍 Download details:")
+            self.logger.info(f"  Original filename: '{filename}'")
+            self.logger.info(f"  Encoded filename: '{encoded_filename}'")
+            self.logger.info(f"  Download URL: {download_url}")
+            self.logger.info(f"  Task ID: {task_id}")
+            
+            response = self.session.get(download_url, timeout=60)
+            
+            # Log response details for debugging
+            self.logger.info(f"🔍 Response status: {response.status_code}")
+            if response.status_code != 200:
+                try:
+                    self.logger.error(f"🔍 Response headers: {dict(response.headers)}")
+                except Exception:
+                    self.logger.error(f"🔍 Response headers: {response.headers}")
+                try:
+                    self.logger.error(f"🔍 Response text (first 500 chars): {response.text[:500]}")
+                except Exception:
+                    self.logger.error(f"🔍 Response text: <unavailable>")
+            
             response.raise_for_status()
 
             with open(output_path, "wb") as f:

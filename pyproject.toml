@@ -73,6 +73,7 @@ pytest-cov = ">=4.1.0"
 matplotlib = ">=3.8.0"
 pillow = ">=10.1.0"
 scikit-image = ">=0.22.0"
+filetype = ">=1"
 
 [tool.black]
 line-length = 140

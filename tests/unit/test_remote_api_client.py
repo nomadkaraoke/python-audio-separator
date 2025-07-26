@@ -161,6 +161,7 @@ class TestAudioSeparatorAPIClient:
         """Test successful file download."""
         mock_response = Mock()
         mock_response.content = b"fake audio file content"
+        mock_response.status_code = 200
         mock_response.raise_for_status.return_value = None
         mock_get.return_value = mock_response
 
@@ -176,6 +177,7 @@ class TestAudioSeparatorAPIClient:
         """Test file download with default output path."""
         mock_response = Mock()
         mock_response.content = b"fake audio file content"
+        mock_response.status_code = 200
         mock_response.raise_for_status.return_value = None
         mock_get.return_value = mock_response
 
@@ -190,6 +192,7 @@ class TestAudioSeparatorAPIClient:
         """Test file download with spaces in filename (URL encoding)."""
         mock_response = Mock()
         mock_response.content = b"fake audio file content"
+        mock_response.status_code = 200
         mock_response.raise_for_status.return_value = None
         mock_get.return_value = mock_response
 
@@ -208,6 +211,7 @@ class TestAudioSeparatorAPIClient:
         """Test file download with special characters in filename."""
         mock_response = Mock()
         mock_response.content = b"fake audio file content"
+        mock_response.status_code = 200
         mock_response.raise_for_status.return_value = None
         mock_get.return_value = mock_response
 
@@ -226,6 +230,7 @@ class TestAudioSeparatorAPIClient:
         """Test file download with unicode characters in filename."""
         mock_response = Mock()
         mock_response.content = b"fake audio file content"
+        mock_response.status_code = 200
         mock_response.raise_for_status.return_value = None
         mock_get.return_value = mock_response
 
@@ -438,3 +443,23 @@ class TestAudioSeparatorAPIClient:
         ]
         actual_calls = [call.args for call in mock_download.call_args_list]
         assert actual_calls == expected_calls
+
+    @patch("requests.Session.get")
+    @patch("builtins.open", new_callable=mock_open)
+    def test_download_file_server_side_url_decoding_scenario(self, mock_file, mock_get, api_client):
+        """Test that the client properly URL-encodes filenames that require server-side decoding."""
+        mock_response = Mock()
+        mock_response.content = b"fake audio file content"
+        mock_response.status_code = 200
+        mock_response.raise_for_status.return_value = None
+        mock_get.return_value = mock_response
+
+        # Test the exact problematic filename from the bug report
+        problematic_filename = "Bloc Party - The Prayer (Vocals model_bs_roformer_ep_317_sdr_12.9755.ckpt)_(Instrumental)_mel_band_roformer_karaoke_aufr33_viperx_sdr_10.flac"
+        result = api_client.download_file("test-task-bug", problematic_filename)
+
+        # Verify URL was properly encoded - this is the exact URL that should be sent
+        expected_url = "https://test-api.example.com/download/test-task-bug/Bloc%20Party%20-%20The%20Prayer%20%28Vocals%20model_bs_roformer_ep_317_sdr_12.9755.ckpt%29_%28Instrumental%29_mel_band_roformer_karaoke_aufr33_viperx_sdr_10.flac"
+        mock_get.assert_called_once_with(expected_url, timeout=60)
+        assert result == problematic_filename
+        mock_file.assert_called_once_with(problematic_filename, "wb")

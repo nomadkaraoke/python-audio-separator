@@ -30,6 +30,7 @@ import json
 from importlib.metadata import version
 import typing
 from typing import Optional
+from urllib.parse import unquote
 
 # Third-party imports
 from fastapi import FastAPI, File, Form, HTTPException, Response, UploadFile
@@ -102,7 +103,7 @@ image = (
     .pip_install(
         [
             # Core audio-separator with GPU support (this pulls in most dependencies from pyproject.toml)
-            "audio-separator[gpu]>=0.35.0",
+            "audio-separator[gpu]>=0.35.1",
             # FastAPI and web server dependencies for Modal API deployment
             "fastapi>=0.104.0",
             "uvicorn[standard]>=0.24.0",
@@ -616,7 +617,12 @@ async def download_file(task_id: str, filename: str) -> Response:
     Download a separated audio file
     """
     try:
-        file_data = get_file_function.remote(task_id, filename)
+        # Explicitly URL-decode the filename to handle edge cases with special characters
+        # FastAPI normally handles this, but complex filenames with multiple special chars
+        # may not be decoded properly in all cases
+        decoded_filename = unquote(filename)
+        
+        file_data = get_file_function.remote(task_id, decoded_filename)
 
         # Detect file type from content
         detected_type = filetype.guess(file_data)
@@ -625,10 +631,10 @@ async def download_file(task_id: str, filename: str) -> Response:
             content_type = detected_type.mime
         else:
             # Log when we can't detect the file type
-            print(f"WARNING: Could not detect MIME type for {filename}, using generic type")
+            print(f"WARNING: Could not detect MIME type for {decoded_filename}, using generic type")
             content_type = "application/octet-stream"
 
-        return Response(content=file_data, media_type=content_type, headers={"Content-Disposition": f"attachment; filename={filename}"})
+        return Response(content=file_data, media_type=content_type, headers={"Content-Disposition": f"attachment; filename={decoded_filename}"})
 
     except FileNotFoundError as exc:
         raise HTTPException(status_code=404, detail="File not found") from exc
