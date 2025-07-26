@@ -413,36 +413,71 @@ def get_file_by_hash_function(task_id: str, file_hash: str) -> tuple[bytes, str]
     Retrieve a separated audio file by its hash identifier.
     Returns tuple of (file_data, actual_filename)
     """
+    print(f"🔍 get_file_by_hash_function called - Task ID: {task_id}, File hash: {file_hash}")
+    
+    # Reload the volume to ensure we see the latest files written by other function executions
+    print(f"🔍 Reloading volume to see latest files...")
+    volume.reload()
+    
     # Access Modal Dict to get the job status with file hash mappings
     job_status = modal.Dict.from_name("audio-separator-job-status", create_if_missing=True)
     
     if task_id not in job_status:
+        print(f"❌ Task not found in job_status: {task_id}")
         raise FileNotFoundError(f"Task not found: {task_id}")
     
     status_data = job_status[task_id]
     files_dict = status_data.get("files", {})
+    print(f"🔍 Retrieved files_dict: {files_dict}")
+    print(f"🔍 files_dict type: {type(files_dict)}")
     
     # Check if files is still a list (backward compatibility)
     if isinstance(files_dict, list):
+        print(f"🔍 Using legacy list format with {len(files_dict)} files")
         # For backward compatibility, try to find file by regenerating hash
         for filename in files_dict:
-            if generate_file_hash(filename) == file_hash:
+            generated_hash = generate_file_hash(filename)
+            print(f"🔍 Checking filename '{filename}' -> hash '{generated_hash}' vs requested '{file_hash}'")
+            if generated_hash == file_hash:
                 file_path = f"/storage/outputs/{task_id}/{filename}"
+                print(f"🔍 Hash match! Checking file path: {file_path}")
                 if os.path.exists(file_path):
+                    print(f"✅ File exists, returning content")
                     with open(file_path, "rb") as f:
                         return f.read(), filename
+                else:
+                    print(f"❌ File does not exist at path: {file_path}")
         raise FileNotFoundError(f"File with hash {file_hash} not found in legacy format")
     
     # Normal case: files is a dictionary mapping hashes to filenames
+    print(f"🔍 Using new hash format with {len(files_dict)} files")
+    print(f"🔍 Available hashes: {list(files_dict.keys())}")
+    
     if file_hash not in files_dict:
+        print(f"❌ Hash {file_hash} not found in files_dict")
         raise FileNotFoundError(f"File with hash {file_hash} not found")
     
     actual_filename = files_dict[file_hash]
     file_path = f"/storage/outputs/{task_id}/{actual_filename}"
+    print(f"🔍 Hash found! Filename: '{actual_filename}'")
+    print(f"🔍 Checking file path: {file_path}")
 
     if not os.path.exists(file_path):
+        print(f"❌ File does not exist at path: {file_path}")
+        # List what files actually exist in the directory
+        task_dir = f"/storage/outputs/{task_id}"
+        if os.path.exists(task_dir):
+            actual_files = os.listdir(task_dir)
+            print(f"🔍 Files actually in directory ({len(actual_files)}):")
+            for i, actual_file in enumerate(actual_files):
+                print(f"  [{i}] '{actual_file}'")
+                if actual_file == actual_filename:
+                    print(f"    ✅ EXACT MATCH found!")
+        else:
+            print(f"❌ Task directory does not exist: {task_dir}")
         raise FileNotFoundError(f"File not found: {actual_filename}")
 
+    print(f"✅ File exists, returning content")
     with open(file_path, "rb") as f:
         return f.read(), actual_filename
 
