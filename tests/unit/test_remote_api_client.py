@@ -185,6 +185,60 @@ class TestAudioSeparatorAPIClient:
         mock_file.assert_called_once_with("output.wav", "wb")
 
     @patch("requests.Session.get")
+    @patch("builtins.open", new_callable=mock_open)
+    def test_download_file_with_spaces_in_filename(self, mock_file, mock_get, api_client):
+        """Test file download with spaces in filename (URL encoding)."""
+        mock_response = Mock()
+        mock_response.content = b"fake audio file content"
+        mock_response.raise_for_status.return_value = None
+        mock_get.return_value = mock_response
+
+        filename_with_spaces = "My Song (Vocals) Output.wav"
+        result = api_client.download_file("test-task-123", filename_with_spaces)
+
+        # Verify URL was properly encoded
+        expected_url = "https://test-api.example.com/download/test-task-123/My%20Song%20%28Vocals%29%20Output.wav"
+        mock_get.assert_called_once_with(expected_url, timeout=60)
+        assert result == filename_with_spaces
+        mock_file.assert_called_once_with(filename_with_spaces, "wb")
+
+    @patch("requests.Session.get")
+    @patch("builtins.open", new_callable=mock_open)
+    def test_download_file_with_special_characters(self, mock_file, mock_get, api_client):
+        """Test file download with special characters in filename."""
+        mock_response = Mock()
+        mock_response.content = b"fake audio file content"
+        mock_response.raise_for_status.return_value = None
+        mock_get.return_value = mock_response
+
+        filename_with_special_chars = "Song & Band - Title (Vocals 50% Mix).flac"
+        result = api_client.download_file("test-task-456", filename_with_special_chars)
+
+        # Verify URL was properly encoded
+        expected_url = "https://test-api.example.com/download/test-task-456/Song%20%26%20Band%20-%20Title%20%28Vocals%2050%25%20Mix%29.flac"
+        mock_get.assert_called_once_with(expected_url, timeout=60)
+        assert result == filename_with_special_chars
+        mock_file.assert_called_once_with(filename_with_special_chars, "wb")
+
+    @patch("requests.Session.get")
+    @patch("builtins.open", new_callable=mock_open)
+    def test_download_file_with_unicode_characters(self, mock_file, mock_get, api_client):
+        """Test file download with unicode characters in filename."""
+        mock_response = Mock()
+        mock_response.content = b"fake audio file content"
+        mock_response.raise_for_status.return_value = None
+        mock_get.return_value = mock_response
+
+        unicode_filename = "Café - Naïve Song (Résumé).mp3"
+        result = api_client.download_file("test-task-789", unicode_filename)
+
+        # Verify URL was properly encoded (UTF-8 encoded then percent-encoded)
+        expected_url = "https://test-api.example.com/download/test-task-789/Caf%C3%A9%20-%20Na%C3%AFve%20Song%20%28R%C3%A9sum%C3%A9%29.mp3"
+        mock_get.assert_called_once_with(expected_url, timeout=60)
+        assert result == unicode_filename
+        mock_file.assert_called_once_with(unicode_filename, "wb")
+
+    @patch("requests.Session.get")
     def test_download_file_error(self, mock_get, api_client):
         """Test file download with error."""
         mock_get.side_effect = requests.RequestException("Download error")
@@ -351,3 +405,36 @@ class TestAudioSeparatorAPIClient:
         # Verify download was called with custom output path
         mock_download.assert_called_once_with("test-task-123", "output1.wav", "custom_dir/output1.wav")
         assert result["downloaded_files"] == ["custom_dir/output1.wav"]
+
+    @patch.object(AudioSeparatorAPIClient, "separate_audio")
+    @patch.object(AudioSeparatorAPIClient, "get_job_status")
+    @patch.object(AudioSeparatorAPIClient, "download_file")
+    @patch("time.sleep")
+    def test_separate_audio_and_wait_with_special_character_filenames(self, mock_sleep, mock_download, mock_status, mock_separate, api_client, mock_audio_file):
+        """Test the convenience method with filenames containing special characters."""
+        mock_separate.return_value = {"task_id": "test-task-456"}
+        
+        # Simulate files with special characters like those in the bug report
+        files_with_special_chars = [
+            "Song (Vocals model_bs_roformer_ep_317_sdr_12.9755.ckpt)_(Instrumental)_mel_band_roformer.flac",
+            "Song (Vocals model_bs_roformer_ep_317_sdr_12.9755.ckpt)_(Vocals)_mel_band_roformer.flac"
+        ]
+        mock_status.side_effect = [{"status": "completed", "files": files_with_special_chars}]
+        
+        # Mock successful downloads
+        mock_download.side_effect = files_with_special_chars
+
+        result = api_client.separate_audio_and_wait(mock_audio_file, download=True)
+
+        # Verify both files were downloaded despite having special characters
+        assert result["status"] == "completed"
+        assert result["downloaded_files"] == files_with_special_chars
+        assert mock_download.call_count == 2
+        
+        # Verify download was called with the correct filenames
+        expected_calls = [
+            ("test-task-456", files_with_special_chars[0], files_with_special_chars[0]),
+            ("test-task-456", files_with_special_chars[1], files_with_special_chars[1])
+        ]
+        actual_calls = [call.args for call in mock_download.call_args_list]
+        assert actual_calls == expected_calls

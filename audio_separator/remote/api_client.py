@@ -3,6 +3,7 @@ import os
 import logging
 import json
 from typing import Optional, List, Dict
+from urllib.parse import quote
 
 import requests
 
@@ -319,7 +320,9 @@ class AudioSeparatorAPIClient:
             output_path = filename
 
         try:
-            response = self.session.get(f"{self.api_url}/download/{task_id}/{filename}", timeout=60)
+            # URL encode the filename to handle spaces and special characters
+            encoded_filename = quote(filename, safe='')
+            response = self.session.get(f"{self.api_url}/download/{task_id}/{encoded_filename}", timeout=60)
             response.raise_for_status()
 
             with open(output_path, "wb") as f:
