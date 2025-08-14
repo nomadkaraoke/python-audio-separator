@@ -13,8 +13,6 @@ If you don't know how to code, please consider learning - it's free, and anyone 
 - Add ability for user to download all models ahead of time
 - Add tests for Windows, Linux and macOS separately
 - Add tests for Python 3.10, 3.11
-- Add support for MDXC models
-- Add support for Demucs models
 - Add support for Ensemble mode
 - Add support for Chaining multiple models
 - Add support for Splitting multiple stems from a single input file by running different models
