@@ -49,7 +49,7 @@ class MockAPIHandler(BaseHTTPRequestHandler):
             parts = path.split("/")
             if len(parts) >= 4:
                 task_id = parts[2]
-                filename = parts[3]
+                filename = urllib.parse.unquote(parts[3])
 
                 # Check if job exists and is completed
                 if task_id in self.jobs and self.jobs[task_id]["status"] == "completed":
