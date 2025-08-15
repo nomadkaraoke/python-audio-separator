@@ -8,6 +8,15 @@
             "is_karaoke": false,
             "is_bv_model": false,
             "is_bv_model_rebalanced": 0.0
+        },
+        "581f4461b8d8c7e43af546eebd3b6a2a": {
+            "vr_model_param": "4band_v4_ms_fullband",
+            "primary_stem": "Vocals",
+            "nout": 64,
+            "nout_lstm": 128,
+            "is_karaoke": false,
+            "is_bv_model": true,
+            "is_bv_model_rebalanced": 0.9
         }
     },
     "mdx_model_data": {
