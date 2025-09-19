@@ -1,4 +1,6 @@
-# Audio Separator 🎶
+<div align="center">
+ 
+# 🎶 Audio Separator 🎶
 
 [![PyPI version](https://badge.fury.io/py/audio-separator.svg)](https://badge.fury.io/py/audio-separator)
 [![Conda Version](https://img.shields.io/conda/vn/conda-forge/audio-separator.svg)](https://anaconda.org/conda-forge/audio-separator)
@@ -7,11 +9,56 @@
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1gSlmSmna7f7fH6OjsiMEDLl-aJ9kGPkY?usp=sharing)
 [![Open In Huggingface](https://huggingface.co/datasets/huggingface/badges/resolve/main/open-in-hf-spaces-sm.svg)](https://huggingface.co/spaces/theneos/audio-separator)
 
+</div>
+
 **Summary:** Easy to use audio stem separation from the command line or as a dependency in your own Python project, using the amazing MDX-Net, VR Arch, Demucs and MDXC models available in UVR by @Anjok07 & @aufr33.
 
 Audio Separator is a Python package that allows you to separate an audio file into various stems, using models trained by @Anjok07 for use with [Ultimate Vocal Remover](https://github.com/Anjok07/ultimatevocalremovergui).
 
 The simplest (and probably most used) use case for this package is to separate an audio file into two stems, Instrumental and Vocals, which can be very useful for producing karaoke videos! However, the models available in UVR can separate audio into many more stems, such as Drums, Bass, Piano, and Guitar, and perform other audio processing tasks, such as denoising or removing echo/reverb.
+
+<details>
+<summary align="center"><b>Table of Contents</div></b></summary>
+
+- [🎶 Audio Separator 🎶](#-audio-separator-)
+  - [Features](#features)
+  - [Installation 🛠️](#installation-%EF%B8%8F)
+    - [🐳 Docker](#-docker)
+    - [🎮 Nvidia GPU with CUDA or 🧪 Google Colab](#-nvidia-gpu-with-cuda-or--google-colab)
+    - [ Apple Silicon, macOS Sonoma+ with M1 or newer CPU (CoreML acceleration)](#-apple-silicon-macos-sonoma-with-m1-or-newer-cpu-coreml-acceleration)
+    - [🐢 No hardware acceleration, CPU only](#-no-hardware-acceleration-cpu-only)
+    - [🎥 FFmpeg dependency](#-ffmpeg-dependency)
+  - [GPU / CUDA specific installation steps with Pip](#gpu--cuda-specific-installation-steps-with-pip)
+    - [Multiple CUDA library versions may be needed](#multiple-cuda-library-versions-may-be-needed)
+  - [Usage 🚀](#usage-)
+    - [Command Line Interface (CLI)](#command-line-interface-cli)
+    - [Listing and Filtering Available Models](#listing-and-filtering-available-models)
+      - [Filtering Models](#filtering-models)
+      - [Limiting Results](#limiting-results)
+      - [JSON Output](#json-output)
+    - [Full command-line interface options](#full-command-line-interface-options)
+    - [As a Dependency in a Python Project](#as-a-dependency-in-a-python-project)
+      - [Batch processing and processing with multiple models](#batch-processing-and-processing-with-multiple-models)
+      - [Renaming Stems](#renaming-stems)
+  - [Parameters for the Separator class](#parameters-for-the-separator-class)
+  - [Remote API Usage 🌐](#remote-api-usage-)
+  - [Requirements 📋](#requirements-)
+  - [Developing Locally](#developing-locally)
+    - [Prerequisites](#prerequisites)
+    - [Clone the Repository](#clone-the-repository)
+    - [Create and activate the Conda Environment](#create-and-activate-the-conda-environment)
+    - [Install Dependencies](#install-dependencies)
+    - [Running the Command-Line Interface Locally](#running-the-command-line-interface-locally)
+    - [Deactivate the Virtual Environment](#deactivate-the-virtual-environment)
+    - [Building the Package](#building-the-package)
+  - [Contributing 🤝](#contributing-)
+  - [License 📄](#license-)
+  - [Credits 🙏](#credits-)
+  - [Contact 💌](#contact-)
+  - [Thanks to all contributors for their efforts](#thanks-to-all-contributors-for-their-efforts)
+</details>
+
+---
 
 ## Features
 
@@ -555,7 +602,8 @@ This project is licensed under the MIT [License](LICENSE).
 
 For questions or feedback, please raise an issue or reach out to @beveradb ([Andrew Beveridge](mailto:andrew@beveridge.uk)) directly.
 
-## Sponsors
+---
+<div align="center">
 
 <!-- sponsors --><!-- sponsors -->
 
@@ -564,3 +612,5 @@ For questions or feedback, please raise an issue or reach out to @beveradb ([And
 <a href="https://github.com/nomadkaraoke/python-audio-separator/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=nomadkaraoke/python-audio-separator" />
 </a>
+
+</div>
