@@ -28,13 +28,13 @@ graph TD
     H --> J
     I --> J
     
-    style A fill:#e1f5fe
-    style B fill:#f3e5f5
-    style C fill:#fff3e0
-    style D fill:#e8f5e8
-    style E fill:#e8f5e8
-    style F fill:#e8f5e8
-    style J fill:#e1f5fe
+    style A fill:#e1f5fe,color:#000
+    style B fill:#f3e5f5,color:#000
+    style C fill:#fff3e0,color:#000
+    style D fill:#e8f5e8,color:#000
+    style E fill:#e8f5e8,color:#000
+    style F fill:#e8f5e8,color:#000
+    style J fill:#e1f5fe,color:#000
 ```
 
 ### Deploying the API Server
@@ -43,15 +43,17 @@ To use the remote API functionality, you'll need to deploy the Audio Separator A
 
 1. **Sign up for Modal.com** at [modal.com](https://modal.com)
 2. **Install the Modal CLI** and authenticate:
+   (Note, modal will need access to the installed project dependencies in whatever virtual environment you're using for audio-separator)
    ```bash
+   poetry install --extras cpu # need either cpu or gpu to ensure onnxruntime is installed
    pip install modal
    modal setup
    ```
-3. **Deploy the Audio Separator API**:
+4. **Deploy the Audio Separator API**:
    ```bash
    modal deploy audio_separator/remote/deploy_modal.py
    ```
-4. **Get your API URL** from the deployment output. It will look like:
+5. **Get your API URL** from the deployment output. It will look like:
    ```
    https://USERNAME--audio-separator-api.modal.run
    ```
