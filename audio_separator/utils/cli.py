@@ -179,30 +179,12 @@ def main():
         logger.info(f"Model {args.model_filename} downloaded successfully.")
         sys.exit(0)
 
-    if not hasattr(args, "audio_files"):
+    audio_files = list(getattr(args, "audio_files", []))
+    if not audio_files:
         parser.print_help()
         sys.exit(1)
 
-    # Path processing: if a directory is specified, collect all audio files from it
-    audio_files = []
-    for path in args.audio_files:
-        if os.path.isdir(path):
-            # If the path is a directory, recursively search for all audio files
-            for root, dirs, files in os.walk(path):
-                for file in files:
-                    # Check the file extension to ensure it's an audio file
-                    if file.endswith((".wav", ".flac", ".mp3", ".ogg", ".opus", ".m4a", ".aiff", ".ac3")):  # Add other formats if needed
-                        audio_files.append(os.path.join(root, file))
-        else:
-            # If the path is a file, add it to the list
-            audio_files.append(path)
-
-    # If no audio files are found, log an error and exit the program
-    if not audio_files:
-        logger.error("No valid audio files found in the specified path(s).")
-        sys.exit(1)
-
-    logger.info(f"Separator version {package_version} beginning with input file(s): {', '.join(audio_files)}")
+    logger.info(f"Separator version {package_version} beginning with input path(s): {', '.join(audio_files)}")
 
     separator = Separator(
         log_formatter=log_formatter,
@@ -234,7 +216,12 @@ def main():
             "post_process_threshold": args.vr_post_process_threshold,
             "high_end_process": args.vr_high_end_process,
         },
-        demucs_params={"segment_size": args.demucs_segment_size, "shifts": args.demucs_shifts, "overlap": args.demucs_overlap, "segments_enabled": args.demucs_segments_enabled},
+        demucs_params={
+            "segment_size": args.demucs_segment_size,
+            "shifts": args.demucs_shifts,
+            "overlap": args.demucs_overlap,
+            "segments_enabled": args.demucs_segments_enabled,
+        },
         mdxc_params={
             "segment_size": args.mdxc_segment_size,
             "batch_size": args.mdxc_batch_size,
@@ -246,6 +233,5 @@ def main():
 
     separator.load_model(model_filename=args.model_filename)
 
-    for audio_file in audio_files:
-        output_files = separator.separate(audio_file, custom_output_names=args.custom_output_names)
-        logger.info(f"Separation complete! Output file(s): {' '.join(output_files)}")
+    output_files = separator.separate(audio_files, custom_output_names=args.custom_output_names)
+    logger.info(f"Separation complete! Output file(s): {' '.join(output_files)}")
