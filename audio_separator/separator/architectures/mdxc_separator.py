@@ -138,6 +138,15 @@ class MDXCSeparator(CommonSeparator):
         self.logger.debug(f"Preparing mix for input audio file {self.audio_file_path}...")
         mix = self.prepare_mix(self.audio_file_path)
 
+        # Check if audio is shorter than threshold
+        audio_duration_seconds = mix.shape[1] / self.sample_rate
+        if audio_duration_seconds < 10.0:
+            # Only change and warn if it wasn't already set by the user
+            if not self.override_model_segment_size:
+                self.override_model_segment_size = True
+                self.logger.warning(f"Audio duration ({audio_duration_seconds:.2f}s) is less than 10 seconds.")
+                self.logger.warning("Automatically enabling override_model_segment_size for better processing of short audio.")
+
         self.logger.debug("Normalizing mix before demixing...")
         mix = spec_utils.normalize(wave=mix, max_peak=self.normalization_threshold, min_peak=self.amplification_threshold)
 
