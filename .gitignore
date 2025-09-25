@@ -14,6 +14,7 @@
 tests/model-metrics/results
 tests/model-metrics/datasets
 temp_images
+audio_separator/separator/msst-models-new
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
