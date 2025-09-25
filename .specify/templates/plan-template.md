@@ -47,7 +47,32 @@
 ## Constitution Check
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+### I. Library-First Architecture
+- [ ] Core functionality implemented in `Separator` class or similar library pattern
+- [ ] CLI/Remote API are thin wrappers, not containing business logic
+- [ ] Clear separation between model architectures (MDX, VR, Demucs, MDXC)
+
+### II. Multi-Interface Consistency  
+- [ ] Feature accessible via Python API, CLI, and Remote API (if applicable)
+- [ ] Parameter names identical across all interfaces
+- [ ] Same model architectures supported across interfaces
+
+### III. Test-First Development (NON-NEGOTIABLE)
+- [ ] Tests written before implementation
+- [ ] Unit tests for all core functionality
+- [ ] Integration tests with audio validation (SSIM comparison)
+- [ ] CLI tests for all exposed functionality
+
+### IV. Performance & Resource Efficiency
+- [ ] Hardware acceleration support considered (CUDA, CoreML, DirectML)
+- [ ] Memory optimization for large files (streaming/batch processing)
+- [ ] Tunable parameters for different hardware capabilities
+
+### V. Model Architecture Separation
+- [ ] Each architecture in separate modules
+- [ ] Inherits from `CommonSeparator` pattern
+- [ ] Architecture-specific parameters isolated
+- [ ] Loading one architecture doesn't load others
 
 ## Project Structure
 
@@ -209,4 +234,4 @@ ios/ or android/
 - [ ] Complexity deviations documented
 
 ---
-*Based on Constitution v2.1.1 - See `/memory/constitution.md`*
+*Based on Constitution v1.0.0 - See `.specify/memory/constitution.md`*

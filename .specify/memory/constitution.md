@@ -1,50 +1,74 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report:
+Version change: Initial → 1.0.0
+Modified principles: All (new constitution)
+Added sections: Core Principles, Performance Standards, Quality Assurance
+Removed sections: None (template placeholders)
+Templates requiring updates:
+- ✅ plan-template.md (Constitution Check section updated)
+- ✅ spec-template.md (aligned with principles)
+- ✅ tasks-template.md (TDD enforcement aligned)
+- ✅ agent-file-template.md (no changes needed)
+Follow-up TODOs: None
+-->
+
+# Audio Separator Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Library-First Architecture
+The `Separator` class MUST be the primary interface for all audio separation functionality. CLI and remote API are thin wrappers around the library. Libraries MUST be self-contained, independently testable, and documented with clear separation of concerns between architectures (MDX, VR, Demucs, MDXC).
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+**Rationale**: This ensures the core functionality can be integrated into other projects while maintaining a consistent API across all interfaces.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### II. Multi-Interface Consistency
+Every core feature MUST be accessible via three interfaces: Python API, CLI, and Remote API. Parameter names and behavior MUST be identical across all interfaces. All interfaces MUST support the same model architectures and processing options.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+**Rationale**: Users should have consistent experience regardless of how they access the functionality, enabling seamless transition between local and remote processing.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### III. Test-First Development (NON-NEGOTIABLE)
+TDD is mandatory: Tests written → Tests fail → Implementation → Tests pass. All new features MUST include unit tests, integration tests with audio validation (SSIM comparison), and CLI tests. No code merges without passing tests.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+**Rationale**: Audio processing requires precision and consistency. Automated testing with perceptual validation ensures output quality remains stable across changes.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### IV. Performance & Resource Efficiency
+Hardware acceleration MUST be supported (CUDA, CoreML, DirectML). Memory usage MUST be optimized for large audio files through streaming and batch processing. Processing parameters MUST be tunable for different hardware capabilities.
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+**Rationale**: Audio separation is computationally intensive. Efficient resource usage enables processing of longer files and broader hardware compatibility.
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+### V. Model Architecture Separation
+Each model architecture (MDX, VR, Demucs, MDXC) MUST be implemented in separate modules inheriting from `CommonSeparator`. Loading one architecture MUST NOT load code from others. Architecture-specific parameters MUST be isolated and documented.
+
+**Rationale**: This prevents conflicts between different model types and keeps memory usage minimal by loading only required components.
+
+## Performance Standards
+
+All audio processing operations MUST meet these requirements:
+- **Memory efficiency**: Support files larger than available RAM through streaming
+- **GPU utilization**: Automatically detect and utilize available hardware acceleration
+- **Batch processing**: Support processing multiple files without model reloading
+- **Output consistency**: Identical inputs MUST produce identical outputs (deterministic)
+
+## Quality Assurance
+
+### Testing Requirements
+- **Unit tests**: All core classes and functions
+- **Integration tests**: End-to-end audio processing with SSIM validation
+- **Performance tests**: Memory usage and processing speed benchmarks
+- **Cross-platform tests**: Windows, macOS, Linux compatibility
+
+### Audio Validation
+Output quality MUST be validated using:
+- Waveform and spectrogram image comparison (SSIM ≥ 0.95)
+- Reference audio files for each supported model architecture
+- Automated regression testing on model output changes
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This constitution supersedes all other development practices. All pull requests MUST verify compliance with these principles. Any deviation MUST be explicitly justified and documented.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Amendment Process**: Changes require documentation of impact, approval from maintainers, and migration plan for affected code.
+
+**Compliance Review**: All features undergo constitutional compliance check during planning phase and post-implementation validation.
+
+**Version**: 1.0.0 | **Ratified**: 2025-09-25 | **Last Amended**: 2025-09-25
