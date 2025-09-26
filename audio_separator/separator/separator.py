@@ -656,7 +656,7 @@ class Separator:
         model_data = yaml.load(open(model_data_yaml_filepath, encoding="utf-8"), Loader=yaml.FullLoader)
         self.logger.debug(f"Model data loaded from YAML file: {model_data}")
 
-        if "roformer" in model_data_yaml_filepath:
+        if "roformer" in model_data_yaml_filepath.lower():
             model_data["is_roformer"] = True
 
         return model_data

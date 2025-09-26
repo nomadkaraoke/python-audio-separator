@@ -245,6 +245,9 @@
         },
         "Roformer Model: BS Roformer | Instrumental Resurrection by unwa": {
             "bs_roformer_instrumental_resurrection_unwa.ckpt": "config_bs_roformer_instrumental_resurrection_unwa.yaml"
+        },
+        "Roformer Model: BS Roformer SW-Fixed by jarredou": {
+            "BS-Roformer-SW-Fixed.ckpt": "BS-Roformer-SW-Fixed.yaml"
         }
     }
 }
