@@ -138,16 +138,7 @@ class TestRoformerBackwardCompatibility:
         assert hasattr(model_config, 'sage_attention')
         assert model_config.sage_attention is False  # Default value
     
-    def test_no_implementation_exists_yet(self):
-        """TDD verification: This test ensures no implementation exists yet."""
-        
-        # This test MUST PASS initially
-        with pytest.raises(ImportError):
-            from audio_separator.separator.roformer.roformer_loader import RoformerLoader
-        
-        # Verify expected directory structure doesn't exist
-        roformer_dir = "/Users/andrew/Projects/python-audio-separator/audio_separator/separator/roformer"
-        assert not os.path.exists(roformer_dir), "Roformer directory should not exist yet (TDD)"
+    # TDD placeholder test removed - implementation is now complete
     
     @pytest.mark.skipif(not IMPORTS_AVAILABLE, reason="Implementation not available yet (TDD)")
     def test_audio_quality_regression_detection(self, mock_old_roformer_model, mock_audio_file):

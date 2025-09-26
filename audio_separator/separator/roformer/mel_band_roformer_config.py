@@ -8,7 +8,7 @@ from typing import Optional, Dict, Any
 from .model_configuration import ModelConfiguration, RoformerType
 
 
-@dataclass
+@dataclass(frozen=True, unsafe_hash=True)
 class MelBandRoformerConfig(ModelConfiguration):
     """
     Configuration class specifically for MelBandRoformer models.

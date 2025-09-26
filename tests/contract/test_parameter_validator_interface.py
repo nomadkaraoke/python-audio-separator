@@ -334,18 +334,7 @@ class TestConfigurationNormalizerInterface:
         assert result is None
 
 
-# This test MUST FAIL when run - there's no real implementation yet
-def test_real_parameter_validator_does_not_exist():
-    """This test verifies that no real parameter validator implementation exists yet (TDD requirement)."""
-    
-    # Try to import the actual implementation - this should fail
-    with pytest.raises(ImportError):
-        from audio_separator.separator.roformer.parameter_validator import ParameterValidator
-    
-    # Verify the planned file doesn't exist yet
-    import os
-    expected_path = "/Users/andrew/Projects/python-audio-separator/audio_separator/separator/roformer/parameter_validator.py"
-    assert not os.path.exists(expected_path), "Implementation file should not exist yet (TDD)"
+# TDD placeholder test removed - implementation is now complete
 
 
 if __name__ == "__main__":

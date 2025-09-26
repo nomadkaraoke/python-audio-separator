@@ -14,7 +14,7 @@ class RoformerType(Enum):
     MEL_BAND_ROFORMER = "mel_band_roformer"
 
 
-@dataclass
+@dataclass(frozen=True, unsafe_hash=True)
 class ModelConfiguration:
     """
     Model configuration parameters for Roformer models.
@@ -29,7 +29,7 @@ class ModelConfiguration:
     
     # Common optional parameters (with sensible defaults)
     stereo: bool = False
-    num_stems: int = 2
+    num_stems: int = 1
     time_transformer_depth: int = 2
     freq_transformer_depth: int = 2
     dim_head: int = 64
@@ -53,8 +53,8 @@ class ModelConfiguration:
     num_bands: Optional[int] = None  # MelBandRoformer
     sample_rate: int = 44100  # Default sample rate
     
-    # Additional configuration data
-    extra_config: Dict[str, Any] = field(default_factory=dict)
+    # Additional configuration data (stored as tuple for hashability)
+    extra_config: Tuple[Tuple[str, Any], ...] = field(default_factory=tuple)
     
     def __post_init__(self):
         """Validate configuration after initialization."""
@@ -114,9 +114,9 @@ class ModelConfiguration:
             else:
                 extra_params[key] = value
         
-        # Set extra_config if there are unknown parameters
+        # Set extra_config as tuple if there are unknown parameters
         if extra_params:
-            known_params['extra_config'] = extra_params
+            known_params['extra_config'] = tuple(extra_params.items())
         
         return cls(**known_params)
     

@@ -8,7 +8,7 @@ from typing import Tuple, Optional, Dict, Any
 from .model_configuration import ModelConfiguration, RoformerType
 
 
-@dataclass
+@dataclass(frozen=True, unsafe_hash=True)
 class BSRoformerConfig(ModelConfiguration):
     """
     Configuration class specifically for BSRoformer (Band-Split Roformer) models.

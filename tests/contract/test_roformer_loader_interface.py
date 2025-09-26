@@ -160,17 +160,7 @@ class TestRoformerLoaderInterface:
         assert config.depth > 0
 
 
-# This test MUST FAIL when run - there's no real implementation yet
-def test_real_implementation_does_not_exist():
-    """This test verifies that no real implementation exists yet (TDD requirement)."""
-    
-    # Try to import the actual implementation - this should fail
-    with pytest.raises(ImportError):
-        from audio_separator.separator.roformer.roformer_loader import RoformerLoader
-    
-    # Verify the planned file doesn't exist yet
-    expected_path = "/Users/andrew/Projects/python-audio-separator/audio_separator/separator/roformer/roformer_loader.py"
-    assert not os.path.exists(expected_path), "Implementation file should not exist yet (TDD)"
+# TDD placeholder test removed - implementation is now complete
 
 
 if __name__ == "__main__":

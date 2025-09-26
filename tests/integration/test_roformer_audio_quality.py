@@ -87,10 +87,7 @@ class TestRoformerAudioQuality:
                 # 3. Validate stem separation quality
                 # 4. Ensure no clipping or distortion
     
-    def test_no_implementation_exists_yet(self):
-        """TDD verification: This test ensures no implementation exists yet."""
-        with pytest.raises(ImportError):
-            from audio_separator.separator.roformer.roformer_loader import RoformerLoader
+    # TDD placeholder test removed - implementation is now complete
     
     @pytest.mark.skipif(not IMPORTS_AVAILABLE, reason="Implementation not available yet (TDD)")
     def test_audio_similarity_calculation_framework(self, reference_audio_file):

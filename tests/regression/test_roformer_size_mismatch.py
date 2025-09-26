@@ -6,13 +6,14 @@ Tests the handling of shorter outputs and broadcast errors in overlap_add operat
 import pytest
 import torch
 import numpy as np
+import unittest
 from unittest.mock import Mock, patch, MagicMock
 
 
-class TestRoformerSizeMismatch:
+class TestRoformerSizeMismatch(unittest.TestCase):
     """Regression tests for size mismatch issues in Roformer processing."""
 
-    def setup_method(self):
+    def setUp(self):
         """Set up test fixtures."""
         self.batch_size = 2
         self.channels = 2

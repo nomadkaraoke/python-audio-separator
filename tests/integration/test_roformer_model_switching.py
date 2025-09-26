@@ -70,10 +70,7 @@ class TestRoformerModelSwitching:
             # Both should work without conflicts
             assert separator.model is not None
     
-    def test_no_implementation_exists_yet(self):
-        """TDD verification: This test ensures no implementation exists yet."""
-        with pytest.raises(ImportError):
-            from audio_separator.separator.roformer.roformer_loader import RoformerLoader
+    # TDD placeholder test removed - implementation is now complete
 
 
 if __name__ == "__main__":
