@@ -7,14 +7,38 @@ from typing import Dict, Any, List, Optional, Union, Tuple
 import sys
 import os
 
-# Add contracts to path for interface imports
-sys.path.append('/Users/andrew/Projects/python-audio-separator/specs/001-update-roformer-implementation/contracts')
-
-from parameter_validator_interface import (
-    ParameterValidatorInterface,
-    ValidationIssue,
-    ValidationSeverity
-)
+# Add contracts to path for interface imports (optional)
+try:
+    sys.path.append('/Users/andrew/Projects/python-audio-separator/specs/001-update-roformer-implementation/contracts')
+    from parameter_validator_interface import (
+        ParameterValidatorInterface,
+        ValidationIssue,
+        ValidationSeverity
+    )
+    _has_interface = True
+except ImportError:
+    # Create dummy interfaces for when contracts are not available
+    from enum import Enum
+    from dataclasses import dataclass
+    
+    class ValidationSeverity(Enum):
+        ERROR = "error"
+        WARNING = "warning"
+        INFO = "info"
+    
+    @dataclass
+    class ValidationIssue:
+        severity: ValidationSeverity
+        parameter_name: str
+        message: str
+        suggested_fix: str
+        current_value: any = None
+        expected_value: any = None
+    
+    class ParameterValidatorInterface:
+        pass
+    
+    _has_interface = False
 from .parameter_validation_error import ParameterValidationError
 
 

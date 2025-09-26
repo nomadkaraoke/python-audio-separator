@@ -56,28 +56,28 @@
 - [x] T015 [P] Audio quality validation test for MelBandRoformer models in tests/integration/test_roformer_audio_quality.py
 
 ### Roformer Chunking and Overlap Unit Tests
-- [ ] T051 [P] Assert chunk_size uses model.stft_hop_length: tests/unit/test_mdxc_roformer_chunking.py::test_chunk_size_uses_model_stft_hop_length
-- [ ] T052 [P] Fallback to audio.hop_length if model.stft_hop_length missing: tests/unit/test_mdxc_roformer_chunking.py::test_chunk_size_falls_back_to_audio_hop_length
-- [ ] T053 [P] Step clamped to chunk_size (desired_step > chunk_size or ≤ 0): tests/unit/test_mdxc_roformer_chunking.py::test_step_clamped_to_chunk_size
-- [ ] T054 [P] overlap_add handles shorter model output safely (safe_len): tests/unit/test_mdxc_roformer_chunking.py::test_overlap_add_short_output_safe
-- [ ] T055 [P] Counter increments match overlap_add safe span: tests/unit/test_mdxc_roformer_chunking.py::test_counter_updates_safe_len
-- [ ] T056 [P] No NaN/inf on normalization (counter clamp): tests/unit/test_mdxc_roformer_chunking.py::test_counter_clamp_no_nan
-- [ ] T057 [P] Short-audio last-block path works and preserves length: tests/unit/test_mdxc_roformer_chunking.py::test_short_audio_last_block
-- [ ] T058 [P] Parametrized invariants across dim_t and hop configs: tests/unit/test_mdxc_roformer_chunking.py::test_parametrized_shape_invariants
+- [x] T051 [P] Assert chunk_size uses model.stft_hop_length: tests/unit/test_mdxc_roformer_chunking.py::test_chunk_size_uses_model_stft_hop_length
+- [x] T052 [P] Fallback to audio.hop_length if model.stft_hop_length missing: tests/unit/test_mdxc_roformer_chunking.py::test_chunk_size_falls_back_to_audio_hop_length
+- [x] T053 [P] Step clamped to chunk_size (desired_step > chunk_size or ≤ 0): tests/unit/test_mdxc_roformer_chunking.py::test_step_clamped_to_chunk_size
+- [x] T054 [P] overlap_add handles shorter model output safely (safe_len): tests/unit/test_mdxc_roformer_chunking.py::test_overlap_add_short_output_safe
+- [x] T055 [P] Counter increments match overlap_add safe span: tests/unit/test_mdxc_roformer_chunking.py::test_counter_updates_safe_len
+- [x] T056 [P] No NaN/inf on normalization (counter clamp): tests/unit/test_mdxc_roformer_chunking.py::test_counter_clamp_no_nan
+- [x] T057 [P] Short-audio last-block path works and preserves length: tests/unit/test_mdxc_roformer_chunking.py::test_short_audio_last_block
+- [x] T058 [P] Parametrized invariants across dim_t and hop configs: tests/unit/test_mdxc_roformer_chunking.py::test_parametrized_shape_invariants
 
 ### Roformer Detection Tests
-- [ ] T059 [P] YAML path containing "roformer" sets is_roformer and routes Roformer path: tests/unit/test_separator_detection.py::test_is_roformer_set_from_yaml_path
+- [x] T059 [P] YAML path containing "roformer" sets is_roformer and routes Roformer path: tests/unit/test_separator_detection.py::test_is_roformer_set_from_yaml_path
 
 ### Roformer Integration (E2E)
-- [ ] T060 [P] New BSRoformer SW-Fixed end-to-end separation succeeds: tests/integration/test_roformer_e2e.py::test_bs_roformer_sw_fixed_e2e
-- [ ] T061 [P] Legacy Roformer end-to-end separation still succeeds: tests/integration/test_roformer_e2e.py::test_legacy_roformer_e2e
+- [x] T060 [P] New BSRoformer SW-Fixed end-to-end separation succeeds: tests/integration/test_roformer_e2e.py::test_bs_roformer_sw_fixed_e2e
+- [x] T061 [P] Legacy Roformer end-to-end separation still succeeds: tests/integration/test_roformer_e2e.py::test_legacy_roformer_e2e
 
 ### Regression: Size mismatch family
-- [ ] T062 [P] Reproduce shorter outputs (N∈{1,16,32,236}) and assert no broadcast errors, output length preserved: tests/regression/test_roformer_size_mismatch.py::test_overlap_add_safe_lengths
+- [x] T062 [P] Reproduce shorter outputs (N∈{1,16,32,236}) and assert no broadcast errors, output length preserved: tests/regression/test_roformer_size_mismatch.py::test_overlap_add_safe_lengths
 
 ### Logging and Performance Sanity
-- [ ] T063 [P] Logs include hop/step sources (stft_hop_length, dim_t, desired vs actual step): tests/unit/test_mdxc_roformer_chunking.py::test_logging_for_hop_and_step
-- [ ] T064 [P] Iteration count reasonable (ceil calculation within ±1): tests/unit/test_mdxc_roformer_chunking.py::test_iteration_count_reasonable
+- [x] T063 [P] Logs include hop/step sources (stft_hop_length, dim_t, desired vs actual step): tests/unit/test_mdxc_roformer_chunking.py::test_logging_for_hop_and_step
+- [x] T064 [P] Iteration count reasonable (ceil calculation within ±1): tests/unit/test_mdxc_roformer_chunking.py::test_iteration_count_reasonable
 
 ## Phase 3.3: Core Implementation (ONLY after tests are failing)
 
@@ -89,10 +89,10 @@
 - [x] T020 [P] Implement ParameterValidationError exception in audio_separator/separator/roformer/parameter_validation_error.py
 
 ### Parameter Validation System
-- [ ] T021 [P] Implement ParameterValidator class in audio_separator/separator/roformer/parameter_validator.py
-- [ ] T022 [P] Implement BSRoformerValidator class in audio_separator/separator/roformer/bs_roformer_validator.py
-- [ ] T023 [P] Implement MelBandRoformerValidator class in audio_separator/separator/roformer/mel_band_roformer_validator.py
-- [ ] T024 [P] Implement ConfigurationNormalizer class in audio_separator/separator/roformer/configuration_normalizer.py
+- [x] T021 [P] Implement ParameterValidator class in audio_separator/separator/roformer/parameter_validator.py
+- [x] T022 [P] Implement BSRoformerValidator class in audio_separator/separator/roformer/bs_roformer_validator.py
+- [x] T023 [P] Implement MelBandRoformerValidator class in audio_separator/separator/roformer/mel_band_roformer_validator.py
+- [x] T024 [P] Implement ConfigurationNormalizer class in audio_separator/separator/roformer/configuration_normalizer.py
 
 ### Updated Roformer Models
 - [x] T025 Update BSRoformer.__init__ method in audio_separator/separator/uvr_lib_v5/roformer/bs_roformer.py to add new parameters (mlp_expansion_factor, sage_attention, zero_dc, use_torch_checkpoint, skip_connection)
@@ -101,41 +101,41 @@
 - [x] T028 Update transformer_kwargs in MelBandRoformer to include sage_attention parameter
 
 ### Normalization Fixes
-- [ ] T029 Update get_norm function in audio_separator/separator/uvr_lib_v5/tfc_tdf_v3.py to handle missing norm attributes gracefully
-- [ ] T030 Add defensive checks in TFC_TDF_net.__init__ for normalization configuration
+- [x] T029 Update get_norm function in audio_separator/separator/uvr_lib_v5/tfc_tdf_v3.py to handle missing norm attributes gracefully
+- [x] T030 Add defensive checks in TFC_TDF_net.__init__ for normalization configuration
 
 ### Fallback Loading System
-- [ ] T031 [P] Implement RoformerLoader class with fallback mechanism in audio_separator/separator/roformer/roformer_loader.py
-- [ ] T032 [P] Implement FallbackLoader class in audio_separator/separator/roformer/fallback_loader.py
-- [ ] T033 Update RoformerSeparator class in audio_separator/separator/architectures/roformer_separator.py to use new loading system
+- [x] T031 [P] Implement RoformerLoader class with fallback mechanism in audio_separator/separator/roformer/roformer_loader.py
+- [x] T032 [P] Implement FallbackLoader class in audio_separator/separator/roformer/fallback_loader.py
+- [x] T033 Update RoformerSeparator class in audio_separator/separator/architectures/roformer_separator.py to use new loading system
 
 ## Phase 3.4: Integration
 
-- [ ] T034 Integrate new RoformerLoader into CommonSeparator base class in audio_separator/separator/common_separator.py
-- [ ] T035 Update CLI model loading logic to use new fallback mechanism in audio_separator/separator/separator.py
-- [ ] T036 Add logging for implementation version used (old/new/fallback) in audio_separator/separator/roformer/roformer_loader.py
-- [ ] T037 Update error handling and user messages for configuration validation failures
-- [ ] T038 Integrate with existing integration test framework (test_cli_integration.py compatibility)
+- [x] T034 Integrate new RoformerLoader into CommonSeparator base class in audio_separator/separator/common_separator.py
+- [x] T035 Update CLI model loading logic to use new fallback mechanism in audio_separator/separator/separator.py
+- [x] T036 Add logging for implementation version used (old/new/fallback) in audio_separator/separator/roformer/roformer_loader.py
+- [x] T037 Update error handling and user messages for configuration validation failures
+- [x] T038 Integrate with existing integration test framework (test_cli_integration.py compatibility)
 
 ## Phase 3.5: Polish
 
 ### Unit Tests
-- [ ] T039 [P] Unit tests for ModelConfiguration validation in tests/unit/test_model_configuration.py
-- [ ] T040 [P] Unit tests for ParameterValidator methods in tests/unit/test_parameter_validator.py
-- [ ] T041 [P] Unit tests for ConfigurationNormalizer methods in tests/unit/test_configuration_normalizer.py
-- [ ] T042 [P] Unit tests for fallback mechanism logic in tests/unit/test_fallback_loader.py
+- [x] T039 [P] Unit tests for ModelConfiguration validation in tests/unit/test_model_configuration.py
+- [x] T040 [P] Unit tests for ParameterValidator methods in tests/unit/test_parameter_validator.py
+- [x] T041 [P] Unit tests for ConfigurationNormalizer methods in tests/unit/test_configuration_normalizer.py
+- [x] T042 [P] Unit tests for fallback mechanism logic in tests/unit/test_fallback_loader.py
 
 ### Performance and Quality Validation
-- [ ] T043 Run existing integration tests to ensure no regression in audio quality (SSIM ≥ 0.90/0.80)
-- [ ] T044 Performance benchmark for model loading time (should not significantly increase)
-- [ ] T045 Memory usage validation for new parameter handling
-- [ ] T046 [P] Update documentation in audio_separator/separator/roformer/README.md for new parameters
+- [x] T043 Run existing integration tests to ensure no regression in audio quality (SSIM ≥ 0.90/0.80)
+- [x] T044 Performance benchmark for model loading time (should not significantly increase)
+- [x] T045 Memory usage validation for new parameter handling
+- [x] T046 [P] Update documentation in audio_separator/separator/roformer/README.md for new parameters
 
 ### Manual Testing
-- [ ] T047 Manual test with existing BSRoformer models from integration test suite
-- [ ] T048 Manual test with existing MelBandRoformer models from integration test suite  
-- [ ] T049 Manual test with newer models containing new parameters (if available)
-- [ ] T050 Manual validation of error messages for common configuration issues
+- [x] T047 Manual test with existing BSRoformer models from integration test suite
+- [x] T048 Manual test with existing MelBandRoformer models from integration test suite  
+- [x] T049 Manual test with newer models containing new parameters (if available)
+- [x] T050 Manual validation of error messages for common configuration issues
 
 ## Dependencies
 
