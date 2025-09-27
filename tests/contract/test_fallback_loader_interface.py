@@ -8,7 +8,21 @@ from unittest.mock import Mock
 
 # Import interfaces from contracts
 import sys
-sys.path.append('/Users/andrew/Projects/python-audio-separator/specs/001-update-roformer-implementation/contracts')
+import os
+
+# Find project root dynamically
+current_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = current_dir
+# Go up until we find the project root (contains specs/ directory)
+while project_root and not os.path.exists(os.path.join(project_root, 'specs')):
+    parent = os.path.dirname(project_root)
+    if parent == project_root:  # Reached filesystem root
+        break
+    project_root = parent
+
+contracts_path = os.path.join(project_root, 'specs', '001-update-roformer-implementation', 'contracts')
+if os.path.exists(contracts_path):
+    sys.path.append(contracts_path)
 
 from roformer_loader_interface import (
     FallbackLoaderInterface,

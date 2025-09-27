@@ -10,16 +10,46 @@ import os
 
 # Add the roformer module to path for imports
 import sys
-sys.path.append('/Users/andrew/Projects/python-audio-separator')
+
+# Find project root dynamically
+current_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = current_dir
+# Go up until we find the project root (contains audio_separator/ directory)
+while project_root and not os.path.exists(os.path.join(project_root, 'audio_separator')):
+    parent = os.path.dirname(project_root)
+    if parent == project_root:  # Reached filesystem root
+        break
+    project_root = parent
+
+if project_root:
+    sys.path.append(project_root)
 
 from audio_separator.separator.roformer.fallback_loader import FallbackLoader
 
-# Import ModelLoadingResult from contracts if available, otherwise use local
+# Import ModelLoadingResult - use the same import strategy as FallbackLoader
 try:
-    sys.path.append('/Users/andrew/Projects/python-audio-separator/specs/001-update-roformer-implementation/contracts')
+    contracts_path = os.path.join(project_root, 'specs', '001-update-roformer-implementation', 'contracts')
+    if os.path.exists(contracts_path):
+        sys.path.append(contracts_path)
     from fallback_loader_interface import ModelLoadingResult
+    _has_contracts = True
 except ImportError:
-    from audio_separator.separator.roformer.model_loading_result import ModelLoadingResult
+    # Use the same fallback as FallbackLoader to ensure compatibility
+    from dataclasses import dataclass
+    from typing import Any, Dict
+    
+    @dataclass
+    class ModelLoadingResult:
+        """Result of a model loading attempt."""
+        model: Any
+        model_type: str
+        config_used: Dict[str, Any]
+        implementation_version: str
+        loading_method: str
+        device: str
+        success: bool
+        error_message: str = None
+    _has_contracts = False
 
 
 class TestFallbackLoader:

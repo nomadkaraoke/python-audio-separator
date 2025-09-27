@@ -9,7 +9,18 @@ from unittest.mock import Mock, patch
 # Add the roformer module to path for imports
 import sys
 import os
-sys.path.append('/Users/andrew/Projects/python-audio-separator')
+# Find project root dynamically
+current_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = current_dir
+# Go up until we find the project root (contains audio_separator/ directory)
+while project_root and not os.path.exists(os.path.join(project_root, 'audio_separator')):
+    parent = os.path.dirname(project_root)
+    if parent == project_root:  # Reached filesystem root
+        break
+    project_root = parent
+
+if project_root:
+    sys.path.append(project_root)
 
 from audio_separator.separator.roformer.configuration_normalizer import ConfigurationNormalizer
 from audio_separator.separator.roformer.parameter_validation_error import ParameterValidationError

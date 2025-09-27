@@ -29,7 +29,17 @@ class DecimalEncoder(JSONEncoder):
 
 MUSDB_PATH = "/Volumes/Nomad4TBOne/python-audio-separator/tests/model-metrics/datasets/musdb18hq"
 RESULTS_PATH = "/Volumes/Nomad4TBOne/python-audio-separator/tests/model-metrics/results"
-COMBINED_RESULTS_PATH = "/Users/andrew/Projects/python-audio-separator/audio_separator/models-scores.json"
+# Find project root dynamically
+import os
+current_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = current_dir
+while project_root and not os.path.exists(os.path.join(project_root, 'audio_separator')):
+    parent = os.path.dirname(project_root)
+    if parent == project_root:  # Reached filesystem root
+        break
+    project_root = parent
+
+COMBINED_RESULTS_PATH = os.path.join(project_root, "audio_separator", "models-scores.json")
 COMBINED_MUSEVAL_RESULTS_PATH = "/Volumes/Nomad4TBOne/python-audio-separator/tests/model-metrics/results/combined-museval-results.json"
 STOP_SIGNAL_PATH = "/Volumes/Nomad4TBOne/python-audio-separator/tests/model-metrics/stop-signal"
 
