@@ -249,7 +249,11 @@ class MDXCSeparator(CommonSeparator):
         """
         Adds the overlapping part of the result to the result tensor.
         """
-        result[..., start : start + length] += x[..., :length] * weights[:length]
+        # Guard against minor shape mismatches from model output length
+        # Use the minimum of provided lengths to avoid broadcasting errors
+        safe_len = min(length, x.shape[-1], weights.shape[0])
+        if safe_len > 0:
+            result[..., start : start + safe_len] += x[..., :safe_len] * weights[:safe_len]
         return result
 
     def demix(self, mix: np.ndarray) -> dict:
@@ -284,11 +288,25 @@ class MDXCSeparator(CommonSeparator):
             self.logger.debug(f"Number of stems: {num_stems}")
 
             # chunk_size aka "C" in UVR
-            chunk_size = self.model_data_cfgdict.audio.hop_length * (mdx_segment_size - 1)
-            self.logger.debug(f"Chunk size: {chunk_size}")
+            # IMPORTANT: For Roformer models, use the model's STFT hop length to derive the temporal chunk size
+            stft_hop_len = getattr(self.model_data_cfgdict.model, "stft_hop_length", None)
+            if stft_hop_len is None:
+                # Fallback to audio.hop_length if not present, but log for visibility
+                stft_hop_len = self.model_data_cfgdict.audio.hop_length
+                self.logger.debug(
+                    f"Model.stft_hop_length missing; falling back to audio.hop_length={stft_hop_len}"
+                )
 
-            step = int(self.overlap * self.model_data_cfgdict.audio.sample_rate)
-            self.logger.debug(f"Step: {step}")
+            chunk_size = int(stft_hop_len) * (int(mdx_segment_size) - 1)
+            self.logger.debug(
+                f"Chunk size: {chunk_size} (using stft_hop_length={stft_hop_len} and dim_t={mdx_segment_size})"
+            )
+
+            # Align step to chunk_size by default for Roformer to avoid stride mismatches
+            # If a user-specified overlap (in seconds) results in a step larger than chunk_size, clamp it
+            desired_step = int(self.overlap * self.model_data_cfgdict.audio.sample_rate)
+            step = chunk_size if desired_step <= 0 else min(desired_step, chunk_size)
+            self.logger.debug(f"Step: {step} (desired={desired_step})")
 
             # Create a weighting table and convert it to a PyTorch tensor
             window = torch.tensor(signal.windows.hamming(chunk_size), dtype=torch.float32)
@@ -313,11 +331,16 @@ class MDXCSeparator(CommonSeparator):
                     # Perform overlap_add on CPU
                     if i + chunk_size > mix.shape[1]:
                         # Fixed to correctly add to the end of the tensor
-                        result = self.overlap_add(result, x, window, result.shape[-1] - chunk_size, length)
-                        counter[..., result.shape[-1] - chunk_size :] += window[:length]
+                        start_idx = result.shape[-1] - chunk_size
+                        result = self.overlap_add(result, x, window, start_idx, length)
+                        safe_len = min(length, x.shape[-1], window.shape[0])
+                        if safe_len > 0:
+                            counter[..., start_idx : start_idx + safe_len] += window[:safe_len]
                     else:
                         result = self.overlap_add(result, x, window, i, length)
-                        counter[..., i : i + length] += window[:length]
+                        safe_len = min(length, x.shape[-1], window.shape[0])
+                        if safe_len > 0:
+                            counter[..., i : i + safe_len] += window[:safe_len]
 
             inferenced_outputs = result / counter.clamp(min=1e-10)
 
