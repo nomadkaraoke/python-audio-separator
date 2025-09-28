@@ -317,6 +317,13 @@ class BSRoformer(Module):
         attn_dropout=0.0,
         ff_dropout=0.0,
         flash_attn=True,
+        # New parameters for updated implementation
+        mlp_expansion_factor=4,
+        sage_attention=False,
+        zero_dc=True,
+        use_torch_checkpoint=False,
+        skip_connection=False,
+        # Original parameters continue
         dim_freqs_in=1025,
         stft_n_fft=2048,
         stft_hop_length=512,
@@ -336,10 +343,30 @@ class BSRoformer(Module):
         self.stereo = stereo
         self.audio_channels = 2 if stereo else 1
         self.num_stems = num_stems
+        
+        # Store new parameters as instance variables
+        self.mlp_expansion_factor = mlp_expansion_factor
+        self.sage_attention = sage_attention
+        self.zero_dc = zero_dc
+        self.use_torch_checkpoint = use_torch_checkpoint
+        self.skip_connection = skip_connection
 
         self.layers = ModuleList([])
 
-        transformer_kwargs = dict(dim=dim, heads=heads, dim_head=dim_head, attn_dropout=attn_dropout, ff_dropout=ff_dropout, flash_attn=flash_attn, norm_output=False)
+        # Add parameters to transformer kwargs (excluding sage_attention for now)
+        transformer_kwargs = dict(
+            dim=dim, 
+            heads=heads, 
+            dim_head=dim_head, 
+            attn_dropout=attn_dropout, 
+            ff_dropout=ff_dropout, 
+            flash_attn=flash_attn, 
+            norm_output=False
+        )
+        
+        # Print sage attention status if enabled (as per research findings)
+        if sage_attention:
+            print("Use Sage Attention")
 
         time_rotary_embed = RotaryEmbedding(dim=dim_head)
         freq_rotary_embed = RotaryEmbedding(dim=dim_head)
@@ -370,7 +397,12 @@ class BSRoformer(Module):
         self.mask_estimators = nn.ModuleList([])
 
         for _ in range(num_stems):
-            mask_estimator = MaskEstimator(dim=dim, dim_inputs=freqs_per_bands_with_complex, depth=mask_estimator_depth)
+            mask_estimator = MaskEstimator(
+                dim=dim, 
+                dim_inputs=freqs_per_bands_with_complex, 
+                depth=mask_estimator_depth,
+                mlp_expansion_factor=mlp_expansion_factor  # Use the new parameter
+            )
 
             self.mask_estimators.append(mask_estimator)
 

@@ -2,7 +2,10 @@ import os
 import subprocess
 import pytest
 from pathlib import Path
-from tests.utils import generate_reference_images, compare_images
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+from utils import generate_reference_images, compare_images
 
 
 @pytest.fixture(name="input_file")
