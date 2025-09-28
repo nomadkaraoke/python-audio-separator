@@ -7,6 +7,7 @@ Considering [their pricing](https://modal.com/pricing) for execution with an Nvi
 With $30/month in free credits, that's over **1,500 GPU-accelerated audio separation jobs per month, for free!**
 
 **✨ Key Features:**
+
 - **Multiple Model Support**: Upload once, separate with multiple models in a single job
 - **Full Parameter Compatibility**: All local CLI parameters and architecture settings supported
 - **Efficient Processing**: Avoid repeated uploads when comparing different models
@@ -27,7 +28,7 @@ graph TD
     G --> J["📥 Download All Results<br/>Compare quality across models"]
     H --> J
     I --> J
-    
+
     style A fill:#e1f5fe,color:#000
     style B fill:#f3e5f5,color:#000
     style C fill:#fff3e0,color:#000
@@ -49,16 +50,17 @@ To use the remote API functionality, you'll need to deploy the Audio Separator A
    pip install modal
    modal setup
    ```
-4. **Deploy the Audio Separator API**:
+3. **Deploy the Audio Separator API**:
    ```bash
    modal deploy audio_separator/remote/deploy_modal.py
    ```
-5. **Get your API URL** from the deployment output. It will look like:
+4. **Get your API URL** from the deployment output. It will look like:
    ```
    https://USERNAME--audio-separator-api.modal.run
    ```
 
 Set this API URL as an environment variable:
+
 ```bash
 export AUDIO_SEPARATOR_API_URL="https://USERNAME--audio-separator-api.modal.run"
 ```
@@ -117,7 +119,7 @@ result = api_client.separate_audio_and_wait(
     # MDX parameters
     mdx_segment_size=512,
     mdx_batch_size=2,
-    # VR parameters  
+    # VR parameters
     vr_aggression=10,
     vr_window_size=320,
     # And any other separator parameters...
@@ -125,7 +127,7 @@ result = api_client.separate_audio_and_wait(
 
 # Advanced approach: manual job management (for custom polling logic)
 result = api_client.separate_audio(
-    "path/to/audio.wav", 
+    "path/to/audio.wav",
     models=["model1.ckpt", "model2.onnx"],
     custom_output_names={"Vocals": "vocals_output", "Instrumental": "instrumental_output"}
 )
@@ -137,7 +139,7 @@ import time
 while True:
     status = api_client.get_job_status(task_id)
     print(f"Job status: {status['status']}")
-    
+
     # Show progress with model information
     if "progress" in status:
         progress_info = f"Progress: {status['progress']}%"
@@ -145,11 +147,11 @@ while True:
             model_info = f" (Model {status['current_model_index'] + 1}/{status['total_models']})"
             progress_info += model_info
         print(progress_info)
-    
+
     if status["status"] == "completed":
         # Download files manually
-        for filename in status["files"]:
-            output_path = api_client.download_file(task_id, filename)
+        for filehash, filename in status["files"].items():
+            output_path = api_client.download_file_by_hash(task_id, filehash, filename)
             print(f"Downloaded: {output_path}")
         break
     elif status["status"] == "error":
@@ -174,6 +176,7 @@ Audio Separator also provides a command-line interface for interacting with remo
 #### Commands
 
 **Separate audio files:**
+
 ```bash
 # Separate audio file (asynchronous processing)
 audio-separator-remote separate audio.wav --model model_bs_roformer_ep_317_sdr_12.9755.ckpt
@@ -198,11 +201,13 @@ audio-separator-remote separate audio.wav \
 ```
 
 **Check job status:**
+
 ```bash
 audio-separator-remote status <task_id>
 ```
 
 **List available models:**
+
 ```bash
 # Pretty formatted list
 audio-separator-remote models
@@ -215,11 +220,13 @@ audio-separator-remote models --filter vocals
 ```
 
 **Download specific files:**
+
 ```bash
 audio-separator-remote download <task_id> filename1.wav filename2.wav
 ```
 
 **Get version information:**
+
 ```bash
 audio-separator-remote --version
 ```
@@ -227,6 +234,7 @@ audio-separator-remote --version
 #### CLI Options
 
 **Global Options:**
+
 - `--api_url`: Override the API URL
 - `--timeout`: Set timeout for polling (default: 600 seconds)
 - `--poll_interval`: Set polling interval (default: 10 seconds)
@@ -234,10 +242,12 @@ audio-separator-remote --version
 - `--log_level`: Set log level (info, debug, warning, etc.)
 
 **Model Selection:**
+
 - `--model`: Single model to use for separation
 - `--models`: Multiple models to use for separation (space-separated)
 
 **Output Parameters:**
+
 - `--output_format`: Output format (default: flac)
 - `--output_bitrate`: Output bitrate
 - `--normalization`: Max peak amplitude to normalize to (default: 0.9)
@@ -251,6 +261,7 @@ audio-separator-remote --version
 
 **Architecture-Specific Parameters:**
 All MDX, VR, Demucs, and MDXC parameters from the local CLI are supported:
+
 - `--mdx_segment_size`, `--mdx_overlap`, `--mdx_batch_size`, etc.
 - `--vr_batch_size`, `--vr_window_size`, `--vr_aggression`, etc.
 - `--demucs_segment_size`, `--demucs_shifts`, `--demucs_overlap`, etc.
@@ -289,6 +300,7 @@ audio-separator-remote separate vocals.wav \
 #### Key Features
 
 The remote API client automatically handles:
+
 - **File uploading and downloading**: Seamless transfer of audio files and results
 - **Multiple model processing**: Upload once, separate with multiple models efficiently
 - **Full separator compatibility**: All local CLI parameters and architectures supported
@@ -299,12 +311,14 @@ The remote API client automatically handles:
 #### Benefits of Multiple Model Support
 
 When using multiple models, the remote API provides significant advantages:
+
 - **Efficiency**: Upload your audio file once, process with multiple models without re-uploading
 - **Comparison**: Easily compare results from different models (e.g., vocals vs. instrumental quality)
 - **Workflow optimization**: Process with complementary models in a single job
 - **Time savings**: Avoid repeated upload times for large audio files
 
 Example use cases:
+
 - Compare quality between `model_bs_roformer_ep_317_sdr_12.9755.ckpt` (high-quality vocals) and `UVR-MDX-NET-Inst_HQ_4.onnx` (high-quality instrumental)
 - Process with both 2-stem models (vocals/instrumental) and multi-stem models (vocals/drums/bass/other) in one job
 - Use different models optimized for different parts of the frequency spectrum
