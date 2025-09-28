@@ -126,6 +126,10 @@ MODEL_SIMILARITY_THRESHOLDS = {
 # Parameterized test for multiple models
 MODEL_PARAMS = [
     # (model_filename, expected_output_filenames)
+    ("mel_band_roformer_karaoke_aufr33_viperx_sdr_10.1956.ckpt", [
+        "mardy20s_(Instrumental)_mel_band_roformer_karaoke_aufr33_viperx_sdr_10.flac",
+        "mardy20s_(Vocals)_mel_band_roformer_karaoke_aufr33_viperx_sdr_10.flac",
+    ]),
     ("kuielab_b_vocals.onnx", ["mardy20s_(Instrumental)_kuielab_b_vocals.flac", "mardy20s_(Vocals)_kuielab_b_vocals.flac"]),
     ("MGM_MAIN_v4.pth", ["mardy20s_(Instrumental)_MGM_MAIN_v4.flac", "mardy20s_(Vocals)_MGM_MAIN_v4.flac"]),
     ("UVR-MDX-NET-Inst_HQ_4.onnx", ["mardy20s_(Instrumental)_UVR-MDX-NET-Inst_HQ_4.flac", "mardy20s_(Vocals)_UVR-MDX-NET-Inst_HQ_4.flac"]),
