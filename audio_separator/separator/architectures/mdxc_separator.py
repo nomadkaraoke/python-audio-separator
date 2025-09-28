@@ -10,8 +10,7 @@ from scipy import signal
 from audio_separator.separator.common_separator import CommonSeparator
 from audio_separator.separator.uvr_lib_v5 import spec_utils
 from audio_separator.separator.uvr_lib_v5.tfc_tdf_v3 import TFC_TDF_net
-from audio_separator.separator.uvr_lib_v5.roformer.mel_band_roformer import MelBandRoformer
-from audio_separator.separator.uvr_lib_v5.roformer.bs_roformer import BSRoformer
+# Roformer direct constructors removed; loading handled via RoformerLoader in CommonSeparator.
 
 
 class MDXCSeparator(CommonSeparator):
@@ -56,7 +55,8 @@ class MDXCSeparator(CommonSeparator):
         self.logger.debug(f"MDXC arch params: override_model_segment_size={self.override_model_segment_size}, pitch_shift={self.pitch_shift}")
         self.logger.debug(f"MDXC multi-stem params: process_all_stems={self.process_all_stems}")
 
-        self.is_roformer = "is_roformer" in self.model_data
+        # Align Roformer detection flag with CommonSeparator to ensure consistent stats/logging
+        self.is_roformer = getattr(self, "is_roformer_model", False)
 
         self.load_model()
 
@@ -84,23 +84,21 @@ class MDXCSeparator(CommonSeparator):
 
         try:
             if self.is_roformer:
-                self.logger.debug("Loading Roformer model...")
+                # Use the RoformerLoader exclusively; no legacy fallback
+                self.logger.debug("Loading Roformer model via RoformerLoader...")
+                result = self.roformer_loader.load_model(
+                    model_path=self.model_path,
+                    config=self.model_data,
+                    device=str(self.torch_device),
+                )
 
-                # Determine the model type based on the configuration and instantiate it
-                if "num_bands" in self.model_data_cfgdict.model:
-                    self.logger.debug("Loading MelBandRoformer model...")
-                    model = MelBandRoformer(**self.model_data_cfgdict.model)
-                elif "freqs_per_bands" in self.model_data_cfgdict.model:
-                    self.logger.debug("Loading BSRoformer model...")
-                    model = BSRoformer(**self.model_data_cfgdict.model)
+                if getattr(result, "success", False) and getattr(result, "model", None) is not None:
+                    self.model_run = result.model
+                    self.model_run.to(self.torch_device).eval()
                 else:
-                    raise ValueError("Unknown Roformer model type in the configuration.")
-
-                # Load model checkpoint
-                checkpoint = torch.load(self.model_path, map_location="cpu", weights_only=True)
-                self.model_run = model if not isinstance(model, torch.nn.DataParallel) else model.module
-                self.model_run.load_state_dict(checkpoint)
-                self.model_run.to(self.torch_device).eval()
+                    error_msg = getattr(result, "error_message", "RoformerLoader unsuccessful")
+                    self.logger.error(f"Failed to load Roformer model: {error_msg}")
+                    raise RuntimeError(error_msg)
 
             else:
                 self.logger.debug("Loading TFC_TDF_net model...")

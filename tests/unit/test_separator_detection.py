@@ -56,7 +56,8 @@ class TestSeparatorDetection:
             is_roformer = mock_detect_roformer_from_path(yaml_path)
             
             if is_roformer:
-                return "RoformerSeparator"
+                # In current routing, Roformer models are handled via MDXCSeparator path
+                return "MDXCSeparator"
             elif 'mdx' in yaml_path.lower():
                 return "MDXSeparator"
             elif 'vr' in yaml_path.lower():
@@ -75,8 +76,8 @@ class TestSeparatorDetection:
         
         for path in roformer_paths:
             separator_type = mock_route_separator(path)
-            assert separator_type == "RoformerSeparator", (
-                f"Roformer model '{path}' should route to RoformerSeparator, got {separator_type}"
+            assert separator_type == "MDXCSeparator", (
+                f"Roformer model '{path}' should route to MDXCSeparator, got {separator_type}"
             )
 
         # Test routing for non-Roformer models
