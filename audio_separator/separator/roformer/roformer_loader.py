@@ -45,12 +45,25 @@ class RoformerLoader:
             self._loading_stats['new_implementation_success'] += 1
             logger.info(f"Successfully loaded {model_type} model with new implementation")
             return result
-        except (RuntimeError, ValueError) as e:
+        except (RuntimeError, ValueError, TypeError) as e:
             logger.error(f"New implementation failed: {e}")
-            return ModelLoadingResult.failure_result(
-                error_message=f"New implementation failed: {e}",
-                implementation=ImplementationVersion.NEW,
-            )
+            # Attempt legacy fallback using the original (pre-normalized) configuration
+            try:
+                fallback_result = self._load_with_legacy_implementation(
+                    model_path=model_path,
+                    original_config=config,
+                    device=device,
+                    original_error=str(e)
+                )
+                logger.warning("Fell back to legacy Roformer implementation successfully")
+                return fallback_result
+            except (RuntimeError, ValueError, TypeError) as fallback_error:
+                logger.error(f"Legacy implementation also failed: {fallback_error}")
+                self._loading_stats['total_failures'] += 1
+                return ModelLoadingResult.failure_result(
+                    error_message=f"New implementation failed: {e}; Legacy fallback failed: {fallback_error}",
+                    implementation=ImplementationVersion.NEW,
+                )
 
     def validate_configuration(self, config: Dict[str, Any], model_type: str) -> bool:
         try:
@@ -160,12 +173,66 @@ class RoformerLoader:
         }
         if 'sample_rate' in config:
             model_args['sample_rate'] = config['sample_rate']
-        if 'fmin' in config:
-            model_args['fmin'] = config['fmin']
-        if 'fmax' in config:
-            model_args['fmax'] = config['fmax']
+        # Optional parameters commonly present in legacy configs
+        for optional_key in [
+            'mask_estimator_depth',
+            'stft_n_fft',
+            'stft_hop_length',
+            'stft_win_length',
+            'stft_normalized',
+            'stft_window_fn',
+            'multi_stft_resolution_loss_weight',
+            'multi_stft_resolutions_window_sizes',
+            'multi_stft_hop_size',
+            'multi_stft_normalized',
+            'multi_stft_window_fn',
+            'match_input_audio_length',
+        ]:
+            if optional_key in config:
+                model_args[optional_key] = config[optional_key]
+        # Note: fmin and fmax are defined in config classes but not accepted by current constructor
         logger.debug(f"Creating MelBandRoformer with args: {list(model_args.keys())}")
         return MelBandRoformer(**model_args)
+
+    def _load_with_legacy_implementation(self,
+                                          model_path: str,
+                                          original_config: Dict[str, Any],
+                                          device: str,
+                                          original_error: str) -> ModelLoadingResult:
+        """
+        Attempt to load the model using the legacy direct-constructor path
+        for maximum backward compatibility with existing checkpoints.
+        """
+        import torch
+
+        # Use nested 'model' section if present; otherwise assume flat
+        model_cfg = original_config.get('model', original_config)
+
+        # Determine model type from config
+        if 'num_bands' in model_cfg:
+            from ..uvr_lib_v5.roformer.mel_band_roformer import MelBandRoformer
+            model = MelBandRoformer(**model_cfg)
+        elif 'freqs_per_bands' in model_cfg:
+            from ..uvr_lib_v5.roformer.bs_roformer import BSRoformer
+            model = BSRoformer(**model_cfg)
+        else:
+            raise ValueError("Unknown Roformer model type in legacy configuration")
+
+        # Load checkpoint as raw state dict (legacy behavior)
+        try:
+            checkpoint = torch.load(model_path, map_location='cpu', weights_only=True)
+        except TypeError:
+            # For older torch versions without weights_only
+            checkpoint = torch.load(model_path, map_location='cpu')
+
+        model.load_state_dict(checkpoint)
+        model.to(device).eval()
+
+        return ModelLoadingResult.fallback_success_result(
+            model=model,
+            original_error=original_error,
+            config=original_config,
+        )
 
     def get_loading_stats(self) -> Dict[str, int]:
         return self._loading_stats.copy()
@@ -232,8 +299,7 @@ class RoformerLoader:
                 'use_torch_checkpoint': False,
                 'skip_connection': False,
                 'sample_rate': 44100,
-                'fmin': 0,
-                'fmax': None,
+                # Note: fmin and fmax are not implemented in MelBandRoformer constructor
             }
         else:
             raise ValueError(f"Unknown model type: {model_type}")
