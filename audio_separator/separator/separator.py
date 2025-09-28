@@ -786,8 +786,7 @@ class Separator:
             # Enhanced error handling for Roformer models
             if "roformer" in model_filename.lower() or (model_data and model_data.get("is_roformer", False)):
                 error_msg = (f"Failed to instantiate Roformer model: {e}. "
-                           f"This may be due to missing parameters or configuration validation failures. "
-                           f"The fallback mechanism should handle this automatically.")
+                           f"This may be due to missing parameters or configuration validation failures.")
                 self.logger.error(error_msg)
                 raise RuntimeError(error_msg) from e
             else:
