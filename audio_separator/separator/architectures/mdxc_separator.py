@@ -446,9 +446,23 @@ class MDXCSeparator(CommonSeparator):
             self.logger.debug("Deleting inferenced outputs to free up memory")
             del inferenced_outputs
 
+            # For single-target models (e.g., karaoke), also return the residual as secondary
             if self.pitch_shift != 0:
                 self.logger.debug("Applying pitch correction for single instrument")
-                return self.pitch_fix(inferenced_output, sample_rate, orig_mix)
+                primary = self.pitch_fix(inferenced_output, sample_rate, orig_mix)
             else:
-                self.logger.debug("Returning inferenced output for single instrument")
-                return inferenced_output
+                primary = inferenced_output
+
+            if self.is_primary_stem_main_target:
+                self.logger.debug("Single-target model detected; computing residual secondary stem from original mix")
+                # Ensure shapes match before residual subtraction
+                if primary.shape[1] != orig_mix.shape[1]:
+                    primary = spec_utils.match_array_shapes(primary, orig_mix)
+                secondary = orig_mix - primary
+                return {
+                    self.primary_stem_name: primary,
+                    self.secondary_stem_name: secondary,
+                }
+
+            self.logger.debug("Returning inferenced output for single instrument")
+            return primary
