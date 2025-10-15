@@ -65,9 +65,9 @@ class MDXCSeparator(CommonSeparator):
         self.audio_file_path = None
         self.audio_file_base = None
 
-        self.is_primary_stem_main_target = False
-        if self.model_data_cfgdict.training.target_instrument == "Vocals" or len(self.model_data_cfgdict.training.instruments) > 1:
-            self.is_primary_stem_main_target = True
+        # Only mark primary stem as main target for single-target models.
+        # Multi-stem models should not trigger residual subtraction logic.
+        self.is_primary_stem_main_target = bool(self.model_data_cfgdict.training.target_instrument)
 
         self.logger.debug(f"is_primary_stem_main_target: {self.is_primary_stem_main_target}")
 
@@ -403,8 +403,8 @@ class MDXCSeparator(CommonSeparator):
             self.logger.debug("Deleting accumulated outputs to free up memory")
             del accumulated_outputs
 
-        if num_stems > 1 or self.is_primary_stem_main_target:
-            self.logger.debug("Number of stems is greater than 1 or vocals are main target, detaching individual sources and correcting pitch if necessary...")
+        if num_stems > 1:
+            self.logger.debug("Number of stems is greater than 1, detaching individual sources and correcting pitch if necessary...")
 
             sources = {}
 
@@ -420,7 +420,8 @@ class MDXCSeparator(CommonSeparator):
                 else:
                     sources[key] = value
 
-            if self.is_primary_stem_main_target:
+            # Residual subtraction is only applicable for single-target models (not multi-stem)
+            if self.is_primary_stem_main_target and num_stems == 1:
                 self.logger.debug(f"Primary stem: {self.primary_stem_name} is main target, detaching and matching array shapes if necessary...")
                 if sources[self.primary_stem_name].shape[1] != orig_mix.shape[1]:
                     sources[self.primary_stem_name] = spec_utils.match_array_shapes(sources[self.primary_stem_name], orig_mix)
@@ -445,9 +446,23 @@ class MDXCSeparator(CommonSeparator):
             self.logger.debug("Deleting inferenced outputs to free up memory")
             del inferenced_outputs
 
+            # For single-target models (e.g., karaoke), also return the residual as secondary
             if self.pitch_shift != 0:
                 self.logger.debug("Applying pitch correction for single instrument")
-                return self.pitch_fix(inferenced_output, sample_rate, orig_mix)
+                primary = self.pitch_fix(inferenced_output, sample_rate, orig_mix)
             else:
-                self.logger.debug("Returning inferenced output for single instrument")
-                return inferenced_output
+                primary = inferenced_output
+
+            if self.is_primary_stem_main_target:
+                self.logger.debug("Single-target model detected; computing residual secondary stem from original mix")
+                # Ensure shapes match before residual subtraction
+                if primary.shape[1] != orig_mix.shape[1]:
+                    primary = spec_utils.match_array_shapes(primary, orig_mix)
+                secondary = orig_mix - primary
+                return {
+                    self.primary_stem_name: primary,
+                    self.secondary_stem_name: secondary,
+                }
+
+            self.logger.debug("Returning inferenced output for single instrument")
+            return primary
