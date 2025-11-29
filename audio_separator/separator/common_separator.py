@@ -315,41 +315,22 @@ class CommonSeparator:
         output_bit_depth = self.input_bit_depth if self.input_bit_depth is not None else 16
         self.logger.info(f"Writing output with {output_bit_depth}-bit depth")
 
-        # Convert audio data to the appropriate bit depth
-        if output_bit_depth == 16:
-            if stem_source.dtype != np.int16:
-                stem_source = (stem_source * 32767).astype(np.int16)
-                self.logger.debug("Converted stem_source to int16.")
-            sample_width = 2
-        elif output_bit_depth == 24:
-            # For 24-bit, we need to use int32 but scale to 24-bit range
-            if stem_source.dtype != np.int32:
-                stem_source = (stem_source * 8388607).astype(np.int32)
-                self.logger.debug("Converted stem_source to int32 (24-bit).")
-            sample_width = 3
-        elif output_bit_depth == 32:
-            # For 32-bit, use int32
-            if stem_source.dtype != np.int32:
-                stem_source = (stem_source * 2147483647).astype(np.int32)
-                self.logger.debug("Converted stem_source to int32 (32-bit).")
-            sample_width = 4
-        else:
-            # Fallback to 16-bit
-            if stem_source.dtype != np.int16:
-                stem_source = (stem_source * 32767).astype(np.int16)
-                self.logger.debug("Converted stem_source to int16 (fallback).")
-            sample_width = 2
+        # For pydub, we always convert to int16 for the AudioSegment creation
+        # Then let ffmpeg handle the conversion to the target bit depth during export
+        if stem_source.dtype != np.int16:
+            stem_source = (stem_source * 32767).astype(np.int16)
+            self.logger.debug("Converted stem_source to int16 for pydub processing.")
 
         # Correctly interleave stereo channels
-        stem_source_interleaved = np.empty((2 * stem_source.shape[0],), dtype=stem_source.dtype)
+        stem_source_interleaved = np.empty((2 * stem_source.shape[0],), dtype=np.int16)
         stem_source_interleaved[0::2] = stem_source[:, 0]  # Left channel
         stem_source_interleaved[1::2] = stem_source[:, 1]  # Right channel
 
         self.logger.debug(f"Interleaved audio data shape: {stem_source_interleaved.shape}")
 
-        # Create a pydub AudioSegment
+        # Create a pydub AudioSegment (always from 16-bit data)
         try:
-            audio_segment = AudioSegment(stem_source_interleaved.tobytes(), frame_rate=self.sample_rate, sample_width=sample_width, channels=2)
+            audio_segment = AudioSegment(stem_source_interleaved.tobytes(), frame_rate=self.sample_rate, sample_width=2, channels=2)
             self.logger.debug("Created AudioSegment successfully.")
         except (IOError, ValueError) as e:
             self.logger.error(f"Specific error creating AudioSegment: {e}")
@@ -369,23 +350,31 @@ class CommonSeparator:
 
         # Export using the determined format
         try:
-            # Pass codec parameters to ffmpeg to enforce bit depth for WAV files
+            # Pass codec parameters to ffmpeg to enforce bit depth for lossless formats
             export_params = {"format": file_format}
             
             if bitrate:
                 export_params["bitrate"] = bitrate
             
-            # For WAV files, specify the codec parameters to enforce bit depth
-            if file_format == "wav":
+            # For lossless formats (WAV/FLAC), specify the codec parameters to enforce bit depth
+            if file_format in ["wav", "flac"]:
                 if output_bit_depth == 16:
-                    export_params["codec"] = "pcm_s16le"
+                    export_params["parameters"] = ["-sample_fmt", "s16"]
                 elif output_bit_depth == 24:
-                    export_params["codec"] = "pcm_s24le"
+                    export_params["parameters"] = ["-sample_fmt", "s32"]
+                    # For 24-bit, we also need to specify the bit depth explicitly
+                    if file_format == "wav":
+                        export_params["codec"] = "pcm_s24le"
+                    elif file_format == "flac":
+                        # FLAC supports 24-bit natively, no special handling needed
+                        pass
                 elif output_bit_depth == 32:
-                    export_params["codec"] = "pcm_s32le"
+                    export_params["parameters"] = ["-sample_fmt", "s32"]
+                    if file_format == "wav":
+                        export_params["codec"] = "pcm_s32le"
             
             audio_segment.export(stem_path, **export_params)
-            self.logger.debug(f"Exported audio file successfully to {stem_path}")
+            self.logger.debug(f"Exported audio file successfully to {stem_path} with {output_bit_depth}-bit depth")
         except (IOError, ValueError) as e:
             self.logger.error(f"Error exporting audio file: {e}")
 
