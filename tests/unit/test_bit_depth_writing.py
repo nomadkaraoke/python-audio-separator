@@ -15,6 +15,29 @@ from unittest.mock import Mock
 from audio_separator.separator.common_separator import CommonSeparator
 
 
+# Check if FFmpeg is available (required for pydub tests)
+def is_ffmpeg_available():
+    """Check if FFmpeg is available in the system."""
+    import subprocess
+    try:
+        subprocess.run(
+            ["ffmpeg", "-version"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            check=True
+        )
+        return True
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return False
+
+
+FFMPEG_AVAILABLE = is_ffmpeg_available()
+requires_ffmpeg = pytest.mark.skipif(
+    not FFMPEG_AVAILABLE,
+    reason="FFmpeg not available (required for pydub tests)"
+)
+
+
 def create_test_audio_file(output_path, sample_rate=44100, duration=0.5, bit_depth=16):
     """Create a test audio file with a specific bit depth."""
     t = np.linspace(0, duration, int(sample_rate * duration))
@@ -84,6 +107,7 @@ def fixture_mock_separator_config(temp_dir):
     }
 
 
+@requires_ffmpeg
 def test_write_16bit_with_pydub(temp_dir, mock_separator_config):
     """Test that 16-bit audio is written correctly with pydub."""
     print("\n>>> TEST: Write 16-bit audio with pydub")
@@ -118,6 +142,7 @@ def test_write_16bit_with_pydub(temp_dir, mock_separator_config):
     print("✅ Test passed: 16-bit audio written correctly with pydub")
 
 
+@requires_ffmpeg
 def test_write_24bit_with_pydub(temp_dir, mock_separator_config):
     """Test that 24-bit audio is written correctly with pydub."""
     print("\n>>> TEST: Write 24-bit audio with pydub")
@@ -151,6 +176,7 @@ def test_write_24bit_with_pydub(temp_dir, mock_separator_config):
     print("✅ Test passed: 24-bit audio written correctly with pydub")
 
 
+@requires_ffmpeg
 def test_write_32bit_with_pydub(temp_dir, mock_separator_config):
     """Test that 32-bit audio is written correctly with pydub."""
     print("\n>>> TEST: Write 32-bit audio with pydub")
