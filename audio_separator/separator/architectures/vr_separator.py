@@ -105,8 +105,8 @@ class VRSeparator(CommonSeparator):
 
         self.model_run = lambda *args, **kwargs: self.logger.error("Model run method is not initialised yet.")
 
-        # This should go away once we refactor to remove soundfile.write and replace with pydub like we did for the MDX rewrite
-        self.wav_subtype = "PCM_16"
+        # wav_subtype will be set based on input audio bit depth in prepare_mix()
+        # Removed hardcoded "PCM_16" to allow bit depth preservation
 
         self.logger.info("VR Separator initialisation complete")
 
@@ -126,7 +126,33 @@ class VRSeparator(CommonSeparator):
         self.secondary_source = None
 
         self.audio_file_path = audio_file_path
-        self.audio_file_base = os.path.splitext(os.path.basename(audio_file_path))[0]
+        self.audio_file_base = os.path.splitext(os.path.basename(audio_file_path))[ 0]
+
+        # Detect input audio bit depth for output preservation
+        try:
+            import soundfile as sf
+            info = sf.info(audio_file_path)
+            self.input_audio_subtype = info.subtype
+            self.logger.info(f"Input audio subtype: {self.input_audio_subtype}")
+            
+            # Map subtype to wav_subtype for soundfile and set input_bit_depth for pydub
+            if "24" in self.input_audio_subtype:
+                self.wav_subtype = "PCM_24"
+                self.input_bit_depth = 24
+                self.logger.info("Detected 24-bit input audio")
+            elif "32" in self.input_audio_subtype:
+                self.wav_subtype = "PCM_32"
+                self.input_bit_depth = 32
+                self.logger.info("Detected 32-bit input audio")
+            else:
+                self.wav_subtype = "PCM_16"
+                self.input_bit_depth = 16
+                self.logger.info("Detected 16-bit input audio")
+        except Exception as e:
+            self.logger.warning(f"Could not detect input audio bit depth: {e}. Defaulting to PCM_16")
+            self.wav_subtype = "PCM_16"
+            self.input_audio_subtype = None
+            self.input_bit_depth = 16
 
         self.logger.debug(f"Starting separation for input audio file {self.audio_file_path}...")
 

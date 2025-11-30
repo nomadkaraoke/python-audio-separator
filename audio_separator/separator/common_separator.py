@@ -95,6 +95,10 @@ class CommonSeparator:
         # Check if model_data has a "training" key with "instruments" list
         self.primary_stem_name = None
         self.secondary_stem_name = None
+        
+        # Audio bit depth tracking for preserving input quality
+        self.input_bit_depth = None
+        self.input_subtype = None
 
         if "training" in self.model_data and "instruments" in self.model_data["training"]:
             instruments = self.model_data["training"]["instruments"]
@@ -211,11 +215,40 @@ class CommonSeparator:
         # Check if the input is a file path (string) and needs to be loaded
         if not isinstance(mix, np.ndarray):
             self.logger.debug(f"Loading audio from file: {mix}")
+            
+            # Get audio file info to capture bit depth before loading
+            try:
+                audio_info = sf.info(mix)
+                self.input_subtype = audio_info.subtype
+                self.logger.info(f"Input audio subtype: {self.input_subtype}")
+                
+                # Map subtype to bit depth
+                if 'PCM_16' in self.input_subtype or self.input_subtype == 'PCM_S8':
+                    self.input_bit_depth = 16
+                elif 'PCM_24' in self.input_subtype:
+                    self.input_bit_depth = 24
+                elif 'PCM_32' in self.input_subtype or 'FLOAT' in self.input_subtype or 'DOUBLE' in self.input_subtype:
+                    self.input_bit_depth = 32
+                else:
+                    # Default to 16-bit for unknown formats
+                    self.input_bit_depth = 16
+                    self.logger.warning(f"Unknown audio subtype {self.input_subtype}, defaulting to 16-bit output")
+                
+                self.logger.info(f"Detected input bit depth: {self.input_bit_depth}-bit")
+            except Exception as e:
+                self.logger.warning(f"Could not read audio file info, defaulting to 16-bit output: {e}")
+                self.input_bit_depth = 16
+                self.input_subtype = 'PCM_16'
+            
             mix, sr = librosa.load(mix, mono=False, sr=self.sample_rate)
             self.logger.debug(f"Audio loaded. Sample rate: {sr}, Audio shape: {mix.shape}")
         else:
             # Transpose the mix if it's already an ndarray (expected shape: [channels, samples])
             self.logger.debug("Transposing the provided mix array.")
+            # Default to 16-bit if numpy array provided directly
+            if self.input_bit_depth is None:
+                self.input_bit_depth = 16
+                self.input_subtype = 'PCM_16'
             mix = mix.T
             self.logger.debug(f"Transposed mix shape: {mix.shape}")
 
@@ -278,10 +311,15 @@ class CommonSeparator:
         self.logger.debug(f"Audio data shape before processing: {stem_source.shape}")
         self.logger.debug(f"Data type before conversion: {stem_source.dtype}")
 
-        # Ensure the audio data is in the correct format (e.g., int16)
+        # Determine bit depth for output (use input bit depth if available, otherwise default to 16)
+        output_bit_depth = self.input_bit_depth if self.input_bit_depth is not None else 16
+        self.logger.info(f"Writing output with {output_bit_depth}-bit depth")
+
+        # For pydub, we always convert to int16 for the AudioSegment creation
+        # Then let ffmpeg handle the conversion to the target bit depth during export
         if stem_source.dtype != np.int16:
             stem_source = (stem_source * 32767).astype(np.int16)
-            self.logger.debug("Converted stem_source to int16.")
+            self.logger.debug("Converted stem_source to int16 for pydub processing.")
 
         # Correctly interleave stereo channels
         stem_source_interleaved = np.empty((2 * stem_source.shape[0],), dtype=np.int16)
@@ -290,9 +328,9 @@ class CommonSeparator:
 
         self.logger.debug(f"Interleaved audio data shape: {stem_source_interleaved.shape}")
 
-        # Create a pydub AudioSegment
+        # Create a pydub AudioSegment (always from 16-bit data)
         try:
-            audio_segment = AudioSegment(stem_source_interleaved.tobytes(), frame_rate=self.sample_rate, sample_width=stem_source.dtype.itemsize, channels=2)
+            audio_segment = AudioSegment(stem_source_interleaved.tobytes(), frame_rate=self.sample_rate, sample_width=2, channels=2)
             self.logger.debug("Created AudioSegment successfully.")
         except (IOError, ValueError) as e:
             self.logger.error(f"Specific error creating AudioSegment: {e}")
@@ -312,8 +350,31 @@ class CommonSeparator:
 
         # Export using the determined format
         try:
-            audio_segment.export(stem_path, format=file_format, bitrate=bitrate)
-            self.logger.debug(f"Exported audio file successfully to {stem_path}")
+            # Pass codec parameters to ffmpeg to enforce bit depth for lossless formats
+            export_params = {"format": file_format}
+            
+            if bitrate:
+                export_params["bitrate"] = bitrate
+            
+            # For lossless formats (WAV/FLAC), specify the codec parameters to enforce bit depth
+            if file_format in ["wav", "flac"]:
+                if output_bit_depth == 16:
+                    export_params["parameters"] = ["-sample_fmt", "s16"]
+                elif output_bit_depth == 24:
+                    export_params["parameters"] = ["-sample_fmt", "s32"]
+                    # For 24-bit, we also need to specify the bit depth explicitly
+                    if file_format == "wav":
+                        export_params["codec"] = "pcm_s24le"
+                    elif file_format == "flac":
+                        # FLAC supports 24-bit natively, no special handling needed
+                        pass
+                elif output_bit_depth == 32:
+                    export_params["parameters"] = ["-sample_fmt", "s32"]
+                    if file_format == "wav":
+                        export_params["codec"] = "pcm_s32le"
+            
+            audio_segment.export(stem_path, **export_params)
+            self.logger.debug(f"Exported audio file successfully to {stem_path} with {output_bit_depth}-bit depth")
         except (IOError, ValueError) as e:
             self.logger.error(f"Error exporting audio file: {e}")
 
@@ -335,6 +396,27 @@ class CommonSeparator:
             os.makedirs(self.output_dir, exist_ok=True)
             stem_path = os.path.join(self.output_dir, stem_path)
 
+        # Determine the subtype based on the input audio's bit depth
+        output_subtype = None
+        if self.input_subtype:
+            output_subtype = self.input_subtype
+            self.logger.info(f"Using input subtype for output: {output_subtype}")
+        elif self.input_bit_depth:
+            # Map bit depth to subtype
+            if self.input_bit_depth == 16:
+                output_subtype = 'PCM_16'
+            elif self.input_bit_depth == 24:
+                output_subtype = 'PCM_24'
+            elif self.input_bit_depth == 32:
+                output_subtype = 'PCM_32'
+            else:
+                output_subtype = 'PCM_16'  # Default fallback
+            self.logger.info(f"Using output subtype based on bit depth: {output_subtype}")
+        else:
+            # Default to PCM_16 if no bit depth info available
+            output_subtype = 'PCM_16'
+            self.logger.warning("No bit depth info available, defaulting to PCM_16")
+
         # Correctly interleave stereo channels if needed
         if stem_source.shape[1] == 2:
             # If the audio is already interleaved, ensure it's in the correct order
@@ -342,25 +424,19 @@ class CommonSeparator:
             if stem_source.flags["F_CONTIGUOUS"]:
                 # Convert to C contiguous (row-major)
                 stem_source = np.ascontiguousarray(stem_source)
-            # Otherwise, perform interleaving
-            else:
-                stereo_interleaved = np.empty((2 * stem_source.shape[0],), dtype=np.int16)
-                # Left channel
-                stereo_interleaved[0::2] = stem_source[:, 0]
-                # Right channel
-                stereo_interleaved[1::2] = stem_source[:, 1]
-                stem_source = stereo_interleaved
+            # No need to manually interleave for soundfile - it handles multi-channel properly
+            # Just ensure we don't have the wrong shape
 
-        self.logger.debug(f"Interleaved audio data shape: {stem_source.shape}")
+        self.logger.debug(f"Audio data shape for soundfile: {stem_source.shape}")
 
         """
         Write audio using soundfile (for formats other than M4A).
         """
-        # Save audio using soundfile
+        # Save audio using soundfile with the specified subtype
         try:
-            # Specify the subtype to define the sample width
-            sf.write(stem_path, stem_source, self.sample_rate)
-            self.logger.debug(f"Exported audio file successfully to {stem_path}")
+            # Specify the subtype to match input bit depth
+            sf.write(stem_path, stem_source, self.sample_rate, subtype=output_subtype)
+            self.logger.debug(f"Exported audio file successfully to {stem_path} with subtype {output_subtype}")
         except Exception as e:
             self.logger.error(f"Error exporting audio file: {e}")
 
