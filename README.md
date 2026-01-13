@@ -126,7 +126,7 @@ pip install "audio-separator[cpu]"
 
 Conda:
 ```sh
-conda install audio-separator-c pytorch -c conda-forge
+conda install audio-separator -c pytorch -c conda-forge
 ```
 
 Pip:
