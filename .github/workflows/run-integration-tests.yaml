@@ -2,6 +2,11 @@ name: run-integration-tests
 
 on:
   pull_request:
+    paths:
+      - 'audio_separator/**'
+      - 'tests/**'
+      - 'pyproject.toml'
+      - 'poetry.lock'
 
 jobs:
   integration-test:
