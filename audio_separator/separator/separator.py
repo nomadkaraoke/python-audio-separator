@@ -953,13 +953,11 @@ class Separator:
             for i, chunk_path in enumerate(chunk_paths):
                 self.logger.info(f"Processing chunk {i+1}/{len(chunk_paths)}: {chunk_path}")
 
-                # Temporarily disable chunking and change output directory for chunk processing
                 original_chunk_duration = self.chunk_duration
                 original_output_dir = self.output_dir
                 self.chunk_duration = None
                 self.output_dir = temp_dir
 
-                # Also update the model instance's output_dir since it's a separate object
                 if self.model_instance:
                     original_model_output_dir = self.model_instance.output_dir
                     self.model_instance.output_dir = temp_dir
@@ -968,20 +966,17 @@ class Separator:
                     output_files = self._separate_file(chunk_path, custom_output_names)
 
                     if output_files and len(output_files) >= 2:
-                        # Convert to absolute paths if they're relative
                         primary_path = output_files[0] if os.path.isabs(output_files[0]) else os.path.join(temp_dir, output_files[0])
                         secondary_path = output_files[1] if os.path.isabs(output_files[1]) else os.path.join(temp_dir, output_files[1])
                         processed_chunks_primary.append(primary_path)
                         processed_chunks_secondary.append(secondary_path)
                     elif output_files and len(output_files) == 1:
-                        # Handle single stem output
                         primary_path = output_files[0] if os.path.isabs(output_files[0]) else os.path.join(temp_dir, output_files[0])
                         processed_chunks_primary.append(primary_path)
                     else:
                         self.logger.warning(f"Chunk {i+1} produced unexpected output")
 
                 finally:
-                    # Restore original settings
                     self.chunk_duration = original_chunk_duration
                     self.output_dir = original_output_dir
                     if self.model_instance:
@@ -991,14 +986,12 @@ class Separator:
                 if self.model_instance:
                     self.model_instance.clear_gpu_cache()
 
-            # Determine output paths
-            # We need to get the base output path from what would have been generated
+            # Determine output paths for merged files
             base_name = os.path.splitext(os.path.basename(audio_file_path))[0]
             if custom_output_names:
                 primary_name = custom_output_names.get("primary", f"{base_name}_(Vocals)")
                 secondary_name = custom_output_names.get("secondary", f"{base_name}_(Instrumental)")
             else:
-                # Use default naming convention
                 primary_stem_name = getattr(self.model_instance, 'primary_stem_name', 'Vocals')
                 secondary_stem_name = getattr(self.model_instance, 'secondary_stem_name', 'Instrumental')
                 primary_name = f"{base_name}_({primary_stem_name})"
@@ -1007,7 +1000,6 @@ class Separator:
             primary_output = os.path.join(self.output_dir, f"{primary_name}.{self.output_format.lower()}")
             secondary_output = os.path.join(self.output_dir, f"{secondary_name}.{self.output_format.lower()}")
 
-            # Merge processed chunks
             output_files = []
 
             if processed_chunks_primary:

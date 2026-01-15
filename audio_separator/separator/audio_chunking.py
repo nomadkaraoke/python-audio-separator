@@ -1,10 +1,4 @@
-"""
-Audio chunking utilities for processing large audio files.
-
-This module provides functionality to split large audio files into smaller chunks,
-process them independently, and merge the results back together. This helps prevent
-out-of-memory errors when processing very long audio files.
-"""
+"""Audio chunking utilities for processing large audio files to prevent OOM errors."""
 
 import os
 import logging
