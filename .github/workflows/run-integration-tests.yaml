@@ -2,14 +2,27 @@ name: run-integration-tests
 
 on:
   pull_request:
-    paths:
-      - 'audio_separator/**'
-      - 'tests/**'
-      - 'pyproject.toml'
-      - 'poetry.lock'
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.filter.outputs.code }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            code:
+              - 'audio_separator/**'
+              - 'tests/**'
+              - 'pyproject.toml'
+              - 'poetry.lock'
+
   integration-test:
+    needs: changes
+    if: needs.changes.outputs.should_run == 'true'
     runs-on: self-hosted
     env:
       AUDIO_SEPARATOR_MODEL_DIR: ${{ github.workspace }}/models
@@ -31,12 +44,12 @@ jobs:
 
       - name: Setup PATH
         run: echo "$HOME/.local/bin" >> $GITHUB_PATH
-  
+
       - name: Install system dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y ffmpeg libsamplerate0 libsamplerate-dev
-  
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:

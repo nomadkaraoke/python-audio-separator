@@ -2,14 +2,27 @@ name: run-unit-tests
 
 on:
   pull_request:
-    paths:
-      - 'audio_separator/**'
-      - 'tests/**'
-      - 'pyproject.toml'
-      - 'poetry.lock'
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.filter.outputs.code }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            code:
+              - 'audio_separator/**'
+              - 'tests/**'
+              - 'pyproject.toml'
+              - 'poetry.lock'
+
   test-ubuntu:
+    needs: changes
+    if: needs.changes.outputs.should_run == 'true'
     runs-on: ubuntu-latest
 
     strategy:
@@ -47,6 +60,8 @@ jobs:
         run: poetry run pytest tests/unit
 
   test-macos:
+    needs: changes
+    if: needs.changes.outputs.should_run == 'true'
     runs-on: macos-latest
 
     strategy:
@@ -74,6 +89,8 @@ jobs:
           poetry run pytest tests/unit
 
   test-windows:
+    needs: changes
+    if: needs.changes.outputs.should_run == 'true'
     runs-on: windows-latest
 
     strategy:
