@@ -25,7 +25,7 @@ jobs:
         run: python -m pipx install poetry
 
       - name: Setup PATH
-        run: echo "/root/.local/bin" >> $GITHUB_PATH
+        run: echo "$HOME/.local/bin" >> $GITHUB_PATH
   
       - name: Install system dependencies
         run: |
