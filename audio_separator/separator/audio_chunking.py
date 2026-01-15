@@ -54,7 +54,7 @@ class AudioChunker:
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
 
-        self.logger.info(f"Loading audio file: {input_path}")
+        self.logger.debug(f"Loading audio file: {input_path}")
         audio = AudioSegment.from_file(input_path)
 
         total_duration_ms = len(audio)

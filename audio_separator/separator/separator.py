@@ -187,7 +187,6 @@ class Separator:
         if chunk_duration is not None:
             if chunk_duration <= 0:
                 raise ValueError("chunk_duration must be greater than 0")
-            self.logger.info(f"File-level chunking enabled with chunk duration: {chunk_duration}s")
 
         # These are parameters which users may want to configure so we expose them to the top-level Separator class,
         # even though they are specific to a single model architecture
@@ -939,7 +938,7 @@ class Separator:
 
         # Create temporary directory for chunks
         temp_dir = tempfile.mkdtemp(prefix="audio-separator-chunks-")
-        self.logger.info(f"Created temporary directory for chunks: {temp_dir}")
+        self.logger.debug(f"Created temporary directory for chunks: {temp_dir}")
 
         try:
             # Split audio into chunks
