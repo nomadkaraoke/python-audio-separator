@@ -4,7 +4,25 @@ on:
   pull_request:
 
 jobs:
-  integration-test:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.filter.outputs.code }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            code:
+              - 'audio_separator/**'
+              - 'tests/**'
+              - 'pyproject.toml'
+              - 'poetry.lock'
+
+  run-integration-test:
+    needs: changes
+    if: needs.changes.outputs.should_run == 'true'
     runs-on: self-hosted
     env:
       AUDIO_SEPARATOR_MODEL_DIR: ${{ github.workspace }}/models
@@ -26,12 +44,12 @@ jobs:
 
       - name: Setup PATH
         run: echo "$HOME/.local/bin" >> $GITHUB_PATH
-  
+
       - name: Install system dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y ffmpeg libsamplerate0 libsamplerate-dev
-  
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -76,3 +94,21 @@ jobs:
             tests/*.flac
             **/temp_images/**/*.png
             tests/**/temp_images/**/*.png
+
+  # Gate job for branch protection - always reports a status
+  integration-test:
+    needs: [changes, run-integration-test]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check test results
+        run: |
+          if [[ "${{ needs.changes.outputs.should_run }}" != "true" ]]; then
+            echo "Tests skipped - no code changes detected"
+            exit 0
+          fi
+          if [[ "${{ needs.run-integration-test.result }}" == "failure" ]]; then
+            echo "Integration tests failed"
+            exit 1
+          fi
+          echo "Integration tests passed"
