@@ -57,12 +57,12 @@ class TestAudioChunker:
     @patch('audio_separator.separator.audio_chunking.AudioSegment.from_file')
     @patch('audio_separator.separator.audio_chunking.os.path.exists')
     @patch('audio_separator.separator.audio_chunking.os.makedirs')
-    def test_split_audio_basic(self, mock_makedirs, mock_exists, mock_from_file):
+    def test_split_audio_basic(self, _mock_makedirs, mock_exists, mock_from_file):
         """Test basic audio splitting."""
         # Mock audio file (30 seconds)
         mock_audio = Mock()
         mock_audio.__len__ = Mock(return_value=30000)  # 30 seconds in ms
-        mock_audio.__getitem__ = Mock(side_effect=lambda key: mock_audio)
+        mock_audio.__getitem__ = Mock(side_effect=lambda _: mock_audio)
         mock_audio.export = Mock()
         mock_from_file.return_value = mock_audio
         mock_exists.return_value = True
@@ -85,12 +85,12 @@ class TestAudioChunker:
     @patch('audio_separator.separator.audio_chunking.AudioSegment.from_file')
     @patch('audio_separator.separator.audio_chunking.os.path.exists')
     @patch('audio_separator.separator.audio_chunking.os.makedirs')
-    def test_split_audio_uneven_chunks(self, mock_makedirs, mock_exists, mock_from_file):
+    def test_split_audio_uneven_chunks(self, _mock_makedirs, mock_exists, mock_from_file):
         """Test splitting audio with uneven chunk sizes."""
         # Mock audio file (25 seconds)
         mock_audio = Mock()
         mock_audio.__len__ = Mock(return_value=25000)  # 25 seconds in ms
-        mock_audio.__getitem__ = Mock(side_effect=lambda key: mock_audio)
+        mock_audio.__getitem__ = Mock(side_effect=lambda _: mock_audio)
         mock_audio.export = Mock()
         mock_from_file.return_value = mock_audio
         mock_exists.return_value = True
@@ -108,14 +108,14 @@ class TestAudioChunker:
             if os.path.exists(temp_dir):
                 shutil.rmtree(temp_dir)
 
-    def test_split_audio_file_not_found(self):
+    def test_split_audio_file_not_found(self, tmp_path):
         """Test split_audio with non-existent file."""
         with pytest.raises(FileNotFoundError):
-            self.chunker.split_audio("nonexistent.wav", "/tmp")
+            self.chunker.split_audio("nonexistent.wav", str(tmp_path))
 
     @patch('audio_separator.separator.audio_chunking.AudioSegment.from_file')
     @patch('audio_separator.separator.audio_chunking.os.path.exists')
-    def test_merge_chunks_basic(self, mock_exists, mock_from_file):
+    def test_merge_chunks_basic(self, mock_exists, mock_from_file, tmp_path):
         """Test basic chunk merging."""
         # Mock chunk files
         mock_chunk1 = Mock()
@@ -134,23 +134,23 @@ class TestAudioChunker:
             mock_combined.__len__ = Mock(return_value=20000)
 
             chunk_paths = ["chunk1.wav", "chunk2.wav"]
-            output_path = self.chunker.merge_chunks(chunk_paths, "/tmp/output.wav")
+            output_path = self.chunker.merge_chunks(chunk_paths, str(tmp_path / "output.wav"))
 
-            assert output_path == "/tmp/output.wav"
+            assert output_path == str(tmp_path / "output.wav")
             assert mock_combined.export.called
 
-    def test_merge_chunks_empty_list(self):
+    def test_merge_chunks_empty_list(self, tmp_path):
         """Test merge_chunks with empty chunk list."""
         with pytest.raises(ValueError, match="Cannot merge empty list"):
-            self.chunker.merge_chunks([], "/tmp/output.wav")
+            self.chunker.merge_chunks([], str(tmp_path / "output.wav"))
 
     @patch('audio_separator.separator.audio_chunking.os.path.exists')
-    def test_merge_chunks_missing_file(self, mock_exists):
+    def test_merge_chunks_missing_file(self, mock_exists, tmp_path):
         """Test merge_chunks with missing chunk file."""
         mock_exists.return_value = False
 
         with pytest.raises(FileNotFoundError, match="Chunk file not found"):
-            self.chunker.merge_chunks(["missing.wav"], "/tmp/output.wav")
+            self.chunker.merge_chunks(["missing.wav"], str(tmp_path / "output.wav"))
 
     def test_chunk_duration_calculation(self):
         """Test chunk duration calculation."""
