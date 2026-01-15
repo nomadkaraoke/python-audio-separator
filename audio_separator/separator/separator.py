@@ -10,6 +10,7 @@ import logging
 import warnings
 import importlib
 import io
+import re
 from typing import Optional
 
 import hashlib
@@ -946,8 +947,7 @@ class Separator:
             chunk_paths = chunker.split_audio(audio_file_path, temp_dir)
 
             # Process each chunk
-            processed_chunks_primary = []
-            processed_chunks_secondary = []
+            processed_chunks_by_stem = {}
 
             for i, chunk_path in enumerate(chunk_paths):
                 self.logger.info(f"Processing chunk {i+1}/{len(chunk_paths)}: {chunk_path}")
@@ -964,16 +964,28 @@ class Separator:
                 try:
                     output_files = self._separate_file(chunk_path, custom_output_names)
 
-                    if output_files and len(output_files) >= 2:
-                        primary_path = output_files[0] if os.path.isabs(output_files[0]) else os.path.join(temp_dir, output_files[0])
-                        secondary_path = output_files[1] if os.path.isabs(output_files[1]) else os.path.join(temp_dir, output_files[1])
-                        processed_chunks_primary.append(primary_path)
-                        processed_chunks_secondary.append(secondary_path)
-                    elif output_files and len(output_files) == 1:
-                        primary_path = output_files[0] if os.path.isabs(output_files[0]) else os.path.join(temp_dir, output_files[0])
-                        processed_chunks_primary.append(primary_path)
-                    else:
-                        self.logger.warning(f"Chunk {i+1} produced unexpected output")
+                    # Dynamically group chunks by stem name
+                    for stem_path in output_files:
+                        # Extract stem name from filename: "chunk_0000_(Vocals).wav" → "Vocals"
+                        filename = os.path.basename(stem_path)
+                        match = re.search(r'_\(([^)]+)\)', filename)
+                        if match:
+                            stem_name = match.group(1)
+                        else:
+                            # Fallback: use index-based name if pattern not found
+                            stem_index = len([k for k in processed_chunks_by_stem.keys() if k.startswith('stem_')])
+                            stem_name = f"stem_{stem_index}"
+                            self.logger.warning(f"Could not extract stem name from {filename}, using {stem_name}")
+
+                        if stem_name not in processed_chunks_by_stem:
+                            processed_chunks_by_stem[stem_name] = []
+
+                        # Ensure absolute path
+                        abs_path = stem_path if os.path.isabs(stem_path) else os.path.join(temp_dir, stem_path)
+                        processed_chunks_by_stem[stem_name].append(abs_path)
+
+                    if not output_files:
+                        self.logger.warning(f"Chunk {i+1} produced no output files")
 
                 finally:
                     self.chunk_duration = original_chunk_duration
@@ -985,31 +997,28 @@ class Separator:
                 if self.model_instance:
                     self.model_instance.clear_gpu_cache()
 
-            # Determine output paths for merged files
+            # Merge chunks for each stem dynamically
             base_name = os.path.splitext(os.path.basename(audio_file_path))[0]
-            if custom_output_names:
-                primary_name = custom_output_names.get("primary", f"{base_name}_(Vocals)")
-                secondary_name = custom_output_names.get("secondary", f"{base_name}_(Instrumental)")
-            else:
-                primary_stem_name = getattr(self.model_instance, 'primary_stem_name', 'Vocals')
-                secondary_stem_name = getattr(self.model_instance, 'secondary_stem_name', 'Instrumental')
-                primary_name = f"{base_name}_({primary_stem_name})"
-                secondary_name = f"{base_name}_({secondary_stem_name})"
-
-            primary_output = os.path.join(self.output_dir, f"{primary_name}.{self.output_format.lower()}")
-            secondary_output = os.path.join(self.output_dir, f"{secondary_name}.{self.output_format.lower()}")
-
             output_files = []
 
-            if processed_chunks_primary:
-                self.logger.info(f"Merging {len(processed_chunks_primary)} primary stem chunks")
-                chunker.merge_chunks(processed_chunks_primary, primary_output)
-                output_files.append(primary_output)
+            for stem_name in sorted(processed_chunks_by_stem.keys()):
+                chunk_paths_for_stem = processed_chunks_by_stem[stem_name]
 
-            if processed_chunks_secondary:
-                self.logger.info(f"Merging {len(processed_chunks_secondary)} secondary stem chunks")
-                chunker.merge_chunks(processed_chunks_secondary, secondary_output)
-                output_files.append(secondary_output)
+                if not chunk_paths_for_stem:
+                    self.logger.warning(f"No chunks found for stem: {stem_name}")
+                    continue
+
+                # Determine output filename
+                if custom_output_names and stem_name in custom_output_names:
+                    output_filename = custom_output_names[stem_name]
+                else:
+                    output_filename = f"{base_name}_({stem_name})"
+
+                output_path = os.path.join(self.output_dir, f"{output_filename}.{self.output_format.lower()}")
+
+                self.logger.info(f"Merging {len(chunk_paths_for_stem)} chunks for stem: {stem_name}")
+                chunker.merge_chunks(chunk_paths_for_stem, output_path)
+                output_files.append(output_path)
 
             self.logger.info(f"Chunked processing completed. Output files: {output_files}")
             return output_files

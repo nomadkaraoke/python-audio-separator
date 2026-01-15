@@ -296,11 +296,17 @@ audio-separator very_long_audio.wav --chunk_duration 300  # 5-minute chunks
 2. **Process**: Each chunk is processed separately, reducing peak memory usage
 3. **Merge**: The results are merged back together with simple concatenation
 
+The chunking feature supports all model types:
+- **2-stem models** (e.g., MDX): Vocals + Instrumental
+- **4-stem models** (e.g., Demucs): Drums, Bass, Other, Vocals
+- **6-stem models** (e.g., Demucs 6s): Bass, Drums, Other, Vocals, Guitar, Piano
+
 #### Benefits
 
 - **Prevents OOM errors**: Process files of any length without running out of memory
 - **Predictable memory usage**: Memory usage stays bounded regardless of file length
 - **No quality loss**: Each chunk is fully processed with the selected model
+- **Multi-stem support**: Works seamlessly with 2, 4, and 6-stem models
 
 #### Recommendations
 
