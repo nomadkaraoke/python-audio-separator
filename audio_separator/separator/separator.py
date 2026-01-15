@@ -94,6 +94,7 @@ class Separator:
         use_soundfile=False,
         use_autocast=False,
         use_directml=False,
+        chunk_duration=None,
         mdx_params={"hop_length": 1024, "segment_size": 256, "overlap": 0.25, "batch_size": 1, "enable_denoise": False},
         vr_params={"batch_size": 1, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False},
         demucs_params={"segment_size": "Default", "shifts": 2, "overlap": 0.25, "segments_enabled": True},
@@ -181,6 +182,12 @@ class Separator:
         self.use_soundfile = use_soundfile
         self.use_autocast = use_autocast
         self.use_directml = use_directml
+
+        self.chunk_duration = chunk_duration
+        if chunk_duration is not None:
+            if chunk_duration <= 0:
+                raise ValueError("chunk_duration must be greater than 0")
+            self.logger.info(f"File-level chunking enabled with chunk duration: {chunk_duration}s")
 
         # These are parameters which users may want to configure so we expose them to the top-level Separator class,
         # even though they are specific to a single model architecture
@@ -866,6 +873,18 @@ class Separator:
         Returns:
         - output_files (list of str): A list containing the paths to the separated audio stem files.
         """
+        # Check if chunking is enabled and file is large enough
+        if self.chunk_duration is not None:
+            import librosa
+            duration = librosa.get_duration(path=audio_file_path)
+
+            from audio_separator.separator.audio_chunking import AudioChunker
+            chunker = AudioChunker(self.chunk_duration, self.logger)
+
+            if chunker.should_chunk(duration):
+                self.logger.info(f"File duration {duration:.1f}s exceeds chunk size {self.chunk_duration}s, using chunked processing")
+                return self._process_with_chunking(audio_file_path, custom_output_names)
+
         # Log the start of the separation process
         self.logger.info(f"Starting separation process for audio_file_path: {audio_file_path}")
         separate_start_time = time.perf_counter()
@@ -898,6 +917,104 @@ class Separator:
         self.logger.info(f'Separation duration: {time.strftime("%H:%M:%S", time.gmtime(int(time.perf_counter() - separate_start_time)))}')
 
         return output_files
+
+    def _process_with_chunking(self, audio_file_path, custom_output_names=None):
+        """
+        Process large file by splitting into chunks.
+
+        This method splits a large audio file into smaller chunks, processes each chunk
+        separately, and merges the results back together. This helps prevent out-of-memory
+        errors when processing very long audio files.
+
+        Parameters:
+        - audio_file_path (str): The path to the audio file.
+        - custom_output_names (dict, optional): Custom names for the output files. Defaults to None.
+
+        Returns:
+        - output_files (list of str): A list containing the paths to the separated audio stem files.
+        """
+        import tempfile
+        import shutil
+        from audio_separator.separator.audio_chunking import AudioChunker
+
+        # Create temporary directory for chunks
+        temp_dir = tempfile.mkdtemp(prefix="audio-separator-chunks-")
+        self.logger.info(f"Created temporary directory for chunks: {temp_dir}")
+
+        try:
+            # Split audio into chunks
+            chunker = AudioChunker(self.chunk_duration, self.logger)
+            chunk_paths = chunker.split_audio(audio_file_path, temp_dir)
+
+            # Process each chunk
+            processed_chunks_primary = []
+            processed_chunks_secondary = []
+
+            for i, chunk_path in enumerate(chunk_paths):
+                self.logger.info(f"Processing chunk {i+1}/{len(chunk_paths)}: {chunk_path}")
+
+                # Call the original separation logic (recursive call, but chunking won't trigger again)
+                # We temporarily disable chunking for the recursive call
+                original_chunk_duration = self.chunk_duration
+                self.chunk_duration = None
+
+                try:
+                    output_files = self._separate_file(chunk_path, custom_output_names)
+
+                    if output_files and len(output_files) >= 2:
+                        processed_chunks_primary.append(output_files[0])
+                        processed_chunks_secondary.append(output_files[1])
+                    elif output_files and len(output_files) == 1:
+                        # Handle single stem output
+                        processed_chunks_primary.append(output_files[0])
+                    else:
+                        self.logger.warning(f"Chunk {i+1} produced unexpected output")
+
+                finally:
+                    # Restore chunking setting
+                    self.chunk_duration = original_chunk_duration
+
+                # Clear GPU cache between chunks
+                if self.model_instance:
+                    self.model_instance.clear_gpu_cache()
+
+            # Determine output paths
+            # We need to get the base output path from what would have been generated
+            base_name = os.path.splitext(os.path.basename(audio_file_path))[0]
+            if custom_output_names:
+                primary_name = custom_output_names.get("primary", f"{base_name}_(Vocals)")
+                secondary_name = custom_output_names.get("secondary", f"{base_name}_(Instrumental)")
+            else:
+                # Use default naming convention
+                primary_stem_name = getattr(self.model_instance, 'primary_stem_name', 'Vocals')
+                secondary_stem_name = getattr(self.model_instance, 'secondary_stem_name', 'Instrumental')
+                primary_name = f"{base_name}_({primary_stem_name})"
+                secondary_name = f"{base_name}_({secondary_stem_name})"
+
+            primary_output = os.path.join(self.output_dir, f"{primary_name}.{self.output_format.lower()}")
+            secondary_output = os.path.join(self.output_dir, f"{secondary_name}.{self.output_format.lower()}")
+
+            # Merge processed chunks
+            output_files = []
+
+            if processed_chunks_primary:
+                self.logger.info(f"Merging {len(processed_chunks_primary)} primary stem chunks")
+                chunker.merge_chunks(processed_chunks_primary, primary_output)
+                output_files.append(primary_output)
+
+            if processed_chunks_secondary:
+                self.logger.info(f"Merging {len(processed_chunks_secondary)} secondary stem chunks")
+                chunker.merge_chunks(processed_chunks_secondary, secondary_output)
+                output_files.append(secondary_output)
+
+            self.logger.info(f"Chunked processing completed. Output files: {output_files}")
+            return output_files
+
+        finally:
+            # Clean up temporary directory
+            if os.path.exists(temp_dir):
+                self.logger.debug(f"Cleaning up temporary directory: {temp_dir}")
+                shutil.rmtree(temp_dir, ignore_errors=True)
 
     def download_model_and_data(self, model_filename):
         """
