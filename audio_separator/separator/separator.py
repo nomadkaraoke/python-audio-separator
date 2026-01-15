@@ -953,26 +953,39 @@ class Separator:
             for i, chunk_path in enumerate(chunk_paths):
                 self.logger.info(f"Processing chunk {i+1}/{len(chunk_paths)}: {chunk_path}")
 
-                # Call the original separation logic (recursive call, but chunking won't trigger again)
-                # We temporarily disable chunking for the recursive call
+                # Temporarily disable chunking and change output directory for chunk processing
                 original_chunk_duration = self.chunk_duration
+                original_output_dir = self.output_dir
                 self.chunk_duration = None
+                self.output_dir = temp_dir
+
+                # Also update the model instance's output_dir since it's a separate object
+                if self.model_instance:
+                    original_model_output_dir = self.model_instance.output_dir
+                    self.model_instance.output_dir = temp_dir
 
                 try:
                     output_files = self._separate_file(chunk_path, custom_output_names)
 
                     if output_files and len(output_files) >= 2:
-                        processed_chunks_primary.append(output_files[0])
-                        processed_chunks_secondary.append(output_files[1])
+                        # Convert to absolute paths if they're relative
+                        primary_path = output_files[0] if os.path.isabs(output_files[0]) else os.path.join(temp_dir, output_files[0])
+                        secondary_path = output_files[1] if os.path.isabs(output_files[1]) else os.path.join(temp_dir, output_files[1])
+                        processed_chunks_primary.append(primary_path)
+                        processed_chunks_secondary.append(secondary_path)
                     elif output_files and len(output_files) == 1:
                         # Handle single stem output
-                        processed_chunks_primary.append(output_files[0])
+                        primary_path = output_files[0] if os.path.isabs(output_files[0]) else os.path.join(temp_dir, output_files[0])
+                        processed_chunks_primary.append(primary_path)
                     else:
                         self.logger.warning(f"Chunk {i+1} produced unexpected output")
 
                 finally:
-                    # Restore chunking setting
+                    # Restore original settings
                     self.chunk_duration = original_chunk_duration
+                    self.output_dir = original_output_dir
+                    if self.model_instance:
+                        self.model_instance.output_dir = original_model_output_dir
 
                 # Clear GPU cache between chunks
                 if self.model_instance:
