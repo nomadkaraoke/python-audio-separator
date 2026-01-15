@@ -4,7 +4,25 @@ on:
   pull_request:
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.filter.outputs.code }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            code:
+              - 'audio_separator/**'
+              - 'tests/**'
+              - 'pyproject.toml'
+              - 'poetry.lock'
+
   test-ubuntu:
+    needs: changes
+    if: needs.changes.outputs.should_run == 'true'
     runs-on: ubuntu-latest
 
     strategy:
@@ -12,6 +30,17 @@ jobs:
         python-version: ['3.10', '3.11', '3.12', '3.13']
 
     steps:
+      - name: Free disk space
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: false
+          docker-images: true
+          swap-storage: true
+
       - name: Checkout project
         uses: actions/checkout@v4
 
@@ -31,6 +60,8 @@ jobs:
         run: poetry run pytest tests/unit
 
   test-macos:
+    needs: changes
+    if: needs.changes.outputs.should_run == 'true'
     runs-on: macos-latest
 
     strategy:
@@ -58,6 +89,8 @@ jobs:
           poetry run pytest tests/unit
 
   test-windows:
+    needs: changes
+    if: needs.changes.outputs.should_run == 'true'
     runs-on: windows-latest
 
     strategy:
@@ -82,3 +115,23 @@ jobs:
 
       - name: Run unit tests with coverage
         run: poetry run pytest tests/unit
+
+  # Gate job for branch protection - always reports a status
+  unit-tests:
+    needs: [changes, test-ubuntu, test-macos, test-windows]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check test results
+        run: |
+          if [[ "${{ needs.changes.outputs.should_run }}" != "true" ]]; then
+            echo "Tests skipped - no code changes detected"
+            exit 0
+          fi
+          if [[ "${{ needs.test-ubuntu.result }}" == "failure" ]] || \
+             [[ "${{ needs.test-macos.result }}" == "failure" ]] || \
+             [[ "${{ needs.test-windows.result }}" == "failure" ]]; then
+            echo "Some tests failed"
+            exit 1
+          fi
+          echo "All tests passed"
