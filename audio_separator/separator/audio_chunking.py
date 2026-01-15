@@ -82,7 +82,6 @@ class AudioChunker:
             chunk.export(chunk_path, format=ext.lstrip('.'))
             chunk_paths.append(chunk_path)
 
-        self.logger.info(f"Successfully split audio into {len(chunk_paths)} chunks")
         return chunk_paths
 
     def merge_chunks(self, chunk_paths: List[str], output_path: str) -> str:
