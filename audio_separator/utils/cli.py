@@ -59,6 +59,7 @@ def main():
     sample_rate_help = "Modify the sample rate of the output audio (default: %(default)s). Example: --sample_rate=44100"
     use_soundfile_help = "Use soundfile to write audio output (default: %(default)s). Example: --use_soundfile"
     use_autocast_help = "Use PyTorch autocast for faster inference (default: %(default)s). Do not use for CPU inference. Example: --use_autocast"
+    chunk_duration_help = "Split audio into chunks of this duration in seconds (default: %(default)s = no chunking). Useful for processing very long audio files on systems with limited memory. Recommended: 600 (10 minutes) for files >1 hour. Chunks are concatenated without overlap/crossfade. Example: --chunk_duration=600"
     custom_output_names_help = 'Custom names for all output files in JSON format (default: %(default)s). Example: --custom_output_names=\'{"Vocals": "vocals_output", "Drums": "drums_output"}\''
 
     common_params = parser.add_argument_group("Common Separation Parameters")
@@ -69,6 +70,7 @@ def main():
     common_params.add_argument("--sample_rate", type=int, default=44100, help=sample_rate_help)
     common_params.add_argument("--use_soundfile", action="store_true", help=use_soundfile_help)
     common_params.add_argument("--use_autocast", action="store_true", help=use_autocast_help)
+    common_params.add_argument("--chunk_duration", type=float, default=None, help=chunk_duration_help)
     common_params.add_argument("--custom_output_names", type=json.loads, default=None, help=custom_output_names_help)
 
     mdx_segment_size_help = "Larger consumes more resources, but may give better results (default: %(default)s). Example: --mdx_segment_size=256"
@@ -200,6 +202,7 @@ def main():
         sample_rate=args.sample_rate,
         use_soundfile=args.use_soundfile,
         use_autocast=args.use_autocast,
+        chunk_duration=args.chunk_duration,
         mdx_params={
             "hop_length": args.mdx_hop_length,
             "segment_size": args.mdx_segment_size,

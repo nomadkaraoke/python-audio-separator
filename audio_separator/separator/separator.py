@@ -10,6 +10,7 @@ import logging
 import warnings
 import importlib
 import io
+import re
 from typing import Optional
 
 import hashlib
@@ -94,6 +95,7 @@ class Separator:
         use_soundfile=False,
         use_autocast=False,
         use_directml=False,
+        chunk_duration=None,
         mdx_params={"hop_length": 1024, "segment_size": 256, "overlap": 0.25, "batch_size": 1, "enable_denoise": False},
         vr_params={"batch_size": 1, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False},
         demucs_params={"segment_size": "Default", "shifts": 2, "overlap": 0.25, "segments_enabled": True},
@@ -181,6 +183,11 @@ class Separator:
         self.use_soundfile = use_soundfile
         self.use_autocast = use_autocast
         self.use_directml = use_directml
+
+        self.chunk_duration = chunk_duration
+        if chunk_duration is not None:
+            if chunk_duration <= 0:
+                raise ValueError("chunk_duration must be greater than 0")
 
         # These are parameters which users may want to configure so we expose them to the top-level Separator class,
         # even though they are specific to a single model architecture
@@ -866,6 +873,18 @@ class Separator:
         Returns:
         - output_files (list of str): A list containing the paths to the separated audio stem files.
         """
+        # Check if chunking is enabled and file is large enough
+        if self.chunk_duration is not None:
+            import librosa
+            duration = librosa.get_duration(path=audio_file_path)
+
+            from audio_separator.separator.audio_chunking import AudioChunker
+            chunker = AudioChunker(self.chunk_duration, self.logger)
+
+            if chunker.should_chunk(duration):
+                self.logger.info(f"File duration {duration:.1f}s exceeds chunk size {self.chunk_duration}s, using chunked processing")
+                return self._process_with_chunking(audio_file_path, custom_output_names)
+
         # Log the start of the separation process
         self.logger.info(f"Starting separation process for audio_file_path: {audio_file_path}")
         separate_start_time = time.perf_counter()
@@ -898,6 +917,117 @@ class Separator:
         self.logger.info(f'Separation duration: {time.strftime("%H:%M:%S", time.gmtime(int(time.perf_counter() - separate_start_time)))}')
 
         return output_files
+
+    def _process_with_chunking(self, audio_file_path, custom_output_names=None):
+        """
+        Process large file by splitting into chunks.
+
+        This method splits a large audio file into smaller chunks, processes each chunk
+        separately, and merges the results back together. This helps prevent out-of-memory
+        errors when processing very long audio files.
+
+        Parameters:
+        - audio_file_path (str): The path to the audio file.
+        - custom_output_names (dict, optional): Custom names for the output files. Defaults to None.
+
+        Returns:
+        - output_files (list of str): A list containing the paths to the separated audio stem files.
+        """
+        import tempfile
+        import shutil
+        from audio_separator.separator.audio_chunking import AudioChunker
+
+        # Create temporary directory for chunks
+        temp_dir = tempfile.mkdtemp(prefix="audio-separator-chunks-")
+        self.logger.debug(f"Created temporary directory for chunks: {temp_dir}")
+
+        try:
+            # Split audio into chunks
+            chunker = AudioChunker(self.chunk_duration, self.logger)
+            chunk_paths = chunker.split_audio(audio_file_path, temp_dir)
+
+            # Process each chunk
+            processed_chunks_by_stem = {}
+
+            for i, chunk_path in enumerate(chunk_paths):
+                self.logger.info(f"Processing chunk {i+1}/{len(chunk_paths)}: {chunk_path}")
+
+                original_chunk_duration = self.chunk_duration
+                original_output_dir = self.output_dir
+                self.chunk_duration = None
+                self.output_dir = temp_dir
+
+                if self.model_instance:
+                    original_model_output_dir = self.model_instance.output_dir
+                    self.model_instance.output_dir = temp_dir
+
+                try:
+                    output_files = self._separate_file(chunk_path, custom_output_names)
+
+                    # Dynamically group chunks by stem name
+                    for stem_path in output_files:
+                        # Extract stem name from filename: "chunk_0000_(Vocals).wav" → "Vocals"
+                        filename = os.path.basename(stem_path)
+                        match = re.search(r'_\(([^)]+)\)', filename)
+                        if match:
+                            stem_name = match.group(1)
+                        else:
+                            # Fallback: use index-based name if pattern not found
+                            stem_index = len([k for k in processed_chunks_by_stem.keys() if k.startswith('stem_')])
+                            stem_name = f"stem_{stem_index}"
+                            self.logger.warning(f"Could not extract stem name from {filename}, using {stem_name}")
+
+                        if stem_name not in processed_chunks_by_stem:
+                            processed_chunks_by_stem[stem_name] = []
+
+                        # Ensure absolute path
+                        abs_path = stem_path if os.path.isabs(stem_path) else os.path.join(temp_dir, stem_path)
+                        processed_chunks_by_stem[stem_name].append(abs_path)
+
+                    if not output_files:
+                        self.logger.warning(f"Chunk {i+1} produced no output files")
+
+                finally:
+                    self.chunk_duration = original_chunk_duration
+                    self.output_dir = original_output_dir
+                    if self.model_instance:
+                        self.model_instance.output_dir = original_model_output_dir
+
+                # Clear GPU cache between chunks
+                if self.model_instance:
+                    self.model_instance.clear_gpu_cache()
+
+            # Merge chunks for each stem dynamically
+            base_name = os.path.splitext(os.path.basename(audio_file_path))[0]
+            output_files = []
+
+            for stem_name in sorted(processed_chunks_by_stem.keys()):
+                chunk_paths_for_stem = processed_chunks_by_stem[stem_name]
+
+                if not chunk_paths_for_stem:
+                    self.logger.warning(f"No chunks found for stem: {stem_name}")
+                    continue
+
+                # Determine output filename
+                if custom_output_names and stem_name in custom_output_names:
+                    output_filename = custom_output_names[stem_name]
+                else:
+                    output_filename = f"{base_name}_({stem_name})"
+
+                output_path = os.path.join(self.output_dir, f"{output_filename}.{self.output_format.lower()}")
+
+                self.logger.info(f"Merging {len(chunk_paths_for_stem)} chunks for stem: {stem_name}")
+                chunker.merge_chunks(chunk_paths_for_stem, output_path)
+                output_files.append(output_path)
+
+            self.logger.info(f"Chunked processing completed. Output files: {output_files}")
+            return output_files
+
+        finally:
+            # Clean up temporary directory
+            if os.path.exists(temp_dir):
+                self.logger.debug(f"Cleaning up temporary directory: {temp_dir}")
+                shutil.rmtree(temp_dir, ignore_errors=True)
 
     def download_model_and_data(self, model_filename):
         """

@@ -278,6 +278,46 @@ For programmatic use, you can output the model list in JSON format:
 audio-separator -l --list_format=json
 ```
 
+### Processing Large Files
+
+For very long audio files (>1 hour), you may encounter out-of-memory errors. The `--chunk_duration` option automatically splits large files into smaller chunks, processes them separately, and merges the results:
+
+```sh
+# Process an 8-hour podcast in 10-minute chunks
+audio-separator long_podcast.wav --chunk_duration 600
+
+# Adjust chunk size based on available memory
+audio-separator very_long_audio.wav --chunk_duration 300  # 5-minute chunks
+```
+
+#### How It Works
+
+1. **Split**: The input file is split into fixed-duration chunks (e.g., 10 minutes)
+2. **Process**: Each chunk is processed separately, reducing peak memory usage
+3. **Merge**: The results are merged back together with simple concatenation
+
+The chunking feature supports all model types:
+- **2-stem models** (e.g., MDX): Vocals + Instrumental
+- **4-stem models** (e.g., Demucs): Drums, Bass, Other, Vocals
+- **6-stem models** (e.g., Demucs 6s): Bass, Drums, Other, Vocals, Guitar, Piano
+
+#### Benefits
+
+- **Prevents OOM errors**: Process files of any length without running out of memory
+- **Predictable memory usage**: Memory usage stays bounded regardless of file length
+- **No quality loss**: Each chunk is fully processed with the selected model
+- **Multi-stem support**: Works seamlessly with 2, 4, and 6-stem models
+
+#### Recommendations
+
+- **Files > 1 hour**: Use `--chunk_duration 600` (10 minutes)
+- **Limited memory systems**: Use smaller chunks (300-600 seconds)
+- **Ample memory**: You may not need chunking at all
+
+#### Note on Audio Quality
+
+Chunks are concatenated without crossfading, which may result in minor artifacts at chunk boundaries in rare cases. For most use cases, these are not noticeable. The simple concatenation approach keeps processing time minimal while solving out-of-memory issues.
+
 ### Full command-line interface options
 
 ```sh
