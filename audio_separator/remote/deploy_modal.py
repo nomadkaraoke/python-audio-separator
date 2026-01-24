@@ -31,6 +31,7 @@ import hashlib
 from importlib.metadata import version
 import typing
 from typing import Optional
+from urllib.parse import quote
 
 # Third-party imports
 from fastapi import FastAPI, File, Form, HTTPException, Response, UploadFile
@@ -712,7 +713,13 @@ async def download_file(task_id: str, file_hash: str) -> Response:
             print(f"WARNING: Could not detect MIME type for {actual_filename}, using generic type")
             content_type = "application/octet-stream"
 
-        return Response(content=file_data, media_type=content_type, headers={"Content-Disposition": f"attachment; filename={actual_filename}"})
+        # RFC 5987 encoding for Unicode filenames in Content-Disposition header
+        # Provide ASCII fallback for older clients, and UTF-8 encoded filename for modern clients
+        ascii_filename = "".join(c if ord(c) < 128 else "_" for c in actual_filename)
+        encoded_filename = quote(actual_filename, safe="")
+        content_disposition = f"attachment; filename=\"{ascii_filename}\"; filename*=UTF-8''{encoded_filename}"
+
+        return Response(content=file_data, media_type=content_type, headers={"Content-Disposition": content_disposition})
 
     except FileNotFoundError as exc:
         raise HTTPException(status_code=404, detail="File not found") from exc
