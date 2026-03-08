@@ -962,7 +962,7 @@ class Separator:
                     self.model_instance.output_dir = temp_dir
 
                 try:
-                    output_files = self._separate_file(chunk_path, custom_output_names)
+                    output_files = self._separate_file(chunk_path)
 
                     # Dynamically group chunks by stem name
                     for stem_path in output_files:
