@@ -36,19 +36,31 @@ class Ensembler:
             if len(weights) != len(waveforms):
                 self.logger.warning(f"Number of weights ({len(weights)}) does not match number of waveforms ({len(waveforms)}). Using equal weights.")
                 weights = np.ones(len(waveforms))
+            
+            # Validate weights are finite and sum is non-zero
+            weights_sum = np.sum(weights)
+            if not np.all(np.isfinite(weights)) or not np.isfinite(weights_sum) or weights_sum == 0:
+                self.logger.warning(f"Weights {self.weights} contain non-finite values or sum to zero. Falling back to equal weights.")
+                weights = np.ones(len(waveforms))
 
         self.logger.debug(f"Ensembling {len(waveforms)} waveforms using algorithm {self.algorithm}")
 
         if self.algorithm == "avg_wave":
             ensembled = np.zeros_like(waveforms[0])
-            for w, weight in zip(waveforms, weights):
+            for w, weight in zip(waveforms, weights, strict=True):
                 ensembled += w * weight
             return ensembled / np.sum(weights)
         elif self.algorithm == "median_wave":
+            if self.weights is not None and not np.all(weights == weights[0]):
+                self.logger.warning(f"Weights are ignored for algorithm {self.algorithm}")
             return np.median(waveforms, axis=0)
         elif self.algorithm == "min_wave":
+            if self.weights is not None and not np.all(weights == weights[0]):
+                self.logger.warning(f"Weights are ignored for algorithm {self.algorithm}")
             return self._lambda_min(np.array(waveforms), axis=0, key=np.abs)
         elif self.algorithm == "max_wave":
+            if self.weights is not None and not np.all(weights == weights[0]):
+                self.logger.warning(f"Weights are ignored for algorithm {self.algorithm}")
             return self._lambda_max(np.array(waveforms), axis=0, key=np.abs)
         elif self.algorithm in ["avg_fft", "median_fft", "min_fft", "max_fft"]:
             return self._ensemble_fft(waveforms, weights)
@@ -96,7 +108,7 @@ class Ensembler:
         spec = np.asfortranarray([spec_left, spec_right])
         return spec
 
-    def _istft(self, spec, hl=1024, length=None):
+    def _istft(self, spec, hl=1024, length=None, original_channels=None):
         if spec.shape[0] == 1:
             spec = np.vstack([spec, spec])
 
@@ -105,29 +117,38 @@ class Ensembler:
         wave_left = librosa.istft(spec_left, hop_length=hl, length=length)
         wave_right = librosa.istft(spec_right, hop_length=hl, length=length)
         wave = np.asfortranarray([wave_left, wave_right])
+
+        if original_channels == 1:
+            wave = wave[:1, :]
+
         return wave
 
     def _ensemble_fft(self, waveforms, weights):
+        num_channels = waveforms[0].shape[0]
         final_length = waveforms[0].shape[-1]
         specs = [self._stft(w) for w in waveforms]
         specs = np.array(specs)
 
         if self.algorithm == "avg_fft":
             ense_spec = np.zeros_like(specs[0])
-            for s, weight in zip(specs, weights):
+            for s, weight in zip(specs, weights, strict=True):
                 ense_spec += s * weight
             ense_spec /= np.sum(weights)
-        elif self.algorithm == "median_fft":
-            # For complex numbers, we take median of real and imag parts separately to be safe
-            real_median = np.median(np.real(specs), axis=0)
-            imag_median = np.median(np.imag(specs), axis=0)
-            ense_spec = real_median + 1j * imag_median
-        elif self.algorithm == "min_fft":
-            ense_spec = self._lambda_min(specs, axis=0, key=np.abs)
-        elif self.algorithm == "max_fft":
-            ense_spec = self._lambda_max(specs, axis=0, key=np.abs)
+        elif self.algorithm in ["median_fft", "min_fft", "max_fft"]:
+            if self.weights is not None and not np.all(weights == weights[0]):
+                self.logger.warning(f"Weights are ignored for algorithm {self.algorithm}")
 
-        return self._istft(ense_spec, length=final_length)
+            if self.algorithm == "median_fft":
+                # For complex numbers, we take median of real and imag parts separately to be safe
+                real_median = np.median(np.real(specs), axis=0)
+                imag_median = np.median(np.imag(specs), axis=0)
+                ense_spec = real_median + 1j * imag_median
+            elif self.algorithm == "min_fft":
+                ense_spec = self._lambda_min(specs, axis=0, key=np.abs)
+            elif self.algorithm == "max_fft":
+                ense_spec = self._lambda_max(specs, axis=0, key=np.abs)
+
+        return self._istft(ense_spec, length=final_length, original_channels=num_channels)
 
     def _ensemble_uvr(self, waveforms, uvr_algorithm):
         specs = [spec_utils.wave_to_spectrogram_no_mp(w) for w in waveforms]

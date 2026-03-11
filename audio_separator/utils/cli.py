@@ -185,9 +185,9 @@ def main():
 
     if args.download_model_only:
         models_to_download = args.model_filename if isinstance(args.model_filename, list) else [args.model_filename]
+        separator = Separator(log_formatter=log_formatter, log_level=log_level, model_file_dir=args.model_file_dir)
         for model in models_to_download:
             logger.info(f"Separator version {package_version} downloading model {model} to directory {args.model_file_dir}")
-            separator = Separator(log_formatter=log_formatter, log_level=log_level, model_file_dir=args.model_file_dir)
             separator.download_model_and_data(model)
         
         models_string = ", ".join(models_to_download) if isinstance(models_to_download, list) else models_to_download

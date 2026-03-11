@@ -1187,13 +1187,35 @@ class Separator:
 
                             # Normalize stem names to fix mismatched model labels
                             lower_name = stem_name.lower()
-                            if "vocal" in lower_name:
+                            stem_name_map = {
+                                "vocals": "Vocals",
+                                "instrumental": "Instrumental",
+                                "inst": "Instrumental",
+                                "karaoke": "Instrumental",
+                                "other": "Other",
+                                "no_vocals": "Instrumental",
+                                "drums": "Drums",
+                                "bass": "Bass",
+                                "guitar": "Guitar",
+                                "piano": "Piano",
+                                "synthesizer": "Synthesizer",
+                                "strings": "Strings",
+                                "woodwinds": "Woodwinds",
+                                "brass": "Brass",
+                                "wind inst": "Wind Inst",
+                                "lead vocals": "Lead Vocals",
+                                "backing vocals": "Backing Vocals",
+                                "primary stem": "Primary Stem",
+                                "secondary stem": "Secondary Stem",
+                            }
+
+                            if "vocal" in lower_name and "lead" not in lower_name and "backing" not in lower_name:
                                 stem_name = "Vocals"
-                            elif lower_name in ["instrumental", "inst", "karaoke", "other", "no_vocals"]:
-                                stem_name = "Instrumental"
+                            elif lower_name in stem_name_map:
+                                stem_name = stem_name_map[lower_name]
                             else:
                                 # Standardize capitalization for other stems (e.g., Drums, Bass)
-                                stem_name = stem_name.capitalize()
+                                stem_name = stem_name.title()
 
                             if stem_name not in stems_by_type:
                                 stems_by_type[stem_name] = []
@@ -1263,6 +1285,9 @@ class Separator:
                 # Restore original model filenames state
                 self.model_filename = original_model_filename
                 self.model_filenames = original_model_filenames
+
+                # Clear model instance reference
+                self.model_instance = None
 
                 # Clean up temporary directory
                 if os.path.exists(temp_dir):
