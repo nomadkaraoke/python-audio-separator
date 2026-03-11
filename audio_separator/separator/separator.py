@@ -732,13 +732,15 @@ class Separator:
         This method instantiates the architecture-specific separation class,
         loading the separation model into memory, downloading it first if necessary.
         """
-        self.model_filename = model_filename
-
         if isinstance(model_filename, list):
-            self.model_filenames = model_filename
-            self.logger.info(f"Multiple models specified for ensembling: {self.model_filenames}")
-            return
+            if len(model_filename) > 1:
+                self.model_filename = model_filename
+                self.model_filenames = model_filename
+                self.logger.info(f"Multiple models specified for ensembling: {self.model_filenames}")
+                return
+            model_filename = model_filename[0]
 
+        self.model_filename = model_filename
         self.model_filenames = [model_filename]
 
         self.logger.info(f"Loading model {model_filename}...")
@@ -1265,18 +1267,14 @@ class Separator:
                         self.logger.warning(f"No model instance available to write ensembled audio. Using fallback writer for {output_path}")
                         final_output_path = os.path.join(self.output_dir, output_path)
 
-                        if self.output_format.lower() == "wav":
-                            import soundfile as sf
+                        import soundfile as sf
 
+                        try:
+                            self.logger.debug(f"Attempting to write ensembled audio to {final_output_path}...")
                             sf.write(final_output_path, ensembled_wav.T, self.sample_rate)
-                        else:
-                            # For non-WAV formats, we'd ideally use the same logic as CommonSeparator
-                            # but since we don't have an instance, we'll just log an error for now
-                            # or try to write as WAV anyway as a last resort.
-                            self.logger.error(f"Fallback writer only supports WAV format. Attempting to write {output_path} as WAV.")
+                        except Exception as e:
+                            self.logger.error(f"Error writing {self.output_format} format: {e}. Falling back to WAV.")
                             final_output_path = final_output_path.rsplit(".", 1)[0] + ".wav"
-                            import soundfile as sf
-
                             sf.write(final_output_path, ensembled_wav.T, self.sample_rate)
 
                         output_files.append(final_output_path)
