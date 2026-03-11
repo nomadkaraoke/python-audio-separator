@@ -25,20 +25,20 @@ class Ensembler:
         waveforms = [np.pad(w, ((0, 0), (0, max_length - w.shape[1]))) if w.shape[1] < max_length else w for w in waveforms]
 
         if self.weights is None:
-            self.weights = np.ones(len(waveforms))
+            weights = np.ones(len(waveforms))
         else:
-            self.weights = np.array(self.weights)
-            if len(self.weights) != len(waveforms):
-                self.logger.warning(f"Number of weights ({len(self.weights)}) does not match number of waveforms ({len(waveforms)}). Using equal weights.")
-                self.weights = np.ones(len(waveforms))
+            weights = np.array(self.weights)
+            if len(weights) != len(waveforms):
+                self.logger.warning(f"Number of weights ({len(weights)}) does not match number of waveforms ({len(waveforms)}). Using equal weights.")
+                weights = np.ones(len(waveforms))
 
         self.logger.debug(f"Ensembling {len(waveforms)} waveforms using algorithm {self.algorithm}")
 
         if self.algorithm == "avg_wave":
             ensembled = np.zeros_like(waveforms[0])
-            for w, weight in zip(waveforms, self.weights):
+            for w, weight in zip(waveforms, weights):
                 ensembled += w * weight
-            return ensembled / np.sum(self.weights)
+            return ensembled / np.sum(weights)
         elif self.algorithm == "median_wave":
             return np.median(waveforms, axis=0)
         elif self.algorithm == "min_wave":
@@ -46,7 +46,7 @@ class Ensembler:
         elif self.algorithm == "max_wave":
             return self._lambda_max(np.array(waveforms), axis=0, key=np.abs)
         elif self.algorithm in ["avg_fft", "median_fft", "min_fft", "max_fft"]:
-            return self._ensemble_fft(waveforms)
+            return self._ensemble_fft(waveforms, weights)
         elif self.algorithm == "uvr_max_spec":
             return self._ensemble_uvr(waveforms, spec_utils.MAX_SPEC)
         elif self.algorithm == "uvr_min_spec":
@@ -79,6 +79,11 @@ class Ensembler:
             return arr.flatten()[idxs]
 
     def _stft(self, wave, nfft=2048, hl=1024):
+        if wave.ndim == 1:
+            wave = np.stack([wave, wave])
+        elif wave.shape[0] == 1:
+            wave = np.vstack([wave, wave])
+
         wave_left = np.asfortranarray(wave[0])
         wave_right = np.asfortranarray(wave[1])
         spec_left = librosa.stft(wave_left, n_fft=nfft, hop_length=hl)
@@ -87,6 +92,9 @@ class Ensembler:
         return spec
 
     def _istft(self, spec, hl=1024, length=None):
+        if spec.shape[0] == 1:
+            spec = np.vstack([spec, spec])
+
         spec_left = np.asfortranarray(spec[0])
         spec_right = np.asfortranarray(spec[1])
         wave_left = librosa.istft(spec_left, hop_length=hl, length=length)
@@ -94,16 +102,16 @@ class Ensembler:
         wave = np.asfortranarray([wave_left, wave_right])
         return wave
 
-    def _ensemble_fft(self, waveforms):
+    def _ensemble_fft(self, waveforms, weights):
         final_length = waveforms[0].shape[-1]
         specs = [self._stft(w) for w in waveforms]
         specs = np.array(specs)
 
         if self.algorithm == "avg_fft":
             ense_spec = np.zeros_like(specs[0])
-            for s, weight in zip(specs, self.weights):
+            for s, weight in zip(specs, weights):
                 ense_spec += s * weight
-            ense_spec /= np.sum(self.weights)
+            ense_spec /= np.sum(weights)
         elif self.algorithm == "median_fft":
             # For complex numbers, we take median of real and imag parts separately to be safe
             real_median = np.median(np.real(specs), axis=0)

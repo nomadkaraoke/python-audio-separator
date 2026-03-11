@@ -1238,6 +1238,26 @@ class Separator:
                         self.model_instance.write_audio(output_path, ensembled_wav.T)
                         final_output_path = os.path.join(self.output_dir, output_path)
                         output_files.append(final_output_path)
+                    else:
+                        # Fallback writer if no model instance is available
+                        self.logger.warning(f"No model instance available to write ensembled audio. Using fallback writer for {output_path}")
+                        final_output_path = os.path.join(self.output_dir, output_path)
+
+                        if self.output_format.lower() == "wav":
+                            import soundfile as sf
+
+                            sf.write(final_output_path, ensembled_wav.T, self.sample_rate)
+                        else:
+                            # For non-WAV formats, we'd ideally use the same logic as CommonSeparator
+                            # but since we don't have an instance, we'll just log an error for now
+                            # or try to write as WAV anyway as a last resort.
+                            self.logger.error(f"Fallback writer only supports WAV format. Attempting to write {output_path} as WAV.")
+                            final_output_path = final_output_path.rsplit(".", 1)[0] + ".wav"
+                            import soundfile as sf
+
+                            sf.write(final_output_path, ensembled_wav.T, self.sample_rate)
+
+                        output_files.append(final_output_path)
 
             finally:
                 # Restore original model filenames state

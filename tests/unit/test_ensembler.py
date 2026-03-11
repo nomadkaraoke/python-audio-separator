@@ -77,3 +77,35 @@ def test_ensembler_ensemble_wav_uvr(logger):
     # so the result should be all 0s.
     result = ensembler.ensemble([wav1, wav2])
     assert np.allclose(result, 0.0)
+
+def test_ensembler_empty_list(logger):
+    ensembler = Ensembler(logger)
+    assert ensembler.ensemble([]) is None
+
+def test_ensembler_single_waveform(logger):
+    wav = np.random.rand(2, 100)
+    ensembler = Ensembler(logger)
+    result = ensembler.ensemble([wav])
+    assert np.array_equal(result, wav)
+
+def test_ensembler_mismatched_channels(logger):
+    wav1 = np.random.rand(2, 100)
+    wav2 = np.random.rand(1, 100)
+    ensembler = Ensembler(logger)
+    # Broadcasing will happen in np.zeros_like(waveforms[0]) + w * weight
+    # but let's see what happens. Actually it should probably be handled or at least tested.
+    # Current implementation pads length but not channels.
+    with pytest.raises(ValueError):
+        ensembler.ensemble([wav1, wav2])
+
+def test_ensembler_mono_stft(logger):
+    wav_mono = np.random.rand(1024)
+    ensembler = Ensembler(logger)
+    spec = ensembler._stft(wav_mono)
+    assert spec.shape[0] == 2 # Should be converted to stereo
+
+def test_ensembler_single_channel_stft(logger):
+    wav_mono = np.random.rand(1, 1024)
+    ensembler = Ensembler(logger)
+    spec = ensembler._stft(wav_mono)
+    assert spec.shape[0] == 2 # Should be converted to stereo
