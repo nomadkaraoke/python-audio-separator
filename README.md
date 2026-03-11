@@ -1,5 +1,5 @@
 <div align="center">
- 
+
 # 🎶 Audio Separator 🎶
 
 [![PyPI version](https://badge.fury.io/py/audio-separator.svg)](https://badge.fury.io/py/audio-separator)
@@ -318,6 +318,61 @@ The chunking feature supports all model types:
 
 Chunks are concatenated without crossfading, which may result in minor artifacts at chunk boundaries in rare cases. For most use cases, these are not noticeable. The simple concatenation approach keeps processing time minimal while solving out-of-memory issues.
 
+### Ensembling Multiple Models
+
+You can combine the results of multiple models to improve separation quality. This will run each model and then combine their outputs using a specified algorithm.
+
+#### CLI Usage
+
+Use the `--model_filename` (or `-m`) flag with multiple arguments. You can also specify the ensemble algorithm using `--ensemble_algorithm`.
+
+```sh
+# Ensemble two models using the default 'avg_wave' algorithm
+audio-separator audio.wav -m model1.ckpt model2.onnx
+
+# Ensemble multiple models using a specific algorithm
+audio-separator audio.wav -m model1.ckpt model2.onnx model3.ckpt --ensemble_algorithm max_fft
+```
+
+#### Python API Usage
+
+```python
+from audio_separator.separator import Separator
+
+# Initialize the Separator class with custom parameters
+separator = Separator(
+    output_dir='output',
+    ensemble_algorithm='avg_wave'
+)
+
+# List of models to ensemble
+# Note: These models will be downloaded automatically if not present
+models = [
+    'UVR-MDX-NET-Inst_HQ_3.onnx',
+    'UVR_MDXNET_KARA_2.onnx'
+]
+
+# Specify multiple models for ensembling
+separator.load_model(model_filename=models)
+
+# Perform separation
+# The algorithm defaults to 'avg_wave' as specified during Separator initialization
+output_files = separator.separate('audio.wav')
+```
+
+#### Supported Ensemble Algorithms
+- `avg_wave`: Weighted average of waveforms (default)
+- `median_wave`: Median of waveforms
+- `min_wave`: Minimum of waveforms
+- `max_wave`: Maximum of waveforms
+- `avg_fft`: Weighted average of spectrograms
+- `median_fft`: Median of spectrograms
+- `min_fft`: Minimum of spectrograms
+- `max_fft`: Maximum of spectrograms
+- `uvr_max_spec`: UVR-based maximum spectrogram ensemble
+- `uvr_min_spec`: UVR-based minimum spectrogram ensemble
+- `ensemble_wav`: UVR-based least noisy chunk ensemble
+
 ### Full command-line interface options
 
 ```sh
@@ -525,6 +580,8 @@ You can also rename specific stems:
 - **`vr_params`:** (Optional) VR Architecture Specific Attributes & Defaults. `Default: {"batch_size": 1, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False}`
 - **`demucs_params`:** (Optional) Demucs Architecture Specific Attributes & Defaults. `Default: {"segment_size": "Default", "shifts": 2, "overlap": 0.25, "segments_enabled": True}`
 - **`mdxc_params`:** (Optional) MDXC Architecture Specific Attributes & Defaults. `Default: {"segment_size": 256, "override_model_segment_size": False, "batch_size": 1, "overlap": 8, "pitch_shift": 0}`
+- **`ensemble_algorithm`:** (Optional) Algorithm to use for ensembling multiple models. `Default: 'avg_wave'`
+- **`ensemble_weights`:** (Optional) Weights for each model in the ensemble. `Default: None` (equal weights)
 
 ## Remote API Usage 🌐
 

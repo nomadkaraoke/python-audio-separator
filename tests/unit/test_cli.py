@@ -3,8 +3,25 @@ import pytest
 import logging
 from audio_separator.utils.cli import main
 import subprocess
+import importlib.metadata
 from unittest import mock
 from unittest.mock import patch, MagicMock, mock_open
+
+
+# Mock metadata.distribution for tests to avoid PackageNotFoundError in environment without installed package
+@pytest.fixture(autouse=True)
+def mock_distribution():
+    original_distribution = importlib.metadata.distribution
+
+    def side_effect(package_name):
+        if package_name == "audio-separator":
+            mock_dist = MagicMock()
+            mock_dist.version = "0.41.1"
+            return mock_dist
+        return original_distribution(package_name)
+
+    with patch("importlib.metadata.distribution", side_effect=side_effect):
+        yield
 
 
 # Common fixture for expected arguments
@@ -25,6 +42,8 @@ def common_expected_args():
         "use_soundfile": False,
         "use_autocast": False,
         "chunk_duration": None,
+        "ensemble_algorithm": "avg_wave",
+        "ensemble_weights": None,
         "mdx_params": {"hop_length": 1024, "segment_size": 256, "overlap": 0.25, "batch_size": 1, "enable_denoise": False},
         "vr_params": {"batch_size": 1, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False},
         "demucs_params": {"segment_size": "Default", "shifts": 2, "overlap": 0.25, "segments_enabled": True},
@@ -115,7 +134,7 @@ def test_cli_model_filename_argument(common_expected_args):
 
             # Assertions
             mock_separator.assert_called_once_with(**common_expected_args)
-            mock_separator_instance.load_model.assert_called_once_with(model_filename="Custom_Model.onnx")
+            mock_separator_instance.load_model.assert_called_once_with(model_filename=["Custom_Model.onnx"])
 
 
 # Test using output directory argument

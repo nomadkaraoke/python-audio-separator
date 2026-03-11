@@ -37,7 +37,7 @@ def main():
     info_params.add_argument("--list_limit", type=int, help="Limit the number of models shown")
     info_params.add_argument("--list_format", choices=["pretty", "json"], default="pretty", help="Format for listing models: 'pretty' for formatted output, 'json' for raw JSON dump")
 
-    model_filename_help = "Model to use for separation (default: %(default)s). Example: -m 2_HP-UVR.pth"
+    model_filename_help = "Model(s) to use for separation (default: %(default)s). Multiple models can be specified for ensembling. Example: -m model1.ckpt model2.onnx"
     output_format_help = "Output format for separated files, any common format (default: %(default)s). Example: --output_format=MP3"
     output_bitrate_help = "Output bitrate for separated files, any ffmpeg-compatible bitrate (default: %(default)s). Example: --output_bitrate=320k"
     output_dir_help = "Directory to write output files (default: <current dir>). Example: --output_dir=/app/separated"
@@ -45,7 +45,7 @@ def main():
     download_model_only_help = "Download a single model file only, without performing separation."
 
     io_params = parser.add_argument_group("Separation I/O Params")
-    io_params.add_argument("-m", "--model_filename", default="model_bs_roformer_ep_317_sdr_12.9755.ckpt", help=model_filename_help)
+    io_params.add_argument("-m", "--model_filename", default="model_bs_roformer_ep_317_sdr_12.9755.ckpt", nargs="+", help=model_filename_help)
     io_params.add_argument("--output_format", default="FLAC", help=output_format_help)
     io_params.add_argument("--output_bitrate", default=None, help=output_bitrate_help)
     io_params.add_argument("--output_dir", default=None, help=output_dir_help)
@@ -60,6 +60,8 @@ def main():
     use_soundfile_help = "Use soundfile to write audio output (default: %(default)s). Example: --use_soundfile"
     use_autocast_help = "Use PyTorch autocast for faster inference (default: %(default)s). Do not use for CPU inference. Example: --use_autocast"
     chunk_duration_help = "Split audio into chunks of this duration in seconds (default: %(default)s = no chunking). Useful for processing very long audio files on systems with limited memory. Recommended: 600 (10 minutes) for files >1 hour. Chunks are concatenated without overlap/crossfade. Example: --chunk_duration=600"
+    ensemble_algorithm_help = "Algorithm to use for ensembling multiple models (default: %(default)s). Choices: avg_wave, median_wave, min_wave, max_wave, avg_fft, median_fft, min_fft, max_fft, uvr_max_spec, uvr_min_spec, ensemble_wav. Example: --ensemble_algorithm=max_spec"
+    ensemble_weights_help = "Weights for ensembling multiple models (default: %(default)s). Number of weights must match number of models. Example: --ensemble_weights 1.0 0.5"
     custom_output_names_help = 'Custom names for all output files in JSON format (default: %(default)s). Example: --custom_output_names=\'{"Vocals": "vocals_output", "Drums": "drums_output"}\''
 
     common_params = parser.add_argument_group("Common Separation Parameters")
@@ -71,6 +73,13 @@ def main():
     common_params.add_argument("--use_soundfile", action="store_true", help=use_soundfile_help)
     common_params.add_argument("--use_autocast", action="store_true", help=use_autocast_help)
     common_params.add_argument("--chunk_duration", type=float, default=None, help=chunk_duration_help)
+    common_params.add_argument(
+        "--ensemble_algorithm",
+        default="avg_wave",
+        choices=["avg_wave", "median_wave", "min_wave", "max_wave", "avg_fft", "median_fft", "min_fft", "max_fft", "uvr_max_spec", "uvr_min_spec", "ensemble_wav"],
+        help=ensemble_algorithm_help,
+    )
+    common_params.add_argument("--ensemble_weights", nargs="+", type=float, default=None, help=ensemble_weights_help)
     common_params.add_argument("--custom_output_names", type=json.loads, default=None, help=custom_output_names_help)
 
     mdx_segment_size_help = "Larger consumes more resources, but may give better results (default: %(default)s). Example: --mdx_segment_size=256"
@@ -175,9 +184,11 @@ def main():
         sys.exit(0)
 
     if args.download_model_only:
-        logger.info(f"Separator version {package_version} downloading model {args.model_filename} to directory {args.model_file_dir}")
-        separator = Separator(log_formatter=log_formatter, log_level=log_level, model_file_dir=args.model_file_dir)
-        separator.download_model_and_data(args.model_filename)
+        models_to_download = args.model_filename if isinstance(args.model_filename, list) else [args.model_filename]
+        for model in models_to_download:
+            logger.info(f"Separator version {package_version} downloading model {model} to directory {args.model_file_dir}")
+            separator = Separator(log_formatter=log_formatter, log_level=log_level, model_file_dir=args.model_file_dir)
+            separator.download_model_and_data(model)
         logger.info(f"Model {args.model_filename} downloaded successfully.")
         sys.exit(0)
 
@@ -203,6 +214,8 @@ def main():
         use_soundfile=args.use_soundfile,
         use_autocast=args.use_autocast,
         chunk_duration=args.chunk_duration,
+        ensemble_algorithm=args.ensemble_algorithm,
+        ensemble_weights=args.ensemble_weights,
         mdx_params={
             "hop_length": args.mdx_hop_length,
             "segment_size": args.mdx_segment_size,
