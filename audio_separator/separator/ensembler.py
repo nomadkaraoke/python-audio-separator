@@ -20,6 +20,11 @@ class Ensembler:
         if len(waveforms) == 1:
             return waveforms[0]
 
+        # Ensure all waveforms have the same number of channels
+        num_channels = waveforms[0].shape[0]
+        if any(w.shape[0] != num_channels for w in waveforms):
+            raise ValueError("All waveforms must have the same number of channels for ensembling.")
+
         # Ensure all waveforms have the same length by padding with zeros
         max_length = max(w.shape[1] for w in waveforms)
         waveforms = [np.pad(w, ((0, 0), (0, max_length - w.shape[1]))) if w.shape[1] < max_length else w for w in waveforms]
