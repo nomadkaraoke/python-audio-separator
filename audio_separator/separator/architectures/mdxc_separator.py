@@ -15,26 +15,55 @@ from audio_separator.separator.uvr_lib_v5.tfc_tdf_v3 import TFC_TDF_net
 
 
 class RoformerDataset(Dataset):
+    """
+    Dataset for handling Roformer audio chunks.
+    It splits the audio mix into configurable chunks with a specified step size.
+    """
+
     def __init__(self, mix, chunk_size, step):
+        """
+        Initializes the RoformerDataset.
+
+        Args:
+            mix (np.ndarray): The audio mix to be processed.
+            chunk_size (int): The size of each chunk.
+            step (int): The step size between chunks.
+        """
         self.mix = mix
         self.chunk_size = chunk_size
         self.step = step
         self.indices = list(range(0, mix.shape[1], step))
 
     def __len__(self):
+        """
+        Returns the number of chunks in the dataset.
+
+        Returns:
+            int: The number of chunks.
+        """
         return len(self.indices)
 
     def __getitem__(self, idx):
+        """
+        Gets a chunk from the dataset by index.
+
+        Args:
+            idx (int): The index of the chunk.
+
+        Returns:
+            tuple: A tuple containing the chunk (np.ndarray), the start index (int), and the length (int).
+        """
         start_idx = self.indices[idx]
         part = self.mix[:, start_idx : start_idx + self.chunk_size]
         length = part.shape[-1]
 
         # We need to handle the last chunk where part is smaller than chunk_size
-        if start_idx + self.chunk_size > self.mix.shape[1]:
+        if length < self.chunk_size and self.mix.shape[1] >= self.chunk_size:
             # Take the last chunk_size from the end
             part = self.mix[:, -self.chunk_size :]
             length = self.chunk_size
             start_idx = self.mix.shape[1] - self.chunk_size
+        # If mix is shorter than chunk_size, keep original part and length
 
         return part, start_idx, length
 
@@ -351,7 +380,7 @@ class MDXCSeparator(CommonSeparator):
                     parts = parts.to(device)
                     xs = self.model_run(parts)
 
-                    for b in range(len(xs)):
+                    for b in range(xs.shape[0]):
                         x = xs[b].cpu()
                         start_idx = start_idxs[b].item()
                         length = lengths[b].item()
