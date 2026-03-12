@@ -3,7 +3,6 @@ import argparse
 import logging
 import json
 import sys
-import os
 from importlib import metadata
 
 
@@ -118,6 +117,7 @@ def main():
     mdxc_override_model_segment_size_help = "Override model default segment size instead of using the model default value. Example: --mdxc_override_model_segment_size"
     mdxc_overlap_help = "Amount of overlap between prediction windows, 2-50. Higher is better but slower (default: %(default)s). Example: --mdxc_overlap=8"
     mdxc_batch_size_help = "Larger consumes more RAM but may process slightly faster (default: %(default)s). Example: --mdxc_batch_size=4"
+    mdxc_num_workers_help = "Number of workers for DataLoader. Higher = faster preprocessing but more CPU/RAM (default: %(default)s). Example: --mdxc_num_workers=4"
     mdxc_pitch_shift_help = "Shift audio pitch by a number of semitones while processing. May improve output for deep/high vocals. (default: %(default)s). Example: --mdxc_pitch_shift=2"
 
     mdxc_params = parser.add_argument_group("MDXC Architecture Parameters")
@@ -125,6 +125,7 @@ def main():
     mdxc_params.add_argument("--mdxc_override_model_segment_size", action="store_true", help=mdxc_override_model_segment_size_help)
     mdxc_params.add_argument("--mdxc_overlap", type=int, default=8, help=mdxc_overlap_help)
     mdxc_params.add_argument("--mdxc_batch_size", type=int, default=1, help=mdxc_batch_size_help)
+    mdxc_params.add_argument("--mdxc_num_workers", type=int, default=0, help=mdxc_num_workers_help)
     mdxc_params.add_argument("--mdxc_pitch_shift", type=int, default=0, help=mdxc_pitch_shift_help)
 
     args = parser.parse_args()
@@ -228,6 +229,7 @@ def main():
         mdxc_params={
             "segment_size": args.mdxc_segment_size,
             "batch_size": args.mdxc_batch_size,
+            "num_workers": args.mdxc_num_workers,
             "overlap": args.mdxc_overlap,
             "override_model_segment_size": args.mdxc_override_model_segment_size,
             "pitch_shift": args.mdxc_pitch_shift,

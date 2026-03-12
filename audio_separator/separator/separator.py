@@ -99,7 +99,7 @@ class Separator:
         mdx_params={"hop_length": 1024, "segment_size": 256, "overlap": 0.25, "batch_size": 1, "enable_denoise": False},
         vr_params={"batch_size": 1, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False},
         demucs_params={"segment_size": "Default", "shifts": 2, "overlap": 0.25, "segments_enabled": True},
-        mdxc_params={"segment_size": 256, "override_model_segment_size": False, "batch_size": 1, "overlap": 8, "pitch_shift": 0},
+        mdxc_params={"segment_size": 256, "override_model_segment_size": False, "batch_size": 1, "overlap": 8, "pitch_shift": 0, "num_workers": 0},
         info_only=False,
     ):
         """Initialize the separator."""
@@ -169,7 +169,7 @@ class Separator:
 
         self.invert_using_spec = invert_using_spec
         if self.invert_using_spec:
-            self.logger.debug(f"Secondary step will be inverted using spectogram rather than waveform. This may improve quality but is slightly slower.")
+            self.logger.debug("Secondary step will be inverted using spectogram rather than waveform. This may improve quality but is slightly slower.")
 
         try:
             self.sample_rate = int(sample_rate)
@@ -496,14 +496,14 @@ class Separator:
         self.download_file_if_not_exists("https://raw.githubusercontent.com/TRvlvr/application_data/main/filelists/download_checks.json", download_checks_path)
 
         model_downloads_list = json.load(open(download_checks_path, encoding="utf-8"))
-        self.logger.debug(f"UVR model download list loaded")
+        self.logger.debug("UVR model download list loaded")
 
         # Load the model scores with error handling
         model_scores = {}
         try:
             with resources.open_text("audio_separator", "models-scores.json") as f:
                 model_scores = json.load(f)
-            self.logger.debug(f"Model scores loaded")
+            self.logger.debug("Model scores loaded")
         except json.JSONDecodeError as e:
             self.logger.warning(f"Failed to load model scores: {str(e)}")
             self.logger.warning("Continuing without model scores")
@@ -529,7 +529,7 @@ class Separator:
         # Load the JSON file using importlib.resources
         with resources.open_text("audio_separator", "models.json") as f:
             audio_separator_models_list = json.load(f)
-        self.logger.debug(f"Audio-Separator model list loaded")
+        self.logger.debug("Audio-Separator model list loaded")
 
         # Return object with list of model names
         model_files_grouped_by_type = {

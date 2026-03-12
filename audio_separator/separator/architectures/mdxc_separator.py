@@ -3,6 +3,7 @@ import sys
 
 import torch
 import numpy as np
+from torch.utils.data import DataLoader, Dataset
 from tqdm import tqdm
 from ml_collections import ConfigDict
 from scipy import signal
@@ -11,6 +12,31 @@ from audio_separator.separator.common_separator import CommonSeparator
 from audio_separator.separator.uvr_lib_v5 import spec_utils
 from audio_separator.separator.uvr_lib_v5.tfc_tdf_v3 import TFC_TDF_net
 # Roformer direct constructors removed; loading handled via RoformerLoader in CommonSeparator.
+
+
+class RoformerDataset(Dataset):
+    def __init__(self, mix, chunk_size, step):
+        self.mix = mix
+        self.chunk_size = chunk_size
+        self.step = step
+        self.indices = list(range(0, mix.shape[1], step))
+
+    def __len__(self):
+        return len(self.indices)
+
+    def __getitem__(self, idx):
+        start_idx = self.indices[idx]
+        part = self.mix[:, start_idx : start_idx + self.chunk_size]
+        length = part.shape[-1]
+
+        # We need to handle the last chunk where part is smaller than chunk_size
+        if start_idx + self.chunk_size > self.mix.shape[1]:
+            # Take the last chunk_size from the end
+            part = self.mix[:, -self.chunk_size :]
+            length = self.chunk_size
+            start_idx = self.mix.shape[1] - self.chunk_size
+
+        return part, start_idx, length
 
 
 class MDXCSeparator(CommonSeparator):
@@ -41,6 +67,7 @@ class MDXCSeparator(CommonSeparator):
 
         self.overlap = arch_config.get("overlap", 8)
         self.batch_size = arch_config.get("batch_size", 1)
+        self.num_workers = arch_config.get("num_workers", 0)
 
         # Amount of pitch shift to apply during processing (this does NOT affect the pitch of the output audio):
         # • Whole numbers indicate semitones.
@@ -51,7 +78,7 @@ class MDXCSeparator(CommonSeparator):
 
         self.process_all_stems = arch_config.get("process_all_stems", True)
 
-        self.logger.debug(f"MDXC arch params: batch_size={self.batch_size}, segment_size={self.segment_size}, overlap={self.overlap}")
+        self.logger.debug(f"MDXC arch params: batch_size={self.batch_size}, segment_size={self.segment_size}, overlap={self.overlap}, num_workers={self.num_workers}")
         self.logger.debug(f"MDXC arch params: override_model_segment_size={self.override_model_segment_size}, pitch_shift={self.pitch_shift}")
         self.logger.debug(f"MDXC multi-stem params: process_all_stems={self.process_all_stems}")
 
@@ -317,28 +344,23 @@ class MDXCSeparator(CommonSeparator):
                 result = torch.zeros(req_shape, dtype=torch.float32)
                 counter = torch.zeros(req_shape, dtype=torch.float32)
 
-                for i in tqdm(range(0, mix.shape[1], step)):
-                    part = mix[:, i : i + chunk_size]
-                    length = part.shape[-1]
-                    if i + chunk_size > mix.shape[1]:
-                        part = mix[:, -chunk_size:]
-                        length = chunk_size
-                    part = part.to(device)
-                    x = self.model_run(part.unsqueeze(0))[0]
-                    x = x.cpu()
-                    # Perform overlap_add on CPU
-                    if i + chunk_size > mix.shape[1]:
-                        # Fixed to correctly add to the end of the tensor
-                        start_idx = result.shape[-1] - chunk_size
+                dataset = RoformerDataset(mix, chunk_size, step)
+                dataloader = DataLoader(dataset, batch_size=self.batch_size, shuffle=False, num_workers=self.num_workers, pin_memory=(device.type == "cuda"))
+
+                for parts, start_idxs, lengths in tqdm(dataloader):
+                    parts = parts.to(device)
+                    xs = self.model_run(parts)
+
+                    for b in range(len(xs)):
+                        x = xs[b].cpu()
+                        start_idx = start_idxs[b].item()
+                        length = lengths[b].item()
+
+                        # Perform overlap_add on CPU
                         result = self.overlap_add(result, x, window, start_idx, length)
                         safe_len = min(length, x.shape[-1], window.shape[0])
                         if safe_len > 0:
                             counter[..., start_idx : start_idx + safe_len] += window[:safe_len]
-                    else:
-                        result = self.overlap_add(result, x, window, i, length)
-                        safe_len = min(length, x.shape[-1], window.shape[0])
-                        if safe_len > 0:
-                            counter[..., i : i + safe_len] += window[:safe_len]
 
             inferenced_outputs = result / counter.clamp(min=1e-10)
 
