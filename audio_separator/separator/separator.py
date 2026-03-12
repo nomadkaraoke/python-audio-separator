@@ -77,6 +77,7 @@ class Separator:
         batch_size: 1
         overlap: 8
         pitch_shift: 0
+        num_workers: 0
     """
 
     def __init__(
