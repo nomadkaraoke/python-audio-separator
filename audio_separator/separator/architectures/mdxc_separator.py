@@ -32,7 +32,19 @@ class RoformerDataset(Dataset):
         self.mix = mix
         self.chunk_size = chunk_size
         self.step = step
-        self.indices = list(range(0, mix.shape[1], step))
+
+        indices = list(range(0, mix.shape[1], step))
+        last_start = mix.shape[1] - chunk_size
+
+        if last_start > 0:
+            # Remap any index that would result in a short chunk to the last_start
+            indices = [i if i <= last_start else last_start for i in indices]
+        elif last_start <= 0:
+            # If mix is shorter than or equal to chunk_size, only one chunk starting at 0 is needed
+            indices = [0]
+
+        # Use a dictionary to preserve insertion order while deduplicating
+        self.indices = list(dict.fromkeys(indices))
 
     def __len__(self):
         """
@@ -56,14 +68,6 @@ class RoformerDataset(Dataset):
         start_idx = self.indices[idx]
         part = self.mix[:, start_idx : start_idx + self.chunk_size]
         length = part.shape[-1]
-
-        # We need to handle the last chunk where part is smaller than chunk_size
-        if length < self.chunk_size and self.mix.shape[1] >= self.chunk_size:
-            # Take the last chunk_size from the end
-            part = self.mix[:, -self.chunk_size :]
-            length = self.chunk_size
-            start_idx = self.mix.shape[1] - self.chunk_size
-        # If mix is shorter than chunk_size, keep original part and length
 
         return part, start_idx, length
 
@@ -378,10 +382,10 @@ class MDXCSeparator(CommonSeparator):
 
                 for parts, start_idxs, lengths in tqdm(dataloader):
                     parts = parts.to(device)
-                    xs = self.model_run(parts)
+                    xs = self.model_run(parts).detach().cpu()
 
                     for b in range(xs.shape[0]):
-                        x = xs[b].cpu()
+                        x = xs[b]
                         start_idx = start_idxs[b].item()
                         length = lengths[b].item()
 
