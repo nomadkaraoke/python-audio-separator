@@ -6,8 +6,9 @@ Tests the chunking mechanism, overlap handling, and edge cases.
 import pytest
 import numpy as np
 import torch
-from unittest.mock import Mock, MagicMock, patch
+from unittest.mock import Mock
 import logging
+from audio_separator.separator.architectures.mdxc_separator import RoformerDataset
 
 
 class TestMDXCRoformerChunking:
@@ -103,7 +104,6 @@ class TestMDXCRoformerChunking:
         """T055: Counter increments match overlap_add safe span."""
         # Mock counter and overlap_add logic
         counter = torch.zeros(2, 20000)
-        chunk_size = 8192
         safe_len = 6000  # Shorter than chunk_size
         start_idx = 1000
         
@@ -288,7 +288,7 @@ class TestMDXCRoformerChunking:
             audio = Mock()
             audio.hop_length = 512
             
-            result = mock_setup_chunking_with_logging(model_with_stft, audio)
+            mock_setup_chunking_with_logging(model_with_stft, audio)
             
             # Verify logging occurred
             assert "stft_hop_length=1024" in caplog.text
@@ -342,10 +342,61 @@ class TestMDXCRoformerChunking:
             )
             
             # Verify minimum iterations
-            assert actual_iterations >= 1, f"Should always have at least 1 iteration"
+            assert actual_iterations >= 1, "Should always have at least 1 iteration"
             
             # Verify maximum reasonable iterations
             max_reasonable = (audio_length // step_size) + 2
             assert actual_iterations <= max_reasonable, (
                 f"Too many iterations {actual_iterations} for audio_len={audio_length}"
             )
+
+
+class TestRoformerDataset:
+    """Test cases for the RoformerDataset class."""
+
+    def test_roformer_dataset_no_duplicates(self):
+        """Verify that indices are correctly deduplicated when tail lands on step boundary."""
+        mix = np.zeros((2, 100))
+        chunk_size = 20
+        step = 10
+        dataset = RoformerDataset(mix, chunk_size, step)
+
+        # Expected indices: 0, 10, 20, 30, 40, 50, 60, 70, 80
+        # (90 was remapped to 80 and then deduplicated)
+        expected_indices = [0, 10, 20, 30, 40, 50, 60, 70, 80]
+        assert dataset.indices == expected_indices
+        assert len(dataset.indices) == len(set(dataset.indices))
+
+    def test_roformer_dataset_tail_remapped(self):
+        """Verify that audio tail is correctly remapped and included."""
+        mix = np.zeros((2, 105))
+        chunk_size = 20
+        step = 10
+        dataset = RoformerDataset(mix, chunk_size, step)
+
+        # Expected indices: 0, 10, 20, 30, 40, 50, 60, 70, 80, 85
+        expected_indices = [0, 10, 20, 30, 40, 50, 60, 70, 80, 85]
+        assert dataset.indices == expected_indices
+        assert len(dataset.indices) == len(set(dataset.indices))
+
+    def test_roformer_dataset_short_audio(self):
+        """Verify that audio shorter than chunk_size is handled correctly."""
+        mix = np.zeros((2, 10))
+        chunk_size = 20
+        step = 10
+        dataset = RoformerDataset(mix, chunk_size, step)
+
+        # Should result in just [0]
+        assert dataset.indices == [0]
+        part, start_idx, length = dataset[0]
+        assert part.shape == (2, 10)
+        assert start_idx == 0
+        assert length == 10
+
+    def test_roformer_dataset_exact_overlap(self):
+        """Verify that exact overlaps result in correct index scheduling."""
+        mix = np.zeros((2, 40))
+        chunk_size = 20
+        step = 20
+        dataset = RoformerDataset(mix, chunk_size, step)
+        assert dataset.indices == [0, 20]

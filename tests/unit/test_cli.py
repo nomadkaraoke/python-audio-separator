@@ -2,7 +2,6 @@ import json
 import pytest
 import logging
 from audio_separator.utils.cli import main
-import subprocess
 from unittest import mock
 from unittest.mock import patch, MagicMock, mock_open
 
@@ -275,3 +274,21 @@ def test_cli_demucs_output_names_argument(common_expected_args):
             # Assertions
             mock_separator.assert_called_once_with(**common_expected_args)
             mock_separator_instance.separate.assert_called_once_with(["test_audio.mp3"], custom_output_names=demucs_output_names)
+
+
+# Test using mdxc_num_workers argument
+def test_cli_mdxc_num_workers_argument(common_expected_args):
+    test_args = ["cli.py", "test_audio.mp3", "--mdxc_num_workers=2"]
+    with patch("sys.argv", test_args):
+        with patch("audio_separator.separator.Separator") as mock_separator:
+            mock_separator_instance = mock_separator.return_value
+            mock_separator_instance.separate.return_value = ["output_file.mp3"]
+            main()
+
+            # Update expected args for this specific test
+            expected_args = common_expected_args.copy()
+            expected_args["mdxc_params"] = expected_args["mdxc_params"].copy()
+            expected_args["mdxc_params"]["num_workers"] = 2
+
+            # Assertions
+            mock_separator.assert_called_once_with(**expected_args)
