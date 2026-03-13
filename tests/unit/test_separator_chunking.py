@@ -318,7 +318,7 @@ class TestSeparatorChunkingLogic:
 
         # Track state changes during _separate_file call
         state_during_processing = {}
-        def track_state(chunk_path, custom_names):
+        def track_state(chunk_path, custom_names=None):
             state_during_processing['chunk_duration'] = separator.chunk_duration
             state_during_processing['output_dir'] = separator.output_dir
             state_during_processing['model_output_dir'] = separator.model_instance.output_dir
