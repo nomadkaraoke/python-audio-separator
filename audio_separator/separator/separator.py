@@ -126,8 +126,9 @@ class Separator:
         vr_params={"batch_size": 1, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False},
         demucs_params={"segment_size": "Default", "shifts": 2, "overlap": 0.25, "segments_enabled": True},
         mdxc_params={"segment_size": 256, "override_model_segment_size": False, "batch_size": 1, "overlap": 8, "pitch_shift": 0},
-        ensemble_algorithm="avg_wave",
+        ensemble_algorithm=None,
         ensemble_weights=None,
+        ensemble_preset=None,
         info_only=False,
     ):
         """Initialize the separator."""
@@ -219,6 +220,22 @@ class Separator:
 
         self.ensemble_algorithm = ensemble_algorithm
         self.ensemble_weights = ensemble_weights
+        self.ensemble_preset = ensemble_preset
+        self._ensemble_preset_models = None
+
+        # If an ensemble preset is specified, load it and apply defaults
+        if ensemble_preset is not None:
+            preset_data = self._load_ensemble_preset(ensemble_preset)
+            self._ensemble_preset_models = preset_data["models"]
+            # Preset values are defaults — explicit user args (non-None) take priority
+            if ensemble_algorithm is None:
+                self.ensemble_algorithm = preset_data["algorithm"]
+            if ensemble_weights is None and preset_data.get("weights") is not None:
+                self.ensemble_weights = preset_data["weights"]
+
+        # Apply default algorithm if still not set (no preset, no explicit arg)
+        if self.ensemble_algorithm is None:
+            self.ensemble_algorithm = "avg_wave"
 
         # These are parameters which users may want to configure so we expose them to the top-level Separator class,
         # even though they are specific to a single model architecture
@@ -238,6 +255,64 @@ class Separator:
 
         if not info_only:
             self.setup_accelerated_inferencing_device()
+
+    VALID_ENSEMBLE_ALGORITHMS = [
+        "avg_wave", "median_wave", "min_wave", "max_wave",
+        "avg_fft", "median_fft", "min_fft", "max_fft",
+        "uvr_max_spec", "uvr_min_spec", "ensemble_wav",
+    ]
+
+    def _load_ensemble_preset(self, preset_name):
+        """
+        Load and validate an ensemble preset from ensemble_presets.json.
+
+        Returns a dict with keys: name, description, models, algorithm, weights, contributor.
+        Raises ValueError if the preset is not found or fails validation.
+        """
+        try:
+            with resources.open_text("audio_separator", "ensemble_presets.json") as f:
+                presets_data = json.load(f)
+        except FileNotFoundError:
+            raise ValueError("Ensemble presets file not found. The package may be corrupted or improperly installed.")
+
+        presets = presets_data.get("presets", {})
+        if preset_name not in presets:
+            available = ", ".join(sorted(presets.keys()))
+            raise ValueError(f"Unknown ensemble preset: '{preset_name}'. Available presets: {available}")
+
+        preset = presets[preset_name]
+
+        # Validate models
+        models = preset.get("models", [])
+        if not isinstance(models, list) or len(models) < 2:
+            raise ValueError(f"Ensemble preset '{preset_name}' must specify at least 2 models, got {len(models) if isinstance(models, list) else 0}")
+
+        # Validate algorithm
+        algorithm = preset.get("algorithm", "avg_wave")
+        if algorithm not in self.VALID_ENSEMBLE_ALGORITHMS:
+            raise ValueError(f"Ensemble preset '{preset_name}' has unknown algorithm: '{algorithm}'")
+
+        # Validate weights
+        weights = preset.get("weights")
+        if weights is not None:
+            if not isinstance(weights, list) or len(weights) != len(models):
+                raise ValueError(f"Ensemble preset '{preset_name}' weights length ({len(weights) if isinstance(weights, list) else 'N/A'}) must match models count ({len(models)})")
+
+        self.logger.info(f"Loaded ensemble preset '{preset_name}': {preset.get('name', preset_name)} — {preset.get('description', '')}")
+        return preset
+
+    def list_ensemble_presets(self):
+        """
+        List all available ensemble presets.
+
+        Returns a dict mapping preset IDs to their full preset data.
+        """
+        try:
+            with resources.open_text("audio_separator", "ensemble_presets.json") as f:
+                presets_data = json.load(f)
+        except FileNotFoundError:
+            return {}
+        return presets_data.get("presets", {})
 
     def setup_accelerated_inferencing_device(self):
         """
@@ -757,6 +832,10 @@ class Separator:
         This method instantiates the architecture-specific separation class,
         loading the separation model into memory, downloading it first if necessary.
         """
+        # If an ensemble preset was loaded and no explicit model list was provided, use preset models
+        if self._ensemble_preset_models is not None and model_filename == "model_bs_roformer_ep_317_sdr_12.9755.ckpt":
+            model_filename = self._ensemble_preset_models
+
         if isinstance(model_filename, list):
             if len(model_filename) > 1:
                 self.model_filename = list(model_filename)

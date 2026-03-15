@@ -42,8 +42,9 @@ def common_expected_args():
         "use_soundfile": False,
         "use_autocast": False,
         "chunk_duration": None,
-        "ensemble_algorithm": "avg_wave",
+        "ensemble_algorithm": None,
         "ensemble_weights": None,
+        "ensemble_preset": None,
         "mdx_params": {"hop_length": 1024, "segment_size": 256, "overlap": 0.25, "batch_size": 1, "enable_denoise": False},
         "vr_params": {"batch_size": 1, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False},
         "demucs_params": {"segment_size": "Default", "shifts": 2, "overlap": 0.25, "segments_enabled": True},
@@ -333,3 +334,31 @@ def test_cli_old_syntax_model_before_audio(common_expected_args):
 
             mock_separator_instance.load_model.assert_called_once_with(model_filename="my_model.onnx")
             mock_separator_instance.separate.assert_called_once_with(["test_audio.mp3"], custom_output_names=None)
+
+
+# Test --ensemble_preset passes preset to Separator and calls load_model() with default
+def test_cli_ensemble_preset(common_expected_args):
+    test_args = ["cli.py", "test_audio.mp3", "--ensemble_preset", "vocal_balanced"]
+    with patch("sys.argv", test_args):
+        with patch("audio_separator.separator.Separator") as mock_separator:
+            mock_separator_instance = mock_separator.return_value
+            mock_separator_instance.separate.return_value = ["output_file.mp3"]
+            main()
+
+            expected_args = common_expected_args.copy()
+            expected_args["ensemble_preset"] = "vocal_balanced"
+            mock_separator.assert_called_once_with(**expected_args)
+            # With preset and no explicit models, load_model() called with default
+            mock_separator_instance.load_model.assert_called_once_with()
+
+
+# Test --list_presets exits cleanly
+def test_cli_list_presets(capsys):
+    test_args = ["cli.py", "--list_presets"]
+    with patch("sys.argv", test_args):
+        with pytest.raises(SystemExit) as exc_info:
+            main()
+        assert exc_info.value.code == 0
+    captured = capsys.readouterr()
+    assert "vocal_balanced" in captured.out
+    assert "karaoke" in captured.out

@@ -10,7 +10,7 @@ authors = ["Andrew Beveridge <andrew@beveridge.uk>"]
 license = "MIT"
 readme = "README.md"
 packages = [{include = "audio_separator"}]
-include = ["audio_separator/separator/models.json"]
+include = ["audio_separator/separator/models.json", "audio_separator/ensemble_presets.json"]
 homepage = "https://github.com/karaokenerds/python-audio-separator"
 repository = "https://github.com/karaokenerds/python-audio-separator"
 documentation = "https://github.com/karaokenerds/python-audio-separator/blob/main/README.md"

@@ -376,6 +376,44 @@ output_files = separator.separate('audio.wav')
 - `uvr_min_spec`: UVR-based minimum spectrogram ensemble
 - `ensemble_wav`: UVR-based least noisy chunk ensemble
 
+#### Ensemble Presets
+
+Instead of specifying models and algorithms manually, you can use curated presets based on community-tested combinations:
+
+```sh
+# List available presets
+audio-separator --list_presets
+
+# Use a preset (models and algorithm are configured automatically)
+audio-separator audio.wav --ensemble_preset vocal_balanced
+
+# Override a preset's algorithm
+audio-separator audio.wav --ensemble_preset vocal_balanced --ensemble_algorithm max_fft
+```
+
+**Python API:**
+```python
+separator = Separator(output_dir='output', ensemble_preset='vocal_balanced')
+separator.load_model()  # Uses preset's models automatically
+output_files = separator.separate('audio.wav')
+```
+
+Available presets:
+
+| Preset | Use Case | Models | Algorithm |
+|--------|----------|--------|-----------|
+| `instrumental_clean` | Cleanest instrumentals, minimal vocal bleed | 2 | `uvr_max_spec` |
+| `instrumental_full` | Maximum instrument preservation | 2 | `uvr_max_spec` |
+| `instrumental_balanced` | Good noise/fullness balance | 2 | `uvr_max_spec` |
+| `instrumental_low_resource` | Fast, low VRAM | 2 | `avg_fft` |
+| `vocal_balanced` | Best overall vocal quality | 2 | `avg_fft` |
+| `vocal_clean` | Minimal instrument bleed | 2 | `min_fft` |
+| `vocal_full` | Maximum vocal capture | 2 | `max_fft` |
+| `vocal_rvc` | Optimized for RVC/AI training | 2 | `avg_wave` |
+| `karaoke` | Lead vocal removal | 3 | `avg_wave` |
+
+Presets are defined in `audio_separator/ensemble_presets.json` — contributions welcome via PR!
+
 ### Full command-line interface options
 
 ```sh
