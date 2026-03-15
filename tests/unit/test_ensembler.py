@@ -109,3 +109,58 @@ def test_ensembler_single_channel_stft(logger):
     ensembler = Ensembler(logger)
     spec = ensembler._stft(wav_mono)
     assert spec.shape[0] == 2 # Should be converted to stereo
+
+def test_ensembler_median_fft(logger):
+    wav1 = np.random.rand(2, 1024)
+    wav2 = np.random.rand(2, 1024)
+    wav3 = np.random.rand(2, 1024)
+    ensembler = Ensembler(logger, algorithm="median_fft")
+    result = ensembler.ensemble([wav1, wav2, wav3])
+    assert result.shape == (2, 1024)
+    assert np.all(np.isfinite(result))
+
+def test_ensembler_min_fft(logger):
+    wav1 = np.random.rand(2, 1024)
+    wav2 = np.random.rand(2, 1024)
+    ensembler = Ensembler(logger, algorithm="min_fft")
+    result = ensembler.ensemble([wav1, wav2])
+    assert result.shape == (2, 1024)
+    assert np.all(np.isfinite(result))
+
+def test_ensembler_max_fft(logger):
+    wav1 = np.random.rand(2, 1024)
+    wav2 = np.random.rand(2, 1024)
+    ensembler = Ensembler(logger, algorithm="max_fft")
+    result = ensembler.ensemble([wav1, wav2])
+    assert result.shape == (2, 1024)
+    assert np.all(np.isfinite(result))
+
+def test_ensembler_uvr_max_spec(logger):
+    wav1 = np.random.rand(2, 4096).astype(np.float32)
+    wav2 = np.random.rand(2, 4096).astype(np.float32)
+    ensembler = Ensembler(logger, algorithm="uvr_max_spec")
+    result = ensembler.ensemble([wav1, wav2])
+    assert result.ndim == 2
+    assert np.all(np.isfinite(result))
+
+def test_ensembler_uvr_min_spec(logger):
+    wav1 = np.random.rand(2, 4096).astype(np.float32)
+    wav2 = np.random.rand(2, 4096).astype(np.float32)
+    ensembler = Ensembler(logger, algorithm="uvr_min_spec")
+    result = ensembler.ensemble([wav1, wav2])
+    assert result.ndim == 2
+    assert np.all(np.isfinite(result))
+
+def test_ensembler_invalid_algorithm(logger):
+    wav1 = np.random.rand(2, 100)
+    ensembler = Ensembler(logger, algorithm="nonexistent")
+    with pytest.raises(ValueError, match="Unknown ensemble algorithm"):
+        ensembler.ensemble([wav1, wav1])
+
+def test_ensembler_weight_mismatch_fallback(logger):
+    wav1 = np.ones((2, 100))
+    wav2 = np.zeros((2, 100))
+    # 3 weights for 2 waveforms should fall back to equal weights
+    ensembler = Ensembler(logger, algorithm="avg_wave", weights=[1.0, 2.0, 3.0])
+    result = ensembler.ensemble([wav1, wav2])
+    assert np.allclose(result, 0.5)  # equal weights -> simple average

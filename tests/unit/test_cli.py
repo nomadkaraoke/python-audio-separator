@@ -134,7 +134,7 @@ def test_cli_model_filename_argument(common_expected_args):
 
             # Assertions
             mock_separator.assert_called_once_with(**common_expected_args)
-            mock_separator_instance.load_model.assert_called_once_with(model_filename=["Custom_Model.onnx"])
+            mock_separator_instance.load_model.assert_called_once_with(model_filename="Custom_Model.onnx")
 
 
 # Test using output directory argument
@@ -294,3 +294,42 @@ def test_cli_demucs_output_names_argument(common_expected_args):
             # Assertions
             mock_separator.assert_called_once_with(**common_expected_args)
             mock_separator_instance.separate.assert_called_once_with(["test_audio.mp3"], custom_output_names=demucs_output_names)
+
+
+# Test using --extra_models for ensemble mode
+def test_cli_extra_models_argument(common_expected_args):
+    test_args = ["cli.py", "test_audio.mp3", "-m", "model1.onnx", "--extra_models", "model2.onnx", "model3.onnx"]
+    with patch("sys.argv", test_args):
+        with patch("audio_separator.separator.Separator") as mock_separator:
+            mock_separator_instance = mock_separator.return_value
+            mock_separator_instance.separate.return_value = ["output_file.mp3"]
+            main()
+
+            # Assertions
+            mock_separator.assert_called_once_with(**common_expected_args)
+            mock_separator_instance.load_model.assert_called_once_with(model_filename=["model1.onnx", "model2.onnx", "model3.onnx"])
+
+
+# Test that -m with single model still passes a string (backward compat)
+def test_cli_single_model_passes_string(common_expected_args):
+    test_args = ["cli.py", "test_audio.mp3", "-m", "my_model.onnx"]
+    with patch("sys.argv", test_args):
+        with patch("audio_separator.separator.Separator") as mock_separator:
+            mock_separator_instance = mock_separator.return_value
+            mock_separator_instance.separate.return_value = ["output_file.mp3"]
+            main()
+
+            mock_separator_instance.load_model.assert_called_once_with(model_filename="my_model.onnx")
+
+
+# Test old CLI syntax: -m model audio.wav (model before audio file)
+def test_cli_old_syntax_model_before_audio(common_expected_args):
+    test_args = ["cli.py", "-m", "my_model.onnx", "test_audio.mp3"]
+    with patch("sys.argv", test_args):
+        with patch("audio_separator.separator.Separator") as mock_separator:
+            mock_separator_instance = mock_separator.return_value
+            mock_separator_instance.separate.return_value = ["output_file.mp3"]
+            main()
+
+            mock_separator_instance.load_model.assert_called_once_with(model_filename="my_model.onnx")
+            mock_separator_instance.separate.assert_called_once_with(["test_audio.mp3"], custom_output_names=None)

@@ -324,14 +324,17 @@ You can combine the results of multiple models to improve separation quality. Th
 
 #### CLI Usage
 
-Use the `--model_filename` (or `-m`) flag with multiple arguments. You can also specify the ensemble algorithm using `--ensemble_algorithm`.
+Use `-m` for the primary model and `--extra_models` for additional models. You can also specify the ensemble algorithm using `--ensemble_algorithm`.
 
 ```sh
 # Ensemble two models using the default 'avg_wave' algorithm
-audio-separator audio.wav -m model1.ckpt model2.onnx
+audio-separator audio.wav -m model1.ckpt --extra_models model2.onnx
 
 # Ensemble multiple models using a specific algorithm
-audio-separator audio.wav -m model1.ckpt model2.onnx model3.ckpt --ensemble_algorithm max_fft
+audio-separator audio.wav -m model1.ckpt --extra_models model2.onnx model3.ckpt --ensemble_algorithm max_fft
+
+# With custom weights (must match the number of models)
+audio-separator audio.wav -m model1.ckpt --extra_models model2.onnx --ensemble_weights 2.0 1.0
 ```
 
 #### Python API Usage

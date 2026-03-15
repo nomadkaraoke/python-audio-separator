@@ -37,7 +37,8 @@ def main():
     info_params.add_argument("--list_limit", type=int, help="Limit the number of models shown")
     info_params.add_argument("--list_format", choices=["pretty", "json"], default="pretty", help="Format for listing models: 'pretty' for formatted output, 'json' for raw JSON dump")
 
-    model_filename_help = "Model(s) to use for separation (default: %(default)s). Multiple models can be specified for ensembling. Example: -m model1.ckpt model2.onnx"
+    model_filename_help = "Model to use for separation (default: %(default)s). Example: -m model1.ckpt"
+    extra_models_help = "Additional models for ensembling. Requires -m for the primary model. Example: --extra_models model2.onnx model3.ckpt"
     output_format_help = "Output format for separated files, any common format (default: %(default)s). Example: --output_format=MP3"
     output_bitrate_help = "Output bitrate for separated files, any ffmpeg-compatible bitrate (default: %(default)s). Example: --output_bitrate=320k"
     output_dir_help = "Directory to write output files (default: <current dir>). Example: --output_dir=/app/separated"
@@ -45,7 +46,8 @@ def main():
     download_model_only_help = "Download a single model file only, without performing separation."
 
     io_params = parser.add_argument_group("Separation I/O Params")
-    io_params.add_argument("-m", "--model_filename", default=["model_bs_roformer_ep_317_sdr_12.9755.ckpt"], nargs="+", help=model_filename_help)
+    io_params.add_argument("-m", "--model_filename", default="model_bs_roformer_ep_317_sdr_12.9755.ckpt", help=model_filename_help)
+    io_params.add_argument("--extra_models", nargs="+", default=None, help=extra_models_help)
     io_params.add_argument("--output_format", default="FLAC", help=output_format_help)
     io_params.add_argument("--output_bitrate", default=None, help=output_bitrate_help)
     io_params.add_argument("--output_dir", default=None, help=output_dir_help)
@@ -184,14 +186,13 @@ def main():
         sys.exit(0)
 
     if args.download_model_only:
-        models_to_download = args.model_filename if isinstance(args.model_filename, list) else [args.model_filename]
+        models_to_download = [args.model_filename] + (args.extra_models or [])
         separator = Separator(log_formatter=log_formatter, log_level=log_level, model_file_dir=args.model_file_dir)
         for model in models_to_download:
             logger.info(f"Separator version {package_version} downloading model {model} to directory {args.model_file_dir}")
             separator.download_model_and_data(model)
-        
-        models_string = ", ".join(models_to_download) if isinstance(models_to_download, list) else models_to_download
-        logger.info(f"Model {models_string} downloaded successfully.")
+
+        logger.info(f"Model {', '.join(models_to_download)} downloaded successfully.")
         sys.exit(0)
 
     audio_files = list(getattr(args, "audio_files", []))
@@ -249,7 +250,11 @@ def main():
         },
     )
 
-    separator.load_model(model_filename=args.model_filename)
+    # Combine primary model with any extra models for ensembling
+    model_filenames = [args.model_filename] + (args.extra_models or [])
+    if len(model_filenames) == 1:
+        model_filenames = model_filenames[0]
+    separator.load_model(model_filename=model_filenames)
 
     output_files = separator.separate(audio_files, custom_output_names=args.custom_output_names)
     logger.info(f"Separation complete! Output file(s): {' '.join(output_files)}")

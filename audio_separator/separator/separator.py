@@ -25,6 +25,29 @@ import onnxruntime as ort
 from tqdm import tqdm
 from audio_separator.separator.ensembler import Ensembler
 
+# Mapping of common stem name variations to canonical names for ensemble grouping.
+STEM_NAME_MAP = {
+    "vocals": "Vocals",
+    "instrumental": "Instrumental",
+    "inst": "Instrumental",
+    "karaoke": "Instrumental",
+    "other": "Other",
+    "no_vocals": "Instrumental",
+    "drums": "Drums",
+    "bass": "Bass",
+    "guitar": "Guitar",
+    "piano": "Piano",
+    "synthesizer": "Synthesizer",
+    "strings": "Strings",
+    "woodwinds": "Woodwinds",
+    "brass": "Brass",
+    "wind inst": "Wind Inst",
+    "lead vocals": "Lead Vocals",
+    "backing vocals": "Backing Vocals",
+    "primary stem": "Primary Stem",
+    "secondary stem": "Secondary Stem",
+}
+
 
 class Separator:
     """
@@ -207,6 +230,8 @@ class Separator:
 
         self.onnx_execution_provider = None
         self.model_instance = None
+        self.model_filename = None
+        self.model_filenames = []
 
         self.model_is_uvr_vip = False
         self.model_friendly_name = None
@@ -734,8 +759,8 @@ class Separator:
         """
         if isinstance(model_filename, list):
             if len(model_filename) > 1:
-                self.model_filename = model_filename
-                self.model_filenames = model_filename
+                self.model_filename = list(model_filename)
+                self.model_filenames = list(model_filename)
                 self.logger.info(f"Multiple models specified for ensembling: {self.model_filenames}")
                 return
             model_filename = model_filename[0]
@@ -1161,6 +1186,7 @@ class Separator:
                 # Store paths of intermediate stems grouped by stem name
                 # { "Vocals": ["temp_dir/model1_Vocals.wav", "temp_dir/model2_Vocals.wav"], ... }
                 stems_by_type = {}
+                original_output_dir = self.output_dir
 
                 for model_filename in original_model_filenames:
                     self.logger.info(f"Processing with model: {model_filename}")
@@ -1169,7 +1195,6 @@ class Separator:
                     self.load_model(model_filename)
 
                     # Set temporary output directory for this model
-                    original_output_dir = self.output_dir
                     self.output_dir = temp_dir
                     if self.model_instance:
                         self.model_instance.output_dir = temp_dir
@@ -1189,32 +1214,11 @@ class Separator:
 
                             # Normalize stem names to fix mismatched model labels
                             lower_name = stem_name.lower()
-                            stem_name_map = {
-                                "vocals": "Vocals",
-                                "instrumental": "Instrumental",
-                                "inst": "Instrumental",
-                                "karaoke": "Instrumental",
-                                "other": "Other",
-                                "no_vocals": "Instrumental",
-                                "drums": "Drums",
-                                "bass": "Bass",
-                                "guitar": "Guitar",
-                                "piano": "Piano",
-                                "synthesizer": "Synthesizer",
-                                "strings": "Strings",
-                                "woodwinds": "Woodwinds",
-                                "brass": "Brass",
-                                "wind inst": "Wind Inst",
-                                "lead vocals": "Lead Vocals",
-                                "backing vocals": "Backing Vocals",
-                                "primary stem": "Primary Stem",
-                                "secondary stem": "Secondary Stem",
-                            }
 
                             if "vocal" in lower_name and "lead" not in lower_name and "backing" not in lower_name:
                                 stem_name = "Vocals"
-                            elif lower_name in stem_name_map:
-                                stem_name = stem_name_map[lower_name]
+                            elif lower_name in STEM_NAME_MAP:
+                                stem_name = STEM_NAME_MAP[lower_name]
                             else:
                                 # Standardize capitalization for other stems (e.g., Drums, Bass)
                                 stem_name = stem_name.title()
@@ -1236,13 +1240,22 @@ class Separator:
                     self.logger.info(f"Ensembling {len(stem_paths)} stems for type: {stem_name}")
 
                     waveforms = []
+                    original_channels = None
                     for sp in stem_paths:
                         wav, _ = librosa.load(sp, mono=False, sr=self.sample_rate)
                         if wav.ndim == 1:
+                            if original_channels is None:
+                                original_channels = 1
                             wav = np.asfortranarray([wav, wav])
+                        elif original_channels is None:
+                            original_channels = wav.shape[0]
                         waveforms.append(wav)
 
                     ensembled_wav = ensembler.ensemble(waveforms)
+
+                    # Restore original channel count (avoid fake stereo from mono input)
+                    if original_channels == 1 and ensembled_wav.shape[0] > 1:
+                        ensembled_wav = ensembled_wav[:1, :]
 
                     # Determine output filename
                     if custom_output_names and stem_name in custom_output_names:
