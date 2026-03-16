@@ -103,8 +103,18 @@ class CommonSeparator:
         if "training" in self.model_data and "instruments" in self.model_data["training"]:
             instruments = self.model_data["training"]["instruments"]
             if instruments:
-                self.primary_stem_name = instruments[0]
-                self.secondary_stem_name = instruments[1] if len(instruments) > 1 else self.secondary_stem(self.primary_stem_name)
+                target_instrument = self.model_data["training"].get("target_instrument")
+
+                # When target_instrument is set and doesn't match instruments[0],
+                # the model's prediction would be labeled with the wrong stem name.
+                # Swap so primary_stem_name always matches the model's actual target output.
+                if target_instrument and len(instruments) >= 2 and instruments[0] != target_instrument and instruments[1] == target_instrument:
+                    self.logger.debug(f"Swapping stem names: target_instrument '{target_instrument}' doesn't match instruments[0] '{instruments[0]}'")
+                    self.primary_stem_name = instruments[1]
+                    self.secondary_stem_name = instruments[0]
+                else:
+                    self.primary_stem_name = instruments[0]
+                    self.secondary_stem_name = instruments[1] if len(instruments) > 1 else self.secondary_stem(self.primary_stem_name)
 
         if self.primary_stem_name is None:
             self.primary_stem_name = self.model_data.get("primary_stem", "Vocals")
