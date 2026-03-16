@@ -107,7 +107,103 @@ def test_preset_json_valid():
         assert len(preset["models"]) >= 2, f"Preset {preset_id} must have at least 2 models"
         assert preset["algorithm"] in valid_algorithms, f"Preset {preset_id} has invalid algorithm: {preset['algorithm']}"
 
-        weights = preset.get("weights")
-        if weights is not None:
-            assert isinstance(weights, list), f"Preset {preset_id} weights must be a list"
-            assert len(weights) == len(preset["models"]), f"Preset {preset_id} weights length mismatch"
+
+def test_preset_validation_bad_weights_length(mock_separator_init):
+    """Preset with weights length != models length should raise ValueError."""
+    # We need to patch the JSON to inject a bad preset
+    import io
+    bad_json = json.dumps({
+        "version": 1,
+        "presets": {
+            "bad_weights": {
+                "name": "Bad",
+                "description": "test",
+                "models": ["a.ckpt", "b.ckpt"],
+                "algorithm": "avg_wave",
+                "weights": [1.0, 2.0, 3.0],  # 3 weights for 2 models
+            }
+        }
+    })
+    with patch("audio_separator.separator.separator.resources.open_text", return_value=io.StringIO(bad_json)):
+        with pytest.raises(ValueError, match="weights length"):
+            Separator(ensemble_preset="bad_weights")
+
+
+def test_preset_validation_bad_algorithm(mock_separator_init):
+    """Preset with unknown algorithm should raise ValueError."""
+    import io
+    bad_json = json.dumps({
+        "version": 1,
+        "presets": {
+            "bad_algo": {
+                "name": "Bad",
+                "description": "test",
+                "models": ["a.ckpt", "b.ckpt"],
+                "algorithm": "nonexistent_algorithm",
+                "weights": None,
+            }
+        }
+    })
+    with patch("audio_separator.separator.separator.resources.open_text", return_value=io.StringIO(bad_json)):
+        with pytest.raises(ValueError, match="unknown algorithm"):
+            Separator(ensemble_preset="bad_algo")
+
+
+def test_preset_validation_single_model(mock_separator_init):
+    """Preset with only 1 model should raise ValueError."""
+    import io
+    bad_json = json.dumps({
+        "version": 1,
+        "presets": {
+            "one_model": {
+                "name": "Bad",
+                "description": "test",
+                "models": ["a.ckpt"],
+                "algorithm": "avg_wave",
+                "weights": None,
+            }
+        }
+    })
+    with patch("audio_separator.separator.separator.resources.open_text", return_value=io.StringIO(bad_json)):
+        with pytest.raises(ValueError, match="at least 2 models"):
+            Separator(ensemble_preset="one_model")
+
+
+def test_preset_weights_applied(mock_separator_init):
+    """Preset with explicit weights should apply them."""
+    import io
+    preset_json = json.dumps({
+        "version": 1,
+        "presets": {
+            "weighted": {
+                "name": "Weighted",
+                "description": "test",
+                "models": ["a.ckpt", "b.ckpt"],
+                "algorithm": "avg_wave",
+                "weights": [2.0, 1.0],
+            }
+        }
+    })
+    with patch("audio_separator.separator.separator.resources.open_text", return_value=io.StringIO(preset_json)):
+        sep = Separator(ensemble_preset="weighted")
+        assert sep.ensemble_weights == [2.0, 1.0]
+
+
+def test_preset_explicit_weights_override(mock_separator_init):
+    """User-provided weights should override preset weights."""
+    import io
+    preset_json = json.dumps({
+        "version": 1,
+        "presets": {
+            "weighted": {
+                "name": "Weighted",
+                "description": "test",
+                "models": ["a.ckpt", "b.ckpt"],
+                "algorithm": "avg_wave",
+                "weights": [2.0, 1.0],
+            }
+        }
+    })
+    with patch("audio_separator.separator.separator.resources.open_text", return_value=io.StringIO(preset_json)):
+        sep = Separator(ensemble_preset="weighted", ensemble_weights=[5.0, 3.0])
+        assert sep.ensemble_weights == [5.0, 3.0]
