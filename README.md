@@ -359,7 +359,6 @@ models = [
 separator.load_model(model_filename=models)
 
 # Perform separation
-# The algorithm defaults to 'avg_wave' as specified during Separator initialization
 output_files = separator.separate('audio.wav')
 ```
 
@@ -623,6 +622,7 @@ You can also rename specific stems:
 - **`mdxc_params`:** (Optional) MDXC Architecture Specific Attributes & Defaults. `Default: {"segment_size": 256, "override_model_segment_size": False, "batch_size": 1, "overlap": 8, "pitch_shift": 0}`
 - **`ensemble_algorithm`:** (Optional) Algorithm to use for ensembling multiple models. `Default: 'avg_wave'`
 - **`ensemble_weights`:** (Optional) Weights for each model in the ensemble. `Default: None` (equal weights)
+- **`ensemble_preset`:** (Optional) Named ensemble preset (e.g. `'vocal_balanced'`, `'karaoke'`). Sets models, algorithm, and weights automatically. Use `Separator(info_only=True).list_ensemble_presets()` to see all. `Default: None`
 
 ## Remote API Usage 🌐
 
