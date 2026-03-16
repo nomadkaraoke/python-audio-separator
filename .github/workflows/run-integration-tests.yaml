@@ -40,8 +40,8 @@ jobs:
           echo "=== GPU Info ==="
           nvidia-smi
           echo ""
-          echo "=== CUDA Version ==="
-          nvidia-smi --query-gpu=driver_version,cuda_version --format=csv,noheader
+          echo "=== Driver Version ==="
+          nvidia-smi --query-gpu=driver_version,name,memory.total --format=csv,noheader
 
       - name: Set up Python
         uses: actions/setup-python@v5
