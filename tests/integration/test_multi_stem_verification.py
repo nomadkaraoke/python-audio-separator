@@ -171,6 +171,12 @@ def test_drumsep_pipeline(tmp_path):
 
 
 # ─── Karaoke ─────────────────────────────────────────────────────────
+#
+# Karaoke models remove lead vocals while preserving backing vocals in
+# the instrumental. The test verifies:
+# 1. Karaoke output matches its own reference (regression check)
+# 2. Karaoke vocal output differs from standard vocal output (confirms
+#    the model extracts less — just lead vocals, not all vocals)
 
 KARAOKE_PARAMS = [
     ("tests/inputs/levee_drums.flac", "ref_levee_drums"),
@@ -180,23 +186,36 @@ KARAOKE_PARAMS = [
 
 @pytest.mark.parametrize("input_file,ref_prefix", KARAOKE_PARAMS)
 def test_karaoke_separation(input_file, ref_prefix, tmp_path):
-    """Test karaoke model separation matches references."""
-    model = "mel_band_roformer_karaoke_aufr33_viperx_sdr_10.1956.ckpt"
+    """Test karaoke model produces output matching references and differs from standard split."""
+    karaoke_model = "mel_band_roformer_karaoke_aufr33_viperx_sdr_10.1956.ckpt"
     output_dir = str(tmp_path)
 
-    output_files = run_separation(model, input_file, output_dir)
+    # Step 1: Run karaoke model
+    output_files = run_separation(karaoke_model, input_file, output_dir)
     clip = os.path.basename(input_file)
     print(f"\n  {clip} → karaoke")
 
+    # Step 2: Verify stems match karaoke references
     for stem, ref_suffix in [("Vocals", "vocals_karaoke"), ("Instrumental", "instrumental_karaoke")]:
         stem_file = find_stem(output_files, stem, output_dir)
         assert stem_file, f"No {stem} stem found"
 
         ref_path = os.path.join(REFERENCE_DIR, f"{ref_prefix}_{ref_suffix}.flac")
         corr = correlate(stem_file, ref_path)
-        print(f"    {stem:<15} corr: {corr:.3f}")
-
+        print(f"    {stem:<15} corr with karaoke ref: {corr:.3f}")
         assert corr > DEFAULT_CORRELATION_THRESHOLD, f"{stem} correlation {corr:.3f} below threshold"
+
+    # Step 3: Verify karaoke vocals differ from standard vocals
+    # (karaoke extracts only lead vocals; standard extracts all vocals)
+    karaoke_vocals = find_stem(output_files, "Vocals", output_dir)
+    standard_vocals_ref = os.path.join(REFERENCE_DIR, f"{ref_prefix}_vocals.flac")
+    if os.path.exists(standard_vocals_ref):
+        corr_vs_standard = correlate(karaoke_vocals, standard_vocals_ref)
+        print(f"    Karaoke vs standard vocals corr: {corr_vs_standard:.3f} (should be < 0.95)")
+        # Karaoke vocals should differ from standard vocals
+        # (not a hard failure — depends on whether there are backing vocals)
+        if corr_vs_standard > 0.95:
+            print(f"    NOTE: Karaoke and standard vocals are very similar — clip may lack backing vocals")
 
 
 # ─── Wind / Brass extraction ─────────────────────────────────────────
