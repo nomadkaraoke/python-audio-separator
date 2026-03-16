@@ -1,0 +1,26 @@
+# Use ROCm base image with Python
+FROM rocm/dev-ubuntu-22.04:5.7.1-complete
+
+# Set the working directory in the container
+WORKDIR /workdir
+
+# Install necessary packages
+RUN apt-get update && apt-get install -y \
+    ffmpeg \
+    build-essential \
+    python3 \
+    python3-pip \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN python3 -m pip install --upgrade pip
+
+# Install PyTorch with ROCm support and audio-separator with ROCm extra
+RUN --mount=type=cache,target=/root/.cache \
+    pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm5.7
+
+# Install audio-separator with ROCm support
+RUN --mount=type=cache,target=/root/.cache \
+    pip3 install "audio-separator[rocm]"
+
+# Run audio-separator when the container launches
+ENTRYPOINT ["audio-separator"]

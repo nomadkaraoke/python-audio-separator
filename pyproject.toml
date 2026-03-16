@@ -62,6 +62,7 @@ soundfile = ">=0.12"
 cpu = ["onnxruntime"]
 gpu = ["onnxruntime-gpu"]
 dml = ["onnxruntime-directml", "torch_directml"]
+rocm = ["onnxruntime-rocm"]
 
 [tool.poetry.scripts]
 audio-separator = 'audio_separator.utils.cli:main'

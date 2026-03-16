@@ -112,6 +112,26 @@ Docker:
 beveradb/audio-separator:gpu
 ```
 
+### 🖥️ AMD GPU with ROCm (Linux)
+
+**Supported ROCm Versions:** 5.7+
+
+💬 If successfully configured, you should see this log message when running `audio-separator --env_info`:
+ `ONNXruntime has ROCMExecutionProvider available, enabling acceleration`
+
+Pip:
+```sh
+pip install "audio-separator[rocm]"
+```
+
+Note: For ROCm support, you need to have ROCm installed on your system first. PyTorch with ROCm support should be installed separately using the official PyTorch installation instructions for ROCm.
+
+Docker (build from source):
+```sh
+docker build -f Dockerfile.rocm -t audio-separator:rocm .
+docker run -it --device=/dev/kfd --device=/dev/dri --group-add=video -v `pwd`:/workdir audio-separator:rocm input.wav
+```
+
 ###  Apple Silicon, macOS Sonoma+ with M1 or newer CPU (CoreML acceleration)
 
 💬 If successfully configured, you should see this log message when running `audio-separator --env_info`:
@@ -157,11 +177,11 @@ apt-get update; apt-get install -y ffmpeg
 brew update; brew install ffmpeg
 ```
 
-## GPU / CUDA specific installation steps with Pip
+## GPU specific installation steps with Pip (CUDA and ROCm)
 
-In theory, all you should need to do to get `audio-separator` working with a GPU is install it with the `[gpu]` extra as above.
+In theory, all you should need to do to get `audio-separator` working with a GPU is install it with the appropriate extra (`[gpu]` for CUDA/NVIDIA or `[rocm]` for ROCm/AMD) as above.
 
-However, sometimes getting both PyTorch and ONNX Runtime working with CUDA support can be a bit tricky so it may not work that easily.
+However, sometimes getting both PyTorch and ONNX Runtime working with GPU support can be a bit tricky so it may not work that easily.
 
 You may need to reinstall both packages directly, allowing pip to calculate the right versions for your platform, for example:
 
@@ -195,6 +215,22 @@ If you encounter the following messages when running on Google Colab or in anoth
 You can resolve this by running the following command:
 ```sh
 python -m pip install ort-nightly-gpu --index-url=https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/ort-cuda-12-nightly/pypi/simple/
+```
+
+### ROCm specific troubleshooting
+
+For ROCm (AMD GPU) support, make sure you have:
+1. ROCm installed on your system (typically version 5.7+)
+2. PyTorch with ROCm support installed (check PyTorch website for ROCm installation)
+3. `onnxruntime-rocm` package installed
+
+If you encounter issues with ROCm detection, try reinstalling the packages:
+```sh
+pip uninstall torch onnxruntime
+pip cache purge
+# Install PyTorch with ROCm support (check https://pytorch.org for the correct command)
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm5.7
+pip install onnxruntime-rocm
 ```
 
 > Note: if anyone knows how to make this cleaner so we can support both different platform-specific dependencies for hardware acceleration without a separate installation process for each, please let me know or raise a PR!

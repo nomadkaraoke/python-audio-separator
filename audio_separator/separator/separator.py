@@ -256,6 +256,7 @@ class Separator:
         onnxruntime_silicon_package = self.get_package_distribution("onnxruntime-silicon")
         onnxruntime_cpu_package = self.get_package_distribution("onnxruntime")
         onnxruntime_dml_package = self.get_package_distribution("onnxruntime-directml")
+        onnxruntime_rocm_package = self.get_package_distribution("onnxruntime-rocm")
 
         if onnxruntime_gpu_package is not None:
             self.logger.info(f"ONNX Runtime GPU package installed with version: {onnxruntime_gpu_package.version}")
@@ -265,6 +266,8 @@ class Separator:
             self.logger.info(f"ONNX Runtime CPU package installed with version: {onnxruntime_cpu_package.version}")
         if onnxruntime_dml_package is not None:
             self.logger.info(f"ONNX Runtime DirectML package installed with version: {onnxruntime_dml_package.version}")
+        if onnxruntime_rocm_package is not None:
+            self.logger.info(f"ONNX Runtime ROCm package installed with version: {onnxruntime_rocm_package.version}")
 
     def setup_torch_device(self, system_info):
         """
@@ -277,8 +280,14 @@ class Separator:
         self.torch_device_cpu = torch.device("cpu")
 
         if torch.cuda.is_available():
-            self.configure_cuda(ort_providers)
-            hardware_acceleration_enabled = True
+            # Check if ROCm is available (AMD GPUs)
+            # We check ROCMExecutionProvider first since if it's available, we're likely on ROCm
+            if "ROCMExecutionProvider" in ort_providers:
+                self.configure_rocm(ort_providers)
+                hardware_acceleration_enabled = True
+            else:
+                self.configure_cuda(ort_providers)
+                hardware_acceleration_enabled = True
         elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available() and system_info.processor == "arm":
             self.configure_mps(ort_providers)
             hardware_acceleration_enabled = True
@@ -304,6 +313,18 @@ class Separator:
             self.onnx_execution_provider = ["CUDAExecutionProvider"]
         else:
             self.logger.warning("CUDAExecutionProvider not available in ONNXruntime, so acceleration will NOT be enabled")
+
+    def configure_rocm(self, ort_providers):
+        """
+        This method configures the ROCm device for PyTorch and ONNX Runtime, if available.
+        """
+        self.logger.info("ROCm (AMD GPU) is available, setting Torch device to CUDA (ROCm presents as CUDA)")
+        self.torch_device = torch.device("cuda")
+        if "ROCMExecutionProvider" in ort_providers:
+            self.logger.info("ONNXruntime has ROCMExecutionProvider available, enabling acceleration")
+            self.onnx_execution_provider = ["ROCMExecutionProvider"]
+        else:
+            self.logger.warning("ROCMExecutionProvider not available in ONNXruntime, so acceleration will NOT be enabled")
 
     def configure_mps(self, ort_providers):
         """
