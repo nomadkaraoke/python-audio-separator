@@ -58,13 +58,16 @@ def run_preset(preset, input_file, output_dir):
 
 
 def find_stem(output_files, stem_name, output_dir):
-    """Find the output file matching a stem name (case-insensitive)."""
+    """Find the output file matching a stem name (case-insensitive).
+
+    Uses the last _(StemName) group so pipeline outputs are matched correctly.
+    """
     for f in output_files:
         full = f if os.path.isabs(f) else os.path.join(output_dir, f)
         if not os.path.exists(full):
             full = os.path.join(output_dir, os.path.basename(f))
-        match = re.search(r'_\(([^)]+)\)', os.path.basename(f))
-        if match and match.group(1).lower() == stem_name.lower():
+        matches = re.findall(r'_\(([^)]+)\)', os.path.basename(f))
+        if matches and matches[-1].lower() == stem_name.lower():
             return full
     return None
 

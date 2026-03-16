@@ -46,13 +46,18 @@ DEFAULT_CORRELATION_THRESHOLD = 0.70
 
 
 def correlate(file_a, file_b, sr=44100):
-    """Compute Pearson correlation between two audio files (mono-mixed)."""
+    """Compute Pearson correlation between two audio files (mono-mixed).
+
+    Returns nan when both signals are near-silent (zero variance), which
+    callers should treat as a match (both files are silence).
+    """
     a, _ = librosa.load(file_a, sr=sr, mono=True)
     b, _ = librosa.load(file_b, sr=sr, mono=True)
     min_len = min(len(a), len(b))
     a, b = a[:min_len], b[:min_len]
-    if len(a) < min_len:
-        a = np.pad(a, (0, min_len - len(a)))
+    # If both signals are near-silent, corrcoef returns nan; treat as perfect match
+    if np.std(a) < 1e-7 and np.std(b) < 1e-7:
+        return 1.0
     return float(np.corrcoef(a, b)[0, 1])
 
 
@@ -65,13 +70,18 @@ def run_separation(model, input_file, output_dir):
 
 
 def find_stem(output_files, stem_name, output_dir):
-    """Find the output file matching a stem name (case-insensitive)."""
+    """Find the output file matching a stem name (case-insensitive).
+
+    Uses the *last* _(StemName) group in the filename so pipeline outputs
+    (where the input filename already contains a parenthesized stem) are
+    matched correctly against the current model's stem label.
+    """
     for f in output_files:
         full = f if os.path.isabs(f) else os.path.join(output_dir, f)
         if not os.path.exists(full):
             full = os.path.join(output_dir, os.path.basename(f))
-        match = re.search(r'_\(([^)]+)\)', os.path.basename(f))
-        if match and match.group(1).lower() == stem_name.lower():
+        matches = re.findall(r'_\(([^)]+)\)', os.path.basename(f))
+        if matches and matches[-1].lower() == stem_name.lower():
             return full
     return None
 

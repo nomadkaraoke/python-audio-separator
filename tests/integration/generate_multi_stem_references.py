@@ -45,14 +45,14 @@ def run_model(model, input_file, output_dir):
 
 
 def find_stem_file(output_files, stem_name, output_dir):
-    """Find output file matching stem name."""
+    """Find output file matching stem name (uses last parenthesized group for pipeline support)."""
     import re
     for f in output_files:
         full = f if os.path.isabs(f) else os.path.join(output_dir, f)
         if not os.path.exists(full):
             full = os.path.join(output_dir, os.path.basename(f))
-        match = re.search(r'_\(([^)]+)\)', os.path.basename(f))
-        if match and match.group(1).lower() == stem_name.lower():
+        matches = re.findall(r'_\(([^)]+)\)', os.path.basename(f))
+        if matches and matches[-1].lower() == stem_name.lower():
             return full
     return None
 
