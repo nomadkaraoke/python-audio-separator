@@ -16,7 +16,7 @@ def mock_distribution():
     def side_effect(package_name):
         if package_name == "audio-separator":
             mock_dist = MagicMock()
-            mock_dist.version = "0.41.1"
+            mock_dist.version = "0.42.0"
             return mock_dist
         return original_distribution(package_name)
 
