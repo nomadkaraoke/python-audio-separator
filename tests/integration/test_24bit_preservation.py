@@ -72,7 +72,7 @@ def run_separation_test_24bit(model, audio_path, expected_files):
     
     # Run the CLI command
     result = subprocess.run(
-        ["audio-separator", audio_path, "-m", model],
+        ["audio-separator", "-m", model, audio_path],
         capture_output=True,
         text=True,
         check=False

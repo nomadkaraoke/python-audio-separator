@@ -45,7 +45,7 @@ def run_separation_test(model, audio_path, expected_files):
             os.remove(file)
 
     # Run the CLI command
-    result = subprocess.run(["audio-separator", audio_path, "-m", model], capture_output=True, text=True, check=False)  # Explicitly set check to False as we handle errors manually
+    result = subprocess.run(["audio-separator", "-m", model, audio_path], capture_output=True, text=True, check=False)  # Explicitly set check to False as we handle errors manually
 
     # Check that the command completed successfully
     assert result.returncode == 0, f"Command failed with output: {result.stderr}"
