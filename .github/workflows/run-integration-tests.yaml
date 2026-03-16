@@ -25,7 +25,10 @@ jobs:
     if: needs.changes.outputs.should_run == 'true'
     runs-on: self-hosted
     env:
-      AUDIO_SEPARATOR_MODEL_DIR: ${{ github.workspace }}/models
+      # Use persistent local directory on self-hosted runners instead of actions/cache.
+      # Models are pre-downloaded to this path by the runner startup script, so there's
+      # no need to download ~2GB of models on every CI run.
+      AUDIO_SEPARATOR_MODEL_DIR: /opt/audio-separator-models
 
     steps:
       - name: Checkout project
@@ -56,25 +59,18 @@ jobs:
           python-version: '3.13'
           cache: poetry
 
-      - name: Create models directory
-        run: mkdir -p $AUDIO_SEPARATOR_MODEL_DIR
-
-      - name: Cache models directory
-        uses: actions/cache@v3
-        id: model-cache
-        with:
-          path: ${{ env.AUDIO_SEPARATOR_MODEL_DIR }}
-          key: model-cache-${{ hashFiles('tests/integration/test_cli_integration.py') }}
-          restore-keys: model-cache-
-
       - name: Install Poetry dependencies
         run: poetry install -E cpu
 
-      - name: Display model cache status
+      - name: Verify pre-cached models
         run: |
-          echo "Model cache hit: ${{ steps.model-cache.outputs.cache-hit == 'true' }}"
           echo "Models directory contents:"
-          ls -la $AUDIO_SEPARATOR_MODEL_DIR || echo "Directory empty or doesn't exist"
+          ls -lh $AUDIO_SEPARATOR_MODEL_DIR
+          MODEL_COUNT=$(ls -1 $AUDIO_SEPARATOR_MODEL_DIR | wc -l)
+          echo "Total files: $MODEL_COUNT"
+          if [ "$MODEL_COUNT" -lt 10 ]; then
+            echo "::warning::Expected at least 10 pre-cached model files, found $MODEL_COUNT"
+          fi
 
       - name: Run integration tests
         run: poetry run pytest -sv --cov=audio_separator --cov-report=xml tests/integration
