@@ -57,13 +57,19 @@ INSTRUMENTAL_STEMS = {"instrumental", "inst", "karaoke", "no_vocals", "no vocals
 SUB_STEMS = {"drums", "bass", "guitar", "piano", "other", "synthesizer", "strings",
              "woodwinds", "brass", "wind inst", "no drums", "no bass", "no guitar",
              "no piano", "no other", "no synthesizer", "no strings", "no woodwinds",
-             "no brass", "no wind inst", "drum-bass", "no drum-bass"}
+             "no brass", "no wind inst", "drum-bass", "no drum-bass",
+             # Drumsep sub-stems (individual drum kit parts)
+             "kick", "snare", "toms", "hh", "ride", "crash",
+             # Gender-split vocal sub-stems
+             "male", "female",
+             # Specialized extraction sub-stems
+             "aspiration", "bleed", "no bleed"}
 
 # Utility model stems (de-echo, de-noise, de-reverb) — these remove subtle artifacts,
 # not vocals/instruments, so the "cleaned" stem is expected to be ≈ the original mix
 # and the "artifact" stem may be near-silent or unclear on clean source audio.
-UTILITY_STEMS = {"echo", "no echo", "reverb", "no reverb", "noise", "no noise",
-                 "dry", "no dry", "crowd", "no crowd"}
+UTILITY_STEMS = {"echo", "no echo", "reverb", "no reverb", "noreverb",
+                 "noise", "no noise", "dry", "no dry", "crowd", "no crowd"}
 
 # Stems that extract a specific subset of vocals — won't match the full vocal reference
 PARTIAL_VOCAL_STEMS = {"lead vocals", "backing vocals", "lead_only", "backing_only",
