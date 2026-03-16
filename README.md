@@ -119,12 +119,22 @@ beveradb/audio-separator:gpu
 💬 If successfully configured, you should see this log message when running `audio-separator --env_info`:
  `ONNXruntime has ROCMExecutionProvider available, enabling acceleration`
 
-Pip:
+Pip (complete installation):
 ```sh
+# First install PyTorch with ROCm support
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm5.7
+
+# Then install audio-separator with ROCm support
 pip install "audio-separator[rocm]"
 ```
 
-Note: For ROCm support, you need to have ROCm installed on your system first. PyTorch with ROCm support should be installed separately using the official PyTorch installation instructions for ROCm.
+**Important:** You must install PyTorch with ROCm support BEFORE installing audio-separator. If you already have PyTorch with CUDA support installed, uninstall it first:
+```sh
+pip uninstall torch torchvision torchaudio
+pip cache purge
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm5.7
+pip install "audio-separator[rocm]"
+```
 
 Docker (build from source):
 ```sh

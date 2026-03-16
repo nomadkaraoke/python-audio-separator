@@ -46,6 +46,7 @@ onnx2torch-py313 = ">=1.6"
 onnxruntime = { version = ">=1.17", optional = true }
 onnxruntime-gpu = { version = ">=1.17", optional = true }
 onnxruntime-directml = { version = ">=1.17", optional = true }
+onnxruntime-rocm = { version = ">=1.17", optional = true }
 julius = ">=0.2"
 diffq-fixed = { version = ">=0.2", platform = "win32" }
 diffq = { version = ">=0.2", platform = "!=win32" }

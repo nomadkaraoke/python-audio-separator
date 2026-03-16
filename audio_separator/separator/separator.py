@@ -279,6 +279,10 @@ class Separator:
 
         self.torch_device_cpu = torch.device("cpu")
 
+        # Check for PyTorch version compatibility
+        torch_version = torch.__version__
+        self.logger.debug(f"PyTorch version: {torch_version}")
+        
         if torch.cuda.is_available():
             # Check if ROCm is available (AMD GPUs)
             # We check ROCMExecutionProvider first since if it's available, we're likely on ROCm
@@ -286,8 +290,15 @@ class Separator:
                 self.configure_rocm(ort_providers)
                 hardware_acceleration_enabled = True
             else:
-                self.configure_cuda(ort_providers)
-                hardware_acceleration_enabled = True
+                # Check if CUDA version includes CUDA (should be +cu***)
+                if "+cu" in torch_version or "cpu" not in torch_version.lower():
+                    self.logger.info("PyTorch with CUDA support detected")
+                    self.configure_cuda(ort_providers)
+                    hardware_acceleration_enabled = True
+                else:
+                    self.logger.warning("ROCm ExecutionProvider not available but PyTorch appears to be CUDA version. Consider installing PyTorch with ROCm support.")
+                    self.configure_cuda(ort_providers)
+                    hardware_acceleration_enabled = True
         elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available() and system_info.processor == "arm":
             self.configure_mps(ort_providers)
             hardware_acceleration_enabled = True
@@ -318,6 +329,14 @@ class Separator:
         """
         This method configures the ROCm device for PyTorch and ONNX Runtime, if available.
         """
+        torch_version = torch.__version__
+        if "+cu" in torch_version:
+            self.logger.warning("ROCm ExecutionProvider detected, but PyTorch appears to have CUDA support instead of ROCm support.")
+            self.logger.warning("For optimal AMD GPU performance, consider reinstalling PyTorch with ROCm support:")
+            self.logger.warning("pip uninstall torch torchvision torchaudio")
+            self.logger.warning("pip cache purge") 
+            self.logger.warning("pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm5.7")
+        
         self.logger.info("ROCm (AMD GPU) is available, setting Torch device to CUDA (ROCm presents as CUDA)")
         self.torch_device = torch.device("cuda")
         if "ROCMExecutionProvider" in ort_providers:
