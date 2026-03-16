@@ -23,16 +23,25 @@ jobs:
   run-integration-test:
     needs: changes
     if: needs.changes.outputs.should_run == 'true'
-    runs-on: self-hosted
+    runs-on: [self-hosted, gpu]
+    timeout-minutes: 30
     env:
       # Use persistent local directory on self-hosted runners instead of actions/cache.
       # Models are pre-downloaded to this path by the runner startup script, so there's
-      # no need to download ~2GB of models on every CI run.
+      # no need to download ~14GB of models on every CI run.
       AUDIO_SEPARATOR_MODEL_DIR: /opt/audio-separator-models
 
     steps:
       - name: Checkout project
         uses: actions/checkout@v4
+
+      - name: Verify GPU availability
+        run: |
+          echo "=== GPU Info ==="
+          nvidia-smi
+          echo ""
+          echo "=== CUDA Version ==="
+          nvidia-smi --query-gpu=driver_version,cuda_version --format=csv,noheader
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -59,8 +68,8 @@ jobs:
           python-version: '3.13'
           cache: poetry
 
-      - name: Install Poetry dependencies
-        run: poetry install -E cpu
+      - name: Install Poetry dependencies (GPU)
+        run: poetry install -E gpu
 
       - name: Verify pre-cached models
         run: |
