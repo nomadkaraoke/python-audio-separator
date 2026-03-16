@@ -181,6 +181,7 @@ def test_drumsep_pipeline(tmp_path):
 KARAOKE_PARAMS = [
     ("tests/inputs/levee_drums.flac", "ref_levee_drums"),
     ("tests/inputs/clocks_piano.flac", "ref_clocks_piano"),
+    ("tests/inputs/under_pressure_harmonies.flac", "ref_under_pressure_harmonies"),
 ]
 
 
