@@ -1,9 +1,9 @@
 import os
 import subprocess
-import pytest
-from pathlib import Path
 import sys
-import os
+from pathlib import Path
+
+import pytest
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from utils import generate_reference_images, compare_images
 
