@@ -1282,30 +1282,38 @@ class Separator:
                         # Perform separation
                         model_stems = self._separate_file(path, custom_output_names)
 
+                        # Extract and normalize stem names from this model's outputs
+                        model_stem_names = []
                         for stem_path in model_stems:
-                            # Extract stem name from filename: "audio_(Vocals)_model.wav" -> "Vocals"
                             filename = os.path.basename(stem_path)
                             match = re.search(r'_\(([^)]+)\)', filename)
-                            if match:
-                                stem_name = match.group(1)
-                            else:
-                                stem_name = "Unknown"
+                            stem_name = match.group(1) if match else "Unknown"
+                            model_stem_names.append(stem_name)
 
-                            # Normalize stem names to fix mismatched model labels
-                            lower_name = stem_name.lower()
+                        # Normalize stem names with context about how many stems this model produced
+                        num_model_stems = len(model_stem_names)
+                        has_vocal_stem = any(
+                            "vocal" in s.lower() or s.lower() in ("vocals",)
+                            for s in model_stem_names
+                        )
+
+                        for stem_path, raw_stem_name in zip(model_stems, model_stem_names):
+                            lower_name = raw_stem_name.lower()
 
                             if "vocal" in lower_name and "lead" not in lower_name and "backing" not in lower_name:
                                 stem_name = "Vocals"
+                            elif lower_name == "other" and num_model_stems == 2 and has_vocal_stem:
+                                # For 2-stem models where one stem is vocals, "other" is the instrumental
+                                stem_name = "Instrumental"
+                                self.logger.debug(f"Mapped 'other' → 'Instrumental' for 2-stem model (model produced: {model_stem_names})")
                             elif lower_name in STEM_NAME_MAP:
                                 stem_name = STEM_NAME_MAP[lower_name]
                             else:
-                                # Standardize capitalization for other stems (e.g., Drums, Bass)
-                                stem_name = stem_name.title()
+                                stem_name = raw_stem_name.title()
 
                             if stem_name not in stems_by_type:
                                 stems_by_type[stem_name] = []
 
-                            # Ensure absolute path
                             abs_path = stem_path if os.path.isabs(stem_path) else os.path.join(temp_dir, stem_path)
                             stems_by_type[stem_name].append(abs_path)
                     finally:
@@ -1339,8 +1347,22 @@ class Separator:
                     # Determine output filename
                     if custom_output_names and stem_name in custom_output_names:
                         output_filename = custom_output_names[stem_name]
+                    elif self.ensemble_preset:
+                        output_filename = f"{base_name}_({stem_name})_preset_{self.ensemble_preset}"
                     else:
-                        output_filename = f"{base_name}_({stem_name})_Ensemble"
+                        # Build descriptive name from model filenames
+                        model_slugs = []
+                        for mf in original_model_filenames:
+                            # Remove extension, then truncate to keep filenames reasonable
+                            name = os.path.splitext(mf)[0]
+                            # Remove common verbose prefixes
+                            for prefix in ["mel_band_roformer_", "melband_roformer_", "bs_roformer_", "model_bs_roformer_", "UVR-MDX-NET-", "UVR_MDXNET_"]:
+                                if name.startswith(prefix):
+                                    name = name[len(prefix):]
+                                    break
+                            model_slugs.append(name[:12])
+                        slugs_str = "_".join(model_slugs)
+                        output_filename = f"{base_name}_({stem_name})_custom_ensemble_{slugs_str}"
 
                     output_path = f"{output_filename}.{self.output_format.lower()}"
 
