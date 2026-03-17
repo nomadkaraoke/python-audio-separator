@@ -244,30 +244,6 @@ You can resolve this by running the following command:
 python -m pip install ort-nightly-gpu --index-url=https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/ort-cuda-12-nightly/pypi/simple/
 ```
 
-### Multiple CUDA library versions may be needed
-
-Depending on your CUDA version and environment, you may need to install specific version(s) of CUDA libraries for ONNX Runtime to use your GPU.
-
-🧪 Google Colab, for example, now uses CUDA 12 by default, but ONNX Runtime still needs CUDA 11 libraries to work.
-
-If you see the error `Failed to load library` or `cannot open shared object file` when you run `audio-separator`, this is likely the issue.
-
-You can install the CUDA 11 libraries _alongside_ CUDA 12 like so:
-```sh
-apt update; apt install nvidia-cuda-toolkit
-```
-
-If you encounter the following messages when running on Google Colab or in another environment:
-```
-[E:onnxruntime:Default, provider_bridge_ort.cc:1862 TryGetProviderInfo_CUDA] /onnxruntime_src/onnxruntime/core/session/provider_bridge_ort.cc:1539 onnxruntime::Provider& onnxruntime::ProviderLibrary::Get() [ONNXRuntimeError] : 1 : FAIL : Failed to load library libonnxruntime_providers_cuda.so with error: libcudnn_adv.so.9: cannot open shared object file: No such file or directory
-
-[W:onnxruntime:Default, onnxruntime_pybind_state.cc:993 CreateExecutionProviderInstance] Failed to create CUDAExecutionProvider. Require cuDNN 9.* and CUDA 12.*. Please install all dependencies as mentioned in the GPU requirements page (https://onnxruntime.ai/docs/execution-providers/CUDA-ExecutionProvider.html#requirements), make sure they're in the PATH, and that your GPU is supported.
-```
-You can resolve this by running the following command:
-```sh
-python -m pip install ort-nightly-gpu --index-url=https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/ort-cuda-12-nightly/pypi/simple/
-```
-
 ### ROCm specific troubleshooting
 
 For ROCm (AMD GPU) support, make sure you have:
