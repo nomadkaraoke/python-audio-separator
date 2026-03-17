@@ -321,7 +321,6 @@ class Separator:
         )
         onnxruntime_cpu_package = self.get_package_distribution("onnxruntime")
         onnxruntime_dml_package = self.get_package_distribution("onnxruntime-directml")
-        onnxruntime_rocm_package = self.get_package_distribution("onnxruntime-rocm")
 
         if onnxruntime_gpu_package is not None:
             self.logger.info(
@@ -339,10 +338,6 @@ class Separator:
             self.logger.info(
                 f"ONNX Runtime DirectML package installed with version: {onnxruntime_dml_package.version}"
             )
-        if onnxruntime_rocm_package is not None:
-            self.logger.info(
-                f"ONNX Runtime ROCm package installed with version: {onnxruntime_rocm_package.version}"
-            )
 
     def setup_torch_device(self, system_info):
         """
@@ -354,13 +349,8 @@ class Separator:
 
         self.torch_device_cpu = torch.device("cpu")
 
-        # Check for PyTorch version compatibility
-        torch_version = torch.__version__
-        self.logger.debug(f"PyTorch version: {torch_version}")
-
         if torch.cuda.is_available():
-            # Check if ROCm is available (AMD GPUs)
-            # First check if ROCm packages are installed and PyTorch appears to be ROCm-based
+            # Check if ROCm packages are installed and PyTorch shows ROCm support
             onnxruntime_rocm_package = self.get_package_distribution("onnxruntime-rocm")
             torch_version = torch.__version__
 
@@ -389,16 +379,9 @@ class Separator:
                 self.configure_rocm(ort_providers)
                 hardware_acceleration_enabled = True
             else:
-                # Check if CUDA version includes CUDA (should be +cu***)
-                if "+cu" in torch_version or "cpu" not in torch_version.lower():
-                    self.logger.info("PyTorch with CUDA support detected")
-                    self.configure_cuda(ort_providers)
-                    hardware_acceleration_enabled = True
-                else:
-                    self.logger.warning(
-                        "No GPU execution provider available, falling back to CPU mode"
-                    )
-                    hardware_acceleration_enabled = False
+                # Standard CUDA configuration
+                self.configure_cuda(ort_providers)
+                hardware_acceleration_enabled = True
         elif (
             hasattr(torch.backends, "mps")
             and torch.backends.mps.is_available()
@@ -458,10 +441,6 @@ class Separator:
             self.logger.info(
                 "PyTorch with ROCm support detected (version includes +rocm)"
             )
-        else:
-            self.logger.info(
-                "PyTorch CUDA device available, assuming ROCm compatibility"
-            )
 
         self.logger.info(
             "ROCm (AMD GPU) detected, setting Torch device to CUDA (ROCm presents as CUDA)"
@@ -473,21 +452,10 @@ class Separator:
             self.logger.info(
                 "ONNXruntime has ROCMExecutionProvider available, enabling acceleration"
             )
-            # Optimize ROCm execution provider settings
-            try:
-                rocm_config = {
-                    "execution_mode": "parallel",  # Better for AMD GPUs
-                    "tuning_enable": True,  # Enable kernel tuning
-                    "tuning_file_prefix": "rocm-tuning-",  # Tuning file prefix
-                    "memory_pattern_enable": True,  # Enable memory pattern optimization
-                    "arena_extend_strategy": "kNextPowerOfTwo",  # Memory allocation strategy
-                }
-                self.onnx_execution_provider = [("ROCMExecutionProvider", rocm_config)]
-            except Exception as e:
-                self.logger.warning(
-                    f"Failed to configure ROCm execution provider settings: {e}"
-                )
-                self.onnx_execution_provider = ["ROCMExecutionProvider"]
+            self.onnx_execution_provider = ["ROCMExecutionProvider"]
+            self.logger.info(
+                "✓ ROCm (AMD GPU) acceleration enabled via ROCMExecutionProvider"
+            )
         elif "CUDAExecutionProvider" in ort_providers:
             self.logger.info(
                 "Using CUDAExecutionProvider as fallback for ROCm acceleration"
@@ -1272,9 +1240,7 @@ class Separator:
 
         # Run separation method for the loaded model with autocast enabled if supported by the device
         output_files = None
-        use_autocast_for_inference = self.use_autocast and not self.is_rocm
-
-        if use_autocast_for_inference and autocast_mode.is_autocast_available(
+        if self.use_autocast and autocast_mode.is_autocast_available(
             self.torch_device.type
         ):
             self.logger.debug("Autocast available.")
@@ -1283,8 +1249,6 @@ class Separator:
                     audio_file_path, custom_output_names
                 )
         else:
-            if self.is_rocm and self.use_autocast:
-                self.logger.debug("Autocast disabled for ROCm compatibility.")
             self.logger.debug("Autocast unavailable.")
             output_files = self.model_instance.separate(
                 audio_file_path, custom_output_names

@@ -125,7 +125,7 @@ beveradb/audio-separator:gpu
 Pip (complete installation):
 ```sh
 # First install PyTorch with ROCm support (Change ROCm version as needed.)
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/rocm7.2/
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm7.2
 
 # Then install audio-separator with GPU support
 pip install "audio-separator[gpu]"
