@@ -1058,7 +1058,7 @@ class Separator:
         )
 
         with open(model_data_yaml_filepath, encoding="utf-8") as f:
-            model_data = yaml.safe_load(f)
+            model_data = yaml.load(f, Loader=yaml.FullLoader)
         self.logger.debug(f"Model data loaded from YAML file: {model_data}")
 
         if "roformer" in model_data_yaml_filepath.lower():
