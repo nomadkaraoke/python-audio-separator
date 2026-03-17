@@ -21,10 +21,10 @@ jobs:
               - 'poetry.lock'
               - '.github/workflows/run-integration-tests.yaml'
 
-  # ── GPU test jobs (sequential on self-hosted runner) ───────────────
+  # ── GPU test jobs (parallel across self-hosted runners) ─────────────
   #
   # Split into separate jobs so progress is visible as each completes.
-  # They chain via `needs:` since there's a single GPU runner.
+  # With multiple GPU runners, these run in parallel.
 
   core-models:
     needs: changes
@@ -78,7 +78,7 @@ jobs:
             tests/*.flac
 
   ensemble:
-    needs: [changes, core-models]
+    needs: changes
     if: needs.changes.outputs.should_run == 'true'
     runs-on: [self-hosted, gpu]
     timeout-minutes: 15
@@ -119,7 +119,7 @@ jobs:
             tests/*.flac
 
   multi-stem:
-    needs: [changes, ensemble]
+    needs: changes
     if: needs.changes.outputs.should_run == 'true'
     runs-on: [self-hosted, gpu]
     timeout-minutes: 10
