@@ -20,89 +20,186 @@ jobs:
               - 'pyproject.toml'
               - 'poetry.lock'
 
-  run-integration-test:
+  # ── GPU test jobs (sequential on self-hosted runner) ───────────────
+  #
+  # Split into separate jobs so progress is visible as each completes.
+  # They chain via `needs:` since there's a single GPU runner.
+
+  core-models:
     needs: changes
     if: needs.changes.outputs.should_run == 'true'
     runs-on: [self-hosted, gpu]
-    timeout-minutes: 30
+    timeout-minutes: 15
     env:
-      # Use persistent local directory on self-hosted runners instead of actions/cache.
-      # Models are pre-downloaded to this path by the runner startup script, so there's
-      # no need to download ~14GB of models on every CI run.
       AUDIO_SEPARATOR_MODEL_DIR: /opt/audio-separator-models
-
     steps:
-      - name: Checkout project
-        uses: actions/checkout@v4
-
+      - uses: actions/checkout@v4
       - name: Verify GPU availability
-        run: |
-          echo "=== GPU Info ==="
-          nvidia-smi
-          echo ""
-          echo "=== Driver Version ==="
-          nvidia-smi --query-gpu=driver_version,name,memory.total --format=csv,noheader
-
+        run: nvidia-smi --query-gpu=driver_version,name,memory.total --format=csv,noheader
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.13'
-
-      - name: Install pipx
-        run: python -m pip install --user pipx && python -m pipx ensurepath
-
-      - name: Install poetry
-        run: python -m pipx install poetry
-
-      - name: Setup PATH
-        run: echo "$HOME/.local/bin" >> $GITHUB_PATH
-
-      - name: Install system dependencies
+      - name: Install pipx and poetry
         run: |
-          sudo apt-get update
-          sudo apt-get install -y ffmpeg libsamplerate0 libsamplerate-dev
-
-      - name: Set up Python
+          python -m pip install --user pipx && python -m pipx ensurepath
+          python -m pipx install poetry
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+      - name: Install system dependencies
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg libsamplerate0 libsamplerate-dev
+      - name: Set up Python with cache
         uses: actions/setup-python@v5
         with:
           python-version: '3.13'
           cache: poetry
-
       - name: Install Poetry dependencies (GPU)
         run: poetry install -E gpu
-
       - name: Verify pre-cached models
         run: |
-          echo "Models directory contents:"
-          ls -lh $AUDIO_SEPARATOR_MODEL_DIR
           MODEL_COUNT=$(ls -1 $AUDIO_SEPARATOR_MODEL_DIR | wc -l)
-          echo "Total files: $MODEL_COUNT"
+          echo "Pre-cached models: $MODEL_COUNT"
           if [ "$MODEL_COUNT" -lt 10 ]; then
             echo "::warning::Expected at least 10 pre-cached model files, found $MODEL_COUNT"
           fi
-
-      - name: Run integration tests
-        run: poetry run pytest -sv --cov=audio_separator --cov-report=xml tests/integration
-
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-
-      - name: Upload test results
+      - name: "Run: 24-bit preservation + CLI integration tests"
+        run: |
+          poetry run pytest -sv \
+            tests/integration/test_24bit_preservation.py \
+            tests/integration/test_cli_integration.py
+      - name: Upload test artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: integration-test-results
+          name: core-models-results
           path: |
             *.flac
             tests/*.flac
-            **/temp_images/**/*.png
-            tests/**/temp_images/**/*.png
 
-  # Gate job for branch protection - always reports a status
+  ensemble:
+    needs: [changes, core-models]
+    if: needs.changes.outputs.should_run == 'true'
+    runs-on: [self-hosted, gpu]
+    timeout-minutes: 15
+    env:
+      AUDIO_SEPARATOR_MODEL_DIR: /opt/audio-separator-models
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pipx and poetry
+        run: |
+          python -m pip install --user pipx && python -m pipx ensurepath
+          python -m pipx install poetry
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+      - name: Install system dependencies
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg libsamplerate0 libsamplerate-dev
+      - name: Set up Python with cache
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: poetry
+      - name: Install Poetry dependencies (GPU)
+        run: poetry install -E gpu
+      - name: "Run: ensemble preset + quality tests"
+        run: |
+          poetry run pytest -sv \
+            tests/integration/test_ensemble_integration.py \
+            tests/integration/test_ensemble_meaningful.py
+      - name: Upload test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ensemble-results
+          path: |
+            *.flac
+            tests/*.flac
+
+  multi-stem:
+    needs: [changes, ensemble]
+    if: needs.changes.outputs.should_run == 'true'
+    runs-on: [self-hosted, gpu]
+    timeout-minutes: 10
+    env:
+      AUDIO_SEPARATOR_MODEL_DIR: /opt/audio-separator-models
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pipx and poetry
+        run: |
+          python -m pip install --user pipx && python -m pipx ensurepath
+          python -m pipx install poetry
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+      - name: Install system dependencies
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg libsamplerate0 libsamplerate-dev
+      - name: Set up Python with cache
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: poetry
+      - name: Install Poetry dependencies (GPU)
+        run: poetry install -E gpu
+      - name: "Run: multi-stem separation + pipeline tests"
+        run: |
+          poetry run pytest -sv \
+            tests/integration/test_multi_stem_verification.py
+      - name: Upload test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: multi-stem-results
+          path: |
+            *.flac
+            tests/*.flac
+
+  # ── Fast tests (no GPU required, runs in parallel) ────────────────
+
+  fast-tests:
+    needs: changes
+    if: needs.changes.outputs.should_run == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pipx and poetry
+        run: |
+          python -m pip install --user pipx && python -m pipx ensurepath
+          python -m pipx install poetry
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+      - name: Install system dependencies
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg libsamplerate0 libsamplerate-dev
+      - name: Set up Python with cache
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: poetry
+      - name: Install Poetry dependencies
+        run: poetry install
+      - name: "Run: remote API, roformer, and output integration tests"
+        run: |
+          poetry run pytest -sv \
+            tests/integration/test_remote_api_integration.py \
+            tests/integration/test_roformer_audio_quality.py \
+            tests/integration/test_roformer_backward_compatibility.py \
+            tests/integration/test_roformer_config_validation.py \
+            tests/integration/test_roformer_e2e.py \
+            tests/integration/test_roformer_fallback_mechanism.py \
+            tests/integration/test_roformer_model_switching.py \
+            tests/integration/test_roformer_new_parameters.py \
+            tests/integration/test_separator_output_integration.py
+
+  # ── Gate job for branch protection ────────────────────────────────
+
   integration-test:
-    needs: [changes, run-integration-test]
+    needs: [changes, core-models, ensemble, multi-stem, fast-tests]
     if: always()
     runs-on: ubuntu-latest
     steps:
@@ -112,8 +209,17 @@ jobs:
             echo "Tests skipped - no code changes detected"
             exit 0
           fi
-          if [[ "${{ needs.run-integration-test.result }}" == "failure" ]]; then
+
+          echo "core-models:  ${{ needs.core-models.result }}"
+          echo "ensemble:     ${{ needs.ensemble.result }}"
+          echo "multi-stem:   ${{ needs.multi-stem.result }}"
+          echo "fast-tests:   ${{ needs.fast-tests.result }}"
+
+          if [[ "${{ needs.core-models.result }}" == "failure" ]] || \
+             [[ "${{ needs.ensemble.result }}" == "failure" ]] || \
+             [[ "${{ needs.multi-stem.result }}" == "failure" ]] || \
+             [[ "${{ needs.fast-tests.result }}" == "failure" ]]; then
             echo "Integration tests failed"
             exit 1
           fi
-          echo "Integration tests passed"
+          echo "All integration tests passed"
