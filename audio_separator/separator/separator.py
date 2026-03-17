@@ -1,4 +1,4 @@
-""" This file contains the Separator class, to facilitate the separation of stems from audio. """
+"""This file contains the Separator class, to facilitate the separation of stems from audio."""
 
 from importlib import metadata, resources
 import os
@@ -96,10 +96,35 @@ class Separator:
         use_autocast=False,
         use_directml=False,
         chunk_duration=None,
-        mdx_params={"hop_length": 1024, "segment_size": 256, "overlap": 0.25, "batch_size": 1, "enable_denoise": False},
-        vr_params={"batch_size": 1, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False},
-        demucs_params={"segment_size": "Default", "shifts": 2, "overlap": 0.25, "segments_enabled": True},
-        mdxc_params={"segment_size": 256, "override_model_segment_size": False, "batch_size": 1, "overlap": 8, "pitch_shift": 0},
+        mdx_params={
+            "hop_length": 1024,
+            "segment_size": 256,
+            "overlap": 0.25,
+            "batch_size": 1,
+            "enable_denoise": False,
+        },
+        vr_params={
+            "batch_size": 1,
+            "window_size": 512,
+            "aggression": 5,
+            "enable_tta": False,
+            "enable_post_process": False,
+            "post_process_threshold": 0.2,
+            "high_end_process": False,
+        },
+        demucs_params={
+            "segment_size": "Default",
+            "shifts": 2,
+            "overlap": 0.25,
+            "segments_enabled": True,
+        },
+        mdxc_params={
+            "segment_size": 256,
+            "override_model_segment_size": False,
+            "batch_size": 1,
+            "overlap": 8,
+            "pitch_shift": 0,
+        },
         info_only=False,
     ):
         """Initialize the separator."""
@@ -111,7 +136,9 @@ class Separator:
         self.log_handler = logging.StreamHandler()
 
         if self.log_formatter is None:
-            self.log_formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(module)s - %(message)s")
+            self.log_formatter = logging.Formatter(
+                "%(asctime)s - %(levelname)s - %(module)s - %(message)s"
+            )
 
         self.log_handler.setFormatter(self.log_formatter)
 
@@ -125,12 +152,16 @@ class Separator:
         # Skip initialization logs if info_only is True
         if not info_only:
             package_version = self.get_package_distribution("audio-separator").version
-            self.logger.info(f"Separator version {package_version} instantiating with output_dir: {output_dir}, output_format: {output_format}")
+            self.logger.info(
+                f"Separator version {package_version} instantiating with output_dir: {output_dir}, output_format: {output_format}"
+            )
 
         if output_dir is None:
             output_dir = os.getcwd()
             if not info_only:
-                self.logger.info("Output directory not specified. Using current working directory.")
+                self.logger.info(
+                    "Output directory not specified. Using current working directory."
+                )
 
         self.output_dir = output_dir
 
@@ -138,11 +169,17 @@ class Separator:
         env_model_dir = os.environ.get("AUDIO_SEPARATOR_MODEL_DIR")
         if env_model_dir:
             self.model_file_dir = env_model_dir
-            self.logger.info(f"Using model directory from AUDIO_SEPARATOR_MODEL_DIR env var: {self.model_file_dir}")
+            self.logger.info(
+                f"Using model directory from AUDIO_SEPARATOR_MODEL_DIR env var: {self.model_file_dir}"
+            )
             if not os.path.exists(self.model_file_dir):
-                raise FileNotFoundError(f"The specified model directory does not exist: {self.model_file_dir}")
+                raise FileNotFoundError(
+                    f"The specified model directory does not exist: {self.model_file_dir}"
+                )
         else:
-            self.logger.info(f"Using model directory from model_file_dir parameter: {model_file_dir}")
+            self.logger.info(
+                f"Using model directory from model_file_dir parameter: {model_file_dir}"
+            )
             self.model_file_dir = model_file_dir
 
         # Create the model directory if it does not exist
@@ -157,28 +194,42 @@ class Separator:
 
         self.normalization_threshold = normalization_threshold
         if normalization_threshold <= 0 or normalization_threshold > 1:
-            raise ValueError("The normalization_threshold must be greater than 0 and less than or equal to 1.")
+            raise ValueError(
+                "The normalization_threshold must be greater than 0 and less than or equal to 1."
+            )
 
         self.amplification_threshold = amplification_threshold
         if amplification_threshold < 0 or amplification_threshold > 1:
-            raise ValueError("The amplification_threshold must be greater than or equal to 0 and less than or equal to 1.")
+            raise ValueError(
+                "The amplification_threshold must be greater than or equal to 0 and less than or equal to 1."
+            )
 
         self.output_single_stem = output_single_stem
         if output_single_stem is not None:
-            self.logger.debug(f"Single stem output requested, so only one output file ({output_single_stem}) will be written")
+            self.logger.debug(
+                f"Single stem output requested, so only one output file ({output_single_stem}) will be written"
+            )
 
         self.invert_using_spec = invert_using_spec
         if self.invert_using_spec:
-            self.logger.debug(f"Secondary step will be inverted using spectogram rather than waveform. This may improve quality but is slightly slower.")
+            self.logger.debug(
+                f"Secondary step will be inverted using spectogram rather than waveform. This may improve quality but is slightly slower."
+            )
 
         try:
             self.sample_rate = int(sample_rate)
             if self.sample_rate <= 0:
-                raise ValueError(f"The sample rate setting is {self.sample_rate} but it must be a non-zero whole number.")
+                raise ValueError(
+                    f"The sample rate setting is {self.sample_rate} but it must be a non-zero whole number."
+                )
             if self.sample_rate > 12800000:
-                raise ValueError(f"The sample rate setting is {self.sample_rate}. Enter something less ambitious.")
+                raise ValueError(
+                    f"The sample rate setting is {self.sample_rate}. Enter something less ambitious."
+                )
         except ValueError:
-            raise ValueError("The sample rate must be a non-zero whole number. Please provide a valid integer.")
+            raise ValueError(
+                "The sample rate must be a non-zero whole number. Please provide a valid integer."
+            )
 
         self.use_soundfile = use_soundfile
         self.use_autocast = use_autocast
@@ -191,11 +242,17 @@ class Separator:
 
         # These are parameters which users may want to configure so we expose them to the top-level Separator class,
         # even though they are specific to a single model architecture
-        self.arch_specific_params = {"MDX": mdx_params, "VR": vr_params, "Demucs": demucs_params, "MDXC": mdxc_params}
+        self.arch_specific_params = {
+            "MDX": mdx_params,
+            "VR": vr_params,
+            "Demucs": demucs_params,
+            "MDXC": mdxc_params,
+        }
 
         self.torch_device = None
         self.torch_device_cpu = None
         self.torch_device_mps = None
+        self.is_rocm = False
 
         self.onnx_execution_provider = None
         self.model_instance = None
@@ -224,7 +281,9 @@ class Separator:
         self.logger.info(f"Operating System: {os_name} {os_version}")
 
         system_info = platform.uname()
-        self.logger.info(f"System: {system_info.system} Node: {system_info.node} Release: {system_info.release} Machine: {system_info.machine} Proc: {system_info.processor}")
+        self.logger.info(
+            f"System: {system_info.system} Node: {system_info.node} Release: {system_info.release} Machine: {system_info.machine} Proc: {system_info.processor}"
+        )
 
         python_version = platform.python_version()
         self.logger.info(f"Python Version: {python_version}")
@@ -238,11 +297,15 @@ class Separator:
         This method checks if ffmpeg is installed and logs its version.
         """
         try:
-            ffmpeg_version_output = subprocess.check_output(["ffmpeg", "-version"], text=True)
+            ffmpeg_version_output = subprocess.check_output(
+                ["ffmpeg", "-version"], text=True
+            )
             first_line = ffmpeg_version_output.splitlines()[0]
             self.logger.info(f"FFmpeg installed: {first_line}")
         except FileNotFoundError:
-            self.logger.error("FFmpeg is not installed. Please install FFmpeg to use this package.")
+            self.logger.error(
+                "FFmpeg is not installed. Please install FFmpeg to use this package."
+            )
             # Raise an exception if this is being run by a user, as ffmpeg is required for pydub to write audio
             # but if we're just running unit tests in CI, no reason to throw
             if "PYTEST_CURRENT_TEST" not in os.environ:
@@ -253,21 +316,33 @@ class Separator:
         This method logs the ONNX Runtime package versions, including the GPU and Silicon packages if available.
         """
         onnxruntime_gpu_package = self.get_package_distribution("onnxruntime-gpu")
-        onnxruntime_silicon_package = self.get_package_distribution("onnxruntime-silicon")
+        onnxruntime_silicon_package = self.get_package_distribution(
+            "onnxruntime-silicon"
+        )
         onnxruntime_cpu_package = self.get_package_distribution("onnxruntime")
         onnxruntime_dml_package = self.get_package_distribution("onnxruntime-directml")
         onnxruntime_rocm_package = self.get_package_distribution("onnxruntime-rocm")
 
         if onnxruntime_gpu_package is not None:
-            self.logger.info(f"ONNX Runtime GPU package installed with version: {onnxruntime_gpu_package.version}")
+            self.logger.info(
+                f"ONNX Runtime GPU package installed with version: {onnxruntime_gpu_package.version}"
+            )
         if onnxruntime_silicon_package is not None:
-            self.logger.info(f"ONNX Runtime Silicon package installed with version: {onnxruntime_silicon_package.version}")
+            self.logger.info(
+                f"ONNX Runtime Silicon package installed with version: {onnxruntime_silicon_package.version}"
+            )
         if onnxruntime_cpu_package is not None:
-            self.logger.info(f"ONNX Runtime CPU package installed with version: {onnxruntime_cpu_package.version}")
+            self.logger.info(
+                f"ONNX Runtime CPU package installed with version: {onnxruntime_cpu_package.version}"
+            )
         if onnxruntime_dml_package is not None:
-            self.logger.info(f"ONNX Runtime DirectML package installed with version: {onnxruntime_dml_package.version}")
+            self.logger.info(
+                f"ONNX Runtime DirectML package installed with version: {onnxruntime_dml_package.version}"
+            )
         if onnxruntime_rocm_package is not None:
-            self.logger.info(f"ONNX Runtime ROCm package installed with version: {onnxruntime_rocm_package.version}")
+            self.logger.info(
+                f"ONNX Runtime ROCm package installed with version: {onnxruntime_rocm_package.version}"
+            )
 
     def setup_torch_device(self, system_info):
         """
@@ -282,11 +357,35 @@ class Separator:
         # Check for PyTorch version compatibility
         torch_version = torch.__version__
         self.logger.debug(f"PyTorch version: {torch_version}")
-        
+
         if torch.cuda.is_available():
             # Check if ROCm is available (AMD GPUs)
-            # We check ROCMExecutionProvider first since if it's available, we're likely on ROCm
-            if "ROCMExecutionProvider" in ort_providers:
+            # First check if ROCm packages are installed and PyTorch appears to be ROCm-based
+            onnxruntime_rocm_package = self.get_package_distribution("onnxruntime-rocm")
+            torch_version = torch.__version__
+
+            # Prioritize ROCm if ROCm packages are installed and PyTorch shows ROCm support
+            if onnxruntime_rocm_package is not None and ("+rocm" in torch_version):
+                self.logger.info(
+                    "ROCm packages detected and PyTorch shows ROCm support"
+                )
+                if "ROCMExecutionProvider" in ort_providers:
+                    self.configure_rocm(ort_providers)
+                    hardware_acceleration_enabled = True
+                elif "CUDAExecutionProvider" in ort_providers:
+                    self.logger.info(
+                        "ROCm detected with PyTorch, using CUDAExecutionProvider for AMD GPU acceleration"
+                    )
+                    self.configure_cuda(ort_providers)
+                    hardware_acceleration_enabled = True
+                else:
+                    self.logger.warning(
+                        "ROCm packages installed but no GPU execution provider available"
+                    )
+                    self.logger.warning("Falling back to CPU mode")
+                    hardware_acceleration_enabled = False
+            elif "ROCMExecutionProvider" in ort_providers:
+                # Fallback: check ROCMExecutionProvider directly
                 self.configure_rocm(ort_providers)
                 hardware_acceleration_enabled = True
             else:
@@ -296,20 +395,28 @@ class Separator:
                     self.configure_cuda(ort_providers)
                     hardware_acceleration_enabled = True
                 else:
-                    self.logger.warning("ROCm ExecutionProvider not available but PyTorch appears to be CUDA version. Consider installing PyTorch with ROCm support.")
-                    self.configure_cuda(ort_providers)
-                    hardware_acceleration_enabled = True
-        elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available() and system_info.processor == "arm":
+                    self.logger.warning(
+                        "No GPU execution provider available, falling back to CPU mode"
+                    )
+                    hardware_acceleration_enabled = False
+        elif (
+            hasattr(torch.backends, "mps")
+            and torch.backends.mps.is_available()
+            and system_info.processor == "arm"
+        ):
             self.configure_mps(ort_providers)
             hardware_acceleration_enabled = True
         elif self.use_directml and has_torch_dml_installed:
             import torch_directml
+
             if torch_directml.is_available():
                 self.configure_dml(ort_providers)
                 hardware_acceleration_enabled = True
 
         if not hardware_acceleration_enabled:
-            self.logger.info("No hardware acceleration could be configured, running in CPU mode")
+            self.logger.info(
+                "No hardware acceleration could be configured, running in CPU mode"
+            )
             self.torch_device = self.torch_device_cpu
             self.onnx_execution_provider = ["CPUExecutionProvider"]
 
@@ -320,60 +427,123 @@ class Separator:
         self.logger.info("CUDA is available in Torch, setting Torch device to CUDA")
         self.torch_device = torch.device("cuda")
         if "CUDAExecutionProvider" in ort_providers:
-            self.logger.info("ONNXruntime has CUDAExecutionProvider available, enabling acceleration")
+            self.logger.info(
+                "ONNXruntime has CUDAExecutionProvider available, enabling acceleration"
+            )
             self.onnx_execution_provider = ["CUDAExecutionProvider"]
         else:
-            self.logger.warning("CUDAExecutionProvider not available in ONNXruntime, so acceleration will NOT be enabled")
+            self.logger.warning(
+                "CUDAExecutionProvider not available in ONNXruntime, so acceleration will NOT be enabled"
+            )
 
     def configure_rocm(self, ort_providers):
         """
         This method configures the ROCm device for PyTorch and ONNX Runtime, if available.
         """
+        self.is_rocm = True
         torch_version = torch.__version__
         if "+cu" in torch_version:
-            self.logger.warning("ROCm ExecutionProvider detected, but PyTorch appears to have CUDA support instead of ROCm support.")
-            self.logger.warning("For optimal AMD GPU performance, consider reinstalling PyTorch with ROCm support:")
+            self.logger.warning(
+                "ROCm ExecutionProvider detected, but PyTorch appears to have CUDA support instead of ROCm support."
+            )
+            self.logger.warning(
+                "For optimal AMD GPU performance, consider reinstalling PyTorch with ROCm support:"
+            )
             self.logger.warning("pip uninstall torch torchvision torchaudio")
-            self.logger.warning("pip cache purge") 
-            self.logger.warning("pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm5.7")
-        
-        self.logger.info("ROCm (AMD GPU) is available, setting Torch device to CUDA (ROCm presents as CUDA)")
-        self.torch_device = torch.device("cuda")
-        if "ROCMExecutionProvider" in ort_providers:
-            self.logger.info("ONNXruntime has ROCMExecutionProvider available, enabling acceleration")
-            self.onnx_execution_provider = ["ROCMExecutionProvider"]
+            self.logger.warning("pip cache purge")
+            self.logger.warning(
+                "pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm5.7"
+            )
+        elif "+rocm" in torch_version:
+            self.logger.info(
+                "PyTorch with ROCm support detected (version includes +rocm)"
+            )
         else:
-            self.logger.warning("ROCMExecutionProvider not available in ONNXruntime, so acceleration will NOT be enabled")
+            self.logger.info(
+                "PyTorch CUDA device available, assuming ROCm compatibility"
+            )
+
+        self.logger.info(
+            "ROCm (AMD GPU) detected, setting Torch device to CUDA (ROCm presents as CUDA)"
+        )
+        self.torch_device = torch.device("cuda")
+
+        # Try to configure ROCm execution provider if available
+        if "ROCMExecutionProvider" in ort_providers:
+            self.logger.info(
+                "ONNXruntime has ROCMExecutionProvider available, enabling acceleration"
+            )
+            # Optimize ROCm execution provider settings
+            try:
+                rocm_config = {
+                    "execution_mode": "parallel",  # Better for AMD GPUs
+                    "tuning_enable": True,  # Enable kernel tuning
+                    "tuning_file_prefix": "rocm-tuning-",  # Tuning file prefix
+                    "memory_pattern_enable": True,  # Enable memory pattern optimization
+                    "arena_extend_strategy": "kNextPowerOfTwo",  # Memory allocation strategy
+                }
+                self.onnx_execution_provider = [("ROCMExecutionProvider", rocm_config)]
+            except Exception as e:
+                self.logger.warning(
+                    f"Failed to configure ROCm execution provider settings: {e}"
+                )
+                self.onnx_execution_provider = ["ROCMExecutionProvider"]
+        elif "CUDAExecutionProvider" in ort_providers:
+            self.logger.info(
+                "Using CUDAExecutionProvider as fallback for ROCm acceleration"
+            )
+            self.onnx_execution_provider = ["CUDAExecutionProvider"]
+            self.logger.info(
+                "✓ ROCm (AMD GPU) acceleration enabled via CUDAExecutionProvider"
+            )
+        else:
+            self.logger.warning(
+                "No GPU execution provider available for ROCm, falling back to CPU"
+            )
+            self.onnx_execution_provider = ["CPUExecutionProvider"]
 
     def configure_mps(self, ort_providers):
         """
         This method configures the Apple Silicon MPS/CoreML device for PyTorch and ONNX Runtime, if available.
         """
-        self.logger.info("Apple Silicon MPS/CoreML is available in Torch and processor is ARM, setting Torch device to MPS")
+        self.logger.info(
+            "Apple Silicon MPS/CoreML is available in Torch and processor is ARM, setting Torch device to MPS"
+        )
         self.torch_device_mps = torch.device("mps")
 
         self.torch_device = self.torch_device_mps
 
         if "CoreMLExecutionProvider" in ort_providers:
-            self.logger.info("ONNXruntime has CoreMLExecutionProvider available, enabling acceleration")
+            self.logger.info(
+                "ONNXruntime has CoreMLExecutionProvider available, enabling acceleration"
+            )
             self.onnx_execution_provider = ["CoreMLExecutionProvider"]
         else:
-            self.logger.warning("CoreMLExecutionProvider not available in ONNXruntime, so acceleration will NOT be enabled")
+            self.logger.warning(
+                "CoreMLExecutionProvider not available in ONNXruntime, so acceleration will NOT be enabled"
+            )
 
     def configure_dml(self, ort_providers):
         """
         This method configures the DirectML device for PyTorch and ONNX Runtime, if available.
         """
         import torch_directml
-        self.logger.info("DirectML is available in Torch, setting Torch device to DirectML")
-        self.torch_device_dml = torch_directml.device() 
+
+        self.logger.info(
+            "DirectML is available in Torch, setting Torch device to DirectML"
+        )
+        self.torch_device_dml = torch_directml.device()
         self.torch_device = self.torch_device_dml
 
         if "DmlExecutionProvider" in ort_providers:
-            self.logger.info("ONNXruntime has DmlExecutionProvider available, enabling acceleration")
+            self.logger.info(
+                "ONNXruntime has DmlExecutionProvider available, enabling acceleration"
+            )
             self.onnx_execution_provider = ["DmlExecutionProvider"]
         else:
-            self.logger.warning("DmlExecutionProvider not available in ONNXruntime, so acceleration will NOT be enabled")
+            self.logger.warning(
+                "DmlExecutionProvider not available in ONNXruntime, so acceleration will NOT be enabled"
+            )
 
     def get_package_distribution(self, package_name):
         """
@@ -399,12 +569,16 @@ class Separator:
             with open(model_path, "rb") as f:
                 if file_size < BYTES_TO_HASH:
                     # Hash the entire file if smaller than the target byte count
-                    self.logger.debug(f"File size {file_size} < {BYTES_TO_HASH}, hashing entire file.")
+                    self.logger.debug(
+                        f"File size {file_size} < {BYTES_TO_HASH}, hashing entire file."
+                    )
                     hash_value = hashlib.md5(f.read()).hexdigest()
                 else:
                     # Seek to the specific position before the end (from the beginning) and hash
                     seek_pos = file_size - BYTES_TO_HASH
-                    self.logger.debug(f"File size {file_size} >= {BYTES_TO_HASH}, seeking to {seek_pos} and hashing remaining bytes.")
+                    self.logger.debug(
+                        f"File size {file_size} >= {BYTES_TO_HASH}, seeking to {seek_pos} and hashing remaining bytes."
+                    )
                     f.seek(seek_pos, io.SEEK_SET)
                     hash_value = hashlib.md5(f.read()).hexdigest()
 
@@ -414,11 +588,11 @@ class Separator:
 
         except FileNotFoundError:
             self.logger.error(f"Model file not found at {model_path}")
-            raise # Re-raise the specific error
+            raise  # Re-raise the specific error
         except Exception as e:
             # Catch other potential errors (e.g., permissions, other IOErrors)
             self.logger.error(f"Error calculating hash for {model_path}: {e}")
-            raise # Re-raise other errors
+            raise  # Re-raise other errors
 
     def download_file_if_not_exists(self, url, output_path):
         """
@@ -426,10 +600,14 @@ class Separator:
         """
 
         if os.path.isfile(output_path):
-            self.logger.debug(f"File already exists at {output_path}, skipping download")
+            self.logger.debug(
+                f"File already exists at {output_path}, skipping download"
+            )
             return
 
-        self.logger.debug(f"Downloading file from {url} to {output_path} with timeout 300s")
+        self.logger.debug(
+            f"Downloading file from {url} to {output_path} with timeout 300s"
+        )
         response = requests.get(url, stream=True, timeout=300)
 
         if response.status_code == 200:
@@ -442,7 +620,9 @@ class Separator:
                     f.write(chunk)
             progress_bar.close()
         else:
-            raise RuntimeError(f"Failed to download file from {url}, response code: {response.status_code}")
+            raise RuntimeError(
+                f"Failed to download file from {url}, response code: {response.status_code}"
+            )
 
     def list_supported_model_files(self):
         """
@@ -533,7 +713,10 @@ class Separator:
         """
         download_checks_path = os.path.join(self.model_file_dir, "download_checks.json")
 
-        self.download_file_if_not_exists("https://raw.githubusercontent.com/TRvlvr/application_data/main/filelists/download_checks.json", download_checks_path)
+        self.download_file_if_not_exists(
+            "https://raw.githubusercontent.com/TRvlvr/application_data/main/filelists/download_checks.json",
+            download_checks_path,
+        )
 
         model_downloads_list = json.load(open(download_checks_path, encoding="utf-8"))
         self.logger.debug(f"UVR model download list loaded")
@@ -549,13 +732,20 @@ class Separator:
             self.logger.warning("Continuing without model scores")
 
         # Only show Demucs v4 models as we've only implemented support for v4
-        filtered_demucs_v4 = {key: value for key, value in model_downloads_list["demucs_download_list"].items() if key.startswith("Demucs v4")}
+        filtered_demucs_v4 = {
+            key: value
+            for key, value in model_downloads_list["demucs_download_list"].items()
+            if key.startswith("Demucs v4")
+        }
 
         # Modified Demucs handling to use YAML files as identifiers and include download files
         demucs_models = {}
         for name, files in filtered_demucs_v4.items():
             # Find the YAML file in the model files
-            yaml_file = next((filename for filename in files.keys() if filename.endswith(".yaml")), None)
+            yaml_file = next(
+                (filename for filename in files.keys() if filename.endswith(".yaml")),
+                None,
+            )
             if yaml_file:
                 model_score_data = model_scores.get(yaml_file, {})
                 demucs_models[name] = {
@@ -563,7 +753,9 @@ class Separator:
                     "scores": model_score_data.get("median_scores", {}),
                     "stems": model_score_data.get("stems", []),
                     "target_stem": model_score_data.get("target_stem"),
-                    "download_files": list(files.values()),  # List of all download URLs/filenames
+                    "download_files": list(
+                        files.values()
+                    ),  # List of all download URLs/filenames
                 }
 
         # Load the JSON file using importlib.resources
@@ -581,7 +773,10 @@ class Separator:
                     "target_stem": model_scores.get(filename, {}).get("target_stem"),
                     "download_files": [filename],
                 }  # Just the filename for VR models
-                for name, filename in {**model_downloads_list["vr_download_list"], **audio_separator_models_list["vr_download_list"]}.items()
+                for name, filename in {
+                    **model_downloads_list["vr_download_list"],
+                    **audio_separator_models_list["vr_download_list"],
+                }.items()
             },
             "MDX": {
                 name: {
@@ -591,16 +786,29 @@ class Separator:
                     "target_stem": model_scores.get(filename, {}).get("target_stem"),
                     "download_files": [filename],
                 }  # Just the filename for MDX models
-                for name, filename in {**model_downloads_list["mdx_download_list"], **model_downloads_list["mdx_download_vip_list"], **audio_separator_models_list["mdx_download_list"]}.items()
+                for name, filename in {
+                    **model_downloads_list["mdx_download_list"],
+                    **model_downloads_list["mdx_download_vip_list"],
+                    **audio_separator_models_list["mdx_download_list"],
+                }.items()
             },
             "Demucs": demucs_models,
             "MDXC": {
                 name: {
                     "filename": next(iter(files.keys())),
-                    "scores": model_scores.get(next(iter(files.keys())), {}).get("median_scores", {}),
-                    "stems": model_scores.get(next(iter(files.keys())), {}).get("stems", []),
-                    "target_stem": model_scores.get(next(iter(files.keys())), {}).get("target_stem"),
-                    "download_files": list(files.keys()) + list(files.values()),  # List of both model filenames and config filenames
+                    "scores": model_scores.get(next(iter(files.keys())), {}).get(
+                        "median_scores", {}
+                    ),
+                    "stems": model_scores.get(next(iter(files.keys())), {}).get(
+                        "stems", []
+                    ),
+                    "target_stem": model_scores.get(next(iter(files.keys())), {}).get(
+                        "target_stem"
+                    ),
+                    "download_files": list(files.keys())
+                    + list(
+                        files.values()
+                    ),  # List of both model filenames and config filenames
                 }
                 for name, files in {
                     **model_downloads_list["mdx23c_download_list"],
@@ -619,8 +827,12 @@ class Separator:
         This method prints a message to the user if they have downloaded a VIP model, reminding them to support Anjok07 on Patreon.
         """
         if self.model_is_uvr_vip:
-            self.logger.warning(f"The model: '{self.model_friendly_name}' is a VIP model, intended by Anjok07 for access by paying subscribers only.")
-            self.logger.warning("If you are not already subscribed, please consider supporting the developer of UVR, Anjok07 by subscribing here: https://patreon.com/uvr")
+            self.logger.warning(
+                f"The model: '{self.model_friendly_name}' is a VIP model, intended by Anjok07 for access by paying subscribers only."
+            )
+            self.logger.warning(
+                "If you are not already subscribed, please consider supporting the developer of UVR, Anjok07 by subscribing here: https://patreon.com/uvr"
+            )
 
     def download_model_files(self, model_filename):
         """
@@ -631,22 +843,33 @@ class Separator:
 
         supported_model_files_grouped = self.list_supported_model_files()
         public_model_repo_url_prefix = "https://github.com/TRvlvr/model_repo/releases/download/all_public_uvr_models"
-        vip_model_repo_url_prefix = "https://github.com/Anjok0109/ai_magic/releases/download/v5"
+        vip_model_repo_url_prefix = (
+            "https://github.com/Anjok0109/ai_magic/releases/download/v5"
+        )
         audio_separator_models_repo_url_prefix = "https://github.com/nomadkaraoke/python-audio-separator/releases/download/model-configs"
 
         yaml_config_filename = None
 
-        self.logger.debug(f"Searching for model_filename {model_filename} in supported_model_files_grouped")
+        self.logger.debug(
+            f"Searching for model_filename {model_filename} in supported_model_files_grouped"
+        )
 
         # Iterate through model types (MDX, Demucs, MDXC)
         for model_type, models in supported_model_files_grouped.items():
             # Iterate through each model in this type
             for model_friendly_name, model_info in models.items():
                 self.model_is_uvr_vip = "VIP" in model_friendly_name
-                model_repo_url_prefix = vip_model_repo_url_prefix if self.model_is_uvr_vip else public_model_repo_url_prefix
+                model_repo_url_prefix = (
+                    vip_model_repo_url_prefix
+                    if self.model_is_uvr_vip
+                    else public_model_repo_url_prefix
+                )
 
                 # Check if this model matches our target filename
-                if model_info["filename"] == model_filename or model_filename in model_info["download_files"]:
+                if (
+                    model_info["filename"] == model_filename
+                    or model_filename in model_info["download_files"]
+                ):
                     self.logger.debug(f"Found matching model: {model_friendly_name}")
                     self.model_friendly_name = model_friendly_name
                     self.print_uvr_vip_message()
@@ -657,35 +880,59 @@ class Separator:
                         if file_to_download.startswith("http"):
                             filename = file_to_download.split("/")[-1]
                             download_path = os.path.join(self.model_file_dir, filename)
-                            self.download_file_if_not_exists(file_to_download, download_path)
+                            self.download_file_if_not_exists(
+                                file_to_download, download_path
+                            )
                             continue
 
-                        download_path = os.path.join(self.model_file_dir, file_to_download)
+                        download_path = os.path.join(
+                            self.model_file_dir, file_to_download
+                        )
 
                         # For MDXC models, handle YAML config files specially
                         if model_type == "MDXC" and file_to_download.endswith(".yaml"):
                             yaml_config_filename = file_to_download
                             try:
                                 yaml_url = f"{model_repo_url_prefix}/mdx_model_data/mdx_c_configs/{file_to_download}"
-                                self.download_file_if_not_exists(yaml_url, download_path)
+                                self.download_file_if_not_exists(
+                                    yaml_url, download_path
+                                )
                             except RuntimeError:
-                                self.logger.debug("YAML config not found in UVR repo, trying audio-separator models repo...")
+                                self.logger.debug(
+                                    "YAML config not found in UVR repo, trying audio-separator models repo..."
+                                )
                                 yaml_url = f"{audio_separator_models_repo_url_prefix}/{file_to_download}"
-                                self.download_file_if_not_exists(yaml_url, download_path)
+                                self.download_file_if_not_exists(
+                                    yaml_url, download_path
+                                )
                             continue
 
                         # For regular model files, try UVR repo first, then audio-separator repo
                         try:
                             download_url = f"{model_repo_url_prefix}/{file_to_download}"
-                            self.download_file_if_not_exists(download_url, download_path)
+                            self.download_file_if_not_exists(
+                                download_url, download_path
+                            )
                         except RuntimeError:
-                            self.logger.debug("Model not found in UVR repo, trying audio-separator models repo...")
+                            self.logger.debug(
+                                "Model not found in UVR repo, trying audio-separator models repo..."
+                            )
                             download_url = f"{audio_separator_models_repo_url_prefix}/{file_to_download}"
-                            self.download_file_if_not_exists(download_url, download_path)
+                            self.download_file_if_not_exists(
+                                download_url, download_path
+                            )
 
-                    return model_filename, model_type, model_friendly_name, model_path, yaml_config_filename
+                    return (
+                        model_filename,
+                        model_type,
+                        model_friendly_name,
+                        model_path,
+                        yaml_config_filename,
+                    )
 
-        raise ValueError(f"Model file {model_filename} not found in supported model files")
+        raise ValueError(
+            f"Model file {model_filename} not found in supported model files"
+        )
 
     def load_model_data_from_yaml(self, yaml_config_filename):
         """
@@ -694,13 +941,19 @@ class Separator:
         """
         # Verify if the YAML filename includes a full path or just the filename
         if not os.path.exists(yaml_config_filename):
-            model_data_yaml_filepath = os.path.join(self.model_file_dir, yaml_config_filename)
+            model_data_yaml_filepath = os.path.join(
+                self.model_file_dir, yaml_config_filename
+            )
         else:
             model_data_yaml_filepath = yaml_config_filename
 
-        self.logger.debug(f"Loading model data from YAML at path {model_data_yaml_filepath}")
+        self.logger.debug(
+            f"Loading model data from YAML at path {model_data_yaml_filepath}"
+        )
 
-        model_data = yaml.load(open(model_data_yaml_filepath, encoding="utf-8"), Loader=yaml.FullLoader)
+        model_data = yaml.load(
+            open(model_data_yaml_filepath, encoding="utf-8"), Loader=yaml.FullLoader
+        )
         self.logger.debug(f"Model data loaded from YAML file: {model_data}")
 
         if "roformer" in model_data_yaml_filepath.lower():
@@ -715,13 +968,19 @@ class Separator:
         The correct parameters are identified by calculating the hash of the model file and looking up the hash in the UVR data files.
         """
         # Model data and configuration sources from UVR
-        model_data_url_prefix = "https://raw.githubusercontent.com/TRvlvr/application_data/main"
+        model_data_url_prefix = (
+            "https://raw.githubusercontent.com/TRvlvr/application_data/main"
+        )
 
         vr_model_data_url = f"{model_data_url_prefix}/vr_model_data/model_data_new.json"
-        mdx_model_data_url = f"{model_data_url_prefix}/mdx_model_data/model_data_new.json"
+        mdx_model_data_url = (
+            f"{model_data_url_prefix}/mdx_model_data/model_data_new.json"
+        )
 
         # Calculate hash for the downloaded model
-        self.logger.debug("Calculating MD5 hash for model file to identify model parameters from UVR data...")
+        self.logger.debug(
+            "Calculating MD5 hash for model file to identify model parameters from UVR data..."
+        )
         model_hash = self.get_model_hash(model_path)
         self.logger.debug(f"Model {model_path} has hash {model_hash}")
 
@@ -735,25 +994,37 @@ class Separator:
         self.download_file_if_not_exists(mdx_model_data_url, mdx_model_data_path)
 
         # Loading model data from UVR
-        self.logger.debug("Loading MDX and VR model parameters from UVR model data files...")
+        self.logger.debug(
+            "Loading MDX and VR model parameters from UVR model data files..."
+        )
         vr_model_data_object = json.load(open(vr_model_data_path, encoding="utf-8"))
         mdx_model_data_object = json.load(open(mdx_model_data_path, encoding="utf-8"))
 
         # Load additional model data from audio-separator
-        self.logger.debug("Loading additional model parameters from audio-separator model data file...")
+        self.logger.debug(
+            "Loading additional model parameters from audio-separator model data file..."
+        )
         with resources.open_text("audio_separator", "model-data.json") as f:
             audio_separator_model_data = json.load(f)
 
         # Merge the model data objects, with audio-separator data taking precedence
-        vr_model_data_object = {**vr_model_data_object, **audio_separator_model_data.get("vr_model_data", {})}
-        mdx_model_data_object = {**mdx_model_data_object, **audio_separator_model_data.get("mdx_model_data", {})}
+        vr_model_data_object = {
+            **vr_model_data_object,
+            **audio_separator_model_data.get("vr_model_data", {}),
+        }
+        mdx_model_data_object = {
+            **mdx_model_data_object,
+            **audio_separator_model_data.get("mdx_model_data", {}),
+        }
 
         if model_hash in mdx_model_data_object:
             model_data = mdx_model_data_object[model_hash]
         elif model_hash in vr_model_data_object:
             model_data = vr_model_data_object[model_hash]
         else:
-            raise ValueError(f"Unsupported Model File: parameters for MD5 hash {model_hash} could not be found in UVR model data file for MDX or VR arch.")
+            raise ValueError(
+                f"Unsupported Model File: parameters for MD5 hash {model_hash} could not be found in UVR model data file for MDX or VR arch."
+            )
 
         self.logger.debug(f"Model data loaded using hash {model_hash}: {model_data}")
 
@@ -769,9 +1040,17 @@ class Separator:
         load_model_start_time = time.perf_counter()
 
         # Setting up the model path
-        model_filename, model_type, model_friendly_name, model_path, yaml_config_filename = self.download_model_files(model_filename)
+        (
+            model_filename,
+            model_type,
+            model_friendly_name,
+            model_path,
+            yaml_config_filename,
+        ) = self.download_model_files(model_filename)
         model_name = model_filename.split(".")[0]
-        self.logger.debug(f"Model downloaded, friendly name: {model_friendly_name}, model_path: {model_path}")
+        self.logger.debug(
+            f"Model downloaded, friendly name: {model_friendly_name}, model_path: {model_path}"
+        )
 
         if model_path.lower().endswith(".yaml"):
             yaml_config_filename = model_path
@@ -787,6 +1066,7 @@ class Separator:
             "torch_device": self.torch_device,
             "torch_device_cpu": self.torch_device_cpu,
             "torch_device_mps": self.torch_device_mps,
+            "is_rocm": self.is_rocm,
             "onnx_execution_provider": self.onnx_execution_provider,
             "model_name": model_name,
             "model_path": model_path,
@@ -803,14 +1083,26 @@ class Separator:
         }
 
         # Instantiate the appropriate separator class depending on the model type
-        separator_classes = {"MDX": "mdx_separator.MDXSeparator", "VR": "vr_separator.VRSeparator", "Demucs": "demucs_separator.DemucsSeparator", "MDXC": "mdxc_separator.MDXCSeparator"}
+        separator_classes = {
+            "MDX": "mdx_separator.MDXSeparator",
+            "VR": "vr_separator.VRSeparator",
+            "Demucs": "demucs_separator.DemucsSeparator",
+            "MDXC": "mdxc_separator.MDXCSeparator",
+        }
 
-        if model_type not in self.arch_specific_params or model_type not in separator_classes:
+        if (
+            model_type not in self.arch_specific_params
+            or model_type not in separator_classes
+        ):
             # Enhanced error message for Roformer models
-            if "roformer" in model_filename.lower() or (model_data and model_data.get("is_roformer", False)):
-                error_msg = (f"Roformer model type not properly configured: {model_type}. "
-                           f"This may indicate a configuration validation failure. "
-                           f"Please check the model file and YAML configuration.")
+            if "roformer" in model_filename.lower() or (
+                model_data and model_data.get("is_roformer", False)
+            ):
+                error_msg = (
+                    f"Roformer model type not properly configured: {model_type}. "
+                    f"This may indicate a configuration validation failure. "
+                    f"Please check the model file and YAML configuration."
+                )
                 self.logger.error(error_msg)
                 raise ValueError(error_msg)
             else:
@@ -819,35 +1111,53 @@ class Separator:
         if model_type == "Demucs" and sys.version_info < (3, 10):
             raise Exception("Demucs models require Python version 3.10 or newer.")
 
-        self.logger.debug(f"Importing module for model type {model_type}: {separator_classes[model_type]}")
+        self.logger.debug(
+            f"Importing module for model type {model_type}: {separator_classes[model_type]}"
+        )
 
         module_name, class_name = separator_classes[model_type].split(".")
-        module = importlib.import_module(f"audio_separator.separator.architectures.{module_name}")
+        module = importlib.import_module(
+            f"audio_separator.separator.architectures.{module_name}"
+        )
         separator_class = getattr(module, class_name)
 
-        self.logger.debug(f"Instantiating separator class for model type {model_type}: {separator_class}")
-        
+        self.logger.debug(
+            f"Instantiating separator class for model type {model_type}: {separator_class}"
+        )
+
         try:
-            self.model_instance = separator_class(common_config=common_params, arch_config=self.arch_specific_params[model_type])
+            self.model_instance = separator_class(
+                common_config=common_params,
+                arch_config=self.arch_specific_params[model_type],
+            )
         except Exception as e:
             # Enhanced error handling for Roformer models
-            if "roformer" in model_filename.lower() or (model_data and model_data.get("is_roformer", False)):
-                error_msg = (f"Failed to instantiate Roformer model: {e}. "
-                           f"This may be due to missing parameters or configuration validation failures.")
+            if "roformer" in model_filename.lower() or (
+                model_data and model_data.get("is_roformer", False)
+            ):
+                error_msg = (
+                    f"Failed to instantiate Roformer model: {e}. "
+                    f"This may be due to missing parameters or configuration validation failures."
+                )
                 self.logger.error(error_msg)
                 raise RuntimeError(error_msg) from e
             else:
                 raise
 
         # Log Roformer implementation version if applicable
-        if hasattr(self.model_instance, 'is_roformer_model') and self.model_instance.is_roformer_model:
+        if (
+            hasattr(self.model_instance, "is_roformer_model")
+            and self.model_instance.is_roformer_model
+        ):
             roformer_stats = self.model_instance.get_roformer_loading_stats()
             if roformer_stats:
                 self.logger.info(f"Roformer loading stats: {roformer_stats}")
-                
+
         # Log the completion of the model load process
         self.logger.debug("Loading model completed.")
-        self.logger.info(f'Load model duration: {time.strftime("%H:%M:%S", time.gmtime(int(time.perf_counter() - load_model_start_time)))}')
+        self.logger.info(
+            f"Load model duration: {time.strftime('%H:%M:%S', time.gmtime(int(time.perf_counter() - load_model_start_time)))}"
+        )
 
     def separate(self, audio_file_path, custom_output_names=None):
         """
@@ -866,7 +1176,9 @@ class Separator:
         """
         # Check if the model and device are properly initialized
         if not (self.torch_device and self.model_instance):
-            raise ValueError("Initialization failed or model not loaded. Please load a model before attempting to separate.")
+            raise ValueError(
+                "Initialization failed or model not loaded. Please load a model before attempting to separate."
+            )
 
         # If audio_file_path is a string, convert it to a list for uniform processing
         if isinstance(audio_file_path, str):
@@ -882,15 +1194,30 @@ class Separator:
                 for root, dirs, files in os.walk(path):
                     for file in files:
                         # Check the file extension to ensure it's an audio file
-                        if file.endswith((".wav", ".flac", ".mp3", ".ogg", ".opus", ".m4a", ".aiff", ".ac3")):  # Add other formats if needed
+                        if file.endswith(
+                            (
+                                ".wav",
+                                ".flac",
+                                ".mp3",
+                                ".ogg",
+                                ".opus",
+                                ".m4a",
+                                ".aiff",
+                                ".ac3",
+                            )
+                        ):  # Add other formats if needed
                             full_path = os.path.join(root, file)
                             self.logger.info(f"Processing file: {full_path}")
                             try:
                                 # Perform separation for each file
-                                files_output = self._separate_file(full_path, custom_output_names)
+                                files_output = self._separate_file(
+                                    full_path, custom_output_names
+                                )
                                 output_files.extend(files_output)
                             except Exception as e:
-                                self.logger.error(f"Failed to process file {full_path}: {e}")
+                                self.logger.error(
+                                    f"Failed to process file {full_path}: {e}"
+                                )
             else:
                 # If the path is a file, process it directly
                 self.logger.info(f"Processing file: {path}")
@@ -916,32 +1243,52 @@ class Separator:
         # Check if chunking is enabled and file is large enough
         if self.chunk_duration is not None:
             import librosa
+
             duration = librosa.get_duration(path=audio_file_path)
 
             from audio_separator.separator.audio_chunking import AudioChunker
+
             chunker = AudioChunker(self.chunk_duration, self.logger)
 
             if chunker.should_chunk(duration):
-                self.logger.info(f"File duration {duration:.1f}s exceeds chunk size {self.chunk_duration}s, using chunked processing")
+                self.logger.info(
+                    f"File duration {duration:.1f}s exceeds chunk size {self.chunk_duration}s, using chunked processing"
+                )
                 return self._process_with_chunking(audio_file_path, custom_output_names)
 
         # Log the start of the separation process
-        self.logger.info(f"Starting separation process for audio_file_path: {audio_file_path}")
+        self.logger.info(
+            f"Starting separation process for audio_file_path: {audio_file_path}"
+        )
         separate_start_time = time.perf_counter()
 
         # Log normalization and amplification thresholds
-        self.logger.debug(f"Normalization threshold set to {self.normalization_threshold}, waveform will be lowered to this max amplitude to avoid clipping.")
-        self.logger.debug(f"Amplification threshold set to {self.amplification_threshold}, waveform will be scaled up to this max amplitude if below it.")
+        self.logger.debug(
+            f"Normalization threshold set to {self.normalization_threshold}, waveform will be lowered to this max amplitude to avoid clipping."
+        )
+        self.logger.debug(
+            f"Amplification threshold set to {self.amplification_threshold}, waveform will be scaled up to this max amplitude if below it."
+        )
 
         # Run separation method for the loaded model with autocast enabled if supported by the device
         output_files = None
-        if self.use_autocast and autocast_mode.is_autocast_available(self.torch_device.type):
+        use_autocast_for_inference = self.use_autocast and not self.is_rocm
+
+        if use_autocast_for_inference and autocast_mode.is_autocast_available(
+            self.torch_device.type
+        ):
             self.logger.debug("Autocast available.")
             with autocast_mode.autocast(self.torch_device.type):
-                output_files = self.model_instance.separate(audio_file_path, custom_output_names)
+                output_files = self.model_instance.separate(
+                    audio_file_path, custom_output_names
+                )
         else:
+            if self.is_rocm and self.use_autocast:
+                self.logger.debug("Autocast disabled for ROCm compatibility.")
             self.logger.debug("Autocast unavailable.")
-            output_files = self.model_instance.separate(audio_file_path, custom_output_names)
+            output_files = self.model_instance.separate(
+                audio_file_path, custom_output_names
+            )
 
         # Clear GPU cache to free up memory
         self.model_instance.clear_gpu_cache()
@@ -954,7 +1301,9 @@ class Separator:
 
         # Log the completion of the separation process
         self.logger.debug("Separation process completed.")
-        self.logger.info(f'Separation duration: {time.strftime("%H:%M:%S", time.gmtime(int(time.perf_counter() - separate_start_time)))}')
+        self.logger.info(
+            f"Separation duration: {time.strftime('%H:%M:%S', time.gmtime(int(time.perf_counter() - separate_start_time)))}"
+        )
 
         return output_files
 
@@ -990,7 +1339,9 @@ class Separator:
             processed_chunks_by_stem = {}
 
             for i, chunk_path in enumerate(chunk_paths):
-                self.logger.info(f"Processing chunk {i+1}/{len(chunk_paths)}: {chunk_path}")
+                self.logger.info(
+                    f"Processing chunk {i + 1}/{len(chunk_paths)}: {chunk_path}"
+                )
 
                 original_chunk_duration = self.chunk_duration
                 original_output_dir = self.output_dir
@@ -1008,24 +1359,36 @@ class Separator:
                     for stem_path in output_files:
                         # Extract stem name from filename: "chunk_0000_(Vocals).wav" → "Vocals"
                         filename = os.path.basename(stem_path)
-                        match = re.search(r'_\(([^)]+)\)', filename)
+                        match = re.search(r"_\(([^)]+)\)", filename)
                         if match:
                             stem_name = match.group(1)
                         else:
                             # Fallback: use index-based name if pattern not found
-                            stem_index = len([k for k in processed_chunks_by_stem.keys() if k.startswith('stem_')])
+                            stem_index = len(
+                                [
+                                    k
+                                    for k in processed_chunks_by_stem.keys()
+                                    if k.startswith("stem_")
+                                ]
+                            )
                             stem_name = f"stem_{stem_index}"
-                            self.logger.warning(f"Could not extract stem name from {filename}, using {stem_name}")
+                            self.logger.warning(
+                                f"Could not extract stem name from {filename}, using {stem_name}"
+                            )
 
                         if stem_name not in processed_chunks_by_stem:
                             processed_chunks_by_stem[stem_name] = []
 
                         # Ensure absolute path
-                        abs_path = stem_path if os.path.isabs(stem_path) else os.path.join(temp_dir, stem_path)
+                        abs_path = (
+                            stem_path
+                            if os.path.isabs(stem_path)
+                            else os.path.join(temp_dir, stem_path)
+                        )
                         processed_chunks_by_stem[stem_name].append(abs_path)
 
                     if not output_files:
-                        self.logger.warning(f"Chunk {i+1} produced no output files")
+                        self.logger.warning(f"Chunk {i + 1} produced no output files")
 
                 finally:
                     self.chunk_duration = original_chunk_duration
@@ -1054,13 +1417,19 @@ class Separator:
                 else:
                     output_filename = f"{base_name}_({stem_name})"
 
-                output_path = os.path.join(self.output_dir, f"{output_filename}.{self.output_format.lower()}")
+                output_path = os.path.join(
+                    self.output_dir, f"{output_filename}.{self.output_format.lower()}"
+                )
 
-                self.logger.info(f"Merging {len(chunk_paths_for_stem)} chunks for stem: {stem_name}")
+                self.logger.info(
+                    f"Merging {len(chunk_paths_for_stem)} chunks for stem: {stem_name}"
+                )
                 chunker.merge_chunks(chunk_paths_for_stem, output_path)
                 output_files.append(output_path)
 
-            self.logger.info(f"Chunked processing completed. Output files: {output_files}")
+            self.logger.info(
+                f"Chunked processing completed. Output files: {output_files}"
+            )
             return output_files
 
         finally:
@@ -1075,7 +1444,13 @@ class Separator:
         """
         self.logger.info(f"Downloading model {model_filename}...")
 
-        model_filename, model_type, model_friendly_name, model_path, yaml_config_filename = self.download_model_files(model_filename)
+        (
+            model_filename,
+            model_type,
+            model_friendly_name,
+            model_path,
+            yaml_config_filename,
+        ) = self.download_model_files(model_filename)
 
         if model_path.lower().endswith(".yaml"):
             yaml_config_filename = model_path
@@ -1087,7 +1462,9 @@ class Separator:
 
         model_data_dict_size = len(model_data)
 
-        self.logger.info(f"Model downloaded, type: {model_type}, friendly name: {model_friendly_name}, model_path: {model_path}, model_data: {model_data_dict_size} items")
+        self.logger.info(
+            f"Model downloaded, type: {model_type}, friendly name: {model_friendly_name}, model_path: {model_path}, model_data: {model_data_dict_size} items"
+        )
 
     def get_simplified_model_list(self, filter_sort_by: Optional[str] = None):
         """
@@ -1130,7 +1507,12 @@ class Separator:
                     stems_with_scores = ["Unknown"]
                     stem_sdr_dict["unknown"] = None
 
-                simplified_list[filename] = {"Name": name, "Type": model_type, "Stems": stems_with_scores, "SDR": stem_sdr_dict}
+                simplified_list[filename] = {
+                    "Name": name,
+                    "Type": model_type,
+                    "Stems": stems_with_scores,
+                    "SDR": stem_sdr_dict,
+                }
 
         # Sort and filter the list if a sort_by parameter is provided
         if filter_sort_by:
@@ -1142,12 +1524,19 @@ class Separator:
                 # Convert sort_by to lowercase for case-insensitive comparison
                 sort_by_lower = filter_sort_by.lower()
                 # Filter out models that don't have the specified stem
-                filtered_list = {k: v for k, v in simplified_list.items() if sort_by_lower in v["SDR"]}
+                filtered_list = {
+                    k: v
+                    for k, v in simplified_list.items()
+                    if sort_by_lower in v["SDR"]
+                }
 
                 # Sort by SDR score if available, putting None values last
                 def sort_key(item):
                     sdr = item[1]["SDR"][sort_by_lower]
-                    return (0 if sdr is None else 1, sdr if sdr is not None else float("-inf"))
+                    return (
+                        0 if sdr is None else 1,
+                        sdr if sdr is not None else float("-inf"),
+                    )
 
                 return dict(sorted(filtered_list.items(), key=sort_key, reverse=True))
 

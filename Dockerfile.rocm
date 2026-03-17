@@ -1,5 +1,5 @@
 # Use ROCm base image with Python
-FROM rocm/dev-ubuntu-22.04:5.7.1-complete
+FROM rocm/dev-ubuntu-22.04:7.2-complete
 
 # Set the working directory in the container
 WORKDIR /workdir
@@ -7,20 +7,23 @@ WORKDIR /workdir
 # Install necessary packages
 RUN apt-get update && apt-get install -y \
     ffmpeg \
-    build-essential \
     python3 \
     python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
 RUN python3 -m pip install --upgrade pip
 
-# Install PyTorch with ROCm support and audio-separator with ROCm extra
+# Install PyTorch with ROCm support
 RUN --mount=type=cache,target=/root/.cache \
-    pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm5.7
+    pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm7.2
 
-# Install audio-separator with ROCm support
+# Install audio-separator with GPU support
 RUN --mount=type=cache,target=/root/.cache \
-    pip3 install "audio-separator[rocm]"
+    pip3 install "audio-separator[gpu]" onnxruntime-rocm
+
+# Set environment variables for AMD RX 6600 series
+ENV HSA_OVERRIDE_GFX_VERSION=10.3.2
+ENV PYTORCH_ROCM_ARCH=gfx1030
 
 # Run audio-separator when the container launches
 ENTRYPOINT ["audio-separator"]

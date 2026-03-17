@@ -1,0 +1,166 @@
+ROCm Debug Script for audio-separator
+Python version: 3.13.5 (main, Jun 25 2025, 18:55:22) [GCC 14.2.0]
+Working directory: /mnt/extra_ssd/Github/python-audio-separator
+
+==================================================
+0. System Information
+==================================================
+CPU: AMD Ryzen 5 5600X 6-Core Processor
+CPU Cores: 12
+Memory: 15913 MB
+Kernel: Linux version 6.19.7-x64v3-xanmod1 (root@runner-huzfz3a5r-project-51590166-concurrent-0) (Debian clang version 19.1.7 (3), Debian LLD 19.1.7) #0~20260312.g3118900 SMP PREEMPT_DYNAMIC Thu Mar 12 15:17:19 UTC
+HSA_OVERRIDE_GFX_VERSION: 10.3.0
+PYTORCH_ROCM_ARCH: gfx1030
+Relevant environment variables:
+  PYTORCH_ROCM_ARCH: gfx1030
+
+==================================================
+0.1 PyTorch ROCm Build Check
+==================================================
+✓ PyTorch built with ROCm support
+
+==================================================
+0.2 ROCm Environment Variables
+==================================================
+  PYTORCH_ROCM_ARCH: gfx1030
+
+==================================================
+0.3 Known ROCm Issues Check
+==================================================
+✓ CUDA AMP (autocast) available
+
+==================================================
+0.4 Memory Layout Check
+==================================================
+✓ Contiguous memory allocation working
+✓ Non-contiguous memory layout working
+
+==================================================
+1. PyTorch and ROCm Setup
+==================================================
+PyTorch version: 2.12.0.dev20260315+rocm7.2
+ROCm detected in version: True
+CUDA available: True
+CUDA device count: 1
+Current CUDA device: 0
+CUDA device name: AMD Radeon RX 6600
+GPU Architecture: 10.3
+GPU Memory: 7.98 GB
+PyTorch ROCm version: 7.2.0
+✓ Basic tensor multiplication on GPU: PASSED
+✓ Memory pinning and non-blocking transfer successful
+✓ CUDA stream operations successful
+✓ CUDA event timing successful: 0.39ms
+✓ Half precision (float16) operations successful
+✓ Complex number operations successful
+
+==================================================
+2. ONNX Runtime Setup
+==================================================
+ONNX Runtime version: 1.24.3
+Available execution providers: ['TensorrtExecutionProvider', 'CUDAExecutionProvider', 'CPUExecutionProvider']
+✗ ROCMExecutionProvider not available
+✓ CUDAExecutionProvider is available (can be used as fallback for AMD)
+✗ Failed to create session with CUDAExecutionProvider: NoSuchFile: [ONNXRuntimeError] : 3 : NO_SUCHFILE : Load model from dummy_model.onnx failed:Load model dummy_model.onnx failed. File doesn't exist
+ROCm environment variables detected:
+  PYTORCH_ROCM_ARCH: gfx1030
+✓ ROCm installation found at /opt/rocm
+  ROCm components detected in /opt/rocm
+
+==================================================
+3. STFT Operations
+==================================================
+Testing Hann window creation...
+✓ Hann window created and moved to GPU: shape=torch.Size([2048]), device=cuda:0
+✓ Hamming window created on GPU
+✓ Blackman window created on GPU
+✓ Custom window created on GPU
+✓ STFT with n_fft=1024: shape=torch.Size([2, 513, 173]), device=cuda:0
+✓ STFT with n_fft=2048: shape=torch.Size([2, 1025, 87]), device=cuda:0
+  Result is not contiguous
+
+Testing complex tensor operations...
+✓ Complex tensor created: torch.Size([2, 1025, 100]), torch.complex64
+✓ Complex multiplication successful
+✓ Complex addition successful
+✓ Complex magnitude calculation successful
+✓ Complex angle calculation successful
+✓ ISTFT completed: torch.Size([2, 44100]), cuda:0
+✓ ISTFT with longer length completed: torch.Size([2, 48000])
+
+Testing ROCm-specific STFT optimizations...
+✓ STFT with float64 precision successful
+✓ STFT with float16 precision successful
+
+==================================================
+4. GPU Memory Allocation
+==================================================
+GPU memory allocated: 68.00 MB
+GPU memory reserved: 132.00 MB
+GPU memory max allocated: 99.55 MB
+GPU memory max reserved: 132.00 MB
+GPU Name: AMD Radeon RX 6600
+GPU Compute Capability: 10.3
+GPU Total Memory: 8176.00 MB
+GPU Multi processor count: 14
+✓ Successfully allocated 1024x1024 tensor (4.00 MB), memory change: +4.00 MB
+✓ Matrix multiplication completed
+  Memory after cleanup: 68.00 MB
+✓ Successfully allocated 2048x2048 tensor (16.00 MB), memory change: +16.00 MB
+✓ Matrix multiplication completed
+  Memory after cleanup: 68.00 MB
+✓ Successfully allocated 4096x4096 tensor (64.00 MB), memory change: +64.00 MB
+✓ Matrix multiplication completed
+  Memory after cleanup: 68.00 MB
+✓ Successfully allocated 8192x8192 tensor (256.00 MB), memory change: +256.00 MB
+✓ Matrix multiplication completed
+  Memory after cleanup: 68.00 MB
+✓ Successfully allocated 16384x16384 tensor (1024.00 MB), memory change: +1024.00 MB
+✓ Matrix multiplication completed
+  Memory after cleanup: 68.00 MB
+
+Testing memory fragmentation...
+✓ Memory fragmentation test completed successfully
+
+Testing large contiguous allocation...
+Attempting to allocate 6051.20 MB (39828x39828 tensor)
+✓ Successfully allocated large contiguous tensor
+✗ Large contiguous allocation failed: OOM
+
+Testing ROCm-specific memory operations...
+✓ Pinned memory allocation successful
+✓ Non-blocking copy successful
+✓ Pinned memory transfer successful
+
+==================================================
+5. Model Type Testing
+==================================================
+✓ Successfully imported all model modules
+
+==================================================
+5.1 Roformer Models
+==================================================
+✓ Successfully created and moved BSRoformer model to GPU
+✓ Model forward pass completed: output shape torch.Size([1, 1, 44032])
+✓ Gradient computation successful
+✓ Successfully created and moved MelBandRoformer model to GPU
+✓ Model forward pass completed: output shape torch.Size([1, 1, 44032])
+✓ Gradient computation successful
+✓ Successfully created RoformerLoader
+✓ Configuration validation passed
+
+==================================================
+5.2 Demucs Models
+==================================================
+✓ Successfully created and moved Demucs model to GPU
+✓ Demucs model forward pass completed: output shape torch.Size([1, 4, 2, 44100])
+✓ Demucs gradient computation successful
+
+==================================================
+5.3 MDX Models
+==================================================
+✗ MDX model operations: FAILED - Exception:  
+
+==================================================
+Debugging complete. Review the results above to identify issues.
+==================================================
