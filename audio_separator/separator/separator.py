@@ -122,35 +122,13 @@ class Separator:
         use_autocast=False,
         use_directml=False,
         chunk_duration=None,
-        mdx_params={
-            "hop_length": 1024,
-            "segment_size": 256,
-            "overlap": 0.25,
-            "batch_size": 1,
-            "enable_denoise": False,
-        },
-        vr_params={
-            "batch_size": 1,
-            "window_size": 512,
-            "aggression": 5,
-            "enable_tta": False,
-            "enable_post_process": False,
-            "post_process_threshold": 0.2,
-            "high_end_process": False,
-        },
-        demucs_params={
-            "segment_size": "Default",
-            "shifts": 2,
-            "overlap": 0.25,
-            "segments_enabled": True,
-        },
-        mdxc_params={
-            "segment_size": 256,
-            "override_model_segment_size": False,
-            "batch_size": 1,
-            "overlap": 8,
-            "pitch_shift": 0,
-        },
+        ensemble_algorithm=None,
+        ensemble_weights=None,
+        ensemble_preset=None,
+        mdx_params=None,
+        vr_params=None,
+        demucs_params=None,
+        mdxc_params=None,
         info_only=False,
     ):
         """Initialize the separator."""
@@ -285,6 +263,41 @@ class Separator:
         if self.ensemble_algorithm is None:
             self.ensemble_algorithm = "avg_wave"
 
+        # Set defaults for arch_specific_params if not provided
+        if mdx_params is None:
+            mdx_params = {
+                "hop_length": 1024,
+                "segment_size": 256,
+                "overlap": 0.25,
+                "batch_size": 1,
+                "enable_denoise": False,
+            }
+        if vr_params is None:
+            vr_params = {
+                "batch_size": 1,
+                "window_size": 512,
+                "aggression": 5,
+                "enable_tta": False,
+                "enable_post_process": False,
+                "post_process_threshold": 0.2,
+                "high_end_process": False,
+            }
+        if demucs_params is None:
+            demucs_params = {
+                "segment_size": "Default",
+                "shifts": 2,
+                "overlap": 0.25,
+                "segments_enabled": True,
+            }
+        if mdxc_params is None:
+            mdxc_params = {
+                "segment_size": 256,
+                "override_model_segment_size": False,
+                "batch_size": 1,
+                "overlap": 8,
+                "pitch_shift": 0,
+            }
+
         # These are parameters which users may want to configure so we expose them to the top-level Separator class,
         # even though they are specific to a single model architecture
         self.arch_specific_params = {
@@ -311,9 +324,17 @@ class Separator:
             self.setup_accelerated_inferencing_device()
 
     VALID_ENSEMBLE_ALGORITHMS = [
-        "avg_wave", "median_wave", "min_wave", "max_wave",
-        "avg_fft", "median_fft", "min_fft", "max_fft",
-        "uvr_max_spec", "uvr_min_spec", "ensemble_wav",
+        "avg_wave",
+        "median_wave",
+        "min_wave",
+        "max_wave",
+        "avg_fft",
+        "median_fft",
+        "min_fft",
+        "max_fft",
+        "uvr_max_spec",
+        "uvr_min_spec",
+        "ensemble_wav",
     ]
 
     def _load_ensemble_preset(self, preset_name):
@@ -327,32 +348,44 @@ class Separator:
             with resources.open_text("audio_separator", "ensemble_presets.json") as f:
                 presets_data = json.load(f)
         except FileNotFoundError:
-            raise ValueError("Ensemble presets file not found. The package may be corrupted or improperly installed.")
+            raise ValueError(
+                "Ensemble presets file not found. The package may be corrupted or improperly installed."
+            )
 
         presets = presets_data.get("presets", {})
         if preset_name not in presets:
             available = ", ".join(sorted(presets.keys()))
-            raise ValueError(f"Unknown ensemble preset: '{preset_name}'. Available presets: {available}")
+            raise ValueError(
+                f"Unknown ensemble preset: '{preset_name}'. Available presets: {available}"
+            )
 
         preset = presets[preset_name]
 
         # Validate models
         models = preset.get("models", [])
         if not isinstance(models, list) or len(models) < 2:
-            raise ValueError(f"Ensemble preset '{preset_name}' must specify at least 2 models, got {len(models) if isinstance(models, list) else 0}")
+            raise ValueError(
+                f"Ensemble preset '{preset_name}' must specify at least 2 models, got {len(models) if isinstance(models, list) else 0}"
+            )
 
         # Validate algorithm
         algorithm = preset.get("algorithm", "avg_wave")
         if algorithm not in self.VALID_ENSEMBLE_ALGORITHMS:
-            raise ValueError(f"Ensemble preset '{preset_name}' has unknown algorithm: '{algorithm}'")
+            raise ValueError(
+                f"Ensemble preset '{preset_name}' has unknown algorithm: '{algorithm}'"
+            )
 
         # Validate weights
         weights = preset.get("weights")
         if weights is not None:
             if not isinstance(weights, list) or len(weights) != len(models):
-                raise ValueError(f"Ensemble preset '{preset_name}' weights length ({len(weights) if isinstance(weights, list) else 'N/A'}) must match models count ({len(models)})")
+                raise ValueError(
+                    f"Ensemble preset '{preset_name}' weights length ({len(weights) if isinstance(weights, list) else 'N/A'}) must match models count ({len(models)})"
+                )
 
-        self.logger.info(f"Loaded ensemble preset '{preset_name}': {preset.get('name', preset_name)} — {preset.get('description', '')}")
+        self.logger.info(
+            f"Loaded ensemble preset '{preset_name}': {preset.get('name', preset_name)} — {preset.get('description', '')}"
+        )
         return preset
 
     def list_ensemble_presets(self):
@@ -471,7 +504,7 @@ class Separator:
                     self.logger.info(
                         "ROCm detected with PyTorch, using CUDAExecutionProvider for AMD GPU acceleration"
                     )
-                    self.configure_cuda(ort_providers)
+                    self.configure_rocm(ort_providers)
                     hardware_acceleration_enabled = True
                 else:
                     self.logger.warning(
@@ -1024,9 +1057,8 @@ class Separator:
             f"Loading model data from YAML at path {model_data_yaml_filepath}"
         )
 
-        model_data = yaml.load(
-            open(model_data_yaml_filepath, encoding="utf-8"), Loader=yaml.FullLoader
-        )
+        with open(model_data_yaml_filepath, encoding="utf-8") as f:
+            model_data = yaml.safe_load(f)
         self.logger.debug(f"Model data loaded from YAML file: {model_data}")
 
         if "roformer" in model_data_yaml_filepath.lower():
@@ -1109,14 +1141,19 @@ class Separator:
         loading the separation model into memory, downloading it first if necessary.
         """
         # If an ensemble preset was loaded and no explicit model list was provided, use preset models
-        if self._ensemble_preset_models is not None and model_filename == "model_bs_roformer_ep_317_sdr_12.9755.ckpt":
+        if (
+            self._ensemble_preset_models is not None
+            and model_filename == "model_bs_roformer_ep_317_sdr_12.9755.ckpt"
+        ):
             model_filename = self._ensemble_preset_models
 
         if isinstance(model_filename, list):
             if len(model_filename) > 1:
                 self.model_filename = list(model_filename)
                 self.model_filenames = list(model_filename)
-                self.logger.info(f"Multiple models specified for ensembling: {self.model_filenames}")
+                self.logger.info(
+                    f"Multiple models specified for ensembling: {self.model_filenames}"
+                )
                 return
             model_filename = model_filename[0]
 
@@ -1209,7 +1246,9 @@ class Separator:
         )
         separator_class = getattr(module, class_name)
 
-        self.logger.debug(f"Instantiating separator class for model type {model_type}: {separator_class}")
+        self.logger.debug(
+            f"Instantiating separator class for model type {model_type}: {separator_class}"
+        )
 
         try:
             self.model_instance = separator_class(
@@ -1260,14 +1299,15 @@ class Separator:
         Returns:
         - output_files (list of str): A list containing the paths to the separated audio stem files.
         """
+        # Check for ensemble (multi-model) separation first - model_instance not needed
+        if isinstance(self.model_filename, list) and len(self.model_filename) > 1:
+            return self._separate_ensemble(audio_file_path, custom_output_names)
+
         # Check if the model and device are properly initialized
         if not (self.torch_device and self.model_instance):
             raise ValueError(
                 "Initialization failed or model not loaded. Please load a model before attempting to separate."
             )
-
-        if isinstance(self.model_filename, list) and len(self.model_filename) > 1:
-            return self._separate_ensemble(audio_file_path, custom_output_names)
 
         # If audio_file_path is a string, convert it to a list for uniform processing
         if isinstance(audio_file_path, str):
@@ -1674,7 +1714,7 @@ class Separator:
                         model_stem_names = []
                         for stem_path in model_stems:
                             filename = os.path.basename(stem_path)
-                            match = re.search(r'_\(([^)]+)\)', filename)
+                            match = re.search(r"_\(([^)]+)\)", filename)
                             stem_name = match.group(1) if match else "Unknown"
                             model_stem_names.append(stem_name)
 
@@ -1685,15 +1725,27 @@ class Separator:
                             for s in model_stem_names
                         )
 
-                        for stem_path, raw_stem_name in zip(model_stems, model_stem_names):
+                        for stem_path, raw_stem_name in zip(
+                            model_stems, model_stem_names
+                        ):
                             lower_name = raw_stem_name.lower()
 
-                            if "vocal" in lower_name and "lead" not in lower_name and "backing" not in lower_name:
+                            if (
+                                "vocal" in lower_name
+                                and "lead" not in lower_name
+                                and "backing" not in lower_name
+                            ):
                                 stem_name = "Vocals"
-                            elif lower_name == "other" and num_model_stems == 2 and has_vocal_stem:
+                            elif (
+                                lower_name == "other"
+                                and num_model_stems == 2
+                                and has_vocal_stem
+                            ):
                                 # For 2-stem models where one stem is vocals, "other" is the instrumental
                                 stem_name = "Instrumental"
-                                self.logger.debug(f"Mapped 'other' → 'Instrumental' for 2-stem model (model produced: {model_stem_names})")
+                                self.logger.debug(
+                                    f"Mapped 'other' → 'Instrumental' for 2-stem model (model produced: {model_stem_names})"
+                                )
                             elif lower_name in STEM_NAME_MAP:
                                 stem_name = STEM_NAME_MAP[lower_name]
                             else:
@@ -1702,17 +1754,25 @@ class Separator:
                             if stem_name not in stems_by_type:
                                 stems_by_type[stem_name] = []
 
-                            abs_path = stem_path if os.path.isabs(stem_path) else os.path.join(temp_dir, stem_path)
+                            abs_path = (
+                                stem_path
+                                if os.path.isabs(stem_path)
+                                else os.path.join(temp_dir, stem_path)
+                            )
                             stems_by_type[stem_name].append(abs_path)
                     finally:
                         self.output_dir = original_output_dir
 
                 # Perform ensembling for each stem type
-                ensembler = Ensembler(self.logger, self.ensemble_algorithm, self.ensemble_weights)
+                ensembler = Ensembler(
+                    self.logger, self.ensemble_algorithm, self.ensemble_weights
+                )
                 base_name = os.path.splitext(os.path.basename(path))[0]
 
                 for stem_name, stem_paths in stems_by_type.items():
-                    self.logger.info(f"Ensembling {len(stem_paths)} stems for type: {stem_name}")
+                    self.logger.info(
+                        f"Ensembling {len(stem_paths)} stems for type: {stem_name}"
+                    )
 
                     waveforms = []
                     original_channels = None
@@ -1736,7 +1796,9 @@ class Separator:
                     if custom_output_names and stem_name in custom_output_names:
                         output_filename = custom_output_names[stem_name]
                     elif self.ensemble_preset:
-                        output_filename = f"{base_name}_({stem_name})_preset_{self.ensemble_preset}"
+                        output_filename = (
+                            f"{base_name}_({stem_name})_preset_{self.ensemble_preset}"
+                        )
                     else:
                         # Build descriptive name from model filenames
                         model_slugs = []
@@ -1744,13 +1806,22 @@ class Separator:
                             # Remove extension, then truncate to keep filenames reasonable
                             name = os.path.splitext(mf)[0]
                             # Remove common verbose prefixes
-                            for prefix in ["mel_band_roformer_", "melband_roformer_", "bs_roformer_", "model_bs_roformer_", "UVR-MDX-NET-", "UVR_MDXNET_"]:
+                            for prefix in [
+                                "mel_band_roformer_",
+                                "melband_roformer_",
+                                "bs_roformer_",
+                                "model_bs_roformer_",
+                                "UVR-MDX-NET-",
+                                "UVR_MDXNET_",
+                            ]:
                                 if name.startswith(prefix):
-                                    name = name[len(prefix):]
+                                    name = name[len(prefix) :]
                                     break
                             model_slugs.append(name[:12])
                         slugs_str = "_".join(model_slugs)
-                        output_filename = f"{base_name}_({stem_name})_custom_ensemble_{slugs_str}"
+                        output_filename = (
+                            f"{base_name}_({stem_name})_custom_ensemble_{slugs_str}"
+                        )
 
                     output_path = f"{output_filename}.{self.output_format.lower()}"
 
@@ -1766,18 +1837,30 @@ class Separator:
                         output_files.append(final_output_path)
                     else:
                         # Fallback writer if no model instance is available
-                        self.logger.warning(f"No model instance available to write ensembled audio. Using fallback writer for {output_path}")
+                        self.logger.warning(
+                            f"No model instance available to write ensembled audio. Using fallback writer for {output_path}"
+                        )
                         final_output_path = os.path.join(self.output_dir, output_path)
 
                         import soundfile as sf
 
                         try:
-                            self.logger.debug(f"Attempting to write ensembled audio to {final_output_path}...")
-                            sf.write(final_output_path, ensembled_wav.T, self.sample_rate)
+                            self.logger.debug(
+                                f"Attempting to write ensembled audio to {final_output_path}..."
+                            )
+                            sf.write(
+                                final_output_path, ensembled_wav.T, self.sample_rate
+                            )
                         except Exception as e:
-                            self.logger.error(f"Error writing {self.output_format} format: {e}. Falling back to WAV.")
-                            final_output_path = final_output_path.rsplit(".", 1)[0] + ".wav"
-                            sf.write(final_output_path, ensembled_wav.T, self.sample_rate)
+                            self.logger.error(
+                                f"Error writing {self.output_format} format: {e}. Falling back to WAV."
+                            )
+                            final_output_path = (
+                                final_output_path.rsplit(".", 1)[0] + ".wav"
+                            )
+                            sf.write(
+                                final_output_path, ensembled_wav.T, self.sample_rate
+                            )
 
                         output_files.append(final_output_path)
 

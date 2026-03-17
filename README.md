@@ -120,15 +120,15 @@ beveradb/audio-separator:gpu
 **Supported ROCm Versions:** 5.7+
 
 💬 If successfully configured, you should see this log message when running `audio-separator --env_info`:
- `ONNXruntime has CUDAExecutionProvider available, enabling acceleration`
+ `ONNXruntime has ROCMExecutionProvider available, enabling acceleration`
 
 Pip (complete installation):
 ```sh
 # First install PyTorch with ROCm support (Change ROCm version as needed.)
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm7.2
 
-# Then install audio-separator with GPU support
-pip install "audio-separator[gpu]"
+# Then install audio-separator with ROCm support
+pip install "audio-separator[rocm]"
 ```
 
 **Important:** You must install PyTorch with ROCm support BEFORE installing audio-separator. If you already have PyTorch with CUDA support installed, uninstall it first:
@@ -136,12 +136,12 @@ pip install "audio-separator[gpu]"
 pip uninstall torch torchvision torchaudio
 pip cache purge
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm5.7
-pip install "audio-separator[gpu]"
+pip install "audio-separator[rocm]"
 ```
 
 **Required ROCm Packages:**
 - PyTorch ROCm: `torch`, `torchvision`, `torchaudio` with ROCm support
-- ONNX Runtime: `onnxruntime`, `onnxruntime-rocm`, `onnxruntime-gpu`
+- ONNX Runtime: `onnxruntime`, `onnxruntime-rocm`
 
 **Basic ROCm Setup:**
 - For AMD Radeon RX 6600 series (gfx1032), set environment variables:
@@ -149,7 +149,7 @@ pip install "audio-separator[gpu]"
 export HSA_OVERRIDE_GFX_VERSION=10.3.2
 export PYTORCH_ROCM_ARCH=gfx1030
 ```
-- ROCm acceleration uses the CUDAExecutionProvider for AMD GPU compatibility
+- ROCm acceleration uses the CUDAExecutionProvider (ONNX Runtime maps ROCm to CUDA for compatibility)
 - The system detects ROCm packages and PyTorch ROCm support automatically
 - ROCm libraries must be properly installed on your system for acceleration to work
 
@@ -212,10 +212,17 @@ However, sometimes getting both PyTorch and ONNX Runtime working with GPU suppor
 
 You may need to reinstall both packages directly, allowing pip to calculate the right versions for your platform, for example:
 
+**For CUDA/NVIDIA (`[gpu]`):**
 - `pip uninstall torch onnxruntime`
 - `pip cache purge`
 - `pip install --force-reinstall torch torchvision torchaudio`
 - `pip install --force-reinstall onnxruntime-gpu`
+
+**For ROCm/AMD (`[rocm]`):**
+- `pip uninstall torch onnxruntime onnxruntime-rocm`
+- `pip cache purge`
+- `pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm7.2`
+- `pip install --force-reinstall onnxruntime-rocm`
 
 I generally recommend installing the latest version of PyTorch for your environment using the command recommended by the wizard here:
 <https://pytorch.org/get-started/locally/>

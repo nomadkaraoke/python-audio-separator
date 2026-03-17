@@ -6,6 +6,7 @@ Saves results to debug_results.txt
 
 import os
 import sys
+import traceback
 
 
 def main():
@@ -32,6 +33,7 @@ def main():
             output.append(f"Device: {torch.cuda.get_device_name(0)}")
     except Exception as e:
         output.append(f"Error: {e}")
+        output.append(f"Traceback:\n{traceback.format_exc()}")
 
     # Check ONNX Runtime
     output.append("\n=== ONNX Runtime Info ===")
@@ -42,6 +44,7 @@ def main():
         output.append(f"Available providers: {ort.get_available_providers()}")
     except Exception as e:
         output.append(f"Error: {e}")
+        output.append(f"Traceback:\n{traceback.format_exc()}")
 
     output.append("\n=== Done ===")
 
