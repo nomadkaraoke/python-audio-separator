@@ -21,12 +21,15 @@ jobs:
               - 'poetry.lock'
               - '.github/workflows/run-integration-tests.yaml'
 
-  # ── GPU test jobs (parallel across self-hosted runners) ─────────────
+  # ── Integration test jobs (parallel across 3 GPU runners) ──────────
   #
-  # Split into separate jobs so progress is visible as each completes.
-  # With multiple GPU runners, these run in parallel.
+  # Balanced to ~7 min each so all 3 finish around the same time.
+  #
+  #   ensemble-presets (~8 min): test_ensemble_integration (heaviest single file)
+  #   core-models      (~7 min): test_24bit + test_cli + test_separator_output + roformer tests
+  #   stems-and-quality (~6 min): test_ensemble_meaningful + test_multi_stem + test_remote_api
 
-  core-models:
+  ensemble-presets:
     needs: changes
     if: needs.changes.outputs.should_run == 'true'
     runs-on: [self-hosted, gpu]
@@ -62,22 +65,18 @@ jobs:
           if [ "$MODEL_COUNT" -lt 10 ]; then
             echo "::warning::Expected at least 10 pre-cached model files, found $MODEL_COUNT"
           fi
-      - name: "Run: 24-bit preservation, CLI integration, and output tests"
-        run: |
-          poetry run pytest -sv \
-            tests/integration/test_24bit_preservation.py \
-            tests/integration/test_cli_integration.py \
-            tests/integration/test_separator_output_integration.py
+      - name: "Run: ensemble preset tests (~8 min)"
+        run: poetry run pytest -sv tests/integration/test_ensemble_integration.py
       - name: Upload test artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: core-models-results
+          name: ensemble-presets-results
           path: |
             *.flac
             tests/*.flac
 
-  ensemble:
+  core-models:
     needs: changes
     if: needs.changes.outputs.should_run == 'true'
     runs-on: [self-hosted, gpu]
@@ -104,25 +103,33 @@ jobs:
           cache: poetry
       - name: Install Poetry dependencies (GPU)
         run: poetry install -E gpu
-      - name: "Run: ensemble preset + quality tests"
+      - name: "Run: 24-bit, CLI, output, and roformer tests (~7 min)"
         run: |
           poetry run pytest -sv \
-            tests/integration/test_ensemble_integration.py \
-            tests/integration/test_ensemble_meaningful.py
+            tests/integration/test_24bit_preservation.py \
+            tests/integration/test_cli_integration.py \
+            tests/integration/test_separator_output_integration.py \
+            tests/integration/test_roformer_audio_quality.py \
+            tests/integration/test_roformer_backward_compatibility.py \
+            tests/integration/test_roformer_config_validation.py \
+            tests/integration/test_roformer_e2e.py \
+            tests/integration/test_roformer_fallback_mechanism.py \
+            tests/integration/test_roformer_model_switching.py \
+            tests/integration/test_roformer_new_parameters.py
       - name: Upload test artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ensemble-results
+          name: core-models-results
           path: |
             *.flac
             tests/*.flac
 
-  multi-stem:
+  stems-and-quality:
     needs: changes
     if: needs.changes.outputs.should_run == 'true'
     runs-on: [self-hosted, gpu]
-    timeout-minutes: 10
+    timeout-minutes: 15
     env:
       AUDIO_SEPARATOR_MODEL_DIR: /opt/audio-separator-models
     steps:
@@ -145,62 +152,25 @@ jobs:
           cache: poetry
       - name: Install Poetry dependencies (GPU)
         run: poetry install -E gpu
-      - name: "Run: multi-stem separation, pipeline, and roformer tests"
+      - name: "Run: ensemble quality, multi-stem, and remote API tests (~6 min)"
         run: |
           poetry run pytest -sv \
+            tests/integration/test_ensemble_meaningful.py \
             tests/integration/test_multi_stem_verification.py \
-            tests/integration/test_roformer_audio_quality.py \
-            tests/integration/test_roformer_backward_compatibility.py \
-            tests/integration/test_roformer_config_validation.py \
-            tests/integration/test_roformer_e2e.py \
-            tests/integration/test_roformer_fallback_mechanism.py \
-            tests/integration/test_roformer_model_switching.py \
-            tests/integration/test_roformer_new_parameters.py
+            tests/integration/test_remote_api_integration.py
       - name: Upload test artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: multi-stem-results
+          name: stems-and-quality-results
           path: |
             *.flac
             tests/*.flac
 
-  # ── Fast tests (no GPU required, runs in parallel) ────────────────
-
-  fast-tests:
-    needs: changes
-    if: needs.changes.outputs.should_run == 'true'
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
-      - name: Install pipx and poetry
-        run: |
-          python -m pip install --user pipx && python -m pipx ensurepath
-          python -m pipx install poetry
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
-      - name: Install system dependencies
-        run: sudo apt-get update && sudo apt-get install -y ffmpeg libsamplerate0 libsamplerate-dev
-      - name: Set up Python with cache
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
-          cache: poetry
-      - name: Install Poetry dependencies
-        run: poetry install
-      - name: "Run: remote API tests"
-        run: |
-          poetry run pytest -sv \
-            tests/integration/test_remote_api_integration.py
-
   # ── Gate job for branch protection ────────────────────────────────
 
   integration-test:
-    needs: [changes, core-models, ensemble, multi-stem, fast-tests]
+    needs: [changes, ensemble-presets, core-models, stems-and-quality]
     if: always()
     runs-on: ubuntu-latest
     steps:
@@ -211,15 +181,13 @@ jobs:
             exit 0
           fi
 
-          echo "core-models:  ${{ needs.core-models.result }}"
-          echo "ensemble:     ${{ needs.ensemble.result }}"
-          echo "multi-stem:   ${{ needs.multi-stem.result }}"
-          echo "fast-tests:   ${{ needs.fast-tests.result }}"
+          echo "ensemble-presets:   ${{ needs.ensemble-presets.result }}"
+          echo "core-models:        ${{ needs.core-models.result }}"
+          echo "stems-and-quality:  ${{ needs.stems-and-quality.result }}"
 
-          if [[ "${{ needs.core-models.result }}" == "failure" ]] || \
-             [[ "${{ needs.ensemble.result }}" == "failure" ]] || \
-             [[ "${{ needs.multi-stem.result }}" == "failure" ]] || \
-             [[ "${{ needs.fast-tests.result }}" == "failure" ]]; then
+          if [[ "${{ needs.ensemble-presets.result }}" == "failure" ]] || \
+             [[ "${{ needs.core-models.result }}" == "failure" ]] || \
+             [[ "${{ needs.stems-and-quality.result }}" == "failure" ]]; then
             echo "Integration tests failed"
             exit 1
           fi
