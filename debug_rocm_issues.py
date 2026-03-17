@@ -23,7 +23,7 @@ def get_rocm_info():
     # Try to get ROCm version
     try:
         result = subprocess.run(
-            ["rocminfo"], capture_output=True, text=True, timeout=10
+            ["rocminfo"], capture_output=True, text=True, timeout=10, check=True
         )
         rocm_info["rocminfo"] = result.stdout
 
@@ -44,7 +44,7 @@ def get_rocm_info():
     # Try to get HIP version
     try:
         result = subprocess.run(
-            ["hipconfig"], capture_output=True, text=True, timeout=10
+            ["hipconfig"], capture_output=True, text=True, timeout=10, check=True
         )
         rocm_info["hipconfig"] = result.stdout
 
@@ -104,9 +104,40 @@ def get_system_info():
     return system_info
 
 
-# Set environment variables for ROCm
-os.environ["HSA_OVERRIDE_GFX_VERSION"] = "10.3.2"
-os.environ["PYTORCH_ROCM_ARCH"] = "gfx1030"
+def configure_rocm_env():
+    """Configure ROCm environment variables if not already set."""
+    if "HSA_OVERRIDE_GFX_VERSION" not in os.environ:
+        os.environ["HSA_OVERRIDE_GFX_VERSION"] = "10.3.2"
+
+    if "PYTORCH_ROCM_ARCH" not in os.environ:
+        # Try to detect GPU version from rocminfo
+        try:
+            result = subprocess.run(
+                ["rocminfo"],
+                capture_output=True,
+                text=True,
+                timeout=10,
+            )
+            # Look for gfx version in output
+            import re
+
+            match = re.search(r"gfx(\d+)", result.stdout)
+            if match:
+                gfx_version = match.group(1)
+                if gfx_version == "1032":
+                    os.environ["PYTORCH_ROCM_ARCH"] = "gfx1030"
+                elif gfx_version.startswith("11"):
+                    os.environ["PYTORCH_ROCM_ARCH"] = "gfx1100"
+                elif gfx_version.startswith("9"):
+                    os.environ["PYTORCH_ROCM_ARCH"] = "gfx90a"
+            else:
+                os.environ["PYTORCH_ROCM_ARCH"] = "gfx1030"
+        except Exception:
+            os.environ["PYTORCH_ROCM_ARCH"] = "gfx1030"
+
+
+# Configure ROCm environment at import time
+configure_rocm_env()
 
 
 def print_section(title):
@@ -229,12 +260,47 @@ def test_onnxruntime_setup():
         if "ROCMExecutionProvider" in providers:
             print("✓ ROCMExecutionProvider is available")
 
-            # Test creating a session with ROCm provider
+            # Create a simple model for testing (before any session creation)
             try:
+                import numpy as np
+                from onnx import TensorProto, helper
+
+                # Define a simple model that does matrix multiplication
+                node1 = helper.make_node(
+                    "MatMul",
+                    inputs=["input1", "input2"],
+                    outputs=["output"],
+                )
+
+                # Create the graph
+                graph = helper.make_graph(
+                    [node1],
+                    "test_graph",
+                    [
+                        helper.make_tensor_value_info(
+                            "input1", TensorProto.FLOAT, [2, 2]
+                        ),
+                        helper.make_tensor_value_info(
+                            "input2", TensorProto.FLOAT, [2, 2]
+                        ),
+                    ],
+                    [
+                        helper.make_tensor_value_info(
+                            "output", TensorProto.FLOAT, [2, 2]
+                        )
+                    ],
+                )
+
+                # Create the model
+                model = helper.make_model(graph)
+                model_serialized = model.SerializeToString()
+                print("✓ In-memory test model created")
+
+                # Test creating a session with ROCm provider
                 session_options = ort.SessionOptions()
                 session_options.log_severity_level = 2  # Warning level
                 session = ort.InferenceSession(
-                    "dummy_model.onnx",
+                    model_serialized,
                     sess_options=session_options,
                     providers=["ROCMExecutionProvider", "CPUExecutionProvider"],
                 )
@@ -242,47 +308,6 @@ def test_onnxruntime_setup():
 
                 # Test ROCm provider capabilities
                 try:
-                    # Create a simple model for testing
-                    import numpy as np
-
-                    # Define a simple model that does matrix multiplication
-                    from onnx import TensorProto, helper, numpy_helper
-
-                    # Define the graph
-                    node1 = helper.make_node(
-                        "MatMul",
-                        inputs=["input1", "input2"],
-                        outputs=["output"],
-                    )
-
-                    # Create the graph
-                    graph = helper.make_graph(
-                        [node1],
-                        "test_graph",
-                        [
-                            helper.make_tensor_value_info(
-                                "input1", TensorProto.FLOAT, [2, 2]
-                            ),
-                            helper.make_tensor_value_info(
-                                "input2", TensorProto.FLOAT, [2, 2]
-                            ),
-                        ],
-                        [
-                            helper.make_tensor_value_info(
-                                "output", TensorProto.FLOAT, [2, 2]
-                            )
-                        ],
-                    )
-
-                    # Create the model
-                    model = helper.make_model(graph)
-
-                    # Test inference
-                    session = ort.InferenceSession(
-                        model.SerializeToString(),
-                        providers=["ROCMExecutionProvider", "CPUExecutionProvider"],
-                    )
-
                     # Run inference
                     input1 = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
                     input2 = np.array([[5.0, 6.0], [7.0, 8.0]], dtype=np.float32)
@@ -315,26 +340,18 @@ def test_onnxruntime_setup():
             # Test creating a session with CUDA provider
             try:
                 session_options = ort.SessionOptions()
-                session = ort.InferenceSession(
-                    "dummy_model.onnx",
-                    sess_options=session_options,
-                    providers=["CUDAExecutionProvider", "CPUExecutionProvider"],
-                )
-                print("✓ Successfully created session with CUDAExecutionProvider")
-
-                # Test CUDA provider capabilities
+                # Reuse the model_serialized if available, otherwise create it
                 try:
-                    # Reuse the same model test as above
+                    _ = model_serialized
+                except NameError:
                     import numpy as np
                     from onnx import TensorProto, helper
 
-                    # Create the graph
                     node1 = helper.make_node(
                         "MatMul",
                         inputs=["input1", "input2"],
                         outputs=["output"],
                     )
-
                     graph = helper.make_graph(
                         [node1],
                         "test_graph",
@@ -352,11 +369,18 @@ def test_onnxruntime_setup():
                             )
                         ],
                     )
-
                     model = helper.make_model(graph)
+                    model_serialized = model.SerializeToString()
 
-                    # Test inference
-                    session = ort.InferenceSession(
+                session = ort.InferenceSession(
+                    model_serialized,
+                    sess_options=session_options,
+                    providers=["CUDAExecutionProvider", "CPUExecutionProvider"],
+                )
+                print("✓ Successfully created session with CUDAExecutionProvider")
+
+                # Test CUDA provider capabilities
+                try:
                         model.SerializeToString(),
                         providers=["CUDAExecutionProvider", "CPUExecutionProvider"],
                     )
@@ -403,8 +427,8 @@ def test_onnxruntime_setup():
                         contents = os.listdir(path)
                         if "lib" in contents or "bin" in contents:
                             print(f"  ROCm components detected in {path}")
-                    except:
-                        pass
+                    except OSError as e:
+                        print(f"  Unable to read {path}: {e}")
 
         except Exception as e:
             print(f"✗ ROCm environment check failed - {type(e).__name__}: {e}")
@@ -452,6 +476,9 @@ def test_stft_operations():
         # Test STFT on GPU
         x_gpu = torch.randn(2, 44100).to("cuda")
 
+        # Initialize sentinel for contiguity check
+        result_gpu = None
+
         # Try different n_fft values
         for n_fft in [1024, 2048]:
             hop_length = n_fft // 4
@@ -471,10 +498,12 @@ def test_stft_operations():
                 print(f"✗ STFT with n_fft={n_fft}: FAILED - {type(e).__name__}: {e}")
 
         # Test memory layout of result
-        if result_gpu.is_contiguous():
-            print(f"  Result is contiguous")
+        if result_gpu is None:
+            print("  Skipping contiguity check because all STFT attempts failed")
+        elif result_gpu.is_contiguous():
+            print("  Result is contiguous")
         else:
-            print(f"  Result is not contiguous")
+            print("  Result is not contiguous")
 
         # Test complex tensor operations
         print("\nTesting complex tensor operations...")
@@ -667,8 +696,10 @@ def test_memory_allocation():
                     tensors.append(tensor)
 
                     if len(tensors) % 5 == 0:  # Deallocate every 5th allocation
-                        del tensors[0]
-                        tensors = tensors[1:]
+                        del tensors[:]
+                        import gc
+
+                        gc.collect()
                         torch.cuda.empty_cache()
 
                 except RuntimeError as e:
@@ -682,8 +713,7 @@ def test_memory_allocation():
                 print("✓ Memory fragmentation test completed successfully")
 
             # Clean up remaining tensors
-            for t in tensors:
-                del t
+            tensors.clear()
             torch.cuda.empty_cache()
 
         except Exception as e:

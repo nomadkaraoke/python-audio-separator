@@ -3,4 +3,4 @@ import torch
 
 def is_rocm():
     """Check if PyTorch is built with ROCm support."""
-    return "+rocm" in torch.__version__
+    return getattr(torch.version, "hip", None) is not None
