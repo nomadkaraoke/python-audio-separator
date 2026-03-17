@@ -318,7 +318,7 @@ class TestSeparatorChunkingLogic:
 
         # Track state changes during _separate_file call
         state_during_processing = {}
-        def track_state(chunk_path, custom_names):
+        def track_state(chunk_path, custom_names=None):
             state_during_processing['chunk_duration'] = separator.chunk_duration
             state_during_processing['output_dir'] = separator.output_dir
             state_during_processing['model_output_dir'] = separator.model_instance.output_dir
@@ -500,8 +500,13 @@ class TestSeparatorChunkingLogic:
         mock_chunker_class.assert_called_once_with(15.0, separator.logger)
 
     @patch('audio_separator.separator.audio_chunking.AudioChunker')
-    def test_custom_output_names_parameter(self, mock_chunker_class):
-        """Test that custom_output_names parameter is handled correctly."""
+    def test_custom_output_names_applied_to_merged_output(self, mock_chunker_class):
+        """Test that custom_output_names are applied to final merged output, not per-chunk.
+
+        Regression test for issue #259: when custom_output_names were passed to
+        _separate_file for each chunk, chunks would get the same custom name and
+        overwrite each other, producing corrupted output.
+        """
         # Setup mock separator
         separator = Mock(spec=Separator)
         separator.logger = self.logger
@@ -511,18 +516,25 @@ class TestSeparatorChunkingLogic:
         separator.model_instance = Mock()
         separator.model_instance.output_dir = self.temp_dir
 
-        # Mock chunker behavior
+        # Mock chunker behavior - multiple chunks to reproduce the overwrite bug
         mock_chunker = Mock()
         mock_chunker_class.return_value = mock_chunker
         mock_chunker.split_audio.return_value = [
             os.path.join(self.temp_dir, "chunk_0000.wav"),
+            os.path.join(self.temp_dir, "chunk_0001.wav"),
+            os.path.join(self.temp_dir, "chunk_0002.wav"),
         ]
 
-        separator._separate_file = Mock(return_value=[
-            os.path.join(self.temp_dir, "chunk_0000_(Vocals).wav"),
+        separator._separate_file = Mock(side_effect=[
+            [os.path.join(self.temp_dir, "chunk_0000_(Vocals).wav"),
+             os.path.join(self.temp_dir, "chunk_0000_(Instrumental).wav")],
+            [os.path.join(self.temp_dir, "chunk_0001_(Vocals).wav"),
+             os.path.join(self.temp_dir, "chunk_0001_(Instrumental).wav")],
+            [os.path.join(self.temp_dir, "chunk_0002_(Vocals).wav"),
+             os.path.join(self.temp_dir, "chunk_0002_(Instrumental).wav")],
         ])
 
-        custom_names = {"Vocals": "my_custom_vocals"}
+        custom_names = {"Vocals": "my_custom_vocals", "Instrumental": "my_custom_instrumental"}
 
         # Import and call the actual method
         from audio_separator.separator.separator import Separator as RealSeparator
@@ -532,9 +544,25 @@ class TestSeparatorChunkingLogic:
             custom_output_names=custom_names
         )
 
-        # Verify custom name was used in output
-        assert len(result) == 1
-        assert "my_custom_vocals" in os.path.basename(result[0])
+        # Verify _separate_file was called WITHOUT custom_output_names for each chunk
+        # This is the core of the fix: chunks must use default naming to avoid overwrites
+        for call_args in separator._separate_file.call_args_list:
+            args, kwargs = call_args
+            assert len(args) == 1, f"_separate_file should be called with only chunk_path, got args: {args}"
+            assert "custom_output_names" not in kwargs, \
+                f"_separate_file should not receive custom_output_names, got kwargs: {kwargs}"
+
+        # Verify custom names were applied to the final merged output
+        assert len(result) == 2
+        output_basenames = [os.path.basename(path) for path in result]
+        assert any("my_custom_instrumental" in name for name in output_basenames)
+        assert any("my_custom_vocals" in name for name in output_basenames)
+
+        # Verify all 3 chunks were processed for each stem
+        assert mock_chunker.merge_chunks.call_count == 2
+        for merge_call in mock_chunker.merge_chunks.call_args_list:
+            chunk_list = merge_call[0][0]
+            assert len(chunk_list) == 3, f"Each stem should merge 3 chunks, got {len(chunk_list)}"
 
 
 class TestSeparatorChunkingEdgeCases:

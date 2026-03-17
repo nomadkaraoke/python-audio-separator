@@ -37,7 +37,8 @@ def main():
     info_params.add_argument("--list_limit", type=int, help="Limit the number of models shown")
     info_params.add_argument("--list_format", choices=["pretty", "json"], default="pretty", help="Format for listing models: 'pretty' for formatted output, 'json' for raw JSON dump")
 
-    model_filename_help = "Model to use for separation (default: %(default)s). Example: -m 2_HP-UVR.pth"
+    model_filename_help = "Model to use for separation (default: %(default)s). Example: -m model1.ckpt"
+    extra_models_help = "Additional models for ensembling. Requires -m for the primary model. Example: --extra_models model2.onnx model3.ckpt"
     output_format_help = "Output format for separated files, any common format (default: %(default)s). Example: --output_format=MP3"
     output_bitrate_help = "Output bitrate for separated files, any ffmpeg-compatible bitrate (default: %(default)s). Example: --output_bitrate=320k"
     output_dir_help = "Directory to write output files (default: <current dir>). Example: --output_dir=/app/separated"
@@ -46,6 +47,7 @@ def main():
 
     io_params = parser.add_argument_group("Separation I/O Params")
     io_params.add_argument("-m", "--model_filename", default="model_bs_roformer_ep_317_sdr_12.9755.ckpt", help=model_filename_help)
+    io_params.add_argument("--extra_models", nargs="+", default=None, help=extra_models_help)
     io_params.add_argument("--output_format", default="FLAC", help=output_format_help)
     io_params.add_argument("--output_bitrate", default=None, help=output_bitrate_help)
     io_params.add_argument("--output_dir", default=None, help=output_dir_help)
@@ -60,6 +62,10 @@ def main():
     use_soundfile_help = "Use soundfile to write audio output (default: %(default)s). Example: --use_soundfile"
     use_autocast_help = "Use PyTorch autocast for faster inference (default: %(default)s). Do not use for CPU inference. Example: --use_autocast"
     chunk_duration_help = "Split audio into chunks of this duration in seconds (default: %(default)s = no chunking). Useful for processing very long audio files on systems with limited memory. Recommended: 600 (10 minutes) for files >1 hour. Chunks are concatenated without overlap/crossfade. Example: --chunk_duration=600"
+    ensemble_algorithm_help = "Algorithm to use for ensembling multiple models (default: avg_wave). Choices: avg_wave, median_wave, min_wave, max_wave, avg_fft, median_fft, min_fft, max_fft, uvr_max_spec, uvr_min_spec, ensemble_wav. Example: --ensemble_algorithm=uvr_max_spec"
+    ensemble_weights_help = "Weights for ensembling multiple models (default: equal). Number of weights must match number of models. Example: --ensemble_weights 1.0 0.5"
+    ensemble_preset_help = "Use a named ensemble preset (e.g. vocal_balanced, karaoke). Presets define models + algorithm. Use --list_presets to see all. Example: --ensemble_preset=vocal_balanced"
+    list_presets_help = "List all available ensemble presets and exit."
     custom_output_names_help = 'Custom names for all output files in JSON format (default: %(default)s). Example: --custom_output_names=\'{"Vocals": "vocals_output", "Drums": "drums_output"}\''
 
     common_params = parser.add_argument_group("Common Separation Parameters")
@@ -71,6 +77,15 @@ def main():
     common_params.add_argument("--use_soundfile", action="store_true", help=use_soundfile_help)
     common_params.add_argument("--use_autocast", action="store_true", help=use_autocast_help)
     common_params.add_argument("--chunk_duration", type=float, default=None, help=chunk_duration_help)
+    common_params.add_argument(
+        "--ensemble_algorithm",
+        default=None,
+        choices=["avg_wave", "median_wave", "min_wave", "max_wave", "avg_fft", "median_fft", "min_fft", "max_fft", "uvr_max_spec", "uvr_min_spec", "ensemble_wav"],
+        help=ensemble_algorithm_help,
+    )
+    common_params.add_argument("--ensemble_weights", nargs="+", type=float, default=None, help=ensemble_weights_help)
+    common_params.add_argument("--ensemble_preset", default=None, help=ensemble_preset_help)
+    common_params.add_argument("--list_presets", action="store_true", help=list_presets_help)
     common_params.add_argument("--custom_output_names", type=json.loads, default=None, help=custom_output_names_help)
 
     mdx_segment_size_help = "Larger consumes more resources, but may give better results (default: %(default)s). Example: --mdx_segment_size=256"
@@ -174,11 +189,41 @@ def main():
 
         sys.exit(0)
 
+    if args.list_presets:
+        separator = Separator(info_only=True)
+        presets = separator.list_ensemble_presets()
+
+        if not presets:
+            print("No ensemble presets available.")
+            sys.exit(0)
+
+        # Calculate column widths
+        id_width = max(len("Preset ID"), max(len(k) for k in presets.keys()))
+        desc_width = max(len("Description"), max(len(p.get("description", "")[:60]) for p in presets.values()))
+        models_width = len("Models")
+        algo_width = max(len("Algorithm"), max(len(p.get("algorithm", "")) for p in presets.values()))
+        total_width = id_width + desc_width + models_width + algo_width + 12
+
+        print("-" * total_width)
+        print(f"{'Preset ID':<{id_width}}  {'Description':<{desc_width}}  {'Models':<{models_width}}  {'Algorithm'}")
+        print("-" * total_width)
+
+        for preset_id, preset in presets.items():
+            desc = preset.get("description", "")[:60]
+            num_models = len(preset.get("models", []))
+            algo = preset.get("algorithm", "")
+            print(f"{preset_id:<{id_width}}  {desc:<{desc_width}}  {num_models:<{models_width}}  {algo}")
+
+        sys.exit(0)
+
     if args.download_model_only:
-        logger.info(f"Separator version {package_version} downloading model {args.model_filename} to directory {args.model_file_dir}")
+        models_to_download = [args.model_filename] + (args.extra_models or [])
         separator = Separator(log_formatter=log_formatter, log_level=log_level, model_file_dir=args.model_file_dir)
-        separator.download_model_and_data(args.model_filename)
-        logger.info(f"Model {args.model_filename} downloaded successfully.")
+        for model in models_to_download:
+            logger.info(f"Separator version {package_version} downloading model {model} to directory {args.model_file_dir}")
+            separator.download_model_and_data(model)
+
+        logger.info(f"Model {', '.join(models_to_download)} downloaded successfully.")
         sys.exit(0)
 
     audio_files = list(getattr(args, "audio_files", []))
@@ -203,6 +248,9 @@ def main():
         use_soundfile=args.use_soundfile,
         use_autocast=args.use_autocast,
         chunk_duration=args.chunk_duration,
+        ensemble_algorithm=args.ensemble_algorithm,
+        ensemble_weights=args.ensemble_weights,
+        ensemble_preset=args.ensemble_preset,
         mdx_params={
             "hop_length": args.mdx_hop_length,
             "segment_size": args.mdx_segment_size,
@@ -234,7 +282,15 @@ def main():
         },
     )
 
-    separator.load_model(model_filename=args.model_filename)
+    # Combine primary model with any extra models for ensembling
+    # If a preset is active and no explicit models were provided, use preset models via default
+    if args.ensemble_preset and args.model_filename == "model_bs_roformer_ep_317_sdr_12.9755.ckpt" and not args.extra_models:
+        separator.load_model()
+    else:
+        model_filenames = [args.model_filename] + (args.extra_models or [])
+        if len(model_filenames) == 1:
+            model_filenames = model_filenames[0]
+        separator.load_model(model_filename=model_filenames)
 
     output_files = separator.separate(audio_files, custom_output_names=args.custom_output_names)
     logger.info(f"Separation complete! Output file(s): {' '.join(output_files)}")

@@ -11,6 +11,8 @@ import warnings
 import importlib
 import io
 import re
+import librosa
+import numpy as np
 from typing import Optional
 
 import hashlib
@@ -21,6 +23,30 @@ import torch
 import torch.amp.autocast_mode as autocast_mode
 import onnxruntime as ort
 from tqdm import tqdm
+from audio_separator.separator.ensembler import Ensembler
+
+# Mapping of common stem name variations to canonical names for ensemble grouping.
+STEM_NAME_MAP = {
+    "vocals": "Vocals",
+    "instrumental": "Instrumental",
+    "inst": "Instrumental",
+    "karaoke": "Instrumental",
+    "other": "Other",
+    "no_vocals": "Instrumental",
+    "drums": "Drums",
+    "bass": "Bass",
+    "guitar": "Guitar",
+    "piano": "Piano",
+    "synthesizer": "Synthesizer",
+    "strings": "Strings",
+    "woodwinds": "Woodwinds",
+    "brass": "Brass",
+    "wind inst": "Wind Inst",
+    "lead vocals": "Lead Vocals",
+    "backing vocals": "Backing Vocals",
+    "primary stem": "Primary Stem",
+    "secondary stem": "Secondary Stem",
+}
 
 
 class Separator:
@@ -240,6 +266,25 @@ class Separator:
             if chunk_duration <= 0:
                 raise ValueError("chunk_duration must be greater than 0")
 
+        self.ensemble_algorithm = ensemble_algorithm
+        self.ensemble_weights = ensemble_weights
+        self.ensemble_preset = ensemble_preset
+        self._ensemble_preset_models = None
+
+        # If an ensemble preset is specified, load it and apply defaults
+        if ensemble_preset is not None:
+            preset_data = self._load_ensemble_preset(ensemble_preset)
+            self._ensemble_preset_models = preset_data["models"]
+            # Preset values are defaults — explicit user args (non-None) take priority
+            if ensemble_algorithm is None:
+                self.ensemble_algorithm = preset_data["algorithm"]
+            if ensemble_weights is None and preset_data.get("weights") is not None:
+                self.ensemble_weights = preset_data["weights"]
+
+        # Apply default algorithm if still not set (no preset, no explicit arg)
+        if self.ensemble_algorithm is None:
+            self.ensemble_algorithm = "avg_wave"
+
         # These are parameters which users may want to configure so we expose them to the top-level Separator class,
         # even though they are specific to a single model architecture
         self.arch_specific_params = {
@@ -256,12 +301,72 @@ class Separator:
 
         self.onnx_execution_provider = None
         self.model_instance = None
+        self.model_filename = None
+        self.model_filenames = []
 
         self.model_is_uvr_vip = False
         self.model_friendly_name = None
 
         if not info_only:
             self.setup_accelerated_inferencing_device()
+
+    VALID_ENSEMBLE_ALGORITHMS = [
+        "avg_wave", "median_wave", "min_wave", "max_wave",
+        "avg_fft", "median_fft", "min_fft", "max_fft",
+        "uvr_max_spec", "uvr_min_spec", "ensemble_wav",
+    ]
+
+    def _load_ensemble_preset(self, preset_name):
+        """
+        Load and validate an ensemble preset from ensemble_presets.json.
+
+        Returns a dict with keys: name, description, models, algorithm, weights, contributor.
+        Raises ValueError if the preset is not found or fails validation.
+        """
+        try:
+            with resources.open_text("audio_separator", "ensemble_presets.json") as f:
+                presets_data = json.load(f)
+        except FileNotFoundError:
+            raise ValueError("Ensemble presets file not found. The package may be corrupted or improperly installed.")
+
+        presets = presets_data.get("presets", {})
+        if preset_name not in presets:
+            available = ", ".join(sorted(presets.keys()))
+            raise ValueError(f"Unknown ensemble preset: '{preset_name}'. Available presets: {available}")
+
+        preset = presets[preset_name]
+
+        # Validate models
+        models = preset.get("models", [])
+        if not isinstance(models, list) or len(models) < 2:
+            raise ValueError(f"Ensemble preset '{preset_name}' must specify at least 2 models, got {len(models) if isinstance(models, list) else 0}")
+
+        # Validate algorithm
+        algorithm = preset.get("algorithm", "avg_wave")
+        if algorithm not in self.VALID_ENSEMBLE_ALGORITHMS:
+            raise ValueError(f"Ensemble preset '{preset_name}' has unknown algorithm: '{algorithm}'")
+
+        # Validate weights
+        weights = preset.get("weights")
+        if weights is not None:
+            if not isinstance(weights, list) or len(weights) != len(models):
+                raise ValueError(f"Ensemble preset '{preset_name}' weights length ({len(weights) if isinstance(weights, list) else 'N/A'}) must match models count ({len(models)})")
+
+        self.logger.info(f"Loaded ensemble preset '{preset_name}': {preset.get('name', preset_name)} — {preset.get('description', '')}")
+        return preset
+
+    def list_ensemble_presets(self):
+        """
+        List all available ensemble presets.
+
+        Returns a dict mapping preset IDs to their full preset data.
+        """
+        try:
+            with resources.open_text("audio_separator", "ensemble_presets.json") as f:
+                presets_data = json.load(f)
+        except FileNotFoundError:
+            return {}
+        return presets_data.get("presets", {})
 
     def setup_accelerated_inferencing_device(self):
         """
@@ -1003,6 +1108,21 @@ class Separator:
         This method instantiates the architecture-specific separation class,
         loading the separation model into memory, downloading it first if necessary.
         """
+        # If an ensemble preset was loaded and no explicit model list was provided, use preset models
+        if self._ensemble_preset_models is not None and model_filename == "model_bs_roformer_ep_317_sdr_12.9755.ckpt":
+            model_filename = self._ensemble_preset_models
+
+        if isinstance(model_filename, list):
+            if len(model_filename) > 1:
+                self.model_filename = list(model_filename)
+                self.model_filenames = list(model_filename)
+                self.logger.info(f"Multiple models specified for ensembling: {self.model_filenames}")
+                return
+            model_filename = model_filename[0]
+
+        self.model_filename = model_filename
+        self.model_filenames = [model_filename]
+
         self.logger.info(f"Loading model {model_filename}...")
 
         load_model_start_time = time.perf_counter()
@@ -1089,9 +1209,7 @@ class Separator:
         )
         separator_class = getattr(module, class_name)
 
-        self.logger.debug(
-            f"Instantiating separator class for model type {model_type}: {separator_class}"
-        )
+        self.logger.debug(f"Instantiating separator class for model type {model_type}: {separator_class}")
 
         try:
             self.model_instance = separator_class(
@@ -1147,6 +1265,9 @@ class Separator:
             raise ValueError(
                 "Initialization failed or model not loaded. Please load a model before attempting to separate."
             )
+
+        if isinstance(self.model_filename, list) and len(self.model_filename) > 1:
+            return self._separate_ensemble(audio_file_path, custom_output_names)
 
         # If audio_file_path is a string, convert it to a list for uniform processing
         if isinstance(audio_file_path, str):
@@ -1317,7 +1438,7 @@ class Separator:
                     self.model_instance.output_dir = temp_dir
 
                 try:
-                    output_files = self._separate_file(chunk_path, custom_output_names)
+                    output_files = self._separate_file(chunk_path)
 
                     # Dynamically group chunks by stem name
                     for stem_path in output_files:
@@ -1505,3 +1626,172 @@ class Separator:
                 return dict(sorted(filtered_list.items(), key=sort_key, reverse=True))
 
         return simplified_list
+
+    def _separate_ensemble(self, audio_file_path, custom_output_names=None):
+        """
+        Internal method to handle ensembling of multiple models.
+        """
+        import tempfile
+        import shutil
+
+        if isinstance(audio_file_path, str):
+            audio_file_path = [audio_file_path]
+
+        output_files = []
+
+        original_model_filename = self.model_filename
+        original_model_filenames = self.model_filenames
+
+        for path in audio_file_path:
+            self.logger.info(f"Ensemble processing for file: {path}")
+
+            # Create temporary directory for intermediate stems
+            temp_dir = tempfile.mkdtemp(prefix="audio-separator-ensemble-")
+            self.logger.debug(f"Created temporary directory for ensemble: {temp_dir}")
+
+            try:
+                # Store paths of intermediate stems grouped by stem name
+                # { "Vocals": ["temp_dir/model1_Vocals.wav", "temp_dir/model2_Vocals.wav"], ... }
+                stems_by_type = {}
+                original_output_dir = self.output_dir
+
+                for model_filename in original_model_filenames:
+                    self.logger.info(f"Processing with model: {model_filename}")
+
+                    # Load the model
+                    self.load_model(model_filename)
+
+                    # Set temporary output directory for this model
+                    self.output_dir = temp_dir
+                    if self.model_instance:
+                        self.model_instance.output_dir = temp_dir
+
+                    try:
+                        # Perform separation
+                        model_stems = self._separate_file(path, custom_output_names)
+
+                        # Extract and normalize stem names from this model's outputs
+                        model_stem_names = []
+                        for stem_path in model_stems:
+                            filename = os.path.basename(stem_path)
+                            match = re.search(r'_\(([^)]+)\)', filename)
+                            stem_name = match.group(1) if match else "Unknown"
+                            model_stem_names.append(stem_name)
+
+                        # Normalize stem names with context about how many stems this model produced
+                        num_model_stems = len(model_stem_names)
+                        has_vocal_stem = any(
+                            "vocal" in s.lower() or s.lower() in ("vocals",)
+                            for s in model_stem_names
+                        )
+
+                        for stem_path, raw_stem_name in zip(model_stems, model_stem_names):
+                            lower_name = raw_stem_name.lower()
+
+                            if "vocal" in lower_name and "lead" not in lower_name and "backing" not in lower_name:
+                                stem_name = "Vocals"
+                            elif lower_name == "other" and num_model_stems == 2 and has_vocal_stem:
+                                # For 2-stem models where one stem is vocals, "other" is the instrumental
+                                stem_name = "Instrumental"
+                                self.logger.debug(f"Mapped 'other' → 'Instrumental' for 2-stem model (model produced: {model_stem_names})")
+                            elif lower_name in STEM_NAME_MAP:
+                                stem_name = STEM_NAME_MAP[lower_name]
+                            else:
+                                stem_name = raw_stem_name.title()
+
+                            if stem_name not in stems_by_type:
+                                stems_by_type[stem_name] = []
+
+                            abs_path = stem_path if os.path.isabs(stem_path) else os.path.join(temp_dir, stem_path)
+                            stems_by_type[stem_name].append(abs_path)
+                    finally:
+                        self.output_dir = original_output_dir
+
+                # Perform ensembling for each stem type
+                ensembler = Ensembler(self.logger, self.ensemble_algorithm, self.ensemble_weights)
+                base_name = os.path.splitext(os.path.basename(path))[0]
+
+                for stem_name, stem_paths in stems_by_type.items():
+                    self.logger.info(f"Ensembling {len(stem_paths)} stems for type: {stem_name}")
+
+                    waveforms = []
+                    original_channels = None
+                    for sp in stem_paths:
+                        wav, _ = librosa.load(sp, mono=False, sr=self.sample_rate)
+                        if wav.ndim == 1:
+                            if original_channels is None:
+                                original_channels = 1
+                            wav = np.asfortranarray([wav, wav])
+                        elif original_channels is None:
+                            original_channels = wav.shape[0]
+                        waveforms.append(wav)
+
+                    ensembled_wav = ensembler.ensemble(waveforms)
+
+                    # Restore original channel count (avoid fake stereo from mono input)
+                    if original_channels == 1 and ensembled_wav.shape[0] > 1:
+                        ensembled_wav = ensembled_wav[:1, :]
+
+                    # Determine output filename
+                    if custom_output_names and stem_name in custom_output_names:
+                        output_filename = custom_output_names[stem_name]
+                    elif self.ensemble_preset:
+                        output_filename = f"{base_name}_({stem_name})_preset_{self.ensemble_preset}"
+                    else:
+                        # Build descriptive name from model filenames
+                        model_slugs = []
+                        for mf in original_model_filenames:
+                            # Remove extension, then truncate to keep filenames reasonable
+                            name = os.path.splitext(mf)[0]
+                            # Remove common verbose prefixes
+                            for prefix in ["mel_band_roformer_", "melband_roformer_", "bs_roformer_", "model_bs_roformer_", "UVR-MDX-NET-", "UVR_MDXNET_"]:
+                                if name.startswith(prefix):
+                                    name = name[len(prefix):]
+                                    break
+                            model_slugs.append(name[:12])
+                        slugs_str = "_".join(model_slugs)
+                        output_filename = f"{base_name}_({stem_name})_custom_ensemble_{slugs_str}"
+
+                    output_path = f"{output_filename}.{self.output_format.lower()}"
+
+                    # Use a dummy model instance to write the audio if necessary,
+                    # or just use the last model instance we had.
+                    # Actually, we can use the write_audio method from the last model_instance
+                    if self.model_instance:
+                        # Ensure the model instance has the correct audio_file_path and output_dir
+                        self.model_instance.audio_file_path = path
+                        self.model_instance.output_dir = self.output_dir
+                        self.model_instance.write_audio(output_path, ensembled_wav.T)
+                        final_output_path = os.path.join(self.output_dir, output_path)
+                        output_files.append(final_output_path)
+                    else:
+                        # Fallback writer if no model instance is available
+                        self.logger.warning(f"No model instance available to write ensembled audio. Using fallback writer for {output_path}")
+                        final_output_path = os.path.join(self.output_dir, output_path)
+
+                        import soundfile as sf
+
+                        try:
+                            self.logger.debug(f"Attempting to write ensembled audio to {final_output_path}...")
+                            sf.write(final_output_path, ensembled_wav.T, self.sample_rate)
+                        except Exception as e:
+                            self.logger.error(f"Error writing {self.output_format} format: {e}. Falling back to WAV.")
+                            final_output_path = final_output_path.rsplit(".", 1)[0] + ".wav"
+                            sf.write(final_output_path, ensembled_wav.T, self.sample_rate)
+
+                        output_files.append(final_output_path)
+
+            finally:
+                # Restore original model filenames state
+                self.model_filename = original_model_filename
+                self.model_filenames = original_model_filenames
+
+                # Clear model instance reference
+                self.model_instance = None
+
+                # Clean up temporary directory
+                if os.path.exists(temp_dir):
+                    self.logger.debug(f"Cleaning up temporary directory: {temp_dir}")
+                    shutil.rmtree(temp_dir, ignore_errors=True)
+
+        return output_files

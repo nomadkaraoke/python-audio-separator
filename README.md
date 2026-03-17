@@ -1,5 +1,5 @@
 <div align="center">
- 
+
 # 🎶 Audio Separator 🎶
 
 [![PyPI version](https://badge.fury.io/py/audio-separator.svg)](https://badge.fury.io/py/audio-separator)
@@ -393,6 +393,101 @@ The chunking feature supports all model types:
 
 Chunks are concatenated without crossfading, which may result in minor artifacts at chunk boundaries in rare cases. For most use cases, these are not noticeable. The simple concatenation approach keeps processing time minimal while solving out-of-memory issues.
 
+### Ensembling Multiple Models
+
+You can combine the results of multiple models to improve separation quality. This will run each model and then combine their outputs using a specified algorithm.
+
+#### CLI Usage
+
+Use `-m` for the primary model and `--extra_models` for additional models. You can also specify the ensemble algorithm using `--ensemble_algorithm`.
+
+```sh
+# Ensemble two models using the default 'avg_wave' algorithm
+audio-separator audio.wav -m model1.ckpt --extra_models model2.onnx
+
+# Ensemble multiple models using a specific algorithm
+audio-separator audio.wav -m model1.ckpt --extra_models model2.onnx model3.ckpt --ensemble_algorithm max_fft
+
+# With custom weights (must match the number of models)
+audio-separator audio.wav -m model1.ckpt --extra_models model2.onnx --ensemble_weights 2.0 1.0
+```
+
+#### Python API Usage
+
+```python
+from audio_separator.separator import Separator
+
+# Initialize the Separator class with custom parameters
+separator = Separator(
+    output_dir='output',
+    ensemble_algorithm='avg_wave'
+)
+
+# List of models to ensemble
+# Note: These models will be downloaded automatically if not present
+models = [
+    'UVR-MDX-NET-Inst_HQ_3.onnx',
+    'UVR_MDXNET_KARA_2.onnx'
+]
+
+# Specify multiple models for ensembling
+separator.load_model(model_filename=models)
+
+# Perform separation
+output_files = separator.separate('audio.wav')
+```
+
+#### Supported Ensemble Algorithms
+- `avg_wave`: Weighted average of waveforms (default)
+- `median_wave`: Median of waveforms
+- `min_wave`: Minimum of waveforms
+- `max_wave`: Maximum of waveforms
+- `avg_fft`: Weighted average of spectrograms
+- `median_fft`: Median of spectrograms
+- `min_fft`: Minimum of spectrograms
+- `max_fft`: Maximum of spectrograms
+- `uvr_max_spec`: UVR-based maximum spectrogram ensemble
+- `uvr_min_spec`: UVR-based minimum spectrogram ensemble
+- `ensemble_wav`: UVR-based least noisy chunk ensemble
+
+#### Ensemble Presets
+
+Instead of specifying models and algorithms manually, you can use curated presets based on community-tested combinations:
+
+```sh
+# List available presets
+audio-separator --list_presets
+
+# Use a preset (models and algorithm are configured automatically)
+audio-separator audio.wav --ensemble_preset vocal_balanced
+
+# Override a preset's algorithm
+audio-separator audio.wav --ensemble_preset vocal_balanced --ensemble_algorithm max_fft
+```
+
+**Python API:**
+```python
+separator = Separator(output_dir='output', ensemble_preset='vocal_balanced')
+separator.load_model()  # Uses preset's models automatically
+output_files = separator.separate('audio.wav')
+```
+
+Available presets:
+
+| Preset | Use Case | Models | Algorithm |
+|--------|----------|--------|-----------|
+| `instrumental_clean` | Cleanest instrumentals, minimal vocal bleed | 2 | `uvr_max_spec` |
+| `instrumental_full` | Maximum instrument preservation | 2 | `uvr_max_spec` |
+| `instrumental_balanced` | Good noise/fullness balance | 2 | `uvr_max_spec` |
+| `instrumental_low_resource` | Fast, low VRAM | 2 | `avg_fft` |
+| `vocal_balanced` | Best overall vocal quality | 2 | `avg_fft` |
+| `vocal_clean` | Minimal instrument bleed | 2 | `min_fft` |
+| `vocal_full` | Maximum vocal capture | 2 | `max_fft` |
+| `vocal_rvc` | Optimized for RVC/AI training | 2 | `avg_wave` |
+| `karaoke` | Lead vocal removal | 3 | `avg_wave` |
+
+Presets are defined in `audio_separator/ensemble_presets.json` — contributions welcome via PR!
+
 ### Full command-line interface options
 
 ```sh
@@ -598,8 +693,11 @@ You can also rename specific stems:
 - **`use_autocast`:** (Optional) Flag to use PyTorch autocast for faster inference. Do not use for CPU inference. `Default: False`
 - **`mdx_params`:** (Optional) MDX Architecture Specific Attributes & Defaults. `Default: {"hop_length": 1024, "segment_size": 256, "overlap": 0.25, "batch_size": 1, "enable_denoise": False}`
 - **`vr_params`:** (Optional) VR Architecture Specific Attributes & Defaults. `Default: {"batch_size": 1, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False}`
-- **`demucs_params`:** (Optional) Demucs Architecture Specific Attributes & Defaults. `Default: {"segment_size": "Default", "shifts": 2, "overlap": 0.25, "segments_enabled": True}`
+- **`demucs_params`:** (Optional) Demucs Architecture Specific Attributes & Defaults. `Default: {"segment_size": "Default", "shifts": 2, "overlap": 0.25, "segments_enabled": True}` _(Note: `segment_size` "Default" uses the model's internal default, typically 40 for older Demucs models and 10 for Demucs v4/htdemucs)_
 - **`mdxc_params`:** (Optional) MDXC Architecture Specific Attributes & Defaults. `Default: {"segment_size": 256, "override_model_segment_size": False, "batch_size": 1, "overlap": 8, "pitch_shift": 0}`
+- **`ensemble_algorithm`:** (Optional) Algorithm to use for ensembling multiple models. `Default: 'avg_wave'`
+- **`ensemble_weights`:** (Optional) Weights for each model in the ensemble. `Default: None` (equal weights)
+- **`ensemble_preset`:** (Optional) Named ensemble preset (e.g. `'vocal_balanced'`, `'karaoke'`). Sets models, algorithm, and weights automatically. Use `Separator(info_only=True).list_ensemble_presets()` to see all. `Default: None`
 
 ## Remote API Usage 🌐
 
