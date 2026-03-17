@@ -145,10 +145,17 @@ jobs:
           cache: poetry
       - name: Install Poetry dependencies (GPU)
         run: poetry install -E gpu
-      - name: "Run: multi-stem separation + pipeline tests"
+      - name: "Run: multi-stem separation, pipeline, and roformer tests"
         run: |
           poetry run pytest -sv \
-            tests/integration/test_multi_stem_verification.py
+            tests/integration/test_multi_stem_verification.py \
+            tests/integration/test_roformer_audio_quality.py \
+            tests/integration/test_roformer_backward_compatibility.py \
+            tests/integration/test_roformer_config_validation.py \
+            tests/integration/test_roformer_e2e.py \
+            tests/integration/test_roformer_fallback_mechanism.py \
+            tests/integration/test_roformer_model_switching.py \
+            tests/integration/test_roformer_new_parameters.py
       - name: Upload test artifacts
         if: always()
         uses: actions/upload-artifact@v4
@@ -185,17 +192,10 @@ jobs:
           cache: poetry
       - name: Install Poetry dependencies
         run: poetry install
-      - name: "Run: remote API and roformer tests"
+      - name: "Run: remote API tests"
         run: |
           poetry run pytest -sv \
-            tests/integration/test_remote_api_integration.py \
-            tests/integration/test_roformer_audio_quality.py \
-            tests/integration/test_roformer_backward_compatibility.py \
-            tests/integration/test_roformer_config_validation.py \
-            tests/integration/test_roformer_e2e.py \
-            tests/integration/test_roformer_fallback_mechanism.py \
-            tests/integration/test_roformer_model_switching.py \
-            tests/integration/test_roformer_new_parameters.py
+            tests/integration/test_remote_api_integration.py
 
   # ── Gate job for branch protection ────────────────────────────────
 
