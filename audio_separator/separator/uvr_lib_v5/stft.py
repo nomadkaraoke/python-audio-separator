@@ -1,9 +1,6 @@
 import torch
 
-
-def is_rocm():
-    """Check if PyTorch is built with ROCm support."""
-    return "+rocm" in torch.__version__
+from audio_separator.separator.uvr_lib_v5.utils import is_rocm
 
 
 class STFT:

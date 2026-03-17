@@ -2,10 +2,7 @@ import torch
 import torch.nn as nn
 from functools import partial
 
-
-def is_rocm():
-    """Check if PyTorch is built with ROCm support."""
-    return "+rocm" in torch.__version__
+from audio_separator.separator.uvr_lib_v5.utils import is_rocm
 
 
 class STFT:
@@ -19,9 +16,7 @@ class STFT:
     def __call__(self, x):
 
         x_is_non_cuda_device = x.device.type not in ["cuda", "cpu"]
-        run_on_cpu = (
-            False  # Always run on GPU for ROCm, let PyTorch handle device placement
-        )
+        run_on_cpu = x_is_non_cuda_device
 
         if run_on_cpu:
             x = x.cpu()
@@ -39,26 +34,16 @@ class STFT:
         c, t = x.shape[-2:]
         x = x.reshape([-1, t])
 
-        try:
-            x = torch.stft(
-                x,
-                n_fft=self.n_fft,
-                hop_length=self.hop_length,
-                window=window,
-                center=True,
-                return_complex=False,
-            )
-        except Exception as e:
-            # Fallback: try with return_complex=True
-            x_complex = torch.stft(
-                x,
-                n_fft=self.n_fft,
-                hop_length=self.hop_length,
-                window=window,
-                center=True,
-                return_complex=True,
-            )
-            x = torch.stack([x_complex.real, x_complex.imag], dim=-1)
+        # Use return_complex=True for ROCm compatibility
+        x_complex = torch.stft(
+            x,
+            n_fft=self.n_fft,
+            hop_length=self.hop_length,
+            window=window,
+            center=True,
+            return_complex=True,
+        )
+        x = torch.stack([x_complex.real, x_complex.imag], dim=-1)
 
         x = x.permute([0, 3, 1, 2])
         x = x.reshape([*batch_dims, c, 2, -1, x.shape[-1]]).reshape(
@@ -73,9 +58,7 @@ class STFT:
     def inverse(self, x):
 
         x_is_non_cuda_device = x.device.type not in ["cuda", "cpu"]
-        run_on_cpu = (
-            False  # Always run on GPU for ROCm, let PyTorch handle device placement
-        )
+        run_on_cpu = x_is_non_cuda_device
 
         if run_on_cpu:
             x = x.cpu()

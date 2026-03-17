@@ -48,7 +48,7 @@ class ScaledEmbedding(nn.Module):
         self.embedding = nn.Embedding(num_embeddings, embedding_dim)
         if smooth:
             weight = torch.cumsum(self.embedding.weight.data, dim=0)
-            # when summing gaussian, overscale raises as sqrt(n), so we nornalize by that.
+            # when summing gaussian, overscale raises as sqrt(n), so we normalize by that.
             weight = (
                 weight / torch.arange(1, num_embeddings + 1).to(weight).sqrt()[:, None]
             )
@@ -194,7 +194,7 @@ class MultiWrap(nn.Module):
         assert layer.pad
         if not self.conv:
             assert not layer.context_freq
-        for k in range(len(split_ratios) + 1):
+        for _ in range(len(split_ratios) + 1):
             lay = deepcopy(layer)
             if self.conv:
                 lay.conv.padding = (0, 0)
@@ -211,7 +211,7 @@ class MultiWrap(nn.Module):
         ratios = list(self.split_ratios) + [1]
         start = 0
         outs = []
-        for ratio, layer in zip(ratios, self.layers):
+        for ratio, layer in zip(ratios, self.layers, strict=True):
             if self.conv:
                 pad = layer.kernel_size // 4
                 if ratio == 1:
@@ -631,7 +631,7 @@ class HDemucsROCm(nn.Module):
             # Having all convolution operations follow this convention allow to easily
             # align the time and frequency branches later on.
             assert hl == nfft // 4
-            le = int(math.ceil(x.shape[-1] / hl))
+            le = math.ceil(x.shape[-1] / hl)
             pad = hl // 2 * 3
             if not self.hybrid_old:
                 x = pad1d(x, (pad, pad + le * hl - x.shape[-1]), mode="reflect")

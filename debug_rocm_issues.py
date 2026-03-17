@@ -104,8 +104,9 @@ def get_system_info():
     return system_info
 
 
-# Set environment variable to try to work around gfx1032 issue
-os.environ["HSA_OVERRIDE_GFX_VERSION"] = "10.3.0"
+# Set environment variables for ROCm
+os.environ["HSA_OVERRIDE_GFX_VERSION"] = "10.3.2"
+os.environ["PYTORCH_ROCM_ARCH"] = "gfx1030"
 
 
 def print_section(title):
@@ -1054,22 +1055,48 @@ def test_model_types():
                         "num_scales": 2,
                         "scale": [2, 2],
                         "num_blocks_per_scale": 2,
-                        "num_channels": 32,
-                        "growth": 16,
+                        "num_channels": 16,
+                        "growth": 8,
                         "bottleneck_factor": 4,
                     },
                 }
             )
 
             print("Creating TFC_TDF_net model...")
-            model = TFC_TDF_net(test_config, device="cuda")
-            print(f"Model created. Model device: {next(model.parameters()).device}")
+            try:
+                model = TFC_TDF_net(test_config, device="cuda")
+                print(f"Model created. Model device: {next(model.parameters()).device}")
+
+                # Print first few parameters to verify model creation
+                for i, (name, param) in enumerate(model.named_parameters()):
+                    if i < 3:  # Just show first few
+                        print(f"  {name}: {param.shape} {param.device}")
+                    else:
+                        print("  ...")
+                        break
+
+            except Exception as e:
+                print(f"✗ Failed to create model - {type(e).__name__}: {e}")
+                return
 
             print("Moving model to CUDA...")
-            model.to("cuda")
-            print(
-                f"Model moved to CUDA. Current device: {next(model.parameters()).device}"
-            )
+            try:
+                model.to("cuda")
+                print(
+                    f"Model moved to CUDA. Current device: {next(model.parameters()).device}"
+                )
+
+                # Verify parameters are on CUDA
+                for i, (name, param) in enumerate(model.named_parameters()):
+                    if i < 3:  # Just show first few
+                        print(f"  {name}: {param.shape} {param.device}")
+                    else:
+                        print("  ...")
+                        break
+
+            except Exception as e:
+                print(f"✗ Failed to move model to CUDA - {type(e).__name__}: {e}")
+                return
 
             model.eval()
             print("✓ Successfully created and moved TFC_TDF_net model to GPU")
@@ -1080,6 +1107,7 @@ def test_model_types():
 
             try:
                 print("Running forward pass...")
+                print(f"Input shape: {test_input.shape}")
                 output = model(test_input)
                 print(
                     f"✓ MDX model forward pass completed: output shape {output.shape}"
@@ -1205,11 +1233,7 @@ def main():
         else:
             print("✗ Non-contiguous memory layout issue")
 
-    # Run all tests
-    test_pytorch_rocm_setup()
-    test_onnxruntime_setup()
-    test_stft_operations()
-    test_memory_allocation()
+    # Run only MDX model test for focused debugging
     test_model_types()
 
     print("\n" + "=" * 50)
