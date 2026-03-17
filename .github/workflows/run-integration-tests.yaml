@@ -19,6 +19,7 @@ jobs:
               - 'tests/**'
               - 'pyproject.toml'
               - 'poetry.lock'
+              - '.github/workflows/run-integration-tests.yaml'
 
   # ── GPU test jobs (sequential on self-hosted runner) ───────────────
   #
