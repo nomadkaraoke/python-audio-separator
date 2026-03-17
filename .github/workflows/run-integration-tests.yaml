@@ -62,11 +62,12 @@ jobs:
           if [ "$MODEL_COUNT" -lt 10 ]; then
             echo "::warning::Expected at least 10 pre-cached model files, found $MODEL_COUNT"
           fi
-      - name: "Run: 24-bit preservation + CLI integration tests"
+      - name: "Run: 24-bit preservation, CLI integration, and output tests"
         run: |
           poetry run pytest -sv \
             tests/integration/test_24bit_preservation.py \
-            tests/integration/test_cli_integration.py
+            tests/integration/test_cli_integration.py \
+            tests/integration/test_separator_output_integration.py
       - name: Upload test artifacts
         if: always()
         uses: actions/upload-artifact@v4
@@ -184,7 +185,7 @@ jobs:
           cache: poetry
       - name: Install Poetry dependencies
         run: poetry install
-      - name: "Run: remote API, roformer, and output integration tests"
+      - name: "Run: remote API and roformer tests"
         run: |
           poetry run pytest -sv \
             tests/integration/test_remote_api_integration.py \
@@ -194,8 +195,7 @@ jobs:
             tests/integration/test_roformer_e2e.py \
             tests/integration/test_roformer_fallback_mechanism.py \
             tests/integration/test_roformer_model_switching.py \
-            tests/integration/test_roformer_new_parameters.py \
-            tests/integration/test_separator_output_integration.py
+            tests/integration/test_roformer_new_parameters.py
 
   # ── Gate job for branch protection ────────────────────────────────
 
