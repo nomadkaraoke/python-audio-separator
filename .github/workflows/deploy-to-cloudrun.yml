@@ -1,0 +1,68 @@
+name: Deploy to Cloud Run
+
+on:
+  # Deploy when a new PyPI release is published
+  workflow_run:
+    workflows: ["Publish to PyPI"]
+    types: [completed]
+
+  # Deploy on changes to Dockerfile or Cloud Run server
+  push:
+    branches: [main]
+    paths:
+      - "Dockerfile.cloudrun"
+      - "audio_separator/remote/deploy_cloudrun.py"
+
+  # Manual deployment
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    # Only run on successful PyPI publish (or push/manual triggers)
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
+
+    permissions:
+      contents: read
+      id-token: write  # Required for Workload Identity Federation
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
+
+      - name: Build and push Docker image
+        run: |
+          IMAGE="us-central1-docker.pkg.dev/nomadkaraoke/audio-separator/api"
+          TAG="${GITHUB_SHA::8}"
+
+          docker build \
+            -f Dockerfile.cloudrun \
+            -t "${IMAGE}:${TAG}" \
+            -t "${IMAGE}:latest" \
+            .
+
+          docker push "${IMAGE}:${TAG}"
+          docker push "${IMAGE}:latest"
+
+          echo "IMAGE_TAG=${TAG}" >> $GITHUB_ENV
+          echo "IMAGE_URI=${IMAGE}:${TAG}" >> $GITHUB_ENV
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run services update audio-separator \
+            --image="${IMAGE_URI}" \
+            --region=us-central1 \
+            --project=nomadkaraoke \
+            --quiet
