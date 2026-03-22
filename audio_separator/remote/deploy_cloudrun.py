@@ -23,6 +23,7 @@ import hashlib
 import json
 import logging
 import os
+import re
 import shutil
 import threading
 import traceback
@@ -175,8 +176,11 @@ def separate_audio_sync(
 
         update_status("processing", 5)
 
-        # Write uploaded file
-        input_file_path = os.path.join(output_dir, filename)
+        # Strip existing stem markers from filename (e.g. "_(Vocals)_", "_(Instrumental)_")
+        # to prevent the Separator from confusing them with output stem names during
+        # chained separations (Stage 1 output → Stage 2 input).
+        clean_filename = re.sub(r"_\([^)]+\)_", "_", filename)
+        input_file_path = os.path.join(output_dir, clean_filename)
         with open(input_file_path, "wb") as f:
             f.write(audio_data)
 
