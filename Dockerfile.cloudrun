@@ -1,6 +1,9 @@
 # Audio Separator API - Cloud Run GPU Deployment
 # Optimized for NVIDIA L4 GPU on Google Cloud Run
 #
+# Models are baked into the image for zero cold-start latency.
+# To update models, rebuild the image.
+#
 # Build: docker build -f Dockerfile.cloudrun -t audio-separator-cloudrun .
 # Run:   docker run --gpus all -p 8080:8080 audio-separator-cloudrun
 
@@ -63,7 +66,6 @@ RUN cd /tmp/audio-separator-src \
         "uvicorn[standard]>=0.24.0" \
         "python-multipart>=0.0.6" \
         "filetype>=1.2.0" \
-        "google-cloud-storage>=2.14.0" \
     && rm -rf /tmp/audio-separator-src
 
 # Set up CUDA library paths
@@ -80,11 +82,38 @@ ENV MODEL_DIR=/models \
 # Create directories
 RUN mkdir -p /models /tmp/storage/outputs
 
+# Bake ensemble preset models into the image.
+# These are the models used by the default presets (instrumental_clean + karaoke).
+# Total: ~1-1.5 GB. This eliminates cold-start model download time.
+RUN python3 -c "
+from audio_separator.separator import Separator
+import json, importlib.resources as resources
+
+# Load preset definitions
+with resources.open_text('audio_separator', 'ensemble_presets.json') as f:
+    presets = json.load(f)['presets']
+
+# Collect unique model filenames from our default presets
+models_to_download = set()
+for preset_name in ['instrumental_clean', 'karaoke']:
+    preset = presets[preset_name]
+    models_to_download.update(preset['models'])
+
+print(f'Downloading {len(models_to_download)} models for ensemble presets...')
+for model in sorted(models_to_download):
+    print(f'  Downloading: {model}')
+    sep = Separator(model_file_dir='/models')
+    sep.load_model(model)
+    print(f'  Done: {model}')
+
+print('All models downloaded successfully.')
+" && ls -lh /models/
+
 # Expose Cloud Run default port
 EXPOSE 8080
 
 # Health check for container orchestration
-HEALTHCHECK --interval=30s --timeout=10s --start-period=120s --retries=3 \
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
     CMD curl -f http://localhost:8080/health || exit 1
 
 # Run the API server

@@ -40,11 +40,11 @@ jobs:
         uses: google-github-actions/setup-gcloud@v2
 
       - name: Configure Docker for Artifact Registry
-        run: gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
+        run: gcloud auth configure-docker us-east4-docker.pkg.dev --quiet
 
       - name: Build and push Docker image
         run: |
-          IMAGE="us-central1-docker.pkg.dev/nomadkaraoke/audio-separator/api"
+          IMAGE="us-east4-docker.pkg.dev/nomadkaraoke/audio-separator/api"
           TAG="${GITHUB_SHA::8}"
 
           docker build \
@@ -63,6 +63,6 @@ jobs:
         run: |
           gcloud run services update audio-separator \
             --image="${IMAGE_URI}" \
-            --region=us-central1 \
+            --region=us-east4 \
             --project=nomadkaraoke \
             --quiet
