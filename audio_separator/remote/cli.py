@@ -30,8 +30,9 @@ def main():
     separate_parser = subparsers.add_parser("separate", help="Separate audio files")
     separate_parser.add_argument("audio_files", nargs="+", help="Audio file paths to separate")
 
-    # Model selection
+    # Model selection (mutually exclusive: preset, single model, or multiple models)
     model_group = separate_parser.add_mutually_exclusive_group()
+    model_group.add_argument("-p", "--preset", help="Ensemble preset name (e.g. instrumental_clean, karaoke, vocal_balanced)")
     model_group.add_argument("-m", "--model", help="Single model to use for separation")
     model_group.add_argument("--models", nargs="+", help="Multiple models to use for separation")
 
@@ -168,6 +169,7 @@ def handle_separate_command(args, api_client: AudioSeparatorAPIClient, logger: l
             kwargs = {
                 "model": args.model,
                 "models": args.models,
+                "preset": args.preset,
                 "timeout": args.timeout,
                 "poll_interval": args.poll_interval,
                 "download": True,  # Always download in CLI

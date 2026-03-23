@@ -1,0 +1,60 @@
+name: Deploy to Cloud Run
+
+on:
+  # Deploy when a new PyPI release is published
+  workflow_run:
+    workflows: ["Publish to PyPI"]
+    types: [completed]
+
+  # Deploy on changes to Dockerfile or Cloud Run server
+  push:
+    branches: [main]
+    paths:
+      - "Dockerfile.cloudrun"
+      - "audio_separator/remote/deploy_cloudrun.py"
+      - "audio_separator/ensemble_presets.json"
+      - "cloudbuild.yaml"
+
+  # Manual deployment
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    # Only run on successful PyPI publish (or push/manual triggers)
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
+
+    permissions:
+      contents: read
+      id-token: write  # Required for Workload Identity Federation
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      # Use Cloud Build for the Docker build — it has native x86 with enough
+      # RAM to load ML models during the build (baking models into the image).
+      - name: Build and push via Cloud Build
+        run: |
+          gcloud builds submit \
+            --config cloudbuild.yaml \
+            --region=us-east4 \
+            --project=nomadkaraoke \
+            --substitutions=SHORT_SHA=${GITHUB_SHA::8}
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run services update audio-separator \
+            --image="us-east4-docker.pkg.dev/nomadkaraoke/audio-separator/api:${GITHUB_SHA::8}" \
+            --region=us-east4 \
+            --project=nomadkaraoke \
+            --quiet

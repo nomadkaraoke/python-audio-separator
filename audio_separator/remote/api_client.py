@@ -32,6 +32,7 @@ class AudioSeparatorAPIClient:
         file_path: str,
         model: Optional[str] = None,
         models: Optional[List[str]] = None,
+        preset: Optional[str] = None,
         # Output parameters
         output_format: str = "flac",
         output_bitrate: Optional[str] = None,
@@ -76,8 +77,10 @@ class AudioSeparatorAPIClient:
         files = {"file": (os.path.basename(file_path), open(file_path, "rb"))}
         data = {}
 
-        # Handle model parameters (backwards compatibility)
-        if models:
+        # Handle model/preset parameters
+        if preset:
+            data["preset"] = preset
+        elif models:
             data["models"] = json.dumps(models)
         elif model:
             data["model"] = model
@@ -144,6 +147,7 @@ class AudioSeparatorAPIClient:
         file_path: str,
         model: Optional[str] = None,
         models: Optional[List[str]] = None,
+        preset: Optional[str] = None,
         timeout: int = 600,
         poll_interval: int = 10,
         download: bool = True,
@@ -208,13 +212,17 @@ class AudioSeparatorAPIClient:
         import time
 
         # Submit the separation job with all parameters
-        models_desc = models or ([model] if model else ["default"])
-        self.logger.info(f"Submitting separation job for '{file_path}' with models: {models_desc} (audio-separator v{AUDIO_SEPARATOR_VERSION})")
+        if preset:
+            models_desc = f"preset:{preset}"
+        else:
+            models_desc = models or ([model] if model else ["default"])
+        self.logger.info(f"Submitting separation job for '{file_path}' with {models_desc} (audio-separator v{AUDIO_SEPARATOR_VERSION})")
 
         result = self.separate_audio(
             file_path,
             model,
             models,
+            preset,
             output_format,
             output_bitrate,
             normalization_threshold,

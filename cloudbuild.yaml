@@ -1,0 +1,25 @@
+# Cloud Build config for building the audio-separator Docker image with baked models.
+# Run manually: gcloud builds submit --config cloudbuild.yaml --region=us-east4
+# Uses e2-highcpu-32 machine type for fast builds with enough RAM for model loading.
+
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-f'
+      - 'Dockerfile.cloudrun'
+      - '-t'
+      - 'us-east4-docker.pkg.dev/$PROJECT_ID/audio-separator/api:$SHORT_SHA'
+      - '-t'
+      - 'us-east4-docker.pkg.dev/$PROJECT_ID/audio-separator/api:latest'
+      - '.'
+
+images:
+  - 'us-east4-docker.pkg.dev/$PROJECT_ID/audio-separator/api:$SHORT_SHA'
+  - 'us-east4-docker.pkg.dev/$PROJECT_ID/audio-separator/api:latest'
+
+options:
+  machineType: 'E2_HIGHCPU_32'
+  logging: 'CLOUD_LOGGING_ONLY'
+
+timeout: '3600s'
