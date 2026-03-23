@@ -1279,8 +1279,11 @@ class Separator:
                         self.model_instance.output_dir = temp_dir
 
                     try:
-                        # Perform separation
-                        model_stems = self._separate_file(path, custom_output_names)
+                        # Perform separation WITHOUT custom_output_names for intermediate files.
+                        # Intermediate stems must use the default "base_(StemType)_model.ext" naming
+                        # so the regex below can extract stem types for classification.
+                        # custom_output_names is applied later to the final ensembled output.
+                        model_stems = self._separate_file(path, None)
 
                         # Extract and normalize stem names from this model's outputs
                         model_stem_names = []

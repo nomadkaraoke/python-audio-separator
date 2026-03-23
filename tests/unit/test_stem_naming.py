@@ -161,3 +161,69 @@ class TestEnsembleOutputFilenames:
         assert "Inst_HQ_5" in filename
         assert "karaoke_aufr" in filename
         assert filename.startswith("mardy20s_(Vocals)_custom_ensemble_")
+
+
+class TestEnsembleCustomOutputNames:
+    """Test that custom_output_names works correctly with ensemble separation."""
+
+    def test_custom_output_names_not_passed_to_intermediate_separation(self):
+        """Intermediate per-model separations must NOT receive custom_output_names.
+
+        custom_output_names replaces the default '_(StemType)_model' naming, which
+        removes the _(StemType)_ markers needed by _separate_ensemble to classify
+        stems. custom_output_names should only be applied to the final ensembled output.
+        """
+        import re
+        from unittest.mock import patch, MagicMock, call
+        from audio_separator.separator.separator import Separator
+
+        sep = Separator(
+            log_level=logging.WARNING,
+            model_file_dir="/tmp/models",
+            output_dir="/tmp/output",
+            output_format="flac",
+        )
+        sep.model_filenames = ["model_a.ckpt", "model_b.ckpt"]
+        sep.model_filename = ["model_a.ckpt", "model_b.ckpt"]
+        sep.ensemble_algorithm = "uvr_max_spec"
+        sep.ensemble_weights = None
+        sep.ensemble_preset = "test_preset"
+        sep.sample_rate = 44100
+
+        custom_names = {"Vocals": "job123_mixed_vocals", "Instrumental": "job123_mixed_instrumental"}
+
+        with patch.object(sep, '_separate_file') as mock_separate, \
+             patch.object(sep, 'load_model'), \
+             patch('audio_separator.separator.separator.Ensembler') as MockEnsembler, \
+             patch('audio_separator.separator.separator.librosa') as mock_librosa, \
+             patch('audio_separator.separator.separator.np') as mock_np:
+
+            # Mock _separate_file to return files with proper _(StemType)_ naming
+            mock_separate.side_effect = [
+                ["/tmp/ensemble/song_(Vocals)_model_a.flac", "/tmp/ensemble/song_(Instrumental)_model_a.flac"],
+                ["/tmp/ensemble/song_(Vocals)_model_b.flac", "/tmp/ensemble/song_(Instrumental)_model_b.flac"],
+            ]
+
+            # Mock librosa and numpy for ensembling
+            mock_wav = MagicMock()
+            mock_wav.ndim = 2
+            mock_wav.shape = (2, 44100)
+            mock_librosa.load.return_value = (mock_wav, 44100)
+            mock_np.asfortranarray.return_value = mock_wav
+
+            mock_ensembler = MagicMock()
+            mock_ensembler.ensemble.return_value = mock_wav
+            MockEnsembler.return_value = mock_ensembler
+
+            # Mock model_instance for write_audio
+            sep.model_instance = MagicMock()
+            sep.model_instance.output_dir = "/tmp/output"
+
+            sep._separate_ensemble("/tmp/song.flac", custom_output_names=custom_names)
+
+            # Key assertion: _separate_file must be called with None, not custom_names
+            for call_args in mock_separate.call_args_list:
+                assert call_args[0][1] is None, (
+                    f"_separate_file was called with custom_output_names={call_args[0][1]!r} "
+                    f"but should be None for intermediate ensemble files"
+                )
