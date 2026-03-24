@@ -1,5 +1,7 @@
 import torch
 
+from audio_separator.separator.uvr_lib_v5.utils import is_rocm
+
 
 class STFT:
     """
@@ -20,13 +22,22 @@ class STFT:
     def __call__(self, input_tensor):
         # Determine if the input tensor's device is not a standard computing device (i.e., not CPU or CUDA).
         is_non_standard_device = not input_tensor.device.type in ["cuda", "cpu"]
+        run_on_cpu = is_non_standard_device or (
+            input_tensor.device.type == "cuda" and is_rocm()
+        )
 
-        # If on a non-standard device, temporarily move the tensor to CPU for processing.
-        if is_non_standard_device:
+        # If on a non-standard device or ROCm, temporarily move the tensor to CPU for processing.
+        if run_on_cpu:
             input_tensor = input_tensor.cpu()
+
+        # Ensure FP32 for stability on ROCm and non-standard devices
+        if input_tensor.dtype in (torch.float16, torch.bfloat16):
+            input_tensor = input_tensor.float()
 
         # Transfer the pre-defined window tensor to the same device as the input tensor.
         stft_window = self.hann_window.to(input_tensor.device)
+        if stft_window.dtype in (torch.float16, torch.bfloat16):
+            stft_window = stft_window.float()
 
         # Extract batch dimensions (all dimensions except the last two which are channel and time).
         batch_dimensions = input_tensor.shape[:-2]
@@ -38,29 +49,60 @@ class STFT:
         reshaped_tensor = input_tensor.reshape([-1, time_dim])
 
         # Perform the Short-Time Fourier Transform (STFT) on the reshaped tensor.
-        stft_output = torch.stft(reshaped_tensor, n_fft=self.n_fft, hop_length=self.hop_length, window=stft_window, center=True, return_complex=False)
+        try:
+            stft_output = torch.stft(
+                reshaped_tensor,
+                n_fft=self.n_fft,
+                hop_length=self.hop_length,
+                window=stft_window,
+                center=True,
+                return_complex=False,
+            )
+        except Exception as e:
+            # Fallback: try with return_complex=True
+            stft_complex = torch.stft(
+                reshaped_tensor,
+                n_fft=self.n_fft,
+                hop_length=self.hop_length,
+                window=stft_window,
+                center=True,
+                return_complex=True,
+            )
+            stft_output = torch.stack([stft_complex.real, stft_complex.imag], dim=-1)
 
         # Rearrange the dimensions of the STFT output to bring the frequency dimension forward.
         permuted_stft_output = stft_output.permute([0, 3, 1, 2])
 
         # Reshape the output to restore the original batch and channel dimensions, while keeping the newly formed frequency and time dimensions.
-        final_output = permuted_stft_output.reshape([*batch_dimensions, channel_dim, 2, -1, permuted_stft_output.shape[-1]]).reshape(
+        final_output = permuted_stft_output.reshape(
+            [*batch_dimensions, channel_dim, 2, -1, permuted_stft_output.shape[-1]]
+        ).reshape(
             [*batch_dimensions, channel_dim * 2, -1, permuted_stft_output.shape[-1]]
         )
 
-        # If the original tensor was on a non-standard device, move the processed tensor back to that device.
-        if is_non_standard_device:
+        # If the original tensor was on a non-standard device or ROCm, move the processed tensor back to that device.
+        if run_on_cpu:
             final_output = final_output.to(self.device)
 
         # Return the transformed tensor, sliced to retain only the required frequency dimension (`dim_f`).
         return final_output[..., : self.dim_f, :]
 
-    def pad_frequency_dimension(self, input_tensor, batch_dimensions, channel_dim, freq_dim, time_dim, num_freq_bins):
+    def pad_frequency_dimension(
+        self,
+        input_tensor,
+        batch_dimensions,
+        channel_dim,
+        freq_dim,
+        time_dim,
+        num_freq_bins,
+    ):
         """
         Adds zero padding to the frequency dimension of the input tensor.
         """
         # Create a padding tensor for the frequency dimension
-        freq_padding = torch.zeros([*batch_dimensions, channel_dim, num_freq_bins - freq_dim, time_dim]).to(input_tensor.device)
+        freq_padding = torch.zeros(
+            [*batch_dimensions, channel_dim, num_freq_bins - freq_dim, time_dim]
+        ).to(input_tensor.device)
 
         # Concatenate the padding to the input tensor along the frequency dimension.
         padded_tensor = torch.cat([input_tensor, freq_padding], -2)
@@ -77,13 +119,17 @@ class STFT:
 
         return batch_dimensions, channel_dim, freq_dim, time_dim, num_freq_bins
 
-    def prepare_for_istft(self, padded_tensor, batch_dimensions, channel_dim, num_freq_bins, time_dim):
+    def prepare_for_istft(
+        self, padded_tensor, batch_dimensions, channel_dim, num_freq_bins, time_dim
+    ):
         """
         Prepares the tensor for Inverse Short-Time Fourier Transform (ISTFT) by reshaping
         and creating a complex tensor from the real and imaginary parts.
         """
         # Reshape the tensor to separate real and imaginary parts and prepare for ISTFT.
-        reshaped_tensor = padded_tensor.reshape([*batch_dimensions, channel_dim // 2, 2, num_freq_bins, time_dim])
+        reshaped_tensor = padded_tensor.reshape(
+            [*batch_dimensions, channel_dim // 2, 2, num_freq_bins, time_dim]
+        )
 
         # Flatten batch dimensions and rearrange for ISTFT.
         flattened_tensor = reshaped_tensor.reshape([-1, 2, num_freq_bins, time_dim])
@@ -99,28 +145,54 @@ class STFT:
     def inverse(self, input_tensor):
         # Determine if the input tensor's device is not a standard computing device (i.e., not CPU or CUDA).
         is_non_standard_device = not input_tensor.device.type in ["cuda", "cpu"]
+        run_on_cpu = is_non_standard_device or (
+            input_tensor.device.type == "cuda" and is_rocm()
+        )
 
-        # If on a non-standard device, temporarily move the tensor to CPU for processing.
-        if is_non_standard_device:
+        # If on a non-standard device or ROCm, temporarily move the tensor to CPU for processing.
+        if run_on_cpu:
             input_tensor = input_tensor.cpu()
+
+        # Ensure FP32 for stability on ROCm and non-standard devices
+        if input_tensor.dtype in (torch.float16, torch.bfloat16):
+            input_tensor = input_tensor.float()
 
         # Transfer the pre-defined Hann window tensor to the same device as the input tensor.
         stft_window = self.hann_window.to(input_tensor.device)
+        if stft_window.dtype in (torch.float16, torch.bfloat16):
+            stft_window = stft_window.float()
 
-        batch_dimensions, channel_dim, freq_dim, time_dim, num_freq_bins = self.calculate_inverse_dimensions(input_tensor)
+        batch_dimensions, channel_dim, freq_dim, time_dim, num_freq_bins = (
+            self.calculate_inverse_dimensions(input_tensor)
+        )
 
-        padded_tensor = self.pad_frequency_dimension(input_tensor, batch_dimensions, channel_dim, freq_dim, time_dim, num_freq_bins)
+        padded_tensor = self.pad_frequency_dimension(
+            input_tensor,
+            batch_dimensions,
+            channel_dim,
+            freq_dim,
+            time_dim,
+            num_freq_bins,
+        )
 
-        complex_tensor = self.prepare_for_istft(padded_tensor, batch_dimensions, channel_dim, num_freq_bins, time_dim)
+        complex_tensor = self.prepare_for_istft(
+            padded_tensor, batch_dimensions, channel_dim, num_freq_bins, time_dim
+        )
 
         # Perform the Inverse Short-Time Fourier Transform (ISTFT).
-        istft_result = torch.istft(complex_tensor, n_fft=self.n_fft, hop_length=self.hop_length, window=stft_window, center=True)
+        istft_result = torch.istft(
+            complex_tensor,
+            n_fft=self.n_fft,
+            hop_length=self.hop_length,
+            window=stft_window,
+            center=True,
+        )
 
         # Reshape ISTFT result to restore original batch and channel dimensions.
         final_output = istft_result.reshape([*batch_dimensions, 2, -1])
 
-        # If the original tensor was on a non-standard device, move the processed tensor back to that device.
-        if is_non_standard_device:
+        # If the original tensor was on a non-standard device or ROCm, move the processed tensor back to that device.
+        if run_on_cpu:
             final_output = final_output.to(self.device)
 
         return final_output

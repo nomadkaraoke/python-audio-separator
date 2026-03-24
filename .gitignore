@@ -1,6 +1,7 @@
 # Andrew env
 .DS_Store
 .vscode
+debug_results.txt
 
 # Andrew functional adds
 /tracks/

@@ -1,4 +1,4 @@
-""" This file contains the CommonSeparator class, common to all architecture-specific Separator classes. """
+"""This file contains the CommonSeparator class, common to all architecture-specific Separator classes."""
 
 from logging import Logger
 import os
@@ -50,9 +50,27 @@ class CommonSeparator:
     BV_VOCAL_STEM_LABEL = "Backing Vocals"
     NO_STEM = "No "
 
-    STEM_PAIR_MAPPER = {VOCAL_STEM: INST_STEM, INST_STEM: VOCAL_STEM, LEAD_VOCAL_STEM: BV_VOCAL_STEM, BV_VOCAL_STEM: LEAD_VOCAL_STEM, PRIMARY_STEM: SECONDARY_STEM}
+    STEM_PAIR_MAPPER = {
+        VOCAL_STEM: INST_STEM,
+        INST_STEM: VOCAL_STEM,
+        LEAD_VOCAL_STEM: BV_VOCAL_STEM,
+        BV_VOCAL_STEM: LEAD_VOCAL_STEM,
+        PRIMARY_STEM: SECONDARY_STEM,
+    }
 
-    NON_ACCOM_STEMS = (VOCAL_STEM, OTHER_STEM, BASS_STEM, DRUM_STEM, GUITAR_STEM, PIANO_STEM, SYNTH_STEM, STRINGS_STEM, WOODWINDS_STEM, BRASS_STEM, WIND_INST_STEM)
+    NON_ACCOM_STEMS = (
+        VOCAL_STEM,
+        OTHER_STEM,
+        BASS_STEM,
+        DRUM_STEM,
+        GUITAR_STEM,
+        PIANO_STEM,
+        SYNTH_STEM,
+        STRINGS_STEM,
+        WOODWINDS_STEM,
+        BRASS_STEM,
+        WIND_INST_STEM,
+    )
 
     def __init__(self, config):
 
@@ -63,6 +81,7 @@ class CommonSeparator:
         self.torch_device = config.get("torch_device")
         self.torch_device_cpu = config.get("torch_device_cpu")
         self.torch_device_mps = config.get("torch_device_mps")
+        self.is_rocm = config.get("is_rocm", False)
         self.onnx_execution_provider = config.get("onnx_execution_provider")
 
         # Model data
@@ -83,7 +102,7 @@ class CommonSeparator:
         self.invert_using_spec = config.get("invert_using_spec")
         self.sample_rate = config.get("sample_rate")
         self.use_soundfile = config.get("use_soundfile")
-        
+
         # Roformer-specific loading support
         self.roformer_loader = None
         self.is_roformer_model = self._detect_roformer_model()
@@ -95,12 +114,15 @@ class CommonSeparator:
         # Check if model_data has a "training" key with "instruments" list
         self.primary_stem_name = None
         self.secondary_stem_name = None
-        
+
         # Audio bit depth tracking for preserving input quality
         self.input_bit_depth = None
         self.input_subtype = None
 
-        if "training" in self.model_data and "instruments" in self.model_data["training"]:
+        if (
+            "training" in self.model_data
+            and "instruments" in self.model_data["training"]
+        ):
             instruments = self.model_data["training"]["instruments"]
             if instruments:
                 target_instrument = self.model_data["training"].get("target_instrument")
@@ -124,14 +146,28 @@ class CommonSeparator:
         self.is_bv_model = self.model_data.get("is_bv_model", False)
         self.bv_model_rebalance = self.model_data.get("is_bv_model_rebalanced", 0)
 
-        self.logger.debug(f"Common params: model_name={self.model_name}, model_path={self.model_path}")
-        self.logger.debug(f"Common params: output_dir={self.output_dir}, output_format={self.output_format}")
-        self.logger.debug(f"Common params: normalization_threshold={self.normalization_threshold}, amplification_threshold={self.amplification_threshold}")
-        self.logger.debug(f"Common params: enable_denoise={self.enable_denoise}, output_single_stem={self.output_single_stem}")
-        self.logger.debug(f"Common params: invert_using_spec={self.invert_using_spec}, sample_rate={self.sample_rate}")
+        self.logger.debug(
+            f"Common params: model_name={self.model_name}, model_path={self.model_path}"
+        )
+        self.logger.debug(
+            f"Common params: output_dir={self.output_dir}, output_format={self.output_format}"
+        )
+        self.logger.debug(
+            f"Common params: normalization_threshold={self.normalization_threshold}, amplification_threshold={self.amplification_threshold}"
+        )
+        self.logger.debug(
+            f"Common params: enable_denoise={self.enable_denoise}, output_single_stem={self.output_single_stem}"
+        )
+        self.logger.debug(
+            f"Common params: invert_using_spec={self.invert_using_spec}, sample_rate={self.sample_rate}"
+        )
 
-        self.logger.debug(f"Common params: primary_stem_name={self.primary_stem_name}, secondary_stem_name={self.secondary_stem_name}")
-        self.logger.debug(f"Common params: is_karaoke={self.is_karaoke}, is_bv_model={self.is_bv_model}, bv_model_rebalance={self.bv_model_rebalance}")
+        self.logger.debug(
+            f"Common params: primary_stem_name={self.primary_stem_name}, secondary_stem_name={self.secondary_stem_name}"
+        )
+        self.logger.debug(
+            f"Common params: is_karaoke={self.is_karaoke}, is_bv_model={self.is_bv_model}, bv_model_rebalance={self.bv_model_rebalance}"
+        )
 
         # File-specific variables which need to be cleared between processing different audio inputs
         self.audio_file_path = None
@@ -152,7 +188,11 @@ class CommonSeparator:
         if primary_stem in self.STEM_PAIR_MAPPER:
             secondary_stem = self.STEM_PAIR_MAPPER[primary_stem]
         else:
-            secondary_stem = primary_stem.replace(self.NO_STEM, "") if self.NO_STEM in primary_stem else f"{self.NO_STEM}{primary_stem}"
+            secondary_stem = (
+                primary_stem.replace(self.NO_STEM, "")
+                if self.NO_STEM in primary_stem
+                else f"{self.NO_STEM}{primary_stem}"
+            )
 
         return secondary_stem
 
@@ -166,7 +206,9 @@ class CommonSeparator:
         """
         Finalizes the processing of a stem by writing the audio to a file and returning the processed source.
         """
-        self.logger.debug(f"Finalizing {stem_name} stem processing and writing audio...")
+        self.logger.debug(
+            f"Finalizing {stem_name} stem processing and writing audio..."
+        )
         self.write_audio(stem_path, source)
 
         return {stem_name: source}
@@ -212,7 +254,10 @@ class CommonSeparator:
         Update the dictionary for the given model_architecture with the new model name and its sources.
         Use the model_architecture as a key to access the corresponding cache source mapper dictionary.
         """
-        self.cached_sources_map[model_architecture] = {**self.cached_sources_map.get(model_architecture, {}), **{model_name: sources}}
+        self.cached_sources_map[model_architecture] = {
+            **self.cached_sources_map.get(model_architecture, {}),
+            **{model_name: sources},
+        }
 
     def prepare_mix(self, mix):
         """
@@ -225,40 +270,52 @@ class CommonSeparator:
         # Check if the input is a file path (string) and needs to be loaded
         if not isinstance(mix, np.ndarray):
             self.logger.debug(f"Loading audio from file: {mix}")
-            
+
             # Get audio file info to capture bit depth before loading
             try:
                 audio_info = sf.info(mix)
                 self.input_subtype = audio_info.subtype
                 self.logger.info(f"Input audio subtype: {self.input_subtype}")
-                
+
                 # Map subtype to bit depth
-                if 'PCM_16' in self.input_subtype or self.input_subtype == 'PCM_S8':
+                if "PCM_16" in self.input_subtype or self.input_subtype == "PCM_S8":
                     self.input_bit_depth = 16
-                elif 'PCM_24' in self.input_subtype:
+                elif "PCM_24" in self.input_subtype:
                     self.input_bit_depth = 24
-                elif 'PCM_32' in self.input_subtype or 'FLOAT' in self.input_subtype or 'DOUBLE' in self.input_subtype:
+                elif (
+                    "PCM_32" in self.input_subtype
+                    or "FLOAT" in self.input_subtype
+                    or "DOUBLE" in self.input_subtype
+                ):
                     self.input_bit_depth = 32
                 else:
                     # Default to 16-bit for unknown formats
                     self.input_bit_depth = 16
-                    self.logger.warning(f"Unknown audio subtype {self.input_subtype}, defaulting to 16-bit output")
-                
-                self.logger.info(f"Detected input bit depth: {self.input_bit_depth}-bit")
+                    self.logger.warning(
+                        f"Unknown audio subtype {self.input_subtype}, defaulting to 16-bit output"
+                    )
+
+                self.logger.info(
+                    f"Detected input bit depth: {self.input_bit_depth}-bit"
+                )
             except Exception as e:
-                self.logger.warning(f"Could not read audio file info, defaulting to 16-bit output: {e}")
+                self.logger.warning(
+                    f"Could not read audio file info, defaulting to 16-bit output: {e}"
+                )
                 self.input_bit_depth = 16
-                self.input_subtype = 'PCM_16'
-            
+                self.input_subtype = "PCM_16"
+
             mix, sr = librosa.load(mix, mono=False, sr=self.sample_rate)
-            self.logger.debug(f"Audio loaded. Sample rate: {sr}, Audio shape: {mix.shape}")
+            self.logger.debug(
+                f"Audio loaded. Sample rate: {sr}, Audio shape: {mix.shape}"
+            )
         else:
             # Transpose the mix if it's already an ndarray (expected shape: [channels, samples])
             self.logger.debug("Transposing the provided mix array.")
             # Default to 16-bit if numpy array provided directly
             if self.input_bit_depth is None:
                 self.input_bit_depth = 16
-                self.input_subtype = 'PCM_16'
+                self.input_subtype = "PCM_16"
             mix = mix.T
             self.logger.debug(f"Transposed mix shape: {mix.shape}")
 
@@ -291,7 +348,9 @@ class CommonSeparator:
         # Get the duration of the input audio file
         duration_seconds = librosa.get_duration(filename=self.audio_file_path)
         duration_hours = duration_seconds / 3600
-        self.logger.info(f"Audio duration is {duration_hours:.2f} hours ({duration_seconds:.2f} seconds).")
+        self.logger.info(
+            f"Audio duration is {duration_hours:.2f} hours ({duration_seconds:.2f} seconds)."
+        )
 
         if self.use_soundfile:
             self.logger.warning(f"Using soundfile for writing.")
@@ -306,7 +365,11 @@ class CommonSeparator:
         """
         self.logger.debug(f"Entering write_audio_pydub with stem_path: {stem_path}")
 
-        stem_source = spec_utils.normalize(wave=stem_source, max_peak=self.normalization_threshold, min_peak=self.amplification_threshold)
+        stem_source = spec_utils.normalize(
+            wave=stem_source,
+            max_peak=self.normalization_threshold,
+            min_peak=self.amplification_threshold,
+        )
 
         # Check if the numpy array is empty or contains very low values
         if np.max(np.abs(stem_source)) < 1e-6:
@@ -322,7 +385,9 @@ class CommonSeparator:
         self.logger.debug(f"Data type before conversion: {stem_source.dtype}")
 
         # Determine bit depth for output (use input bit depth if available, otherwise default to 16)
-        output_bit_depth = self.input_bit_depth if self.input_bit_depth is not None else 16
+        output_bit_depth = (
+            self.input_bit_depth if self.input_bit_depth is not None else 16
+        )
         self.logger.info(f"Writing output with {output_bit_depth}-bit depth")
 
         # For pydub, we always convert to int16 for the AudioSegment creation
@@ -336,11 +401,18 @@ class CommonSeparator:
         stem_source_interleaved[0::2] = stem_source[:, 0]  # Left channel
         stem_source_interleaved[1::2] = stem_source[:, 1]  # Right channel
 
-        self.logger.debug(f"Interleaved audio data shape: {stem_source_interleaved.shape}")
+        self.logger.debug(
+            f"Interleaved audio data shape: {stem_source_interleaved.shape}"
+        )
 
         # Create a pydub AudioSegment (always from 16-bit data)
         try:
-            audio_segment = AudioSegment(stem_source_interleaved.tobytes(), frame_rate=self.sample_rate, sample_width=2, channels=2)
+            audio_segment = AudioSegment(
+                stem_source_interleaved.tobytes(),
+                frame_rate=self.sample_rate,
+                sample_width=2,
+                channels=2,
+            )
             self.logger.debug("Created AudioSegment successfully.")
         except (IOError, ValueError) as e:
             self.logger.error(f"Specific error creating AudioSegment: {e}")
@@ -356,16 +428,20 @@ class CommonSeparator:
             file_format = "matroska"
 
         # Set the bitrate to 320k for mp3 files if output_bitrate is not specified
-        bitrate = "320k" if file_format == "mp3" and self.output_bitrate is None else self.output_bitrate
+        bitrate = (
+            "320k"
+            if file_format == "mp3" and self.output_bitrate is None
+            else self.output_bitrate
+        )
 
         # Export using the determined format
         try:
             # Pass codec parameters to ffmpeg to enforce bit depth for lossless formats
             export_params = {"format": file_format}
-            
+
             if bitrate:
                 export_params["bitrate"] = bitrate
-            
+
             # For lossless formats (WAV/FLAC), specify the codec parameters to enforce bit depth
             if file_format in ["wav", "flac"]:
                 if output_bit_depth == 16:
@@ -382,9 +458,11 @@ class CommonSeparator:
                     export_params["parameters"] = ["-sample_fmt", "s32"]
                     if file_format == "wav":
                         export_params["codec"] = "pcm_s32le"
-            
+
             audio_segment.export(stem_path, **export_params)
-            self.logger.debug(f"Exported audio file successfully to {stem_path} with {output_bit_depth}-bit depth")
+            self.logger.debug(
+                f"Exported audio file successfully to {stem_path} with {output_bit_depth}-bit depth"
+            )
         except (IOError, ValueError) as e:
             self.logger.error(f"Error exporting audio file: {e}")
 
@@ -394,7 +472,11 @@ class CommonSeparator:
         """
         self.logger.debug(f"Entering write_audio_soundfile with stem_path: {stem_path}")
 
-        stem_source = spec_utils.normalize(wave=stem_source, max_peak=self.normalization_threshold, min_peak=self.amplification_threshold)
+        stem_source = spec_utils.normalize(
+            wave=stem_source,
+            max_peak=self.normalization_threshold,
+            min_peak=self.amplification_threshold,
+        )
 
         # Check if the numpy array is empty or contains very low values
         if np.max(np.abs(stem_source)) < 1e-6:
@@ -414,17 +496,19 @@ class CommonSeparator:
         elif self.input_bit_depth:
             # Map bit depth to subtype
             if self.input_bit_depth == 16:
-                output_subtype = 'PCM_16'
+                output_subtype = "PCM_16"
             elif self.input_bit_depth == 24:
-                output_subtype = 'PCM_24'
+                output_subtype = "PCM_24"
             elif self.input_bit_depth == 32:
-                output_subtype = 'PCM_32'
+                output_subtype = "PCM_32"
             else:
-                output_subtype = 'PCM_16'  # Default fallback
-            self.logger.info(f"Using output subtype based on bit depth: {output_subtype}")
+                output_subtype = "PCM_16"  # Default fallback
+            self.logger.info(
+                f"Using output subtype based on bit depth: {output_subtype}"
+            )
         else:
             # Default to PCM_16 if no bit depth info available
-            output_subtype = 'PCM_16'
+            output_subtype = "PCM_16"
             self.logger.warning("No bit depth info available, defaulting to PCM_16")
 
         # Correctly interleave stereo channels if needed
@@ -446,7 +530,9 @@ class CommonSeparator:
         try:
             # Specify the subtype to match input bit depth
             sf.write(stem_path, stem_source, self.sample_rate, subtype=output_subtype)
-            self.logger.debug(f"Exported audio file successfully to {stem_path} with subtype {output_subtype}")
+            self.logger.debug(
+                f"Exported audio file successfully to {stem_path} with subtype {output_subtype}"
+            )
         except Exception as e:
             self.logger.error(f"Error exporting audio file: {e}")
 
@@ -482,9 +568,9 @@ class CommonSeparator:
         """
         Cleans the filename by replacing invalid characters with underscores.
         """
-        sanitized = re.sub(r'[<>:"/\\|?*]', '_', filename)
-        sanitized = re.sub(r'_+', '_', sanitized)
-        sanitized = sanitized.strip('_. ')
+        sanitized = re.sub(r'[<>:"/\\|?*]', "_", filename)
+        sanitized = re.sub(r"_+", "_", sanitized)
+        sanitized = sanitized.strip("_. ")
         return sanitized
 
     def get_stem_output_path(self, stem_name, custom_output_names):
@@ -493,74 +579,81 @@ class CommonSeparator:
         """
         # Convert custom_output_names keys to lowercase for case-insensitive comparison
         if custom_output_names:
-            custom_output_names_lower = {k.lower(): v for k, v in custom_output_names.items()}
+            custom_output_names_lower = {
+                k.lower(): v for k, v in custom_output_names.items()
+            }
             stem_name_lower = stem_name.lower()
             if stem_name_lower in custom_output_names_lower:
-                sanitized_custom_name = self.sanitize_filename(custom_output_names_lower[stem_name_lower])
-                return os.path.join(f"{sanitized_custom_name}.{self.output_format.lower()}")
+                sanitized_custom_name = self.sanitize_filename(
+                    custom_output_names_lower[stem_name_lower]
+                )
+                return os.path.join(
+                    f"{sanitized_custom_name}.{self.output_format.lower()}"
+                )
 
         sanitized_audio_base = self.sanitize_filename(self.audio_file_base)
         sanitized_stem_name = self.sanitize_filename(stem_name)
-        sanitized_model_name = self.sanitize_filename(self.model_name) 
+        sanitized_model_name = self.sanitize_filename(self.model_name)
 
         filename = f"{sanitized_audio_base}_({sanitized_stem_name})_{sanitized_model_name}.{self.output_format.lower()}"
         return os.path.join(filename)
-    
+
     def _detect_roformer_model(self):
         """
         Detect if the current model is a Roformer model.
-        
+
         Returns:
             bool: True if this is a Roformer model, False otherwise
         """
         if not self.model_data:
             return False
-            
+
         # Check for explicit Roformer flag
         if self.model_data.get("is_roformer", False):
             return True
-            
+
         # Check model path for Roformer indicators
         if self.model_path and "roformer" in self.model_path.lower():
             return True
-            
+
         # Check model name for Roformer indicators
         if self.model_name and "roformer" in self.model_name.lower():
             return True
-            
+
         return False
-    
+
     def _initialize_roformer_loader(self):
         """
         Initialize the Roformer loader for this model.
         """
         try:
             from .roformer.roformer_loader import RoformerLoader
+
             self.roformer_loader = RoformerLoader()
             self.logger.debug("Initialized Roformer loader for CommonSeparator")
         except ImportError as e:
             self.logger.warning(f"Could not import RoformerLoader: {e}")
             self.roformer_loader = None
-    
+
     def get_roformer_loading_stats(self):
         """
         Get Roformer loading statistics if available.
-        
+
         Returns:
             dict: Loading statistics or empty dict if not available
         """
         if self.roformer_loader:
             return self.roformer_loader.get_loading_stats()
         return {}
-    
+
     def validate_roformer_config(self, config, model_type):
         """
         Validate Roformer configuration if loader is available.
-        
+
         Args:
             config: Configuration dictionary to validate
             model_type: Type of model to validate for
-            
+
         Returns:
             bool: True if valid or validation not available, False if invalid
         """
