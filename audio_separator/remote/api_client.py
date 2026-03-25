@@ -29,10 +29,11 @@ class AudioSeparatorAPIClient:
 
     def separate_audio(
         self,
-        file_path: str,
+        file_path: Optional[str] = None,
         model: Optional[str] = None,
         models: Optional[List[str]] = None,
         preset: Optional[str] = None,
+        gcs_uri: Optional[str] = None,
         # Output parameters
         output_format: str = "flac",
         output_bitrate: Optional[str] = None,
@@ -70,12 +71,27 @@ class AudioSeparatorAPIClient:
         mdxc_batch_size: int = 1,
         mdxc_pitch_shift: int = 0,
     ) -> dict:
-        """Submit audio separation job (asynchronous processing)."""
-        if not os.path.exists(file_path):
-            raise FileNotFoundError(f"Audio file not found: {file_path}")
+        """Submit audio separation job (asynchronous processing).
 
-        files = {"file": (os.path.basename(file_path), open(file_path, "rb"))}
+        Provide either file_path (uploads file) or gcs_uri (server fetches from GCS).
+        """
+        if not file_path and not gcs_uri:
+            raise ValueError("Must provide either file_path or gcs_uri")
+        if file_path and gcs_uri:
+            raise ValueError("Provide either file_path or gcs_uri, not both")
+
+        files = {}
+        file_handle = None
+        if file_path:
+            if not os.path.exists(file_path):
+                raise FileNotFoundError(f"Audio file not found: {file_path}")
+            file_handle = open(file_path, "rb")
+            files = {"file": (os.path.basename(file_path), file_handle)}
+
         data = {}
+
+        if gcs_uri:
+            data["gcs_uri"] = gcs_uri
 
         # Handle model/preset parameters
         if preset:
@@ -133,21 +149,28 @@ class AudioSeparatorAPIClient:
 
         try:
             # Increase timeout for large files (5 minutes)
-            response = self.session.post(f"{self.api_url}/separate", files=files, data=data, timeout=300)
+            response = self.session.post(
+                f"{self.api_url}/separate",
+                files=files if files else None,
+                data=data,
+                timeout=300,
+            )
             response.raise_for_status()
             return response.json()
         except requests.RequestException as e:
             self.logger.error(f"Separation request failed: {e}")
             raise
         finally:
-            files["file"][1].close()
+            if file_handle:
+                file_handle.close()
 
     def separate_audio_and_wait(
         self,
-        file_path: str,
+        file_path: Optional[str] = None,
         model: Optional[str] = None,
         models: Optional[List[str]] = None,
         preset: Optional[str] = None,
+        gcs_uri: Optional[str] = None,
         timeout: int = 600,
         poll_interval: int = 10,
         download: bool = True,
@@ -192,9 +215,10 @@ class AudioSeparatorAPIClient:
         and optionally download the result files.
 
         Args:
-            file_path: Path to the audio file to separate
+            file_path: Path to the audio file to separate (or None if using gcs_uri)
             model: Single model to use for separation (for backwards compatibility)
             models: List of models to use for separation
+            gcs_uri: GCS URI (gs://bucket/path) - server fetches directly from GCS
             timeout: Maximum time to wait for completion in seconds (default: 600)
             poll_interval: How often to check status in seconds (default: 10)
             download: Whether to automatically download result files (default: True)
@@ -216,13 +240,15 @@ class AudioSeparatorAPIClient:
             models_desc = f"preset:{preset}"
         else:
             models_desc = models or ([model] if model else ["default"])
-        self.logger.info(f"Submitting separation job for '{file_path}' with {models_desc} (audio-separator v{AUDIO_SEPARATOR_VERSION})")
+        source_desc = gcs_uri if gcs_uri else file_path
+        self.logger.info(f"Submitting separation job for '{source_desc}' with {models_desc} (audio-separator v{AUDIO_SEPARATOR_VERSION})")
 
         result = self.separate_audio(
             file_path,
             model,
             models,
             preset,
+            gcs_uri,
             output_format,
             output_bitrate,
             normalization_threshold,

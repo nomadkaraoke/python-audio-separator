@@ -61,6 +61,37 @@ def generate_file_hash(filename: str) -> str:
     return hashlib.sha256(filename.encode("utf-8")).hexdigest()[:16]
 
 
+def download_from_gcs(gcs_uri: str) -> tuple[bytes, str]:
+    """Download an audio file from GCS.
+
+    Args:
+        gcs_uri: GCS URI in the format gs://bucket/path/to/file
+
+    Returns:
+        Tuple of (file_bytes, filename)
+    """
+    from google.cloud import storage
+
+    if not gcs_uri.startswith("gs://"):
+        raise ValueError(f"Invalid GCS URI (must start with gs://): {gcs_uri}")
+
+    # Parse gs://bucket/path
+    without_prefix = gcs_uri[len("gs://"):]
+    slash_idx = without_prefix.index("/")
+    bucket_name = without_prefix[:slash_idx]
+    blob_path = without_prefix[slash_idx + 1:]
+    filename = os.path.basename(blob_path)
+
+    logger.info(f"Downloading from GCS: bucket={bucket_name}, path={blob_path}")
+    client = storage.Client()
+    bucket = client.bucket(bucket_name)
+    blob = bucket.blob(blob_path)
+    audio_bytes = blob.download_as_bytes()
+    logger.info(f"Downloaded {len(audio_bytes)} bytes from GCS")
+
+    return audio_bytes, filename
+
+
 try:
     AUDIO_SEPARATOR_VERSION = version("audio-separator")
 except Exception:
@@ -335,7 +366,8 @@ web_app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=Tr
 
 @web_app.post("/separate")
 async def separate_audio(
-    file: UploadFile = File(..., description="Audio file to separate"),
+    file: Optional[UploadFile] = File(None, description="Audio file to separate"),
+    gcs_uri: Optional[str] = Form(None, description="GCS URI (gs://bucket/path) to fetch audio from instead of uploading"),
     model: Optional[str] = Form(None, description="Single model to use for separation"),
     models: Optional[str] = Form(None, description='JSON list of models, e.g. ["model1.ckpt", "model2.onnx"]'),
     preset: Optional[str] = Form(None, description="Ensemble preset name (e.g. instrumental_clean, karaoke)"),
@@ -376,9 +408,14 @@ async def separate_audio(
     mdxc_batch_size: int = Form(1),
     mdxc_pitch_shift: int = Form(0),
 ) -> dict:
-    """Upload an audio file and separate it into stems."""
-    if not file.filename:
-        raise HTTPException(status_code=400, detail="No file provided")
+    """Upload an audio file (or provide a GCS URI) and separate it into stems."""
+    # Validate: must provide exactly one of file or gcs_uri
+    has_file = file is not None and file.filename
+    has_gcs = gcs_uri is not None and gcs_uri.strip()
+    if not has_file and not has_gcs:
+        raise HTTPException(status_code=400, detail="Must provide either a file upload or gcs_uri parameter")
+    if has_file and has_gcs:
+        raise HTTPException(status_code=400, detail="Provide either file upload or gcs_uri, not both")
 
     try:
         # Parse models parameter
@@ -403,7 +440,16 @@ async def separate_audio(
             except json.JSONDecodeError as e:
                 raise HTTPException(status_code=400, detail=f"Invalid JSON in custom_output_names parameter: {e}")
 
-        audio_data = await file.read()
+        # Get audio data from file upload or GCS
+        if has_gcs:
+            try:
+                audio_data, filename = download_from_gcs(gcs_uri.strip())
+            except Exception as e:
+                raise HTTPException(status_code=400, detail=f"Failed to download from GCS: {e}")
+        else:
+            audio_data = await file.read()
+            filename = file.filename
+
         task_id = str(uuid.uuid4())
 
         # Set initial status
@@ -411,7 +457,7 @@ async def separate_audio(
             "task_id": task_id,
             "status": "submitted",
             "progress": 0,
-            "original_filename": file.filename,
+            "original_filename": filename,
             "models_used": [f"preset:{preset}"] if preset else (models_list or ["default"]),
             "total_models": 1 if preset else (len(models_list) if models_list else 1),
             "current_model_index": 0,
@@ -425,7 +471,7 @@ async def separate_audio(
             None,
             lambda: separate_audio_sync(
                 audio_data,
-                file.filename,
+                filename,
                 task_id,
                 models_list,
                 preset,
@@ -608,7 +654,7 @@ async def root() -> dict:
             "All MDX, VR, Demucs, and MDXC architectures supported",
         ],
         "endpoints": {
-            "POST /separate": "Upload and separate audio file (supports presets, multiple models, all parameters)",
+            "POST /separate": "Separate audio file via upload or GCS URI (supports presets, multiple models, all parameters)",
             "GET /status/{task_id}": "Get job status and progress",
             "GET /download/{task_id}/{file_hash}": "Download separated file using hash identifier",
             "GET /presets": "List available ensemble presets",

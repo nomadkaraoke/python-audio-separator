@@ -517,3 +517,60 @@ class TestAudioSeparatorAPIClient:
         ]
         actual_calls = [call.args for call in mock_download_hash.call_args_list]
         assert actual_calls == expected_calls
+
+    @patch("requests.Session.post")
+    def test_separate_audio_with_gcs_uri(self, mock_post, api_client):
+        """Test audio separation using GCS URI instead of file upload."""
+        mock_response = Mock()
+        mock_response.json.return_value = {
+            "task_id": "test-task-gcs",
+            "status": "submitted",
+        }
+        mock_response.raise_for_status.return_value = None
+        mock_post.return_value = mock_response
+
+        result = api_client.separate_audio(
+            gcs_uri="gs://my-bucket/path/to/audio.flac",
+            preset="instrumental_clean",
+        )
+
+        assert result["task_id"] == "test-task-gcs"
+
+        # Verify gcs_uri was sent in form data, no file upload
+        call_args = mock_post.call_args
+        assert call_args[1]["files"] is None
+        assert call_args[1]["data"]["gcs_uri"] == "gs://my-bucket/path/to/audio.flac"
+
+    def test_separate_audio_requires_file_or_gcs_uri(self, api_client):
+        """Test that either file_path or gcs_uri must be provided."""
+        with pytest.raises(ValueError, match="Must provide either"):
+            api_client.separate_audio()
+
+    def test_separate_audio_rejects_both_file_and_gcs_uri(self, api_client, mock_audio_file):
+        """Test that providing both file_path and gcs_uri raises an error."""
+        with pytest.raises(ValueError, match="not both"):
+            api_client.separate_audio(
+                file_path=mock_audio_file,
+                gcs_uri="gs://bucket/file.flac",
+            )
+
+    @patch.object(AudioSeparatorAPIClient, "separate_audio")
+    @patch.object(AudioSeparatorAPIClient, "get_job_status")
+    @patch("time.sleep")
+    def test_separate_audio_and_wait_with_gcs_uri(self, mock_sleep, mock_status, mock_separate, api_client):
+        """Test separate_audio_and_wait with GCS URI."""
+        mock_separate.return_value = {"task_id": "test-task-gcs"}
+        mock_status.side_effect = [
+            {"status": "completed", "files": {"hash1": "output.flac"}},
+        ]
+
+        result = api_client.separate_audio_and_wait(
+            gcs_uri="gs://my-bucket/audio.flac",
+            preset="instrumental_clean",
+            download=False,
+        )
+
+        assert result["status"] == "completed"
+        # Verify gcs_uri was passed through to separate_audio
+        call_args = mock_separate.call_args
+        assert call_args[0][4] == "gs://my-bucket/audio.flac"  # positional arg for gcs_uri
