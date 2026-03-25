@@ -149,9 +149,14 @@ class AudioSeparatorAPIClient:
 
         try:
             # Increase timeout for large files (5 minutes)
+            # When using gcs_uri (no file upload), we still need multipart/form-data
+            # encoding because FastAPI requires it for endpoints with File()/Form() params.
+            # Passing a dummy empty file field forces requests to use multipart encoding.
+            if not files:
+                files = {"file": ("", b"", "application/octet-stream")}
             response = self.session.post(
                 f"{self.api_url}/separate",
-                files=files if files else None,
+                files=files,
                 data=data,
                 timeout=300,
             )

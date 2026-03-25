@@ -536,9 +536,10 @@ class TestAudioSeparatorAPIClient:
 
         assert result["task_id"] == "test-task-gcs"
 
-        # Verify gcs_uri was sent in form data, no file upload
+        # Verify gcs_uri was sent in form data
         call_args = mock_post.call_args
-        assert call_args[1]["files"] is None
+        # A dummy empty file is sent to force multipart encoding (FastAPI requires it)
+        assert call_args[1]["files"]["file"][0] == ""  # empty filename
         assert call_args[1]["data"]["gcs_uri"] == "gs://my-bucket/path/to/audio.flac"
 
     def test_separate_audio_requires_file_or_gcs_uri(self, api_client):
