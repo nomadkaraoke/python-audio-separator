@@ -120,6 +120,18 @@ class MDXSeparator(CommonSeparator):
                 ort_session_options.log_severity_level = 0
 
             ort_inference_session = ort.InferenceSession(self.model_path, providers=self.onnx_execution_provider, sess_options=ort_session_options)
+            session_providers = ort_inference_session.get_providers()
+
+            requested_provider = self.onnx_execution_provider[0] if self.onnx_execution_provider else None
+            if requested_provider and requested_provider not in session_providers:
+                self.logger.warning(
+                    f"ONNX Runtime could not activate requested provider {requested_provider}; "
+                    f"session is using {session_providers}. This usually means required CUDA/cuDNN "
+                    f"runtime libraries are not visible to the dynamic loader."
+                )
+            else:
+                self.logger.debug(f"ONNX Runtime session providers: {session_providers}")
+
             self.model_run = lambda spek: ort_inference_session.run(None, {"input": spek.cpu().numpy()})[0]
             self.logger.debug("Model loaded successfully using ONNXruntime inferencing session.")
         else:
