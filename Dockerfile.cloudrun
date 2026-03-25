@@ -61,6 +61,7 @@ RUN cd /tmp/audio-separator-src \
         "uvicorn[standard]>=0.24.0" \
         "python-multipart>=0.0.6" \
         "filetype>=1.2.0" \
+        "google-cloud-storage>=2.0.0" \
     && rm -rf /tmp/audio-separator-src
 
 # Set up CUDA library paths
