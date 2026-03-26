@@ -49,11 +49,39 @@ STORAGE_DIR = os.environ.get("STORAGE_DIR", "/tmp/storage")
 MODEL_BUCKET = os.environ.get("MODEL_BUCKET", "")
 PORT = int(os.environ.get("PORT", "8080"))
 
-# In-memory job status tracking (one instance handles one job at a time on Cloud Run GPU)
-job_status_store: dict[str, dict] = {}
+
 
 # Track model readiness
 models_ready = False
+
+# --- Async job infrastructure ---
+gpu_semaphore = threading.Semaphore(1)
+
+OUTPUT_BUCKET = os.environ.get("OUTPUT_BUCKET", "nomadkaraoke-audio-separator-outputs")
+GCP_PROJECT = os.environ.get("GCP_PROJECT", "nomadkaraoke")
+
+_job_store = None
+_output_store = None
+
+
+def get_job_store():
+    """Get or create the Firestore job store (lazy init)."""
+    global _job_store
+    if _job_store is None:
+        from audio_separator.remote.job_store import FirestoreJobStore
+
+        _job_store = FirestoreJobStore(project=GCP_PROJECT)
+    return _job_store
+
+
+def get_output_store():
+    """Get or create the GCS output store (lazy init)."""
+    global _output_store
+    if _output_store is None:
+        from audio_separator.remote.output_store import GCSOutputStore
+
+        _output_store = GCSOutputStore(bucket_name=OUTPUT_BUCKET, project=GCP_PROJECT)
+    return _output_store
 
 
 def generate_file_hash(filename: str) -> str:
@@ -188,19 +216,26 @@ def separate_audio_sync(
 
     def update_status(status: str, progress: int = 0, error: str = None, files: dict = None):
         status_data = {
-            "task_id": task_id,
             "status": status,
             "progress": progress,
-            "original_filename": filename,
             "models_used": models_used,
             "total_models": len(models) if models else 1,
             "current_model_index": 0,
-            "files": files or {},
         }
+        if files is not None:
+            status_data["files"] = files
         if error:
             status_data["error"] = error
-        job_status_store[task_id] = status_data
+        try:
+            get_job_store().update(task_id, status_data)
+        except Exception as e:
+            logger.warning(f"[{task_id}] Failed to update Firestore status: {e}")
 
+    # Wait for GPU availability
+    update_status("queued", 0)
+    logger.info(f"[{task_id}] Waiting for GPU semaphore...")
+    gpu_semaphore.acquire()
+    logger.info(f"[{task_id}] GPU semaphore acquired, starting separation")
     try:
         os.makedirs(f"{STORAGE_DIR}/outputs/{task_id}", exist_ok=True)
         output_dir = f"{STORAGE_DIR}/outputs/{task_id}"
@@ -329,6 +364,9 @@ def separate_audio_sync(
                     fname = os.path.basename(f)
                     all_output_files[generate_file_hash(fname)] = fname
 
+        # Upload outputs to GCS for cross-instance access
+        get_output_store().upload_task_outputs(task_id, output_dir)
+
         update_status("completed", 100, files=all_output_files)
         logger.info(f"Separation completed. {len(all_output_files)} output files.")
         return {"task_id": task_id, "status": "completed", "files": all_output_files, "models_used": models_used}
@@ -338,12 +376,15 @@ def separate_audio_sync(
         traceback.print_exc()
         update_status("error", 0, error=str(e))
 
-        # Clean up on error
+        return {"task_id": task_id, "status": "error", "error": str(e), "models_used": models_used}
+
+    finally:
+        gpu_semaphore.release()
+        logger.info(f"[{task_id}] GPU semaphore released")
+        # Clean up local files (outputs are in GCS now)
         output_dir = f"{STORAGE_DIR}/outputs/{task_id}"
         if os.path.exists(output_dir):
             shutil.rmtree(output_dir, ignore_errors=True)
-
-        return {"task_id": task_id, "status": "error", "error": str(e), "models_used": models_used}
 
 
 # --- FastAPI Application ---
@@ -451,9 +492,10 @@ async def separate_audio(
             filename = file.filename
 
         task_id = str(uuid.uuid4())
+        instance_id = os.environ.get("K_REVISION", "local")
 
-        # Set initial status
-        job_status_store[task_id] = {
+        # Write initial status to Firestore
+        get_job_store().set(task_id, {
             "task_id": task_id,
             "status": "submitted",
             "progress": 0,
@@ -462,12 +504,12 @@ async def separate_audio(
             "total_models": 1 if preset else (len(models_list) if models_list else 1),
             "current_model_index": 0,
             "files": {},
-        }
+            "instance_id": instance_id,
+        })
 
-        # Run separation in a background thread to not block the event loop
-        # but keep the request alive (Cloud Run keeps the instance warm)
+        # Fire-and-forget: run separation in background thread
         loop = asyncio.get_event_loop()
-        await loop.run_in_executor(
+        loop.run_in_executor(
             None,
             lambda: separate_audio_sync(
                 audio_data,
@@ -509,8 +551,15 @@ async def separate_audio(
             ),
         )
 
-        # Return the final status (completed or error)
-        return job_status_store.get(task_id, {"task_id": task_id, "status": "error", "error": "Job lost"})
+        # Return immediately — client polls /status/{task_id}
+        return {
+            "task_id": task_id,
+            "status": "submitted",
+            "progress": 0,
+            "original_filename": filename,
+            "models_used": [f"preset:{preset}"] if preset else (models_list or ["default"]),
+            "total_models": 1 if preset else (len(models_list) if models_list else 1),
+        }
 
     except HTTPException:
         raise
@@ -521,8 +570,9 @@ async def separate_audio(
 @web_app.get("/status/{task_id}")
 async def get_job_status(task_id: str) -> dict:
     """Get the status of a separation job."""
-    if task_id in job_status_store:
-        return job_status_store[task_id]
+    result = get_job_store().get(task_id)
+    if result:
+        return result
     return {
         "task_id": task_id,
         "status": "not_found",
@@ -535,32 +585,20 @@ async def get_job_status(task_id: str) -> dict:
 async def download_file(task_id: str, file_hash: str) -> Response:
     """Download a separated audio file using its hash identifier."""
     try:
-        # Look up filename from job status
-        status_data = job_status_store.get(task_id)
+        status_data = get_job_store().get(task_id)
         if not status_data:
             raise HTTPException(status_code=404, detail="Task not found")
 
         files_dict = status_data.get("files", {})
 
-        # Handle both dict (hash→filename) and list (legacy) formats
         actual_filename = None
         if isinstance(files_dict, dict):
             actual_filename = files_dict.get(file_hash)
-        elif isinstance(files_dict, list):
-            for fname in files_dict:
-                if generate_file_hash(fname) == file_hash:
-                    actual_filename = fname
-                    break
 
         if not actual_filename:
             raise HTTPException(status_code=404, detail=f"File with hash {file_hash} not found")
 
-        file_path = f"{STORAGE_DIR}/outputs/{task_id}/{actual_filename}"
-        if not os.path.exists(file_path):
-            raise HTTPException(status_code=404, detail=f"File not found on disk: {actual_filename}")
-
-        with open(file_path, "rb") as f:
-            file_data = f.read()
+        file_data = get_output_store().get_file_bytes(task_id, actual_filename)
 
         detected_type = filetype.guess(file_data)
         content_type = detected_type.mime if detected_type and detected_type.mime else "application/octet-stream"
@@ -667,9 +705,20 @@ async def root() -> dict:
 
 @web_app.on_event("startup")
 async def startup_event():
-    """Download models from GCS on startup."""
+    """Clean up local storage and download models from GCS on startup."""
     os.makedirs(MODEL_DIR, exist_ok=True)
-    os.makedirs(f"{STORAGE_DIR}/outputs", exist_ok=True)
+
+    # Wipe local outputs from previous instance
+    outputs_dir = f"{STORAGE_DIR}/outputs"
+    if os.path.exists(outputs_dir):
+        shutil.rmtree(outputs_dir, ignore_errors=True)
+    os.makedirs(outputs_dir, exist_ok=True)
+
+    # Clean up old Firestore jobs (>1 hour)
+    try:
+        get_job_store().cleanup_old_jobs(max_age_seconds=3600)
+    except Exception as e:
+        logger.warning(f"Failed to clean up old jobs: {e}")
 
     # Download models in background thread to not block startup probe
     thread = threading.Thread(target=download_models_from_gcs, daemon=True)
