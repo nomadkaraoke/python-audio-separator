@@ -5,7 +5,7 @@ from audio_separator.remote.job_store import FirestoreJobStore
 
 @pytest.fixture
 def mock_firestore_client():
-    with patch("audio_separator.remote.job_store.firestore.Client") as mock_cls:
+    with patch("google.cloud.firestore.Client") as mock_cls:
         mock_client = MagicMock()
         mock_cls.return_value = mock_client
         yield mock_client

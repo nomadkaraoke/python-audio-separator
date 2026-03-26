@@ -6,8 +6,6 @@ import logging
 import time
 from typing import Optional
 
-from google.cloud import firestore
-
 logger = logging.getLogger("audio-separator-api")
 
 COLLECTION = "audio_separation_jobs"
@@ -20,14 +18,17 @@ class FirestoreJobStore:
     """
 
     def __init__(self, project: str = "nomadkaraoke"):
+        from google.cloud import firestore
+
+        self._firestore = firestore
         self._db = firestore.Client(project=project)
         self._collection = self._db.collection(COLLECTION)
 
     def set(self, task_id: str, data: dict) -> None:
         """Create or overwrite a job status document."""
-        data = {**data, "updated_at": firestore.SERVER_TIMESTAMP}
+        data = {**data, "updated_at": self._firestore.SERVER_TIMESTAMP}
         if "created_at" not in data:
-            data["created_at"] = firestore.SERVER_TIMESTAMP
+            data["created_at"] = self._firestore.SERVER_TIMESTAMP
         self._collection.document(task_id).set(data)
 
     def get(self, task_id: str) -> Optional[dict]:
@@ -39,7 +40,7 @@ class FirestoreJobStore:
 
     def update(self, task_id: str, fields: dict) -> None:
         """Merge fields into an existing document."""
-        fields = {**fields, "updated_at": firestore.SERVER_TIMESTAMP}
+        fields = {**fields, "updated_at": self._firestore.SERVER_TIMESTAMP}
         self._collection.document(task_id).update(fields)
 
     def delete(self, task_id: str) -> None:

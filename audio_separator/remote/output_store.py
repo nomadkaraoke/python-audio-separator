@@ -5,8 +5,6 @@ Uploads separation output files to GCS so any Cloud Run instance can serve downl
 import logging
 import os
 
-from google.cloud import storage
-
 logger = logging.getLogger("audio-separator-api")
 
 
@@ -14,6 +12,8 @@ class GCSOutputStore:
     """Manages separation output files in GCS."""
 
     def __init__(self, bucket_name: str = "nomadkaraoke-audio-separator-outputs", project: str = "nomadkaraoke"):
+        from google.cloud import storage
+
         self._client = storage.Client(project=project)
         self._bucket = self._client.bucket(bucket_name)
 

@@ -1,11 +1,11 @@
 import pytest
-from unittest.mock import MagicMock, patch, mock_open
+from unittest.mock import MagicMock, patch
 from audio_separator.remote.output_store import GCSOutputStore
 
 
 @pytest.fixture
 def mock_storage_client():
-    with patch("audio_separator.remote.output_store.storage.Client") as mock_cls:
+    with patch("google.cloud.storage.Client") as mock_cls:
         mock_client = MagicMock()
         mock_cls.return_value = mock_client
         yield mock_client
@@ -19,7 +19,6 @@ def store(mock_storage_client):
 class TestGCSOutputStore:
     def test_upload_directory(self, store, mock_storage_client):
         """Uploads all files from a local directory to GCS under task_id prefix."""
-        import os
         with patch("os.listdir", return_value=["vocals.flac", "instrumental.flac"]):
             with patch("os.path.isfile", return_value=True):
                 store.upload_task_outputs("task-123", "/tmp/outputs/task-123")
