@@ -148,7 +148,7 @@ class AudioSeparatorAPIClient:
             data["custom_output_names"] = json.dumps(custom_output_names)
 
         try:
-            # Server returns immediately with task_id; 60s is generous for submission
+            # Server processes synchronously; 1800s matches Cloud Run request timeout.
             # When using gcs_uri (no file upload), we still need multipart/form-data
             # encoding because FastAPI requires it for endpoints with File()/Form() params.
             # Passing a dummy empty file field forces requests to use multipart encoding.
@@ -158,7 +158,7 @@ class AudioSeparatorAPIClient:
                 f"{self.api_url}/separate",
                 files=files,
                 data=data,
-                timeout=60,
+                timeout=1800,
             )
             response.raise_for_status()
             return response.json()
