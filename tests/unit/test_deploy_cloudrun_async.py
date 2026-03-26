@@ -76,6 +76,9 @@ class TestGPUSemaphore:
         assert len(completed) == 5
 
 
+uvicorn = pytest.importorskip("uvicorn", reason="uvicorn not installed (server-only dependency)")
+
+
 class TestLazyInit:
     """Test lazy initialization of stores."""
 
