@@ -55,7 +55,6 @@ PORT = int(os.environ.get("PORT", "8080"))
 models_ready = False
 
 # --- Async job infrastructure ---
-gpu_semaphore = threading.Semaphore(1)
 
 OUTPUT_BUCKET = os.environ.get("OUTPUT_BUCKET", "nomadkaraoke-audio-separator-outputs")
 GCP_PROJECT = os.environ.get("GCP_PROJECT", "nomadkaraoke")
@@ -231,11 +230,8 @@ def separate_audio_sync(
         except Exception as e:
             logger.warning(f"[{task_id}] Failed to update Firestore status: {e}")
 
-    # Wait for GPU availability
-    update_status("queued", 0)
-    logger.info(f"[{task_id}] Waiting for GPU semaphore...")
-    gpu_semaphore.acquire()
-    logger.info(f"[{task_id}] GPU semaphore acquired, starting separation")
+    update_status("processing", 0)
+    logger.info(f"[{task_id}] Starting separation")
     try:
         os.makedirs(f"{STORAGE_DIR}/outputs/{task_id}", exist_ok=True)
         output_dir = f"{STORAGE_DIR}/outputs/{task_id}"
@@ -379,8 +375,7 @@ def separate_audio_sync(
         return {"task_id": task_id, "status": "error", "error": str(e), "models_used": models_used}
 
     finally:
-        gpu_semaphore.release()
-        logger.info(f"[{task_id}] GPU semaphore released")
+        logger.info(f"[{task_id}] Separation finished, cleaning up local files")
         # Clean up local files (outputs are in GCS now)
         output_dir = f"{STORAGE_DIR}/outputs/{task_id}"
         if os.path.exists(output_dir):
@@ -507,9 +502,12 @@ async def separate_audio(
             "instance_id": instance_id,
         })
 
-        # Fire-and-forget: run separation in background thread
+        # Run separation synchronously — Cloud Run keeps this request active,
+        # which lets the autoscaler know this instance is busy and route new
+        # requests to new instances (with concurrency=1).
+        # This matches Modal's .spawn() pattern: each job gets its own GPU instance.
         loop = asyncio.get_event_loop()
-        loop.run_in_executor(
+        result = await loop.run_in_executor(
             None,
             lambda: separate_audio_sync(
                 audio_data,
@@ -551,15 +549,8 @@ async def separate_audio(
             ),
         )
 
-        # Return immediately — client polls /status/{task_id}
-        return {
-            "task_id": task_id,
-            "status": "submitted",
-            "progress": 0,
-            "original_filename": filename,
-            "models_used": [f"preset:{preset}"] if preset else (models_list or ["default"]),
-            "total_models": 1 if preset else (len(models_list) if models_list else 1),
-        }
+        # Return the completed/error result (Firestore + GCS already updated by separate_audio_sync)
+        return result
 
     except HTTPException:
         raise
