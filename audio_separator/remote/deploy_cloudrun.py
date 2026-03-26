@@ -49,8 +49,7 @@ STORAGE_DIR = os.environ.get("STORAGE_DIR", "/tmp/storage")
 MODEL_BUCKET = os.environ.get("MODEL_BUCKET", "")
 PORT = int(os.environ.get("PORT", "8080"))
 
-# In-memory job status tracking (one instance handles one job at a time on Cloud Run GPU)
-job_status_store: dict[str, dict] = {}
+
 
 # Track model readiness
 models_ready = False
