@@ -60,8 +60,15 @@ def test_cli_version_subprocess():
 
 # Test the CLI with no arguments
 def test_cli_no_args(capsys):
-    # Skip subprocess CLI tests - require proper CLI installation  
-    pytest.skip("CLI subprocess tests require proper installation")
+    test_args = ["cli.py"]
+
+    with patch("sys.argv", test_args), patch.dict("sys.modules", {"audio_separator.separator": None}):
+        with pytest.raises(SystemExit) as exc_info:
+            main()
+
+    assert exc_info.value.code == 1
+    captured = capsys.readouterr()
+    assert "Separate audio file into different stems." in captured.out
 
 
 # Test with multiple filename arguments

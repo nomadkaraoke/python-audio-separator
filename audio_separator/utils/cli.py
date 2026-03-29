@@ -150,13 +150,13 @@ def main():
         log_level = getattr(logging, args.log_level.upper())
     logger.setLevel(log_level)
 
-    from audio_separator.separator import Separator
-
     if args.env_info:
+        from audio_separator.separator import Separator
         separator = Separator()
         sys.exit(0)
 
     if args.list_models:
+        from audio_separator.separator import Separator
         separator = Separator(info_only=True)
 
         if args.list_format == "json":
@@ -190,6 +190,7 @@ def main():
         sys.exit(0)
 
     if args.list_presets:
+        from audio_separator.separator import Separator
         separator = Separator(info_only=True)
         presets = separator.list_ensemble_presets()
 
@@ -217,6 +218,7 @@ def main():
         sys.exit(0)
 
     if args.download_model_only:
+        from audio_separator.separator import Separator
         models_to_download = [args.model_filename] + (args.extra_models or [])
         separator = Separator(log_formatter=log_formatter, log_level=log_level, model_file_dir=args.model_file_dir)
         for model in models_to_download:
@@ -232,6 +234,8 @@ def main():
         sys.exit(1)
 
     logger.info(f"Separator version {package_version} beginning with input path(s): {', '.join(audio_files)}")
+
+    from audio_separator.separator import Separator
 
     separator = Separator(
         log_formatter=log_formatter,

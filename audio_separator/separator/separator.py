@@ -321,7 +321,25 @@ class Separator:
         system_info = self.get_system_info()
         self.check_ffmpeg_installed()
         self.log_onnxruntime_packages()
+        self.preload_onnxruntime_dependencies()
         self.setup_torch_device(system_info)
+
+    def preload_onnxruntime_dependencies(self):
+        """
+        Preload ONNX Runtime shared library dependencies when supported by the installed package.
+
+        This helps pip-installed CUDA/cuDNN runtime wheels become visible to ONNX Runtime before
+        the first CUDAExecutionProvider session is created.
+        """
+        if not hasattr(ort, "preload_dlls"):
+            self.logger.debug("Installed ONNX Runtime does not provide preload_dlls(); skipping dependency preload.")
+            return
+
+        try:
+            ort.preload_dlls()
+            self.logger.debug("Preloaded ONNX Runtime shared library dependencies.")
+        except Exception as exc:
+            self.logger.warning(f"Unable to preload ONNX Runtime shared library dependencies: {exc}")
 
     def get_system_info(self):
         """
