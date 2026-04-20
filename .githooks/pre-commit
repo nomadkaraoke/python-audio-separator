@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Nomad Karaoke shared pre-commit hook — scans staged changes for secrets.
+# Enable: git config core.hooksPath .githooks
+set -eu
+
+if ! command -v gitleaks >/dev/null 2>&1; then
+  printf '\033[33mwarn:\033[0m gitleaks not installed — skipping secret scan\n' >&2
+  printf '      install: brew install gitleaks   (or: https://github.com/gitleaks/gitleaks)\n' >&2
+  exit 0
+fi
+
+if ! gitleaks protect --staged --redact --no-banner; then
+  printf '\n\033[31m✗ gitleaks detected a potential secret in staged changes.\033[0m\n' >&2
+  printf '  • If real: remove it, rotate the credential, then re-commit.\n' >&2
+  printf '  • If false positive: add an allowlist entry to .gitleaks.toml.\n' >&2
+  printf '  • Emergency override (not recommended): git commit --no-verify\n' >&2
+  exit 1
+fi

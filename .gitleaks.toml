@@ -1,0 +1,60 @@
+# Nomad Karaoke shared gitleaks config.
+# Extends the default ruleset with one custom rule for Discord webhooks
+# and an allowlist covering known false-positive paths.
+
+title = "Nomad Karaoke"
+
+[extend]
+useDefault = true
+
+# ---------------------------------------------------------------------------
+# Custom rules
+# ---------------------------------------------------------------------------
+
+[[rules]]
+id = "discord-webhook-url"
+description = "Discord webhook URL (token embedded in URL)"
+regex = '''https://(?:discord|discordapp)\.com/api/webhooks/\d{17,20}/[A-Za-z0-9_-]{60,}'''
+tags = ["discord", "webhook", "secret"]
+
+# ---------------------------------------------------------------------------
+# Global allowlist
+# ---------------------------------------------------------------------------
+
+[allowlist]
+description = "Paths and patterns that are known false positives"
+
+paths = [
+  '''(?i)\.(jpg|jpeg|png|gif|bmp|svg|webp|pdf|ico|mp3|mp4|wav|flac|m4a)$''',
+  '''(^|/)(package-lock\.json|yarn\.lock|pnpm-lock\.yaml|poetry\.lock|Podfile\.lock|Cargo\.lock|go\.sum|composer\.lock|Gemfile\.lock|uv\.lock)$''',
+  '''(^|/)node_modules/''',
+  '''(^|/)vendor/''',
+  '''(^|/)wp-content/''',
+  '''(^|/)\.dart_tool/''',
+  '''(^|/)\.venv/''',
+  '''(^|/)\.next/''',
+  '''(^|/)build/''',
+  '''(^|/)dist/''',
+  '''(^|/)\.flutter-plugins''',
+  '''(^|/)test[-_]?fixtures?/''',
+  '''(^|/)tests?/.*conftest\.py$''',
+  '''(^|/)tests?/.*test_[^/]+\.py$''',
+  '''(^|/)tests?/.*_test\.py$''',
+  '''(^|/).*\.(test|spec)\.(js|mjs|cjs|ts|tsx|jsx)$''',
+  '''(^|/).*\.test\.local\.(js|mjs|cjs|ts|tsx|jsx|py)$''',
+  '''(^|/).*\.local\.(js|mjs|cjs|ts|tsx|jsx|py)$''',
+]
+
+regexes = [
+  # Explicit placeholder patterns
+  '''YOUR_[A-Z_]{2,}''',
+  '''EXAMPLE_[A-Z_]{2,}''',
+  '''PLACEHOLDER_[A-Z_]{2,}''',
+  '''CHANGE[_-]?ME''',
+  '''<[A-Z_]{2,}>''',
+  '''\$\{[A-Z_]{2,}\}''',
+
+  # Firebase / GCP client API keys — public by design (identify the project,
+  # access is gated by Firebase Security Rules).
+  '''AIzaSy[A-Za-z0-9_-]{33}''',
+]

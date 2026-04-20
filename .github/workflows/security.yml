@@ -1,0 +1,10 @@
+name: Security
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  gitleaks:
+    uses: nomadkaraoke/.github/.github/workflows/gitleaks.yml@main
