@@ -487,7 +487,7 @@ class TestRemoteCLIIntegration:
         logger = Mock()
 
         # Execute the command
-        handle_separate_command(args, mock_client, logger)
+        handle_separate_command(args, mock_client, logger, "test-bucket")
 
         # Verify the API client method was called
         mock_client.separate_audio_and_wait.assert_called_once()
