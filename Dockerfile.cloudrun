@@ -52,6 +52,17 @@ RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.12 1
     && curl -sS https://bootstrap.pypa.io/get-pip.py | python3.12 \
     && python3 -m pip install --no-cache-dir --upgrade pip setuptools wheel
 
+# Install PyTorch with CUDA 12.6 support BEFORE audio-separator[gpu].
+# Without this, `pip install ".[gpu]"` pulls the default CPU-only PyTorch wheel
+# from PyPI and Separator silently falls back to CPU (~10× slower).
+# Cloud Run L4 GPUs have NVIDIA driver 570 (supports up to CUDA 12.8), so cu126
+# works. cu130 would fail with "NVIDIA driver is too old".
+# Installing torch first means audio-separator[gpu] sees it already satisfied.
+RUN pip install --no-cache-dir \
+        torch==2.6.0+cu126 \
+        torchvision==0.21.0+cu126 \
+        --index-url https://download.pytorch.org/whl/cu126
+
 # Install audio-separator with GPU support and API dependencies
 COPY . /tmp/audio-separator-src
 RUN cd /tmp/audio-separator-src \

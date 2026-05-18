@@ -232,13 +232,14 @@ class TestRemoteCLI:
             "downloaded_files": ["output1.wav", "output2.wav"]
         }
 
-        handle_separate_command(args, mock_api_client, mock_logger)
+        handle_separate_command(args, mock_api_client, mock_logger, "test-bucket")
 
         # Verify API client was called with correct parameters
         mock_api_client.separate_audio_and_wait.assert_called_once()
         call_args = mock_api_client.separate_audio_and_wait.call_args
-        assert call_args[0][0] == mock_audio_file  # First positional argument should be the audio file
         kwargs = call_args[1]
+        assert kwargs["file_path"] == mock_audio_file  # Small file uses upload path
+        assert kwargs["gcs_uri"] is None
         assert kwargs["model"] == "test_model.ckpt"
         assert kwargs["timeout"] == 600
         assert kwargs["download"] is True
@@ -266,7 +267,7 @@ class TestRemoteCLI:
             "downloaded_files": ["output1.wav", "output2.wav"]
         }
 
-        handle_separate_command(args, mock_api_client, mock_logger)
+        handle_separate_command(args, mock_api_client, mock_logger, "test-bucket")
 
         call_args = mock_api_client.separate_audio_and_wait.call_args
         kwargs = call_args[1]
@@ -293,7 +294,7 @@ class TestRemoteCLI:
             "error": "Processing failed"
         }
 
-        handle_separate_command(args, mock_api_client, mock_logger)
+        handle_separate_command(args, mock_api_client, mock_logger, "test-bucket")
 
         # Verify error was logged
         mock_logger.error.assert_called()
@@ -314,10 +315,113 @@ class TestRemoteCLI:
 
         mock_api_client.separate_audio_and_wait.side_effect = Exception("API error")
 
-        handle_separate_command(args, mock_api_client, mock_logger)
+        handle_separate_command(args, mock_api_client, mock_logger, "test-bucket")
 
         # Verify error was logged
         mock_logger.error.assert_called()
+
+    def _make_separate_args(self, audio_file, **overrides):
+        """Build a Mock args object for handle_separate_command with sensible defaults."""
+        args = Mock()
+        args.audio_files = [audio_file]
+        args.model = "test_model.ckpt"
+        args.models = None
+        args.preset = None
+        args.timeout = 600
+        args.poll_interval = 10
+        for attr in ['output_format', 'output_bitrate', 'normalization', 'amplification', 'single_stem',
+                     'invert_spect', 'sample_rate', 'use_soundfile', 'use_autocast', 'custom_output_names',
+                     'mdx_segment_size', 'mdx_overlap', 'mdx_batch_size', 'mdx_hop_length', 'mdx_enable_denoise',
+                     'vr_batch_size', 'vr_window_size', 'vr_aggression', 'vr_enable_tta', 'vr_high_end_process',
+                     'vr_enable_post_process', 'vr_post_process_threshold', 'demucs_segment_size', 'demucs_shifts',
+                     'demucs_overlap', 'demucs_segments_enabled', 'mdxc_segment_size', 'mdxc_override_model_segment_size',
+                     'mdxc_overlap', 'mdxc_batch_size', 'mdxc_pitch_shift']:
+            setattr(args, attr, None)
+        for k, v in overrides.items():
+            setattr(args, k, v)
+        return args
+
+    @patch('audio_separator.remote.cli.delete_from_gcs')
+    @patch('audio_separator.remote.cli.upload_to_gcs')
+    @patch('audio_separator.remote.cli.os.path.getsize')
+    def test_handle_separate_large_file_uploads_to_gcs(
+        self, mock_getsize, mock_upload, mock_delete, mock_api_client, mock_logger, mock_audio_file
+    ):
+        """Files over the threshold go via GCS, not multipart upload."""
+        from audio_separator.remote.cli import GCS_UPLOAD_THRESHOLD_BYTES
+
+        mock_getsize.return_value = GCS_UPLOAD_THRESHOLD_BYTES + 1
+        mock_upload.return_value = "gs://test-bucket/cli-uploads/abc-song.wav"
+        mock_api_client.separate_audio_and_wait.return_value = {
+            "status": "completed", "downloaded_files": ["song_(Vocals).wav"],
+        }
+
+        args = self._make_separate_args(mock_audio_file)
+        handle_separate_command(args, mock_api_client, mock_logger, "test-bucket")
+
+        mock_upload.assert_called_once_with(mock_audio_file, "test-bucket", mock_logger)
+        kwargs = mock_api_client.separate_audio_and_wait.call_args[1]
+        assert kwargs["file_path"] is None
+        assert kwargs["gcs_uri"] == "gs://test-bucket/cli-uploads/abc-song.wav"
+        mock_delete.assert_called_once_with("gs://test-bucket/cli-uploads/abc-song.wav", mock_logger)
+
+    @patch('audio_separator.remote.cli.delete_from_gcs')
+    @patch('audio_separator.remote.cli.upload_to_gcs')
+    @patch('audio_separator.remote.cli.os.path.getsize')
+    def test_handle_separate_cleanup_runs_when_separation_fails(
+        self, mock_getsize, mock_upload, mock_delete, mock_api_client, mock_logger, mock_audio_file
+    ):
+        """If separation raises after GCS upload, we still clean up the uploaded object."""
+        from audio_separator.remote.cli import GCS_UPLOAD_THRESHOLD_BYTES
+
+        mock_getsize.return_value = GCS_UPLOAD_THRESHOLD_BYTES + 1
+        mock_upload.return_value = "gs://test-bucket/cli-uploads/abc-song.wav"
+        mock_api_client.separate_audio_and_wait.side_effect = Exception("separator died")
+
+        args = self._make_separate_args(mock_audio_file)
+        handle_separate_command(args, mock_api_client, mock_logger, "test-bucket")
+
+        mock_delete.assert_called_once_with("gs://test-bucket/cli-uploads/abc-song.wav", mock_logger)
+
+    @patch('audio_separator.remote.cli.delete_from_gcs')
+    @patch('audio_separator.remote.cli.upload_to_gcs')
+    @patch('audio_separator.remote.cli.os.path.getsize')
+    def test_handle_separate_upload_failure_skips_separation_and_cleanup(
+        self, mock_getsize, mock_upload, mock_delete, mock_api_client, mock_logger, mock_audio_file
+    ):
+        """If GCS upload fails, we don't call the API and don't try to clean up something we never created."""
+        from audio_separator.remote.cli import GCS_UPLOAD_THRESHOLD_BYTES
+
+        mock_getsize.return_value = GCS_UPLOAD_THRESHOLD_BYTES + 1
+        mock_upload.side_effect = RuntimeError("ADC creds missing")
+
+        args = self._make_separate_args(mock_audio_file)
+        handle_separate_command(args, mock_api_client, mock_logger, "test-bucket")
+
+        mock_api_client.separate_audio_and_wait.assert_not_called()
+        mock_delete.assert_not_called()
+        mock_logger.error.assert_called()
+
+    @patch('audio_separator.remote.cli.upload_to_gcs')
+    @patch('audio_separator.remote.cli.os.path.getsize')
+    def test_handle_separate_small_file_skips_gcs(
+        self, mock_getsize, mock_upload, mock_api_client, mock_logger, mock_audio_file
+    ):
+        """Files at or below the threshold never touch GCS."""
+        from audio_separator.remote.cli import GCS_UPLOAD_THRESHOLD_BYTES
+
+        mock_getsize.return_value = GCS_UPLOAD_THRESHOLD_BYTES
+        mock_api_client.separate_audio_and_wait.return_value = {
+            "status": "completed", "downloaded_files": [],
+        }
+
+        args = self._make_separate_args(mock_audio_file)
+        handle_separate_command(args, mock_api_client, mock_logger, "test-bucket")
+
+        mock_upload.assert_not_called()
+        kwargs = mock_api_client.separate_audio_and_wait.call_args[1]
+        assert kwargs["file_path"] == mock_audio_file
+        assert kwargs["gcs_uri"] is None
 
     def test_handle_status_command_success(self, mock_api_client, mock_logger):
         """Test successful status command handling."""
@@ -441,4 +545,107 @@ class TestRemoteCLI:
 
         handle_download_command(args, mock_api_client, mock_logger)
 
-        mock_logger.error.assert_called() 
+        mock_logger.error.assert_called()
+
+
+class TestGCSHelpers:
+    """Direct tests for the GCS upload/delete helper functions."""
+
+    def test_upload_to_gcs_builds_expected_blob_path_and_uri(self, mock_audio_file, mock_logger):
+        """Object key uses cli-uploads/{uuid}-{filename} so collisions are impossible."""
+        from audio_separator.remote.cli import upload_to_gcs, GCS_INPUT_PREFIX
+
+        from google.cloud import storage as gcs_storage
+        with patch.object(gcs_storage, 'Client') as mock_client_cls:
+            mock_blob = MagicMock()
+            mock_bucket = MagicMock()
+            mock_bucket.blob.return_value = mock_blob
+            mock_client = MagicMock()
+            mock_client.bucket.return_value = mock_bucket
+            mock_client_cls.return_value = mock_client
+
+            gcs_uri = upload_to_gcs(mock_audio_file, "my-bucket", mock_logger)
+
+        mock_client.bucket.assert_called_once_with("my-bucket")
+        blob_path = mock_bucket.blob.call_args[0][0]
+        filename = os.path.basename(mock_audio_file)
+        assert blob_path.startswith(f"{GCS_INPUT_PREFIX}/")
+        assert blob_path.endswith(f"-{filename}")
+        assert gcs_uri == f"gs://my-bucket/{blob_path}"
+        mock_blob.upload_from_filename.assert_called_once_with(mock_audio_file)
+
+    def test_upload_to_gcs_raises_clear_error_when_lib_missing(self, mock_audio_file, mock_logger):
+        """If google-cloud-storage isn't installed, surface a helpful install hint."""
+        from audio_separator.remote.cli import upload_to_gcs
+
+        real_import = __import__
+
+        def fake_import(name, *args, **kwargs):
+            if name == "google.cloud" or name.startswith("google.cloud"):
+                raise ImportError("no google.cloud")
+            return real_import(name, *args, **kwargs)
+
+        with patch('builtins.__import__', side_effect=fake_import):
+            with pytest.raises(RuntimeError, match="google-cloud-storage is required"):
+                upload_to_gcs(mock_audio_file, "my-bucket", mock_logger)
+
+    def test_delete_from_gcs_parses_uri_and_deletes_blob(self, mock_logger):
+        """Verify gs://bucket/path/to/object splits into the correct bucket + blob path."""
+        from audio_separator.remote.cli import delete_from_gcs
+        from google.cloud import storage as gcs_storage
+
+        with patch.object(gcs_storage, 'Client') as mock_client_cls:
+            mock_blob = MagicMock()
+            mock_bucket = MagicMock()
+            mock_bucket.blob.return_value = mock_blob
+            mock_client = MagicMock()
+            mock_client.bucket.return_value = mock_bucket
+            mock_client_cls.return_value = mock_client
+
+            delete_from_gcs("gs://my-bucket/cli-uploads/abc-def/lying.wav", mock_logger)
+
+        mock_client.bucket.assert_called_once_with("my-bucket")
+        mock_bucket.blob.assert_called_once_with("cli-uploads/abc-def/lying.wav")
+        mock_blob.delete.assert_called_once()
+
+    def test_delete_from_gcs_swallows_errors(self, mock_logger):
+        """Best-effort delete: a failure is logged as a warning, never raised."""
+        from audio_separator.remote.cli import delete_from_gcs
+        from google.cloud import storage as gcs_storage
+
+        with patch.object(gcs_storage, 'Client', side_effect=Exception("network down")):
+            delete_from_gcs("gs://my-bucket/some/object.wav", mock_logger)
+
+        mock_logger.warning.assert_called_once()
+
+
+class TestBucketResolution:
+    """Bucket resolution priority: --gcs-bucket flag > AUDIO_SEPARATOR_GCS_INPUT_BUCKET env > default."""
+
+    @patch('sys.argv', ['audio-separator-remote', '--gcs-bucket', 'flag-bucket', 'separate', 'fake.wav'])
+    @patch('audio_separator.remote.cli.AudioSeparatorAPIClient')
+    @patch('audio_separator.remote.cli.handle_separate_command')
+    @patch.dict(os.environ, {'AUDIO_SEPARATOR_API_URL': 'https://test', 'AUDIO_SEPARATOR_GCS_INPUT_BUCKET': 'env-bucket'})
+    def test_flag_wins_over_env(self, mock_handle_separate, mock_client_class):
+        main()
+        # gcs_bucket is the 4th positional arg to handle_separate_command
+        assert mock_handle_separate.call_args[0][3] == 'flag-bucket'
+
+    @patch('sys.argv', ['audio-separator-remote', 'separate', 'fake.wav'])
+    @patch('audio_separator.remote.cli.AudioSeparatorAPIClient')
+    @patch('audio_separator.remote.cli.handle_separate_command')
+    @patch.dict(os.environ, {'AUDIO_SEPARATOR_API_URL': 'https://test', 'AUDIO_SEPARATOR_GCS_INPUT_BUCKET': 'env-bucket'})
+    def test_env_used_when_flag_absent(self, mock_handle_separate, mock_client_class):
+        main()
+        assert mock_handle_separate.call_args[0][3] == 'env-bucket'
+
+    @patch('sys.argv', ['audio-separator-remote', 'separate', 'fake.wav'])
+    @patch('audio_separator.remote.cli.AudioSeparatorAPIClient')
+    @patch('audio_separator.remote.cli.handle_separate_command')
+    def test_default_used_when_neither_flag_nor_env(self, mock_handle_separate, mock_client_class, monkeypatch):
+        from audio_separator.remote.cli import DEFAULT_GCS_INPUT_BUCKET
+
+        monkeypatch.setenv('AUDIO_SEPARATOR_API_URL', 'https://test')
+        monkeypatch.delenv('AUDIO_SEPARATOR_GCS_INPUT_BUCKET', raising=False)
+        main()
+        assert mock_handle_separate.call_args[0][3] == DEFAULT_GCS_INPUT_BUCKET 

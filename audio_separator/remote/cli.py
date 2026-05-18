@@ -5,9 +5,65 @@ import logging
 import os
 import sys
 import time
+import uuid
 from importlib import metadata
 
 from audio_separator.remote import AudioSeparatorAPIClient
+
+# Cloud Run hard-limits request bodies to 32 MiB. Use 30 MiB threshold so a
+# little request overhead won't push us over. Larger files go via GCS.
+GCS_UPLOAD_THRESHOLD_BYTES = 30 * 1024 * 1024
+DEFAULT_GCS_INPUT_BUCKET = "nomadkaraoke-audio-separator-outputs"
+GCS_INPUT_PREFIX = "cli-uploads"
+
+
+def upload_to_gcs(file_path: str, bucket_name: str, logger: logging.Logger) -> str:
+    """Upload a local file to GCS and return its gs:// URI.
+
+    Requires `google-cloud-storage` and Application Default Credentials
+    (run `gcloud auth application-default login` on the laptop).
+    """
+    try:
+        from google.cloud import storage
+    except ImportError as e:
+        raise RuntimeError(
+            "google-cloud-storage is required to upload files larger than "
+            f"{GCS_UPLOAD_THRESHOLD_BYTES // (1024 * 1024)} MiB. "
+            "Install it with: pip install google-cloud-storage"
+        ) from e
+
+    filename = os.path.basename(file_path)
+    blob_path = f"{GCS_INPUT_PREFIX}/{uuid.uuid4()}-{filename}"
+    gcs_uri = f"gs://{bucket_name}/{blob_path}"
+
+    size_mib = os.path.getsize(file_path) / (1024 * 1024)
+    logger.info(f"Uploading {size_mib:.1f} MiB to {gcs_uri} (server fetches from GCS, bypasses Cloud Run 32 MiB limit)")
+
+    client = storage.Client()
+    bucket = client.bucket(bucket_name)
+    blob = bucket.blob(blob_path)
+    blob.upload_from_filename(file_path)
+
+    logger.info(f"Upload complete: {gcs_uri}")
+    return gcs_uri
+
+
+def delete_from_gcs(gcs_uri: str, logger: logging.Logger) -> None:
+    """Best-effort delete of a GCS object. Logs but doesn't raise on failure."""
+    try:
+        from google.cloud import storage
+
+        without_prefix = gcs_uri[len("gs://"):]
+        slash_idx = without_prefix.index("/")
+        bucket_name = without_prefix[:slash_idx]
+        blob_path = without_prefix[slash_idx + 1:]
+
+        client = storage.Client()
+        bucket = client.bucket(bucket_name)
+        bucket.blob(blob_path).delete()
+        logger.info(f"Cleaned up uploaded input: {gcs_uri}")
+    except Exception as e:
+        logger.warning(f"Failed to delete {gcs_uri}: {e} (bucket lifecycle will reclaim it)")
 
 
 def main():
@@ -104,6 +160,13 @@ def main():
     parser.add_argument("-d", "--debug", action="store_true", help="Enable debug logging")
     parser.add_argument("--log_level", default="info", help="Log level (default: info)")
     parser.add_argument("--api_url", help="API URL (overrides AUDIO_SEPARATOR_API_URL env var)")
+    parser.add_argument(
+        "--gcs-bucket",
+        help=(
+            f"GCS bucket for uploading files >{GCS_UPLOAD_THRESHOLD_BYTES // (1024 * 1024)} MiB "
+            f"(overrides AUDIO_SEPARATOR_GCS_INPUT_BUCKET env var, default: {DEFAULT_GCS_INPUT_BUCKET})"
+        ),
+    )
 
     args = parser.parse_args()
 
@@ -145,9 +208,12 @@ def main():
     # Create API client
     api_client = AudioSeparatorAPIClient(api_url, logger)
 
+    # Resolve GCS bucket for large-file uploads
+    gcs_bucket = args.gcs_bucket or os.environ.get("AUDIO_SEPARATOR_GCS_INPUT_BUCKET", DEFAULT_GCS_INPUT_BUCKET)
+
     # Handle commands
     if args.command == "separate":
-        handle_separate_command(args, api_client, logger)
+        handle_separate_command(args, api_client, logger, gcs_bucket)
     elif args.command == "status":
         handle_status_command(args, api_client, logger)
     elif args.command == "models":
@@ -159,14 +225,35 @@ def main():
         sys.exit(1)
 
 
-def handle_separate_command(args, api_client: AudioSeparatorAPIClient, logger: logging.Logger):
+def handle_separate_command(args, api_client: AudioSeparatorAPIClient, logger: logging.Logger, gcs_bucket: str):
     """Handle the separate command."""
     for audio_file in args.audio_files:
-        logger.info(f"Uploading '{audio_file}' to audio separator...")
+        logger.info(f"Processing '{audio_file}'...")
+
+        # Decide upload path: small files go via multipart POST, large files via GCS
+        # to bypass the Cloud Run 32 MiB request body limit.
+        uploaded_gcs_uri = None
+        try:
+            file_size = os.path.getsize(audio_file)
+            use_gcs = file_size > GCS_UPLOAD_THRESHOLD_BYTES
+        except OSError as e:
+            logger.error(f"❌ Cannot read '{audio_file}': {e}")
+            continue
 
         try:
+            if use_gcs:
+                logger.info(
+                    f"File is {file_size / (1024 * 1024):.1f} MiB (>{GCS_UPLOAD_THRESHOLD_BYTES // (1024 * 1024)} MiB), "
+                    "uploading via GCS"
+                )
+                uploaded_gcs_uri = upload_to_gcs(audio_file, gcs_bucket, logger)
+                source_kwargs = {"file_path": None, "gcs_uri": uploaded_gcs_uri}
+            else:
+                source_kwargs = {"file_path": audio_file, "gcs_uri": None}
+
             # Prepare parameters for separation
             kwargs = {
+                **source_kwargs,
                 "model": args.model,
                 "models": args.models,
                 "preset": args.preset,
@@ -213,7 +300,7 @@ def handle_separate_command(args, api_client: AudioSeparatorAPIClient, logger: l
             }
 
             # Use the convenience method that handles everything
-            result = api_client.separate_audio_and_wait(audio_file, **kwargs)
+            result = api_client.separate_audio_and_wait(**kwargs)
 
             if result["status"] == "completed":
                 if "downloaded_files" in result:
@@ -227,6 +314,9 @@ def handle_separate_command(args, api_client: AudioSeparatorAPIClient, logger: l
 
         except Exception as e:
             logger.error(f"❌ Error processing '{audio_file}': {e}")
+        finally:
+            if uploaded_gcs_uri:
+                delete_from_gcs(uploaded_gcs_uri, logger)
 
 
 def handle_status_command(args, api_client: AudioSeparatorAPIClient, logger: logging.Logger):

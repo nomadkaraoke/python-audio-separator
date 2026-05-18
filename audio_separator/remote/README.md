@@ -200,6 +200,22 @@ audio-separator-remote separate audio.wav \
   --vr_aggression 10
 ```
 
+**Large files (>30 MiB):**
+
+When the deployment runs on Cloud Run, request bodies are capped at 32 MiB. For larger inputs the CLI automatically uploads the file to GCS first and tells the server to fetch from `gs://...`, bypassing the limit. This is transparent — the same `separate` command works for any file size:
+
+```bash
+# Same command, file size detected automatically
+audio-separator-remote separate big_song.wav --preset vocal_balanced
+```
+
+Requirements when the GCS path activates:
+- Application Default Credentials on the laptop (`gcloud auth application-default login`)
+- Write permission on the input bucket (defaults to `nomadkaraoke-audio-separator-outputs`)
+- The Cloud Run service account needs read permission on the same bucket (it already does for the default bucket)
+
+Override the bucket with `--gcs-bucket my-bucket` or by setting `AUDIO_SEPARATOR_GCS_INPUT_BUCKET`. Uploaded inputs are deleted after the job finishes (success or failure); the bucket's lifecycle policy is the safety net if cleanup fails.
+
 **Check job status:**
 
 ```bash
@@ -236,6 +252,7 @@ audio-separator-remote --version
 **Global Options:**
 
 - `--api_url`: Override the API URL
+- `--gcs-bucket`: Bucket used for the >30 MiB upload fallback (env: `AUDIO_SEPARATOR_GCS_INPUT_BUCKET`, default: `nomadkaraoke-audio-separator-outputs`)
 - `--timeout`: Set timeout for polling (default: 600 seconds)
 - `--poll_interval`: Set polling interval (default: 10 seconds)
 - `--debug`: Enable debug logging
