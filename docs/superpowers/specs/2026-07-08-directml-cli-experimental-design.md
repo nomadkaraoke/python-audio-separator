@@ -102,17 +102,21 @@ everyone else.
 - Add `--use_directml` to the CLI usage/help reference block in the README if one
   is maintained there.
 
-### 4. Tests — `tests/unit/test_cli.py`, `tests/unit/test_remote_cli.py`
+### 4. Tests — `tests/unit/test_cli.py`
 
 - Add `"use_directml": False` to the `common_expected_args` fixture
-  (`test_cli.py`).
+  (`test_cli.py`). **Required:** once `cli.py` forwards `use_directml` into the
+  `Separator(...)` call, every test that asserts
+  `assert_called_once_with(**common_expected_args)` will fail unless the fixture
+  includes the key. The fixture update and the `cli.py` forwarding must land
+  together.
 - Add `test_cli_use_directml_argument` mirroring `test_cli_use_autocast_argument`
   (asserts `--use_directml` results in `use_directml=True` in the `Separator`
   call).
-- Add `use_directml` to the forwarded-argument lists in `test_remote_cli.py`
-  (4 locations).
 - No DirectML *execution* test — DML cannot run in CI. We test only the
   CLI→constructor wiring, exactly as `use_autocast` is tested.
+- **Remote CLI (`tests/unit/test_remote_cli.py`) is deliberately NOT touched** —
+  see Non-goals.
 
 ### 5. Reply to contributor (draft; maintainer sends)
 
@@ -139,6 +143,12 @@ everyone else.
   document status; we do not chase untested fixes.
 - No formal support commitment or ongoing compatibility-matrix maintenance
   burden.
+- **No remote CLI / API / deploy-server changes.** DirectML is local-only
+  (Windows + AMD/Intel GPU); the remote separation servers run on Cloud Run /
+  Modal with CUDA or CPU and can never present a DirectML device. Plumbing
+  `use_directml` through `audio_separator/remote/*` would be misleading dead
+  configuration. The local `cli.py` change does not affect the remote tests
+  (separate arg parser).
 
 ## Risk assessment
 
