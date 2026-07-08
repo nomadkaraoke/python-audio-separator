@@ -41,6 +41,7 @@ def common_expected_args():
         "sample_rate": 44100,
         "use_soundfile": False,
         "use_autocast": False,
+        "use_directml": False,
         "chunk_duration": None,
         "ensemble_algorithm": None,
         "ensemble_weights": None,
@@ -252,6 +253,23 @@ def test_cli_use_autocast_argument(common_expected_args):
             # Update expected args for this specific test
             expected_args = common_expected_args.copy()
             expected_args["use_autocast"] = True
+
+            # Assertions
+            mock_separator.assert_called_once_with(**expected_args)
+
+
+# Test using use_directml argument
+def test_cli_use_directml_argument(common_expected_args):
+    test_args = ["cli.py", "test_audio.mp3", "--use_directml"]
+    with patch("sys.argv", test_args):
+        with patch("audio_separator.separator.Separator") as mock_separator:
+            mock_separator_instance = mock_separator.return_value
+            mock_separator_instance.separate.return_value = ["output_file.mp3"]
+            main()
+
+            # Update expected args for this specific test
+            expected_args = common_expected_args.copy()
+            expected_args["use_directml"] = True
 
             # Assertions
             mock_separator.assert_called_once_with(**expected_args)

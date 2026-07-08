@@ -27,6 +27,7 @@ The simplest (and probably most used) use case for this package is to separate a
     - [🎮 Nvidia GPU with CUDA or 🧪 Google Colab](#-nvidia-gpu-with-cuda-or--google-colab)
     - [ Apple Silicon, macOS Sonoma+ with M1 or newer CPU (CoreML acceleration)](#-apple-silicon-macos-sonoma-with-m1-or-newer-cpu-coreml-acceleration)
     - [🐢 No hardware acceleration, CPU only](#-no-hardware-acceleration-cpu-only)
+    - [🪟 Windows AMD / Intel GPU with DirectML (experimental)](#-windows-amd--intel-gpu-with-directml-experimental)
     - [🎥 FFmpeg dependency](#-ffmpeg-dependency)
   - [GPU / CUDA specific installation steps with Pip](#gpu--cuda-specific-installation-steps-with-pip)
     - [Multiple CUDA library versions may be needed](#multiple-cuda-library-versions-may-be-needed)
@@ -138,6 +139,34 @@ Docker:
 ```sh
 beveradb/audio-separator
 ```
+
+### 🪟 Windows AMD / Intel GPU with DirectML (experimental)
+
+> **Experimental / community-supported.** DirectML acceleration was contributed by the community and is not tested in CI or by the maintainer (it requires Windows plus an AMD or Intel GPU). It is opt-in and will never affect CUDA, Apple Silicon, or CPU users.
+
+Install with the `dml` extra:
+```sh
+pip install "audio-separator[dml]"
+```
+
+Then enable it explicitly with the `--use_directml` flag:
+```sh
+audio-separator path/to/audio.wav --use_directml
+```
+
+💬 If DirectML is configured correctly you should see this log message when running `audio-separator --env_info`:
+ `ONNXruntime has DmlExecutionProvider available, enabling acceleration`
+
+**Model architecture status on DirectML:**
+
+| Architecture | Model types | Status |
+|---|---|---|
+| MDX | `.onnx` | ✅ Confirmed working |
+| MDXC (incl. the default `bs_roformer` model) | `.ckpt` / `.yaml` | ⚠️ Expected to work, community-untested |
+| VR | `.pth` | ⚠️ Expected to work, community-untested |
+| Demucs | — | ❓ Unverified |
+
+If you test any of the untested architectures, please [open an issue](https://github.com/nomadkaraoke/python-audio-separator/issues) with your `--env_info` output and logs — reports are what move these from "untested" to "confirmed".
 
 ### 🎥 FFmpeg dependency
 
@@ -418,7 +447,7 @@ Presets are defined in `audio_separator/ensemble_presets.json` — contributions
 ```sh
 usage: audio-separator [-h] [-v] [-d] [-e] [-l] [--log_level LOG_LEVEL] [--list_filter LIST_FILTER] [--list_limit LIST_LIMIT] [--list_format {pretty,json}] [-m MODEL_FILENAME] [--output_format OUTPUT_FORMAT]
                        [--output_bitrate OUTPUT_BITRATE] [--output_dir OUTPUT_DIR] [--model_file_dir MODEL_FILE_DIR] [--download_model_only] [--invert_spect] [--normalization NORMALIZATION]
-                       [--amplification AMPLIFICATION] [--single_stem SINGLE_STEM] [--sample_rate SAMPLE_RATE] [--use_soundfile] [--use_autocast] [--custom_output_names CUSTOM_OUTPUT_NAMES]
+                       [--amplification AMPLIFICATION] [--single_stem SINGLE_STEM] [--sample_rate SAMPLE_RATE] [--use_soundfile] [--use_autocast] [--use_directml] [--custom_output_names CUSTOM_OUTPUT_NAMES]
                        [--mdx_segment_size MDX_SEGMENT_SIZE] [--mdx_overlap MDX_OVERLAP] [--mdx_batch_size MDX_BATCH_SIZE] [--mdx_hop_length MDX_HOP_LENGTH] [--mdx_enable_denoise] [--vr_batch_size VR_BATCH_SIZE]
                        [--vr_window_size VR_WINDOW_SIZE] [--vr_aggression VR_AGGRESSION] [--vr_enable_tta] [--vr_high_end_process] [--vr_enable_post_process]
                        [--vr_post_process_threshold VR_POST_PROCESS_THRESHOLD] [--demucs_segment_size DEMUCS_SEGMENT_SIZE] [--demucs_shifts DEMUCS_SHIFTS] [--demucs_overlap DEMUCS_OVERLAP]
@@ -460,6 +489,7 @@ Common Separation Parameters:
   --sample_rate SAMPLE_RATE                              Modify the sample rate of the output audio (default: 44100). Example: --sample_rate=44100
   --use_soundfile                                        Use soundfile to write audio output (default: False). Example: --use_soundfile
   --use_autocast                                         Use PyTorch autocast for faster inference (default: False). Do not use for CPU inference. Example: --use_autocast
+  --use_directml                                         Use DirectML for hardware-accelerated inference on Windows AMD/Intel GPUs (experimental; requires the 'dml' extra). Example: --use_directml
   --custom_output_names CUSTOM_OUTPUT_NAMES              Custom names for all output files in JSON format (default: None). Example: --custom_output_names='{"Vocals": "vocals_output", "Drums": "drums_output"}'
 
 MDX Architecture Parameters:
@@ -616,6 +646,7 @@ You can also rename specific stems:
 - **`sample_rate`:** (Optional) Set the sample rate of the output audio. `Default: 44100`
 - **`use_soundfile`:** (Optional) Use soundfile for output writing, can solve OOM issues, especially on longer audio.
 - **`use_autocast`:** (Optional) Flag to use PyTorch autocast for faster inference. Do not use for CPU inference. `Default: False`
+- **`use_directml`:** (Optional) Flag to use DirectML for hardware-accelerated inference on Windows AMD/Intel GPUs (experimental; requires the `dml` extra and only takes effect when CUDA and Apple Silicon MPS are unavailable). `Default: False`
 - **`mdx_params`:** (Optional) MDX Architecture Specific Attributes & Defaults. `Default: {"hop_length": 1024, "segment_size": 256, "overlap": 0.25, "batch_size": 1, "enable_denoise": False}`
 - **`vr_params`:** (Optional) VR Architecture Specific Attributes & Defaults. `Default: {"batch_size": 1, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False}`
 - **`demucs_params`:** (Optional) Demucs Architecture Specific Attributes & Defaults. `Default: {"segment_size": "Default", "shifts": 2, "overlap": 0.25, "segments_enabled": True}` _(Note: `segment_size` "Default" uses the model's internal default, typically 40 for older Demucs models and 10 for Demucs v4/htdemucs)_

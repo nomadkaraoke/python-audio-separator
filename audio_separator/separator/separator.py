@@ -401,6 +401,14 @@ class Separator:
             self.torch_device = self.torch_device_cpu
             self.onnx_execution_provider = ["CPUExecutionProvider"]
 
+            # Discoverability hint: DirectML is an explicit opt-in (experimental). If the
+            # DirectML packages are installed but the feature wasn't enabled, tell the user how.
+            if not self.use_directml and (has_torch_dml_installed or self.get_package_distribution("onnxruntime-directml") is not None):
+                self.logger.info(
+                    "DirectML packages detected but DirectML is not enabled. "
+                    "Pass use_directml=True (or --use_directml on the CLI) to enable experimental DirectML acceleration."
+                )
+
     def configure_cuda(self, ort_providers):
         """
         This method configures the CUDA device for PyTorch and ONNX Runtime, if available.
