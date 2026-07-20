@@ -1,4 +1,5 @@
 import os
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -6,6 +7,25 @@ from pathlib import Path
 import pytest
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from utils import generate_reference_images, compare_images
+
+
+def resolve_cli_executable():
+    """Locate the audio-separator console script.
+
+    On Windows CI, `poetry run pytest` does not reliably put the venv Scripts
+    directory on the subprocess search PATH, so a bare "audio-separator"
+    fails with WinError 2. Console scripts always live in the same directory
+    as the interpreter in a venv (Scripts\\ on Windows, bin/ on POSIX), so
+    fall back to resolving next to sys.executable.
+    """
+    found = shutil.which("audio-separator")
+    if found:
+        return found
+    script_name = "audio-separator.exe" if os.name == "nt" else "audio-separator"
+    candidate = os.path.join(os.path.dirname(sys.executable), script_name)
+    if os.path.exists(candidate):
+        return candidate
+    return "audio-separator"
 
 
 @pytest.fixture(name="input_file")
@@ -45,7 +65,7 @@ def run_separation_test(model, audio_path, expected_files):
             os.remove(file)
 
     # Run the CLI command
-    result = subprocess.run(["audio-separator", "-m", model, audio_path], capture_output=True, text=True, check=False)  # Explicitly set check to False as we handle errors manually
+    result = subprocess.run([resolve_cli_executable(), "-m", model, audio_path], capture_output=True, text=True, check=False)  # Explicitly set check to False as we handle errors manually
 
     # Check that the command completed successfully
     assert result.returncode == 0, f"Command failed with output: {result.stderr}"

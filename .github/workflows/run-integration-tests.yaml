@@ -32,7 +32,7 @@ jobs:
   ensemble-presets:
     needs: changes
     if: needs.changes.outputs.should_run == 'true'
-    runs-on: [self-hosted, gpu]
+    runs-on: [self-hosted, linux, gpu]
     timeout-minutes: 15
     env:
       AUDIO_SEPARATOR_MODEL_DIR: /opt/audio-separator-models
@@ -79,7 +79,7 @@ jobs:
   core-models:
     needs: changes
     if: needs.changes.outputs.should_run == 'true'
-    runs-on: [self-hosted, gpu]
+    runs-on: [self-hosted, linux, gpu]
     timeout-minutes: 15
     env:
       AUDIO_SEPARATOR_MODEL_DIR: /opt/audio-separator-models
@@ -128,7 +128,7 @@ jobs:
   stems-and-quality:
     needs: changes
     if: needs.changes.outputs.should_run == 'true'
-    runs-on: [self-hosted, gpu]
+    runs-on: [self-hosted, linux, gpu]
     timeout-minutes: 15
     env:
       AUDIO_SEPARATOR_MODEL_DIR: /opt/audio-separator-models
@@ -167,10 +167,61 @@ jobs:
             *.flac
             tests/*.flac
 
+  # ── Windows CPU integration smoke (GitHub-hosted, free) ────────────
+  #
+  # End-to-end separation on Windows with the CPU provider — one model per
+  # architecture that DirectML supports (RoFormer, MDX, VR). Catches
+  # Windows-specific breakage (paths, soundfile/ffmpeg, model download)
+  # independent of GPU/DirectML. Python 3.12 to match the DirectML jobs
+  # (torch-directml has no 3.13 wheels).
+  #
+  # Models are downloaded on first run and cached with actions/cache
+  # (hosted runners have no pre-baked model dir).
+
+  windows-cpu-integration:
+    needs: changes
+    if: needs.changes.outputs.should_run == 'true'
+    runs-on: windows-latest
+    timeout-minutes: 45
+    env:
+      AUDIO_SEPARATOR_MODEL_DIR: C:\audio-separator-models
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install poetry
+        run: pipx install poetry
+      - name: Set up Python with cache
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: poetry
+      - name: Install ffmpeg
+        run: choco install ffmpeg -y --no-progress
+      - name: Install Poetry dependencies (CPU)
+        run: poetry install -E cpu
+      - name: Cache separation models
+        uses: actions/cache@v4
+        with:
+          path: C:\audio-separator-models
+          key: windows-cpu-smoke-models-v1
+      - name: Ensure model directory exists
+        # Separator raises FileNotFoundError if AUDIO_SEPARATOR_MODEL_DIR
+        # doesn't exist (it never creates it); a cache miss leaves it absent.
+        run: New-Item -ItemType Directory -Force -Path C:\audio-separator-models | Out-Null
+      - name: "Run: one model per DML-relevant architecture (RoFormer, MDX, VR)"
+        run: poetry run pytest -sv tests/integration/test_cli_integration.py -k "mel_band_roformer_karaoke or Inst_HQ_4 or 2_HP-UVR"
+      - name: Upload test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-cpu-integration-results
+          path: |
+            *.flac
+            tests/*.flac
+
   # ── Gate job for branch protection ────────────────────────────────
 
   integration-test:
-    needs: [changes, ensemble-presets, core-models, stems-and-quality]
+    needs: [changes, ensemble-presets, core-models, stems-and-quality, windows-cpu-integration]
     if: always()
     runs-on: ubuntu-latest
     steps:
@@ -181,9 +232,10 @@ jobs:
             exit 0
           fi
 
-          echo "ensemble-presets:   ${{ needs.ensemble-presets.result }}"
-          echo "core-models:        ${{ needs.core-models.result }}"
-          echo "stems-and-quality:  ${{ needs.stems-and-quality.result }}"
+          echo "ensemble-presets:        ${{ needs.ensemble-presets.result }}"
+          echo "core-models:             ${{ needs.core-models.result }}"
+          echo "stems-and-quality:       ${{ needs.stems-and-quality.result }}"
+          echo "windows-cpu-integration: ${{ needs.windows-cpu-integration.result }}"
 
           if [[ "${{ needs.ensemble-presets.result }}" == "failure" ]] || \
              [[ "${{ needs.core-models.result }}" == "failure" ]] || \
@@ -191,4 +243,12 @@ jobs:
             echo "Integration tests failed"
             exit 1
           fi
-          echo "All integration tests passed"
+
+          # windows-cpu-integration is reported above but does not fail the
+          # gate yet — it gets promoted to blocking (here + ruleset) after a
+          # stabilization period. See docs/CI-GPU-RUNNERS.md.
+          if [[ "${{ needs.windows-cpu-integration.result }}" == "success" ]]; then
+            echo "All integration tests passed"
+          else
+            echo "GPU integration tests passed; windows-cpu-integration did not succeed (non-blocking)"
+          fi
