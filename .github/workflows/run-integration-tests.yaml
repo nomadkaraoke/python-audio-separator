@@ -241,8 +241,14 @@ jobs:
         shell: powershell
     env:
       AUDIO_SEPARATOR_MODEL_DIR: C:\audio-separator-models
+      # Short venv base path: the default SYSTEM-profile pypoetry cache dir
+      # plus onnx's very long test-data paths exceeds Windows' 260-char
+      # MAX_PATH and breaks pip ([WinError 206]).
+      POETRY_VIRTUALENVS_PATH: C:\venvs
     steps:
       - uses: actions/checkout@v4
+      - name: Enable Windows long paths
+        run: Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem' -Name LongPathsEnabled -Value 1 -Type DWord
       - name: Verify GPU is in WDDM mode (DirectML requirement)
         run: |
           nvidia-smi --query-gpu=driver_version,name,driver_model.current --format=csv,noheader
