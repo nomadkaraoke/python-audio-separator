@@ -154,9 +154,11 @@ def test_dml_separation(model, expected_files, is_roformer, validate_reference, 
     if is_roformer:
         # Loader regression guard: the map_location fix means the NEW
         # implementation must load — a silent legacy fallback would keep CI
-        # green while shipping the unfixed path.
+        # green while shipping the unfixed path. Assert on the separator's
+        # "Roformer loading stats" line (the loader module's own logger does
+        # not propagate to the CLI handler).
         assert "Fell back to legacy" not in log_text, f"{model} silently fell back to legacy implementation"
-        assert "with new implementation" in log_text, f"{model} did not report new-implementation load"
+        assert "'new_implementation_success': 1" in log_text, f"{model} did not report new-implementation load stats"
 
     for output_file in expected_files:
         assert os.path.exists(output_file), f"Output file {output_file} was not created"

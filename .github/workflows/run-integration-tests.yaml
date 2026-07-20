@@ -234,7 +234,9 @@ jobs:
     needs: changes
     if: needs.changes.outputs.should_run == 'true'
     runs-on: [self-hosted, windows, gpu]
-    timeout-minutes: 40
+    # RoFormer/MDX23C run on CPU under DML (allocator limitation) — the
+    # test step alone takes ~30 min.
+    timeout-minutes: 60
     continue-on-error: true
     defaults:
       run:
