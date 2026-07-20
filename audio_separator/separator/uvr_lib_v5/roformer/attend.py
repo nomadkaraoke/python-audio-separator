@@ -15,6 +15,16 @@ FlashAttentionConfig = namedtuple("FlashAttentionConfig", ["enable_flash", "enab
 # helpers
 
 
+def _is_dml_device(device) -> bool:
+    """torch-directml devices use torch's out-of-tree backend slot (privateuseone).
+
+    F.scaled_dot_product_attention is not implemented by torch-directml (fails
+    with a D3D12 'The parameter is incorrect.' error), so DML tensors must take
+    the plain einsum attention path. Module-level so tests can patch it.
+    """
+    return device.type == "privateuseone"
+
+
 def exists(val):
     return val is not None
 
@@ -93,8 +103,27 @@ class Attend(nn.Module):
 
         scale = q.shape[-1] ** -0.5
 
-        if self.flash:
+        # DML has no SDPA — fall through to the einsum path. Gated so every
+        # other device keeps its exact existing behavior. (Issue #292)
+        if self.flash and not _is_dml_device(device):
             return self.flash_attn(q, k, v)
+
+        if _is_dml_device(device):
+            # Use matmul (a real GEMM) instead of einsum: torch-directml
+            # lowers einsum naively (broadcast multiply + reduce), whose
+            # b×h×i×j×d intermediate is tens of GB at segment 801 — the
+            # 'DML allocator out of memory' crash. Also slice the batch dim
+            # to bound the materialized (b h i j) similarity tensor. The
+            # result is mathematically identical to the einsum path below.
+            outs = []
+            step = 8
+            for i in range(0, q.shape[0], step):
+                qs, ks, vs = q[i : i + step], k[i : i + step], v[i : i + step]
+                sim = torch.matmul(qs, ks.transpose(-1, -2)) * scale
+                attn = sim.softmax(dim=-1)
+                attn = self.attn_dropout(attn)
+                outs.append(torch.matmul(attn, vs))
+            return torch.cat(outs, dim=0)
 
         # similarity
 

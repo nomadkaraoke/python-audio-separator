@@ -1,3 +1,4 @@
+import gc
 import os
 import sys
 
@@ -11,6 +12,55 @@ from audio_separator.separator.common_separator import CommonSeparator
 from audio_separator.separator.uvr_lib_v5 import spec_utils
 from audio_separator.separator.uvr_lib_v5.tfc_tdf_v3 import TFC_TDF_net
 # Roformer direct constructors removed; loading handled via RoformerLoader in CommonSeparator.
+
+
+def _mdxc_inference_device(torch_device, torch_device_cpu, logger):
+    """Pick the inference device for MDXC-family (incl. RoFormer) models.
+
+    All code-level DirectML incompatibilities in these models are fixed
+    (state-dict loading, complex ops, SDPA, rotary embedding, einsum
+    lowering), but torch-directml's allocator cannot sustain their chunked
+    inference loops — it fails with 'DML allocator out of memory' after a
+    few chunks regardless of segment size (upstream limitation; verified on
+    a 16GB T4, torch-directml 0.2.5). Until that is fixed upstream, run
+    these models on CPU; MDX and VR stay GPU-accelerated via DirectML.
+    Set AUDIO_SEPARATOR_FORCE_DML_MDXC=1 to attempt DirectML anyway.
+    (Issue #292)
+    """
+    if getattr(torch_device, "type", None) != "privateuseone":
+        return torch_device
+    if os.environ.get("AUDIO_SEPARATOR_FORCE_DML_MDXC"):
+        logger.warning("AUDIO_SEPARATOR_FORCE_DML_MDXC set — attempting MDXC/RoFormer on DirectML (may exhaust GPU memory).")
+        return torch_device
+    logger.warning(
+        "MDXC/RoFormer models currently run on CPU under DirectML: torch-directml's "
+        "allocator cannot sustain their chunked inference ('DML allocator out of "
+        "memory', upstream limitation). MDX and VR models remain GPU-accelerated. "
+        "Set AUDIO_SEPARATOR_FORCE_DML_MDXC=1 to attempt DirectML anyway."
+    )
+    return torch_device_cpu if torch_device_cpu is not None else torch.device("cpu")
+
+
+def _release_dml_memory_if_needed(device):
+    """Work around torch-directml's cross-iteration allocator leak.
+
+    torch-directml (privateuseone) does not reliably reuse freed blocks
+    across inference iterations — long chunk loops die with 'DML allocator
+    out of memory' after a few batches even though each batch fits. Its
+    0.2.x API added torch_directml.empty_cache() for exactly this; call it
+    (plus a gc pass to drop deferred references) after each batch on DML
+    only. No-op everywhere else and on older torch-directml. (Issue #292)
+    """
+    if getattr(device, "type", None) != "privateuseone":
+        return
+    gc.collect()
+    try:
+        import torch_directml
+
+        if hasattr(torch_directml, "empty_cache"):
+            torch_directml.empty_cache()
+    except Exception:  # pragma: no cover — defensive: never break inference
+        pass
 
 
 class MDXCSeparator(CommonSeparator):
@@ -28,6 +78,10 @@ class MDXCSeparator(CommonSeparator):
         # It's loaded in from model_data_new.json in Separator.load_model and there are JSON examples in that method
         # The instance variable self.model_data is passed through from Separator and set in CommonSeparator
         self.logger.debug(f"Model data: {self.model_data}")
+
+        # DirectML: run MDXC-family models on CPU until torch-directml's
+        # allocator can sustain them (see _mdxc_inference_device).
+        self.torch_device = _mdxc_inference_device(self.torch_device, self.torch_device_cpu, self.logger)
 
         # Arch Config is the MDXC architecture specific user configuration options, which should all be configurable by the user
         # either by their Separator class instantiation or by passing in a CLI parameter.
@@ -326,6 +380,7 @@ class MDXCSeparator(CommonSeparator):
                     part = part.to(device)
                     x = self.model_run(part.unsqueeze(0))[0]
                     x = x.cpu()
+                    _release_dml_memory_if_needed(device)
                     # Perform overlap_add on CPU
                     if i + chunk_size > mix.shape[1]:
                         # Fixed to correctly add to the end of the tensor
@@ -397,6 +452,9 @@ class MDXCSeparator(CommonSeparator):
                         # Accumulate outputs on CPU
                         accumulated_outputs[..., count * hop_size : count * hop_size + chunk_size] += individual_output_cpu
                         count += 1
+
+                    del single_batch_result
+                    _release_dml_memory_if_needed(self.torch_device)
 
             self.logger.debug("Calculating inferenced outputs based on accumulated outputs and overlap")
             inferenced_outputs = accumulated_outputs[..., chunk_size - hop_size : -(pad_size + chunk_size - hop_size)] / self.overlap

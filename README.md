@@ -161,12 +161,15 @@ audio-separator path/to/audio.wav --use_directml
 
 | Architecture | Model types | Status |
 |---|---|---|
-| MDX | `.onnx` | ✅ Confirmed working |
-| MDXC (incl. the default `bs_roformer` model) | `.ckpt` / `.yaml` | ⚠️ Expected to work, community-untested |
-| VR | `.pth` | ⚠️ Expected to work, community-untested |
-| Demucs | — | ❓ Unverified |
+| MDX | `.onnx` | ✅ GPU-accelerated (CI-verified on NVIDIA T4/WDDM) |
+| VR | `.pth` | ✅ GPU-accelerated (CI-verified on NVIDIA T4/WDDM) |
+| MDXC / RoFormer (incl. the default `bs_roformer` model) | `.ckpt` / `.yaml` | ⚠️ Runs correctly on **CPU** automatically. All code-level DirectML incompatibilities are fixed (v0.44.5), but torch-directml's allocator cannot sustain these models' inference loops (`DML allocator out of memory`, upstream limitation). Set `AUDIO_SEPARATOR_FORCE_DML_MDXC=1` to attempt GPU anyway — reports welcome, especially from AMD/Intel GPUs. |
+| Demucs | — | ❌ Not supported (torch-directml lacks the fused LSTM operator) |
 
-If you test any of the untested architectures, please [open an issue](https://github.com/nomadkaraoke/python-audio-separator/issues) with your `--env_info` output and logs — reports are what move these from "untested" to "confirmed".
+These statuses are enforced by the `windows-directml` CI job, which runs real
+separations on an NVIDIA T4 in WDDM mode. If `AUDIO_SEPARATOR_FORCE_DML_MDXC=1`
+works on your GPU, please [open an issue](https://github.com/nomadkaraoke/python-audio-separator/issues)
+with your `--env_info` output — torch-directml behaves differently across vendors.
 
 ### 🎥 FFmpeg dependency
 

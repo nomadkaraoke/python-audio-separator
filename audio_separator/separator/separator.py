@@ -984,7 +984,7 @@ class Separator:
                                 files_output = self._separate_file(full_path, custom_output_names)
                                 output_files.extend(files_output)
                             except Exception as e:
-                                self.logger.error(f"Failed to process file {full_path}: {e}")
+                                self.logger.error(f"Failed to process file {full_path}: {e}", exc_info=True)
             else:
                 # If the path is a file, process it directly
                 self.logger.info(f"Processing file: {path}")
@@ -992,7 +992,7 @@ class Separator:
                     files_output = self._separate_file(path, custom_output_names)
                     output_files.extend(files_output)
                 except Exception as e:
-                    self.logger.error(f"Failed to process file {path}: {e}")
+                    self.logger.error(f"Failed to process file {path}: {e}", exc_info=True)
 
         return output_files
 
