@@ -118,3 +118,25 @@ class TestAttendDmlFallback:
 
         assert math_out.shape == flash_out.shape
         assert torch.allclose(flash_out, math_out, atol=1e-5), "einsum fallback diverges from SDPA"
+
+
+class TestRotaryNoCatEquivalence:
+    """The DML rotary path computes t*cos + rotate_half(t)*sin directly,
+    skipping the (empty) edge concat torch-directml rejects. It must match
+    the library implementation exactly."""
+
+    def test_manual_rotation_matches_library(self):
+        from rotary_embedding_torch import RotaryEmbedding
+
+        torch.manual_seed(0)
+        rotary = RotaryEmbedding(dim=64)
+        t = torch.randn(2, 8, 16, 64)
+
+        library = rotary.rotate_queries_or_keys(t)
+        with patch.object(bs_mod, "_is_dml_device", return_value=True):
+            manual_bs = bs_mod._rotate_queries_or_keys(rotary, t)
+        with patch.object(mel_mod, "_is_dml_device", return_value=True):
+            manual_mel = mel_mod._rotate_queries_or_keys(rotary, t)
+
+        assert torch.allclose(library, manual_bs, atol=1e-6)
+        assert torch.allclose(library, manual_mel, atol=1e-6)
