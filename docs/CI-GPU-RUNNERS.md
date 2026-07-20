@@ -141,12 +141,15 @@ EOF
 **Diagnosis steps**:
 
 1. Check the Cloud Function's response to the webhook — this is the most
-   common failure point. A 503 with `{"error": "HTTP Error 403"}` means the
-   `github-runner-pat` secret is expired/unauthorized (it's used to mint JIT
-   configs). Check recent deliveries on the org webhook:
+   common failure point. A 503 with `{"error": "HTTP Error 403"}` usually
+   means the `github-runner-pat` secret is expired/unauthorized (it's used to
+   mint JIT configs) — inspect the full error in the function logs to rule
+   out org-policy or rate-limit causes. Check recent deliveries on the org
+   webhook:
    ```bash
    gh api orgs/nomadkaraoke/hooks   # find the workflow_job webhook id
-   gh api orgs/nomadkaraoke/hooks/<id>/deliveries --paginate | head -50
+   hook_id=123456                   # substitute the id from above
+   gh api "orgs/nomadkaraoke/hooks/${hook_id}/deliveries" --paginate | head -50
    ```
    Fix: rotate the PAT and add a new secret version:
    ```bash
@@ -180,6 +183,8 @@ that never registered — check the Cloud Function logs (above). To look at a
 live VM yourself:
 
 ```bash
+# Use the zone the VM was actually created in (us-central1-a primary,
+# us-east4-c on stockout fallback — check `gcloud compute instances list`).
 gcloud compute instances get-serial-port-output <vm-name> \
   --zone=us-central1-a --project=nomadkaraoke --port=1 | tail -100
 ```
@@ -194,8 +199,9 @@ gh workflow run build-runner-images.yml --repo nomadkaraoke/karaoke-gen \
   -f variants=gpu
 ```
 
-See karaoke-gen memory/docs for known NVIDIA driver issues
-(`project_gpu_runner_drivers.md`).
+Known NVIDIA driver issues (kernel-header mismatches, DKMS failures) are
+handled by the provisioning script in
+`karaoke-gen/infrastructure/scripts/runner-image-provision.sh`.
 
 ## Cost
 

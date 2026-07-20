@@ -79,6 +79,11 @@ def is_dml_device(device) -> bool:
     return torch.device(device).type == "privateuseone"
 ```
 
+(`privateuseone` is torch's generic out-of-tree backend slot, so in theory a
+non-DML backend could claim it — but this branch is only reachable when the
+Separator itself set the device via `torch_directml.device()` under
+`use_directml=True`, so the check cannot misfire for cuda/mps/cpu users.)
+
 ### Phase 2a: loader fix (kills failure 1)
 
 In `RoformerLoader._load_with_new_implementation`:
@@ -244,9 +249,11 @@ integration checks (ruleset 529535) once stable.
     check `ModelLoadingResult` implementation) — otherwise the map_location
     fix can silently regress while everything still "passes" via fallback.
   - **Quality assertion, not just no-crash**: separate the same fixture on
-    CPU and on DML in the same job; assert correlation / SDR-style similarity
-    (reuse helpers from `test_roformer_audio_quality.py`). DirectML producing
-    silent garbage must fail CI.
+    CPU and on DML in the same job; assert (a) correlation / SDR-style
+    similarity vs the CPU output, (b) metrics are finite (no NaN/Inf), and
+    (c) an explicit RMS/peak energy floor on the DML output — silent or
+    near-silent output must fail even if a similarity metric degenerates.
+    Reuse/extend helpers from `test_roformer_audio_quality.py`.
 - Note: T4/NVIDIA validates the DirectML *code path* (DX12), which is the
   right CI proxy even though the reporter has an AMD iGPU — final AMD
   validation comes from the reporter (below).

@@ -243,4 +243,8 @@ jobs:
           # windows-cpu-integration is reported above but does not fail the
           # gate yet — it gets promoted to blocking (here + ruleset) after a
           # stabilization period. See docs/CI-GPU-RUNNERS.md.
-          echo "All integration tests passed"
+          if [[ "${{ needs.windows-cpu-integration.result }}" == "success" ]]; then
+            echo "All integration tests passed"
+          else
+            echo "GPU integration tests passed; windows-cpu-integration did not succeed (non-blocking)"
+          fi
