@@ -18,6 +18,15 @@ from einops.layers.torch import Rearrange
 # helper functions
 
 
+
+def _is_dml_device(device) -> bool:
+    """torch-directml devices use torch's out-of-tree backend slot (privateuseone).
+
+    Module-level so tests can patch it to exercise the DML CPU-hop branches
+    on CPU-only machines.
+    """
+    return device.type == "privateuseone"
+
 def exists(val):
     return val is not None
 
@@ -430,6 +439,11 @@ class BSRoformer(Module):
 
         original_device = raw_audio.device
         x_is_mps = True if original_device.type == "mps" else False
+        # torch-directml (privateuseone) has no complex tensor support, so all
+        # complex ops (stft, view_as_complex, complex multiply, istft) hop to
+        # CPU; the transformer stack — the heavy compute — stays on the DML
+        # device. Gated so cuda/mps/cpu behavior is unchanged. (Issue #292)
+        x_is_dml = _is_dml_device(original_device)
 
         # if x_is_mps:
         #     raw_audio = raw_audio.cpu()
@@ -450,8 +464,12 @@ class BSRoformer(Module):
 
         stft_window = self.stft_window_fn().to(device)
 
-        stft_repr = torch.stft(raw_audio, **self.stft_kwargs, window=stft_window, return_complex=True)
-        stft_repr = torch.view_as_real(stft_repr)
+        if x_is_dml:
+            stft_repr = torch.stft(raw_audio.cpu(), **self.stft_kwargs, window=stft_window.cpu(), return_complex=True)
+            stft_repr = torch.view_as_real(stft_repr).to(device)
+        else:
+            stft_repr = torch.stft(raw_audio, **self.stft_kwargs, window=stft_window, return_complex=True)
+            stft_repr = torch.view_as_real(stft_repr)
 
         stft_repr = unpack_one(stft_repr, batch_audio_channel_packed_shape, "* f t c")
         stft_repr = rearrange(stft_repr, "b s f t c -> b (f s) t c")  # merge stereo / mono into the frequency, with frequency leading dimension, for band splitting
@@ -500,6 +518,10 @@ class BSRoformer(Module):
 
         # complex number multiplication
 
+        if x_is_dml:
+            stft_repr = stft_repr.cpu()
+            mask = mask.cpu()
+
         stft_repr = torch.view_as_complex(stft_repr)
         mask = torch.view_as_complex(mask)
 
@@ -509,7 +531,7 @@ class BSRoformer(Module):
 
         stft_repr = rearrange(stft_repr, "b n (f s) t -> (b n s) f t", s=self.audio_channels)
 
-        recon_audio = torch.istft(stft_repr.cpu() if x_is_mps else stft_repr, **self.stft_kwargs, window=stft_window.cpu() if x_is_mps else stft_window, return_complex=False).to(device)
+        recon_audio = torch.istft(stft_repr.cpu() if x_is_mps else stft_repr, **self.stft_kwargs, window=stft_window.cpu() if (x_is_mps or x_is_dml) else stft_window, return_complex=False).to(device)
 
         recon_audio = rearrange(recon_audio, "(b n s) t -> b n s t", s=self.audio_channels, n=self.num_stems)
 
