@@ -17,6 +17,15 @@ from einops import rearrange, pack, unpack, reduce, repeat
 from librosa import filters
 
 
+
+def _is_dml_device(device) -> bool:
+    """torch-directml devices use torch's out-of-tree backend slot (privateuseone).
+
+    Module-level so tests can patch it to exercise the DML CPU-hop branches
+    on CPU-only machines.
+    """
+    return device.type == "privateuseone"
+
 def exists(val):
     return val is not None
 
@@ -339,6 +348,12 @@ class MelBandRoformer(Module):
 
         original_device = raw_audio.device
         x_is_mps = True if original_device.type == "mps" else False
+        # torch-directml (privateuseone) has no complex tensor support, so all
+        # complex ops (stft, view_as_complex, scatter over complex, complex
+        # multiply, istft) hop to CPU; the transformer stack — the heavy
+        # compute — stays on the DML device. Gated so cuda/mps/cpu behavior
+        # is unchanged. (Issue #292)
+        x_is_dml = _is_dml_device(original_device)
 
         if x_is_mps:
             raw_audio = raw_audio.cpu()
@@ -360,8 +375,12 @@ class MelBandRoformer(Module):
 
         stft_window = self.stft_window_fn().to(device)
 
-        stft_repr = torch.stft(raw_audio, **self.stft_kwargs, window=stft_window, return_complex=True)
-        stft_repr = torch.view_as_real(stft_repr)
+        if x_is_dml:
+            stft_repr = torch.stft(raw_audio.cpu(), **self.stft_kwargs, window=stft_window.cpu(), return_complex=True)
+            stft_repr = torch.view_as_real(stft_repr).to(device)
+        else:
+            stft_repr = torch.stft(raw_audio, **self.stft_kwargs, window=stft_window, return_complex=True)
+            stft_repr = torch.view_as_real(stft_repr)
 
         stft_repr = unpack_one(stft_repr, batch_audio_channel_packed_shape, "* f t c")
         stft_repr = rearrange(stft_repr, "b s f t c -> b (f s) t c")  # merge stereo / mono into the frequency, with frequency leading dimension, for band splitting
@@ -394,6 +413,12 @@ class MelBandRoformer(Module):
         if x_is_mps:
             masks = masks.cpu()
 
+        # Everything from view_as_complex through istft is complex-dtype work;
+        # DML tensors must hop to CPU for it.
+        if x_is_dml:
+            stft_repr = stft_repr.cpu()
+            masks = masks.cpu()
+
         stft_repr = rearrange(stft_repr, "b f t c -> b 1 f t c")
 
         stft_repr = torch.view_as_complex(stft_repr)
@@ -401,7 +426,7 @@ class MelBandRoformer(Module):
 
         masks = masks.type(stft_repr.dtype)
 
-        if x_is_mps:
+        if x_is_mps or x_is_dml:
             scatter_indices = repeat(self.freq_indices.cpu(), "f -> b n f t", b=batch, n=self.num_stems, t=stft_repr.shape[-1])
         else:
             scatter_indices = repeat(self.freq_indices, "f -> b n f t", b=batch, n=self.num_stems, t=stft_repr.shape[-1])
@@ -410,12 +435,15 @@ class MelBandRoformer(Module):
         masks_summed = (
             torch.zeros_like(stft_repr_expanded_stems.cpu() if x_is_mps else stft_repr_expanded_stems)
             .scatter_add_(2, scatter_indices.cpu() if x_is_mps else scatter_indices, masks.cpu() if x_is_mps else masks)
-            .to(device)
         )
+        if not x_is_dml:
+            # complex tensors cannot live on a DML device; keep them on CPU
+            # until after the istft
+            masks_summed = masks_summed.to(device)
 
         denom = repeat(self.num_bands_per_freq, "f -> (f r) 1", r=channels)
 
-        if x_is_mps:
+        if x_is_mps or x_is_dml:
             denom = denom.cpu()
 
         masks_averaged = masks_summed / denom.clamp(min=1e-8)
@@ -424,7 +452,10 @@ class MelBandRoformer(Module):
 
         stft_repr = rearrange(stft_repr, "b n (f s) t -> (b n s) f t", s=self.audio_channels)
 
-        recon_audio = torch.istft(stft_repr.cpu() if x_is_mps else stft_repr, **self.stft_kwargs, window=stft_window.cpu() if x_is_mps else stft_window, return_complex=False, length=istft_length)
+        recon_audio = torch.istft(stft_repr.cpu() if x_is_mps else stft_repr, **self.stft_kwargs, window=stft_window.cpu() if (x_is_mps or x_is_dml) else stft_window, return_complex=False, length=istft_length)
+
+        if x_is_dml:
+            recon_audio = recon_audio.to(original_device)
 
         recon_audio = rearrange(recon_audio, "(b n s) t -> b n s t", b=batch, s=self.audio_channels, n=self.num_stems)
 
