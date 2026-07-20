@@ -38,7 +38,7 @@ pytestmark = pytest.mark.skipif(
 INPUT_FILE = "tests/inputs/mardy20s.flac"
 REFERENCE_DIR = "tests/inputs/reference"
 
-# (model, expected output files, is_roformer)
+# (model, expected output files, is_roformer, validate_reference)
 DML_MODEL_PARAMS = [
     (
         # The exact model from the issue #292 report
@@ -48,6 +48,7 @@ DML_MODEL_PARAMS = [
             "mardy20s_(Vocals)_model_bs_roformer_ep_317_sdr_12.flac",
         ],
         True,
+        True,
     ),
     (
         "mel_band_roformer_karaoke_aufr33_viperx_sdr_10.1956.ckpt",
@@ -55,6 +56,7 @@ DML_MODEL_PARAMS = [
             "mardy20s_(Instrumental)_mel_band_roformer_karaoke_aufr33_viperx_sdr_10.flac",
             "mardy20s_(Vocals)_mel_band_roformer_karaoke_aufr33_viperx_sdr_10.flac",
         ],
+        True,
         True,
     ),
     (
@@ -65,6 +67,7 @@ DML_MODEL_PARAMS = [
             "mardy20s_(Vocals)_UVR-MDX-NET-Inst_HQ_4.flac",
         ],
         False,
+        True,
     ),
     (
         # VR — regression guard: already worked on DirectML before #292
@@ -73,6 +76,20 @@ DML_MODEL_PARAMS = [
             "mardy20s_(Instrumental)_2_HP-UVR.flac",
             "mardy20s_(Vocals)_2_HP-UVR.flac",
         ],
+        False,
+        True,
+    ),
+    (
+        # Plain MDXC (TFC_TDF arch) — its STFT wrapper already CPU-hops
+        # non-cuda/cpu devices, so it should work on DML unchanged. No
+        # committed reference images for this model: audibility/finiteness
+        # checks only. Auto-downloads on first run (not in the baked set).
+        "MDX23C-8KFFT-InstVoc_HQ.ckpt",
+        [
+            "mardy20s_(Instrumental)_MDX23C-8KFFT-InstVoc_HQ.flac",
+            "mardy20s_(Vocals)_MDX23C-8KFFT-InstVoc_HQ.flac",
+        ],
+        False,
         False,
     ),
 ]
@@ -94,8 +111,8 @@ def _assert_audible_and_finite(path):
     assert rms > RMS_FLOOR, f"{path} is (near-)silent: rms={rms:.2e}"
 
 
-@pytest.mark.parametrize("model,expected_files,is_roformer", DML_MODEL_PARAMS)
-def test_dml_separation(model, expected_files, is_roformer):
+@pytest.mark.parametrize("model,expected_files,is_roformer,validate_reference", DML_MODEL_PARAMS)
+def test_dml_separation(model, expected_files, is_roformer, validate_reference):
     for f in expected_files:
         if os.path.exists(f):
             os.remove(f)
@@ -126,7 +143,7 @@ def test_dml_separation(model, expected_files, is_roformer):
         assert os.path.getsize(output_file) > 0, f"Output file {output_file} is empty"
         _assert_audible_and_finite(output_file)
 
-        if os.environ.get("SKIP_AUDIO_VALIDATION") != "1":
+        if validate_reference and os.environ.get("SKIP_AUDIO_VALIDATION") != "1":
             waveform_match, spectrogram_match = validate_audio_output(
                 output_file, REFERENCE_DIR, WAVEFORM_THRESHOLD, SPECTROGRAM_THRESHOLD
             )
