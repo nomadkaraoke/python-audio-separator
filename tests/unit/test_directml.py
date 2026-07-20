@@ -110,3 +110,42 @@ def test_new_implementation_map_location_unchanged_for_cuda():
 
 def test_new_implementation_map_location_unchanged_for_mps():
     assert _load_via_new_implementation("mps") == "mps"
+
+
+# ---------------------------------------------------------------------------
+# MDXC-family DirectML CPU fallback (issue #292)
+# ---------------------------------------------------------------------------
+
+import torch as _torch
+
+from audio_separator.separator.architectures.mdxc_separator import _mdxc_inference_device
+
+
+class TestMdxcInferenceDevice:
+    def test_cpu_and_cuda_pass_through(self):
+        log = MagicMock()
+        assert _mdxc_inference_device(_torch.device("cpu"), _torch.device("cpu"), log) == _torch.device("cpu")
+        cuda = _torch.device("cuda", 0)
+        assert _mdxc_inference_device(cuda, _torch.device("cpu"), log) == cuda
+        log.warning.assert_not_called()
+
+    def test_dml_falls_back_to_cpu_with_warning(self, monkeypatch):
+        monkeypatch.delenv("AUDIO_SEPARATOR_FORCE_DML_MDXC", raising=False)
+        log = MagicMock()
+        dml = _torch.device("privateuseone", 0)
+        result = _mdxc_inference_device(dml, _torch.device("cpu"), log)
+        assert result == _torch.device("cpu")
+        assert log.warning.call_count == 1
+        assert "run on CPU under DirectML" in log.warning.call_args[0][0]
+
+    def test_dml_fallback_without_cpu_device_configured(self, monkeypatch):
+        monkeypatch.delenv("AUDIO_SEPARATOR_FORCE_DML_MDXC", raising=False)
+        result = _mdxc_inference_device(_torch.device("privateuseone", 0), None, MagicMock())
+        assert result == _torch.device("cpu")
+
+    def test_env_override_keeps_dml(self, monkeypatch):
+        monkeypatch.setenv("AUDIO_SEPARATOR_FORCE_DML_MDXC", "1")
+        log = MagicMock()
+        dml = _torch.device("privateuseone", 0)
+        assert _mdxc_inference_device(dml, _torch.device("cpu"), log) == dml
+        assert "attempting" in log.warning.call_args[0][0]
