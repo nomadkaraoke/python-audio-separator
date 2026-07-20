@@ -119,6 +119,26 @@ class TestAttendDmlFallback:
         assert math_out.shape == flash_out.shape
         assert torch.allclose(flash_out, math_out, atol=1e-5), "einsum fallback diverges from SDPA"
 
+    def test_sliced_attention_matches_unsliced(self):
+        # The DML path slices the batch dim (step=8) to bound peak memory;
+        # use a batch that is neither a multiple of the step nor smaller than
+        # it, to cover the ragged final slice.
+        from audio_separator.separator.uvr_lib_v5.roformer import attend as attend_mod
+
+        torch.manual_seed(0)
+        att = attend_mod.Attend(flash=False)
+        att.eval()
+        q = torch.randn(19, 4, 16, 32)
+        k = torch.randn(19, 4, 16, 32)
+        v = torch.randn(19, 4, 16, 32)
+
+        with torch.no_grad():
+            unsliced = att(q, k, v)
+            with patch.object(attend_mod, "_is_dml_device", return_value=True):
+                sliced = att(q, k, v)
+
+        assert torch.allclose(unsliced, sliced, atol=1e-6), "batch-sliced attention diverges"
+
 
 class TestRotaryNoCatEquivalence:
     """The DML rotary path computes t*cos + rotate_half(t)*sin directly,
