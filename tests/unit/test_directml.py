@@ -36,3 +36,77 @@ def test_directml_hint_absent_when_no_packages(caplog):
     with caplog.at_level(logging.INFO):
         _run_setup(use_directml=False, dml_installed=False)
     assert not any(HINT in r.message for r in caplog.records)
+
+
+# ---------------------------------------------------------------------------
+# RoformerLoader map_location handling on DirectML (issue #292)
+#
+# torch-directml's deserialization hook expects integer device ids, so
+# torch.load(map_location=<privateuseone device>) raises TypeError and the
+# loader silently fell back to the legacy implementation. The fix loads the
+# state dict on CPU (DML only) and moves the model to the device afterwards.
+# ---------------------------------------------------------------------------
+
+from audio_separator.separator.roformer.roformer_loader import RoformerLoader, _is_dml_device
+
+
+class TestIsDmlDevice:
+    def test_dml_device_strings(self):
+        assert _is_dml_device("privateuseone")
+        assert _is_dml_device("privateuseone:0")
+        assert _is_dml_device("privateuseone:1")
+
+    def test_non_dml_devices(self):
+        assert not _is_dml_device("cpu")
+        assert not _is_dml_device("cuda")
+        assert not _is_dml_device("cuda:0")
+        assert not _is_dml_device("mps")
+
+    def test_torch_device_objects(self):
+        import torch
+
+        assert not _is_dml_device(torch.device("cpu"))
+        assert _is_dml_device(torch.device("privateuseone", 0))
+
+
+def _load_via_new_implementation(device):
+    """Drive _load_with_new_implementation with mocked model + torch.load,
+    returning (map_location_used, device_model_moved_to)."""
+    loader = RoformerLoader()
+    model = MagicMock(name="model")
+    seen = {}
+
+    def fake_torch_load(path, map_location=None):
+        seen["map_location"] = map_location
+        return {}
+
+    with patch.object(loader, "_create_bs_roformer", return_value=model), \
+         patch("torch.load", side_effect=fake_torch_load), \
+         patch("os.path.exists", return_value=True):
+        result = loader._load_with_new_implementation(
+            model_path="/fake/model.ckpt",
+            config={"dim": 1, "depth": 1, "freqs_per_bands": (2,)},
+            model_type="bs_roformer",
+            device=device,
+        )
+
+    assert result.success
+    model.to.assert_called_once_with(device)
+    return seen["map_location"]
+
+
+def test_new_implementation_loads_on_cpu_for_dml_device():
+    # State dict must be mapped to CPU; the model still moves to the DML device.
+    assert _load_via_new_implementation("privateuseone:0") == "cpu"
+
+
+def test_new_implementation_map_location_unchanged_for_cpu():
+    assert _load_via_new_implementation("cpu") == "cpu"
+
+
+def test_new_implementation_map_location_unchanged_for_cuda():
+    assert _load_via_new_implementation("cuda:0") == "cuda:0"
+
+
+def test_new_implementation_map_location_unchanged_for_mps():
+    assert _load_via_new_implementation("mps") == "mps"

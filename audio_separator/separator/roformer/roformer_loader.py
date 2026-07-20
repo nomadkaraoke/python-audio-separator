@@ -10,6 +10,18 @@ from .parameter_validation_error import ParameterValidationError
 logger = logging.getLogger(__name__)
 
 
+def _is_dml_device(device) -> bool:
+    """True if `device` refers to a torch-directml device.
+
+    torch-directml registers itself on torch's out-of-tree backend slot, so
+    its devices stringify as "privateuseone[:N]". Accepts either a string or
+    a torch.device. Only reachable in practice when the Separator enabled
+    DirectML explicitly (use_directml=True), so this cannot misfire for
+    cuda/mps/cpu users.
+    """
+    return str(device).startswith("privateuseone")
+
+
 class RoformerLoader:
     """Main Roformer model loader (new implementation only)."""
 
@@ -95,7 +107,15 @@ class RoformerLoader:
                 raise ValueError(f"Unknown model type: {model_type}")
 
             if os.path.exists(model_path):
-                state_dict = torch.load(model_path, map_location=device)
+                # torch-directml's deserialization hook expects integer device
+                # ids and raises TypeError ("'>=' not supported between
+                # instances of 'torch.device' and 'int'") when torch.load maps
+                # storages straight onto a privateuseone device. Loading on CPU
+                # and moving the model afterwards is equivalent and works
+                # everywhere, but is gated to DML so all other devices keep
+                # their exact existing behavior. (Issue #292)
+                map_location = "cpu" if _is_dml_device(device) else device
+                state_dict = torch.load(model_path, map_location=map_location)
                 if isinstance(state_dict, dict) and 'state_dict' in state_dict:
                     model.load_state_dict(state_dict['state_dict'])
                 elif isinstance(state_dict, dict) and 'model' in state_dict:
