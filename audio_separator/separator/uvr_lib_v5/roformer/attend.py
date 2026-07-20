@@ -15,6 +15,16 @@ FlashAttentionConfig = namedtuple("FlashAttentionConfig", ["enable_flash", "enab
 # helpers
 
 
+def _is_dml_device(device) -> bool:
+    """torch-directml devices use torch's out-of-tree backend slot (privateuseone).
+
+    F.scaled_dot_product_attention is not implemented by torch-directml (fails
+    with a D3D12 'The parameter is incorrect.' error), so DML tensors must take
+    the plain einsum attention path. Module-level so tests can patch it.
+    """
+    return device.type == "privateuseone"
+
+
 def exists(val):
     return val is not None
 
@@ -93,7 +103,9 @@ class Attend(nn.Module):
 
         scale = q.shape[-1] ** -0.5
 
-        if self.flash:
+        # DML has no SDPA — fall through to the einsum path. Gated so every
+        # other device keeps its exact existing behavior. (Issue #292)
+        if self.flash and not _is_dml_device(device):
             return self.flash_attn(q, k, v)
 
         # similarity

@@ -296,4 +296,13 @@ def main():
         separator.load_model(model_filename=model_filenames)
 
     output_files = separator.separate(audio_files, custom_output_names=args.custom_output_names)
+
+    if not output_files:
+        # Separator.separate logs and swallows per-file errors so a batch can
+        # continue past one bad file — but if NOTHING was produced, the run
+        # failed and the CLI must not report success (this previously exited 0
+        # with "Separation complete!" after logging an error).
+        logger.error("Separation produced no output files — see errors above.")
+        sys.exit(1)
+
     logger.info(f"Separation complete! Output file(s): {' '.join(output_files)}")

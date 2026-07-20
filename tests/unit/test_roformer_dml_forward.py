@@ -88,3 +88,33 @@ class TestMelBandRoformerDmlBranchEquivalence:
         assert hopped.device == audio.device
         assert hopped.shape == normal.shape
         assert torch.allclose(normal, hopped, atol=1e-6), "DML CPU-hop branch changed the output"
+
+
+class TestAttendDmlFallback:
+    """SDPA is unimplemented on torch-directml — Attend must route DML tensors
+    to the einsum math path. Forcing the gate on CPU proves the fallback path
+    produces the same attention output as SDPA."""
+
+    def test_is_dml_device(self):
+        from audio_separator.separator.uvr_lib_v5.roformer import attend as attend_mod
+
+        assert not attend_mod._is_dml_device(torch.device("cpu"))
+        assert attend_mod._is_dml_device(torch.device("privateuseone", 0))
+
+    def test_math_fallback_matches_sdpa_output(self):
+        from audio_separator.separator.uvr_lib_v5.roformer import attend as attend_mod
+
+        torch.manual_seed(0)
+        att = attend_mod.Attend(flash=True)
+        att.eval()
+        q = torch.randn(2, 4, 16, 32)
+        k = torch.randn(2, 4, 16, 32)
+        v = torch.randn(2, 4, 16, 32)
+
+        with torch.no_grad():
+            flash_out = att(q, k, v)
+            with patch.object(attend_mod, "_is_dml_device", return_value=True):
+                math_out = att(q, k, v)
+
+        assert math_out.shape == flash_out.shape
+        assert torch.allclose(flash_out, math_out, atol=1e-5), "einsum fallback diverges from SDPA"
