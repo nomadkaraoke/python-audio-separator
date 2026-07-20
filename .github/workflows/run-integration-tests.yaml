@@ -258,6 +258,10 @@ jobs:
         run: poetry install
       - name: Layer DirectML packages via pip
         run: poetry run pip install onnxruntime-directml torch-directml
+      - name: Install VC++ runtime (torch/onnxruntime native DLLs need it)
+        run: |
+          curl.exe -fsSL -o "$env:TEMP\vc_redist.x64.exe" https://aka.ms/vs/17/release/vc_redist.x64.exe
+          Start-Process -FilePath "$env:TEMP\vc_redist.x64.exe" -ArgumentList "/install", "/quiet", "/norestart" -Wait
       - name: Verify DirectML availability
         run: |
           poetry run python -c "import torch_directml; assert torch_directml.is_available(); print('torch_directml OK:', torch_directml.device_name(0))"
