@@ -1,3 +1,4 @@
+import gc
 import os
 import sys
 
@@ -11,6 +12,28 @@ from audio_separator.separator.common_separator import CommonSeparator
 from audio_separator.separator.uvr_lib_v5 import spec_utils
 from audio_separator.separator.uvr_lib_v5.tfc_tdf_v3 import TFC_TDF_net
 # Roformer direct constructors removed; loading handled via RoformerLoader in CommonSeparator.
+
+
+def _release_dml_memory_if_needed(device):
+    """Work around torch-directml's cross-iteration allocator leak.
+
+    torch-directml (privateuseone) does not reliably reuse freed blocks
+    across inference iterations — long chunk loops die with 'DML allocator
+    out of memory' after a few batches even though each batch fits. Its
+    0.2.x API added torch_directml.empty_cache() for exactly this; call it
+    (plus a gc pass to drop deferred references) after each batch on DML
+    only. No-op everywhere else and on older torch-directml. (Issue #292)
+    """
+    if getattr(device, "type", None) != "privateuseone":
+        return
+    gc.collect()
+    try:
+        import torch_directml
+
+        if hasattr(torch_directml, "empty_cache"):
+            torch_directml.empty_cache()
+    except Exception:  # pragma: no cover — defensive: never break inference
+        pass
 
 
 class MDXCSeparator(CommonSeparator):
@@ -326,6 +349,7 @@ class MDXCSeparator(CommonSeparator):
                     part = part.to(device)
                     x = self.model_run(part.unsqueeze(0))[0]
                     x = x.cpu()
+                    _release_dml_memory_if_needed(device)
                     # Perform overlap_add on CPU
                     if i + chunk_size > mix.shape[1]:
                         # Fixed to correctly add to the end of the tensor
@@ -397,6 +421,9 @@ class MDXCSeparator(CommonSeparator):
                         # Accumulate outputs on CPU
                         accumulated_outputs[..., count * hop_size : count * hop_size + chunk_size] += individual_output_cpu
                         count += 1
+
+                    del single_batch_result
+                    _release_dml_memory_if_needed(self.torch_device)
 
             self.logger.debug("Calculating inferenced outputs based on accumulated outputs and overlap")
             inferenced_outputs = accumulated_outputs[..., chunk_size - hop_size : -(pad_size + chunk_size - hop_size)] / self.overlap
