@@ -203,6 +203,10 @@ jobs:
         with:
           path: C:\audio-separator-models
           key: windows-cpu-smoke-models-v1
+      - name: Ensure model directory exists
+        # Separator raises FileNotFoundError if AUDIO_SEPARATOR_MODEL_DIR
+        # doesn't exist (it never creates it); a cache miss leaves it absent.
+        run: New-Item -ItemType Directory -Force -Path C:\audio-separator-models | Out-Null
       - name: "Run: one model per DML-relevant architecture (RoFormer, MDX, VR)"
         run: poetry run pytest -sv tests/integration/test_cli_integration.py -k "mel_band_roformer_karaoke or Inst_HQ_4 or 2_HP-UVR"
       - name: Upload test artifacts
