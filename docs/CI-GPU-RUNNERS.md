@@ -82,11 +82,15 @@ Two tiers (added 2026-07 for RoFormer/DirectML support, issue #292):
    runs one model per DirectML-relevant architecture (RoFormer, MDX, VR)
    end-to-end on CPU. Models are cached via `actions/cache`. Python 3.12
    (torch-directml has no 3.13 wheels, and the DML jobs must match).
-2. **`windows-directml`** (planned) — self-hosted ephemeral Windows Server +
-   T4 VM (`gha-runner-gpu-windows` family), runs separation with
-   `--use_directml` and compares output quality against CPU results. The
-   image uses the NVIDIA **GRID** driver (WDDM mode) — the datacenter driver
-   puts the T4 in TCC mode, which has no DirectX support and breaks DirectML.
+2. **`windows-directml`** (experimental, `continue-on-error`) — self-hosted
+   ephemeral Windows Server + T4 VM (`gha-runner-gpu-windows` family), runs
+   RoFormer/MDX/VR separations with `--use_directml`, asserting reference
+   quality, non-silent finite output, and new-implementation RoFormer loads
+   (no silent legacy fallback). The image uses the NVIDIA **GRID** driver
+   (WDDM mode) — the datacenter driver puts the T4 in TCC mode, which has no
+   DirectX support and breaks DirectML. torch-directml is layered via pip in
+   the job (poetry's lock resolves the `dml` extra to an unusable
+   torch-1.13-era torch-directml because modern releases pin torch==2.4.1).
 
 ## Required GitHub branch protection checks
 

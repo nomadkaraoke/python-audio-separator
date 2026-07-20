@@ -218,10 +218,59 @@ jobs:
             *.flac
             tests/*.flac
 
+  # ── Windows DirectML integration (self-hosted ephemeral Windows GPU) ──
+  #
+  # Runs on the gha-runner-gpu-windows ephemeral fleet (T4 in WDDM mode;
+  # see docs/CI-GPU-RUNNERS.md). Experimental: continue-on-error until
+  # promoted to a required check.
+  #
+  # torch-directml is layered via pip, NOT the poetry `dml` extra: current
+  # torch-directml releases pin torch==2.4.1, so poetry's lock resolved the
+  # extra to torch-directml 0.1.13 (a torch-1.13-era relic that must not be
+  # used). pip resolves the modern 0.2.5.dev wheel + a compatible torch in
+  # this job's venv only, leaving every other platform's torch untouched.
+
+  windows-directml:
+    needs: changes
+    if: needs.changes.outputs.should_run == 'true'
+    runs-on: [self-hosted, windows, gpu]
+    timeout-minutes: 40
+    continue-on-error: true
+    defaults:
+      run:
+        shell: powershell
+    env:
+      AUDIO_SEPARATOR_MODEL_DIR: C:\audio-separator-models
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify GPU is in WDDM mode (DirectML requirement)
+        run: |
+          nvidia-smi --query-gpu=driver_version,name,driver_model.current --format=csv,noheader
+          $model = nvidia-smi --query-gpu=driver_model.current --format=csv,noheader
+          if ($model -notmatch "WDDM") { throw "GPU not in WDDM mode: $model" }
+      - name: Install Poetry dependencies (base)
+        run: poetry install
+      - name: Layer DirectML packages via pip
+        run: poetry run pip install onnxruntime-directml torch-directml
+      - name: Verify DirectML availability
+        run: |
+          poetry run python -c "import torch_directml; assert torch_directml.is_available(); print('torch_directml OK:', torch_directml.device_name(0))"
+          poetry run python -c "import onnxruntime as ort; ps = ort.get_available_providers(); print(ps); assert 'DmlExecutionProvider' in ps"
+      - name: "Run: DirectML separations (RoFormer, MDX, VR)"
+        run: poetry run pytest -sv tests/integration/test_windows_directml.py
+      - name: Upload test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-directml-results
+          path: |
+            *.flac
+            tests/*.flac
+
   # ── Gate job for branch protection ────────────────────────────────
 
   integration-test:
-    needs: [changes, ensemble-presets, core-models, stems-and-quality, windows-cpu-integration]
+    needs: [changes, ensemble-presets, core-models, stems-and-quality, windows-cpu-integration, windows-directml]
     if: always()
     runs-on: ubuntu-latest
     steps:
@@ -236,6 +285,7 @@ jobs:
           echo "core-models:             ${{ needs.core-models.result }}"
           echo "stems-and-quality:       ${{ needs.stems-and-quality.result }}"
           echo "windows-cpu-integration: ${{ needs.windows-cpu-integration.result }}"
+          echo "windows-directml:        ${{ needs.windows-directml.result }} (continue-on-error; see job for real outcome)"
 
           if [[ "${{ needs.ensemble-presets.result }}" == "failure" ]] || \
              [[ "${{ needs.core-models.result }}" == "failure" ]] || \
