@@ -38,7 +38,13 @@ pytestmark = pytest.mark.skipif(
 INPUT_FILE = "tests/inputs/mardy20s.flac"
 REFERENCE_DIR = "tests/inputs/reference"
 
-# (model, expected output files, is_roformer, validate_reference)
+# torch-directml's allocator can't sustain the default MDXC segment size
+# (801 for these roformer models) at fp32 — 'DML allocator out of memory' —
+# so ckpt-based models run with a reduced segment. This is the documented
+# resource knob for constrained GPUs, not a DML-specific hack.
+DML_SEGMENT_ARGS = ["--mdxc_override_model_segment_size", "--mdxc_segment_size", "256"]
+
+# (model, expected output files, is_roformer, validate_reference, extra_args)
 DML_MODEL_PARAMS = [
     (
         # The exact model from the issue #292 report
@@ -49,6 +55,7 @@ DML_MODEL_PARAMS = [
         ],
         True,
         True,
+        DML_SEGMENT_ARGS,
     ),
     (
         "mel_band_roformer_karaoke_aufr33_viperx_sdr_10.1956.ckpt",
@@ -58,6 +65,7 @@ DML_MODEL_PARAMS = [
         ],
         True,
         True,
+        DML_SEGMENT_ARGS,
     ),
     (
         # MDX — regression guard: already worked on DirectML before #292
@@ -68,6 +76,7 @@ DML_MODEL_PARAMS = [
         ],
         False,
         True,
+        [],
     ),
     (
         # VR — regression guard: already worked on DirectML before #292
@@ -78,6 +87,7 @@ DML_MODEL_PARAMS = [
         ],
         False,
         True,
+        [],
     ),
     (
         # Plain MDXC (TFC_TDF arch) — its STFT wrapper already CPU-hops
@@ -91,6 +101,7 @@ DML_MODEL_PARAMS = [
         ],
         False,
         False,
+        DML_SEGMENT_ARGS,
     ),
 ]
 
@@ -111,14 +122,14 @@ def _assert_audible_and_finite(path):
     assert rms > RMS_FLOOR, f"{path} is (near-)silent: rms={rms:.2e}"
 
 
-@pytest.mark.parametrize("model,expected_files,is_roformer,validate_reference", DML_MODEL_PARAMS)
-def test_dml_separation(model, expected_files, is_roformer, validate_reference):
+@pytest.mark.parametrize("model,expected_files,is_roformer,validate_reference,extra_args", DML_MODEL_PARAMS)
+def test_dml_separation(model, expected_files, is_roformer, validate_reference, extra_args):
     for f in expected_files:
         if os.path.exists(f):
             os.remove(f)
 
     result = subprocess.run(
-        [resolve_cli_executable(), "--use_directml", "--log_level", "debug", "-m", model, INPUT_FILE],
+        [resolve_cli_executable(), "--use_directml", "--log_level", "debug", *extra_args, "-m", model, INPUT_FILE],
         capture_output=True,
         text=True,
         check=False,
