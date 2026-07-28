@@ -7,6 +7,7 @@ from rotary_embedding_torch import RotaryEmbedding
 
 from audio_separator.separator.architectures.mdxc_separator import MDXCSeparator
 from audio_separator.separator.execution_policy import NATIVE_FP16
+from audio_separator.separator.roformer.roformer_loader import RoformerLoader
 from audio_separator.separator.uvr_lib_v5.roformer import bs_roformer as bs_module
 
 
@@ -136,6 +137,23 @@ def test_regional_compile_target_flattening_handles_two_and_three_transformer_bs
     targets = separator._regional_compile_targets()
 
     assert targets == [*two_transformer_block, *three_transformer_block]
+
+
+def test_roformer_loader_forwards_linear_transformer_depth_to_bs_model():
+    loader = RoformerLoader()
+    model = Mock()
+    config = {
+        "dim": 16,
+        "depth": 1,
+        "linear_transformer_depth": 2,
+        "freqs_per_bands": (17, 16),
+    }
+
+    with patch.object(bs_module, "BSRoformer", return_value=model) as bs_roformer:
+        loaded = loader._create_bs_roformer(config)
+
+    assert loaded is model
+    assert bs_roformer.call_args.kwargs["linear_transformer_depth"] == 2
 
 
 def test_bs_linear_attention_block_runs_in_half_and_is_included_in_regional_compile():

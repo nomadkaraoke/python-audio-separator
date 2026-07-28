@@ -184,6 +184,7 @@ class TestConfigurationNormalizer:
         config = {
             'dim': '512',
             'depth': '12.0',  # Float string to int
+            'linear_transformer_depth': '1',
             'sample_rate': 44100.0,  # Float to int
             'attn_dropout': '0.1',
             'ff_dropout': 0.2
@@ -193,6 +194,7 @@ class TestConfigurationNormalizer:
         
         assert result['dim'] == 512
         assert result['depth'] == 12
+        assert result['linear_transformer_depth'] == 1
         assert result['sample_rate'] == 44100
         assert result['attn_dropout'] == 0.1
         assert result['ff_dropout'] == 0.2
@@ -200,6 +202,7 @@ class TestConfigurationNormalizer:
         # Check types
         assert isinstance(result['dim'], int)
         assert isinstance(result['depth'], int)
+        assert isinstance(result['linear_transformer_depth'], int)
         assert isinstance(result['sample_rate'], int)
         assert isinstance(result['attn_dropout'], float)
         assert isinstance(result['ff_dropout'], float)
