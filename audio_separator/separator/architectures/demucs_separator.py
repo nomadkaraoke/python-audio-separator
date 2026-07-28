@@ -8,6 +8,7 @@ from audio_separator.separator.uvr_lib_v5.demucs.apply import apply_model, demuc
 from audio_separator.separator.uvr_lib_v5.demucs.hdemucs import HDemucs
 from audio_separator.separator.uvr_lib_v5.demucs.pretrained import get_model as get_demucs_model
 from audio_separator.separator.uvr_lib_v5 import spec_utils
+from audio_separator.separator.uvr_lib_v5.device_utils import should_accumulate_on_device
 
 DEMUCS_4_SOURCE = ["drums", "bass", "other", "vocals"]
 
@@ -21,6 +22,17 @@ DEMUCS_6_SOURCE_MAPPER = {
     CommonSeparator.GUITAR_STEM: 4,
     CommonSeparator.PIANO_STEM: 5,
 }
+
+
+def _estimate_demucs_full_track_buffer_bytes(channels, samples, num_sources, shifts, num_bag_models):
+    """Estimate peak float32 storage retained across Demucs split and shift passes."""
+    input_bytes = channels * samples * 4
+    output_copies = 2 if shifts > 1 else 1
+    if num_bag_models:
+        output_copies = max(output_copies, 2)
+        if num_bag_models > 1 and shifts > 1:
+            output_copies = 3
+    return 3 * input_bytes + output_copies * num_sources * input_bytes + samples * 4
 
 
 class DemucsSeparator(CommonSeparator):
@@ -107,19 +119,34 @@ class DemucsSeparator(CommonSeparator):
 
         self.logger.debug("Loading model for demixing...")
 
-        self.demucs_model_instance = HDemucs(sources=DEMUCS_4_SOURCE)
-        self.demucs_model_instance = get_demucs_model(name=os.path.splitext(os.path.basename(self.model_path))[0], repo=Path(os.path.dirname(self.model_path)))
-        self.demucs_model_instance = demucs_segments(self.segment_size, self.demucs_model_instance)
-        self.demucs_model_instance.to(self.torch_device)
-        self.demucs_model_instance.eval()
+        separation_failed = False
+        try:
+            self.demucs_model_instance = HDemucs(sources=DEMUCS_4_SOURCE)
+            self.demucs_model_instance = get_demucs_model(name=os.path.splitext(os.path.basename(self.model_path))[0], repo=Path(os.path.dirname(self.model_path)))
+            self.demucs_model_instance = demucs_segments(self.segment_size, self.demucs_model_instance)
+            self.demucs_model_instance.to(self.torch_device)
+            self.demucs_model_instance.eval()
 
-        self.logger.debug("Model loaded and set to evaluation mode.")
+            self.logger.debug("Model loaded and set to evaluation mode.")
 
-        source = self.demix_demucs(mix)
-
-        del self.demucs_model_instance
-        self.clear_gpu_cache()
-        self.logger.debug("Model and GPU cache cleared after demixing.")
+            source = self.demix_demucs(mix)
+        except BaseException:
+            separation_failed = True
+            raise
+        finally:
+            if hasattr(self, "demucs_model_instance"):
+                del self.demucs_model_instance
+            try:
+                self.clear_gpu_cache()
+            except Exception as cleanup_error:
+                if not separation_failed:
+                    raise
+                self.logger.warning(
+                    "Failed to clear the GPU cache after Demucs inference failed: %s",
+                    cleanup_error,
+                    exc_info=True,
+                )
+            self.logger.debug("Model and GPU cache cleared after demixing.")
 
         output_files = []
         self.logger.debug("Processing output files...")
@@ -166,14 +193,29 @@ class DemucsSeparator(CommonSeparator):
         self.logger.debug("Starting demixing process in demix_demucs...")
 
         processed = {}
-        mix = torch.tensor(mix, dtype=torch.float32)
+        num_sources = len(self.demucs_model_instance.sources)
+        estimated_buffer_bytes = _estimate_demucs_full_track_buffer_bytes(
+            channels=mix.shape[0],
+            samples=mix.shape[-1],
+            num_sources=num_sources,
+            shifts=self.shifts,
+            num_bag_models=len(getattr(self.demucs_model_instance, "models", ())),
+        )
+        accumulate_on_device = should_accumulate_on_device(self.torch_device, estimated_buffer_bytes)
+        mix_device = self.torch_device if accumulate_on_device else torch.device("cpu")
+        if self.torch_device.type == "mps" and not accumulate_on_device:
+            self.logger.info(
+                "Keeping full-track Demucs buffers on CPU for this long input to limit MPS memory use "
+                f"(estimated buffers: {estimated_buffer_bytes / 1024**3:.2f} GiB)."
+            )
+        mix = torch.tensor(mix, dtype=torch.float32, device=mix_device)
         ref = mix.mean(0)
         ref_mean = ref.mean()
         ref_std = ref.std()
         if not torch.isfinite(ref_std):
             ref_std = torch.zeros_like(ref_std)
         normalization_std = ref_std.clamp_min(torch.finfo(mix.dtype).eps)
-        mix = (mix - ref_mean) / normalization_std
+        mix.sub_(ref_mean).div_(normalization_std)
         mix_infer = mix
 
         with torch.no_grad():
@@ -190,7 +232,8 @@ class DemucsSeparator(CommonSeparator):
                 progress=True,
             )[0]
 
-        sources = (sources * ref_std + ref_mean).cpu().numpy()
+        sources.mul_(ref_std).add_(ref_mean)
+        sources = sources.cpu().numpy()
         sources[[0, 1]] = sources[[1, 0]]
         processed[mix] = sources[:, :, 0:None].copy()
         sources = list(processed.values())

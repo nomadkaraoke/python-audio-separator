@@ -1,5 +1,7 @@
 import torch
 
+from audio_separator.separator.uvr_lib_v5.device_utils import should_fallback_to_cpu_for_complex_ops
+
 
 class STFT:
     """
@@ -18,11 +20,11 @@ class STFT:
         self.hann_window = torch.hann_window(window_length=self.n_fft, periodic=True)
 
     def __call__(self, input_tensor):
-        # Determine if the input tensor's device is not a standard computing device (i.e., not CPU or CUDA).
-        is_non_standard_device = not input_tensor.device.type in ["cuda", "cpu"]
+        original_device = input_tensor.device
+        should_fallback = should_fallback_to_cpu_for_complex_ops(original_device)
 
-        # If on a non-standard device, temporarily move the tensor to CPU for processing.
-        if is_non_standard_device:
+        # Use CPU only when the current backend lacks the required complex operations.
+        if should_fallback:
             input_tensor = input_tensor.cpu()
 
         # Transfer the pre-defined window tensor to the same device as the input tensor.
@@ -48,9 +50,9 @@ class STFT:
             [*batch_dimensions, channel_dim * 2, -1, permuted_stft_output.shape[-1]]
         )
 
-        # If the original tensor was on a non-standard device, move the processed tensor back to that device.
-        if is_non_standard_device:
-            final_output = final_output.to(self.device)
+        # Restore the input device after using the CPU fallback.
+        if should_fallback:
+            final_output = final_output.to(original_device)
 
         # Return the transformed tensor, sliced to retain only the required frequency dimension (`dim_f`).
         return final_output[..., : self.dim_f, :]
@@ -97,11 +99,11 @@ class STFT:
         return complex_tensor
 
     def inverse(self, input_tensor):
-        # Determine if the input tensor's device is not a standard computing device (i.e., not CPU or CUDA).
-        is_non_standard_device = not input_tensor.device.type in ["cuda", "cpu"]
+        original_device = input_tensor.device
+        should_fallback = should_fallback_to_cpu_for_complex_ops(original_device)
 
-        # If on a non-standard device, temporarily move the tensor to CPU for processing.
-        if is_non_standard_device:
+        # Use CPU only when the current backend lacks the required complex operations.
+        if should_fallback:
             input_tensor = input_tensor.cpu()
 
         # Transfer the pre-defined Hann window tensor to the same device as the input tensor.
@@ -119,8 +121,8 @@ class STFT:
         # Reshape ISTFT result to restore original batch and channel dimensions.
         final_output = istft_result.reshape([*batch_dimensions, 2, -1])
 
-        # If the original tensor was on a non-standard device, move the processed tensor back to that device.
-        if is_non_standard_device:
-            final_output = final_output.to(self.device)
+        # Restore the input device after using the CPU fallback.
+        if should_fallback:
+            final_output = final_output.to(original_device)
 
         return final_output

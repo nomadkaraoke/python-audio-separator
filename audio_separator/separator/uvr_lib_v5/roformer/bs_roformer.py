@@ -11,10 +11,12 @@ from beartype.typing import Tuple, Optional, List, Callable
 from beartype import beartype
 
 from rotary_embedding_torch import RotaryEmbedding
-from rotary_embedding_torch.rotary_embedding_torch import rotate_half as _rotate_half_no_cat
 
 from einops import rearrange, pack, unpack
 from einops.layers.torch import Rearrange
+
+from audio_separator.separator.uvr_lib_v5.device_utils import should_fallback_to_cpu_for_complex_ops
+from .rotary import rotate_queries_or_keys as _rotate_queries_or_keys
 
 # helper functions
 
@@ -28,26 +30,6 @@ def _is_dml_device(device) -> bool:
     """
     return device.type == "privateuseone"
 
-
-def _rotate_queries_or_keys(rotary_embed, t):
-    """Apply rotary position embedding, avoiding zero-width tensor ops on DML.
-
-    rotary_embedding_torch's apply_rotary_emb concatenates (possibly empty)
-    unrotated edge slices around the rotated block; torch-directml rejects
-    zero-sized tensor ops with 'The parameter is incorrect.'. These models
-    always rotate the full head dimension, so the edge slices are empty and
-    the concat is a no-op — compute the rotation directly instead. Verified
-    equivalent to the library implementation by unit test. (Issue #292)
-    """
-    if not _is_dml_device(t.device):
-        return rotary_embed.rotate_queries_or_keys(t)
-    seq_len = t.shape[-2]
-    freqs = rotary_embed.forward(rotary_embed.get_seq_pos(seq_len, device=t.device, dtype=t.dtype), seq_len=seq_len)
-    if freqs.shape[-1] != t.shape[-1]:
-        # Partial-dim rotation would need the edge concat — unreachable here
-        # (RotaryEmbedding(dim=dim_head) rotates the full head dim).
-        return rotary_embed.rotate_queries_or_keys(t)
-    return t * freqs.cos() + _rotate_half_no_cat(t) * freqs.sin()
 
 def exists(val):
     return val is not None
@@ -69,6 +51,8 @@ def unpack_one(t, ps, pattern):
 
 
 def l2norm(t):
+    if t.dtype in (torch.float16, torch.bfloat16):
+        return F.normalize(t.float(), dim=-1, p=2).to(t.dtype)
     return F.normalize(t, dim=-1, p=2)
 
 
@@ -80,7 +64,11 @@ class RMSNorm(Module):
 
     def forward(self, x):
         x = x.to(self.gamma.device)
-        return F.normalize(x, dim=-1) * self.scale * self.gamma
+        if x.dtype in (torch.float16, torch.bfloat16):
+            normalized = F.normalize(x.float(), dim=-1).to(x.dtype)
+        else:
+            normalized = F.normalize(x, dim=-1)
+        return normalized * self.scale * self.gamma
 
 
 # attention
@@ -460,7 +448,8 @@ class BSRoformer(Module):
         """
 
         original_device = raw_audio.device
-        x_is_mps = True if original_device.type == "mps" else False
+        # Use the legacy CPU hop unless the current MPS runtime supports every required complex operation.
+        x_is_mps = original_device.type == "mps" and should_fallback_to_cpu_for_complex_ops(original_device)
         # torch-directml (privateuseone) has no complex tensor support, so all
         # complex ops (stft, view_as_complex, complex multiply, istft) hop to
         # CPU; the transformer stack — the heavy compute — stays on the DML
@@ -486,7 +475,7 @@ class BSRoformer(Module):
 
         stft_window = self.stft_window_fn().to(device)
 
-        if x_is_dml:
+        if x_is_mps or x_is_dml:
             stft_repr = torch.stft(raw_audio.cpu(), **self.stft_kwargs, window=stft_window.cpu(), return_complex=True)
             stft_repr = torch.view_as_real(stft_repr).to(device)
         else:
@@ -497,6 +486,10 @@ class BSRoformer(Module):
         stft_repr = rearrange(stft_repr, "b s f t c -> b (f s) t c")  # merge stereo / mono into the frequency, with frequency leading dimension, for band splitting
 
         x = rearrange(stft_repr, "b f t c -> b t (f c)")
+
+        band_split_dtype = next(self.band_split.parameters()).dtype
+        if x.dtype != band_split_dtype:
+            x = x.to(band_split_dtype)
 
         x = self.band_split(x)
 
@@ -540,9 +533,12 @@ class BSRoformer(Module):
 
         # complex number multiplication
 
-        if x_is_dml:
+        if x_is_mps or x_is_dml:
             stft_repr = stft_repr.cpu()
             mask = mask.cpu()
+
+        if mask.dtype != stft_repr.dtype:
+            mask = mask.to(stft_repr.dtype)
 
         stft_repr = torch.view_as_complex(stft_repr)
         mask = torch.view_as_complex(mask)
@@ -553,7 +549,7 @@ class BSRoformer(Module):
 
         stft_repr = rearrange(stft_repr, "b n (f s) t -> (b n s) f t", s=self.audio_channels)
 
-        recon_audio = torch.istft(stft_repr.cpu() if x_is_mps else stft_repr, **self.stft_kwargs, window=stft_window.cpu() if (x_is_mps or x_is_dml) else stft_window, return_complex=False).to(device)
+        recon_audio = torch.istft(stft_repr, **self.stft_kwargs, window=stft_window.cpu() if (x_is_mps or x_is_dml) else stft_window, return_complex=False).to(device)
 
         recon_audio = rearrange(recon_audio, "(b n s) t -> b n s t", s=self.audio_channels, n=self.num_stems)
 

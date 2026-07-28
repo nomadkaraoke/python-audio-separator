@@ -14,6 +14,7 @@ from unittest.mock import patch
 
 from audio_separator.separator.uvr_lib_v5.roformer import bs_roformer as bs_mod
 from audio_separator.separator.uvr_lib_v5.roformer import mel_band_roformer as mel_mod
+from audio_separator.separator.uvr_lib_v5.roformer import rotary as rotary_mod
 
 
 def _tiny_bs_roformer():
@@ -153,9 +154,9 @@ class TestRotaryNoCatEquivalence:
         t = torch.randn(2, 8, 16, 64)
 
         library = rotary.rotate_queries_or_keys(t)
-        with patch.object(bs_mod, "_is_dml_device", return_value=True):
+        with patch.object(rotary_mod, "_is_dml_device", return_value=True):
             manual_bs = bs_mod._rotate_queries_or_keys(rotary, t)
-        with patch.object(mel_mod, "_is_dml_device", return_value=True):
+        with patch.object(rotary_mod, "_is_dml_device", return_value=True):
             manual_mel = mel_mod._rotate_queries_or_keys(rotary, t)
 
         assert torch.allclose(library, manual_bs, atol=1e-6)

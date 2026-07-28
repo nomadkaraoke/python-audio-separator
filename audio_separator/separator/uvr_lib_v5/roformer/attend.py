@@ -49,8 +49,9 @@ print_once = once(print)
 
 
 class Attend(nn.Module):
-    def __init__(self, dropout=0.0, flash=False):
+    def __init__(self, dropout=0.0, flash=False, scale=None):
         super().__init__()
+        self.scale = scale
         self.dropout = dropout
         self.attn_dropout = nn.Dropout(dropout)
 
@@ -86,7 +87,13 @@ class Attend(nn.Module):
 
         # pytorch 2.0 flash attn: q, k, v, mask, dropout, softmax_scale
         with torch.backends.cuda.sdp_kernel(**config._asdict()):
-            out = F.scaled_dot_product_attention(q, k, v, dropout_p=self.dropout if self.training else 0.0)
+            out = F.scaled_dot_product_attention(
+                q,
+                k,
+                v,
+                dropout_p=self.dropout if self.training else 0.0,
+                scale=self.scale,
+            )
 
         return out
 
@@ -101,7 +108,7 @@ class Attend(nn.Module):
 
         q_len, k_len, device = q.shape[-2], k.shape[-2], q.device
 
-        scale = q.shape[-1] ** -0.5
+        scale = self.scale if exists(self.scale) else q.shape[-1] ** -0.5
 
         # DML has no SDPA — fall through to the einsum path. Gated so every
         # other device keeps its exact existing behavior. (Issue #292)
