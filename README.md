@@ -25,9 +25,10 @@ The simplest (and probably most used) use case for this package is to separate a
   - [Installation 🛠️](#installation-%EF%B8%8F)
     - [🐳 Docker](#-docker)
     - [🎮 Nvidia GPU with CUDA or 🧪 Google Colab](#-nvidia-gpu-with-cuda-or--google-colab)
-    - [ Apple Silicon, macOS Sonoma+ with M1 or newer CPU (CoreML acceleration)](#-apple-silicon-macos-sonoma-with-m1-or-newer-cpu-coreml-acceleration)
+    - [ Apple Silicon, macOS Sonoma+ with M1 or newer (CoreML and MPS acceleration)](#-apple-silicon-macos-sonoma-with-m1-or-newer-coreml-and-mps-acceleration)
     - [🐢 No hardware acceleration, CPU only](#-no-hardware-acceleration-cpu-only)
     - [🪟 Windows AMD / Intel GPU with DirectML (experimental)](#-windows-amd--intel-gpu-with-directml-experimental)
+    - [Inference precision and compilation](#inference-precision-and-compilation)
     - [🎥 FFmpeg dependency](#-ffmpeg-dependency)
   - [GPU / CUDA specific installation steps with Pip](#gpu--cuda-specific-installation-steps-with-pip)
     - [Multiple CUDA library versions may be needed](#multiple-cuda-library-versions-may-be-needed)
@@ -114,15 +115,38 @@ Docker:
 beveradb/audio-separator:gpu
 ```
 
-###  Apple Silicon, macOS Sonoma+ with M1 or newer CPU (CoreML acceleration)
+###  Apple Silicon, macOS Sonoma+ with M1 or newer (CoreML and MPS acceleration)
 
-💬 If successfully configured, you should see this log message when running `audio-separator --env_info`:
- `ONNXruntime has CoreMLExecutionProvider available, enabling acceleration`
+PyTorch models use the MPS device, while ONNX models use the CoreML execution provider when it is available.
 
 Pip:
 ```sh
 pip install "audio-separator[cpu]"
 ```
+
+💬 If successfully configured, `audio-separator --env_info` logs:
+
+```text
+Apple Silicon MPS/CoreML is available in Torch and processor is ARM, setting Torch device to MPS
+ONNXruntime has CoreMLExecutionProvider available, enabling acceleration
+```
+
+On Apple Silicon, audio-separator requires PyTorch 2.13 or newer (and earlier than PyTorch 3). Other platforms continue to support PyTorch 2.3 or newer. In a dependency-only MPS comparison, upgrading from PyTorch 2.8 to 2.13 reduced a representative five-inference workload by about 16%; PyTorch 2.13 is also the validated baseline for the fast paths below. Its Apple Silicon wheels target macOS 14 (Sonoma) or newer.
+
+If the runtime probe finds an unsupported complex operation, inference automatically uses the compatible CPU fallback for that spectral work.
+
+**Model architecture status on Apple Silicon:**
+
+| Architecture | Model types | Accelerator |
+|---|---|---|
+| MDX | `.onnx` | CoreML when the execution provider is available |
+| VR | `.pth` | PyTorch MPS |
+| Demucs | `.yaml` | PyTorch MPS; supported spectral operations stay on-device |
+| MDXC / RoFormer | `.ckpt` / `.yaml` | PyTorch MPS; supported spectral operations and bounded overlap-add buffers stay on-device |
+
+Duration-scaled MDXC, RoFormer, and Demucs buffers use the MPS fast path while their estimated footprint is at most 1 GiB. Larger full-track buffers remain on CPU to preserve MPS/Metal working-set headroom for model weights and activations; model inference still runs on MPS.
+
+Set `AUDIO_SEPARATOR_FORCE_CPU_COMPLEX=1` to force the legacy CPU path for complex spectral operations when diagnosing an MPS compatibility issue.
 
 ### 🐢 No hardware acceleration, CPU only
 
@@ -171,6 +195,50 @@ These statuses are enforced by the `windows-directml` CI job, which runs real
 separations on an NVIDIA T4 in WDDM mode. If `AUDIO_SEPARATOR_FORCE_DML_MDXC=1`
 works on your GPU, please [open an issue](https://github.com/nomadkaraoke/python-audio-separator/issues)
 with your `--env_info` output — torch-directml behaves differently across vendors.
+
+### Inference precision and compilation
+
+Three opt-in flags control PyTorch inference:
+
+- `--use_autocast` runs supported operations through PyTorch autocast.
+- `--use_native_fp16` converts a verified model to native float16. It is mutually exclusive with `--use_autocast`.
+- `--use_torch_compile` enables regional compilation for verified model, device, and precision combinations. It is orthogonal to precision, so it can be used with float32, autocast, or native float16 where supported.
+
+The verified combinations are intentionally conservative:
+
+| Device | Model family | Effective precision | Regional `torch.compile` |
+|---|---|---|---|
+| MPS or CUDA | MelBand RoFormer, BS-RoFormer | `fp32`, `autocast`, or `native_fp16` | Supported with all three precision modes |
+| MPS or CUDA | VR, Demucs, and other PyTorch models | `fp32`, or `autocast` when available | Not yet verified; a request warns and continues in eager mode |
+| CPU | MelBand RoFormer, BS-RoFormer | `fp32`, or `autocast` when available | Supported with both precision modes |
+| CPU | VR, Demucs, and other PyTorch models | `fp32`, or `autocast` when available | Not yet verified; a request warns and continues in eager mode |
+| DirectML | PyTorch models | `fp32` | Not enabled for these optimizations; requests warn and continue with float32/eager inference |
+| Any | ONNX models | Managed by the selected ONNX Runtime provider | Not applicable |
+
+Native float16 is currently verified only for MelBand RoFormer and BS-RoFormer on MPS and CUDA. Requesting it for any other combination logs a warning and safely continues in float32. Native float16 keeps numerically sensitive RoFormer operations, including rotary angles, normalization, STFT, and ISTFT, in float32.
+
+Compilation has a cold-start cost: the first separation for a new model or input shape can be slower while PyTorch builds and caches graphs. Verified MPS and CUDA measurements showed that autocast plus compilation can improve warm, repeated same-shape MelBand and BS-RoFormer inference, so this is a useful starting point for that workload:
+
+```sh
+audio-separator path/to/audio.wav --use_autocast --use_torch_compile
+```
+
+CPU testing also found modest warm improvements from float32 compilation, while reduced-precision CPU modes were slower than float32 on the tested Apple Silicon processor. Results depend on the model, input shape, compiler-cache state, PyTorch version, and hardware. For one-shot or changing-shape workloads, benchmark eager inference as well. Float32 compilation can be selected explicitly on CPU, MPS, or CUDA:
+
+```sh
+audio-separator path/to/audio.wav --use_torch_compile
+```
+
+CPU compilation also requires a PyTorch and Python combination supported by Torch Dynamo. If regional compilation is unavailable or fails, audio-separator warns, restores the eager module calls, retries the affected chunk once, and reports `effective_torch_compile=False`.
+
+Native-float16 compilation is available only for verified MelBand RoFormer and BS-RoFormer models on MPS or CUDA:
+
+```sh
+audio-separator path/to/audio.wav --use_native_fp16 --use_torch_compile
+```
+
+After `load_model()`, the Python API exposes the selected mode through `separator.effective_precision` (`"fp32"`, `"autocast"`, or `"native_fp16"`) and `separator.effective_torch_compile` (`True` only when regional compilation was activated). These properties make warning-based fallbacks observable to callers.
+When a multi-model ensemble is selected, they return `"fp32"` and `False` until an individual member is loaded because the ensemble itself has no single effective execution mode.
 
 ### 🎥 FFmpeg dependency
 
@@ -451,7 +519,7 @@ Presets are defined in `audio_separator/ensemble_presets.json` — contributions
 ```sh
 usage: audio-separator [-h] [-v] [-d] [-e] [-l] [--log_level LOG_LEVEL] [--list_filter LIST_FILTER] [--list_limit LIST_LIMIT] [--list_format {pretty,json}] [-m MODEL_FILENAME] [--output_format OUTPUT_FORMAT]
                        [--output_bitrate OUTPUT_BITRATE] [--output_dir OUTPUT_DIR] [--model_file_dir MODEL_FILE_DIR] [--download_model_only] [--invert_spect] [--normalization NORMALIZATION]
-                       [--amplification AMPLIFICATION] [--single_stem SINGLE_STEM] [--sample_rate SAMPLE_RATE] [--use_soundfile] [--use_autocast] [--use_directml] [--custom_output_names CUSTOM_OUTPUT_NAMES]
+                       [--amplification AMPLIFICATION] [--single_stem SINGLE_STEM] [--sample_rate SAMPLE_RATE] [--use_soundfile] [--use_autocast | --use_native_fp16] [--use_torch_compile] [--use_directml] [--custom_output_names CUSTOM_OUTPUT_NAMES]
                        [--mdx_segment_size MDX_SEGMENT_SIZE] [--mdx_overlap MDX_OVERLAP] [--mdx_batch_size MDX_BATCH_SIZE] [--mdx_hop_length MDX_HOP_LENGTH] [--mdx_enable_denoise] [--vr_batch_size VR_BATCH_SIZE]
                        [--vr_window_size VR_WINDOW_SIZE] [--vr_aggression VR_AGGRESSION] [--vr_enable_tta] [--vr_high_end_process] [--vr_enable_post_process]
                        [--vr_post_process_threshold VR_POST_PROCESS_THRESHOLD] [--demucs_segment_size DEMUCS_SEGMENT_SIZE] [--demucs_shifts DEMUCS_SHIFTS] [--demucs_overlap DEMUCS_OVERLAP]
@@ -492,7 +560,9 @@ Common Separation Parameters:
   --single_stem SINGLE_STEM                              Output only single stem, e.g. Instrumental, Vocals, Drums, Bass, Guitar, Piano, Other. Example: --single_stem=Instrumental
   --sample_rate SAMPLE_RATE                              Modify the sample rate of the output audio (default: 44100). Example: --sample_rate=44100
   --use_soundfile                                        Use soundfile to write audio output (default: False). Example: --use_soundfile
-  --use_autocast                                         Use PyTorch autocast for faster inference (default: False). Do not use for CPU inference. Example: --use_autocast
+  --use_autocast                                         Use PyTorch autocast when supported (default: False). Example: --use_autocast
+  --use_native_fp16                                      Use native float16 for verified model/device combinations (default: False). Mutually exclusive with --use_autocast. Example: --use_native_fp16
+  --use_torch_compile                                    Compile verified repeated model blocks when supported (default: False). Best for long inputs or repeated same-shape runs; a fresh compiler cache can make the first run slower. Example: --use_torch_compile
   --use_directml                                         Use DirectML for hardware-accelerated inference on Windows AMD/Intel GPUs (experimental; requires the 'dml' extra). Example: --use_directml
   --custom_output_names CUSTOM_OUTPUT_NAMES              Custom names for all output files in JSON format (default: None). Example: --custom_output_names='{"Vocals": "vocals_output", "Drums": "drums_output"}'
 
@@ -550,6 +620,8 @@ print(f"Separation complete! Output file(s): {' '.join(output_files)}")
 You can process multiple files without reloading the model to save time and memory.
 
 You only need to load a model when choosing or changing models. See example below:
+
+Consecutive calls to `load_model()` with the same single model filename reuse the loaded instance. Call `load_model(..., force_reload=True)` after changing settings that are captured when the model is loaded. Multi-model ensembles keep their existing loading behavior.
 
 ```python
 from audio_separator.separator import Separator
@@ -668,7 +740,9 @@ You can also rename specific stems:
 - **`invert_using_spec`:** (Optional) Flag to invert using spectrogram. `Default: False`
 - **`sample_rate`:** (Optional) Set the sample rate of the output audio. `Default: 44100`
 - **`use_soundfile`:** (Optional) Use soundfile for output writing, can solve OOM issues, especially on longer audio.
-- **`use_autocast`:** (Optional) Flag to use PyTorch autocast for faster inference. Do not use for CPU inference. `Default: False`
+- **`use_autocast`:** (Optional) Use PyTorch autocast when the loaded model and device support it. Mutually exclusive with `use_native_fp16=True`. `Default: False`
+- **`use_native_fp16`:** (Optional) Convert a verified model to native float16 inference. Currently supported for MelBand RoFormer and BS-RoFormer on MPS and CUDA. Mutually exclusive with `use_autocast=True`; unsupported combinations warn and continue in float32. `Default: False`
+- **`use_torch_compile`:** (Optional) Compile verified repeated model blocks. This can be combined with float32 or autocast for MelBand RoFormer and BS-RoFormer on CPU, MPS, and CUDA, and with native float16 on MPS and CUDA. A fresh compiler cache can make the first run slower; unsupported combinations warn and continue in eager mode. `Default: False`
 - **`use_directml`:** (Optional) Flag to use DirectML for hardware-accelerated inference on Windows AMD/Intel GPUs (experimental; requires the `dml` extra and only takes effect when CUDA and Apple Silicon MPS are unavailable). `Default: False`
 - **`mdx_params`:** (Optional) MDX Architecture Specific Attributes & Defaults. `Default: {"hop_length": 1024, "segment_size": 256, "overlap": 0.25, "batch_size": 1, "enable_denoise": False}`
 - **`vr_params`:** (Optional) VR Architecture Specific Attributes & Defaults. `Default: {"batch_size": 1, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False}`
@@ -678,6 +752,8 @@ You can also rename specific stems:
 - **`ensemble_weights`:** (Optional) Weights for each model in the ensemble. `Default: None` (equal weights)
 - **`ensemble_preset`:** (Optional) Named ensemble preset (e.g. `'vocal_balanced'`, `'karaoke'`). Sets models, algorithm, and weights automatically. Use `Separator(info_only=True).list_ensemble_presets()` to see all. `Default: None`
 
+After loading a model, inspect the read-only `Separator.effective_precision` and `Separator.effective_torch_compile` properties to see which requested modes were actually activated.
+
 ## Remote API Usage 🌐
 
 Audio Separator includes a remote API client that allows you to connect to a deployed Audio Separator API service, enabling you to perform audio separation without running the models locally. The API uses asynchronous processing with job polling for efficient handling of separation tasks.
@@ -686,7 +762,7 @@ To deploy Audio Separator as an API on modal.com and use this for remote process
 
 ## Requirements 📋
 
-Python >= 3.10
+Python >= 3.10, except Python 3.14.1 (excluded by the Python metadata of the required torchvision 0.28 release)
 
 Libraries: torch, onnx, onnxruntime, numpy, librosa, requests, six, tqdm, pydub
 
@@ -696,7 +772,8 @@ This project uses Poetry for dependency management and packaging. Follow these s
 
 ### Prerequisites
 
-- Make sure you have Python 3.10 or newer installed on your machine.
+- Make sure you have Python 3.10 or newer installed on your machine, excluding Python 3.14.1.
+- Install Poetry 2.0.0 or newer. Poetry 2 is required for dependency resolution, installation, and builds.
 - Install Conda (I recommend Miniforge: [Miniforge GitHub](https://github.com/conda-forge/miniforge)) to manage your Python virtual environments
 
 ### Clone the Repository
