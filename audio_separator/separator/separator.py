@@ -271,6 +271,8 @@ class Separator:
         self.model_filename = None
         self.model_filenames = []
         self._loaded_model_filename = None
+        self._loaded_model_friendly_name = None
+        self._loaded_model_is_uvr_vip = False
 
         self.model_is_uvr_vip = False
         self.model_friendly_name = None
@@ -920,6 +922,8 @@ class Separator:
         if not force_reload and self.model_instance is not None and self._loaded_model_filename == model_filename:
             self.model_filename = model_filename
             self.model_filenames = [model_filename]
+            self.model_friendly_name = self._loaded_model_friendly_name
+            self.model_is_uvr_vip = self._loaded_model_is_uvr_vip
             self.logger.info(f"Model {model_filename} is already loaded; reusing the existing instance.")
             return
 
@@ -933,6 +937,7 @@ class Separator:
         try:
             # Setting up the model path
             model_filename, model_type, model_friendly_name, model_path, yaml_config_filename = self.download_model_files(model_filename)
+            model_is_uvr_vip = self.model_is_uvr_vip
             model_name = model_filename.split(".")[0]
             self.logger.debug(f"Model downloaded, friendly name: {model_friendly_name}, model_path: {model_path}")
 
@@ -1025,6 +1030,10 @@ class Separator:
         self.model_filename = selected_model_filename
         self.model_filenames = [selected_model_filename]
         self._loaded_model_filename = model_filename
+        self.model_friendly_name = model_friendly_name
+        self.model_is_uvr_vip = model_is_uvr_vip
+        self._loaded_model_friendly_name = model_friendly_name
+        self._loaded_model_is_uvr_vip = model_is_uvr_vip
 
         # Log the completion of the model load process
         self.logger.debug("Loading model completed.")

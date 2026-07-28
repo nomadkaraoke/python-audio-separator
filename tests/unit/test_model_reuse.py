@@ -40,6 +40,31 @@ def test_load_model_normalizes_single_item_list_before_reuse(separator):
     assert separator.model_filenames == ["model.ckpt"]
 
 
+def test_load_model_reuse_restores_loaded_model_metadata(separator):
+    loaded_instance = object()
+    separator.model_instance = loaded_instance
+    separator._loaded_model_filename = "first.ckpt"
+    separator._loaded_model_friendly_name = "First model"
+    separator._loaded_model_is_uvr_vip = False
+
+    def download_second_model(_model_filename):
+        separator.model_friendly_name = "Second VIP model"
+        separator.model_is_uvr_vip = True
+        return "second.ckpt", "MDXC", "Second VIP model", "/tmp/second.ckpt", None
+
+    with (
+        patch.object(separator, "download_model_files", side_effect=download_second_model) as download_model_files,
+        patch.object(separator, "load_model_data_using_hash", return_value={}),
+    ):
+        separator.download_model_and_data("second.ckpt")
+        separator.load_model("first.ckpt")
+
+    download_model_files.assert_called_once_with("second.ckpt")
+    assert separator.model_instance is loaded_instance
+    assert separator.model_friendly_name == "First model"
+    assert separator.model_is_uvr_vip is False
+
+
 def test_load_model_force_reload_bypasses_reuse(separator):
     separator.model_instance = object()
     separator._loaded_model_filename = "model.ckpt"
@@ -183,6 +208,8 @@ def test_successful_load_populates_cache_for_the_next_call(separator):
     separator_class.assert_called_once()
     assert separator.model_instance is loaded_instance
     assert separator._loaded_model_filename == "model.ckpt"
+    assert separator._loaded_model_friendly_name == "Model"
+    assert separator._loaded_model_is_uvr_vip is False
 
 
 def test_force_reload_repeats_a_successful_load(separator):
