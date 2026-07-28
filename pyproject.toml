@@ -78,15 +78,15 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = ">=3.10,!=3.14.1"
-# PyTorch 2.13 is the measured and validated MPS baseline; its Apple Silicon
-# wheels target macOS 14 or newer. Preserve upstream's PyTorch 2.8 / torchvision
-# 0.23 lock on other Python <3.14 platforms to avoid an unrelated upgrade.
+# PyTorch 2.13 is the measured baseline on Apple Silicon and Linux/CUDA; its
+# Apple Silicon wheels target macOS 14 or newer. Preserve upstream's PyTorch
+# 2.8 / torchvision 0.23 lock on unvalidated Python <3.14 platforms.
 # Python 3.14 needs the first pair with cp314 wheels; torchvision 0.28 excludes
 # Python 3.14.1, which is mirrored by the project Python constraint above.
 torch = [
-    { version = ">=2.13,<3", markers = "sys_platform == 'darwin' and platform_machine == 'arm64'" },
-    { version = ">=2.3,<2.9", markers = "(sys_platform != 'darwin' or platform_machine != 'arm64') and python_version < '3.14'" },
-    { version = ">=2.13,<3", markers = "(sys_platform != 'darwin' or platform_machine != 'arm64') and python_version >= '3.14'" },
+    { version = ">=2.13,<3", markers = "sys_platform == 'linux' or (sys_platform == 'darwin' and platform_machine == 'arm64')" },
+    { version = ">=2.3,<2.9", markers = "sys_platform != 'linux' and (sys_platform != 'darwin' or platform_machine != 'arm64') and python_version < '3.14'" },
+    { version = ">=2.13,<3", markers = "sys_platform != 'linux' and (sys_platform != 'darwin' or platform_machine != 'arm64') and python_version >= '3.14'" },
 ]
 
 [tool.poetry.scripts]
