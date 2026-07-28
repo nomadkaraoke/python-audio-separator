@@ -131,7 +131,7 @@ Apple Silicon MPS/CoreML is available in Torch and processor is ARM, setting Tor
 ONNXruntime has CoreMLExecutionProvider available, enabling acceleration
 ```
 
-On Apple Silicon, audio-separator requires PyTorch 2.13 or newer (and earlier than PyTorch 3). Other platforms continue to support PyTorch 2.3 or newer. In a dependency-only MPS comparison, upgrading from PyTorch 2.8 to 2.13 reduced a representative five-inference workload by about 16%; PyTorch 2.13 is also the validated baseline for the fast paths below. Its Apple Silicon wheels target macOS 14 (Sonoma) or newer.
+On Apple Silicon, audio-separator requires PyTorch 2.13 or newer (and earlier than PyTorch 3). Other platforms continue to support PyTorch 2.3 or newer. PyTorch 2.13 is the validated baseline for the fast paths below, and its Apple Silicon wheels target macOS 14 (Sonoma) or newer.
 
 If the runtime probe finds an unsupported complex operation, inference automatically uses the compatible CPU fallback for that spectral work.
 
@@ -225,13 +225,13 @@ Compilation has a cold-start cost: the first separation for a new model or input
 audio-separator path/to/audio.wav --use_autocast --use_torch_compile
 ```
 
-CPU testing also found modest warm improvements from float32 compilation, while reduced-precision CPU modes were slower than float32 on the tested Apple Silicon processor. Results depend on the model, input shape, compiler-cache state, PyTorch version, and hardware. For one-shot or changing-shape workloads, benchmark eager inference as well. Float32 compilation can be selected explicitly on CPU, MPS, or CUDA:
+The short-input CPU checks verified mode resolution and fallback behavior only; they are not a CPU performance ranking. Results depend on the model, input shape, compiler-cache state, PyTorch version, and hardware. For one-shot or changing-shape workloads, benchmark eager inference as well. Float32 compilation can be selected explicitly on CPU, MPS, or CUDA:
 
 ```sh
 audio-separator path/to/audio.wav --use_torch_compile
 ```
 
-CPU compilation also requires a PyTorch and Python combination supported by Torch Dynamo. If regional compilation is unavailable or fails, audio-separator warns, restores the eager module calls, retries the affected chunk once, and reports `effective_torch_compile=False`.
+CPU compilation also requires a PyTorch and Python combination supported by Torch Dynamo. If regional compilation is unavailable or setup fails, audio-separator warns and continues with eager inference. If a compiled block fails lazily during inference, audio-separator restores the eager module calls, retries the affected chunk once, and reports `effective_torch_compile=False`.
 
 Native-float16 compilation is available only for verified MelBand RoFormer and BS-RoFormer models on MPS or CUDA:
 
