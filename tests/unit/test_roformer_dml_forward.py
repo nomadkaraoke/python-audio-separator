@@ -11,6 +11,7 @@ itself doesn't alter results, reorder dims, or drop tensors.
 import pytest
 import torch
 from unittest.mock import patch
+from packaging import version
 
 from audio_separator.separator.uvr_lib_v5.roformer import bs_roformer as bs_mod
 from audio_separator.separator.uvr_lib_v5.roformer import mel_band_roformer as mel_mod
@@ -139,6 +140,59 @@ class TestAttendDmlFallback:
                 sliced = att(q, k, v)
 
         assert torch.allclose(unsliced, sliced, atol=1e-6), "batch-sliced attention diverges"
+
+
+class TestAttendCompilation:
+    @pytest.mark.parametrize(
+        ("config", "expected"),
+        [
+            (
+                (True, True, True),
+                [
+                    torch.nn.attention.SDPBackend.FLASH_ATTENTION,
+                    torch.nn.attention.SDPBackend.EFFICIENT_ATTENTION,
+                    torch.nn.attention.SDPBackend.MATH,
+                    torch.nn.attention.SDPBackend.CUDNN_ATTENTION,
+                ],
+            ),
+            (
+                (True, False, False),
+                [
+                    torch.nn.attention.SDPBackend.FLASH_ATTENTION,
+                    torch.nn.attention.SDPBackend.CUDNN_ATTENTION,
+                ],
+            ),
+            (
+                (False, True, True),
+                [
+                    torch.nn.attention.SDPBackend.EFFICIENT_ATTENTION,
+                    torch.nn.attention.SDPBackend.MATH,
+                    torch.nn.attention.SDPBackend.CUDNN_ATTENTION,
+                ],
+            ),
+        ],
+    )
+    def test_sdpa_backend_translation_preserves_legacy_flags(self, config, expected):
+        from audio_separator.separator.uvr_lib_v5.roformer import attend as attend_mod
+
+        assert attend_mod._sdpa_backends(attend_mod.FlashAttentionConfig(*config)) == expected
+
+    def test_sdpa_path_has_no_dynamo_graph_break(self):
+        from audio_separator.separator.uvr_lib_v5.roformer import attend as attend_mod
+
+        if version.parse(torch.__version__.split("+")[0]) < version.parse("2.6"):
+            pytest.skip("Dynamo learned to trace torch.nn.attention.sdpa_kernel in PyTorch 2.6")
+
+        torch.manual_seed(0)
+        att = attend_mod.Attend(flash=True).eval()
+        q = torch.randn(2, 4, 16, 32)
+        k = torch.randn(2, 4, 16, 32)
+        v = torch.randn(2, 4, 16, 32)
+
+        explanation = torch._dynamo.explain(att)(q, k, v)
+
+        assert explanation.graph_count == 1
+        assert explanation.graph_break_count == 0
 
 
 class TestRotaryNoCatEquivalence:

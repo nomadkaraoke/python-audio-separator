@@ -2,11 +2,15 @@
 
 from dataclasses import dataclass
 
+from packaging import version
+import torch
+
 from audio_separator.separator.uvr_lib_v5.device_utils import supports_autocast
 
 FP32 = "fp32"
 AUTOCAST = "autocast"
 NATIVE_FP16 = "native_fp16"
+MIN_TORCH_COMPILE_VERSION = version.parse("2.6")
 
 # Keep these tables intentionally conservative. A cell should only be added after
 # its correctness, numerical quality, and fallback behavior have been verified.
@@ -41,6 +45,12 @@ class ExecutionPolicy:
 
     precision: str = FP32
     use_torch_compile: bool = False
+
+
+def _regional_compile_runtime_supported() -> bool:
+    """Return whether Dynamo can trace the SDPA context used by RoFormer."""
+    torch_version = version.parse(torch.__version__.split("+")[0])
+    return hasattr(torch, "compile") and torch_version >= MIN_TORCH_COMPILE_VERSION
 
 
 def resolve_execution_policy(
@@ -89,14 +99,19 @@ def resolve_execution_policy(
     compile_enabled = False
     if use_torch_compile:
         capability = (capability_device_type, normalized_family, precision)
-        if capability in TORCH_COMPILE_CAPABILITIES:
-            compile_enabled = True
-        else:
+        if capability not in TORCH_COMPILE_CAPABILITIES:
             logger.warning(
                 "Regional torch.compile is not supported for device=%s, model=%s, precision=%s; " "continuing with eager inference.",
                 device_type,
                 normalized_family,
                 precision,
             )
+        elif not _regional_compile_runtime_supported():
+            logger.warning(
+                "Regional torch.compile requires PyTorch 2.6 or newer; found %s. Continuing with eager inference.",
+                torch.__version__,
+            )
+        else:
+            compile_enabled = True
 
     return ExecutionPolicy(precision=precision, use_torch_compile=compile_enabled)

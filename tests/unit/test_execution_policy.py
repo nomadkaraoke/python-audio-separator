@@ -121,6 +121,19 @@ def test_autocast_and_compile_are_orthogonal_requests():
     logger.warning.assert_not_called()
 
 
+def test_compile_falls_back_on_torch_versions_without_traceable_sdpa_context():
+    with (
+        patch("audio_separator.separator.execution_policy.supports_autocast", return_value=True),
+        patch("audio_separator.separator.execution_policy._regional_compile_runtime_supported", return_value=False),
+    ):
+        policy, logger = _resolve(autocast=True, compile=True)
+
+    assert policy.precision == AUTOCAST
+    assert policy.use_torch_compile is False
+    logger.warning.assert_called_once()
+    assert "PyTorch 2.6 or newer" in logger.warning.call_args.args[0]
+
+
 def test_directml_never_enables_autocast():
     with patch("audio_separator.separator.execution_policy.supports_autocast") as available:
         policy, logger = _resolve(device="privateuseone", autocast=True)

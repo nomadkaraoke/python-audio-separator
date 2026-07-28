@@ -4,6 +4,7 @@ from collections import namedtuple
 
 import torch
 from torch import nn, einsum
+from torch.nn.attention import SDPBackend, sdpa_kernel
 import torch.nn.functional as F
 
 from einops import rearrange, reduce
@@ -27,6 +28,22 @@ def _is_dml_device(device) -> bool:
 
 def exists(val):
     return val is not None
+
+
+def _sdpa_backends(config):
+    """Translate the legacy SDPA flags to the Dynamo-compatible API."""
+    backends = []
+    if config.enable_flash:
+        backends.append(SDPBackend.FLASH_ATTENTION)
+    if config.enable_mem_efficient:
+        backends.append(SDPBackend.EFFICIENT_ATTENTION)
+    if config.enable_math:
+        backends.append(SDPBackend.MATH)
+
+    # torch.backends.cuda.sdp_kernel enabled cuDNN by default even though the
+    # local config predates that fourth flag. Preserve that behavior.
+    backends.append(SDPBackend.CUDNN_ATTENTION)
+    return backends
 
 
 def once(fn):
@@ -85,8 +102,8 @@ class Attend(nn.Module):
         if is_cuda and q.dtype != torch.float16:
             config = FlashAttentionConfig(False, True, True)
 
-        # pytorch 2.0 flash attn: q, k, v, mask, dropout, softmax_scale
-        with torch.backends.cuda.sdp_kernel(**config._asdict()):
+        # Keep SDPA backend selection inside the graphable PyTorch API.
+        with sdpa_kernel(_sdpa_backends(config)):
             out = F.scaled_dot_product_attention(
                 q,
                 k,

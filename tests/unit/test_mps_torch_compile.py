@@ -1,9 +1,13 @@
 from unittest.mock import Mock, patch
 
+from packaging import version
 import pytest
 import torch
 
 from audio_separator.separator.architectures.mdxc_separator import MDXCSeparator
+from audio_separator.separator.uvr_lib_v5.roformer.bs_roformer import Transformer as BSTransformer
+from audio_separator.separator.uvr_lib_v5.roformer.mel_band_roformer import Transformer as MelBandTransformer
+from rotary_embedding_torch import RotaryEmbedding
 
 
 def _separator(*, use_torch_compile=True, policy_allows_compile=True):
@@ -16,6 +20,25 @@ def _separator(*, use_torch_compile=True, policy_allows_compile=True):
     separator.model_run = Mock()
     separator.model_run.layers = torch.nn.ModuleList([torch.nn.ModuleList([torch.nn.Identity(), torch.nn.Identity()])])
     return separator
+
+
+@pytest.mark.parametrize(
+    "transformer",
+    [
+        MelBandTransformer(dim=16, depth=1, dim_head=4, heads=2, rotary_embed=RotaryEmbedding(dim=4), flash_attn=True),
+        BSTransformer(dim=16, depth=1, dim_head=4, heads=2, rotary_embed=RotaryEmbedding(dim=4), flash_attn=True),
+        BSTransformer(dim=16, depth=1, dim_head=4, heads=2, flash_attn=True, linear_attn=True),
+    ],
+    ids=["mel-band", "bs-rotary", "bs-linear"],
+)
+def test_regional_transformer_is_captured_as_one_dynamo_graph(transformer):
+    if version.parse(torch.__version__.split("+")[0]) < version.parse("2.6"):
+        pytest.skip("Regional compilation requires PyTorch 2.6 or newer")
+
+    explanation = torch._dynamo.explain(transformer.eval())(torch.randn(2, 8, 16))
+
+    assert explanation.graph_count == 1
+    assert explanation.graph_break_count == 0
 
 
 def test_regional_compile_wraps_repeated_transformers():
