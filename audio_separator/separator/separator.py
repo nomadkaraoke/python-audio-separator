@@ -917,102 +917,114 @@ class Separator:
                 return
             model_filename = model_filename[0]
 
-        self.model_filename = model_filename
-        self.model_filenames = [model_filename]
-
         if not force_reload and self.model_instance is not None and self._loaded_model_filename == model_filename:
+            self.model_filename = model_filename
+            self.model_filenames = [model_filename]
             self.logger.info(f"Model {model_filename} is already loaded; reusing the existing instance.")
             return
 
         self.logger.info(f"Loading model {model_filename}...")
 
         load_model_start_time = time.perf_counter()
-
-        # Setting up the model path
-        model_filename, model_type, model_friendly_name, model_path, yaml_config_filename = self.download_model_files(model_filename)
-        model_name = model_filename.split(".")[0]
-        self.logger.debug(f"Model downloaded, friendly name: {model_friendly_name}, model_path: {model_path}")
-
-        if model_path.lower().endswith(".yaml"):
-            yaml_config_filename = model_path
-
-        if yaml_config_filename is not None:
-            model_data = self.load_model_data_from_yaml(yaml_config_filename)
-        else:
-            model_data = self.load_model_data_using_hash(model_path)
-
-        common_params = {
-            "logger": self.logger,
-            "log_level": self.log_level,
-            "torch_device": self.torch_device,
-            "torch_device_cpu": self.torch_device_cpu,
-            "torch_device_mps": self.torch_device_mps,
-            "onnx_execution_provider": self.onnx_execution_provider,
-            "model_name": model_name,
-            "model_path": model_path,
-            "model_data": model_data,
-            "output_format": self.output_format,
-            "output_bitrate": self.output_bitrate,
-            "output_dir": self.output_dir,
-            "normalization_threshold": self.normalization_threshold,
-            "amplification_threshold": self.amplification_threshold,
-            "output_single_stem": self.output_single_stem,
-            "invert_using_spec": self.invert_using_spec,
-            "sample_rate": self.sample_rate,
-            "use_soundfile": self.use_soundfile,
-            "use_autocast": self.use_autocast,
-            "use_native_fp16": self.use_native_fp16,
-            "use_torch_compile": self.use_torch_compile,
-        }
-
-        # Instantiate the appropriate separator class depending on the model type
-        separator_classes = {"MDX": "mdx_separator.MDXSeparator", "VR": "vr_separator.VRSeparator", "Demucs": "demucs_separator.DemucsSeparator", "MDXC": "mdxc_separator.MDXCSeparator"}
-
-        if model_type not in self.arch_specific_params or model_type not in separator_classes:
-            # Enhanced error message for Roformer models
-            if "roformer" in model_filename.lower() or (model_data and model_data.get("is_roformer", False)):
-                error_msg = (f"Roformer model type not properly configured: {model_type}. "
-                           f"This may indicate a configuration validation failure. "
-                           f"Please check the model file and YAML configuration.")
-                self.logger.error(error_msg)
-                raise ValueError(error_msg)
-            else:
-                raise ValueError(f"Model type not supported (yet): {model_type}")
-
-        if model_type == "Demucs" and sys.version_info < (3, 10):
-            raise Exception("Demucs models require Python version 3.10 or newer.")
-
-        self.logger.debug(f"Importing module for model type {model_type}: {separator_classes[model_type]}")
-
-        module_name, class_name = separator_classes[model_type].split(".")
-        module = importlib.import_module(f"audio_separator.separator.architectures.{module_name}")
-        separator_class = getattr(module, class_name)
-
-        self.logger.debug(f"Instantiating separator class for model type {model_type}: {separator_class}")
+        selected_model_filename = model_filename
+        previous_model_friendly_name = self.model_friendly_name
+        previous_model_is_uvr_vip = self.model_is_uvr_vip
 
         try:
-            self.model_instance = separator_class(common_config=common_params, arch_config=self.arch_specific_params[model_type])
-        except Exception as e:
-            # Enhanced error handling for Roformer models
-            if "roformer" in model_filename.lower() or (model_data and model_data.get("is_roformer", False)):
-                error_msg = (f"Failed to instantiate Roformer model: {e}. "
-                           f"This may be due to missing parameters or configuration validation failures.")
-                self.logger.error(error_msg)
-                raise RuntimeError(error_msg) from e
+            # Setting up the model path
+            model_filename, model_type, model_friendly_name, model_path, yaml_config_filename = self.download_model_files(model_filename)
+            model_name = model_filename.split(".")[0]
+            self.logger.debug(f"Model downloaded, friendly name: {model_friendly_name}, model_path: {model_path}")
+
+            if model_path.lower().endswith(".yaml"):
+                yaml_config_filename = model_path
+
+            if yaml_config_filename is not None:
+                model_data = self.load_model_data_from_yaml(yaml_config_filename)
             else:
-                raise
+                model_data = self.load_model_data_using_hash(model_path)
 
-        resolve_policy = getattr(self.model_instance, "resolve_execution_policy", None)
-        if callable(resolve_policy) and not getattr(self.model_instance, "_execution_policy_resolved", False):
-            resolve_policy(model_type.lower())
+            common_params = {
+                "logger": self.logger,
+                "log_level": self.log_level,
+                "torch_device": self.torch_device,
+                "torch_device_cpu": self.torch_device_cpu,
+                "torch_device_mps": self.torch_device_mps,
+                "onnx_execution_provider": self.onnx_execution_provider,
+                "model_name": model_name,
+                "model_path": model_path,
+                "model_data": model_data,
+                "output_format": self.output_format,
+                "output_bitrate": self.output_bitrate,
+                "output_dir": self.output_dir,
+                "normalization_threshold": self.normalization_threshold,
+                "amplification_threshold": self.amplification_threshold,
+                "output_single_stem": self.output_single_stem,
+                "invert_using_spec": self.invert_using_spec,
+                "sample_rate": self.sample_rate,
+                "use_soundfile": self.use_soundfile,
+                "use_autocast": self.use_autocast,
+                "use_native_fp16": self.use_native_fp16,
+                "use_torch_compile": self.use_torch_compile,
+            }
 
+            # Instantiate the appropriate separator class depending on the model type
+            separator_classes = {"MDX": "mdx_separator.MDXSeparator", "VR": "vr_separator.VRSeparator", "Demucs": "demucs_separator.DemucsSeparator", "MDXC": "mdxc_separator.MDXCSeparator"}
+
+            if model_type not in self.arch_specific_params or model_type not in separator_classes:
+                # Enhanced error message for Roformer models
+                if "roformer" in model_filename.lower() or (model_data and model_data.get("is_roformer", False)):
+                    error_msg = (f"Roformer model type not properly configured: {model_type}. "
+                               f"This may indicate a configuration validation failure. "
+                               f"Please check the model file and YAML configuration.")
+                    self.logger.error(error_msg)
+                    raise ValueError(error_msg)
+                else:
+                    raise ValueError(f"Model type not supported (yet): {model_type}")
+
+            if model_type == "Demucs" and sys.version_info < (3, 10):
+                raise Exception("Demucs models require Python version 3.10 or newer.")
+
+            self.logger.debug(f"Importing module for model type {model_type}: {separator_classes[model_type]}")
+
+            module_name, class_name = separator_classes[model_type].split(".")
+            module = importlib.import_module(f"audio_separator.separator.architectures.{module_name}")
+            separator_class = getattr(module, class_name)
+
+            self.logger.debug(f"Instantiating separator class for model type {model_type}: {separator_class}")
+
+            try:
+                model_instance = separator_class(common_config=common_params, arch_config=self.arch_specific_params[model_type])
+            except Exception as e:
+                # Enhanced error handling for Roformer models
+                if "roformer" in model_filename.lower() or (model_data and model_data.get("is_roformer", False)):
+                    error_msg = (f"Failed to instantiate Roformer model: {e}. "
+                               f"This may be due to missing parameters or configuration validation failures.")
+                    self.logger.error(error_msg)
+                    raise RuntimeError(error_msg) from e
+                else:
+                    raise
+
+            resolve_policy = getattr(model_instance, "resolve_execution_policy", None)
+            if callable(resolve_policy) and not getattr(model_instance, "_execution_policy_resolved", False):
+                resolve_policy(model_type.lower())
+
+            # Log Roformer implementation version if applicable
+            if hasattr(model_instance, 'is_roformer_model') and model_instance.is_roformer_model:
+                roformer_stats = model_instance.get_roformer_loading_stats()
+                if roformer_stats:
+                    self.logger.info(f"Roformer loading stats: {roformer_stats}")
+        except BaseException:
+            # Model discovery updates these fields; restore them with the prior
+            # selection so callers never observe a partially loaded model.
+            self.model_friendly_name = previous_model_friendly_name
+            self.model_is_uvr_vip = previous_model_is_uvr_vip
+            raise
+
+        self.model_instance = model_instance
+        self.model_filename = selected_model_filename
+        self.model_filenames = [selected_model_filename]
         self._loaded_model_filename = model_filename
-
-        # Log Roformer implementation version if applicable
-        if hasattr(self.model_instance, 'is_roformer_model') and self.model_instance.is_roformer_model:
-            roformer_stats = self.model_instance.get_roformer_loading_stats()
-            if roformer_stats:
-                self.logger.info(f"Roformer loading stats: {roformer_stats}")
 
         # Log the completion of the model load process
         self.logger.debug("Loading model completed.")

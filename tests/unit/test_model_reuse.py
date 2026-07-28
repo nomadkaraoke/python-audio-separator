@@ -62,14 +62,104 @@ def test_load_model_reloads_when_instance_is_missing(separator):
 def test_load_model_reloads_different_model_without_poisoning_cache(separator):
     loaded_instance = object()
     separator.model_instance = loaded_instance
+    separator.model_filename = "first.ckpt"
+    separator.model_filenames = ["first.ckpt"]
     separator._loaded_model_filename = "first.ckpt"
+    separator.model_friendly_name = "First model"
+    separator.model_is_uvr_vip = False
 
-    with patch.object(separator, "download_model_files", side_effect=RuntimeError("load failed")):
+    def fail_download(_model_filename):
+        separator.model_friendly_name = "Second model"
+        separator.model_is_uvr_vip = True
+        raise RuntimeError("load failed")
+
+    with patch.object(separator, "download_model_files", side_effect=fail_download):
         with pytest.raises(RuntimeError, match="load failed"):
             separator.load_model("second.ckpt")
 
     assert separator.model_instance is loaded_instance
+    assert separator.model_filename == "first.ckpt"
+    assert separator.model_filenames == ["first.ckpt"]
     assert separator._loaded_model_filename == "first.ckpt"
+    assert separator.model_friendly_name == "First model"
+    assert separator.model_is_uvr_vip is False
+
+
+@pytest.mark.parametrize(
+    "failure",
+    [RuntimeError("construction failed"), SystemExit("construction stopped")],
+    ids=["runtime-error", "system-exit"],
+)
+def test_load_model_constructor_failure_preserves_previous_selection(separator, failure):
+    loaded_instance = object()
+    separator.model_instance = loaded_instance
+    separator.model_filename = "first.ckpt"
+    separator.model_filenames = ["first.ckpt"]
+    separator._loaded_model_filename = "first.ckpt"
+    separator.model_friendly_name = "First model"
+    separator.model_is_uvr_vip = False
+    separator_class = MagicMock(side_effect=failure)
+    architecture_module = SimpleNamespace(MDXCSeparator=separator_class)
+
+    def resolve_download(_model_filename):
+        separator.model_friendly_name = "Second model"
+        separator.model_is_uvr_vip = True
+        return "second.ckpt", "MDXC", "Second model", "/tmp/second.ckpt", None
+
+    with (
+        patch.object(separator, "download_model_files", side_effect=resolve_download),
+        patch.object(separator, "load_model_data_using_hash", return_value={}),
+        patch("audio_separator.separator.separator.importlib.import_module", return_value=architecture_module),
+    ):
+        with pytest.raises(type(failure), match=str(failure)):
+            separator.load_model("second.ckpt")
+
+    assert separator.model_instance is loaded_instance
+    assert separator.model_filename == "first.ckpt"
+    assert separator.model_filenames == ["first.ckpt"]
+    assert separator._loaded_model_filename == "first.ckpt"
+    assert separator.model_friendly_name == "First model"
+    assert separator.model_is_uvr_vip is False
+
+
+def test_load_model_policy_failure_preserves_previous_ensemble_selection(separator):
+    ensemble_models = ["first.ckpt", "third.ckpt"]
+    loaded_instance = object()
+    separator.model_instance = loaded_instance
+    separator.model_filename = list(ensemble_models)
+    separator.model_filenames = list(ensemble_models)
+    separator._loaded_model_filename = "first.ckpt"
+    separator.model_friendly_name = "First model"
+    separator.model_is_uvr_vip = False
+    resolve_execution_policy = MagicMock(side_effect=RuntimeError("policy failed"))
+    candidate_instance = SimpleNamespace(
+        _execution_policy_resolved=False,
+        is_roformer_model=False,
+        resolve_execution_policy=resolve_execution_policy,
+    )
+    separator_class = MagicMock(return_value=candidate_instance)
+    architecture_module = SimpleNamespace(MDXCSeparator=separator_class)
+
+    with (
+        patch.object(
+            separator,
+            "download_model_files",
+            return_value=("second.ckpt", "MDXC", "Second model", "/tmp/second.ckpt", None),
+        ),
+        patch.object(separator, "load_model_data_using_hash", return_value={}),
+        patch("audio_separator.separator.separator.importlib.import_module", return_value=architecture_module),
+    ):
+        with pytest.raises(RuntimeError, match="policy failed"):
+            separator.load_model("second.ckpt")
+
+    resolve_execution_policy.assert_called_once_with("mdxc")
+    assert separator.model_instance is loaded_instance
+    assert separator.model_filename == ensemble_models
+    assert separator.model_filenames == ensemble_models
+    assert separator.model_filename is not ensemble_models
+    assert separator._loaded_model_filename == "first.ckpt"
+    assert separator.model_friendly_name == "First model"
+    assert separator.model_is_uvr_vip is False
 
 
 def test_successful_load_populates_cache_for_the_next_call(separator):
