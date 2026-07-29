@@ -19,6 +19,7 @@ dependencies = [
     "numpy>=2",
     "onnx-weekly",
     "onnx2torch-py313>=1.6",
+    "packaging",
     "pydub>=0.25",
     "pyyaml",
     "requests>=2",

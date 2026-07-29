@@ -101,7 +101,7 @@ def resolve_execution_policy(
         capability = (capability_device_type, normalized_family, precision)
         if capability not in TORCH_COMPILE_CAPABILITIES:
             logger.warning(
-                "Regional torch.compile is not supported for device=%s, model=%s, precision=%s; " "continuing with eager inference.",
+                "Regional torch.compile is not supported for device=%s, model=%s, precision=%s; continuing with eager inference.",
                 device_type,
                 normalized_family,
                 precision,

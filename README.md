@@ -217,7 +217,7 @@ The verified combinations are intentionally conservative:
 
 Native float16 is currently verified only for MelBand RoFormer and BS-RoFormer on MPS and CUDA. Requesting it for any other combination logs a warning and safely continues in float32. Native float16 keeps numerically sensitive RoFormer operations, including rotary angles, normalization, STFT, and ISTFT, in float32.
 
-The project currently pins `rotary-embedding-torch` 0.6.5, whose decorator disables autocast only for CUDA. The hard-coded CUDA guard is still present in 0.9.1 and is tracked upstream in [issue #46](https://github.com/lucidrains/rotary-embedding-torch/issues/46), so audio-separator uses its own device-aware float32 region for rotary angle construction.
+The project constrains `rotary-embedding-torch` to the 0.6.x series and currently locks 0.6.5, whose decorator disables autocast only for CUDA. The hard-coded CUDA guard is still present in 0.9.1 and is tracked upstream in [issue #46](https://github.com/lucidrains/rotary-embedding-torch/issues/46), so audio-separator uses its own device-aware float32 region for rotary angle construction.
 
 Regional compilation requires PyTorch 2.6 or newer. Older supported PyTorch releases keep the selected precision mode, warn, and continue with eager inference.
 
@@ -781,6 +781,8 @@ This project uses Poetry for dependency management and packaging. Follow these s
 - Make sure you have Python 3.10 or newer installed on your machine, excluding Python 3.14.1.
 - Install Poetry 2.0.0 or newer. Poetry 2 is required for dependency resolution, installation, and builds.
 - Install Conda (I recommend Miniforge: [Miniforge GitHub](https://github.com/conda-forge/miniforge)) to manage your Python virtual environments
+
+The contributor lock currently resolves PyTorch 2.13 with the CUDA 13.0 stack on Linux. [CUDA 13 requires an R580-or-newer NVIDIA driver](https://docs.nvidia.com/deploy/cuda-compatibility/minor-version-compatibility.html), so check `nvidia-smi` before using a self-hosted GPU runner. Published package metadata keeps the broader `torch>=2.3,<3` range on non-Apple platforms, so this driver requirement applies to the contributor lock rather than every installation.
 
 ### Clone the Repository
 
