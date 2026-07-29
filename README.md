@@ -627,6 +627,8 @@ You only need to load a model when choosing or changing models. See example belo
 
 Consecutive calls to `load_model()` with the same single model filename reuse the loaded instance. Call `load_model(..., force_reload=True)` after changing settings that are captured when the model is loaded. Multi-model ensembles keep their existing loading behavior.
 
+The reused instance and its live weights remain allocated until another model replaces it, `force_reload=True` replaces it, or the `Separator` itself is released; clearing the allocator cache does not unload referenced weights. The Demucs architecture is intentionally different: its lightweight wrapper is reusable, but its internal network is still loaded and released inside each `separate()` call to preserve the existing memory lifecycle.
+
 ```python
 from audio_separator.separator import Separator
 
