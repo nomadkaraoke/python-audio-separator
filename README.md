@@ -217,6 +217,8 @@ The verified combinations are intentionally conservative:
 
 Native float16 is currently verified only for MelBand RoFormer and BS-RoFormer on MPS and CUDA. Requesting it for any other combination logs a warning and safely continues in float32. Native float16 keeps numerically sensitive RoFormer operations, including rotary angles, normalization, STFT, and ISTFT, in float32.
 
+The project currently pins `rotary-embedding-torch` 0.6.5, whose decorator disables autocast only for CUDA. The hard-coded CUDA guard is still present in 0.9.1 and is tracked upstream in [issue #46](https://github.com/lucidrains/rotary-embedding-torch/issues/46), so audio-separator uses its own device-aware float32 region for rotary angle construction.
+
 Regional compilation requires PyTorch 2.6 or newer. Older supported PyTorch releases keep the selected precision mode, warn, and continue with eager inference.
 
 Compilation has a cold-start cost: the first separation for a new model or input shape can be slower while PyTorch builds and caches graphs. Verified MPS and CUDA measurements showed that autocast plus compilation can improve warm, repeated same-shape MelBand and BS-RoFormer inference, so this is a useful starting point for that workload:

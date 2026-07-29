@@ -51,7 +51,7 @@ def _float32_frequencies(rotary_embed, *, seq_len: int, device: torch.device) ->
 def rotate_queries_or_keys(rotary_embed, tensor: torch.Tensor) -> torch.Tensor:
     """Apply full-head rotary embeddings with float32 angles on every backend.
 
-    rotary-embedding-torch 0.6.x disables CUDA autocast only, so CPU and MPS
+    rotary-embedding-torch 0.6.5 disables CUDA autocast only, so CPU and MPS
     autocast can otherwise lower the precision of its position/angle einsum.
     DirectML also rejects the empty edge tensors concatenated by the upstream
     helper when the full head dimension is rotated, so that case keeps the
