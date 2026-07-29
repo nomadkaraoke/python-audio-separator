@@ -14,7 +14,10 @@ from audio_separator.separator.architectures.mdxc_separator import (
     _estimate_mdxc_full_track_buffer_bytes,
     _estimate_roformer_full_track_buffer_bytes,
 )
-from audio_separator.separator.uvr_lib_v5.device_utils import MAX_MPS_FULL_TRACK_BUFFER_BYTES
+from audio_separator.separator.uvr_lib_v5.device_utils import (
+    MAX_MPS_FULL_TRACK_BUFFER_BYTES,
+    should_accumulate_on_device,
+)
 
 
 def _demucs_separator(device: torch.device) -> DemucsSeparator:
@@ -35,24 +38,50 @@ def _mix() -> np.ndarray:
     return rng.standard_normal((2, 128), dtype=np.float32)
 
 
-def test_medium_track_buffers_use_mps_but_one_hour_buffers_use_cpu():
-    medium_track_samples = round(229.18 * 44100)
-    one_hour_samples = 3600 * 44100
-    roformer_chunk_size = 485100
+@pytest.mark.parametrize(
+    "estimate_bytes",
+    [
+        pytest.param(
+            lambda samples: _estimate_roformer_full_track_buffer_bytes(2, 2, samples, chunk_size=485100),
+            id="roformer",
+        ),
+        pytest.param(
+            lambda samples: _estimate_mdxc_full_track_buffer_bytes(2, 2, padded_length=samples + 485100),
+            id="mdxc",
+        ),
+        pytest.param(
+            lambda samples: _estimate_demucs_full_track_buffer_bytes(
+                2,
+                samples,
+                4,
+                shifts=2,
+                num_bag_models=1,
+            ),
+            id="demucs",
+        ),
+    ],
+)
+def test_full_track_buffer_estimates_cross_mps_limit_at_adjacent_sample_counts(estimate_bytes):
+    below_samples = 0
+    above_samples = 1
+    while estimate_bytes(above_samples) <= MAX_MPS_FULL_TRACK_BUFFER_BYTES:
+        below_samples = above_samples
+        above_samples *= 2
 
-    medium_track_estimates = (
-        _estimate_roformer_full_track_buffer_bytes(2, 2, medium_track_samples, roformer_chunk_size),
-        _estimate_mdxc_full_track_buffer_bytes(2, 2, medium_track_samples + roformer_chunk_size),
-        _estimate_demucs_full_track_buffer_bytes(2, medium_track_samples, 4, shifts=2, num_bag_models=1),
-    )
-    one_hour_estimates = (
-        _estimate_roformer_full_track_buffer_bytes(2, 2, one_hour_samples, roformer_chunk_size),
-        _estimate_mdxc_full_track_buffer_bytes(2, 2, one_hour_samples + roformer_chunk_size),
-        _estimate_demucs_full_track_buffer_bytes(2, one_hour_samples, 4, shifts=2, num_bag_models=1),
-    )
+    while above_samples - below_samples > 1:
+        midpoint = (below_samples + above_samples) // 2
+        if estimate_bytes(midpoint) <= MAX_MPS_FULL_TRACK_BUFFER_BYTES:
+            below_samples = midpoint
+        else:
+            above_samples = midpoint
 
-    assert all(estimated <= MAX_MPS_FULL_TRACK_BUFFER_BYTES for estimated in medium_track_estimates)
-    assert all(estimated > MAX_MPS_FULL_TRACK_BUFFER_BYTES for estimated in one_hour_estimates)
+    below_limit = estimate_bytes(below_samples)
+    above_limit = estimate_bytes(above_samples)
+
+    assert above_samples == below_samples + 1
+    assert below_limit <= MAX_MPS_FULL_TRACK_BUFFER_BYTES < above_limit
+    assert should_accumulate_on_device(torch.device("mps"), below_limit) is True
+    assert should_accumulate_on_device(torch.device("mps"), above_limit) is False
 
 
 class _FakeMDXCModel:
