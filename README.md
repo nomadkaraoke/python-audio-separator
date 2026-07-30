@@ -144,7 +144,22 @@ If the runtime probe finds an unsupported complex operation, inference automatic
 | Demucs | `.yaml` | PyTorch MPS; supported spectral operations stay on-device |
 | MDXC / RoFormer | `.ckpt` / `.yaml` | PyTorch MPS; supported spectral operations and bounded overlap-add buffers stay on-device |
 
-Duration-scaled MDXC, RoFormer, and Demucs buffers use the MPS fast path while their estimated footprint is at most 1 GiB. Larger full-track buffers remain on CPU to preserve MPS/Metal working-set headroom for model weights and activations; model inference still runs on MPS.
+Duration-scaled MDXC, RoFormer, and Demucs buffers use the MPS fast path while their estimated footprint fits a per-device budget. Larger full-track buffers move to CPU to preserve MPS/Metal working-set headroom for model weights and activations.
+
+The budget is half of the *free* working set — `recommended_max_memory() - driver_allocated_memory()` — and never less than 1 GiB. Model weights are already resident when the decision is made, so the buffers are measured against what is actually left, and can never take more room than they leave behind for activations. When Metal cannot report a working set, the budget is the 1 GiB floor.
+
+Because `driver_allocated_memory()` includes the allocator's cached blocks, free room is understated rather than overstated while blocks are being reused, and the budget varies with what the process has already allocated.
+
+**Model inference always runs on MPS.** Only these duration-scaled buffers move, and only past the budget:
+
+| Architecture | What moves to CPU past the budget |
+|---|---|
+| RoFormer (MDXC) | the overlap-add `result` and `counter` buffers, the Hamming `window`, and each chunk's model output as it is accumulated |
+| MDXC (non-RoFormer) | the padded input mix, its chunk view, and the `accumulated_outputs` accumulator |
+| Demucs | the full-track input mix and the returned source buffers |
+| VR, MDX (ONNX) | nothing — neither path uses these buffers |
+
+Set `AUDIO_SEPARATOR_MPS_BUFFER_BUDGET_GIB` to override the budget in GiB (for example `AUDIO_SEPARATOR_MPS_BUFFER_BUDGET_GIB=8`). Values that are not a positive number are ignored. Each fallback logs the estimate and the budget it was compared against, at info level.
 
 Set `AUDIO_SEPARATOR_FORCE_CPU_COMPLEX=1` to force the legacy CPU path for complex spectral operations when diagnosing an MPS compatibility issue.
 

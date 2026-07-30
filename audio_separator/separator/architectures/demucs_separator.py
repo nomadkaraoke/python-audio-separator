@@ -8,7 +8,7 @@ from audio_separator.separator.uvr_lib_v5.demucs.apply import apply_model, demuc
 from audio_separator.separator.uvr_lib_v5.demucs.hdemucs import HDemucs
 from audio_separator.separator.uvr_lib_v5.demucs.pretrained import get_model as get_demucs_model
 from audio_separator.separator.uvr_lib_v5 import spec_utils
-from audio_separator.separator.uvr_lib_v5.device_utils import should_accumulate_on_device
+from audio_separator.separator.uvr_lib_v5.device_utils import mps_accumulation_budget_bytes, should_accumulate_on_device
 
 DEMUCS_4_SOURCE = ["drums", "bass", "other", "vocals"]
 
@@ -205,8 +205,10 @@ class DemucsSeparator(CommonSeparator):
         mix_device = self.torch_device if accumulate_on_device else torch.device("cpu")
         if self.torch_device.type == "mps" and not accumulate_on_device:
             self.logger.info(
-                "Keeping full-track Demucs buffers on CPU for this long input to limit MPS memory use "
-                f"(estimated buffers: {estimated_buffer_bytes / 1024**3:.2f} GiB)."
+                "Keeping the full-track Demucs mix and source buffers on CPU for this input to limit MPS memory use; "
+                "model inference still runs on MPS "
+                f"(estimated buffers: {estimated_buffer_bytes / 1024**3:.2f} GiB, "
+                f"budget: {mps_accumulation_budget_bytes() / 1024**3:.2f} GiB)."
             )
         mix = torch.tensor(mix, dtype=torch.float32, device=mix_device)
         ref = mix.mean(0)

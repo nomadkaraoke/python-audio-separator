@@ -12,7 +12,18 @@ _AUTOCAST_SUPPORT_CACHE = {}
 # Full-track buffers grow linearly with audio duration. Keep short and medium
 # inputs on MPS, but leave oversized accumulators on CPU so they cannot consume
 # most of the MPS working-set budget before model activations are allocated.
+# This value is the floor of the budget, and the whole budget when Metal cannot
+# report a working-set size.
 MAX_MPS_FULL_TRACK_BUFFER_BYTES = 1024**3
+
+# Share of the *free* Metal working set that full-track buffers may occupy.
+# Half means the buffers can never take more room than they leave behind for
+# model activations, which are what actually fail when the working set runs out.
+MPS_BUFFER_HEADROOM_SHARE = 0.5
+
+# Overrides the computed budget, in GiB. Intended for diagnosis and for callers
+# who know their own headroom better than the heuristic does.
+MPS_BUFFER_BUDGET_ENV = "AUDIO_SEPARATOR_MPS_BUFFER_BUDGET_GIB"
 
 
 def _supports_autocast(device_type: str) -> bool:
@@ -101,6 +112,48 @@ def should_fallback_to_cpu_for_demucs_mask(device: torch.device, cac: bool) -> b
     return (device.type == "mps" and not cac) or should_fallback_to_cpu_for_complex_ops(device)
 
 
+def _mps_memory_reading(counter: str) -> int:
+    """Return a torch.mps memory counter in bytes, or 0 when it is unavailable."""
+    try:
+        if not torch.backends.mps.is_available():
+            return 0
+        value = getattr(torch.mps, counter)()
+    except (AttributeError, RuntimeError, OSError, ValueError):
+        return 0
+
+    return int(value) if value and value > 0 else 0
+
+
+def mps_accumulation_budget_bytes() -> int:
+    """Return how many bytes of duration-scaled buffers may stay on MPS.
+
+    Model weights are already resident by the time this is called, so the budget
+    is measured against what is still free rather than against the whole working
+    set: buffers may take at most MPS_BUFFER_HEADROOM_SHARE of the remaining
+    room, which leaves at least as much again for activations. It never drops
+    below MAX_MPS_FULL_TRACK_BUFFER_BYTES.
+    """
+    override = os.environ.get(MPS_BUFFER_BUDGET_ENV)
+    if override:
+        try:
+            override_gib = float(override)
+        except ValueError:
+            override_gib = 0.0
+        if override_gib > 0:
+            return int(override_gib * 1024**3)
+
+    recommended = _mps_memory_reading("recommended_max_memory")
+    if recommended <= 0:
+        return MAX_MPS_FULL_TRACK_BUFFER_BYTES
+
+    # driver_allocated_memory counts the allocator's cached blocks as well as
+    # live tensors, so free room is understated while blocks are being reused.
+    # Erring small here is the safe direction for a working-set guard.
+    free = max(recommended - _mps_memory_reading("driver_allocated_memory"), 0)
+
+    return max(int(free * MPS_BUFFER_HEADROOM_SHARE), MAX_MPS_FULL_TRACK_BUFFER_BYTES)
+
+
 def should_accumulate_on_device(device: torch.device, estimated_bytes: int) -> bool:
     """Return whether duration-scaled buffers fit the bounded MPS fast path."""
-    return device.type == "mps" and estimated_bytes <= MAX_MPS_FULL_TRACK_BUFFER_BYTES
+    return device.type == "mps" and estimated_bytes <= mps_accumulation_budget_bytes()

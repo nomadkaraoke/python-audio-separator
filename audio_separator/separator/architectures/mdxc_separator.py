@@ -12,7 +12,7 @@ from scipy import signal
 from audio_separator.separator.common_separator import CommonSeparator
 from audio_separator.separator.execution_policy import NATIVE_FP16
 from audio_separator.separator.uvr_lib_v5 import spec_utils
-from audio_separator.separator.uvr_lib_v5.device_utils import should_accumulate_on_device, supports_autocast
+from audio_separator.separator.uvr_lib_v5.device_utils import mps_accumulation_budget_bytes, should_accumulate_on_device, supports_autocast
 from audio_separator.separator.uvr_lib_v5.tfc_tdf_v3 import TFC_TDF_net
 # Roformer direct constructors removed; loading handled via RoformerLoader in CommonSeparator.
 
@@ -517,8 +517,10 @@ class MDXCSeparator(CommonSeparator):
             accumulation_device = device if accumulate_on_device else torch.device("cpu")
             if device.type == "mps" and not accumulate_on_device:
                 self.logger.info(
-                    "Using CPU overlap-add buffers for this long input to limit MPS memory use "
-                    f"(estimated full-track buffers: {estimated_buffer_bytes / 1024**3:.2f} GiB)."
+                    "Keeping the overlap-add result/counter buffers on CPU for this input to limit MPS memory use; "
+                    "model inference still runs on MPS "
+                    f"(estimated full-track buffers: {estimated_buffer_bytes / 1024**3:.2f} GiB, "
+                    f"budget: {mps_accumulation_budget_bytes() / 1024**3:.2f} GiB)."
                 )
 
             # Keep overlap-add buffers next to the model on unified-memory MPS devices.
@@ -581,8 +583,10 @@ class MDXCSeparator(CommonSeparator):
             accumulation_device = self.torch_device if accumulate_on_device else torch.device("cpu")
             if self.torch_device.type == "mps" and not accumulate_on_device:
                 self.logger.info(
-                    "Using CPU overlap-add buffers for this long input to limit MPS memory use "
-                    f"(estimated full-track buffers: {estimated_buffer_bytes / 1024**3:.2f} GiB)."
+                    "Keeping the padded mix and accumulated_outputs on CPU for this input to limit MPS memory use; "
+                    "model inference still runs on MPS "
+                    f"(estimated full-track buffers: {estimated_buffer_bytes / 1024**3:.2f} GiB, "
+                    f"budget: {mps_accumulation_budget_bytes() / 1024**3:.2f} GiB)."
                 )
 
             mix = torch.tensor(mix, dtype=torch.float32, device=accumulation_device)

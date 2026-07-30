@@ -14,10 +14,18 @@ from audio_separator.separator.architectures.mdxc_separator import (
     _estimate_mdxc_full_track_buffer_bytes,
     _estimate_roformer_full_track_buffer_bytes,
 )
+from audio_separator.separator.uvr_lib_v5 import device_utils
 from audio_separator.separator.uvr_lib_v5.device_utils import (
     MAX_MPS_FULL_TRACK_BUFFER_BYTES,
     should_accumulate_on_device,
 )
+
+
+@pytest.fixture
+def fixed_floor_budget():
+    """Pin the budget to the fixed floor so crossover maths is host-independent."""
+    with patch.object(device_utils, "_mps_memory_reading", return_value=0):
+        yield MAX_MPS_FULL_TRACK_BUFFER_BYTES
 
 
 def _demucs_separator(device: torch.device) -> DemucsSeparator:
@@ -61,7 +69,7 @@ def _mix() -> np.ndarray:
         ),
     ],
 )
-def test_full_track_buffer_estimates_cross_mps_limit_at_adjacent_sample_counts(estimate_bytes):
+def test_full_track_buffer_estimates_cross_mps_limit_at_adjacent_sample_counts(estimate_bytes, fixed_floor_budget):
     below_samples = 0
     above_samples = 1
     while estimate_bytes(above_samples) <= MAX_MPS_FULL_TRACK_BUFFER_BYTES:

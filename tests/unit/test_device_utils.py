@@ -101,11 +101,99 @@ def test_device_accumulation_is_limited_to_mps(device_type, expected):
     assert device_utils.should_accumulate_on_device(torch.device(device_type), estimated_bytes=1024) is expected
 
 
-def test_mps_accumulation_falls_back_to_cpu_above_bounded_buffer_size():
-    limit = device_utils.MAX_MPS_FULL_TRACK_BUFFER_BYTES
+def _metal(recommended, driver=0):
+    """Patch the two torch.mps counters the budget is derived from."""
 
-    assert device_utils.should_accumulate_on_device(torch.device("mps"), estimated_bytes=limit) is True
-    assert device_utils.should_accumulate_on_device(torch.device("mps"), estimated_bytes=limit + 1) is False
+    def reading(counter):
+        return recommended if counter == "recommended_max_memory" else driver
+
+    return patch.object(device_utils, "_mps_memory_reading", side_effect=reading)
+
+
+def test_mps_accumulation_falls_back_to_cpu_above_bounded_buffer_size():
+    with _metal(recommended=0):
+        limit = device_utils.mps_accumulation_budget_bytes()
+
+        assert limit == device_utils.MAX_MPS_FULL_TRACK_BUFFER_BYTES
+        assert device_utils.should_accumulate_on_device(torch.device("mps"), estimated_bytes=limit) is True
+        assert device_utils.should_accumulate_on_device(torch.device("mps"), estimated_bytes=limit + 1) is False
+
+
+def test_accumulation_budget_is_half_of_the_free_working_set():
+    recommended = 16 * 1024**3
+    driver = 2 * 1024**3
+
+    with _metal(recommended, driver):
+        budget = device_utils.mps_accumulation_budget_bytes()
+
+    assert budget == int((recommended - driver) * device_utils.MPS_BUFFER_HEADROOM_SHARE)
+    assert budget == 7 * 1024**3
+
+
+def test_accumulation_budget_shrinks_as_the_working_set_fills():
+    recommended = 16 * 1024**3
+
+    with _metal(recommended, driver=0):
+        idle = device_utils.mps_accumulation_budget_bytes()
+    with _metal(recommended, driver=12 * 1024**3):
+        loaded = device_utils.mps_accumulation_budget_bytes()
+
+    assert idle == 8 * 1024**3
+    assert loaded == 2 * 1024**3
+
+
+def test_accumulation_budget_never_drops_below_the_floor():
+    # Free room this small would put half of it under the floor.
+    with _metal(recommended=16 * 1024**3, driver=15 * 1024**3):
+        assert device_utils.mps_accumulation_budget_bytes() == device_utils.MAX_MPS_FULL_TRACK_BUFFER_BYTES
+
+
+def test_accumulation_budget_survives_an_overcommitted_working_set():
+    # driver_allocated can exceed the recommendation; free room must not go negative.
+    with _metal(recommended=8 * 1024**3, driver=12 * 1024**3):
+        assert device_utils.mps_accumulation_budget_bytes() == device_utils.MAX_MPS_FULL_TRACK_BUFFER_BYTES
+
+
+@pytest.mark.parametrize("recommended", [0, 8 * 1024**3])
+def test_accumulation_budget_env_override_wins(monkeypatch, recommended):
+    monkeypatch.setenv(device_utils.MPS_BUFFER_BUDGET_ENV, "6.5")
+
+    with _metal(recommended):
+        assert device_utils.mps_accumulation_budget_bytes() == int(6.5 * 1024**3)
+
+
+@pytest.mark.parametrize("value", ["", "0", "-2", "not-a-number"])
+def test_accumulation_budget_ignores_unusable_env_override(monkeypatch, value):
+    monkeypatch.setenv(device_utils.MPS_BUFFER_BUDGET_ENV, value)
+
+    with _metal(recommended=0):
+        assert device_utils.mps_accumulation_budget_bytes() == device_utils.MAX_MPS_FULL_TRACK_BUFFER_BYTES
+
+
+@pytest.mark.parametrize("counter", ["recommended_max_memory", "driver_allocated_memory"])
+@pytest.mark.parametrize("failure", [AttributeError, RuntimeError, OSError, ValueError])
+def test_memory_reading_survives_a_failing_metal_query(counter, failure):
+    with (
+        patch.object(device_utils.torch.backends.mps, "is_available", return_value=True),
+        patch.object(device_utils.torch.mps, counter, side_effect=failure("boom")),
+    ):
+        assert device_utils._mps_memory_reading(counter) == 0
+
+
+@pytest.mark.parametrize("counter", ["recommended_max_memory", "driver_allocated_memory"])
+def test_memory_reading_is_zero_without_mps(counter):
+    with patch.object(device_utils.torch.backends.mps, "is_available", return_value=False):
+        assert device_utils._mps_memory_reading(counter) == 0
+
+
+def test_a_larger_budget_keeps_more_inputs_on_mps():
+    estimate = 3 * 1024**3
+
+    with _metal(recommended=0):
+        assert device_utils.should_accumulate_on_device(torch.device("mps"), estimate) is False
+
+    with _metal(recommended=16 * 1024**3, driver=0):
+        assert device_utils.should_accumulate_on_device(torch.device("mps"), estimate) is True
 
 
 @pytest.mark.parametrize(
