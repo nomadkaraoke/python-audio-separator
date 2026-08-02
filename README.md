@@ -144,22 +144,9 @@ If the runtime probe finds an unsupported complex operation, inference automatic
 | Demucs | `.yaml` | PyTorch MPS; supported spectral operations stay on-device |
 | MDXC / RoFormer | `.ckpt` / `.yaml` | PyTorch MPS; supported spectral operations and bounded overlap-add buffers stay on-device |
 
-Duration-scaled MDXC, RoFormer, and Demucs buffers use the MPS fast path while their estimated footprint fits a per-device budget. Larger full-track buffers move to CPU to preserve MPS/Metal working-set headroom for model weights and activations.
+For long inputs, the full-track working buffers can move to CPU automatically to leave Metal memory free for inference — model inference itself always stays on MPS. The threshold adapts to the device's free Metal working set and is never below 1 GiB.
 
-The budget is half of the *free* working set — `recommended_max_memory() - driver_allocated_memory()` — and never less than 1 GiB. Model weights are already resident when the decision is made, so the buffers are measured against what is actually left, and can never take more room than they leave behind for activations. When Metal cannot report a working set, the budget is the 1 GiB floor.
-
-Because `driver_allocated_memory()` includes the allocator's cached blocks, free room is understated rather than overstated while blocks are being reused, and the budget varies with what the process has already allocated.
-
-**Model inference always runs on MPS.** Only these duration-scaled buffers move, and only past the budget:
-
-| Architecture | What moves to CPU past the budget |
-|---|---|
-| RoFormer (MDXC) | the overlap-add `result` and `counter` buffers, the Hamming `window`, and each chunk's model output as it is accumulated |
-| MDXC (non-RoFormer) | the padded input mix, its chunk view, and the `accumulated_outputs` accumulator |
-| Demucs | the full-track input mix and the returned source buffers |
-| VR, MDX (ONNX) | nothing — neither path uses these buffers |
-
-Set `AUDIO_SEPARATOR_MPS_BUFFER_BUDGET_GIB` to override the budget in GiB (for example `AUDIO_SEPARATOR_MPS_BUFFER_BUDGET_GIB=8`). Values that are not a positive number are ignored. Each fallback logs the estimate and the budget it was compared against, at info level.
+Set `AUDIO_SEPARATOR_MPS_BUFFER_BUDGET_GIB` to override that threshold in GiB, for example `AUDIO_SEPARATOR_MPS_BUFFER_BUDGET_GIB=8`.
 
 Set `AUDIO_SEPARATOR_FORCE_CPU_COMPLEX=1` to force the legacy CPU path for complex spectral operations when diagnosing an MPS compatibility issue.
 
@@ -224,15 +211,12 @@ The verified combinations are intentionally conservative:
 | Device | Model family | Effective precision | Regional `torch.compile` |
 |---|---|---|---|
 | MPS or CUDA | MelBand RoFormer, BS-RoFormer | `fp32`, `autocast`, or `native_fp16` | Supported with all three precision modes |
-| MPS or CUDA | VR, Demucs, and other PyTorch models | `fp32`, or `autocast` when available | Not yet verified; a request warns and continues in eager mode |
 | CPU | MelBand RoFormer, BS-RoFormer | `fp32`, or `autocast` when available | Supported with both precision modes |
-| CPU | VR, Demucs, and other PyTorch models | `fp32`, or `autocast` when available | Not yet verified; a request warns and continues in eager mode |
+| MPS, CUDA, or CPU | VR, Demucs, and other PyTorch models | `fp32`, or `autocast` when available | Not yet verified; a request warns and continues in eager mode |
 | DirectML | PyTorch models | `fp32` | Not enabled for these optimizations; requests warn and continue with float32/eager inference |
 | Any | ONNX models | Managed by the selected ONNX Runtime provider | Not applicable |
 
 Native float16 is currently verified only for MelBand RoFormer and BS-RoFormer on MPS and CUDA. Requesting it for any other combination logs a warning and safely continues in float32. Native float16 keeps numerically sensitive RoFormer operations, including rotary angles, normalization, STFT, and ISTFT, in float32.
-
-The project constrains `rotary-embedding-torch` to the 0.6.x series and currently locks 0.6.5, whose decorator disables autocast only for CUDA. The hard-coded CUDA guard is still present in 0.9.1 and is tracked upstream in [issue #46](https://github.com/lucidrains/rotary-embedding-torch/issues/46), so audio-separator uses its own device-aware float32 region for rotary angle construction.
 
 Regional compilation requires PyTorch 2.6 or newer. Older supported PyTorch releases keep the selected precision mode, warn, and continue with eager inference.
 
@@ -242,13 +226,13 @@ Compilation has a cold-start cost: the first separation for a new model or input
 audio-separator path/to/audio.wav --use_autocast --use_torch_compile
 ```
 
-The short-input CPU checks verified mode resolution and fallback behavior only; they are not a CPU performance ranking. Results depend on the model, input shape, compiler-cache state, PyTorch version, and hardware. For one-shot or changing-shape workloads, benchmark eager inference as well. Float32 compilation can be selected explicitly on CPU, MPS, or CUDA:
+Results depend on the model, input shape, compiler-cache state, PyTorch version, and hardware; for one-shot or changing-shape workloads, benchmark eager inference as well. Float32 compilation can be selected explicitly on CPU, MPS, or CUDA:
 
 ```sh
 audio-separator path/to/audio.wav --use_torch_compile
 ```
 
-CPU compilation also requires a PyTorch and Python combination supported by Torch Dynamo. If regional compilation is unavailable or setup fails, audio-separator warns and continues with eager inference. If a compiled block fails lazily during inference, audio-separator restores the eager module calls, retries the affected chunk once, and reports `effective_torch_compile=False`.
+CPU compilation also requires a PyTorch and Python combination supported by Torch Dynamo. If compilation is unavailable or fails at any point, audio-separator warns, falls back to eager inference, and reports `effective_torch_compile=False`.
 
 Native-float16 compilation is available only for verified MelBand RoFormer and BS-RoFormer models on MPS or CUDA:
 
@@ -256,8 +240,7 @@ Native-float16 compilation is available only for verified MelBand RoFormer and B
 audio-separator path/to/audio.wav --use_native_fp16 --use_torch_compile
 ```
 
-After `load_model()`, the Python API exposes the selected mode through `separator.effective_precision` (`"fp32"`, `"autocast"`, or `"native_fp16"`) and `separator.effective_torch_compile` (`True` only when regional compilation was activated). These properties make warning-based fallbacks observable to callers.
-When a multi-model ensemble is selected, they return `"fp32"` and `False` until an individual member is loaded because the ensemble itself has no single effective execution mode.
+After `load_model()`, the Python API exposes the selected mode through `separator.effective_precision` (`"fp32"`, `"autocast"`, or `"native_fp16"`) and `separator.effective_torch_compile` (`True` only when regional compilation was activated). These properties make warning-based fallbacks observable to callers. When a multi-model ensemble is selected, they return `"fp32"` and `False` until an individual member is loaded, because the ensemble itself has no single effective execution mode.
 
 ### 🎥 FFmpeg dependency
 
@@ -642,7 +625,7 @@ You only need to load a model when choosing or changing models. See example belo
 
 Consecutive calls to `load_model()` with the same single model filename reuse the loaded instance. Call `load_model(..., force_reload=True)` after changing settings that are captured when the model is loaded. Multi-model ensembles keep their existing loading behavior.
 
-The reused instance and its live weights remain allocated until another model replaces it, `force_reload=True` replaces it, or the `Separator` itself is released; clearing the allocator cache does not unload referenced weights. The Demucs architecture is intentionally different: its lightweight wrapper is reusable, but its internal network is still loaded and released inside each `separate()` call to preserve the existing memory lifecycle.
+The reused model and its weights stay in memory until another model replaces them or the `Separator` is released. Demucs is the exception: it still loads and releases its internal network inside each `separate()` call.
 
 ```python
 from audio_separator.separator import Separator
@@ -783,7 +766,7 @@ To deploy Audio Separator as an API on modal.com and use this for remote process
 
 ## Requirements 📋
 
-Python >= 3.10, except Python 3.14.1 (excluded by the Python metadata of the required torchvision 0.28 release)
+Python >= 3.10 (Python 3.14.1 is not supported)
 
 Libraries: torch, onnx, onnxruntime, numpy, librosa, requests, six, tqdm, pydub
 
@@ -797,7 +780,7 @@ This project uses Poetry for dependency management and packaging. Follow these s
 - Install Poetry 2.0.0 or newer. Poetry 2 is required for dependency resolution, installation, and builds.
 - Install Conda (I recommend Miniforge: [Miniforge GitHub](https://github.com/conda-forge/miniforge)) to manage your Python virtual environments
 
-The contributor lock currently resolves PyTorch 2.13 with the CUDA 13.0 stack on Linux. [CUDA 13 requires an R580-or-newer NVIDIA driver](https://docs.nvidia.com/deploy/cuda-compatibility/minor-version-compatibility.html), so check `nvidia-smi` before using a self-hosted GPU runner. Published package metadata keeps the broader `torch>=2.3,<3` range on non-Apple platforms, so this driver requirement applies to the contributor lock rather than every installation.
+The contributor lock currently resolves PyTorch 2.13 with the CUDA 13.0 stack on Linux. [CUDA 13 requires an R580-or-newer NVIDIA driver](https://docs.nvidia.com/deploy/cuda-compatibility/minor-version-compatibility.html), so check `nvidia-smi` before using a self-hosted GPU runner. This applies to the contributor lock only, not to pip installations.
 
 ### Clone the Repository
 
