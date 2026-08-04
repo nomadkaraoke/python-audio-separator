@@ -20,10 +20,12 @@ def _apple_gpu_is_virtualized() -> bool:
     if platform.system() != "Darwin":
         return False
     try:
-        model = subprocess.run(["sysctl", "-n", "hw.model"], capture_output=True, text=True, timeout=5, check=False).stdout
-    except OSError:
+        result = subprocess.run(["sysctl", "-n", "hw.model"], capture_output=True, text=True, timeout=5, check=False)
+    except (OSError, subprocess.TimeoutExpired):
         return False
-    return model.strip().startswith("VirtualMac")
+    if result.returncode != 0:
+        return False
+    return result.stdout.strip().startswith("VirtualMac")
 
 
 class MelBandRoformer(torch.nn.Module):
