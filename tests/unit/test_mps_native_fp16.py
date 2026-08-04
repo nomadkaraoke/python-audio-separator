@@ -1,4 +1,6 @@
 import copy
+import platform
+import subprocess
 from contextlib import nullcontext
 from types import SimpleNamespace
 from unittest.mock import Mock, patch
@@ -11,6 +13,17 @@ from audio_separator.separator.architectures.mdxc_separator import MDXCSeparator
 from audio_separator.separator.execution_policy import AUTOCAST, FP32, NATIVE_FP16
 from audio_separator.separator.separator import Separator
 from audio_separator.separator.uvr_lib_v5.roformer import mel_band_roformer as mel_module
+
+
+def _apple_gpu_is_virtualized() -> bool:
+    """Detect a paravirtualized Metal device (hosted CI Macs report VirtualMac*)."""
+    if platform.system() != "Darwin":
+        return False
+    try:
+        model = subprocess.run(["sysctl", "-n", "hw.model"], capture_output=True, text=True, timeout=5, check=False).stdout
+    except OSError:
+        return False
+    return model.strip().startswith("VirtualMac")
 
 
 class MelBandRoformer(torch.nn.Module):
@@ -246,6 +259,10 @@ def test_native_fp16_mps_forward_handles_silence(force_cpu_complex):
 
 
 @pytest.mark.skipif(not torch.backends.mps.is_available(), reason="MPS is not available")
+@pytest.mark.skipif(
+    _apple_gpu_is_virtualized(),
+    reason="fp16 SNR gates need a real Apple GPU: virtualized Metal degrades half-precision accumulation",
+)
 @pytest.mark.parametrize("force_cpu_complex", [False, True])
 def test_native_fp16_mps_forward_matches_cpu_fp32_for_non_silent_audio(force_cpu_complex):
     cpu_model = _tiny_mel_band_roformer()

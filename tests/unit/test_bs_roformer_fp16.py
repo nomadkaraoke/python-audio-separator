@@ -1,4 +1,6 @@
 import copy
+import platform
+import subprocess
 from unittest.mock import Mock, patch
 
 import pytest
@@ -9,6 +11,17 @@ from audio_separator.separator.architectures.mdxc_separator import MDXCSeparator
 from audio_separator.separator.execution_policy import NATIVE_FP16
 from audio_separator.separator.roformer.roformer_loader import RoformerLoader
 from audio_separator.separator.uvr_lib_v5.roformer import bs_roformer as bs_module
+
+
+def _apple_gpu_is_virtualized() -> bool:
+    """Detect a paravirtualized Metal device (hosted CI Macs report VirtualMac*)."""
+    if platform.system() != "Darwin":
+        return False
+    try:
+        model = subprocess.run(["sysctl", "-n", "hw.model"], capture_output=True, text=True, timeout=5, check=False).stdout
+    except OSError:
+        return False
+    return model.strip().startswith("VirtualMac")
 
 
 def _tiny_bs_roformer(*, linear_transformer_depth=0):
@@ -202,6 +215,10 @@ def test_bs_half_mps_forward_keeps_silence_finite_and_zero(force_cpu_complex):
 
 
 @pytest.mark.skipif(not torch.backends.mps.is_available(), reason="MPS is not available")
+@pytest.mark.skipif(
+    _apple_gpu_is_virtualized(),
+    reason="fp16 SNR gates need a real Apple GPU: virtualized Metal degrades half-precision accumulation",
+)
 @pytest.mark.parametrize("force_cpu_complex", [False, True])
 def test_bs_half_mps_forward_matches_cpu_float32(force_cpu_complex):
     cpu_model = _tiny_bs_roformer()
