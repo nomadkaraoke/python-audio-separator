@@ -82,7 +82,16 @@ jobs:
           cache: poetry # caching dependencies from poetry.lock
 
       - name: Install Poetry dependencies (CPU)
-        run: poetry install -E cpu
+        # Large wheels intermittently fail mid-download on hosted macOS runners,
+        # so retry the install; completed downloads are reused from the cache.
+        run: |
+          n=0
+          until poetry install -E cpu; do
+            n=$((n+1))
+            if [ "$n" -ge 3 ]; then exit 1; fi
+            echo "poetry install failed; retry $n/2 in 15s"
+            sleep 15
+          done
 
       - name: Run unit tests with coverage
         run: |
