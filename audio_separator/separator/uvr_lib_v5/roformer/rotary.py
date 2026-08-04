@@ -56,6 +56,11 @@ def rotate_queries_or_keys(rotary_embed, tensor: torch.Tensor) -> torch.Tensor:
     DirectML also rejects the empty edge tensors concatenated by the upstream
     helper when the full head dimension is rotated, so that case keeps the
     existing concat-free implementation.
+
+    This module reads rotary-embedding-torch internals (freqs, cached_freqs,
+    cache_if_possible, learned_freq, freqs_for, default_seq_dim, get_seq_pos)
+    rather than a public API, which is why pyproject pins the dependency to
+    the 0.6.x series these helpers are validated against.
     """
     input_dtype = tensor.dtype
     seq_dim = rotary_embed.default_seq_dim
