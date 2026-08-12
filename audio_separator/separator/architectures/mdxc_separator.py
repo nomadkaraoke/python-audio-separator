@@ -93,8 +93,13 @@ class MDXCSeparator(CommonSeparator):
         # The segment size is set based on the value provided in a chosen model's associated config file (yaml).
         self.override_model_segment_size = arch_config.get("override_model_segment_size", False)
 
-        self.overlap = arch_config.get("overlap", 8)
-        self.batch_size = arch_config.get("batch_size", 1)
+        inference_config = self.model_data.get("inference", {})
+        self.overlap = arch_config.get("overlap")
+        if self.overlap is None:
+            self.overlap = inference_config.get("num_overlap", 8)
+        self.batch_size = arch_config.get("batch_size")
+        if self.batch_size is None:
+            self.batch_size = inference_config.get("batch_size", 1)
 
         # Amount of pitch shift to apply during processing (this does NOT affect the pitch of the output audio):
         # • Whole numbers indicate semitones.
@@ -354,11 +359,9 @@ class MDXCSeparator(CommonSeparator):
                 f"Chunk size: {chunk_size} (using stft_hop_length={stft_hop_len} and dim_t={mdx_segment_size})"
             )
 
-            # Align step to chunk_size by default for Roformer to avoid stride mismatches
-            # If a user-specified overlap (in seconds) results in a step larger than chunk_size, clamp it
-            desired_step = int(self.overlap * self.model_data_cfgdict.audio.sample_rate)
-            step = chunk_size if desired_step <= 0 else min(desired_step, chunk_size)
-            self.logger.debug(f"Step: {step} (desired={desired_step})")
+            # MDXC overlap is the number of overlapping prediction windows.
+            step = chunk_size // self.overlap
+            self.logger.debug(f"Step: {step} (overlap={self.overlap})")
 
             # Create a weighting table and convert it to a PyTorch tensor
             window = torch.tensor(signal.windows.hamming(chunk_size), dtype=torch.float32)

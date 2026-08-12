@@ -203,8 +203,8 @@ def separate_audio_sync(
     # MDXC parameters
     mdxc_segment_size: int = 256,
     mdxc_override_model_segment_size: bool = False,
-    mdxc_overlap: int = 8,
-    mdxc_batch_size: int = 1,
+    mdxc_overlap: Optional[int] = None,
+    mdxc_batch_size: Optional[int] = None,
     mdxc_pitch_shift: int = 0,
 ) -> dict:
     """Separate audio into stems. Runs synchronously (Cloud Run GPU handles one job at a time)."""
@@ -440,8 +440,8 @@ async def separate_audio(
     # MDXC parameters
     mdxc_segment_size: int = Form(256),
     mdxc_override_model_segment_size: bool = Form(False),
-    mdxc_overlap: int = Form(8),
-    mdxc_batch_size: int = Form(1),
+    mdxc_overlap: Optional[int] = Form(None),
+    mdxc_batch_size: Optional[int] = Form(None),
     mdxc_pitch_shift: int = Form(0),
 ) -> dict:
     """Upload an audio file (or provide a GCS URI) and separate it into stems."""

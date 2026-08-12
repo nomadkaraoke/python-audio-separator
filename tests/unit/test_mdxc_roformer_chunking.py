@@ -9,7 +9,6 @@ import torch
 from unittest.mock import Mock, MagicMock, patch
 import logging
 
-
 class TestMDXCRoformerChunking:
     """Test cases for MDXC Roformer chunking and overlap functionality."""
 
@@ -38,29 +37,45 @@ class TestMDXCRoformerChunking:
         # Test implementation for chunking optimization - placeholder for future implementation
         pytest.skip("Chunking optimization not yet implemented")
 
-    def test_step_clamped_to_chunk_size(self):
-        """T053: Step clamped to chunk_size (desired_step > chunk_size or ≤ 0)."""
-        chunk_size = 8192
-        
-        # Test case 1: desired_step > chunk_size
-        desired_step_too_large = 10000
-        actual_step = min(desired_step_too_large, chunk_size)
-        assert actual_step == chunk_size
-        
-        # Test case 2: desired_step ≤ 0
-        desired_step_zero = 0
-        actual_step = max(desired_step_zero, chunk_size // 4)  # Use quarter chunk as minimum
-        assert actual_step == chunk_size // 4
-        
-        # Test case 3: desired_step negative
-        desired_step_negative = -100
-        actual_step = max(desired_step_negative, chunk_size // 4)
-        assert actual_step == chunk_size // 4
-        
-        # Test case 4: valid desired_step
-        desired_step_valid = 4096
-        actual_step = min(max(desired_step_valid, 1), chunk_size)
-        assert actual_step == desired_step_valid
+    def test_step_uses_overlap_divisor(self):
+        """T053: Step follows the MSST num_overlap divisor semantics."""
+        from ml_collections import ConfigDict
+
+        from audio_separator.separator.architectures.mdxc_separator import MDXCSeparator
+
+        class IdentityModel(torch.nn.Module):
+            def __init__(self):
+                super().__init__()
+                self.anchor = torch.nn.Parameter(torch.zeros(1))
+
+            def forward(self, audio):
+                return audio.unsqueeze(1)
+
+        separator = MDXCSeparator.__new__(MDXCSeparator)
+        separator.pitch_shift = 0
+        separator.is_roformer = True
+        separator.override_model_segment_size = False
+        separator.model_data_cfgdict = ConfigDict(
+            {
+                "inference": {"dim_t": 5},
+                "training": {"target_instrument": "Vocals", "instruments": ["Vocals"]},
+                "model": {"stft_hop_length": 2},
+                "audio": {"hop_length": 2},
+            }
+        )
+        separator.overlap = 2
+        separator.model_run = IdentityModel()
+        separator.is_primary_stem_main_target = False
+        separator.logger = Mock()
+        chunk_starts = []
+
+        with patch(
+            "audio_separator.separator.architectures.mdxc_separator.tqdm",
+            side_effect=lambda values: chunk_starts.extend(values) or values,
+        ):
+            separator.demix(np.ones((2, 16), dtype=np.float32))
+
+        assert chunk_starts == [0, 4, 8, 12]
 
     def test_overlap_add_short_output_safe(self):
         """T054: overlap_add handles shorter model output safely (safe_len)."""

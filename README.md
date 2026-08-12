@@ -521,8 +521,8 @@ Demucs Architecture Parameters:
 MDXC Architecture Parameters:
   --mdxc_segment_size MDXC_SEGMENT_SIZE                  Larger consumes more resources, but may give better results (default: 256). Example: --mdxc_segment_size=256
   --mdxc_override_model_segment_size                     Override model default segment size instead of using the model default value. Example: --mdxc_override_model_segment_size
-  --mdxc_overlap MDXC_OVERLAP                            Amount of overlap between prediction windows, 2-50. Higher is better but slower (default: 8). Example: --mdxc_overlap=8
-  --mdxc_batch_size MDXC_BATCH_SIZE                      Larger consumes more RAM but may process slightly faster (default: 1). Example: --mdxc_batch_size=4
+  --mdxc_overlap MDXC_OVERLAP                            Number of overlapping prediction windows, 2-50. Higher is better but slower (default: model config, falling back to 8). Example: --mdxc_overlap=8
+  --mdxc_batch_size MDXC_BATCH_SIZE                      Larger consumes more RAM but may process slightly faster (default: model config, falling back to 1). Example: --mdxc_batch_size=4
   --mdxc_pitch_shift MDXC_PITCH_SHIFT                    Shift audio pitch by a number of semitones while processing. May improve output for deep/high vocals. (default: 0). Example: --mdxc_pitch_shift=2
 ```
 
@@ -673,7 +673,7 @@ You can also rename specific stems:
 - **`mdx_params`:** (Optional) MDX Architecture Specific Attributes & Defaults. `Default: {"hop_length": 1024, "segment_size": 256, "overlap": 0.25, "batch_size": 1, "enable_denoise": False}`
 - **`vr_params`:** (Optional) VR Architecture Specific Attributes & Defaults. `Default: {"batch_size": 1, "window_size": 512, "aggression": 5, "enable_tta": False, "enable_post_process": False, "post_process_threshold": 0.2, "high_end_process": False}`
 - **`demucs_params`:** (Optional) Demucs Architecture Specific Attributes & Defaults. `Default: {"segment_size": "Default", "shifts": 2, "overlap": 0.25, "segments_enabled": True}` _(Note: `segment_size` "Default" uses the model's internal default, typically 40 for older Demucs models and 10 for Demucs v4/htdemucs)_
-- **`mdxc_params`:** (Optional) MDXC Architecture Specific Attributes & Defaults. `Default: {"segment_size": 256, "override_model_segment_size": False, "batch_size": 1, "overlap": 8, "pitch_shift": 0}`
+- **`mdxc_params`:** (Optional) MDXC Architecture Specific Attributes & Defaults. `Default: {"segment_size": 256, "override_model_segment_size": False, "batch_size": None, "overlap": None, "pitch_shift": 0}` (`None` uses the model YAML's `inference` value, falling back to `1` for batch size and `8` for overlap.)
 - **`ensemble_algorithm`:** (Optional) Algorithm to use for ensembling multiple models. `Default: 'avg_wave'`
 - **`ensemble_weights`:** (Optional) Weights for each model in the ensemble. `Default: None` (equal weights)
 - **`ensemble_preset`:** (Optional) Named ensemble preset (e.g. `'vocal_balanced'`, `'karaoke'`). Sets models, algorithm, and weights automatically. Use `Separator(info_only=True).list_ensemble_presets()` to see all. `Default: None`
