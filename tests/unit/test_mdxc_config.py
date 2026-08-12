@@ -1,5 +1,6 @@
 from unittest.mock import Mock, patch
 
+import pytest
 import torch
 from ml_collections import ConfigDict
 
@@ -45,3 +46,28 @@ def test_mdxc_inference_defaults_fall_back_for_older_configs():
 
     assert separator.overlap == 8
     assert separator.batch_size == 1
+
+
+def test_mdxc_null_inference_values_use_fallbacks():
+    separator = _make_separator({"overlap": None, "batch_size": None}, {"num_overlap": None, "batch_size": None})
+
+    assert separator.overlap == 8
+    assert separator.batch_size == 1
+
+
+@pytest.mark.parametrize(
+    ("arch_config", "inference_config", "message"),
+    [
+        ({"overlap": 0, "batch_size": 1}, {"num_overlap": 2}, "MDXC overlap"),
+        ({"overlap": -1, "batch_size": 1}, {"num_overlap": 2}, "MDXC overlap"),
+        ({"overlap": None, "batch_size": 1}, {"num_overlap": 0}, "MDXC overlap"),
+        ({"overlap": None, "batch_size": 1}, {"num_overlap": -1}, "MDXC overlap"),
+        ({"overlap": 2, "batch_size": 0}, {"batch_size": 1}, "MDXC batch size"),
+        ({"overlap": 2, "batch_size": -1}, {"batch_size": 1}, "MDXC batch size"),
+        ({"overlap": 2, "batch_size": None}, {"batch_size": 0}, "MDXC batch size"),
+        ({"overlap": 2, "batch_size": None}, {"batch_size": -1}, "MDXC batch size"),
+    ],
+)
+def test_mdxc_rejects_non_positive_inference_values(arch_config, inference_config, message):
+    with pytest.raises(ValueError, match=message):
+        _make_separator(arch_config, inference_config)

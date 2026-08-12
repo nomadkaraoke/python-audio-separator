@@ -94,12 +94,25 @@ class MDXCSeparator(CommonSeparator):
         self.override_model_segment_size = arch_config.get("override_model_segment_size", False)
 
         inference_config = self.model_data.get("inference", {})
-        self.overlap = arch_config.get("overlap")
-        if self.overlap is None:
-            self.overlap = inference_config.get("num_overlap", 8)
-        self.batch_size = arch_config.get("batch_size")
-        if self.batch_size is None:
-            self.batch_size = inference_config.get("batch_size", 1)
+        overlap = arch_config.get("overlap")
+        if overlap is None:
+            overlap = inference_config.get("num_overlap")
+        if overlap is None:
+            overlap = 8
+
+        batch_size = arch_config.get("batch_size")
+        if batch_size is None:
+            batch_size = inference_config.get("batch_size")
+        if batch_size is None:
+            batch_size = 1
+
+        if overlap <= 0:
+            raise ValueError("MDXC overlap must be greater than zero")
+        if batch_size <= 0:
+            raise ValueError("MDXC batch size must be greater than zero")
+
+        self.overlap = overlap
+        self.batch_size = batch_size
 
         # Amount of pitch shift to apply during processing (this does NOT affect the pitch of the output audio):
         # • Whole numbers indicate semitones.
