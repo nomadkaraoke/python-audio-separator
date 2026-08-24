@@ -779,7 +779,11 @@ class Separator:
         model_data = yaml.load(open(model_data_yaml_filepath, encoding="utf-8"), Loader=yaml.FullLoader)
         self.logger.debug(f"Model data loaded from YAML file: {model_data}")
 
-        if "roformer" in model_data_yaml_filepath.lower():
+        from .roformer.configuration_normalizer import ConfigurationNormalizer
+
+        configured_roformer_type = ConfigurationNormalizer().detect_model_type(model_data)
+        yaml_filename = os.path.basename(model_data_yaml_filepath).lower()
+        if configured_roformer_type is not None or "roformer" in yaml_filename:
             model_data["is_roformer"] = True
 
         return model_data

@@ -519,9 +519,16 @@ class CommonSeparator:
         # Check for explicit Roformer flag
         if self.model_data.get("is_roformer", False):
             return True
+
+        # Prefer architecture-defining configuration over renameable paths.
+        from .roformer.configuration_normalizer import ConfigurationNormalizer
+
+        if ConfigurationNormalizer().detect_model_type(self.model_data) is not None:
+            return True
             
-        # Check model path for Roformer indicators
-        if self.model_path and "roformer" in self.model_path.lower():
+        # Keep filename-based compatibility without letting parent directories
+        # influence architecture routing.
+        if self.model_path and "roformer" in os.path.basename(self.model_path).lower():
             return True
             
         # Check model name for Roformer indicators

@@ -38,13 +38,13 @@ class RoformerLoader:
                    device: str = 'cpu') -> ModelLoadingResult:
         logger.info(f"Loading Roformer model from {model_path}")
         try:
-            normalized_config = self.config_normalizer.normalize_from_file_path(
-                config, model_path, apply_defaults=True, validate=True
+            model_type = self.config_normalizer.resolve_model_type(config, model_path)
+            normalized_config = self.config_normalizer.normalize_config(
+                config, model_type, apply_defaults=True, validate=True
             )
-            model_type = self.config_normalizer.detect_model_type(normalized_config)
             logger.debug(f"Detected model type: {model_type}")
-        except ParameterValidationError as e:
-            logger.error(f"Configuration validation failed: {e}")
+        except (ParameterValidationError, ValueError) as e:
+            logger.error(f"Model configuration resolution failed: {e}")
             return ModelLoadingResult.failure_result(
                 error_message=f"Config validation: {e}",
                 implementation=ImplementationVersion.NEW,
@@ -64,6 +64,7 @@ class RoformerLoader:
                 fallback_result = self._load_with_legacy_implementation(
                     model_path=model_path,
                     original_config=config,
+                    model_type=model_type,
                     device=device,
                     original_error=str(e)
                 )
@@ -217,6 +218,7 @@ class RoformerLoader:
     def _load_with_legacy_implementation(self,
                                           model_path: str,
                                           original_config: Dict[str, Any],
+                                          model_type: str,
                                           device: str,
                                           original_error: str) -> ModelLoadingResult:
         """
@@ -225,18 +227,23 @@ class RoformerLoader:
         """
         import torch
 
-        # Use nested 'model' section if present; otherwise assume flat
+        # Preserve the legacy constructor's original flat/model-section input.
         model_cfg = original_config.get('model', original_config)
+        model_cfg = self.config_normalizer.normalize_config(
+            model_cfg,
+            model_type,
+            apply_defaults=False,
+            validate=False,
+        )
 
-        # Determine model type from config
-        if 'num_bands' in model_cfg:
+        if model_type == "mel_band_roformer":
             from ..uvr_lib_v5.roformer.mel_band_roformer import MelBandRoformer
             model = MelBandRoformer(**model_cfg)
-        elif 'freqs_per_bands' in model_cfg:
+        elif model_type == "bs_roformer":
             from ..uvr_lib_v5.roformer.bs_roformer import BSRoformer
             model = BSRoformer(**model_cfg)
         else:
-            raise ValueError("Unknown Roformer model type in legacy configuration")
+            raise ValueError(f"Unknown Roformer model type in legacy configuration: {model_type}")
 
         # Load checkpoint as raw state dict (legacy behavior)
         try:
@@ -248,11 +255,13 @@ class RoformerLoader:
         model.load_state_dict(checkpoint)
         model.to(device).eval()
 
-        return ModelLoadingResult.fallback_success_result(
+        result = ModelLoadingResult.fallback_success_result(
             model=model,
             original_error=original_error,
             config=original_config,
         )
+        result.add_model_info('model_type', model_type)
+        return result
 
     def get_loading_stats(self) -> Dict[str, int]:
         return self._loading_stats.copy()
@@ -264,15 +273,10 @@ class RoformerLoader:
         }
 
     def detect_model_type(self, model_path: str) -> str:
-        model_path_lower = model_path.lower()
-        if any(indicator in model_path_lower for indicator in ['bs_roformer', 'bs-roformer', 'bsroformer']):
-            return "bs_roformer"
-        if any(indicator in model_path_lower for indicator in ['mel_band_roformer', 'mel-band-roformer', 'melband']):
-            return "mel_band_roformer"
-        if 'roformer' in model_path_lower:
-            logger.warning(f"Generic 'roformer' detected in {model_path}, defaulting to bs_roformer")
-            return "bs_roformer"
-        raise ValueError(f"Cannot determine Roformer model type from path: {model_path}")
+        model_type = self.config_normalizer.detect_model_type_from_filename(model_path)
+        if model_type is None:
+            raise ValueError(f"Cannot determine Roformer model type from path: {model_path}")
+        return model_type
 
     def get_default_configuration(self, model_type: str) -> Dict[str, Any]:
         if model_type == "bs_roformer":

@@ -104,7 +104,9 @@ print(f"Normalized config has {len(normalized)} parameters")
 
 ## Model Type Detection
 
-Detected via config contents (e.g., `freqs_per_bands` vs `num_bands`) and filename hints. Defaults to BSRoformer when ambiguous.
+The RoFormer family is resolved before family-specific defaults are applied. Architecture-defining configuration is authoritative: after supported nested sections and parameter aliases are normalized, `num_bands` identifies MelBand RoFormer and `freqs_per_bands` identifies BS-RoFormer.
+
+If the configuration does not identify a family, only explicit tokens in the checkpoint basename are considered; parent-directory names are ignored. Contradictory configuration markers fail validation. Configurations and basenames that provide no family evidence retain the legacy BS-RoFormer fallback with a warning.
 
 ## Integration with Audio Separator
 
