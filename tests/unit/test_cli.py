@@ -7,6 +7,8 @@ import importlib.metadata
 from unittest import mock
 from unittest.mock import patch, MagicMock, mock_open
 
+from audio_separator.separator.exceptions import AudioExportError
+
 
 # Mock metadata.distribution for tests to avoid PackageNotFoundError in environment without installed package
 @pytest.fixture(autouse=True)
@@ -94,6 +96,19 @@ def test_cli_multiple_filenames():
         log_messages = [call[0][0] for call in mock_logger.info.call_args_list]
         assert any("test1.mp3" in msg and "test2.mp3" in msg for msg in log_messages)
         assert any("Separation complete" in msg for msg in log_messages)
+
+
+def test_cli_exits_one_when_audio_export_fails():
+    test_args = ["cli.py", "bad.wav"]
+    export_error = AudioExportError("writer failed", path="bad_(Vocals).flac", backend="pydub")
+
+    with patch("sys.argv", test_args), patch("audio_separator.separator.Separator") as separator_class:
+        separator_class.return_value.separate.side_effect = export_error
+
+        with pytest.raises(SystemExit) as raised:
+            main()
+
+    assert raised.value.code == 1
 
 
 # Test the CLI with a specific audio file

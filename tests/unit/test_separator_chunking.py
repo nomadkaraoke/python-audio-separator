@@ -11,6 +11,7 @@ import logging
 from unittest.mock import Mock, patch, MagicMock, call
 from pydub import AudioSegment
 
+from audio_separator.separator.exceptions import InvalidAudioDataError
 from audio_separator.separator.separator import Separator
 
 
@@ -580,8 +581,8 @@ class TestSeparatorChunkingEdgeCases:
             shutil.rmtree(self.temp_dir)
 
     @patch('audio_separator.separator.audio_chunking.AudioChunker')
-    def test_empty_output_handling(self, mock_chunker_class):
-        """Test handling when a chunk produces no output files."""
+    def test_empty_chunk_output_is_rejected_because_duration_cannot_be_preserved(self, mock_chunker_class):
+        """An empty chunk output cannot preserve the stem timeline and must fail."""
         # Setup mock separator
         separator = Mock(spec=Separator)
         separator.logger = self.logger
@@ -603,20 +604,18 @@ class TestSeparatorChunkingEdgeCases:
 
         # Import and call the actual method
         from audio_separator.separator.separator import Separator as RealSeparator
-        result = RealSeparator._process_with_chunking(
-            separator,
-            os.path.join(self.temp_dir, "test.wav"),
-            custom_output_names=None
-        )
+        with pytest.raises(InvalidAudioDataError, match="no stems"):
+            RealSeparator._process_with_chunking(
+                separator,
+                os.path.join(self.temp_dir, "test.wav"),
+                custom_output_names=None
+            )
 
-        # Should return empty list
-        assert len(result) == 0
-        # merge_chunks should not be called
-        assert mock_chunker.merge_chunks.call_count == 0
+        mock_chunker.merge_chunks.assert_not_called()
 
     @patch('audio_separator.separator.audio_chunking.AudioChunker')
-    def test_inconsistent_stem_count_across_chunks(self, mock_chunker_class):
-        """Test handling when different chunks produce different stem counts."""
+    def test_missing_stem_chunk_is_rejected_because_duration_cannot_be_preserved(self, mock_chunker_class):
+        """A missing stem chunk would shorten its timeline and must fail before merge."""
         # Setup mock separator
         separator = Mock(spec=Separator)
         separator.logger = self.logger
@@ -648,15 +647,14 @@ class TestSeparatorChunkingEdgeCases:
 
         # Import and call the actual method
         from audio_separator.separator.separator import Separator as RealSeparator
-        result = RealSeparator._process_with_chunking(
-            separator,
-            os.path.join(self.temp_dir, "test.wav"),
-            custom_output_names=None
-        )
+        with pytest.raises(InvalidAudioDataError, match="missing stem"):
+            RealSeparator._process_with_chunking(
+                separator,
+                os.path.join(self.temp_dir, "test.wav"),
+                custom_output_names=None
+            )
 
-        # Should handle inconsistency gracefully
-        # Vocals should have 2 chunks, Instrumental should have 1 chunk
-        assert len(result) == 2
+        mock_chunker.merge_chunks.assert_not_called()
 
     @patch('audio_separator.separator.audio_chunking.AudioChunker')
     def test_filename_without_stem_pattern(self, mock_chunker_class):

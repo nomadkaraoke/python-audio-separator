@@ -7,10 +7,13 @@ import pytest
 import os
 import tempfile
 import logging
+from pathlib import Path
 from unittest.mock import Mock, patch, MagicMock
 from pydub import AudioSegment
+from pydub.generators import Sine
 
 from audio_separator.separator.audio_chunking import AudioChunker
+from audio_separator.separator.exceptions import AudioExportError
 
 
 class TestAudioChunker:
@@ -121,7 +124,7 @@ class TestAudioChunker:
         mock_chunk1 = Mock()
         mock_chunk2 = Mock()
         mock_combined = Mock()
-        mock_combined.export = Mock()
+        mock_combined.export = Mock(side_effect=lambda path, **_kwargs: Path(path).write_bytes(b"audio"))
 
         # Setup mock to return chunks and allow addition
         mock_from_file.side_effect = [mock_chunk1, mock_chunk2]
@@ -226,6 +229,51 @@ class TestAudioChunkerIntegration:
             if os.path.exists(temp_dir):
                 shutil.rmtree(temp_dir)
 
+    def test_merge_failure_preserves_existing_target_and_removes_partial_file(self, tmp_path):
+        chunk_path = tmp_path / "chunk.wav"
+        AudioSegment.silent(duration=10).export(chunk_path, format="wav")
+        output_path = tmp_path / "merged.wav"
+        output_path.write_bytes(b"original")
+
+        def export_partial_then_fail(path, **_kwargs):
+            Path(path).write_bytes(b"partial")
+            raise OSError("ffmpeg failed")
+
+        with patch.object(AudioSegment, "export", side_effect=export_partial_then_fail):
+            with pytest.raises(AudioExportError):
+                AudioChunker(5.0).merge_chunks([str(chunk_path)], str(output_path))
+
+        assert output_path.read_bytes() == b"original"
+        assert sorted(path.name for path in tmp_path.iterdir()) == ["chunk.wav", "merged.wav"]
+
+    def test_merge_closes_pydub_export_handle_before_replace(self, tmp_path):
+        chunk_path = tmp_path / "chunk.wav"
+        AudioSegment.silent(duration=10).export(chunk_path, format="wav")
+        export_handle = Mock()
+
+        def export_audio(path, **_kwargs):
+            Path(path).write_bytes(b"encoded audio")
+            return export_handle
+
+        with patch.object(AudioSegment, "export", side_effect=export_audio):
+            AudioChunker(5.0).merge_chunks([str(chunk_path)], str(tmp_path / "merged.wav"))
+
+        export_handle.close.assert_called_once_with()
+
+    def test_merge_preserves_duration_of_a_silent_intermediate_chunk(self, tmp_path):
+        chunks = [Sine(440).to_audio_segment(duration=100), AudioSegment.silent(duration=150), Sine(440).to_audio_segment(duration=200)]
+        chunk_paths = []
+        for index, chunk in enumerate(chunks):
+            chunk_path = tmp_path / f"chunk-{index}.wav"
+            chunk.export(chunk_path, format="wav")
+            chunk_paths.append(str(chunk_path))
+
+        output_path = tmp_path / "merged.wav"
+        AudioChunker(5.0).merge_chunks(chunk_paths, str(output_path))
+
+        decoded = AudioSegment.from_file(output_path)
+        assert abs(len(decoded) - 450) <= 2
+        assert decoded[110:240].rms == 0
 
 class TestAudioChunkerEdgeCases:
     """Test edge cases and error handling."""

@@ -5,6 +5,7 @@ import soundfile as sf
 import math
 import platform
 import traceback
+from audio_separator.separator.exceptions import InvalidAudioDataError
 from audio_separator.separator.uvr_lib_v5 import pyrb
 from scipy.signal import correlate, hilbert
 import io
@@ -106,10 +107,17 @@ def normalize(wave, max_peak=1.0, min_peak=None):
     Returns:
         array-like: Normalized or original waveform.
     """
+    wave = np.asarray(wave)
+    if wave.size == 0:
+        raise InvalidAudioDataError("Audio data is empty")
+
     maxv = np.abs(wave).max()
+    if not np.isfinite(maxv):
+        raise InvalidAudioDataError("Audio data must contain only finite values")
+
     if maxv > max_peak:
         wave *= max_peak / maxv
-    elif min_peak is not None and maxv < min_peak:
+    elif min_peak is not None and 0 < maxv < min_peak:
         wave *= min_peak / maxv
 
     return wave

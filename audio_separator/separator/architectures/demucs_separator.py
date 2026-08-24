@@ -168,7 +168,12 @@ class DemucsSeparator(CommonSeparator):
         processed = {}
         mix = torch.tensor(mix, dtype=torch.float32)
         ref = mix.mean(0)
-        mix = (mix - ref.mean()) / ref.std()
+        ref_mean = ref.mean()
+        ref_std = ref.std()
+        if not torch.isfinite(ref_std):
+            ref_std = torch.zeros_like(ref_std)
+        normalization_std = ref_std.clamp_min(torch.finfo(mix.dtype).eps)
+        mix = (mix - ref_mean) / normalization_std
         mix_infer = mix
 
         with torch.no_grad():
@@ -185,7 +190,7 @@ class DemucsSeparator(CommonSeparator):
                 progress=True,
             )[0]
 
-        sources = (sources * ref.std() + ref.mean()).cpu().numpy()
+        sources = (sources * ref_std + ref_mean).cpu().numpy()
         sources[[0, 1]] = sources[[1, 0]]
         processed[mix] = sources[:, :, 0:None].copy()
         sources = list(processed.values())

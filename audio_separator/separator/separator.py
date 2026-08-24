@@ -23,7 +23,9 @@ import torch
 import torch.amp.autocast_mode as autocast_mode
 import onnxruntime as ort
 from tqdm import tqdm
+from audio_separator.separator.audio_io import atomic_output_path, validate_audio_source
 from audio_separator.separator.ensembler import Ensembler
+from audio_separator.separator.exceptions import AudioExportError, BatchSeparationError, InvalidAudioDataError
 
 # Mapping of common stem name variations to canonical names for ensemble grouping.
 STEM_NAME_MAP = {
@@ -47,6 +49,15 @@ STEM_NAME_MAP = {
     "primary stem": "Primary Stem",
     "secondary stem": "Secondary Stem",
 }
+
+SUPPORTED_AUDIO_EXTENSIONS = (".wav", ".flac", ".mp3", ".ogg", ".opus", ".m4a", ".aiff", ".ac3")
+
+
+def _iter_directory_audio_files(directory):
+    for root, _dirs, files in os.walk(directory):
+        for filename in files:
+            if filename.endswith(SUPPORTED_AUDIO_EXTENSIONS):
+                yield os.path.join(root, filename)
 
 
 class Separator:
@@ -953,14 +964,50 @@ class Separator:
         - custom_output_names (dict, optional): Custom names for the output files. Defaults to None.
 
         Returns:
-        - output_files (list of str): A list containing the paths to the separated audio stem files.
+        - output_files (list of str): Fully written output paths produced by inputs that completed
+          their full stem set. Valid silent and near-silent stems are included.
+
+        Raises:
+        - InvalidAudioDataError: Decoded or generated audio data was empty, non-finite, or structurally invalid.
+        - AudioExportError: An audio backend or filesystem failed to publish an output file.
+        - BatchSeparationError: A list or directory input had one or more failures. All discoverable
+          inputs are attempted first; inspect ``successful_files`` and the ordered ``failures`` list.
+
+        A single file fails immediately with its original exception. Import the public exception
+        types from ``audio_separator.separator``.
         """
         # Check if the model and device are properly initialized
         if not (self.torch_device and (self.model_instance or (isinstance(self.model_filename, list) and len(self.model_filename) > 0))):
             raise ValueError("Initialization failed or model not loaded. Please load a model before attempting to separate.")
 
         if isinstance(self.model_filename, list) and len(self.model_filename) > 1:
-            return self._separate_ensemble(audio_file_path, custom_output_names)
+            if isinstance(audio_file_path, str) and not os.path.isdir(audio_file_path):
+                return self._separate_ensemble(audio_file_path, custom_output_names)
+
+            ensemble_inputs = []
+            failures = []
+            input_paths = [audio_file_path] if isinstance(audio_file_path, str) else audio_file_path
+            for path in input_paths:
+                if os.path.isdir(path):
+                    ensemble_inputs.extend(_iter_directory_audio_files(path))
+                else:
+                    ensemble_inputs.append(path)
+
+            output_files = []
+            for path in ensemble_inputs:
+                try:
+                    output_files.extend(self._separate_ensemble(path, custom_output_names))
+                except Exception as e:
+                    self.logger.error(f"Failed to process ensemble file {path}: {e}", exc_info=True)
+                    failures.append((path, e))
+
+            if failures:
+                raise BatchSeparationError(output_files, failures)
+            return output_files
+
+        if isinstance(audio_file_path, str) and not os.path.isdir(audio_file_path):
+            self.logger.info(f"Processing file: {audio_file_path}")
+            return self._separate_file(audio_file_path, custom_output_names)
 
         # If audio_file_path is a string, convert it to a list for uniform processing
         if isinstance(audio_file_path, str):
@@ -968,23 +1015,21 @@ class Separator:
 
         # Initialize a list to store paths of all output files
         output_files = []
+        failures = []
 
         # Process each path in the list
         for path in audio_file_path:
             if os.path.isdir(path):
                 # If the path is a directory, recursively search for all audio files
-                for root, dirs, files in os.walk(path):
-                    for file in files:
-                        # Check the file extension to ensure it's an audio file
-                        if file.endswith((".wav", ".flac", ".mp3", ".ogg", ".opus", ".m4a", ".aiff", ".ac3")):  # Add other formats if needed
-                            full_path = os.path.join(root, file)
-                            self.logger.info(f"Processing file: {full_path}")
-                            try:
-                                # Perform separation for each file
-                                files_output = self._separate_file(full_path, custom_output_names)
-                                output_files.extend(files_output)
-                            except Exception as e:
-                                self.logger.error(f"Failed to process file {full_path}: {e}", exc_info=True)
+                for full_path in _iter_directory_audio_files(path):
+                    self.logger.info(f"Processing file: {full_path}")
+                    try:
+                        # Perform separation for each file
+                        files_output = self._separate_file(full_path, custom_output_names)
+                        output_files.extend(files_output)
+                    except Exception as e:
+                        self.logger.error(f"Failed to process file {full_path}: {e}", exc_info=True)
+                        failures.append((full_path, e))
             else:
                 # If the path is a file, process it directly
                 self.logger.info(f"Processing file: {path}")
@@ -993,7 +1038,10 @@ class Separator:
                     output_files.extend(files_output)
                 except Exception as e:
                     self.logger.error(f"Failed to process file {path}: {e}", exc_info=True)
+                    failures.append((path, e))
 
+        if failures:
+            raise BatchSeparationError(output_files, failures)
         return output_files
 
     def _separate_file(self, audio_file_path, custom_output_names=None):
@@ -1027,21 +1075,37 @@ class Separator:
         self.logger.debug(f"Normalization threshold set to {self.normalization_threshold}, waveform will be lowered to this max amplitude to avoid clipping.")
         self.logger.debug(f"Amplification threshold set to {self.amplification_threshold}, waveform will be scaled up to this max amplitude if below it.")
 
-        # Run separation method for the loaded model with autocast enabled if supported by the device
-        output_files = None
-        if self.use_autocast and autocast_mode.is_autocast_available(self.torch_device.type):
-            self.logger.debug("Autocast available.")
-            with autocast_mode.autocast(self.torch_device.type):
+        try:
+            # Run separation method for the loaded model with autocast enabled if supported by the device
+            output_files = None
+            if self.use_autocast and autocast_mode.is_autocast_available(self.torch_device.type):
+                self.logger.debug("Autocast available.")
+                with autocast_mode.autocast(self.torch_device.type):
+                    output_files = self.model_instance.separate(audio_file_path, custom_output_names)
+            else:
+                self.logger.debug("Autocast unavailable.")
                 output_files = self.model_instance.separate(audio_file_path, custom_output_names)
-        else:
-            self.logger.debug("Autocast unavailable.")
-            output_files = self.model_instance.separate(audio_file_path, custom_output_names)
+        finally:
+            # Clear per-file state even when inference or audio export fails.
+            active_error = sys.exc_info()[1]
+            cleanup_errors = []
+            for cleanup_name in ("clear_gpu_cache", "clear_file_specific_paths"):
+                try:
+                    getattr(self.model_instance, cleanup_name)()
+                except Exception as cleanup_error:
+                    cleanup_errors.append((cleanup_name, cleanup_error))
+                    self.logger.error(f"Cleanup step {cleanup_name} failed: {cleanup_error}", exc_info=True)
 
-        # Clear GPU cache to free up memory
-        self.model_instance.clear_gpu_cache()
-
-        # Unset separation parameters to prevent accidentally re-using the wrong source files or output paths
-        self.model_instance.clear_file_specific_paths()
+            if cleanup_errors:
+                if active_error is not None:
+                    if hasattr(active_error, "add_note"):
+                        for cleanup_name, cleanup_error in cleanup_errors:
+                            active_error.add_note(f"Cleanup step {cleanup_name} failed: {cleanup_error}")
+                else:
+                    cleanup_name, cleanup_error = cleanup_errors[0]
+                    if hasattr(cleanup_error, "add_note"):
+                        cleanup_error.add_note(f"Cleanup step failed: {cleanup_name}")
+                    raise cleanup_error
 
         # Remind the user one more time if they used a VIP model, so the message doesn't get lost in the logs
         self.print_uvr_vip_message()
@@ -1082,6 +1146,7 @@ class Separator:
 
             # Process each chunk
             processed_chunks_by_stem = {}
+            stem_names_by_chunk = []
 
             for i, chunk_path in enumerate(chunk_paths):
                 self.logger.info(f"Processing chunk {i+1}/{len(chunk_paths)}: {chunk_path}")
@@ -1097,9 +1162,10 @@ class Separator:
 
                 try:
                     output_files = self._separate_file(chunk_path)
+                    current_stem_names = set()
 
                     # Dynamically group chunks by stem name
-                    for stem_path in output_files:
+                    for stem_index, stem_path in enumerate(output_files):
                         # Extract stem name from filename: "chunk_0000_(Vocals).wav" → "Vocals"
                         filename = os.path.basename(stem_path)
                         match = re.search(r'_\(([^)]+)\)', filename)
@@ -1107,10 +1173,12 @@ class Separator:
                             stem_name = match.group(1)
                         else:
                             # Fallback: use index-based name if pattern not found
-                            stem_index = len([k for k in processed_chunks_by_stem.keys() if k.startswith('stem_')])
                             stem_name = f"stem_{stem_index}"
                             self.logger.warning(f"Could not extract stem name from {filename}, using {stem_name}")
 
+                        if stem_name in current_stem_names:
+                            raise InvalidAudioDataError(f"Chunk {i} produced duplicate stem output: {stem_name}")
+                        current_stem_names.add(stem_name)
                         if stem_name not in processed_chunks_by_stem:
                             processed_chunks_by_stem[stem_name] = []
 
@@ -1120,6 +1188,7 @@ class Separator:
 
                     if not output_files:
                         self.logger.warning(f"Chunk {i+1} produced no output files")
+                    stem_names_by_chunk.append(current_stem_names)
 
                 finally:
                     self.chunk_duration = original_chunk_duration
@@ -1130,6 +1199,19 @@ class Separator:
                 # Clear GPU cache between chunks
                 if self.model_instance:
                     self.model_instance.clear_gpu_cache()
+
+            all_stem_names = set().union(*stem_names_by_chunk) if stem_names_by_chunk else set()
+            if not all_stem_names:
+                raise InvalidAudioDataError("Chunked separation produced no stems")
+
+            missing_stems = {
+                chunk_index: sorted(all_stem_names - chunk_stems)
+                for chunk_index, chunk_stems in enumerate(stem_names_by_chunk)
+                if chunk_stems != all_stem_names
+            }
+            if missing_stems:
+                details = "; ".join(f"chunk {chunk_index}: {', '.join(stems)}" for chunk_index, stems in missing_stems.items())
+                raise InvalidAudioDataError(f"Chunked separation is missing stem output(s): {details}")
 
             # Merge chunks for each stem dynamically
             base_name = os.path.splitext(os.path.basename(audio_file_path))[0]
@@ -1393,14 +1475,25 @@ class Separator:
                         final_output_path = os.path.join(self.output_dir, output_path)
 
                         import soundfile as sf
+                        from audio_separator.separator.uvr_lib_v5 import spec_utils
 
+                        ensemble_audio = validate_audio_source(ensembled_wav.T)
+                        ensemble_audio = spec_utils.normalize(
+                            wave=ensemble_audio,
+                            max_peak=self.normalization_threshold,
+                            min_peak=self.amplification_threshold,
+                        )
                         try:
-                            self.logger.debug(f"Attempting to write ensembled audio to {final_output_path}...")
-                            sf.write(final_output_path, ensembled_wav.T, self.sample_rate)
-                        except Exception as e:
-                            self.logger.error(f"Error writing {self.output_format} format: {e}. Falling back to WAV.")
+                            with atomic_output_path(final_output_path, "soundfile") as temp_output_path:
+                                self.logger.debug(f"Attempting to write ensembled audio to {final_output_path}...")
+                                sf.write(temp_output_path, ensemble_audio, self.sample_rate)
+                        except AudioExportError as requested_format_error:
+                            self.logger.error(
+                                f"Error writing {self.output_format} format: {requested_format_error}. Falling back to WAV."
+                            )
                             final_output_path = final_output_path.rsplit(".", 1)[0] + ".wav"
-                            sf.write(final_output_path, ensembled_wav.T, self.sample_rate)
+                            with atomic_output_path(final_output_path, "soundfile") as temp_output_path:
+                                sf.write(temp_output_path, ensemble_audio, self.sample_rate)
 
                         output_files.append(final_output_path)
 
