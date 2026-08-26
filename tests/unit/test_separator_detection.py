@@ -7,6 +7,10 @@ import pytest
 from unittest.mock import Mock, patch, MagicMock
 import os
 import tempfile
+import yaml
+
+from audio_separator.separator.separator import Separator
+from audio_separator.separator.common_separator import CommonSeparator
 
 
 class TestSeparatorDetection:
@@ -20,6 +24,52 @@ class TestSeparatorDetection:
         """Clean up test fixtures."""
         import shutil
         shutil.rmtree(self.temp_dir, ignore_errors=True)
+
+    def test_non_roformer_yaml_is_not_detected_from_parent_directory(self, tmp_path):
+        """A parent directory name must not turn an MDXC config into a Roformer config."""
+        config_dir = tmp_path / "roformer-experiment"
+        config_dir.mkdir()
+        config_path = config_dir / "model_2_stem_full_band_8k.yaml"
+        config_path.write_text(yaml.safe_dump({'model': {'dim': 128, 'depth': 4}}))
+
+        separator = Separator.__new__(Separator)
+        separator.model_file_dir = str(tmp_path)
+        separator.logger = Mock()
+
+        model_data = separator.load_model_data_from_yaml(str(config_path))
+
+        assert model_data.get('is_roformer', False) is False
+
+    def test_neutral_yaml_filename_uses_config_content_for_roformer_detection(self, tmp_path):
+        """A model family marker is sufficient even when the YAML was renamed."""
+        config_path = tmp_path / "config.yaml"
+        config_path.write_text(yaml.safe_dump({'model': {'num_bands': 60}}))
+
+        separator = Separator.__new__(Separator)
+        separator.model_file_dir = str(tmp_path)
+        separator.logger = Mock()
+
+        model_data = separator.load_model_data_from_yaml(str(config_path))
+
+        assert model_data['is_roformer'] is True
+
+    def test_common_separator_ignores_checkpoint_parent_directory(self):
+        """CommonSeparator must not route a plain MDXC model by its storage directory."""
+        separator = CommonSeparator.__new__(CommonSeparator)
+        separator.model_data = {'model': {'dim': 128, 'depth': 4}}
+        separator.model_path = '/tmp/roformer-experiment/model.ckpt'
+        separator.model_name = 'model'
+
+        assert separator._detect_roformer_model() is False
+
+    def test_common_separator_uses_config_content_for_neutral_checkpoint_name(self):
+        """A renamed checkpoint remains a Roformer when its config is unambiguous."""
+        separator = CommonSeparator.__new__(CommonSeparator)
+        separator.model_data = {'model': {'num_bands': 60}}
+        separator.model_path = '/tmp/model.ckpt'
+        separator.model_name = 'model'
+
+        assert separator._detect_roformer_model() is True
 
     def test_is_roformer_set_from_yaml_path(self):
         """T059: YAML path containing 'roformer' sets is_roformer and routes Roformer path."""
