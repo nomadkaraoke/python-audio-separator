@@ -5,6 +5,8 @@ import logging
 from typing import List
 from pydub import AudioSegment
 
+from audio_separator.separator.audio_io import atomic_output_path
+
 
 class AudioChunker:
     """
@@ -124,7 +126,11 @@ class AudioChunker:
         output_format = ext.lstrip('.') if ext else 'wav'
 
         self.logger.info(f"Exporting merged audio ({len(combined) / 1000:.1f}s) to {output_path}")
-        combined.export(output_path, format=output_format)
+        with atomic_output_path(output_path, "pydub") as temp_path:
+            export_handle = combined.export(temp_path, format=output_format)
+            close_export = getattr(export_handle, "close", None)
+            if callable(close_export):
+                close_export()
 
         return output_path
 
