@@ -77,6 +77,30 @@ class TestMDXCRoformerChunking:
 
         assert chunk_starts == [0, 4, 8, 12]
 
+    def test_overlap_larger_than_chunk_size_is_rejected(self):
+        """T053: Invalid overlap cannot produce a zero-sized RoFormer step."""
+        from ml_collections import ConfigDict
+
+        from audio_separator.separator.architectures.mdxc_separator import MDXCSeparator
+
+        separator = MDXCSeparator.__new__(MDXCSeparator)
+        separator.pitch_shift = 0
+        separator.is_roformer = True
+        separator.override_model_segment_size = False
+        separator.model_data_cfgdict = ConfigDict(
+            {
+                "inference": {"dim_t": 5},
+                "training": {"target_instrument": "Vocals", "instruments": ["Vocals"]},
+                "model": {"stft_hop_length": 2},
+                "audio": {"hop_length": 2},
+            }
+        )
+        separator.overlap = 9
+        separator.logger = Mock()
+
+        with pytest.raises(ValueError, match=r"MDXC overlap \(9\) must not exceed chunk size \(8\)"):
+            separator.demix(np.ones((2, 16), dtype=np.float32))
+
     def test_overlap_add_short_output_safe(self):
         """T054: overlap_add handles shorter model output safely (safe_len)."""
         # Create mock tensors

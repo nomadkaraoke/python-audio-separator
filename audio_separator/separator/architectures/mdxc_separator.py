@@ -374,6 +374,8 @@ class MDXCSeparator(CommonSeparator):
 
             # MDXC overlap is the number of overlapping prediction windows.
             step = chunk_size // self.overlap
+            if step <= 0:
+                raise ValueError(f"MDXC overlap ({self.overlap}) must not exceed chunk size ({chunk_size})")
             self.logger.debug(f"Step: {step} (overlap={self.overlap})")
 
             # Create a weighting table and convert it to a PyTorch tensor
