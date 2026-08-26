@@ -289,7 +289,7 @@ class CommonSeparator:
         https://github.com/jiaaro/pydub/issues/135
         """
         # Get the duration of the input audio file
-        duration_seconds = librosa.get_duration(filename=self.audio_file_path)
+        duration_seconds = librosa.get_duration(path=self.audio_file_path)
         duration_hours = duration_seconds / 3600
         self.logger.info(f"Audio duration is {duration_hours:.2f} hours ({duration_seconds:.2f} seconds).")
 
