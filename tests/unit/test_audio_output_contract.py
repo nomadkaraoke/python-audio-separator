@@ -20,6 +20,9 @@ from audio_separator.separator.uvr_lib_v5 import spec_utils
 from audio_separator.separator.exceptions import AudioExportError, BatchSeparationError, InvalidAudioDataError
 
 
+requires_ffmpeg = pytest.mark.skipif(shutil.which("ffmpeg") is None, reason="FFmpeg is required for pydub encoding")
+
+
 @pytest.fixture
 def common_separator(tmp_path):
     config = {
@@ -93,6 +96,29 @@ def test_prepare_mix_accepts_nonempty_silent_audio(common_separator, tmp_path):
     assert np.count_nonzero(mix) == 0
 
 
+@pytest.mark.parametrize(
+    ("audio", "message"),
+    [
+        (np.empty((0, 2), dtype=np.float32), "no audio frames"),
+        (np.array([[0.0, np.nan]], dtype=np.float32), "non-finite samples"),
+        (np.array([[np.inf, 0.0]], dtype=np.float32), "non-finite samples"),
+    ],
+)
+def test_prepare_mix_rejects_invalid_numpy_audio(common_separator, audio, message):
+    with pytest.raises(InvalidAudioDataError, match=message):
+        common_separator.prepare_mix(audio)
+
+
+def test_prepare_mix_accepts_nonempty_silent_numpy_audio(common_separator):
+    frames = 32
+
+    mix = common_separator.prepare_mix(np.zeros((frames, 2), dtype=np.float32))
+
+    assert mix.shape == (2, frames)
+    assert np.isfinite(mix).all()
+    assert np.count_nonzero(mix) == 0
+
+
 def test_demucs_receives_finite_normalized_silent_audio():
     separator = Mock(spec=DemucsSeparator)
     separator.logger = Mock()
@@ -114,6 +140,7 @@ def test_demucs_receives_finite_normalized_silent_audio():
     assert np.isfinite(sources).all()
 
 
+@requires_ffmpeg
 def test_pydub_writer_exports_silent_stereo_audio(common_separator, tmp_path):
     frames = 441
 
@@ -127,7 +154,7 @@ def test_pydub_writer_exports_silent_stereo_audio(common_separator, tmp_path):
     assert info.samplerate == common_separator.sample_rate
 
 
-@pytest.mark.skipif(shutil.which("ffmpeg") is None, reason="FFmpeg is required for M4A encoding")
+@requires_ffmpeg
 def test_pydub_writer_exports_redecodable_near_silent_m4a(common_separator, tmp_path):
     frames = 4410
     common_separator.amplification_threshold = 0.0
@@ -142,6 +169,7 @@ def test_pydub_writer_exports_redecodable_near_silent_m4a(common_separator, tmp_
     assert abs(len(decoded) - 100) <= 30
 
 
+@requires_ffmpeg
 def test_pydub_writer_preserves_mono_audio(common_separator, tmp_path):
     frames = 441
 

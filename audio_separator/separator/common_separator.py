@@ -264,18 +264,17 @@ class CommonSeparator:
             mix = mix.T
             self.logger.debug(f"Transposed mix shape: {mix.shape}")
 
-        # If the original input was a filepath, check if the loaded mix is empty
-        if isinstance(audio_path, str):
-            if mix.size == 0:
-                error_msg = f"Audio file {audio_path} contains no audio frames"
-                self.logger.error(error_msg)
-                raise InvalidAudioDataError(error_msg)
-            elif not np.isfinite(mix).all():
-                error_msg = f"Audio file {audio_path} contains non-finite samples"
-                self.logger.error(error_msg)
-                raise InvalidAudioDataError(error_msg)
-            else:
-                self.logger.debug("Audio file is valid and contains audio frames.")
+        source_description = "Audio array" if isinstance(audio_path, np.ndarray) else f"Audio file {audio_path}"
+        if mix.size == 0:
+            error_msg = f"{source_description} contains no audio frames"
+            self.logger.error(error_msg)
+            raise InvalidAudioDataError(error_msg)
+        elif not np.isfinite(mix).all():
+            error_msg = f"{source_description} contains non-finite samples"
+            self.logger.error(error_msg)
+            raise InvalidAudioDataError(error_msg)
+        else:
+            self.logger.debug("Audio input is valid and contains audio frames.")
 
         # Ensure the mix is in stereo format
         if mix.ndim == 1:

@@ -56,7 +56,7 @@ SUPPORTED_AUDIO_EXTENSIONS = (".wav", ".flac", ".mp3", ".ogg", ".opus", ".m4a", 
 def _iter_directory_audio_files(directory):
     for root, _dirs, files in os.walk(directory):
         for filename in files:
-            if filename.endswith(SUPPORTED_AUDIO_EXTENSIONS):
+            if filename.lower().endswith(SUPPORTED_AUDIO_EXTENSIONS):
                 yield os.path.join(root, filename)
 
 

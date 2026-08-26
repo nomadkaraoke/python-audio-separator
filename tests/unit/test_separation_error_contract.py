@@ -1,6 +1,7 @@
 """Public separation error propagation and batch aggregation contracts."""
 
 import logging
+import os
 from pathlib import Path
 from unittest.mock import Mock, patch
 
@@ -58,8 +59,20 @@ def test_directory_processes_accessible_files_before_raising_batch_error():
             Separator.separate(separator, "/music")
 
     assert raised.value.successful_files == ["good_(Vocals).wav"]
-    assert raised.value.failures == [("/music/bad.wav", export_error)]
+    assert raised.value.failures == [(os.path.join("/music", "bad.wav"), export_error)]
     assert separator._separate_file.call_count == 2
+
+
+def test_directory_processes_uppercase_audio_extensions(tmp_path):
+    separator = separator_double()
+    track_path = tmp_path / "TRACK.MP3"
+    track_path.touch()
+    separator._separate_file.return_value = ["TRACK_(Vocals).wav"]
+
+    output_files = Separator.separate(separator, str(tmp_path))
+
+    assert output_files == ["TRACK_(Vocals).wav"]
+    separator._separate_file.assert_called_once_with(str(track_path), None)
 
 
 def test_cleanup_failures_do_not_mask_writer_error_or_skip_later_cleanup():
