@@ -26,6 +26,7 @@ from tqdm import tqdm
 from audio_separator.separator.audio_io import atomic_output_path, validate_audio_source
 from audio_separator.separator.ensembler import Ensembler
 from audio_separator.separator.exceptions import AudioExportError, BatchSeparationError, InvalidAudioDataError
+from audio_separator.separator.execution_policy import AUTOCAST, FP32, NATIVE_FP16
 
 # Mapping of common stem name variations to canonical names for ensemble grouping.
 STEM_NAME_MAP = {
@@ -84,7 +85,9 @@ class Separator:
         invert_using_spec (bool): Flag to invert using spectrogram.
         sample_rate (int): The sample rate of the audio.
         use_soundfile (bool): Use soundfile for audio writing, can solve OOM issues.
-        use_autocast (bool): Flag to use PyTorch autocast for faster inference.
+        use_autocast (bool): Use PyTorch autocast when the loaded model and device support it.
+        use_torch_compile (bool): Compile verified repeated model blocks when supported.
+        use_native_fp16 (bool): Convert a verified model to native float16 inference when supported.
 
     MDX Architecture Specific Attributes:
         hop_length (int): The hop length for STFT.
@@ -141,8 +144,13 @@ class Separator:
         ensemble_weights=None,
         ensemble_preset=None,
         info_only=False,
+        use_torch_compile=False,
+        use_native_fp16=False,
     ):
         """Initialize the separator."""
+        if use_autocast and use_native_fp16:
+            raise ValueError("use_autocast and use_native_fp16 are mutually exclusive precision modes.")
+
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(log_level)
         self.log_level = log_level
@@ -222,6 +230,8 @@ class Separator:
 
         self.use_soundfile = use_soundfile
         self.use_autocast = use_autocast
+        self.use_native_fp16 = use_native_fp16
+        self.use_torch_compile = use_torch_compile
         self.use_directml = use_directml
 
         self.chunk_duration = chunk_duration
@@ -260,12 +270,29 @@ class Separator:
         self.model_instance = None
         self.model_filename = None
         self.model_filenames = []
+        self._loaded_model_filename = None
+        self._loaded_model_friendly_name = None
+        self._loaded_model_is_uvr_vip = False
 
         self.model_is_uvr_vip = False
         self.model_friendly_name = None
 
         if not info_only:
             self.setup_accelerated_inferencing_device()
+
+    @property
+    def effective_precision(self):
+        """Return the precision mode selected for the currently loaded model."""
+        if len(getattr(self, "model_filenames", ())) > 1:
+            return FP32
+        return getattr(self.model_instance, "effective_precision", FP32)
+
+    @property
+    def effective_torch_compile(self):
+        """Return whether regional compilation is active for the loaded model."""
+        if len(getattr(self, "model_filenames", ())) > 1:
+            return False
+        return bool(getattr(self.model_instance, "effective_torch_compile", False))
 
     VALID_ENSEMBLE_ALGORITHMS = [
         "avg_wave", "median_wave", "min_wave", "max_wave",
@@ -868,10 +895,17 @@ class Separator:
 
         return model_data
 
-    def load_model(self, model_filename="model_bs_roformer_ep_317_sdr_12.9755.ckpt"):
+    def load_model(self, model_filename="model_bs_roformer_ep_317_sdr_12.9755.ckpt", force_reload=False):
         """
         This method instantiates the architecture-specific separation class,
         loading the separation model into memory, downloading it first if necessary.
+
+        Consecutive calls with the same single model reuse the loaded instance. Set
+        ``force_reload`` to ``True`` after changing settings captured at load time.
+
+        Args:
+            model_filename (str or list): The model filename, or filenames for an ensemble.
+            force_reload (bool): Reload a matching single model instead of reusing it.
         """
         # If an ensemble preset was loaded and no explicit model list was provided, use preset models
         if self._ensemble_preset_models is not None and model_filename == "model_bs_roformer_ep_317_sdr_12.9755.ckpt":
@@ -885,89 +919,121 @@ class Separator:
                 return
             model_filename = model_filename[0]
 
-        self.model_filename = model_filename
-        self.model_filenames = [model_filename]
+        if not force_reload and self.model_instance is not None and self._loaded_model_filename == model_filename:
+            self.model_filename = model_filename
+            self.model_filenames = [model_filename]
+            self.model_friendly_name = self._loaded_model_friendly_name
+            self.model_is_uvr_vip = self._loaded_model_is_uvr_vip
+            self.logger.info(f"Model {model_filename} is already loaded; reusing the existing instance.")
+            return
 
         self.logger.info(f"Loading model {model_filename}...")
 
         load_model_start_time = time.perf_counter()
-
-        # Setting up the model path
-        model_filename, model_type, model_friendly_name, model_path, yaml_config_filename = self.download_model_files(model_filename)
-        model_name = model_filename.split(".")[0]
-        self.logger.debug(f"Model downloaded, friendly name: {model_friendly_name}, model_path: {model_path}")
-
-        if model_path.lower().endswith(".yaml"):
-            yaml_config_filename = model_path
-
-        if yaml_config_filename is not None:
-            model_data = self.load_model_data_from_yaml(yaml_config_filename)
-        else:
-            model_data = self.load_model_data_using_hash(model_path)
-
-        common_params = {
-            "logger": self.logger,
-            "log_level": self.log_level,
-            "torch_device": self.torch_device,
-            "torch_device_cpu": self.torch_device_cpu,
-            "torch_device_mps": self.torch_device_mps,
-            "onnx_execution_provider": self.onnx_execution_provider,
-            "model_name": model_name,
-            "model_path": model_path,
-            "model_data": model_data,
-            "output_format": self.output_format,
-            "output_bitrate": self.output_bitrate,
-            "output_dir": self.output_dir,
-            "normalization_threshold": self.normalization_threshold,
-            "amplification_threshold": self.amplification_threshold,
-            "output_single_stem": self.output_single_stem,
-            "invert_using_spec": self.invert_using_spec,
-            "sample_rate": self.sample_rate,
-            "use_soundfile": self.use_soundfile,
-        }
-
-        # Instantiate the appropriate separator class depending on the model type
-        separator_classes = {"MDX": "mdx_separator.MDXSeparator", "VR": "vr_separator.VRSeparator", "Demucs": "demucs_separator.DemucsSeparator", "MDXC": "mdxc_separator.MDXCSeparator"}
-
-        if model_type not in self.arch_specific_params or model_type not in separator_classes:
-            # Enhanced error message for Roformer models
-            if "roformer" in model_filename.lower() or (model_data and model_data.get("is_roformer", False)):
-                error_msg = (f"Roformer model type not properly configured: {model_type}. "
-                           f"This may indicate a configuration validation failure. "
-                           f"Please check the model file and YAML configuration.")
-                self.logger.error(error_msg)
-                raise ValueError(error_msg)
-            else:
-                raise ValueError(f"Model type not supported (yet): {model_type}")
-
-        if model_type == "Demucs" and sys.version_info < (3, 10):
-            raise Exception("Demucs models require Python version 3.10 or newer.")
-
-        self.logger.debug(f"Importing module for model type {model_type}: {separator_classes[model_type]}")
-
-        module_name, class_name = separator_classes[model_type].split(".")
-        module = importlib.import_module(f"audio_separator.separator.architectures.{module_name}")
-        separator_class = getattr(module, class_name)
-
-        self.logger.debug(f"Instantiating separator class for model type {model_type}: {separator_class}")
+        selected_model_filename = model_filename
+        previous_model_friendly_name = self.model_friendly_name
+        previous_model_is_uvr_vip = self.model_is_uvr_vip
 
         try:
-            self.model_instance = separator_class(common_config=common_params, arch_config=self.arch_specific_params[model_type])
-        except Exception as e:
-            # Enhanced error handling for Roformer models
-            if "roformer" in model_filename.lower() or (model_data and model_data.get("is_roformer", False)):
-                error_msg = (f"Failed to instantiate Roformer model: {e}. "
-                           f"This may be due to missing parameters or configuration validation failures.")
-                self.logger.error(error_msg)
-                raise RuntimeError(error_msg) from e
-            else:
-                raise
+            # Setting up the model path
+            model_filename, model_type, model_friendly_name, model_path, yaml_config_filename = self.download_model_files(model_filename)
+            model_is_uvr_vip = self.model_is_uvr_vip
+            model_name = model_filename.split(".")[0]
+            self.logger.debug(f"Model downloaded, friendly name: {model_friendly_name}, model_path: {model_path}")
 
-        # Log Roformer implementation version if applicable
-        if hasattr(self.model_instance, 'is_roformer_model') and self.model_instance.is_roformer_model:
-            roformer_stats = self.model_instance.get_roformer_loading_stats()
-            if roformer_stats:
-                self.logger.info(f"Roformer loading stats: {roformer_stats}")
+            if model_path.lower().endswith(".yaml"):
+                yaml_config_filename = model_path
+
+            if yaml_config_filename is not None:
+                model_data = self.load_model_data_from_yaml(yaml_config_filename)
+            else:
+                model_data = self.load_model_data_using_hash(model_path)
+
+            common_params = {
+                "logger": self.logger,
+                "log_level": self.log_level,
+                "torch_device": self.torch_device,
+                "torch_device_cpu": self.torch_device_cpu,
+                "torch_device_mps": self.torch_device_mps,
+                "onnx_execution_provider": self.onnx_execution_provider,
+                "model_name": model_name,
+                "model_path": model_path,
+                "model_data": model_data,
+                "output_format": self.output_format,
+                "output_bitrate": self.output_bitrate,
+                "output_dir": self.output_dir,
+                "normalization_threshold": self.normalization_threshold,
+                "amplification_threshold": self.amplification_threshold,
+                "output_single_stem": self.output_single_stem,
+                "invert_using_spec": self.invert_using_spec,
+                "sample_rate": self.sample_rate,
+                "use_soundfile": self.use_soundfile,
+                "use_autocast": self.use_autocast,
+                "use_native_fp16": self.use_native_fp16,
+                "use_torch_compile": self.use_torch_compile,
+            }
+
+            # Instantiate the appropriate separator class depending on the model type
+            separator_classes = {"MDX": "mdx_separator.MDXSeparator", "VR": "vr_separator.VRSeparator", "Demucs": "demucs_separator.DemucsSeparator", "MDXC": "mdxc_separator.MDXCSeparator"}
+
+            if model_type not in self.arch_specific_params or model_type not in separator_classes:
+                # Enhanced error message for Roformer models
+                if "roformer" in model_filename.lower() or (model_data and model_data.get("is_roformer", False)):
+                    error_msg = (f"Roformer model type not properly configured: {model_type}. "
+                               f"This may indicate a configuration validation failure. "
+                               f"Please check the model file and YAML configuration.")
+                    self.logger.error(error_msg)
+                    raise ValueError(error_msg)
+                else:
+                    raise ValueError(f"Model type not supported (yet): {model_type}")
+
+            if model_type == "Demucs" and sys.version_info < (3, 10):
+                raise Exception("Demucs models require Python version 3.10 or newer.")
+
+            self.logger.debug(f"Importing module for model type {model_type}: {separator_classes[model_type]}")
+
+            module_name, class_name = separator_classes[model_type].split(".")
+            module = importlib.import_module(f"audio_separator.separator.architectures.{module_name}")
+            separator_class = getattr(module, class_name)
+
+            self.logger.debug(f"Instantiating separator class for model type {model_type}: {separator_class}")
+
+            try:
+                model_instance = separator_class(common_config=common_params, arch_config=self.arch_specific_params[model_type])
+            except Exception as e:
+                # Enhanced error handling for Roformer models
+                if "roformer" in model_filename.lower() or (model_data and model_data.get("is_roformer", False)):
+                    error_msg = (f"Failed to instantiate Roformer model: {e}. "
+                               f"This may be due to missing parameters or configuration validation failures.")
+                    self.logger.error(error_msg)
+                    raise RuntimeError(error_msg) from e
+                else:
+                    raise
+
+            resolve_policy = getattr(model_instance, "resolve_execution_policy", None)
+            if callable(resolve_policy) and not getattr(model_instance, "_execution_policy_resolved", False):
+                resolve_policy(model_type.lower())
+
+            # Log Roformer implementation version if applicable
+            if hasattr(model_instance, 'is_roformer_model') and model_instance.is_roformer_model:
+                roformer_stats = model_instance.get_roformer_loading_stats()
+                if roformer_stats:
+                    self.logger.info(f"Roformer loading stats: {roformer_stats}")
+        except BaseException:
+            # Model discovery updates these fields; restore them with the prior
+            # selection so callers never observe a partially loaded model.
+            self.model_friendly_name = previous_model_friendly_name
+            self.model_is_uvr_vip = previous_model_is_uvr_vip
+            raise
+
+        self.model_instance = model_instance
+        self.model_filename = selected_model_filename
+        self.model_filenames = [selected_model_filename]
+        self._loaded_model_filename = model_filename
+        self.model_friendly_name = model_friendly_name
+        self.model_is_uvr_vip = model_is_uvr_vip
+        self._loaded_model_friendly_name = model_friendly_name
+        self._loaded_model_is_uvr_vip = model_is_uvr_vip
 
         # Log the completion of the model load process
         self.logger.debug("Loading model completed.")
@@ -1097,15 +1163,22 @@ class Separator:
         self.logger.debug(f"Normalization threshold set to {self.normalization_threshold}, waveform will be lowered to this max amplitude to avoid clipping.")
         self.logger.debug(f"Amplification threshold set to {self.amplification_threshold}, waveform will be scaled up to this max amplitude if below it.")
 
+        # Run separation using the policy resolved for the loaded model's actual
+        # inference device. This matters when an architecture falls back to CPU.
+        output_files = None
+        effective_precision = self.effective_precision
+        inference_device = getattr(self.model_instance, "torch_device", self.torch_device)
+        inference_device_type = getattr(inference_device, "type", str(inference_device))
         try:
-            # Run separation method for the loaded model with autocast enabled if supported by the device
-            output_files = None
-            if self.use_autocast and autocast_mode.is_autocast_available(self.torch_device.type):
-                self.logger.debug("Autocast available.")
-                with autocast_mode.autocast(self.torch_device.type):
+            if effective_precision == NATIVE_FP16:
+                self.logger.debug("Using native float16 inference.")
+                output_files = self.model_instance.separate(audio_file_path, custom_output_names)
+            elif effective_precision == AUTOCAST and inference_device_type != "privateuseone":
+                self.logger.debug("Using autocast inference on %s.", inference_device_type)
+                with autocast_mode.autocast(inference_device_type):
                     output_files = self.model_instance.separate(audio_file_path, custom_output_names)
             else:
-                self.logger.debug("Autocast unavailable.")
+                self.logger.debug("Using float32 inference.")
                 output_files = self.model_instance.separate(audio_file_path, custom_output_names)
         finally:
             # Clear per-file state even when inference or audio export fails.

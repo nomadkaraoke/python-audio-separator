@@ -164,7 +164,7 @@ class ConfigurationNormalizer:
         
         # Integer normalization
         elif key in ['dim', 'depth', 'num_stems', 'time_transformer_depth', 
-                    'freq_transformer_depth', 'dim_head', 'heads', 
+                    'freq_transformer_depth', 'linear_transformer_depth', 'dim_head', 'heads',
                     'mlp_expansion_factor', 'num_bands', 'sample_rate',
                     'stft_n_fft', 'stft_hop_length', 'stft_win_length',
                     'mask_estimator_depth']:

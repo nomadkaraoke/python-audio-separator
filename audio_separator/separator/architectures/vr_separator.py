@@ -110,6 +110,34 @@ class VRSeparator(CommonSeparator):
 
         self.logger.info("VR Separator initialisation complete")
 
+    def _ensure_model_loaded(self, nn_arch_size):
+        """Load VR weights once and retain them for subsequent separations."""
+        if isinstance(self.model_run, torch.nn.Module):
+            self.logger.debug("Reusing the loaded VR model.")
+            return
+
+        vr_5_1_models = [56817, 218409]
+        is_vr_51_model = nn_arch_size in vr_5_1_models or self.is_vr_51_model
+        if is_vr_51_model:
+            self.logger.debug("Using CascadedNet for VR 5.1 model...")
+            model_run = nets_new.CascadedNet(
+                self.model_params.param["bins"] * 2,
+                nn_arch_size,
+                nout=self.model_capacity[0],
+                nout_lstm=self.model_capacity[1],
+            )
+        else:
+            self.logger.debug("Determining model capacity...")
+            model_run = nets.determine_model_capacity(self.model_params.param["bins"] * 2, nn_arch_size)
+
+        # Publish the reusable module only after every loading step succeeds.
+        # Otherwise a retry could mistake a partial model for a ready one.
+        model_run.load_state_dict(torch.load(self.model_path, map_location="cpu"))
+        model_run.to(self.torch_device)
+        self.model_run = model_run
+        self.is_vr_51_model = is_vr_51_model
+        self.logger.debug("Model loaded and moved to device.")
+
     def separate(self, audio_file_path, custom_output_names=None):
         """
         Separates the audio file into primary and secondary sources based on the model's configuration.
@@ -157,22 +185,11 @@ class VRSeparator(CommonSeparator):
         self.logger.debug(f"Starting separation for input audio file {self.audio_file_path}...")
 
         nn_arch_sizes = [31191, 33966, 56817, 123821, 123812, 129605, 218409, 537238, 537227]  # default
-        vr_5_1_models = [56817, 218409]
         model_size = math.ceil(os.stat(self.model_path).st_size / 1024)
         nn_arch_size = min(nn_arch_sizes, key=lambda x: abs(x - model_size))
         self.logger.debug(f"Model size determined: {model_size}, NN architecture size: {nn_arch_size}")
 
-        if nn_arch_size in vr_5_1_models or self.is_vr_51_model:
-            self.logger.debug("Using CascadedNet for VR 5.1 model...")
-            self.model_run = nets_new.CascadedNet(self.model_params.param["bins"] * 2, nn_arch_size, nout=self.model_capacity[0], nout_lstm=self.model_capacity[1])
-            self.is_vr_51_model = True
-        else:
-            self.logger.debug("Determining model capacity...")
-            self.model_run = nets.determine_model_capacity(self.model_params.param["bins"] * 2, nn_arch_size)
-
-        self.model_run.load_state_dict(torch.load(self.model_path, map_location="cpu"))
-        self.model_run.to(self.torch_device)
-        self.logger.debug("Model loaded and moved to device.")
+        self._ensure_model_loaded(nn_arch_size)
 
         y_spec, v_spec = self.inference_vr(self.loading_mix(), self.torch_device, self.aggressiveness)
         self.logger.debug("Inference completed.")

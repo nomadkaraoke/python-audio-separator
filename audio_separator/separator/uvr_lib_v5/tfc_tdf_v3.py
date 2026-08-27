@@ -2,6 +2,8 @@ import torch
 import torch.nn as nn
 from functools import partial
 
+from audio_separator.separator.uvr_lib_v5.device_utils import should_fallback_to_cpu_for_complex_ops
+
 class STFT:
     def __init__(self, n_fft, hop_length, dim_f, device):
         self.n_fft = n_fft
@@ -12,8 +14,9 @@ class STFT:
 
     def __call__(self, x):
         
-        x_is_mps = not x.device.type in ["cuda", "cpu"]
-        if x_is_mps:
+        original_device = x.device
+        should_fallback = should_fallback_to_cpu_for_complex_ops(original_device)
+        if should_fallback:
             x = x.cpu()
 
         window = self.window.to(x.device)
@@ -24,15 +27,16 @@ class STFT:
         x = x.permute([0, 3, 1, 2])
         x = x.reshape([*batch_dims, c, 2, -1, x.shape[-1]]).reshape([*batch_dims, c * 2, -1, x.shape[-1]])
 
-        if x_is_mps:
-            x = x.to(self.device)
+        if should_fallback:
+            x = x.to(original_device)
 
         return x[..., :self.dim_f, :]
 
     def inverse(self, x):
         
-        x_is_mps = not x.device.type in ["cuda", "cpu"]
-        if x_is_mps:
+        original_device = x.device
+        should_fallback = should_fallback_to_cpu_for_complex_ops(original_device)
+        if should_fallback:
             x = x.cpu()
 
         window = self.window.to(x.device)
@@ -47,8 +51,8 @@ class STFT:
         x = torch.istft(x, n_fft=self.n_fft, hop_length=self.hop_length, window=window, center=True)
         x = x.reshape([*batch_dims, 2, -1])
 
-        if x_is_mps:
-            x = x.to(self.device)
+        if should_fallback:
+            x = x.to(original_device)
 
         return x
 
@@ -265,5 +269,4 @@ class TFC_TDF_net(nn.Module):
         x = self.stft.inverse(x)
 
         return x
-
 

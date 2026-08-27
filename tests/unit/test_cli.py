@@ -43,6 +43,8 @@ def common_expected_args():
         "sample_rate": 44100,
         "use_soundfile": False,
         "use_autocast": False,
+        "use_native_fp16": False,
+        "use_torch_compile": False,
         "use_directml": False,
         "chunk_duration": None,
         "ensemble_algorithm": None,
@@ -277,6 +279,78 @@ def test_cli_use_autocast_argument(common_expected_args):
             expected_args["use_autocast"] = True
 
             # Assertions
+            mock_separator.assert_called_once_with(**expected_args)
+
+
+def test_cli_use_native_fp16_argument(common_expected_args):
+    test_args = ["cli.py", "test_audio.mp3", "--use_native_fp16"]
+    with patch("sys.argv", test_args):
+        with patch("audio_separator.separator.Separator") as mock_separator:
+            mock_separator_instance = mock_separator.return_value
+            mock_separator_instance.separate.return_value = ["output_file.mp3"]
+            main()
+
+            expected_args = common_expected_args.copy()
+            expected_args["use_native_fp16"] = True
+
+            mock_separator.assert_called_once_with(**expected_args)
+
+
+def test_cli_rejects_multiple_precision_modes():
+    test_args = ["cli.py", "test_audio.mp3", "--use_autocast", "--use_native_fp16"]
+
+    with patch("sys.argv", test_args), pytest.raises(SystemExit, match="2"):
+        main()
+
+
+@pytest.mark.parametrize(
+    ("precision_flag", "expected_key"),
+    [
+        ("--use_autocast", "use_autocast"),
+        ("--use_native_fp16", "use_native_fp16"),
+    ],
+)
+def test_cli_precision_mode_can_be_combined_with_torch_compile(
+    common_expected_args,
+    precision_flag,
+    expected_key,
+):
+    test_args = ["cli.py", "test_audio.mp3", precision_flag, "--use_torch_compile"]
+
+    with patch("sys.argv", test_args), patch("audio_separator.separator.Separator") as mock_separator:
+        mock_separator.return_value.separate.return_value = ["output_file.mp3"]
+        main()
+
+    expected_args = common_expected_args.copy()
+    expected_args[expected_key] = True
+    expected_args["use_torch_compile"] = True
+    mock_separator.assert_called_once_with(**expected_args)
+
+
+def test_cli_rejects_multiple_precision_modes_even_with_torch_compile():
+    test_args = [
+        "cli.py",
+        "test_audio.mp3",
+        "--use_autocast",
+        "--use_native_fp16",
+        "--use_torch_compile",
+    ]
+
+    with patch("sys.argv", test_args), pytest.raises(SystemExit, match="2"):
+        main()
+
+
+def test_cli_use_torch_compile_argument(common_expected_args):
+    test_args = ["cli.py", "test_audio.mp3", "--use_torch_compile"]
+    with patch("sys.argv", test_args):
+        with patch("audio_separator.separator.Separator") as mock_separator:
+            mock_separator_instance = mock_separator.return_value
+            mock_separator_instance.separate.return_value = ["output_file.mp3"]
+            main()
+
+            expected_args = common_expected_args.copy()
+            expected_args["use_torch_compile"] = True
+
             mock_separator.assert_called_once_with(**expected_args)
 
 

@@ -4,14 +4,28 @@ import sys
 
 import torch
 import numpy as np
+from rotary_embedding_torch import RotaryEmbedding
 from tqdm import tqdm
 from ml_collections import ConfigDict
 from scipy import signal
 
 from audio_separator.separator.common_separator import CommonSeparator
+from audio_separator.separator.execution_policy import NATIVE_FP16
 from audio_separator.separator.uvr_lib_v5 import spec_utils
+from audio_separator.separator.uvr_lib_v5.device_utils import mps_accumulation_budget_bytes, should_accumulate_on_device, supports_autocast
 from audio_separator.separator.uvr_lib_v5.tfc_tdf_v3 import TFC_TDF_net
 # Roformer direct constructors removed; loading handled via RoformerLoader in CommonSeparator.
+
+
+def _estimate_roformer_full_track_buffer_bytes(num_instruments, channels, samples, chunk_size):
+    """Estimate float32 overlap-add results, counters, and the chunk window."""
+    return (2 * num_instruments * channels * samples + chunk_size) * 4
+
+
+def _estimate_mdxc_full_track_buffer_bytes(num_stems, channels, padded_length):
+    """Estimate float32 padded inputs, concatenation temporaries, and outputs."""
+    full_track_copies = 2 + max(num_stems, 1)
+    return full_track_copies * channels * padded_length * 4
 
 
 def _mdxc_inference_device(torch_device, torch_device_cpu, logger):
@@ -140,15 +154,19 @@ class MDXCSeparator(CommonSeparator):
             if self.is_roformer:
                 # Use the RoformerLoader exclusively; no legacy fallback
                 self.logger.debug("Loading Roformer model via RoformerLoader...")
+                load_device = "cpu" if self.torch_device.type == "mps" and self.use_native_fp16 else str(self.torch_device)
                 result = self.roformer_loader.load_model(
                     model_path=self.model_path,
                     config=self.model_data,
-                    device=str(self.torch_device),
+                    device=load_device,
                 )
 
                 if getattr(result, "success", False) and getattr(result, "model", None) is not None:
                     self.model_run = result.model
+                    self.roformer_model_type = getattr(result, "model_info", {}).get("model_type")
+                    self._configure_model_precision()
                     self.model_run.to(self.torch_device).eval()
+                    self._configure_model_compilation()
                 else:
                     error_msg = getattr(result, "error_message", "RoformerLoader unsuccessful")
                     self.logger.error(f"Failed to load Roformer model: {error_msg}")
@@ -168,6 +186,106 @@ class MDXCSeparator(CommonSeparator):
             self.logger.error("An error occurred while loading the model file. This often occurs when the model file is corrupt or incomplete.")
             self.logger.error(f"Please try deleting the model file from {self.model_path} and run audio-separator again to re-download it.")
             sys.exit(1)
+
+    def _configure_model_precision(self):
+        """Apply the resolved precision policy for the loaded RoFormer model."""
+        model_family = self.roformer_model_type
+        if model_family is None:
+            class_name = self.model_run.__class__.__name__
+            model_family = {
+                "MelBandRoformer": "mel_band_roformer",
+                "BSRoformer": "bs_roformer",
+            }.get(class_name, "roformer")
+
+        self.resolve_execution_policy(model_family)
+        self.is_native_fp16 = self.effective_precision == NATIVE_FP16
+        if not self.is_native_fp16:
+            return
+
+        # Preserve full-precision rotary angles before converting the rest of the model.
+        rotary_frequencies = [
+            (module, module.freqs.detach().float().clone())
+            for module in self.model_run.modules()
+            if isinstance(module, RotaryEmbedding)
+        ]
+        self.model_run.half()
+        for rotary_embedding, frequencies in rotary_frequencies:
+            rotary_embedding.freqs.data = frequencies.to(rotary_embedding.freqs.device)
+            rotary_embedding.cached_freqs = None
+
+        self.logger.info("Using native float16 for %s on %s.", model_family, self.torch_device.type)
+
+    def _configure_model_compilation(self):
+        """Compile repeated RoFormer transformer blocks when the resolved policy allows it."""
+        self.is_torch_compiled = False
+        self.effective_torch_compile = False
+        if not self._should_torch_compile:
+            return
+
+        # Resolve this once before Dynamo traces the shared rotary helper.
+        supports_autocast(self.torch_device)
+
+        transformer_blocks = self._regional_compile_targets()
+        if not all(callable(getattr(transformer, "compile", None)) for transformer in transformer_blocks):
+            self.logger.warning("Skipping regional torch.compile: this PyTorch build does not provide Module.compile().")
+            return
+        if not all(hasattr(transformer, "_compiled_call_impl") for transformer in transformer_blocks):
+            self.logger.warning(
+                "Skipping regional torch.compile: this PyTorch build cannot safely restore eager module calls."
+            )
+            return
+
+        self._regional_compile_original_calls = [
+            (transformer, transformer._compiled_call_impl) for transformer in transformer_blocks
+        ]
+
+        try:
+            for transformer in transformer_blocks:
+                transformer.compile()
+        except Exception as exc:
+            self._disable_model_compilation()
+            self.logger.warning(f"Regional torch.compile could not be enabled; continuing with eager inference: {exc}")
+            return
+
+        self.is_torch_compiled = True
+        self.effective_torch_compile = True
+        model_family = getattr(self, "roformer_model_type", self.model_run.__class__.__name__)
+        device_type = getattr(getattr(self, "torch_device", None), "type", "unknown")
+        self.logger.info("Using regional torch.compile for %s on %s.", model_family, device_type)
+
+    def _regional_compile_targets(self):
+        """Return the repeated transformer blocks used by regional compilation."""
+        return [transformer for layer in self.model_run.layers for transformer in layer]
+
+    def _disable_model_compilation(self):
+        """Restore regional compile targets to their pre-compilation call implementations."""
+        original_calls = getattr(self, "_regional_compile_original_calls", None)
+        if original_calls is None:
+            original_calls = [
+                (transformer, None)
+                for transformer in self._regional_compile_targets()
+                if hasattr(transformer, "_compiled_call_impl")
+            ]
+        for transformer, original_call in original_calls:
+            transformer._compiled_call_impl = original_call
+        self.is_torch_compiled = False
+        self.effective_torch_compile = False
+
+    def _run_roformer_model(self, part):
+        """Run one RoFormer chunk and restore pre-compilation calls after a lazy compile failure."""
+        try:
+            return self.model_run(part.unsqueeze(0))[0]
+        except Exception as exc:
+            if not getattr(self, "is_torch_compiled", False):
+                raise
+
+            self._disable_model_compilation()
+            output = self.model_run(part.unsqueeze(0))[0]
+            self.logger.warning(
+                "Regional torch.compile failed during inference; retried this chunk successfully using the "
+                f"pre-compilation module calls: {exc}"
+            )
+            return output
 
     def separate(self, audio_file_path, custom_output_names=None):
         """
@@ -190,19 +308,15 @@ class MDXCSeparator(CommonSeparator):
         self.logger.debug(f"Preparing mix for input audio file {self.audio_file_path}...")
         mix = self.prepare_mix(self.audio_file_path)
 
-        # Check if audio is shorter than threshold
+        # Short inputs need the configured segment size, but this automatic
+        # override must not persist when the separator instance is reused.
         audio_duration_seconds = mix.shape[1] / self.sample_rate
-        if audio_duration_seconds < 10.0:
-            # Only change and warn if it wasn't already set by the user
-            if not self.override_model_segment_size:
-                self.override_model_segment_size = True
-                self.logger.warning(f"Audio duration ({audio_duration_seconds:.2f}s) is less than 10 seconds.")
-                self.logger.warning("Automatically enabling override_model_segment_size for better processing of short audio.")
+        override_model_segment_size = self._use_model_segment_override(audio_duration_seconds)
 
         self.logger.debug("Normalizing mix before demixing...")
         mix = spec_utils.normalize(wave=mix, max_peak=self.normalization_threshold, min_peak=self.amplification_threshold)
 
-        source = self.demix(mix=mix)
+        source = self.demix(mix=mix, override_model_segment_size=override_model_segment_size)
         self.logger.debug("Demixing completed.")
 
         output_files = []
@@ -281,6 +395,14 @@ class MDXCSeparator(CommonSeparator):
 
         return output_files
 
+    def _use_model_segment_override(self, audio_duration_seconds: float) -> bool:
+        """Resolve the segment-size override for one input without mutating the separator."""
+        is_short_audio = audio_duration_seconds < 10.0
+        if is_short_audio and not self.override_model_segment_size:
+            self.logger.warning(f"Audio duration ({audio_duration_seconds:.2f}s) is less than 10 seconds.")
+            self.logger.warning("Automatically enabling override_model_segment_size for better processing of short audio.")
+        return self.override_model_segment_size or is_short_audio
+
     def pitch_fix(self, source, sr_pitched, orig_mix):
         """
         Change the pitch of the source audio by a number of semitones.
@@ -308,16 +430,39 @@ class MDXCSeparator(CommonSeparator):
             result[..., start : start + safe_len] += x[..., :safe_len] * weights[:safe_len]
         return result
 
-    def demix(self, mix: np.ndarray) -> dict:
+    @staticmethod
+    def _roformer_chunk_starts(audio_length: int, chunk_size: int, step: int) -> list[int]:
+        """Return a chunk schedule that covers the input without repeating the tail chunk."""
+        if audio_length < 0:
+            raise ValueError("audio_length must be greater than or equal to 0.")
+        if chunk_size <= 0:
+            raise ValueError("chunk_size must be greater than 0.")
+        if step <= 0 or step > chunk_size:
+            raise ValueError("step must be greater than 0 and less than or equal to chunk_size.")
+
+        starts = []
+        for offset in range(0, audio_length, step):
+            if offset + chunk_size >= audio_length:
+                tail_start = max(audio_length - chunk_size, 0)
+                if not starts or starts[-1] != tail_start:
+                    starts.append(tail_start)
+                break
+            starts.append(offset)
+        return starts
+
+    def demix(self, mix: np.ndarray, override_model_segment_size: bool | None = None) -> dict:
         """
         Demixes the input mix into primary and secondary sources using the model and model data.
 
         Args:
             mix (np.ndarray): The mix to be demixed.
+            override_model_segment_size (bool | None): Segment-size override for this input.
         Returns:
             dict: A dictionary containing the demixed sources.
         """
         orig_mix = mix
+        if override_model_segment_size is None:
+            override_model_segment_size = self.override_model_segment_size
 
         if self.pitch_shift != 0:
             self.logger.debug(f"Shifting pitch by -{self.pitch_shift} semitones...")
@@ -328,7 +473,7 @@ class MDXCSeparator(CommonSeparator):
 
             mix = torch.tensor(mix, dtype=torch.float32)
 
-            if self.override_model_segment_size:
+            if override_model_segment_size:
                 mdx_segment_size = self.segment_size
                 self.logger.debug(f"Using configured segment size: {mdx_segment_size}")
             else:
@@ -360,53 +505,58 @@ class MDXCSeparator(CommonSeparator):
             step = chunk_size if desired_step <= 0 else min(desired_step, chunk_size)
             self.logger.debug(f"Step: {step} (desired={desired_step})")
 
-            # Create a weighting table and convert it to a PyTorch tensor
-            window = torch.tensor(signal.windows.hamming(chunk_size), dtype=torch.float32)
-
             device = next(self.model_run.parameters()).device
+            req_shape = (len(self.model_data_cfgdict.training.instruments),) + tuple(mix.shape)
+            estimated_buffer_bytes = _estimate_roformer_full_track_buffer_bytes(
+                num_instruments=req_shape[0],
+                channels=req_shape[1],
+                samples=req_shape[2],
+                chunk_size=chunk_size,
+            )
+            accumulate_on_device = should_accumulate_on_device(device, estimated_buffer_bytes)
+            accumulation_device = device if accumulate_on_device else torch.device("cpu")
+            if device.type == "mps" and not accumulate_on_device:
+                self.logger.info(
+                    "Keeping the overlap-add result/counter buffers on CPU for this input to limit MPS memory use; "
+                    "model inference still runs on MPS "
+                    f"(estimated full-track buffers: {estimated_buffer_bytes / 1024**3:.2f} GiB, "
+                    f"budget: {mps_accumulation_budget_bytes() / 1024**3:.2f} GiB)."
+                )
 
+            # Keep overlap-add buffers next to the model on unified-memory MPS devices.
+            window = torch.tensor(signal.windows.hamming(chunk_size), dtype=torch.float32, device=accumulation_device)
 
             with torch.no_grad():
-                req_shape = (len(self.model_data_cfgdict.training.instruments),) + tuple(mix.shape)
-                result = torch.zeros(req_shape, dtype=torch.float32)
-                counter = torch.zeros(req_shape, dtype=torch.float32)
+                result = torch.zeros(req_shape, dtype=torch.float32, device=accumulation_device)
+                counter = torch.zeros(req_shape, dtype=torch.float32, device=accumulation_device)
 
-                for i in tqdm(range(0, mix.shape[1], step)):
-                    part = mix[:, i : i + chunk_size]
+                chunk_starts = self._roformer_chunk_starts(mix.shape[1], chunk_size, step)
+                for start_idx in tqdm(chunk_starts):
+                    part = mix[:, start_idx : start_idx + chunk_size]
                     length = part.shape[-1]
-                    if i + chunk_size > mix.shape[1]:
-                        part = mix[:, -chunk_size:]
-                        length = chunk_size
                     part = part.to(device)
-                    x = self.model_run(part.unsqueeze(0))[0]
-                    x = x.cpu()
+                    x = self._run_roformer_model(part)
+                    if x.device != accumulation_device:
+                        x = x.to(accumulation_device)
                     _release_dml_memory_if_needed(device)
-                    # Perform overlap_add on CPU
-                    if i + chunk_size > mix.shape[1]:
-                        # Fixed to correctly add to the end of the tensor
-                        start_idx = result.shape[-1] - chunk_size
-                        result = self.overlap_add(result, x, window, start_idx, length)
-                        safe_len = min(length, x.shape[-1], window.shape[0])
-                        if safe_len > 0:
-                            counter[..., start_idx : start_idx + safe_len] += window[:safe_len]
-                    else:
-                        result = self.overlap_add(result, x, window, i, length)
-                        safe_len = min(length, x.shape[-1], window.shape[0])
-                        if safe_len > 0:
-                            counter[..., i : i + safe_len] += window[:safe_len]
+                    result = self.overlap_add(result, x, window, start_idx, length)
+                    safe_len = min(length, x.shape[-1], window.shape[0])
+                    if safe_len > 0:
+                        counter[..., start_idx : start_idx + safe_len] += window[:safe_len]
 
-            inferenced_outputs = result / counter.clamp(min=1e-10)
+            counter.clamp_(min=1e-10)
+            result.div_(counter)
+            inferenced_outputs = result
+            del counter
 
         else:
-            mix = torch.tensor(mix, dtype=torch.float32)
-
             try:
                 num_stems = self.model_run.num_target_instruments
             except AttributeError:
                 num_stems = self.model_run.module.num_target_instruments
             self.logger.debug(f"Number of stems: {num_stems}")
 
-            if self.override_model_segment_size:
+            if override_model_segment_size:
                 mdx_segment_size = self.segment_size
                 self.logger.debug(f"Using configured segment size: {mdx_segment_size}")
             else:
@@ -423,7 +573,32 @@ class MDXCSeparator(CommonSeparator):
             pad_size = hop_size - (mix_shape - chunk_size) % hop_size
             self.logger.debug(f"Pad size: {pad_size}")
 
-            mix = torch.cat([torch.zeros(2, chunk_size - hop_size), mix, torch.zeros(2, pad_size + chunk_size - hop_size)], 1)
+            padded_length = mix_shape + pad_size + 2 * (chunk_size - hop_size)
+            estimated_buffer_bytes = _estimate_mdxc_full_track_buffer_bytes(
+                num_stems=num_stems,
+                channels=mix.shape[0],
+                padded_length=padded_length,
+            )
+            accumulate_on_device = should_accumulate_on_device(self.torch_device, estimated_buffer_bytes)
+            accumulation_device = self.torch_device if accumulate_on_device else torch.device("cpu")
+            if self.torch_device.type == "mps" and not accumulate_on_device:
+                self.logger.info(
+                    "Keeping the padded mix and accumulated_outputs on CPU for this input to limit MPS memory use; "
+                    "model inference still runs on MPS "
+                    f"(estimated full-track buffers: {estimated_buffer_bytes / 1024**3:.2f} GiB, "
+                    f"budget: {mps_accumulation_budget_bytes() / 1024**3:.2f} GiB)."
+                )
+
+            mix = torch.tensor(mix, dtype=torch.float32, device=accumulation_device)
+
+            mix = torch.cat(
+                [
+                    torch.zeros(2, chunk_size - hop_size, device=accumulation_device),
+                    mix,
+                    torch.zeros(2, pad_size + chunk_size - hop_size, device=accumulation_device),
+                ],
+                1,
+            )
             self.logger.debug(f"Mix shape: {mix.shape}")
 
             chunks = mix.unfold(1, chunk_size, hop_size).transpose(0, 1)
@@ -435,7 +610,9 @@ class MDXCSeparator(CommonSeparator):
             # accumulated_outputs is used to accumulate the output from processing each batch of chunks through the model.
             # It starts as a tensor of zeros and is updated in-place as the model processes each batch.
             # The variable holds the combined result of all processed batches, which, after post-processing, represents the separated audio sources.
-            accumulated_outputs = torch.zeros(num_stems, *mix.shape) if num_stems > 1 else torch.zeros_like(mix)
+            accumulated_outputs = (
+                torch.zeros(num_stems, *mix.shape, device=accumulation_device) if num_stems > 1 else torch.zeros_like(mix)
+            )
 
             with torch.no_grad():
                 count = 0
@@ -448,17 +625,18 @@ class MDXCSeparator(CommonSeparator):
                     # Since single_batch_result can contain multiple output tensors (one for each piece of audio in the batch),
                     # individual_output is used to iterate through these tensors and accumulate them into accumulated_outputs.
                     for individual_output in single_batch_result:
-                        individual_output_cpu = individual_output.cpu()
-                        # Accumulate outputs on CPU
-                        accumulated_outputs[..., count * hop_size : count * hop_size + chunk_size] += individual_output_cpu
+                        if individual_output.device != accumulation_device:
+                            individual_output = individual_output.to(accumulation_device)
+                        accumulated_outputs[..., count * hop_size : count * hop_size + chunk_size] += individual_output
                         count += 1
 
                     del single_batch_result
                     _release_dml_memory_if_needed(self.torch_device)
 
             self.logger.debug("Calculating inferenced outputs based on accumulated outputs and overlap")
-            inferenced_outputs = accumulated_outputs[..., chunk_size - hop_size : -(pad_size + chunk_size - hop_size)] / self.overlap
-            self.logger.debug("Deleting accumulated outputs to free up memory")
+            accumulated_outputs.div_(self.overlap)
+            inferenced_outputs = accumulated_outputs[..., chunk_size - hop_size : -(pad_size + chunk_size - hop_size)]
+            self.logger.debug("Releasing the local accumulator reference after selecting the output view")
             del accumulated_outputs
 
         if num_stems > 1:

@@ -1,9 +1,57 @@
+# Poetry 2's hybrid PEP 621 layout publishes broad runtime dependency markers
+# while [tool.poetry] keeps the narrower cross-platform lock used by contributors.
 [build-system]
-requires = ["poetry-core"]
+requires = ["poetry-core>=2.0.0"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.poetry]
+[project]
 name = "audio-separator"
+requires-python = ">=3.10,!=3.14.1"
+dependencies = [
+    "audioop-lts>=0.2.1; python_version >= '3.13' and python_version < '4.0'",
+    "beartype>=0.18.5,<0.19.0",
+    "diffq>=0.2; sys_platform != 'win32'",
+    "diffq-fixed>=0.2; sys_platform == 'win32'",
+    "einops>=0.7",
+    "julius>=0.2",
+    "librosa>=0.10",
+    "ml_collections",
+    "numpy>=2",
+    "onnx-weekly",
+    "onnx2torch-py313>=1.6",
+    "packaging",
+    "pydub>=0.25",
+    "pyyaml",
+    "requests>=2",
+    "resampy>=0.4",
+    "rotary-embedding-torch>=0.6.1,<0.7.0",
+    "samplerate==0.1.0",
+    "scipy>=1.13.0,<2.0.0",
+    "six>=1.16",
+    "soundfile>=0.12",
+    "torch>=2.13,<3; sys_platform == 'darwin' and platform_machine == 'arm64'",
+    "torch>=2.3,<3; sys_platform != 'darwin' or platform_machine != 'arm64'",
+    "tqdm",
+]
+dynamic = [
+    "authors",
+    "classifiers",
+    "description",
+    "keywords",
+    "license",
+    "readme",
+    "scripts",
+    "urls",
+    "version",
+]
+
+[project.optional-dependencies]
+cpu = ["onnxruntime>=1.17"]
+gpu = ["onnxruntime-gpu>=1.17"]
+dml = ["onnxruntime-directml>=1.17", "torch_directml"]
+
+[tool.poetry]
+requires-poetry = ">=2.0.0"
 version = "0.45.0"
 description = "Easy to use audio stem separation, using various models from UVR trained primarily by @Anjok07"
 authors = ["Andrew Beveridge <andrew@beveridge.uk>"]
@@ -30,38 +78,17 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.10"
-requests = ">=2"
-numpy = ">=2"
-librosa = ">=0.10"
-samplerate = "0.1.0"
-six = ">=1.16"
-torch = ">=2.3"
-torch_directml = {version = "*", optional = true}
-tqdm = "*"
-pydub = ">=0.25"
-audioop-lts = { version = ">=0.2.1", python = "^3.13" }
-onnx-weekly = { version = "*" }
-onnx2torch-py313 = ">=1.6"
-onnxruntime = { version = ">=1.17", optional = true }
-onnxruntime-gpu = { version = ">=1.17", optional = true }
-onnxruntime-directml = { version = ">=1.17", optional = true }
-julius = ">=0.2"
-diffq-fixed = { version = ">=0.2", platform = "win32" }
-diffq = { version = ">=0.2", platform = "!=win32" }
-einops = ">=0.7"
-pyyaml = "*"
-ml_collections = "*"
-resampy = ">=0.4"
-beartype = "^0.18.5"
-rotary-embedding-torch = "^0.6.1"
-scipy = "^1.13.0"
-soundfile = ">=0.12"
-
-[tool.poetry.extras]
-cpu = ["onnxruntime"]
-gpu = ["onnxruntime-gpu"]
-dml = ["onnxruntime-directml", "torch_directml"]
+python = ">=3.10,!=3.14.1"
+# PyTorch 2.13 is the measured baseline on Apple Silicon and Linux/CUDA; its
+# Apple Silicon wheels target macOS 14 or newer. Preserve upstream's PyTorch
+# 2.8 / torchvision 0.23 lock on unvalidated Python <3.14 platforms.
+# Python 3.14 needs the first pair with cp314 wheels; torchvision 0.28 excludes
+# Python 3.14.1, which is mirrored by the project Python constraint above.
+torch = [
+    { version = ">=2.13,<3", markers = "sys_platform == 'linux' or (sys_platform == 'darwin' and platform_machine == 'arm64')" },
+    { version = ">=2.3,<2.9", markers = "sys_platform != 'linux' and (sys_platform != 'darwin' or platform_machine != 'arm64') and python_version < '3.14'" },
+    { version = ">=2.13,<3", markers = "sys_platform != 'linux' and (sys_platform != 'darwin' or platform_machine != 'arm64') and python_version >= '3.14'" },
+]
 
 [tool.poetry.scripts]
 audio-separator = 'audio_separator.utils.cli:main'

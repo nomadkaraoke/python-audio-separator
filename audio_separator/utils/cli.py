@@ -60,7 +60,18 @@ def main():
     single_stem_help = "Output only single stem, e.g. Instrumental, Vocals, Drums, Bass, Guitar, Piano, Other. Example: --single_stem=Instrumental"
     sample_rate_help = "Modify the sample rate of the output audio (default: %(default)s). Example: --sample_rate=44100"
     use_soundfile_help = "Use soundfile to write audio output (default: %(default)s). Example: --use_soundfile"
-    use_autocast_help = "Use PyTorch autocast for faster inference (default: %(default)s). Do not use for CPU inference. Example: --use_autocast"
+    use_autocast_help = (
+        "Use PyTorch autocast when supported (default: %(default)s). Example: --use_autocast"
+    )
+    use_native_fp16_help = (
+        "Use native float16 for verified model/device combinations (default: %(default)s). "
+        "Mutually exclusive with --use_autocast. Example: --use_native_fp16"
+    )
+    use_torch_compile_help = (
+        "Compile verified repeated model blocks when supported (default: %(default)s). "
+        "Best for long inputs or repeated same-shape runs; a fresh compiler cache can make "
+        "the first run slower. Example: --use_torch_compile"
+    )
     use_directml_help = "Use DirectML for hardware-accelerated inference on Windows AMD/Intel GPUs (experimental; requires the 'dml' extra). Example: --use_directml"
     chunk_duration_help = "Split audio into chunks of this duration in seconds (default: %(default)s = no chunking). Useful for processing very long audio files on systems with limited memory. Recommended: 600 (10 minutes) for files >1 hour. Chunks are concatenated without overlap/crossfade. Example: --chunk_duration=600"
     ensemble_algorithm_help = "Algorithm to use for ensembling multiple models (default: avg_wave). Choices: avg_wave, median_wave, min_wave, max_wave, avg_fft, median_fft, min_fft, max_fft, uvr_max_spec, uvr_min_spec, ensemble_wav. Example: --ensemble_algorithm=uvr_max_spec"
@@ -76,7 +87,10 @@ def main():
     common_params.add_argument("--single_stem", default=None, help=single_stem_help)
     common_params.add_argument("--sample_rate", type=int, default=44100, help=sample_rate_help)
     common_params.add_argument("--use_soundfile", action="store_true", help=use_soundfile_help)
-    common_params.add_argument("--use_autocast", action="store_true", help=use_autocast_help)
+    precision_params = common_params.add_mutually_exclusive_group()
+    precision_params.add_argument("--use_autocast", action="store_true", help=use_autocast_help)
+    precision_params.add_argument("--use_native_fp16", action="store_true", help=use_native_fp16_help)
+    common_params.add_argument("--use_torch_compile", action="store_true", help=use_torch_compile_help)
     common_params.add_argument("--use_directml", action="store_true", help=use_directml_help)
     common_params.add_argument("--chunk_duration", type=float, default=None, help=chunk_duration_help)
     common_params.add_argument(
@@ -253,6 +267,8 @@ def main():
         sample_rate=args.sample_rate,
         use_soundfile=args.use_soundfile,
         use_autocast=args.use_autocast,
+        use_native_fp16=args.use_native_fp16,
+        use_torch_compile=args.use_torch_compile,
         use_directml=args.use_directml,
         chunk_duration=args.chunk_duration,
         ensemble_algorithm=args.ensemble_algorithm,

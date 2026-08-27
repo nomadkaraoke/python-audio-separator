@@ -113,6 +113,7 @@ class MDXSeparator(CommonSeparator):
         self.logger.debug("Loading ONNX model for inference...")
 
         if self.segment_size == self.dim_t:
+            self.uses_pytorch_inference = False
             ort_session_options = ort.SessionOptions()
             if self.log_level > 10:
                 ort_session_options.log_severity_level = 3
