@@ -287,10 +287,16 @@ def combine_spectrograms(specs, mp, is_v51_model=False):
     return np.asfortranarray(spec_c)
 
 
-def wave_to_spectrogram(wave, hop_length, n_fft, mp, band, is_v51_model=False):
+def wave_to_spectrogram(wave, hop_length, n_fft, mp, band, is_v51_model=False, pad_to_hop=False):
 
     if wave.ndim == 1:
         wave = np.asfortranarray([wave, wave])
+
+    if pad_to_hop:
+        # Cover incomplete final hops with a centered frame so ISTFT does not
+        # normalize the filtered right edge against a near-zero window sum.
+        padded_length = math.ceil(wave.shape[-1] / hop_length) * hop_length
+        wave = librosa.util.fix_length(wave, size=padded_length, axis=-1)
 
     if not is_v51_model:
         if mp.param["reverse"]:
