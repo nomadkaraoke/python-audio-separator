@@ -52,7 +52,7 @@ dml = ["onnxruntime-directml>=1.17", "torch_directml"]
 
 [tool.poetry]
 requires-poetry = ">=2.0.0"
-version = "0.45.0"
+version = "0.46.0"
 description = "Easy to use audio stem separation, using various models from UVR trained primarily by @Anjok07"
 authors = ["Andrew Beveridge <andrew@beveridge.uk>"]
 license = "MIT"
