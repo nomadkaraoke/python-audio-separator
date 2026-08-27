@@ -188,8 +188,8 @@ def separate_audio_function(
     # MDXC parameters
     mdxc_segment_size: int = 256,
     mdxc_override_model_segment_size: bool = False,
-    mdxc_overlap: int = 8,
-    mdxc_batch_size: int = 1,
+    mdxc_overlap: Optional[int] = None,
+    mdxc_batch_size: Optional[int] = None,
     mdxc_pitch_shift: int = 0,
 ) -> dict:
     """
@@ -575,8 +575,8 @@ async def separate_audio(
     # MDXC parameters
     mdxc_segment_size: int = Form(256, description="MDXC segment size"),
     mdxc_override_model_segment_size: bool = Form(False, description="Override MDXC model segment size"),
-    mdxc_overlap: int = Form(8, description="MDXC overlap"),
-    mdxc_batch_size: int = Form(1, description="MDXC batch size"),
+    mdxc_overlap: Optional[int] = Form(None, description="MDXC overlap"),
+    mdxc_batch_size: Optional[int] = Form(None, description="MDXC batch size"),
     mdxc_pitch_shift: int = Form(0, description="MDXC pitch shift"),
 ) -> dict:
     """

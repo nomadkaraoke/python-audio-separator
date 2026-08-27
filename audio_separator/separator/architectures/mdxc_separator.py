@@ -107,8 +107,26 @@ class MDXCSeparator(CommonSeparator):
         # The segment size is set based on the value provided in a chosen model's associated config file (yaml).
         self.override_model_segment_size = arch_config.get("override_model_segment_size", False)
 
-        self.overlap = arch_config.get("overlap", 8)
-        self.batch_size = arch_config.get("batch_size", 1)
+        inference_config = self.model_data.get("inference", {})
+        overlap = arch_config.get("overlap")
+        if overlap is None:
+            overlap = inference_config.get("num_overlap")
+        if overlap is None:
+            overlap = 8
+
+        batch_size = arch_config.get("batch_size")
+        if batch_size is None:
+            batch_size = inference_config.get("batch_size")
+        if batch_size is None:
+            batch_size = 1
+
+        if overlap <= 0:
+            raise ValueError("MDXC overlap must be greater than zero")
+        if batch_size <= 0:
+            raise ValueError("MDXC batch size must be greater than zero")
+
+        self.overlap = overlap
+        self.batch_size = batch_size
 
         # Amount of pitch shift to apply during processing (this does NOT affect the pitch of the output audio):
         # • Whole numbers indicate semitones.
@@ -499,11 +517,11 @@ class MDXCSeparator(CommonSeparator):
                 f"Chunk size: {chunk_size} (using stft_hop_length={stft_hop_len} and dim_t={mdx_segment_size})"
             )
 
-            # Align step to chunk_size by default for Roformer to avoid stride mismatches
-            # If a user-specified overlap (in seconds) results in a step larger than chunk_size, clamp it
-            desired_step = int(self.overlap * self.model_data_cfgdict.audio.sample_rate)
-            step = chunk_size if desired_step <= 0 else min(desired_step, chunk_size)
-            self.logger.debug(f"Step: {step} (desired={desired_step})")
+            # MDXC overlap is the number of overlapping prediction windows.
+            step = chunk_size // self.overlap
+            if step <= 0:
+                raise ValueError(f"MDXC overlap ({self.overlap}) must not exceed chunk size ({chunk_size})")
+            self.logger.debug(f"Step: {step} (overlap={self.overlap})")
 
             device = next(self.model_run.parameters()).device
             req_shape = (len(self.model_data_cfgdict.training.instruments),) + tuple(mix.shape)

@@ -137,8 +137,8 @@ def main():
     mdxc_group = separate_parser.add_argument_group("MDXC Architecture Parameters")
     mdxc_group.add_argument("--mdxc_segment_size", type=int, default=256, help="MDXC segment size (default: %(default)s)")
     mdxc_group.add_argument("--mdxc_override_model_segment_size", action="store_true", help="Override MDXC model segment size")
-    mdxc_group.add_argument("--mdxc_overlap", type=int, default=8, help="MDXC overlap (default: %(default)s)")
-    mdxc_group.add_argument("--mdxc_batch_size", type=int, default=1, help="MDXC batch size (default: %(default)s)")
+    mdxc_group.add_argument("--mdxc_overlap", type=int, default=None, help="MDXC overlap (default: model config, falling back to 8)")
+    mdxc_group.add_argument("--mdxc_batch_size", type=int, default=None, help="MDXC batch size (default: model config, falling back to 1)")
     mdxc_group.add_argument("--mdxc_pitch_shift", type=int, default=0, help="MDXC pitch shift (default: %(default)s)")
 
     # Status command

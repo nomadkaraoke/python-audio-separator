@@ -73,6 +73,22 @@ class TestAudioSeparatorAPIClient:
         assert call_args[0][0] == "https://test-api.example.com/separate"
         assert "files" in call_args[1]
         assert "data" in call_args[1]
+        assert "mdxc_overlap" not in call_args[1]["data"]
+        assert "mdxc_batch_size" not in call_args[1]["data"]
+
+    @patch("requests.Session.post")
+    @patch("builtins.open", new_callable=mock_open, read_data=b"fake audio content")
+    def test_separate_audio_with_mdxc_overrides(self, mock_file, mock_post, api_client, mock_audio_file):
+        mock_response = Mock()
+        mock_response.json.return_value = {"task_id": "test-task-123", "status": "submitted"}
+        mock_response.raise_for_status.return_value = None
+        mock_post.return_value = mock_response
+
+        api_client.separate_audio(mock_audio_file, mdxc_overlap=4, mdxc_batch_size=2)
+
+        data = mock_post.call_args[1]["data"]
+        assert data["mdxc_overlap"] == 4
+        assert data["mdxc_batch_size"] == 2
 
     @patch("requests.Session.post")
     @patch("builtins.open", new_callable=mock_open, read_data=b"fake audio content")

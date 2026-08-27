@@ -67,8 +67,8 @@ class AudioSeparatorAPIClient:
         # MDXC parameters
         mdxc_segment_size: int = 256,
         mdxc_override_model_segment_size: bool = False,
-        mdxc_overlap: int = 8,
-        mdxc_batch_size: int = 1,
+        mdxc_overlap: Optional[int] = None,
+        mdxc_batch_size: Optional[int] = None,
         mdxc_pitch_shift: int = 0,
     ) -> dict:
         """Submit audio separation job (asynchronous processing).
@@ -133,11 +133,14 @@ class AudioSeparatorAPIClient:
                 # MDXC parameters
                 "mdxc_segment_size": mdxc_segment_size,
                 "mdxc_override_model_segment_size": mdxc_override_model_segment_size,
-                "mdxc_overlap": mdxc_overlap,
-                "mdxc_batch_size": mdxc_batch_size,
                 "mdxc_pitch_shift": mdxc_pitch_shift,
             }
         )
+
+        if mdxc_overlap is not None:
+            data["mdxc_overlap"] = mdxc_overlap
+        if mdxc_batch_size is not None:
+            data["mdxc_batch_size"] = mdxc_batch_size
 
         # Add optional parameters only if they have non-default values
         if output_bitrate:
@@ -209,8 +212,8 @@ class AudioSeparatorAPIClient:
         demucs_segments_enabled: bool = True,
         mdxc_segment_size: int = 256,
         mdxc_override_model_segment_size: bool = False,
-        mdxc_overlap: int = 8,
-        mdxc_batch_size: int = 1,
+        mdxc_overlap: Optional[int] = None,
+        mdxc_batch_size: Optional[int] = None,
         mdxc_pitch_shift: int = 0,
     ) -> dict:
         """
