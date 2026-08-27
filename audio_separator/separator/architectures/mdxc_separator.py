@@ -585,6 +585,8 @@ class MDXCSeparator(CommonSeparator):
             self.logger.debug(f"Chunk size: {chunk_size}")
 
             hop_size = chunk_size // self.overlap
+            if hop_size <= 0:
+                raise ValueError(f"MDXC overlap ({self.overlap}) must not exceed chunk size ({chunk_size})")
             self.logger.debug(f"Hop size: {hop_size}")
 
             mix_shape = mix.shape[1]

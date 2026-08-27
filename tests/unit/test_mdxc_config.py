@@ -1,5 +1,6 @@
 from unittest.mock import Mock, patch
 
+import numpy as np
 import pytest
 import torch
 from ml_collections import ConfigDict
@@ -71,3 +72,22 @@ def test_mdxc_null_inference_values_use_fallbacks():
 def test_mdxc_rejects_non_positive_inference_values(arch_config, inference_config, message):
     with pytest.raises(ValueError, match=message):
         _make_separator(arch_config, inference_config)
+
+
+def test_mdxc_non_roformer_rejects_overlap_larger_than_chunk_size():
+    separator = MDXCSeparator.__new__(MDXCSeparator)
+    separator.pitch_shift = 0
+    separator.is_roformer = False
+    separator.override_model_segment_size = False
+    separator.model_data_cfgdict = ConfigDict(
+        {
+            "inference": {"dim_t": 5},
+            "audio": {"hop_length": 2},
+        }
+    )
+    separator.overlap = 9
+    separator.model_run = Mock(num_target_instruments=1)
+    separator.logger = Mock()
+
+    with pytest.raises(ValueError, match=r"MDXC overlap \(9\) must not exceed chunk size \(8\)"):
+        separator.demix(np.ones((2, 16), dtype=np.float32))
