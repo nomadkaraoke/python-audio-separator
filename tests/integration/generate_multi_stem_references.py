@@ -11,7 +11,7 @@ Usage:
 Pipelines:
     1. All 4 clips → bs_roformer_vocals_resurrection_unwa → vocals + instrumental refs
     2. levee_drums, clocks_piano → htdemucs_ft → drums/bass/other/vocals refs
-    3. levee_drums → htdemucs_ft drums stem → MDX23C-DrumSep → kit part refs
+    3. drumkit_groove → MDX23C-DrumSep → kit part refs (direct; clip is already drums)
     4. levee_drums, clocks_piano → karaoke model → karaoke vocal/instrumental refs
     5. sing_sing_sing_brass → 17_HP-Wind_Inst-UVR → woodwind refs
     6. only_time_reverb → resurrection vocals → dereverb → noreverb/reverb refs
@@ -31,6 +31,7 @@ REFERENCE_DIR = "tests/inputs/reference"
 
 CLIPS = {
     "levee_drums": f"{INPUTS_DIR}/levee_drums.flac",
+    "drumkit_groove": f"{INPUTS_DIR}/drumkit_groove.flac",
     "clocks_piano": f"{INPUTS_DIR}/clocks_piano.flac",
     "sing_sing_sing_brass": f"{INPUTS_DIR}/sing_sing_sing_brass.flac",
     "only_time_reverb": f"{INPUTS_DIR}/only_time_reverb.flac",
@@ -83,16 +84,12 @@ def main():
                 stem_file = find_stem_file(outputs, stem, temp_dir)
                 shutil.copy2(stem_file, f"{REFERENCE_DIR}/ref_{clip_name}_{stem.lower()}_htdemucs_ft.flac")
 
-        # 3. DrumSep pipeline: levee drums stem → kit parts
-        print("\n=== DrumSep pipeline references ===")
-        drums_stem = find_stem_file(
-            run_model("htdemucs_ft.yaml", CLIPS["levee_drums"], temp_dir),
-            "Drums", temp_dir
-        )
-        outputs = run_model("MDX23C-DrumSep-aufr33-jarredou.ckpt", drums_stem, temp_dir)
+        # 3. DrumSep on an isolated drum-kit recording (direct — clip is already drums)
+        print("\n=== DrumSep references (drumkit_groove) ===")
+        outputs = run_model("MDX23C-DrumSep-aufr33-jarredou.ckpt", CLIPS["drumkit_groove"], temp_dir)
         for stem in ["kick", "snare", "toms", "hh", "ride", "crash"]:
             stem_file = find_stem_file(outputs, stem, temp_dir)
-            shutil.copy2(stem_file, f"{REFERENCE_DIR}/ref_levee_drums_{stem}_drumsep.flac")
+            shutil.copy2(stem_file, f"{REFERENCE_DIR}/ref_drumkit_groove_{stem}_drumsep.flac")
             print(f"  {stem}: done")
 
         # 4. Karaoke on levee + clocks

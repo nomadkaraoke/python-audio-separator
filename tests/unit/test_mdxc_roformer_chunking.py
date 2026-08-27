@@ -75,7 +75,13 @@ class TestMDXCRoformerChunking:
         ):
             separator.demix(np.ones((2, 16), dtype=np.float32))
 
-        assert chunk_starts == [0, 4, 8, 12]
+        # chunk_size = stft_hop_length * (dim_t - 1) = 2 * 4 = 8, and with
+        # overlap=2 the MSST divisor gives step = chunk_size // overlap = 4.
+        # The offset-8 chunk already reaches the end of the 16-sample input, so
+        # _roformer_chunk_starts stops there rather than emitting a redundant
+        # offset-12 tail chunk (which would clamp back to start 8). The step-4
+        # spacing of [0, 4, 8] is what confirms the overlap-divisor semantics.
+        assert chunk_starts == [0, 4, 8]
 
     def test_overlap_larger_than_chunk_size_is_rejected(self):
         """T053: Invalid overlap cannot produce a zero-sized RoFormer step."""
