@@ -1,28 +1,19 @@
 name: Deploy to Cloud Run
 
+# The `audio-separator` Cloud Run GPU service (us-east4) was SHUT DOWN on
+# 2026-10-01 (GCP cost cut) — prod karaoke-gen jobs never used it (they run
+# separation in the audio-separation-job GPU Cloud Run Job). Automatic deploys
+# on PyPI publish / Dockerfile changes are disabled so releases don't burn
+# Cloud Build time or fail against a missing service. To bring it back, first
+# re-create the service + repo via karaoke-gen Pulumi
+# (`pulumi config set audioSeparatorServiceEnabled true`, see karaoke-gen
+# docs/GCP-COST-OPTIMIZATION.md), then run this workflow manually.
 on:
-  # Deploy when a new PyPI release is published
-  workflow_run:
-    workflows: ["Publish to PyPI"]
-    types: [completed]
-
-  # Deploy on changes to Dockerfile or Cloud Run server
-  push:
-    branches: [main]
-    paths:
-      - "Dockerfile.cloudrun"
-      - "audio_separator/remote/deploy_cloudrun.py"
-      - "audio_separator/ensemble_presets.json"
-      - "cloudbuild.yaml"
-
-  # Manual deployment
   workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    # Only run on successful PyPI publish (or push/manual triggers)
-    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
 
     permissions:
       contents: read
