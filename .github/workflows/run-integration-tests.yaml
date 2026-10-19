@@ -80,7 +80,7 @@ jobs:
     needs: changes
     if: needs.changes.outputs.should_run == 'true'
     runs-on: [self-hosted, linux, gpu]
-    timeout-minutes: 15
+    timeout-minutes: 20
     env:
       AUDIO_SEPARATOR_MODEL_DIR: /opt/audio-separator-models
     steps:
@@ -103,7 +103,7 @@ jobs:
           cache: poetry
       - name: Install Poetry dependencies (GPU)
         run: poetry install -E gpu
-      - name: "Run: 24-bit, CLI, output, and roformer tests (~7 min)"
+      - name: "Run: 24-bit, CLI, output, roformer and timing tests (~8 min)"
         run: |
           poetry run pytest -sv \
             tests/integration/test_24bit_preservation.py \
@@ -115,7 +115,8 @@ jobs:
             tests/integration/test_roformer_e2e.py \
             tests/integration/test_roformer_fallback_mechanism.py \
             tests/integration/test_roformer_model_switching.py \
-            tests/integration/test_roformer_new_parameters.py
+            tests/integration/test_roformer_new_parameters.py \
+            tests/integration/test_roformer_inference_timing.py
       - name: Upload test artifacts
         if: always()
         uses: actions/upload-artifact@v4
