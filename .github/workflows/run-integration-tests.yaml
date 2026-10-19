@@ -195,9 +195,35 @@ jobs:
           python-version: '3.12'
           cache: poetry
       - name: Install ffmpeg
-        run: choco install ffmpeg -y --no-progress
+        shell: pwsh
+        run: |
+          choco install ffmpeg -y --no-progress
+          if ($LASTEXITCODE -ne 0) { throw "FFmpeg installation failed with exit code $LASTEXITCODE" }
+          # Chocolatey updates the persistent PATH, not this runner process.
+          $env:Path = [Environment]::GetEnvironmentVariable('Path', 'Machine') + ';' + [Environment]::GetEnvironmentVariable('Path', 'User') + ';' + $env:Path
+          foreach ($tool in @('ffmpeg.exe', 'ffprobe.exe')) {
+            $executable = (Get-Command $tool -CommandType Application -ErrorAction Stop).Source
+            Split-Path -Parent $executable | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          }
       - name: Install Poetry dependencies (CPU)
         run: poetry install -E cpu
+      - name: Verify FFmpeg export in the Poetry environment
+        shell: pwsh
+        run: |
+          @'
+          import subprocess
+          import tempfile
+          from pathlib import Path
+          from pydub import AudioSegment
+
+          for executable in ('ffmpeg', 'ffprobe'):
+              subprocess.run([executable, '-version'], check=True)
+          with tempfile.TemporaryDirectory() as directory:
+              output = Path(directory) / 'ffmpeg-check.flac'
+              AudioSegment.silent(duration=100).export(str(output), format='flac').close()
+              assert output.stat().st_size > 0
+              assert len(AudioSegment.from_file(str(output))) == 100
+          '@ | poetry run python -
       - name: Cache separation models
         uses: actions/cache@v4
         with:
