@@ -1,5 +1,6 @@
 import unittest
 import numpy as np
+import pytest
 import torch
 from unittest.mock import Mock
 from audio_separator.separator.uvr_lib_v5.stft import STFT
@@ -160,6 +161,48 @@ class TestSTFT(unittest.TestCase):
 class MockLogger:
     def debug(self, message):
         pass
+
+
+@pytest.mark.parametrize("device", ["cpu"] + (["cuda"] if torch.cuda.is_available() else []))
+@pytest.mark.parametrize("force_cpu_fallback", [False, True])
+def test_stft_preserves_mdx_channel_order_and_round_trip(device, force_cpu_fallback, monkeypatch):
+    if force_cpu_fallback:
+        monkeypatch.setenv("AUDIO_SEPARATOR_FORCE_CPU_COMPLEX", "1")
+    else:
+        monkeypatch.delenv("AUDIO_SEPARATOR_FORCE_CPU_COMPLEX", raising=False)
+    generator = torch.Generator().manual_seed(17)
+    audio = torch.randn(3, 2, 2048, generator=generator) * 0.1
+    transform = STFT(Mock(), n_fft=256, hop_length=64, dim_f=129, device=torch.device(device))
+    window = torch.hann_window(256)
+    complex_spectrum = torch.stft(audio.reshape(-1, 2048), n_fft=256, hop_length=64, window=window, return_complex=True)
+    complex_spectrum = complex_spectrum.reshape(3, 2, 129, -1)
+    expected = torch.stack(
+        [complex_spectrum[:, 0].real, complex_spectrum[:, 0].imag, complex_spectrum[:, 1].real, complex_spectrum[:, 1].imag], dim=1
+    )
+    actual = transform(audio.to(device))
+    torch.testing.assert_close(actual.cpu(), expected, rtol=2e-5, atol=2e-6)
+    window_pointer = transform.hann_window.data_ptr()
+    restored = transform.inverse(actual)
+    torch.testing.assert_close(restored.cpu(), audio, rtol=2e-5, atol=2e-6)
+    assert restored.device.type == device
+    assert transform.hann_window.device.type == ("cpu" if force_cpu_fallback else device)
+    assert transform.hann_window.data_ptr() == window_pointer
+    transform(audio.to(device))
+    assert transform.hann_window.data_ptr() == window_pointer
+
+
+@pytest.mark.parametrize("dtype", [torch.float32, torch.float64])
+def test_frequency_padding_preserves_dtype_and_zeroes_omitted_bins(dtype):
+    transform = STFT(Mock(), n_fft=256, hop_length=64, dim_f=100, device=torch.device("cpu"))
+    spectrum = torch.randn(3, 4, 100, 17, dtype=dtype)
+    dimensions = transform.calculate_inverse_dimensions(spectrum)
+    padded = transform.pad_frequency_dimension(spectrum, *dimensions)
+    assert padded.dtype == dtype
+    torch.testing.assert_close(padded[..., :100, :], spectrum)
+    assert torch.count_nonzero(padded[..., 100:, :]) == 0
+    actual = transform.prepare_for_istft(padded, dimensions[0], dimensions[1], dimensions[-1], dimensions[-2])
+    real, imaginary = padded.reshape(-1, 2, 129, 17).unbind(dim=1)
+    torch.testing.assert_close(actual, torch.complex(real, imaginary), rtol=0, atol=0)
 
 
 if __name__ == "__main__":
