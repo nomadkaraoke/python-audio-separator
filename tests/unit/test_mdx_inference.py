@@ -19,6 +19,7 @@ DEVICES = ["cpu"] + (["cuda"] if torch.cuda.is_available() else [])
 
 
 def make_separator(tmp_path, batch_dimension="batch", batch_size=3, device="cpu", segment_size=16, providers=None):
+    """Create a real ONNX test graph and configure a separator without downloading weights."""
     shape = [batch_dimension, 4, 17, 16]
     graph = helper.make_graph(
         [helper.make_node("Neg", ["spectrogram"], ["prediction"])],
@@ -50,6 +51,7 @@ def make_separator(tmp_path, batch_dimension="batch", batch_size=3, device="cpu"
 
 @pytest.mark.parametrize("batch_dimension", [1, 2, "batch", None])
 def test_onnx_batch_metadata_and_input_names(tmp_path, batch_dimension):
+    """Honor declared batch dimensions and resolve nonstandard ONNX input names."""
     separator = make_separator(tmp_path, batch_dimension=batch_dimension)
     batch = batch_dimension if isinstance(batch_dimension, int) else 3
     spectrum = torch.randn(batch, 4, 17, 16)
@@ -62,12 +64,14 @@ def test_onnx_batch_metadata_and_input_names(tmp_path, batch_dimension):
 @pytest.mark.parametrize("length", [1, 1009])
 @pytest.mark.parametrize("fixed_batch", [None, 2])
 def test_batched_demix_preserves_samples_and_pads_last_batch(tmp_path, overlap, length, fixed_batch):
+    """Preserve overlap-add samples and honor batch limits for short and partial windows."""
     separator = make_separator(tmp_path, batch_dimension=fixed_batch or "batch")
     mix = np.random.default_rng(42).normal(0, 0.1, (2, length)).astype(np.float32)
     separator.overlap = overlap
     calls = []
 
     def predict(batch, is_match_mix=False):
+        """Record the submitted batch size and return deterministic scaled audio."""
         calls.append(batch.shape[0])
         return batch.cpu().numpy() * 0.3
 
@@ -87,6 +91,7 @@ def test_batched_demix_preserves_samples_and_pads_last_batch(tmp_path, overlap, 
 @pytest.mark.parametrize("device", DEVICES)
 @pytest.mark.parametrize("batch_dimension", [1, 2, "batch"])
 def test_real_onnx_demix_matches_single_window_batches(tmp_path, device, batch_dimension):
+    """Match serial-window reconstruction when real ONNX inference runs in batches."""
     providers = ["CUDAExecutionProvider", "CPUExecutionProvider"] if device == "cuda" and CUDA_ONNX_AVAILABLE else ["CPUExecutionProvider"]
     separator = make_separator(tmp_path, batch_dimension=batch_dimension, device=device, providers=providers)
     mix = np.random.default_rng(42).normal(0, 0.1, (2, 1009)).astype(np.float32)
@@ -98,6 +103,7 @@ def test_real_onnx_demix_matches_single_window_batches(tmp_path, device, batch_d
 @pytest.mark.parametrize("denoise", [False, True])
 @pytest.mark.parametrize("match_mix", [False, True])
 def test_torch_predictions_remain_on_device(tmp_path, denoise, match_mix):
+    """Preserve prediction values and tensor identity through the inverse STFT boundary."""
     separator = make_separator(tmp_path)
     separator.enable_denoise = denoise
     prediction = torch.randn(2, 4, 17, 16)
@@ -105,6 +111,7 @@ def test_torch_predictions_remain_on_device(tmp_path, denoise, match_mix):
     predictions = []
 
     def predict(value):
+        """Retain each generated prediction so the test can detect unnecessary tensor copies."""
         result = value * 0.3
         predictions.append(result)
         return result
@@ -113,6 +120,7 @@ def test_torch_predictions_remain_on_device(tmp_path, denoise, match_mix):
     seen = []
 
     def inverse(value):
+        """Capture the prediction received by inverse STFT and return a valid audio-shaped tensor."""
         seen.append(value)
         return torch.zeros(2, 2, 120)
 
@@ -135,6 +143,7 @@ def test_torch_predictions_remain_on_device(tmp_path, denoise, match_mix):
 )
 @pytest.mark.parametrize("invert", [False, True])
 def test_secondary_reconstruction_only_runs_when_needed(tmp_path, monkeypatch, selection, expected_names, invert):
+    """Run mixture reconstruction only when a requested secondary stem needs spectral inversion."""
     separator = make_separator(tmp_path)
     separator.output_single_stem = selection
     separator.invert_using_spec = invert
@@ -151,6 +160,7 @@ def test_secondary_reconstruction_only_runs_when_needed(tmp_path, monkeypatch, s
 
 
 def test_reused_separator_does_not_export_previous_audio(tmp_path):
+    """Replace cached sources when one separator processes successive input files."""
     separator = make_separator(tmp_path)
     separator.prepare_mix = Mock(side_effect=[np.ones((2, 32), dtype=np.float32) * level for level in (0.1, 0.2)])
     separator.demix = Mock(side_effect=lambda mix: mix * 0.3)
@@ -165,6 +175,7 @@ def test_reused_separator_does_not_export_previous_audio(tmp_path):
 
 
 def test_native_module_does_not_import_torch_converter():
+    """Keep native MDX imports independent of the optional Torch conversion module."""
     subprocess.run(
         [
             sys.executable,
@@ -178,6 +189,7 @@ def test_native_module_does_not_import_torch_converter():
 
 
 def test_converted_model_keeps_requested_batch_size(tmp_path, monkeypatch):
+    """Use the requested window batch size when ONNX conversion produces a Torch model."""
     import sys
 
     model = torch.nn.Identity()
@@ -190,6 +202,7 @@ def test_converted_model_keeps_requested_batch_size(tmp_path, monkeypatch):
 
 
 def test_invalid_chunk_size_fails_before_allocating_windows(tmp_path):
+    """Reject segment geometry that cannot accommodate the FFT trimming window."""
     separator = make_separator(tmp_path)
     separator.segment_size = 2
     with pytest.raises(ValueError, match="FFT window"):
@@ -202,6 +215,7 @@ CUDA_ONNX_AVAILABLE = torch.cuda.is_available() and "CUDAExecutionProvider" in o
 @pytest.mark.skipif(not CUDA_ONNX_AVAILABLE, reason="CUDA Torch and ONNX Runtime are required")
 @pytest.mark.parametrize("batch_dimension", [1, 2, "batch"])
 def test_cuda_binding_handles_noncontiguous_inputs_and_nondefault_streams(tmp_path, batch_dimension):
+    """Synchronize CUDA buffers across streams and keep results independent between calls."""
     separator = make_separator(
         tmp_path,
         device="cuda",
@@ -228,6 +242,7 @@ def test_cuda_binding_handles_noncontiguous_inputs_and_nondefault_streams(tmp_pa
 @pytest.mark.parametrize("device", DEVICES)
 @pytest.mark.parametrize("output_shape", [None, [None, 4, 17, 16], ["unknown", 4, 17, 16]])
 def test_unknown_output_shapes_use_allocating_fallback(tmp_path, device, output_shape):
+    """Use NumPy allocation when output metadata cannot establish safe buffer dimensions."""
     providers = ["CUDAExecutionProvider", "CPUExecutionProvider"] if device == "cuda" and CUDA_ONNX_AVAILABLE else ["CPUExecutionProvider"]
     separator = make_separator(tmp_path, device=device, providers=providers)
     metadata = separator.onnx_output
@@ -240,9 +255,11 @@ def test_unknown_output_shapes_use_allocating_fallback(tmp_path, device, output_
 
 @pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA Torch is required")
 def test_cuda_provider_failure_retains_numpy_fallback(tmp_path, monkeypatch, caplog):
+    """Retain correct inference and a warning when the requested CUDA provider is unavailable."""
     session_factory = ort.InferenceSession
 
     def cpu_session(*args, **kwargs):
+        """Force a real CPU session to simulate CUDA provider activation failure."""
         kwargs["providers"] = ["CPUExecutionProvider"]
         return session_factory(*args, **kwargs)
 
@@ -258,6 +275,7 @@ def test_cuda_provider_failure_retains_numpy_fallback(tmp_path, monkeypatch, cap
 
 @pytest.mark.parametrize("overlap", [-0.1, 1.0, float("inf"), float("nan")])
 def test_invalid_overlap_fails_before_scheduling_windows(tmp_path, overlap):
+    """Reject invalid overlap values before they can schedule excessive or invalid window work."""
     separator = make_separator(tmp_path)
     separator.overlap = overlap
     with pytest.raises(ValueError, match="MDX overlap"):
@@ -266,12 +284,14 @@ def test_invalid_overlap_fails_before_scheduling_windows(tmp_path, overlap):
 
 @pytest.mark.parametrize("batch_size", [0, -1])
 def test_nonpositive_batch_size_is_rejected(tmp_path, batch_size):
+    """Reject batch sizes that cannot advance the window-processing loop."""
     separator = make_separator(tmp_path, batch_size=batch_size)
     with pytest.raises(ValueError, match="MDX batch size"):
         separator.demix(np.zeros((2, 32), dtype=np.float32))
 
 
 def test_native_separator_releases_without_waiting_for_cycle_collection(tmp_path):
+    """Release native separator ownership immediately without relying on cyclic garbage collection."""
     import gc
     import weakref
 

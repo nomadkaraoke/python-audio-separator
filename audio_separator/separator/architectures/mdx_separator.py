@@ -18,6 +18,7 @@ class MDXSeparator(CommonSeparator):
     """
 
     def __init__(self, common_config, arch_config):
+        """Configure MDX windowing and load the native ONNX or converted Torch model."""
         # Any configuration values which can be shared between architectures should be set already in CommonSeparator,
         # e.g. user-specified functionality choices (self.output_single_stem) or common model parameters (self.primary_stem_name)
         super().__init__(config=common_config)

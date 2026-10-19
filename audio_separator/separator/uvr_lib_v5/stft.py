@@ -11,6 +11,7 @@ class STFT:
     """
 
     def __init__(self, logger, n_fft, hop_length, dim_f, device):
+        """Configure spectral dimensions and create the reusable Hann window."""
         self.logger = logger
         self.n_fft = n_fft
         self.hop_length = hop_length
@@ -20,12 +21,14 @@ class STFT:
         self.hann_window = torch.hann_window(window_length=self.n_fft, periodic=True)
 
     def _window_for(self, input_tensor):
+        """Return the cached Hann window on the tensor's effective compute device."""
         # Cache on the effective device, including the complex-operation CPU fallback.
         if self.hann_window.device != input_tensor.device:
             self.hann_window = self.hann_window.to(input_tensor.device)
         return self.hann_window
 
     def __call__(self, input_tensor):
+        """Pack channel spectra as alternating real and imaginary planes on the input device."""
         original_device = input_tensor.device
         should_fallback = should_fallback_to_cpu_for_complex_ops(original_device)
 
@@ -78,6 +81,7 @@ class STFT:
         return padded_tensor
 
     def calculate_inverse_dimensions(self, input_tensor):
+        """Return the batch, channel, spectral dimensions and full FFT bin count."""
         # Extract batch dimensions and frequency-time dimensions.
         batch_dimensions = input_tensor.shape[:-3]
         channel_dim, freq_dim, time_dim = input_tensor.shape[-3:]
@@ -107,6 +111,7 @@ class STFT:
         return complex_tensor
 
     def inverse(self, input_tensor):
+        """Reconstruct stereo audio and restore the caller's input device."""
         original_device = input_tensor.device
         should_fallback = should_fallback_to_cpu_for_complex_ops(original_device)
 

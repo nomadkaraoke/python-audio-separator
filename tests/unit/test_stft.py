@@ -22,6 +22,7 @@ from audio_separator.separator.uvr_lib_v5.stft import STFT
 
 class TestSTFT(unittest.TestCase):
     def setUp(self):
+        """Configure a CPU STFT instance with a complete frequency spectrum."""
         self.n_fft = 2048
         self.hop_length = 512
         self.dim_f = 1025
@@ -29,12 +30,14 @@ class TestSTFT(unittest.TestCase):
         self.stft = STFT(logger=Mock(), n_fft=self.n_fft, hop_length=self.hop_length, dim_f=self.dim_f, device=self.device)
 
     def create_mock_tensor(self, shape, device=None):
+        """Create random test input on the requested device."""
         tensor = torch.rand(shape)
         if device:
             tensor = tensor.to(device)
         return tensor
 
     def test_stft_initialization(self):
+        """Retain the configured transform dimensions, device and Hann window."""
         self.assertEqual(self.stft.n_fft, self.n_fft)
         self.assertEqual(self.stft.hop_length, self.hop_length)
         self.assertEqual(self.stft.dim_f, self.dim_f)
@@ -42,6 +45,7 @@ class TestSTFT(unittest.TestCase):
         self.assertIsInstance(self.stft.hann_window, torch.Tensor)
 
     def test_stft_call(self):
+        """Produce the expected frequency-bin and time-frame dimensions."""
         input_tensor = self.create_mock_tensor((1, 16000))
 
         # Apply STFT
@@ -76,6 +80,7 @@ class TestSTFT(unittest.TestCase):
         self.assertEqual(stft_result.shape[-2:], expected_shape)
 
     def test_calculate_inverse_dimensions(self):
+        """Recover inverse-transform dimensions from the packed spectrum shape."""
         # Create a sample input tensor
         sample_input = torch.randn(1, 2, 500, 32)  # Batch, Channel, Frequency, Time dimensions
         batch_dims, channel_dim, freq_dim, time_dim, num_freq_bins = self.stft.calculate_inverse_dimensions(sample_input)
@@ -91,6 +96,7 @@ class TestSTFT(unittest.TestCase):
         self.assertEqual(num_freq_bins, expected_num_freq_bins)
 
     def test_pad_frequency_dimension(self):
+        """Extend a truncated spectrum to the full inverse-transform frequency dimension."""
         # Create a sample input tensor
         sample_input = torch.randn(1, 2, 500, 32)  # Batch, Channel, Frequency, Time dimensions
         batch_dims, channel_dim, freq_dim, time_dim, num_freq_bins = self.stft.calculate_inverse_dimensions(sample_input)
@@ -105,6 +111,7 @@ class TestSTFT(unittest.TestCase):
         self.assertEqual(padded_output.shape[-2], expected_freq_dim)
 
     def test_prepare_for_istft(self):
+        """Combine packed real and imaginary planes into the expected complex spectrum shape."""
         # Create a sample input tensor
         sample_input = torch.randn(1, 2, 500, 32)  # Batch, Channel, Frequency, Time dimensions
         batch_dims, channel_dim, freq_dim, time_dim, num_freq_bins = self.stft.calculate_inverse_dimensions(sample_input)
@@ -123,6 +130,7 @@ class TestSTFT(unittest.TestCase):
         self.assertEqual(complex_tensor.shape, expected_shape)
 
     def test_inverse_stft(self):
+        """Preserve the legacy inverse output shape on CPU."""
         # Create a mock tensor with the correct input shape
         input_tensor = torch.rand(1, 2, 1025, 32)  # shape matching output of STFT
 
@@ -140,6 +148,7 @@ class TestSTFT(unittest.TestCase):
 
     @unittest.skipIf(not torch.backends.mps.is_available(), "MPS not available")
     def test_stft_with_mps_device(self):
+        """Transform input on an available MPS device."""
         mps_device = torch.device("mps")
         self.stft.device = mps_device
         input_tensor = self.create_mock_tensor((1, 16000), device=mps_device)
@@ -149,6 +158,7 @@ class TestSTFT(unittest.TestCase):
 
     @unittest.skipIf(not torch.backends.mps.is_available(), "MPS not available")
     def test_inverse_with_mps_device(self):
+        """Reconstruct audio from spectra supplied on an available MPS device."""
         mps_device = torch.device("mps")
         self.stft.device = mps_device
         input_tensor = self.create_mock_tensor((1, 2, 1025, 32), device=mps_device)
@@ -160,12 +170,14 @@ class TestSTFT(unittest.TestCase):
 # Mock logger to use in tests
 class MockLogger:
     def debug(self, message):
+        """Accept debug messages without emitting output during STFT tests."""
         pass
 
 
 @pytest.mark.parametrize("device", ["cpu"] + (["cuda"] if torch.cuda.is_available() else []))
 @pytest.mark.parametrize("force_cpu_fallback", [False, True])
 def test_stft_preserves_mdx_channel_order_and_round_trip(device, force_cpu_fallback, monkeypatch):
+    """Preserve channel packing, reconstruction and window reuse through native or CPU fallback paths."""
     if force_cpu_fallback:
         monkeypatch.setenv("AUDIO_SEPARATOR_FORCE_CPU_COMPLEX", "1")
     else:
@@ -193,6 +205,7 @@ def test_stft_preserves_mdx_channel_order_and_round_trip(device, force_cpu_fallb
 
 @pytest.mark.parametrize("dtype", [torch.float32, torch.float64])
 def test_frequency_padding_preserves_dtype_and_zeroes_omitted_bins(dtype):
+    """Preserve spectral values and dtype while zero-filling omitted frequency bins."""
     transform = STFT(Mock(), n_fft=256, hop_length=64, dim_f=100, device=torch.device("cpu"))
     spectrum = torch.randn(3, 4, 100, 17, dtype=dtype)
     dimensions = transform.calculate_inverse_dimensions(spectrum)
