@@ -55,6 +55,7 @@ SUPPORTED_AUDIO_EXTENSIONS = (".wav", ".flac", ".mp3", ".ogg", ".opus", ".m4a", 
 
 
 def _iter_directory_audio_files(directory):
+    """Yield audio file paths found under the given directory tree."""
     for root, _dirs, files in os.walk(directory):
         for filename in files:
             if filename.lower().endswith(SUPPORTED_AUDIO_EXTENSIONS):
@@ -420,6 +421,7 @@ class Separator:
         onnxruntime_silicon_package = self.get_package_distribution("onnxruntime-silicon")
         onnxruntime_cpu_package = self.get_package_distribution("onnxruntime")
         onnxruntime_dml_package = self.get_package_distribution("onnxruntime-directml")
+        onnxruntime_rocm_package = self.get_package_distribution("onnxruntime-rocm")
 
         if onnxruntime_gpu_package is not None:
             self.logger.info(f"ONNX Runtime GPU package installed with version: {onnxruntime_gpu_package.version}")
@@ -429,6 +431,8 @@ class Separator:
             self.logger.info(f"ONNX Runtime CPU package installed with version: {onnxruntime_cpu_package.version}")
         if onnxruntime_dml_package is not None:
             self.logger.info(f"ONNX Runtime DirectML package installed with version: {onnxruntime_dml_package.version}")
+        if onnxruntime_rocm_package is not None:
+            self.logger.info(f"ONNX Runtime ROCm package installed with version: {onnxruntime_rocm_package.version}")
 
     def setup_torch_device(self, system_info):
         """
@@ -441,7 +445,13 @@ class Separator:
         self.torch_device_cpu = torch.device("cpu")
 
         if torch.cuda.is_available():
-            self.configure_cuda(ort_providers)
+            # ROCm PyTorch also exposes AMD GPUs through torch.cuda, so it is detected via
+            # torch.version.hip and routed to the ROCm-specific configuration. Non-ROCm
+            # CUDA users keep the original configure_cuda path unchanged.
+            if getattr(torch.version, "hip", None) is not None:
+                self.configure_rocm(ort_providers)
+            else:
+                self.configure_cuda(ort_providers)
             hardware_acceleration_enabled = True
         elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available() and system_info.processor == "arm":
             self.configure_mps(ort_providers)
@@ -476,6 +486,35 @@ class Separator:
             self.onnx_execution_provider = ["CUDAExecutionProvider"]
         else:
             self.logger.warning("CUDAExecutionProvider not available in ONNXruntime, so acceleration will NOT be enabled")
+
+    def configure_rocm(self, ort_providers):
+        """
+        This method configures the ROCm device for PyTorch and ONNX Runtime, if available.
+
+        ROCm PyTorch exposes AMD GPUs through torch.cuda, so self.torch_device is still "cuda".
+        ONNX Runtime removed the ROCm execution provider in 1.23; MIGraphXExecutionProvider is
+        the current AMD ONNX GPU provider. Official onnxruntime-gpu wheels only expose a
+        CUDA-linked CUDAExecutionProvider, which cannot activate on a ROCm host.
+        """
+        self.logger.info("ROCm (AMD GPU) is available in Torch, setting Torch device to CUDA (ROCm presents as CUDA)")
+        self.torch_device = torch.device("cuda")
+        for provider in ("MIGraphXExecutionProvider", "ROCMExecutionProvider", "CUDAExecutionProvider"):
+            if provider in ort_providers:
+                self.onnx_execution_provider = [provider]
+                if provider == "CUDAExecutionProvider":
+                    self.logger.info(
+                        "ONNXruntime only exposes CUDAExecutionProvider on this ROCm host; that "
+                        "CUDA-linked provider cannot activate here, so MDX-Net will use the PyTorch "
+                        "HIP path and other architectures are unaffected."
+                    )
+                else:
+                    self.logger.info(f"ONNXruntime has {provider} available, enabling acceleration")
+                break
+        else:
+            self.logger.warning(
+                "No ONNX Runtime GPU execution provider is available for ROCm; MDX-Net will "
+                "use the PyTorch HIP path and other PyTorch architectures are unaffected."
+            )
 
     def configure_mps(self, ort_providers):
         """
@@ -1417,6 +1456,7 @@ class Separator:
 
                 # Sort by SDR score if available, putting None values last
                 def sort_key(item):
+                    """Sort key that puts missing SDR scores last."""
                     sdr = item[1]["SDR"][sort_by_lower]
                     return (0 if sdr is None else 1, sdr if sdr is not None else float("-inf"))
 

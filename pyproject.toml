@@ -49,6 +49,10 @@ dynamic = [
 cpu = ["onnxruntime>=1.17"]
 gpu = ["onnxruntime-gpu>=1.17"]
 dml = ["onnxruntime-directml>=1.17", "torch_directml"]
+# ROCm/AMD GPUs use onnxruntime-gpu's CUDAExecutionProvider through ROCm's HIP
+# compatibility layer; onnxruntime-rocm (ROCMExecutionProvider) is only needed
+# for MI-series GPUs and is not published for newer Python versions.
+rocm = ["onnxruntime-gpu>=1.17"]
 
 [tool.poetry]
 requires-poetry = ">=2.0.0"
