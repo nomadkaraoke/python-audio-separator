@@ -86,6 +86,8 @@ class VRSeparator(CommonSeparator):
         self.high_end_process = arch_config.get("high_end_process", False)
         self.input_high_end_h = None
         self.input_high_end = None
+        self.model_wave_length = None
+        self.output_wave_length = None
 
         # Adjust the intensity of primary stem extraction:
         # - Ranges from -100 - 100.
@@ -155,11 +157,13 @@ class VRSeparator(CommonSeparator):
 
         self.audio_file_path = audio_file_path
         self.audio_file_base = os.path.splitext(os.path.basename(audio_file_path))[ 0]
+        self.output_wave_length = None
 
         # Detect input audio bit depth for output preservation
         try:
             import soundfile as sf
             info = sf.info(audio_file_path)
+            self.output_wave_length = math.ceil(info.frames * self.sample_rate / info.samplerate)
             self.input_audio_subtype = info.subtype
             self.logger.info(f"Input audio subtype: {self.input_audio_subtype}")
             
@@ -235,9 +239,7 @@ class VRSeparator(CommonSeparator):
 
                 self.primary_source = self.spec_to_wav(y_spec).T
                 self.logger.debug("Converting primary source spectrogram to waveform.")
-                if not self.model_samplerate == 44100:
-                    self.primary_source = librosa.resample(self.primary_source.T, orig_sr=self.model_samplerate, target_sr=44100).T
-                    self.logger.debug("Resampling primary source to 44100Hz.")
+                self.primary_source = self._prepare_source_for_output(self.primary_source)
 
             self.primary_stem_output_path = self.get_stem_output_path(self.primary_stem_name, custom_output_names)
 
@@ -253,9 +255,7 @@ class VRSeparator(CommonSeparator):
 
                 self.secondary_source = self.spec_to_wav(v_spec).T
                 self.logger.debug("Converting secondary source spectrogram to waveform.")
-                if not self.model_samplerate == 44100:
-                    self.secondary_source = librosa.resample(self.secondary_source.T, orig_sr=self.model_samplerate, target_sr=44100).T
-                    self.logger.debug("Resampling secondary source to 44100Hz.")
+                self.secondary_source = self._prepare_source_for_output(self.secondary_source)
 
             self.secondary_stem_output_path = self.get_stem_output_path(self.secondary_stem_name, custom_output_names)
 
@@ -271,6 +271,7 @@ class VRSeparator(CommonSeparator):
 
     def loading_mix(self):
         X_wave, X_spec_s = {}, {}
+        self.model_wave_length = None
 
         bands_n = len(self.model_params.param["band"])
 
@@ -288,7 +289,16 @@ class VRSeparator(CommonSeparator):
 
             if d == bands_n:  # high-end band
                 X_wave[d], _ = librosa.load(audio_file, sr=bp["sr"], mono=False, dtype=np.float32, res_type=wav_resolution)
-                X_spec_s[d] = spec_utils.wave_to_spectrogram(X_wave[d], bp["hl"], bp["n_fft"], self.model_params, band=d, is_v51_model=self.is_vr_51_model)
+                self.model_wave_length = X_wave[d].shape[-1]
+                X_spec_s[d] = spec_utils.wave_to_spectrogram(
+                    X_wave[d],
+                    bp["hl"],
+                    bp["n_fft"],
+                    self.model_params,
+                    band=d,
+                    is_v51_model=self.is_vr_51_model,
+                    pad_to_hop=True,
+                )
 
                 if not np.any(X_wave[d]) and is_mp3:
                     X_wave[d] = rerun_mp3(audio_file, bp["sr"])
@@ -297,7 +307,15 @@ class VRSeparator(CommonSeparator):
                     X_wave[d] = np.asarray([X_wave[d], X_wave[d]])
             else:  # lower bands
                 X_wave[d] = librosa.resample(X_wave[d + 1], orig_sr=self.model_params.param["band"][d + 1]["sr"], target_sr=bp["sr"], res_type=wav_resolution)
-                X_spec_s[d] = spec_utils.wave_to_spectrogram(X_wave[d], bp["hl"], bp["n_fft"], self.model_params, band=d, is_v51_model=self.is_vr_51_model)
+                X_spec_s[d] = spec_utils.wave_to_spectrogram(
+                    X_wave[d],
+                    bp["hl"],
+                    bp["n_fft"],
+                    self.model_params,
+                    band=d,
+                    is_v51_model=self.is_vr_51_model,
+                    pad_to_hop=True,
+                )
 
             if d == bands_n and self.high_end_process:
                 self.input_high_end_h = (bp["n_fft"] // 2 - bp["crop_stop"]) + (self.model_params.param["pre_filter_stop"] - self.model_params.param["pre_filter_start"])
@@ -381,6 +399,17 @@ class VRSeparator(CommonSeparator):
         y_spec, v_spec = postprocess(mask, X_mag, X_phase)
 
         return y_spec, v_spec
+
+    def _prepare_source_for_output(self, source):
+        """Resample a source and align it to the configured output frame count."""
+        if self.model_wave_length is not None:
+            source = librosa.util.fix_length(source, size=self.model_wave_length, axis=0)
+        if self.model_samplerate != self.sample_rate:
+            source = librosa.resample(source.T, orig_sr=self.model_samplerate, target_sr=self.sample_rate).T
+            self.logger.debug(f"Resampling source to {self.sample_rate}Hz.")
+        if self.output_wave_length is not None:
+            source = librosa.util.fix_length(source, size=self.output_wave_length, axis=0)
+        return source
 
     def spec_to_wav(self, spec):
         if self.high_end_process and isinstance(self.input_high_end, np.ndarray) and self.input_high_end_h:
