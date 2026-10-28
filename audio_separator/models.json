@@ -264,6 +264,9 @@
         "Roformer Model: BS Roformer | Instrumental ResurrectioN by Gabox": {
             "bs_roformer_instrumental_resurrection_gabox.ckpt": "config_bs_roformer_instrumental_resurrection_unwa.yaml"
         },
+        "Roformer Model: BS Roformer | 4 Stems by ZFTurbo": {
+            "model_bs_roformer_ep_17_sdr_9.6568.ckpt": "config_bs_roformer_384_8_2_485100.yaml"
+        },
         "Roformer Model: BS Roformer SW by jarredou": {
             "BS-Roformer-SW.ckpt": "BS-Roformer-SW.yaml"
         }
