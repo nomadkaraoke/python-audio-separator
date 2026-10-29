@@ -16,6 +16,7 @@ import hashlib
 import json
 import os
 import sys
+import time
 from concurrent.futures import ThreadPoolExecutor
 
 import requests
@@ -52,13 +53,20 @@ def list_assets():
         yield url.split("/")[-1], url
 
 
-def sha256_of_url(url):
-    digest = hashlib.sha256()
-    with requests.get(url, stream=True, timeout=300) as response:
-        response.raise_for_status()
-        for chunk in response.iter_content(chunk_size=1024 * 1024):
-            digest.update(chunk)
-    return digest.hexdigest()
+def sha256_of_url(url, attempts=5):
+    for attempt in range(1, attempts + 1):
+        digest = hashlib.sha256()
+        try:
+            with requests.get(url, stream=True, timeout=300) as response:
+                response.raise_for_status()
+                for chunk in response.iter_content(chunk_size=1024 * 1024):
+                    digest.update(chunk)
+            return digest.hexdigest()
+        except requests.RequestException as e:
+            if attempt == attempts:
+                raise
+            print(f"Retrying {url} after error: {e}", file=sys.stderr)
+            time.sleep(5 * attempt)
 
 
 def main():

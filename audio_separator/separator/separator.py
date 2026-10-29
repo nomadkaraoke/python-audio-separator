@@ -577,7 +577,8 @@ class Separator:
 
             # Download beside the target and rename once complete, so an interrupted
             # download never leaves a truncated file that later runs treat as present.
-            partial_path = f"{output_path}.partial"
+            # The pid keeps processes sharing a model directory from writing the same file.
+            partial_path = f"{output_path}.{os.getpid()}.partial"
             try:
                 with open(partial_path, "wb") as f:
                     for chunk in response.iter_content(chunk_size=8192):

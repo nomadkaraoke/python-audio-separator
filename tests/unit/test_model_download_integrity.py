@@ -90,6 +90,7 @@ def test_tampered_download_is_rejected_and_next_source_used(separator, tmp_path)
 
     assert (tmp_path / "models" / "model.ckpt").read_bytes() == GOOD
     assert not (tmp_path / "models" / "model.ckpt.partial").exists()
+    assert not list((tmp_path / "models").glob("*.partial"))
 
 
 def test_download_fails_when_every_source_is_tampered(separator, tmp_path):
