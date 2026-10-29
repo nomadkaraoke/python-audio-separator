@@ -304,7 +304,7 @@ def test_vr_model_loads_placeholder_once():
         separator._ensure_model_loaded(31191)
 
     determine_model_capacity.assert_called_once_with(256, 31191)
-    load_weights.assert_called_once_with("/tmp/model.pth", map_location="cpu")
+    load_weights.assert_called_once_with("/tmp/model.pth", map_location="cpu", weights_only=True)
     loaded_model.load_state_dict.assert_called_once_with(state_dict)
     loaded_model.to.assert_called_once_with(torch.device("cpu"))
     assert separator.model_run is loaded_model

@@ -132,7 +132,7 @@ class VRSeparator(CommonSeparator):
 
         # Publish the reusable module only after every loading step succeeds.
         # Otherwise a retry could mistake a partial model for a ready one.
-        model_run.load_state_dict(torch.load(self.model_path, map_location="cpu"))
+        model_run.load_state_dict(torch.load(self.model_path, map_location="cpu", weights_only=True))
         model_run.to(self.torch_device)
         self.model_run = model_run
         self.is_vr_51_model = is_vr_51_model

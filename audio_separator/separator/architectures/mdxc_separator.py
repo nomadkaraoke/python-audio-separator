@@ -196,7 +196,7 @@ class MDXCSeparator(CommonSeparator):
                 self.logger.debug("Loading model onto cpu")
                 # For some reason loading the state onto a hardware accelerated devices causes issues, 
                 # so we load it onto CPU first then move it to the device
-                self.model_run.load_state_dict(torch.load(self.model_path, map_location="cpu"))
+                self.model_run.load_state_dict(torch.load(self.model_path, map_location="cpu", weights_only=True))
                 self.model_run.to(self.torch_device).eval()
 
         except RuntimeError as e:

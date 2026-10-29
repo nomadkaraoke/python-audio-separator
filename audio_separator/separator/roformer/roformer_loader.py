@@ -116,7 +116,7 @@ class RoformerLoader:
                 # everywhere, but is gated to DML so all other devices keep
                 # their exact existing behavior. (Issue #292)
                 map_location = "cpu" if _is_dml_device(device) else device
-                state_dict = torch.load(model_path, map_location=map_location)
+                state_dict = torch.load(model_path, map_location=map_location, weights_only=True)
                 if isinstance(state_dict, dict) and 'state_dict' in state_dict:
                     model.load_state_dict(state_dict['state_dict'])
                 elif isinstance(state_dict, dict) and 'model' in state_dict:
@@ -247,11 +247,7 @@ class RoformerLoader:
             raise ValueError(f"Unknown Roformer model type in legacy configuration: {model_type}")
 
         # Load checkpoint as raw state dict (legacy behavior)
-        try:
-            checkpoint = torch.load(model_path, map_location='cpu', weights_only=True)
-        except TypeError:
-            # For older torch versions without weights_only
-            checkpoint = torch.load(model_path, map_location='cpu')
+        checkpoint = torch.load(model_path, map_location='cpu', weights_only=True)
 
         model.load_state_dict(checkpoint)
         model.to(device).eval()

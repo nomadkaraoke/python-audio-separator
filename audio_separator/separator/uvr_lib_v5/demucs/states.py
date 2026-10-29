@@ -12,6 +12,7 @@ import functools
 import hashlib
 import inspect
 import io
+import pickle
 from pathlib import Path
 import warnings
 
@@ -31,16 +32,55 @@ def get_quantizer(model, args, optimizer=None):
     return quantizer
 
 
+# Every global a Demucs v4 package (.th) references, as (module, name). Model files are
+# pickles, so resolving anything outside this list could run arbitrary code at load time.
+# torch storage types never reach find_class: torch's UnpicklerWrapper handles them first.
+_ALLOWED_PACKAGE_GLOBALS = frozenset(
+    {
+        ("collections", "OrderedDict"),
+        ("torch._utils", "_rebuild_tensor_v2"),
+        ("torch._utils", "_rebuild_parameter"),
+        ("_codecs", "encode"),
+        ("fractions", "Fraction"),
+        ("numpy", "dtype"),
+        ("numpy.core.multiarray", "scalar"),
+        ("numpy._core.multiarray", "scalar"),
+        ("demucs.demucs", "Demucs"),
+        ("demucs.hdemucs", "HDemucs"),
+        ("demucs.htdemucs", "HTDemucs"),
+    }
+)
+
+
+class _RestrictedUnpickler(pickle.Unpickler):
+    def find_class(self, module, name):
+        if (module, name) in _ALLOWED_PACKAGE_GLOBALS or (module == "numpy.dtypes" and name.endswith("DType")):
+            return super().find_class(module, name)
+        raise pickle.UnpicklingError(f"Refusing to load Demucs model: global '{module}.{name}' is not allowed")
+
+
+class _RestrictedPickleModule:
+    """pickle-compatible module for torch.load(pickle_module=...) that only resolves allowed globals."""
+
+    __name__ = "audio_separator_restricted_pickle"
+    Unpickler = _RestrictedUnpickler
+    load = staticmethod(lambda f, **kwargs: _RestrictedUnpickler(f, **kwargs).load())
+
+
+def _load_package(path):
+    # Package files store the model class itself, which torch's weights_only loader can't
+    # express portably across the torch/numpy versions we support, so restrict the
+    # unpickler instead. weights_only must be False for torch to use pickle_module.
+    return torch.load(path, "cpu", pickle_module=_RestrictedPickleModule, weights_only=False)
+
+
 def load_model(path_or_package, strict=False):
     """Load a model from the given serialized model, either given as a dict (already loaded)
     or a path to a file on disk."""
     if isinstance(path_or_package, dict):
         package = path_or_package
     elif isinstance(path_or_package, (str, Path)):
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")
-            path = path_or_package
-            package = torch.load(path, "cpu", weights_only=False)
+        package = _load_package(path_or_package)
     else:
         raise ValueError(f"Invalid type for {path_or_package}.")
 
