@@ -76,8 +76,9 @@ def _load_via_new_implementation(device):
     model = MagicMock(name="model")
     seen = {}
 
-    def fake_torch_load(path, map_location=None):
+    def fake_torch_load(path, map_location=None, weights_only=None):
         seen["map_location"] = map_location
+        seen["weights_only"] = weights_only
         return {}
 
     with patch.object(loader, "_create_bs_roformer", return_value=model), \
@@ -92,6 +93,7 @@ def _load_via_new_implementation(device):
 
     assert result.success
     model.to.assert_called_once_with(device)
+    assert seen["weights_only"] is True
     return seen["map_location"]
 
 

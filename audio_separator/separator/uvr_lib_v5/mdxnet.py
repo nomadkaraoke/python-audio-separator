@@ -127,7 +127,7 @@ class Mixer(nn.Module):
         self.linear = nn.Linear((dim_s+1)*2, dim_s*2, bias=False)
         
         self.load_state_dict(
-            torch.load(mixer_path, map_location=device)
+            torch.load(mixer_path, map_location=device, weights_only=True)
         )
 
     def forward(self, x):
