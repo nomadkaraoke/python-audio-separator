@@ -381,6 +381,12 @@ For programmatic use, you can output the model list in JSON format:
 audio-separator -l --list_format=json
 ```
 
+### Where Models Are Downloaded From
+
+Model files are downloaded on first use into `model_file_dir` (or `AUDIO_SEPARATOR_MODEL_DIR`). Each file is fetched from the [audio-separator models release](https://github.com/nomadkaraoke/python-audio-separator/releases/tag/model-configs) first, with the original source (the UVR model repo, or Meta's CDN for Demucs) as a fallback. UVR VIP models are still fetched from Anjok07's repo first.
+
+Every model file must match the SHA-256 published in [`audio_separator/model-checksums.json`](audio_separator/model-checksums.json). A download that doesn't match is discarded and the next source is tried. A file already in the model directory is checked too, and replaced if it doesn't match. Maintainers who upload new model files should regenerate the manifest with `tools/update-model-checksums.py`.
+
 ### Processing Large Files
 
 For very long audio files (>1 hour), you may encounter out-of-memory errors. The `--chunk_duration` option automatically splits large files into smaller chunks, processes them separately, and merges the results:

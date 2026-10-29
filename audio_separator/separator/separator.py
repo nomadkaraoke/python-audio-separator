@@ -277,6 +277,9 @@ class Separator:
         self.model_is_uvr_vip = False
         self.model_friendly_name = None
 
+        self._model_checksums = None
+        self._verified_model_files = set()
+
         if not info_only:
             self.setup_accelerated_inferencing_device()
 
@@ -552,14 +555,18 @@ class Separator:
             self.logger.error(f"Error calculating hash for {model_path}: {e}")
             raise # Re-raise other errors
 
-    def download_file_if_not_exists(self, url, output_path):
+    def download_file_if_not_exists(self, url, output_path, verify_checksum=False):
         """
         This method downloads a file from a given URL to a given output path, if the file does not already exist.
+        With verify_checksum, both an existing file and a fresh download must match model-checksums.json.
         """
 
         if os.path.isfile(output_path):
-            self.logger.debug(f"File already exists at {output_path}, skipping download")
-            return
+            if not verify_checksum or self.verify_model_file_checksum(output_path):
+                self.logger.debug(f"File already exists at {output_path}, skipping download")
+                return
+            self.logger.warning(f"Existing file {output_path} does not match its published SHA-256 checksum; re-downloading it")
+            os.remove(output_path)
 
         self.logger.debug(f"Downloading file from {url} to {output_path} with timeout 300s")
         response = requests.get(url, stream=True, timeout=300)
@@ -568,13 +575,72 @@ class Separator:
             total_size_in_bytes = int(response.headers.get("content-length", 0))
             progress_bar = tqdm(total=total_size_in_bytes, unit="iB", unit_scale=True)
 
-            with open(output_path, "wb") as f:
-                for chunk in response.iter_content(chunk_size=8192):
-                    progress_bar.update(len(chunk))
-                    f.write(chunk)
-            progress_bar.close()
+            # Download beside the target and rename once complete, so an interrupted
+            # download never leaves a truncated file that later runs treat as present.
+            # The pid keeps processes sharing a model directory from writing the same file.
+            partial_path = f"{output_path}.{os.getpid()}.partial"
+            try:
+                with open(partial_path, "wb") as f:
+                    for chunk in response.iter_content(chunk_size=8192):
+                        progress_bar.update(len(chunk))
+                        f.write(chunk)
+                progress_bar.close()
+                if verify_checksum and not self.verify_model_file_checksum(partial_path, filename=os.path.basename(output_path)):
+                    raise RuntimeError(f"Downloaded file from {url} does not match its published SHA-256 checksum")
+                os.replace(partial_path, output_path)
+            finally:
+                if os.path.exists(partial_path):
+                    os.remove(partial_path)
         else:
             raise RuntimeError(f"Failed to download file from {url}, response code: {response.status_code}")
+
+    def download_file_from_first_available(self, urls, output_path):
+        """Download output_path from the first URL that serves a file passing checksum verification."""
+        errors = []
+        for url in urls:
+            try:
+                self.download_file_if_not_exists(url, output_path, verify_checksum=True)
+                return
+            except (RuntimeError, requests.RequestException) as e:
+                self.logger.debug(f"Could not get {os.path.basename(output_path)} from {url}: {e}")
+                errors.append(f"{url}: {e}")
+        raise RuntimeError(f"Failed to download {os.path.basename(output_path)} from any source: " + "; ".join(errors))
+
+    def verify_model_file_checksum(self, path, filename=None):
+        """
+        Check a model file against the SHA-256 published in model-checksums.json.
+        Returns True when it matches or when no checksum is published for that filename.
+        Files are hashed once per process unless their size or mtime changes.
+        """
+        filename = filename or os.path.basename(path)
+        expected = self.get_model_checksums().get(filename)
+        if expected is None:
+            self.logger.debug(f"No published checksum for {filename}, skipping verification")
+            return True
+
+        stat = os.stat(path)
+        cache_key = (os.path.abspath(path), stat.st_size, stat.st_mtime_ns)
+        if cache_key in self._verified_model_files:
+            return True
+
+        digest = hashlib.sha256()
+        with open(path, "rb") as f:
+            for block in iter(lambda: f.read(1024 * 1024), b""):
+                digest.update(block)
+
+        if digest.hexdigest() != expected:
+            self.logger.error(f"SHA-256 mismatch for {filename}: expected {expected}, got {digest.hexdigest()}")
+            return False
+
+        self._verified_model_files.add(cache_key)
+        return True
+
+    def get_model_checksums(self):
+        """Load the {filename: sha256} map of published model files bundled with the package."""
+        if self._model_checksums is None:
+            with resources.open_text("audio_separator", "model-checksums.json") as f:
+                self._model_checksums = json.load(f)["sha256"]
+        return self._model_checksums
 
     def list_supported_model_files(self):
         """
@@ -783,37 +849,24 @@ class Separator:
                     self.model_friendly_name = model_friendly_name
                     self.print_uvr_vip_message()
 
-                    # Download each required file for this model
+                    # Download each required file for this model. The audio-separator models repo
+                    # mirrors nearly every public file, so it is tried first and the original
+                    # source is the fallback. VIP models are still fetched from Anjok07's repo first.
                     for file_to_download in model_info["download_files"]:
-                        # For URLs, extract just the filename portion
                         if file_to_download.startswith("http"):
                             filename = file_to_download.split("/")[-1]
-                            download_path = os.path.join(self.model_file_dir, filename)
-                            self.download_file_if_not_exists(file_to_download, download_path)
-                            continue
-
-                        download_path = os.path.join(self.model_file_dir, file_to_download)
-
-                        # For MDXC models, handle YAML config files specially
-                        if model_type == "MDXC" and file_to_download.endswith(".yaml"):
+                            upstream_url = file_to_download
+                        elif model_type == "MDXC" and file_to_download.endswith(".yaml"):
+                            filename = file_to_download
                             yaml_config_filename = file_to_download
-                            try:
-                                yaml_url = f"{model_repo_url_prefix}/mdx_model_data/mdx_c_configs/{file_to_download}"
-                                self.download_file_if_not_exists(yaml_url, download_path)
-                            except RuntimeError:
-                                self.logger.debug("YAML config not found in UVR repo, trying audio-separator models repo...")
-                                yaml_url = f"{audio_separator_models_repo_url_prefix}/{file_to_download}"
-                                self.download_file_if_not_exists(yaml_url, download_path)
-                            continue
+                            upstream_url = f"{model_repo_url_prefix}/mdx_model_data/mdx_c_configs/{file_to_download}"
+                        else:
+                            filename = file_to_download
+                            upstream_url = f"{model_repo_url_prefix}/{file_to_download}"
 
-                        # For regular model files, try UVR repo first, then audio-separator repo
-                        try:
-                            download_url = f"{model_repo_url_prefix}/{file_to_download}"
-                            self.download_file_if_not_exists(download_url, download_path)
-                        except RuntimeError:
-                            self.logger.debug("Model not found in UVR repo, trying audio-separator models repo...")
-                            download_url = f"{audio_separator_models_repo_url_prefix}/{file_to_download}"
-                            self.download_file_if_not_exists(download_url, download_path)
+                        mirror_url = f"{audio_separator_models_repo_url_prefix}/{filename}"
+                        candidate_urls = [upstream_url, mirror_url] if self.model_is_uvr_vip else [mirror_url, upstream_url]
+                        self.download_file_from_first_available(candidate_urls, os.path.join(self.model_file_dir, filename))
 
                     return model_filename, model_type, model_friendly_name, model_path, yaml_config_filename
 
