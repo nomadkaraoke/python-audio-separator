@@ -55351,6 +55351,18 @@
     "stems": [],
     "target_stem": null
   },
+  "model_bs_roformer_ep_17_sdr_9.6568.ckpt": {
+    "model_name": "Roformer Model: BS Roformer | 4 Stems by ZFTurbo",
+    "track_scores": [],
+    "median_scores": {},
+    "stems": [
+      "vocals",
+      "drums",
+      "bass",
+      "other"
+    ],
+    "target_stem": null
+  },
   "bs_roformer_vocals_gabox.ckpt": {
     "model_name": "Roformer Model: BS Roformer | Vocals by Gabox",
     "track_scores": [
