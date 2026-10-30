@@ -20,6 +20,7 @@ class MDXSeparator(CommonSeparator):
     """
 
     def __init__(self, common_config, arch_config):
+        """Initialize the MDX separator with shared and MDX-specific parameters."""
         # Any configuration values which can be shared between architectures should be set already in CommonSeparator,
         # e.g. user-specified functionality choices (self.output_single_stem) or common model parameters (self.primary_stem_name)
         super().__init__(config=common_config)
@@ -112,8 +113,12 @@ class MDXSeparator(CommonSeparator):
         """
         self.logger.debug("Loading ONNX model for inference...")
 
-        if self.segment_size == self.dim_t:
-            self.uses_pytorch_inference = False
+        use_onnx_runtime = self.segment_size == self.dim_t
+        if use_onnx_runtime and self._prefer_pytorch_inference_on_rocm():
+            use_onnx_runtime = False
+
+        ort_inference_session = None
+        if use_onnx_runtime:
             ort_session_options = ort.SessionOptions()
             if self.log_level > 10:
                 ort_session_options.log_severity_level = 3
@@ -122,28 +127,109 @@ class MDXSeparator(CommonSeparator):
 
             ort_inference_session = ort.InferenceSession(self.model_path, providers=self.onnx_execution_provider, sess_options=ort_session_options)
             session_providers = ort_inference_session.get_providers()
-
             requested_provider = self.onnx_execution_provider[0] if self.onnx_execution_provider else None
+
             if requested_provider and requested_provider not in session_providers:
                 self.logger.warning(
                     f"ONNX Runtime could not activate requested provider {requested_provider}; "
-                    f"session is using {session_providers}. This usually means required CUDA/cuDNN "
-                    f"runtime libraries are not visible to the dynamic loader."
+                    f"session is using {session_providers}. This usually means required runtime "
+                    f"libraries are not visible to the dynamic loader."
                 )
+                if self._should_convert_inactive_amd_provider_on_rocm(requested_provider):
+                    use_onnx_runtime = False
+                    ort_inference_session = None
             else:
                 self.logger.debug(f"ONNX Runtime session providers: {session_providers}")
 
+        if use_onnx_runtime:
             self.model_run = lambda spek: ort_inference_session.run(None, {"input": spek.cpu().numpy()})[0]
             self.logger.debug("Model loaded successfully using ONNXruntime inferencing session.")
         else:
-            if platform.system() == 'Windows':
+            if platform.system() == "Windows":
                 onnx_model = onnx.load(self.model_path)
                 self.model_run = onnx2torch.convert(onnx_model)
             else:
                 self.model_run = onnx2torch.convert(self.model_path)
-   
+
             self.model_run.to(self.torch_device).eval()
-            self.logger.warning("Model converted from onnx to pytorch due to segment size not matching dim_t, processing may be slower.")
+            self.logger.warning(
+                "Model converted from ONNX to PyTorch (segment size does not match dim_t, "
+                "or ROCm has no usable ONNX GPU provider); processing may be slower."
+            )
+
+        self.uses_pytorch_inference = not use_onnx_runtime
+
+    def _rocm_gpu_selected(self):
+        """
+        Return True when ROCm PyTorch is active and the resolved device is the GPU.
+
+        torch.version.hip is set for any ROCm build of PyTorch, including a CPU-only run
+        on such a build. Requiring the selected device to be "cuda" keeps the ONNX
+        Runtime path on CPU, so a ROCm host without a usable GPU is unaffected.
+        """
+        if getattr(torch.version, "hip", None) is None:
+            return False
+        return getattr(self.torch_device, "type", None) == "cuda"
+
+    def _prefer_pytorch_inference_on_rocm(self):
+        """
+        Return True when an ROCm host should run the converted PyTorch graph.
+
+        Official onnxruntime-gpu wheels link against CUDA runtime libraries, which are
+        not present on an ROCm host, so requesting CUDAExecutionProvider silently falls
+        back to the CPU provider. When no real AMD ONNX GPU provider is selected,
+        converting the graph and running it on the HIP device keeps MDX-Net on the GPU.
+        Non-ROCm hosts, and ROCm hosts whose selected device is not the GPU, return
+        False, so CPU/CUDA/MPS/DirectML are unchanged.
+        """
+        if not self._rocm_gpu_selected():
+            return False
+
+        if self._onnx_runtime_override_requested():
+            return False
+
+        provider = (self.onnx_execution_provider or [None])[0]
+        if provider in {"MIGraphXExecutionProvider", "ROCMExecutionProvider"}:
+            return False
+
+        self.logger.info(
+            "ROCm detected and no AMD ONNX GPU provider is selected; running MDX-Net "
+            "through PyTorch (HIP) instead of the ONNX Runtime CUDA/CPU fallback."
+        )
+        return True
+
+    def _should_convert_inactive_amd_provider_on_rocm(self, requested_provider):
+        """
+        Return True when a requested but inactive AMD ONNX provider should run on HIP.
+
+        A requested MIGraphXExecutionProvider or ROCMExecutionProvider can still fail to
+        activate (missing native libraries or an unsupported gfx target) and silently
+        leave the session on CPUExecutionProvider. On ROCm, converting the graph and
+        running it on the HIP device keeps MDX-Net on the GPU. The explicit
+        AUDIO_SEPARATOR_ROCM_ONNX override keeps the ONNX Runtime path.
+        """
+        if requested_provider not in {"MIGraphXExecutionProvider", "ROCMExecutionProvider"}:
+            return False
+        if not self._rocm_gpu_selected():
+            return False
+        if self._onnx_runtime_override_requested():
+            return False
+
+        self.logger.info(
+            "ROCm detected but the requested AMD ONNX provider did not activate; running "
+            "MDX-Net through PyTorch (HIP) instead of the ONNX Runtime CPU fallback."
+        )
+        return True
+
+    def _onnx_runtime_override_requested(self):
+        """
+        Return True when AUDIO_SEPARATOR_ROCM_ONNX asks to keep the ONNX Runtime path.
+
+        Accepted values (case-insensitive): "ort", "cpu", and "0". They only disable the
+        PyTorch conversion; the provider still comes from onnx_execution_provider, which
+        can be a CUDA-named provider that ONNX Runtime falls back to CPU.
+        """
+        return os.environ.get("AUDIO_SEPARATOR_ROCM_ONNX", "").strip().lower() in {"cpu", "ort", "0"}
 
     def separate(self, audio_file_path, custom_output_names=None):
         """

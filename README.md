@@ -28,10 +28,12 @@ The simplest (and probably most used) use case for this package is to separate a
     - [ Apple Silicon, macOS Sonoma+ with M1 or newer (CoreML and MPS acceleration)](#-apple-silicon-macos-sonoma-with-m1-or-newer-coreml-and-mps-acceleration)
     - [🐢 No hardware acceleration, CPU only](#-no-hardware-acceleration-cpu-only)
     - [🪟 Windows AMD / Intel GPU with DirectML (experimental)](#-windows-amd--intel-gpu-with-directml-experimental)
+    - [🖥️ AMD GPU with ROCm (Linux)](#amd-gpu-rocm)
     - [Inference precision and compilation](#inference-precision-and-compilation)
     - [🎥 FFmpeg dependency](#-ffmpeg-dependency)
   - [GPU / CUDA specific installation steps with Pip](#gpu--cuda-specific-installation-steps-with-pip)
     - [Multiple CUDA library versions may be needed](#multiple-cuda-library-versions-may-be-needed)
+    - [ROCm specific troubleshooting](#rocm-specific-troubleshooting)
   - [Usage 🚀](#usage-)
     - [Command Line Interface (CLI)](#command-line-interface-cli)
     - [Listing and Filtering Available Models](#listing-and-filtering-available-models)
@@ -70,6 +72,7 @@ The simplest (and probably most used) use case for this package is to separate a
 - Ability to inference using a pre-trained model in PTH or ONNX format.
 - CLI support for easy use in scripts and batch processing.
 - Python API for integration into other projects.
+- GPU acceleration on NVIDIA CUDA, AMD ROCm (Linux), Apple Silicon, Windows DirectML, or CPU.
 
 ## Installation 🛠️
 
@@ -198,6 +201,88 @@ separations on an NVIDIA T4 in WDDM mode. If `AUDIO_SEPARATOR_FORCE_DML_MDXC=1`
 works on your GPU, please [open an issue](https://github.com/nomadkaraoke/python-audio-separator/issues)
 with your `--env_info` output — torch-directml behaves differently across vendors.
 
+<a id="amd-gpu-rocm"></a>
+
+### 🖥️ AMD GPU with ROCm (Linux)
+
+**Supported ROCm versions:** 6.0+ (tested on ROCm 7.2)
+
+💬 If successfully configured, you should see one of these messages when running `audio-separator --env_info`:
+
+- **PyTorch models (VR, Demucs, MDXC/RoFormer):** `ROCm (AMD GPU) is available in Torch, setting Torch device to CUDA (ROCm presents as CUDA)`
+- **MDX-Net with native AMD ONNX acceleration (`onnxruntime-migraphx` installed):** `ONNXruntime has MIGraphXExecutionProvider available, enabling acceleration`
+- **MDX-Net without a native AMD ONNX provider (the usual case):** `ROCm detected and no AMD ONNX GPU provider is selected; running MDX-Net through PyTorch (HIP) instead of the ONNX Runtime CUDA/CPU fallback.`
+
+Pip (complete installation):
+```sh
+# Step 1: Install PyTorch with ROCm support (change the ROCm version as needed)
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm7.2
+
+# Step 2: Install audio-separator with the rocm extra
+pip install "audio-separator[rocm]"
+```
+
+> ⚠️ **Important:** PyTorch with ROCm support must be installed **before** audio-separator.
+> The `[rocm]` extra installs `onnxruntime-gpu`; its `CUDAExecutionProvider` is CUDA-linked
+> and cannot load on a ROCm host, so MDX-Net ONNX models are run through the PyTorch HIP path.
+
+**Required ROCm packages:**
+- ROCm system libraries (see https://rocm.docs.amd.com for distro-specific instructions)
+- PyTorch: `torch`, `torchvision`, `torchaudio` built for ROCm
+- ONNX Runtime: `onnxruntime-gpu` (installed automatically by the `[rocm]` extra)
+
+**Basic ROCm setup:**
+
+Set `HSA_OVERRIDE_GFX_VERSION` **before** running Python or `audio-separator` when your GPU needs the override. The table also lists the `PYTORCH_ROCM_ARCH` kernel build target for reference.
+
+| GPU | `HSA_OVERRIDE_GFX_VERSION` | `PYTORCH_ROCM_ARCH` |
+|-----|---------------------------|---------------------|
+| RX 6600 / 6600 XT (gfx1032) | `10.3.0` | `gfx1030` |
+| RX 7900 XT/XTX (gfx1100) | `11.0.0` | `gfx1100` |
+| MI250 (gfx90a) | not needed | `gfx90a` |
+| MI300X (gfx942) | not needed | `gfx942` |
+
+```sh
+export HSA_OVERRIDE_GFX_VERSION=10.3.0
+```
+
+**How GPU acceleration works on AMD:**
+
+audio-separator automatically detects ROCm PyTorch at startup (via `torch.version.hip`), and PyTorch exposes the AMD GPU through its `cuda` device:
+
+1. PyTorch models (VR, Demucs, MDXC/RoFormer) run on the AMD GPU directly through HIP.
+2. For MDX-Net (`.onnx`) models, `MIGraphXExecutionProvider` is used when `onnxruntime-migraphx` is installed. Otherwise the ONNX graph is converted to PyTorch with `onnx2torch` and runs on the AMD GPU. Official `onnxruntime-gpu` wheels contain only a CUDA-linked `CUDAExecutionProvider`, which cannot activate on a ROCm host.
+3. Set `AUDIO_SEPARATOR_ROCM_ONNX` to `ort`, `cpu`, or `0` (case-insensitive) to keep the ONNX Runtime path and skip the PyTorch conversion. The provider still comes from the runtime's provider list, which on a ROCm host is the CUDA-linked `CUDAExecutionProvider`; ONNX Runtime then falls back to `CPUExecutionProvider` if that provider cannot load.
+
+**Docker (build from source):**
+```sh
+docker build -f Dockerfile.rocm -t audio-separator:rocm .
+# Run as your host user so the bind-mounted /workdir stays writable, and grant the
+# GIDs that own the GPU device nodes.
+docker run -it \
+  --device=/dev/kfd --device=/dev/dri \
+  --group-add "$(stat -c '%g' /dev/kfd)" \
+  --group-add "$(stat -c '%g' /dev/dri/renderD128)" \
+  --user "$(id -u):$(id -g)" \
+  -v "$(pwd):/workdir" audio-separator:rocm input.wav
+# Add -e HSA_OVERRIDE_GFX_VERSION=10.3.0 only if your GPU needs the override.
+
+# Rootless podman: keep the host supplementary groups instead of mapping them,
+# alongside --userns=keep-id so the bind mount maps to your host user.
+podman run -it --userns=keep-id --group-add=keep-groups \
+  --device=/dev/kfd --device=/dev/dri \
+  --user "$(id -u):$(id -g)" \
+  -v "$(pwd):/workdir" audio-separator:rocm input.wav
+```
+
+The image creates a non-root `appuser` (uid/gid 1000 by default). Rebuild with
+`--build-arg APP_UID=$(id -u) --build-arg APP_GID=$(id -g)` to bake in a different
+uid/gid, or pass `--user` as above. The rootless podman command keeps the host
+supplementary groups with `--group-add=keep-groups`, which cannot be combined with
+named `--group-add` options.
+
+**Note:** `onnxruntime-rocm` (which provided `ROCMExecutionProvider`) was removed from ONNX Runtime since 1.23 and is not recommended. For native ONNX GPU acceleration on AMD, install `onnxruntime-migraphx` (it requires the MIGraphX libraries from ROCm); otherwise MDX-Net uses the PyTorch HIP path automatically.
+
 ### Inference precision and compilation
 
 Three opt-in flags control PyTorch inference:
@@ -262,7 +347,7 @@ brew update; brew install ffmpeg
 
 ## GPU / CUDA specific installation steps with Pip
 
-In theory, all you should need to do to get `audio-separator` working with a GPU is install it with the `[gpu]` extra as above.
+In theory, all you should need to do to get `audio-separator` working with a GPU is install it with the `[gpu]` extra (CUDA/NVIDIA) or the `[rocm]` extra (AMD/ROCm) as above, after installing the matching PyTorch build.
 
 However, sometimes getting both PyTorch and ONNX Runtime working with CUDA support can be a bit tricky so it may not work that easily.
 
@@ -301,6 +386,47 @@ python -m pip install ort-nightly-gpu --index-url=https://aiinfra.pkgs.visualstu
 ```
 
 > Note: if anyone knows how to make this cleaner so we can support both different platform-specific dependencies for hardware acceleration without a separate installation process for each, please let me know or raise a PR!
+
+### ROCm specific troubleshooting
+
+**Prerequisites:**
+1. ROCm system libraries installed (minimum 6.0+, recommended 7.2+)
+   - Check: `rocminfo | head -20` should show your GPU
+   - Install from: https://rocm.docs.amd.com
+2. PyTorch with ROCm support (installed from PyTorch's ROCm index URL)
+   - Check: `python -c "import torch; print(torch.__version__)"` should contain `+rocm`
+3. `onnxruntime-gpu` installed (automatic via `pip install "audio-separator[rocm]"`)
+
+**If GPU acceleration is not working:**
+
+Run `audio-separator --env_info` and check for these clues:
+
+| Symptom | Likely Cause | Fix |
+|---------|-------------|-----|
+| MDX-Net runs on the CPU | `AUDIO_SEPARATOR_ROCM_ONNX` is set to `ort`, `cpu`, or `0`, forcing the ONNX Runtime path | Remove the override. Without a usable AMD ONNX provider, MDX-Net converts to PyTorch and runs through HIP by default, so CPU execution is not expected with `onnxruntime-gpu` |
+| MDX-Net still runs on the CPU with no override set | Conversion did not run, or a conversion error occurred | Check the log for `running MDX-Net through PyTorch (HIP)`; confirm `torch.version.hip` is set and the resolved device is `cuda` |
+| `MIGraphXExecutionProvider` not in providers | MIGraphX libraries or wheel not installed | `pip uninstall -y onnxruntime onnxruntime-gpu && pip install onnxruntime-migraphx` and `sudo apt install migraphx` for native ONNX acceleration |
+| No `CUDAExecutionProvider` in providers | Normal on ROCm | `CUDAExecutionProvider` is CUDA-only and is not expected to activate on a ROCm host |
+| `torch.cuda.is_available()` is `False` | Wrong PyTorch build | Reinstall PyTorch: `pip install torch --index-url https://download.pytorch.org/whl/rocm7.2` |
+| `librocm_smi64.so` errors | Missing ROCm runtime libs | `sudo apt install rocm-libs` or distro equivalent |
+| `HSA_OVERRIDE_GFX_VERSION not set` warning | Consumer GPU needs env variables | See the GPU table above in the AMD section |
+| STFT assertions / crashes | ROCm 5.x bug (fixed in 7.x) | Upgrade to ROCm 7.2+ |
+
+**Clean reinstall:**
+```sh
+pip uninstall torch torchvision torchaudio onnxruntime onnxruntime-gpu
+pip cache purge
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm7.2
+pip install "audio-separator[rocm]"
+```
+
+**Docker issues:**
+- Use the provided `Dockerfile.rocm` and ensure proper device mounting:
+  ```sh
+  docker run -it --device=/dev/kfd --device=/dev/dri --group-add "$(stat -c '%g' /dev/kfd)" --group-add "$(stat -c '%g' /dev/dri/renderD128)" --user "$(id -u):$(id -g)" ...
+  ```
+- The Dockerfile uses ROCm 7.2 and `onnxruntime-gpu` (not `onnxruntime-rocm`) for compatibility.
+- GPU compatibility env vars are not set in the image; pass `-e HSA_OVERRIDE_GFX_VERSION=...` at run time only if your GPU needs it.
 
 ## Usage 🚀
 

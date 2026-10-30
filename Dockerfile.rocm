@@ -1,0 +1,51 @@
+# Use ROCm base image with Python
+FROM rocm/dev-ubuntu-22.04:7.2-complete
+
+# Set the working directory in the container
+WORKDIR /workdir
+
+# Install necessary packages
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ffmpeg \
+    python3 \
+    python3-pip \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN python3 -m pip install --upgrade pip
+
+# Install PyTorch with ROCm support
+RUN --mount=type=cache,target=/root/.cache \
+    pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm7.2
+
+# Install audio-separator from this local checkout so the ROCm support in the
+# repository is used, not a released PyPI version that may predate it.
+# The [rocm] extra installs onnxruntime-gpu. Its CUDAExecutionProvider is CUDA-linked
+# and cannot activate on a ROCm host, so MDX-Net ONNX models run through the PyTorch
+# HIP path (see MDXSeparator._prefer_pytorch_inference_on_rocm); VR, Demucs, and
+# MDXC/RoFormer already run on the ROCm GPU through PyTorch.
+COPY . /src
+RUN --mount=type=cache,target=/root/.cache \
+    cd /src && pip3 install ".[rocm]"
+
+# GPU compatibility overrides are opt-in and unset by default. PYTORCH_ROCM_ARCH is a
+# kernel build target that is not needed with prebuilt ROCm PyTorch wheels, and
+# HSA_OVERRIDE_GFX_VERSION is only needed for consumer GPUs whose gfx target the
+# installed ROCm build does not natively support (for example RX 6600, gfx1032).
+# Supply it at run time with `-e`:
+#   docker run -e HSA_OVERRIDE_GFX_VERSION=10.3.0 ...
+
+# Run as a non-root user. ROCm device access still comes from the caller's
+# --device /dev/kfd --device /dev/dri and --group-add=video --group-add=render, which
+# add the host GPU groups to this user. APP_UID/APP_GID default to 1000; override at build time
+# (--build-arg APP_UID=$(id -u) APP_GID=$(id -g)) or pass --user at run time so the
+# host-owned /workdir bind mount stays writable.
+ARG APP_UID=1000
+ARG APP_GID=1000
+RUN groupadd --gid "${APP_GID}" appuser \
+    && useradd --uid "${APP_UID}" --gid "${APP_GID}" --create-home --shell /bin/bash appuser \
+    && mkdir -p /workdir \
+    && chown -R appuser:appuser /workdir
+USER appuser
+
+# Run audio-separator when the container launches
+ENTRYPOINT ["audio-separator"]

@@ -1,0 +1,16 @@
+.git
+.github
+.venv
+venv
+__pycache__
+*.pyc
+*.pyo
+.pytest_cache
+.ruff_cache
+dist
+build
+*.egg-info
+models
+*.flac
+*.wav
+*.mp3
