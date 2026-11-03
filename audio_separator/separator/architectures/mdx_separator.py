@@ -165,11 +165,14 @@ class MDXSeparator(CommonSeparator):
         mix = self.prepare_mix(self.audio_file_path)
 
         self.logger.debug("Normalizing mix before demixing...")
+        # normalize() scales in place, and only when the peak is outside [min_peak, max_peak], so work on a copy and
+        # undo exactly the gain it applied. The model's output is at the scale of the mix it was given.
         peak = np.abs(mix).max()
-        mix = spec_utils.normalize(wave=mix, max_peak=self.normalization_threshold, min_peak=self.amplification_threshold)
+        normalized_mix = spec_utils.normalize(wave=mix.copy(), max_peak=self.normalization_threshold, min_peak=self.amplification_threshold)
+        gain = np.abs(normalized_mix).max() / peak if peak > 0 else 1.0
 
         # Start the demixing process
-        source = self.demix(mix) * peak
+        source = self.demix(normalized_mix) / gain
         self.logger.debug("Demixing completed.")
 
 
@@ -185,7 +188,7 @@ class MDXSeparator(CommonSeparator):
         # Process the secondary source if not already an array
         if not isinstance(self.secondary_source, np.ndarray):
             self.logger.debug("Producing secondary source: demixing in match_mix mode")
-            raw_mix = self.demix(mix, is_match_mix=True)
+            raw_mix = self.demix(normalized_mix, is_match_mix=True) / gain
 
             if self.invert_using_spec:
                 self.logger.debug("Inverting secondary stem using spectogram as invert_using_spec is set to True")
