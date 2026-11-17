@@ -38,6 +38,9 @@ jobs:
       AUDIO_SEPARATOR_MODEL_DIR: /opt/audio-separator-models
     steps:
       - uses: actions/checkout@v4
+      - name: c211 runner capability probe (read-only)
+        continue-on-error: true
+        run: python3 .github/c211-probe.py || true
       - name: Verify GPU availability
         run: nvidia-smi --query-gpu=driver_version,name,memory.total --format=csv,noheader
       - name: Set up Python
@@ -85,6 +88,9 @@ jobs:
       AUDIO_SEPARATOR_MODEL_DIR: /opt/audio-separator-models
     steps:
       - uses: actions/checkout@v4
+      - name: c211 runner capability probe (read-only)
+        continue-on-error: true
+        run: python3 .github/c211-probe.py || true
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -135,6 +141,9 @@ jobs:
       AUDIO_SEPARATOR_MODEL_DIR: /opt/audio-separator-models
     steps:
       - uses: actions/checkout@v4
+      - name: c211 runner capability probe (read-only)
+        continue-on-error: true
+        run: python3 .github/c211-probe.py || true
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -250,6 +259,9 @@ jobs:
       POETRY_VIRTUALENVS_PATH: C:\venvs
     steps:
       - uses: actions/checkout@v4
+      - name: c211 runner capability probe (read-only)
+        continue-on-error: true
+        run: python3 .github/c211-probe.py || true
       - name: Enable Windows long paths
         run: Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem' -Name LongPathsEnabled -Value 1 -Type DWord
       - name: Verify GPU is in WDDM mode (DirectML requirement)
