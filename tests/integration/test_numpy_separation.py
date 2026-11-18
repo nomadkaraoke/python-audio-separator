@@ -7,18 +7,23 @@ import soundfile as sf
 from audio_separator.separator import Separator
 from audio_separator.separator.architectures.mdx_separator import MDXSeparator
 from audio_separator.separator.architectures.mdxc_separator import MDXCSeparator
+from audio_separator.separator.architectures.vr_separator import VRSeparator
 
 # The MDXC models cover both MDXC demix paths: MDX23C (TFC_TDF_net) with two
 # trained stems, and RoFormer with a single target plus a residual stem.
+# VR rebuilds waveforms from STFT frames, so its stems may end a few milliseconds early.
 NUMPY_MODELS = [
-    pytest.param("kuielab_b_vocals.onnx", MDXSeparator, False, id="mdx"),
-    pytest.param("MDX23C-8KFFT-InstVoc_HQ.ckpt", MDXCSeparator, False, id="mdxc-mdx23c"),
-    pytest.param("model_bs_roformer_ep_317_sdr_12.9755.ckpt", MDXCSeparator, True, id="mdxc-roformer"),
+    pytest.param("kuielab_b_vocals.onnx", MDXSeparator, False, 0.0, id="mdx"),
+    pytest.param("MDX23C-8KFFT-InstVoc_HQ.ckpt", MDXCSeparator, False, 0.0, id="mdxc-mdx23c"),
+    pytest.param("model_bs_roformer_ep_317_sdr_12.9755.ckpt", MDXCSeparator, True, 0.0, id="mdxc-roformer"),
+    pytest.param("MGM_MAIN_v4.pth", VRSeparator, False, 0.05, id="vr"),
 ]
 
 
-@pytest.mark.parametrize("model_filename, architecture, is_roformer", NUMPY_MODELS)
-def test_numpy_separation_returns_arrays_without_output_files(tmp_path, monkeypatch, model_filename, architecture, is_roformer):
+@pytest.mark.parametrize("model_filename, architecture, is_roformer, max_length_diff_seconds", NUMPY_MODELS)
+def test_numpy_separation_returns_arrays_without_output_files(
+    tmp_path, monkeypatch, model_filename, architecture, is_roformer, max_length_diff_seconds
+):
     repo = Path(__file__).resolve().parents[2]
     audio, sample_rate = sf.read(repo / "tests/inputs/mardy20s.flac", dtype="float32")
     separator = Separator(
@@ -42,9 +47,11 @@ def test_numpy_separation_returns_arrays_without_output_files(tmp_path, monkeypa
     np.testing.assert_array_equal(audio, original_audio)
     assert isinstance(stems, dict)
     assert set(stems) == {"Vocals", "Instrumental"}
+    max_length_diff = int(max_length_diff_seconds * sample_rate)
     for stem in stems.values():
         assert isinstance(stem, np.ndarray)
-        assert stem.shape == audio.shape
+        assert stem.ndim == 2 and stem.shape[1] == audio.shape[1]
+        assert abs(stem.shape[0] - audio.shape[0]) <= max_length_diff
         assert np.issubdtype(stem.dtype, np.floating)
         assert np.isfinite(stem).all()
         assert np.any(stem)
