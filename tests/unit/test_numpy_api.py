@@ -103,7 +103,7 @@ def test_numpy_separation_honors_single_stem_selection(numpy_separator):
 
 def test_numpy_separation_cleans_state_after_inference_failure(numpy_separator):
     model = numpy_separator.model_instance
-    model.demix.side_effect = RuntimeError("inference failed")
+    model.demix.side_effect = [np.ones((2, 32), dtype=np.float32), RuntimeError("inference failed")]
 
     with pytest.raises(RuntimeError, match="inference failed"):
         numpy_separator.separate_numpy(np.ones((32, 2), dtype=np.float32), 44100)

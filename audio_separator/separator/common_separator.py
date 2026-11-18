@@ -202,6 +202,15 @@ class CommonSeparator:
 
         return {stem_name: source}
 
+    def _prepare_numpy_stem(self, source):
+        """Validate and normalize a sample-major stem, returning an owned array."""
+        source = validate_audio_source(source)
+        if source.size == 0 or not np.isfinite(source).all():
+            raise InvalidAudioDataError("Stem contains empty or non-finite audio")
+        return spec_utils.normalize(
+            wave=source, max_peak=self.normalization_threshold, min_peak=self.amplification_threshold
+        ).copy()
+
     def cached_sources_clear(self):
         """
         Clears the cache dictionaries for VR, MDX, and Demucs models.

@@ -1098,7 +1098,7 @@ class Separator:
         Input is mono frames or a (frames, channels) array with one or two channels.
         Returns a dict of stem names to independent (frames, 2) arrays at
         ``self.sample_rate``. Input at another sample rate is resampled in memory.
-        Currently supports a single MDX model; file chunking does not apply.
+        Currently supports a single MDX or MDXC model; file chunking does not apply.
         """
         if not isinstance(audio, np.ndarray) or not np.issubdtype(audio.dtype, np.floating):
             raise TypeError("audio must be a floating-point NumPy array")
@@ -1112,9 +1112,10 @@ class Separator:
             raise ValueError("Initialization failed or model not loaded. Please load a model before attempting to separate.")
 
         from audio_separator.separator.architectures.mdx_separator import MDXSeparator
+        from audio_separator.separator.architectures.mdxc_separator import MDXCSeparator
 
-        if len(self.model_filenames) > 1 or not isinstance(self.model_instance, MDXSeparator):
-            raise NotImplementedError("NumPy separation currently supports a single MDX model")
+        if len(self.model_filenames) > 1 or not isinstance(self.model_instance, (MDXSeparator, MDXCSeparator)):
+            raise NotImplementedError("NumPy separation currently supports a single MDX or MDXC model")
         if audio.ndim == 2 and audio.shape[1] == 1:
             audio = audio[:, 0]
         if sample_rate != self.sample_rate:

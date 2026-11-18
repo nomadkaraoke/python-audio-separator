@@ -11,8 +11,6 @@ from tqdm import tqdm
 from audio_separator.separator.uvr_lib_v5 import spec_utils
 from audio_separator.separator.uvr_lib_v5.stft import STFT
 from audio_separator.separator.common_separator import CommonSeparator
-from audio_separator.separator.audio_io import validate_audio_source
-from audio_separator.separator.exceptions import InvalidAudioDataError
 
 
 class MDXSeparator(CommonSeparator):
@@ -209,12 +207,7 @@ class MDXSeparator(CommonSeparator):
             ):
                 if self.output_single_stem and self.output_single_stem.lower() != stem_name.lower():
                     continue
-                source = validate_audio_source(source)
-                if source.size == 0 or not np.isfinite(source).all():
-                    raise InvalidAudioDataError(f"{stem_name} contains empty or non-finite audio")
-                stems[stem_name] = spec_utils.normalize(
-                    wave=source, max_peak=self.normalization_threshold, min_peak=self.amplification_threshold
-                ).copy()
+                stems[stem_name] = self._prepare_numpy_stem(source)
             return stems
 
         # Save and process the secondary stem if needed
