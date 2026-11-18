@@ -32,10 +32,7 @@ def test_numpy_separation_returns_arrays_without_output_files(
 ):
     repo = Path(__file__).resolve().parents[2]
     audio, sample_rate = sf.read(repo / "tests/inputs/mardy20s.flac", dtype="float32")
-    separator = Separator(
-        model_file_dir=str(repo.parent / ".models"),
-        output_dir=str(tmp_path),
-    )
+    separator = Separator(output_dir=str(tmp_path))
     separator.load_model(model_filename=model_filename)
     assert type(separator.model_instance) is architecture
     assert getattr(separator.model_instance, "is_roformer", False) is is_roformer
