@@ -1092,6 +1092,35 @@ class Separator:
         self.logger.debug("Loading model completed.")
         self.logger.info(f'Load model duration: {time.strftime("%H:%M:%S", time.gmtime(int(time.perf_counter() - load_model_start_time)))}')
 
+    def separate_numpy(self, audio, sample_rate):
+        """Separate floating-point audio without reading or writing audio files.
+
+        Input is mono frames or a (frames, channels) array with one or two channels.
+        Returns a dict of stem names to independent (frames, 2) arrays at
+        ``self.sample_rate``. Input at another sample rate is resampled in memory.
+        Currently supports a single MDX model; file chunking does not apply.
+        """
+        if not isinstance(audio, np.ndarray) or not np.issubdtype(audio.dtype, np.floating):
+            raise TypeError("audio must be a floating-point NumPy array")
+        audio = validate_audio_source(audio)
+        if isinstance(sample_rate, (bool, np.bool_)) or not isinstance(sample_rate, (int, np.integer)) or sample_rate <= 0:
+            raise ValueError("sample_rate must be a positive integer")
+        audio = np.array(audio, dtype=np.float32, copy=True)
+        if audio.size == 0 or not np.isfinite(audio).all():
+            raise InvalidAudioDataError("Audio array must contain nonempty, finite audio frames")
+        if not (self.torch_device and self.model_instance):
+            raise ValueError("Initialization failed or model not loaded. Please load a model before attempting to separate.")
+
+        from audio_separator.separator.architectures.mdx_separator import MDXSeparator
+
+        if len(self.model_filenames) > 1 or not isinstance(self.model_instance, MDXSeparator):
+            raise NotImplementedError("NumPy separation currently supports a single MDX model")
+        if audio.ndim == 2 and audio.shape[1] == 1:
+            audio = audio[:, 0]
+        if sample_rate != self.sample_rate:
+            audio = librosa.resample(audio, orig_sr=sample_rate, target_sr=self.sample_rate, axis=0)
+        return self._separate_file(audio, return_numpy=True)
+
     def separate(self, audio_file_path, custom_output_names=None):
         """
         Separates the audio file(s) into different stems (e.g., vocals, instruments) using the loaded model.
@@ -1185,19 +1214,20 @@ class Separator:
             raise BatchSeparationError(output_files, failures)
         return output_files
 
-    def _separate_file(self, audio_file_path, custom_output_names=None):
+    def _separate_file(self, audio_file_path, custom_output_names=None, *, return_numpy=False):
         """
-        Internal method to handle separation for a single audio file.
-        This method performs the actual separation process for a single audio file. It logs the start and end of the process,
+        Internal method to handle separation for a single audio file or array.
+        This method performs the actual separation process for a single input. It logs the start and end of the process,
         handles autocast if enabled, and ensures GPU cache is cleared after processing.
         Parameters:
-        - audio_file_path (str): The path to the audio file.
+        - audio_file_path (str or np.ndarray): The path to the audio file, or in-memory audio.
         - custom_output_names (dict, optional): Custom names for the output files. Defaults to None.
+        - return_numpy (bool): Return stem arrays instead of writing audio files.
         Returns:
-        - output_files (list of str): A list containing the paths to the separated audio stem files.
+        - output_files (list of str or dict): Output paths, or stem names mapped to arrays.
         """
         # Check if chunking is enabled and file is large enough
-        if self.chunk_duration is not None:
+        if not return_numpy and self.chunk_duration is not None:
             import librosa
             duration = librosa.get_duration(path=audio_file_path)
 
@@ -1209,7 +1239,7 @@ class Separator:
                 return self._process_with_chunking(audio_file_path, custom_output_names)
 
         # Log the start of the separation process
-        self.logger.info(f"Starting separation process for audio_file_path: {audio_file_path}")
+        self.logger.info("Starting separation process for %s", "audio array" if return_numpy else f"audio_file_path: {audio_file_path}")
         separate_start_time = time.perf_counter()
 
         # Log normalization and amplification thresholds
@@ -1222,17 +1252,18 @@ class Separator:
         effective_precision = self.effective_precision
         inference_device = getattr(self.model_instance, "torch_device", self.torch_device)
         inference_device_type = getattr(inference_device, "type", str(inference_device))
+        separation_options = {"return_numpy": True} if return_numpy else {}
         try:
             if effective_precision == NATIVE_FP16:
                 self.logger.debug("Using native float16 inference.")
-                output_files = self.model_instance.separate(audio_file_path, custom_output_names)
+                output_files = self.model_instance.separate(audio_file_path, custom_output_names, **separation_options)
             elif effective_precision == AUTOCAST and inference_device_type != "privateuseone":
                 self.logger.debug("Using autocast inference on %s.", inference_device_type)
                 with autocast_mode.autocast(inference_device_type):
-                    output_files = self.model_instance.separate(audio_file_path, custom_output_names)
+                    output_files = self.model_instance.separate(audio_file_path, custom_output_names, **separation_options)
             else:
                 self.logger.debug("Using float32 inference.")
-                output_files = self.model_instance.separate(audio_file_path, custom_output_names)
+                output_files = self.model_instance.separate(audio_file_path, custom_output_names, **separation_options)
         finally:
             # Clear per-file state even when inference or audio export fails.
             active_error = sys.exc_info()[1]
