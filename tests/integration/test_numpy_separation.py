@@ -1,3 +1,4 @@
+from itertools import combinations
 from pathlib import Path
 
 import numpy as np
@@ -5,24 +6,29 @@ import pytest
 import soundfile as sf
 
 from audio_separator.separator import Separator
+from audio_separator.separator.architectures.demucs_separator import DemucsSeparator
 from audio_separator.separator.architectures.mdx_separator import MDXSeparator
 from audio_separator.separator.architectures.mdxc_separator import MDXCSeparator
 from audio_separator.separator.architectures.vr_separator import VRSeparator
+
+VOCALS_AND_INSTRUMENTAL = {"Vocals", "Instrumental"}
+DEMUCS_6_STEMS = {"Vocals", "Drums", "Bass", "Other", "Guitar", "Piano"}
 
 # The MDXC models cover both MDXC demix paths: MDX23C (TFC_TDF_net) with two
 # trained stems, and RoFormer with a single target plus a residual stem.
 # VR rebuilds waveforms from STFT frames, so its stems may end a few milliseconds early.
 NUMPY_MODELS = [
-    pytest.param("kuielab_b_vocals.onnx", MDXSeparator, False, 0.0, id="mdx"),
-    pytest.param("MDX23C-8KFFT-InstVoc_HQ.ckpt", MDXCSeparator, False, 0.0, id="mdxc-mdx23c"),
-    pytest.param("model_bs_roformer_ep_317_sdr_12.9755.ckpt", MDXCSeparator, True, 0.0, id="mdxc-roformer"),
-    pytest.param("MGM_MAIN_v4.pth", VRSeparator, False, 0.05, id="vr"),
+    pytest.param("kuielab_b_vocals.onnx", MDXSeparator, False, 0.0, VOCALS_AND_INSTRUMENTAL, id="mdx"),
+    pytest.param("MDX23C-8KFFT-InstVoc_HQ.ckpt", MDXCSeparator, False, 0.0, VOCALS_AND_INSTRUMENTAL, id="mdxc-mdx23c"),
+    pytest.param("model_bs_roformer_ep_317_sdr_12.9755.ckpt", MDXCSeparator, True, 0.0, VOCALS_AND_INSTRUMENTAL, id="mdxc-roformer"),
+    pytest.param("MGM_MAIN_v4.pth", VRSeparator, False, 0.05, VOCALS_AND_INSTRUMENTAL, id="vr"),
+    pytest.param("htdemucs_6s.yaml", DemucsSeparator, False, 0.0, DEMUCS_6_STEMS, id="demucs"),
 ]
 
 
-@pytest.mark.parametrize("model_filename, architecture, is_roformer, max_length_diff_seconds", NUMPY_MODELS)
+@pytest.mark.parametrize("model_filename, architecture, is_roformer, max_length_diff_seconds, expected_stems", NUMPY_MODELS)
 def test_numpy_separation_returns_arrays_without_output_files(
-    tmp_path, monkeypatch, model_filename, architecture, is_roformer, max_length_diff_seconds
+    tmp_path, monkeypatch, model_filename, architecture, is_roformer, max_length_diff_seconds, expected_stems
 ):
     repo = Path(__file__).resolve().parents[2]
     audio, sample_rate = sf.read(repo / "tests/inputs/mardy20s.flac", dtype="float32")
@@ -46,7 +52,7 @@ def test_numpy_separation_returns_arrays_without_output_files(
 
     np.testing.assert_array_equal(audio, original_audio)
     assert isinstance(stems, dict)
-    assert set(stems) == {"Vocals", "Instrumental"}
+    assert set(stems) == expected_stems
     max_length_diff = int(max_length_diff_seconds * sample_rate)
     for stem in stems.values():
         assert isinstance(stem, np.ndarray)
@@ -56,5 +62,5 @@ def test_numpy_separation_returns_arrays_without_output_files(
         assert np.isfinite(stem).all()
         assert np.any(stem)
         assert not np.shares_memory(stem, audio)
-    assert not np.shares_memory(stems["Vocals"], stems["Instrumental"])
+    assert not any(np.shares_memory(first, second) for first, second in combinations(stems.values(), 2))
     assert not any(tmp_path.iterdir())
