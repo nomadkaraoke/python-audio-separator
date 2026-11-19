@@ -1108,6 +1108,9 @@ class Separator:
         audio = np.array(audio, dtype=np.float32, copy=True)
         if audio.size == 0 or not np.isfinite(audio).all():
             raise InvalidAudioDataError("Audio array must contain nonempty, finite audio frames")
+        # load_model() records an ensemble without creating a model instance, so reject it first.
+        if len(self.model_filenames) > 1:
+            raise NotImplementedError("NumPy separation currently supports a single MDX, MDXC, VR or Demucs model")
         if not (self.torch_device and self.model_instance):
             raise ValueError("Initialization failed or model not loaded. Please load a model before attempting to separate.")
 
@@ -1117,7 +1120,7 @@ class Separator:
         from audio_separator.separator.architectures.demucs_separator import DemucsSeparator
 
         separator_types = (MDXSeparator, MDXCSeparator, VRSeparator, DemucsSeparator)
-        if len(self.model_filenames) > 1 or not isinstance(self.model_instance, separator_types):
+        if not isinstance(self.model_instance, separator_types):
             raise NotImplementedError("NumPy separation currently supports a single MDX, MDXC, VR or Demucs model")
         if audio.ndim == 2 and audio.shape[1] == 1:
             audio = audio[:, 0]

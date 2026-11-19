@@ -758,7 +758,8 @@ instrumental = stems["Instrumental"]
 
 - The input must be a floating-point array. It is copied, so the caller's array is never modified. Mono input is duplicated to two channels. Empty arrays and NaN or infinite samples raise `InvalidAudioDataError`.
 - The result maps stem names to independent `(frames, 2)` arrays at `separator.sample_rate` (44100 by default). Input at another sample rate is resampled in memory, so the number of frames can change.
-- `normalization_threshold`, `amplification_threshold` and `output_single_stem` apply as they do for file output.
+- `normalization_threshold` and `amplification_threshold` apply as they do for file output, as long as `amplification_threshold` is not above `normalization_threshold`.
+- `output_single_stem` limits the result to that stem. One difference from file output: for MDXC models with more than two stems, file output writes every stem by default even when `output_single_stem` is set, but `separate_numpy()` returns only the selected stem.
 - A single MDX, MDXC (including Roformer), VR or Demucs model is supported. Ensembles raise `NotImplementedError`, and `chunk_duration` does not apply.
 - VR models rebuild audio from STFT frames, so their stems can be a few milliseconds shorter than the input, as with file output. Stem dtypes follow each architecture's processing (VR stems are float64).
 

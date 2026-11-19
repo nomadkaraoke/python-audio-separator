@@ -78,6 +78,7 @@ def test_numpy_separation_resamples_on_the_frame_axis(numpy_separator):
 
     stems = numpy_separator.separate_numpy(audio, 22050)
 
+    assert set(stems) == {"Vocals", "Instrumental"}
     assert all(stem.shape == (200, 2) for stem in stems.values())
 
 
@@ -132,3 +133,11 @@ def test_numpy_separation_rejects_invalid_audio(numpy_separator, audio, error):
 def test_numpy_separation_rejects_invalid_sample_rates(numpy_separator, sample_rate):
     with pytest.raises(ValueError, match="positive integer"):
         numpy_separator.separate_numpy(np.ones((32, 2), dtype=np.float32), sample_rate)
+
+
+def test_numpy_separation_rejects_ensemble_before_any_model_is_loaded(tmp_path):
+    separator = Separator(model_file_dir=tmp_path / "models", output_dir=tmp_path / "output", info_only=True)
+    separator.load_model(model_filename=["first.ckpt", "second.ckpt"])
+
+    with pytest.raises(NotImplementedError, match="single MDX"):
+        separator.separate_numpy(np.ones((32, 2), dtype=np.float32), 44100)
