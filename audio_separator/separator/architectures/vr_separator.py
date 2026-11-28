@@ -158,6 +158,8 @@ class VRSeparator(CommonSeparator):
         if return_numpy:
             self.clear_file_specific_paths()
             mix = self.prepare_mix(audio_file_path)
+            input_frames = mix.shape[-1]
+            mix = self._pad_short_mix(mix)
         else:
             self.audio_file_path = audio_file_path
             self.audio_file_base = os.path.splitext(os.path.basename(audio_file_path))[ 0]
@@ -242,7 +244,7 @@ class VRSeparator(CommonSeparator):
                 source = self.spec_to_wav(spec)
                 if self.model_samplerate != self.sample_rate:
                     source = librosa.resample(source, orig_sr=self.model_samplerate, target_sr=self.sample_rate)
-                stems[stem_name] = self._prepare_numpy_stem(source.T)
+                stems[stem_name] = self._prepare_numpy_stem(source[:, :input_frames].T)
             return stems
 
         # Save and process the primary stem if needed
@@ -286,6 +288,17 @@ class VRSeparator(CommonSeparator):
         # self.logger.debug("Vocal split chain processed.")
 
         return output_files
+
+    def _pad_short_mix(self, mix):
+        """Zero-pad an in-memory mix shorter than one STFT window in every band.
+
+        A clip shorter than a hop yields a single STFT frame, which the inverse STFT turns into
+        zero samples. The caller trims the stems back to the original length.
+        """
+        min_frames = max(math.ceil(band["n_fft"] * self.sample_rate / band["sr"]) for band in self.model_params.param["band"].values())
+        if mix.shape[-1] >= min_frames:
+            return mix
+        return np.pad(mix, ((0, 0), (0, min_frames - mix.shape[-1])))
 
     def loading_mix(self, mix=None):
         X_wave, X_spec_s = {}, {}

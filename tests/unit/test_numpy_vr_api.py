@@ -99,6 +99,21 @@ def test_vr_numpy_returns_stereo_arrays_without_audio_io(make_vr_numpy_separator
     separator.model_instance.inference_vr.assert_called_once()
 
 
+# A 128-frame clip is shorter than one STFT hop, so without padding the stems would come back empty.
+@pytest.mark.parametrize("param_name", ["1band_sr44100_hl512", "2band_32000"])
+def test_vr_numpy_keeps_sub_hop_input_length(make_vr_numpy_separator, param_name):
+    separator = make_vr_numpy_separator(param_name)
+    audio = stereo_tone(frames=128)
+
+    stems = separator.separate_numpy(audio, 44100)
+
+    assert set(stems) == {"Instrumental", "Vocals"}
+    for stem in stems.values():
+        assert stem.shape == (128, 2)
+        assert np.isfinite(stem).all()
+        assert np.any(stem)
+
+
 def test_vr_numpy_converts_mono_to_stereo(make_vr_numpy_separator):
     separator = make_vr_numpy_separator()
 
