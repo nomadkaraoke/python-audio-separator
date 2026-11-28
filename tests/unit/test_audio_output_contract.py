@@ -58,6 +58,15 @@ def test_normalize_preserves_silence_when_amplification_is_enabled():
     assert np.isfinite(normalized).all()
 
 
+def test_normalize_amplifies_tiny_peak_without_overflow():
+    wave = np.array([[1e-40, -5e-41], [0.0, 2.5e-41]], dtype=np.float32)
+
+    normalized = spec_utils.normalize(wave, max_peak=0.9, min_peak=0.75)
+
+    assert np.isfinite(normalized).all()
+    assert np.abs(normalized).max() == pytest.approx(0.75, rel=1e-3)
+
+
 @pytest.mark.parametrize(
     ("wave", "message"),
     [

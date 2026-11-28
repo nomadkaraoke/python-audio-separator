@@ -118,7 +118,9 @@ def normalize(wave, max_peak=1.0, min_peak=None):
     if maxv > max_peak:
         wave *= max_peak / maxv
     elif min_peak is not None and 0 < maxv < min_peak:
-        wave *= min_peak / maxv
+        # Divide before multiplying: min_peak / maxv overflows float32 for very quiet audio.
+        wave /= maxv
+        wave *= min_peak
 
     return wave
 
