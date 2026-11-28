@@ -135,6 +135,11 @@ def test_numpy_separation_rejects_invalid_sample_rates(numpy_separator, sample_r
         numpy_separator.separate_numpy(np.ones((32, 2), dtype=np.float32), sample_rate)
 
 
+def test_separator_rejects_amplification_above_normalization(tmp_path):
+    with pytest.raises(ValueError, match="must not be greater than the normalization_threshold"):
+        Separator(output_dir=tmp_path, normalization_threshold=0.5, amplification_threshold=0.8, info_only=True)
+
+
 def test_numpy_separation_rejects_ensemble_before_any_model_is_loaded(tmp_path):
     separator = Separator(model_file_dir=tmp_path / "models", output_dir=tmp_path / "output", info_only=True)
     separator.load_model(model_filename=["first.ckpt", "second.ckpt"])

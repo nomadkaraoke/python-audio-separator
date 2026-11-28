@@ -758,7 +758,7 @@ instrumental = stems["Instrumental"]
 
 - The input must be a floating-point array. It is copied, so the caller's array is never modified. Mono input is duplicated to two channels. Empty arrays and NaN or infinite samples raise `InvalidAudioDataError`.
 - The result maps stem names to independent `(frames, 2)` arrays at `separator.sample_rate` (44100 by default). Input at another sample rate is resampled in memory, so the number of frames can change.
-- `normalization_threshold` and `amplification_threshold` apply as they do for file output, as long as `amplification_threshold` is not above `normalization_threshold`.
+- `normalization_threshold` and `amplification_threshold` apply as they do for file output.
 - `output_single_stem` limits the result to that stem. One difference from file output: for MDXC models with more than two stems, file output writes every stem by default even when `output_single_stem` is set, but `separate_numpy()` returns only the selected stem.
 - A single MDX, MDXC (including Roformer), VR or Demucs model is supported. Ensembles raise `NotImplementedError`, and `chunk_duration` does not apply.
 - VR models rebuild audio from STFT frames, so their stems can be a few milliseconds shorter than the input, as with file output. Stem dtypes follow each architecture's processing (VR stems are float64).
@@ -771,7 +771,7 @@ instrumental = stems["Instrumental"]
 - **`output_dir`:** (Optional) Directory where the separated files will be saved. If not specified, uses the current directory.
 - **`output_format`:** (Optional) Format to encode output files, any common format (WAV, MP3, FLAC, M4A, etc.). `Default: WAV`
 - **`normalization_threshold`:** (Optional) The amount by which the amplitude of the output audio will be multiplied. `Default: 0.9`
-- **`amplification_threshold`:** (Optional) The minimum amplitude level at which the waveform will be amplified. If the peak amplitude of the audio is below this threshold, the waveform will be scaled up to meet it. `Default: 0.0`
+- **`amplification_threshold`:** (Optional) The minimum amplitude level at which the waveform will be amplified. If the peak amplitude of the audio is below this threshold, the waveform will be scaled up to meet it. Must not be greater than `normalization_threshold`. `Default: 0.0`
 - **`output_single_stem`:** (Optional) Output only a single stem, such as 'Instrumental' and 'Vocals'. `Default: None`
 - **`invert_using_spec`:** (Optional) Flag to invert using spectrogram. `Default: False`
 - **`sample_rate`:** (Optional) Set the sample rate of the output audio. `Default: 44100`

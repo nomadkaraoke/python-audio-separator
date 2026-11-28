@@ -210,6 +210,8 @@ class Separator:
         self.amplification_threshold = amplification_threshold
         if amplification_threshold < 0 or amplification_threshold > 1:
             raise ValueError("The amplification_threshold must be greater than or equal to 0 and less than or equal to 1.")
+        if amplification_threshold > normalization_threshold:
+            raise ValueError("The amplification_threshold must not be greater than the normalization_threshold.")
 
         self.output_single_stem = output_single_stem
         if output_single_stem is not None:
